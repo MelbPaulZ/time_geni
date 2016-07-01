@@ -6,8 +6,15 @@ package unimelb.org.itime.base;
  */
 public class C {
     public static class api{
-        public final String BASE = "http://xxxxx/";
-        public final String LOGIN = "user/login";
+        public final static String BASE = "http://xxxxx/";
+        public final static String LOGIN = "user/login";
+    }
+
+    /**
+     * constant value for sharedPreferences
+     */
+    public static class sp{
+        public final static String DEFAULT = "unimelb.org.itime";
     }
 
     public static class error{

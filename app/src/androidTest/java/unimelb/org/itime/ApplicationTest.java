@@ -1,4 +1,4 @@
-package unimelb.org.main;
+package unimelb.org.itime;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
