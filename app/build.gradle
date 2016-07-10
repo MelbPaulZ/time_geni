@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "unimelb.org.itime_android"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -28,6 +28,9 @@ dependencies {
     compile project(':afinal')
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.google.code.gson:gson:2.3'
+
+    // Ui components
+    compile 'com.github.sundeepk:compact-calendar-view:1.8.5'
 
     // Unit test dependency
     testCompile 'junit:junit:4.12'

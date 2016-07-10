@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,4 +11,39 @@
         android:gravity="center"
         android:textSize="40sp"/>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        >
+        <TextView
+            android:id="@+id/main_tab_calendar_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/tab_calendar"
+            style="@style/main_tab"
+            />
+        <TextView
+            android:id="@+id/main_tab_contact_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/tab_contact"
+            style="@style/main_tab"
+            />
+        <TextView
+            android:id="@+id/main_tab_inbox_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/tab_inbox"
+            style="@style/main_tab"
+            />
+        <TextView
+            android:id="@+id/main_tab_setting_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/tab_setting"
+            style="@style/main_tab"
+            />
+    </LinearLayout>
 </RelativeLayout>

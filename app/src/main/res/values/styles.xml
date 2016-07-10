@@ -5,4 +5,9 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!-- style for 4 tab items in main page -->
+    <style name="main_tab">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">1</item>
+    </style>
 </resources>
