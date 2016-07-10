@@ -1,10 +1,5 @@
 package unimelb.org.itime.fragment;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import unimelb.org.itime.base.BaseUiFragment;
 import unimelb.org.main.R;
 
@@ -17,8 +12,7 @@ public class LoginFragment extends BaseUiFragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login, container, false);
+    protected int getLayoutId() {
+        return R.layout.fragment_login;
     }
 }
