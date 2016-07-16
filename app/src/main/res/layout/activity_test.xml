@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="org.unimelb.itime.activity.MainActivity">
+    tools:context="org.unimelb.itime.activity.TestActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -27,13 +27,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <!-- as a placeholder for content fragments -->
-        <FrameLayout
-            android:id="@+id/main_fragment_container"
+        <TextView
+            android:id="@+id/main_hello_tv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/main_tab_ll">
-        </FrameLayout>
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_above="@+id/main_tab_ll"
+            android:text="@string/hello_world"
+            android:textSize="40sp" />
         <LinearLayout
             android:id="@+id/main_tab_ll"
             android:layout_width="match_parent"

@@ -7,10 +7,10 @@ import org.unimelb.itime.base.BaseUiAuthFragment;
 /**
  * required login, need to extend BaseUiAuthFragment
  */
-public class CalendarFragment extends BaseUiAuthFragment{
+public class MainCalendarFragment extends BaseUiAuthFragment{
 
 
-    public CalendarFragment() {
+    public MainCalendarFragment() {
     }
 
     @Override

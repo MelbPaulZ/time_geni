@@ -1,6 +1,7 @@
 package org.unimelb.itime.base;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -35,4 +36,44 @@ public abstract class BaseUiFragment extends Fragment {
      */
     protected abstract int getLayoutId();
 
+    /** -------- basic tool methods -------------- **/
+
+    public void forward(Class<?> classObj) {
+        forward(classObj, null);
+    }
+
+    /**
+     * start a new activity and finish the current one
+     * @param classObj
+     * @param bundle
+     */
+    public void forward(Class<?> classObj, Bundle bundle) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), classObj);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (bundle != null){
+            intent.putExtras(bundle);
+        }
+        this.startActivity(intent);
+        getActivity().finish();
+    }
+
+    public void overlay(Class<?> classObj) {
+        overlay(classObj, null);
+    }
+
+    /**
+     * start a new activity and do not finish the current one
+     * @param classObj
+     * @param bundle
+     */
+    public void overlay(Class<?> classObj, Bundle bundle) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), classObj);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (bundle != null){
+            intent.putExtras(bundle);
+        }
+        this.startActivity(intent);
+    }
 }
