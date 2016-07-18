@@ -1,1 +1,1 @@
-include ':app', ':afinal'
+include ':app', ':afinal', 'BadgedView'

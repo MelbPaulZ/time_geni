@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.chaossss.widget.view.CircleBadgedView;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
@@ -21,6 +23,7 @@ public class TestActivity extends BaseActivity{
 
     private Unbinder butterKnifeUnbinder;
 
+    @BindView(R.id.main_badge_calendar) CircleBadgedView circleBadgedView;
     @BindView(R.id.main_hello_tv) TextView helloTv;
     TextView tabCalendarTv;
     TextView tabContactTv;
@@ -35,6 +38,9 @@ public class TestActivity extends BaseActivity{
         butterKnifeUnbinder = ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         Log.d(TAG, helloTv.getText().toString());
+
+        circleBadgedView.setBadgeText("1");
+        circleBadgedView.showBadge(true);
     }
 
     @Override
