@@ -15,7 +15,20 @@ android {
         // Unit test
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        debug {
+            keyAlias 'itime'
+            storeFile file('keystore.jks')
+            storePassword 'itime_2016'
+            keyPassword 'itime_2016'
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
