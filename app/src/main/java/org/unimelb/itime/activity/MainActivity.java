@@ -3,7 +3,9 @@ package org.unimelb.itime.activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,6 +31,9 @@ public class MainActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(mainToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         init();
     }
 
@@ -80,5 +85,11 @@ public class MainActivity extends BaseActivity{
                 showMainFragments(3);
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 }
