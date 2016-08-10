@@ -34,7 +34,9 @@ public abstract class BaseUiFragment extends Fragment {
      * use to replace onCreateView
      * @return
      */
-    protected abstract int getLayoutId();
+    protected int getLayoutId(){
+        return 0;
+    }
 
     /** -------- basic tool methods -------------- **/
 

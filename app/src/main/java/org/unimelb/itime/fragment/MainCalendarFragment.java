@@ -1,17 +1,18 @@
 package org.unimelb.itime.fragment;
 
 
-import android.util.Log;
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-import retrofit2.http.GET;
+import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
+import org.unimelb.itime.model.User;
+import org.unimelb.itime.viewmodel.MainCalendarViewModel;
 
 /**
  * required login, need to extend BaseUiAuthFragment
@@ -20,49 +21,26 @@ public class MainCalendarFragment extends BaseUiAuthFragment{
 
     private final static String TAG = "MainCalendarFragment";
 
-    String url = "http://itime.demo.com/api/";
+    FragmentMainCalendarBinding binding;
+    MainCalendarViewModel mainCalendarViewModel;
 
     public MainCalendarFragment() {
-        
-        testHttp();
+
     }
 
+    @Nullable
     @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_calendar;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_calendar, container, false);
+        mainCalendarViewModel = new MainCalendarViewModel();
+        mainCalendarViewModel.setUser(new User("1", "yin", "123"));
+        binding.setCalenarVM(mainCalendarViewModel);
+        return binding.getRoot();
     }
 
 
-    private void testHttp(){
-        Log.d(TAG, "testHttp: ");
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(ScalarsConverterFactory.create())
-//                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ITimeService service = retrofit.create(ITimeService.class);
-        Call<String> call = service.test();
-        call.enqueue(new Callback<String>(){
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                Log.d(TAG, "onResponse: " + call.toString());
-                Log.d(TAG, "onResponse: " + response.body());
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.d(TAG, "onFailure: ");
-
-            }
-        });
-    }
 
 
-    interface ITimeService{
-        @GET("users/test")
-        Call<String> test();
-    }
+
 
 }

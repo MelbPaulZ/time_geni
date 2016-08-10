@@ -16,6 +16,7 @@ import org.unimelb.itime.fragment.MainContactsFragment;
 import org.unimelb.itime.fragment.MainInboxFragment;
 import org.unimelb.itime.fragment.MainSettingsFragment;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity{
@@ -30,6 +31,7 @@ public class MainActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         init();
     }
 
