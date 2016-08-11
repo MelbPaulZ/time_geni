@@ -1,4 +1,4 @@
-package org.unimelb.itime.model;
+package org.unimelb.itime.bean;
 
 
 /**

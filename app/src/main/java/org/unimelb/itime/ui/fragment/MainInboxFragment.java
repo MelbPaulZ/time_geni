@@ -1,4 +1,4 @@
-package org.unimelb.itime.fragment;
+package org.unimelb.itime.ui.fragment;
 
 
 import org.unimelb.itime.R;

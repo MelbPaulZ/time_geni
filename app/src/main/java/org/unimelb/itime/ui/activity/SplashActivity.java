@@ -1,4 +1,4 @@
-package org.unimelb.itime.activity;
+package org.unimelb.itime.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;

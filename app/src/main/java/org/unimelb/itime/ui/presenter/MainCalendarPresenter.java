@@ -1,14 +1,12 @@
-package org.unimelb.itime.viewmodel;
+package org.unimelb.itime.ui.presenter;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.util.Log;
-import android.view.View;
 
-import org.unimelb.itime.BR;
+import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+
 import org.unimelb.itime.base.C;
-import org.unimelb.itime.model.User;
 import org.unimelb.itime.restfulapi.UserApi;
+import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,36 +15,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
- * Created by yinchuandong on 9/08/2016.
+ * Created by yinchuandong on 11/08/2016.
  */
-public class MainCalendarViewModel extends BaseObservable{
-    public final static String TAG = "MainCalendarViewModel";
-    private User user;
+public class MainCalendarPresenter extends MvpBasePresenter<MainCalendarMvpView>{
+    private static final String TAG = "LoginPresenter";
 
-    @Bindable
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public View.OnClickListener testClick(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: ");
-                user.setUsername("yin-changed");
-                notifyPropertyChanged(BR.user);
-
-                testHttp();
-            }
-        };
-    }
-
-
-    private void testHttp(){
+    public void testHttp(){
         Log.d(TAG, "testHttp: ");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(C.api.BASE)

@@ -1,8 +1,9 @@
-package org.unimelb.itime.activity;
+package org.unimelb.itime.ui.activity;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -10,11 +11,10 @@ import android.widget.TextView;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
-import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.fragment.MainCalendarFragment;
-import org.unimelb.itime.fragment.MainContactsFragment;
-import org.unimelb.itime.fragment.MainInboxFragment;
-import org.unimelb.itime.fragment.MainSettingsFragment;
+import org.unimelb.itime.ui.fragment.MainCalendarFragment;
+import org.unimelb.itime.ui.fragment.MainContactsFragment;
+import org.unimelb.itime.ui.fragment.MainInboxFragment;
+import org.unimelb.itime.ui.fragment.MainSettingsFragment;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,7 +25,7 @@ public class MainActivity extends BaseActivity{
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    private BaseUiFragment[] tagFragments;
+    private Fragment[] tagFragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +36,12 @@ public class MainActivity extends BaseActivity{
     }
 
     private void init(){
-        tagFragments = new BaseUiFragment[4];
+        tagFragments = new Fragment[4];
         tagFragments[0] = new MainCalendarFragment();
         tagFragments[1] = new MainContactsFragment();
         tagFragments[2] = new MainInboxFragment();
         tagFragments[3] = new MainSettingsFragment();
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[0]);
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[1]);
