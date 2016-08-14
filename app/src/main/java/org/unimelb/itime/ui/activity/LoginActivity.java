@@ -34,7 +34,7 @@ public class LoginActivity extends MvpActivity<LoginMvpView, LoginPresenter> imp
     @NonNull
     @Override
     public LoginPresenter createPresenter() {
-        return new LoginPresenter();
+        return new LoginPresenter(this);
     }
 
 

@@ -86,6 +86,26 @@
                     android:onClick="@{loginVM.onBtnEmailLogin()}"
                     />
 
+                <Button
+                    android:id="@+id/refresh_token_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="refresh token"
+                    android:textStyle="bold"
+                    android:onClick="@{loginVM.onBtnRefreshToken()}"
+                    />
+                <Button
+                    android:id="@+id/list_user_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="list user"
+                    android:textStyle="bold"
+                    android:onClick="@{loginVM.onBtnListUser()}"
+                    />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

@@ -67,11 +67,7 @@
                     android:id="@+id/username_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@={calenarVM.user.username}"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{calenarVM.user.password}"/>
+                    android:text="@={calenarVM.user.userId}"/>
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -1,6 +1,5 @@
 package org.unimelb.itime.util;
 
-import android.app.Service;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -11,11 +10,17 @@ import org.unimelb.itime.base.C;
  */
 public class AppUtil {
 
-    SharedPreferences getSharedPreferences(Context ctx){
+    public static SharedPreferences getSharedPreferences(Context ctx){
         return ctx.getSharedPreferences(C.sp.DEFAULT, Context.MODE_PRIVATE);
     }
 
-    SharedPreferences getSharedPreferences(Service service){
-        return service.getSharedPreferences(C.sp.DEFAULT, Context.MODE_PRIVATE);
+
+    /**
+     * all tokens are saved in this shared preference
+     * @param ctx
+     * @return
+     */
+    public static SharedPreferences getTokenSaver(Context ctx){
+        return ctx.getSharedPreferences(C.sp.TOKEN, Context.MODE_PRIVATE);
     }
 }

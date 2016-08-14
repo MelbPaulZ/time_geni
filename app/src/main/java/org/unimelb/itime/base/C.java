@@ -14,6 +14,11 @@ public class C {
      */
     public static class sp{
         public final static String DEFAULT = "unimelb.org.itime";
+        public final static String TOKEN = "unimelb.org.itime.token";
+    }
+
+    public static class spkey{
+        public final static String ITIME_JWT_TOKEN = "itime_jwt_token";
     }
 
     public static class error{

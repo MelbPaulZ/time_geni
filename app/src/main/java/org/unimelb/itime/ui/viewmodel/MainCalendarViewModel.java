@@ -39,7 +39,7 @@ public class MainCalendarViewModel extends BaseObservable{
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                user.setUsername("yin-changed");
+                user.setUserId("yin-changed");
                 notifyPropertyChanged(BR.user);
                 Log.d(TAG, "onClick: " + user.getId());
                 presenter.testHttp();

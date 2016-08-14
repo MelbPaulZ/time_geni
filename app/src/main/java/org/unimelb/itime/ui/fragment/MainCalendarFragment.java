@@ -48,7 +48,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
-        mainCalendarViewModel.setUser(new User("1", "yin", "123"));
+        mainCalendarViewModel.setUser(new User());
         binding.setCalenarVM(mainCalendarViewModel);
     }
 }

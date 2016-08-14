@@ -50,4 +50,24 @@ public class LoginViewModel extends BaseObservable{
             }
         };
     }
+
+
+    public View.OnClickListener onBtnRefreshToken(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.refreshToken();
+            }
+        };
+    }
+
+
+    public View.OnClickListener onBtnListUser(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.listUser();
+            }
+        };
+    }
 }
