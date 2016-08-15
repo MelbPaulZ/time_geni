@@ -56,7 +56,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
 
 
     public void refreshToken(){
-        Call<JwtToken> call = userApi.refreshToken();
+        String authToken = AuthUtil.getJwtToken(context);
+        Call<JwtToken> call = userApi.refreshToken(authToken);
         call.enqueue(new Callback<JwtToken>() {
             @Override
             public void onResponse(Call<JwtToken> call, Response<JwtToken> response) {

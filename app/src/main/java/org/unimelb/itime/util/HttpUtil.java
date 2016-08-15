@@ -23,14 +23,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class HttpUtil {
 
-    private static OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-    private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-            .baseUrl(C.api.BASE)
-            .addConverterFactory(GsonConverterFactory.create());
-
-
     public static <S> S createServiceWithoutToken(final Context context, Class<S> serviceClass){
-
+        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(C.api.BASE)
+                .addConverterFactory(GsonConverterFactory.create());
         OkHttpClient client = httpClientBuilder.build();
         Retrofit retrofit = retrofitBuilder.client(client).build();
         return retrofit.create(serviceClass);
@@ -44,6 +41,11 @@ public class HttpUtil {
      * @return
      */
     public static <S> S createService(final Context context, Class<S> serviceClass) {
+        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(C.api.BASE)
+                .addConverterFactory(GsonConverterFactory.create());
+
         httpClientBuilder.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -60,15 +62,18 @@ public class HttpUtil {
             @Override
             public Request authenticate(Route route, Response response) throws IOException {
                 UserApi userApi = createServiceWithoutToken(context, UserApi.class);
-                Call<JwtToken> call = userApi.refreshToken();
-                JwtToken jwt = call.execute().body();
-                // if refreshing token fails, there should be a callback
-                return null;
-//                AuthUtil.saveJwtToken(context, jwt.getToken());
-//                return response.request()
-//                        .newBuilder()
-//                        .header("Authorization", "Bearer " + jwt.getToken())
-//                        .build();
+                String authToken = AuthUtil.getJwtToken(context);
+                Call<JwtToken> call = userApi.refreshToken(authToken);
+                retrofit2.Response<JwtToken> refreshRep = call.execute();
+                JwtToken jwt = refreshRep.body();
+                if (jwt == null){
+                    return null;
+                }
+                AuthUtil.saveJwtToken(context, jwt.getToken());
+                return response.request()
+                        .newBuilder()
+                        .header("Authorization", "Bearer " + jwt.getToken())
+                        .build();
             }
         });
 

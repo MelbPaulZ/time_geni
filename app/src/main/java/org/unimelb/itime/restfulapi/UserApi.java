@@ -8,6 +8,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * Created by yinchuandong on 10/08/2016.
@@ -22,7 +23,7 @@ public interface UserApi {
     Call<JwtToken> login(@Field("userId") String userId, @Field("password") String password);
 
     @GET("users/refresh_token")
-    Call<JwtToken> refreshToken();
+    Call<JwtToken> refreshToken(@Query("token") String token);
 
     @GET("users/list")
     Call<User> list();
