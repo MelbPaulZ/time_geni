@@ -1,53 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.activity.MainActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- as a placeholder for content fragments -->
-    <FrameLayout
-        android:id="@+id/main_fragment_container"
+    <data>
+        <variable
+            name="tabBarVM"
+            type="org.unimelb.itime.ui.viewmodel.MainTabBarViewModel"/>
+    </data>
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/main_tab_ll">
+        android:orientation="vertical">
 
-    </FrameLayout>
+        <!-- as a placeholder for content fragments -->
+        <FrameLayout
+            android:id="@+id/main_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/main_tab_ll">
 
-    <LinearLayout
-        android:id="@+id/main_tab_ll"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true">
+        </FrameLayout>
 
-        <TextView
-            android:id="@+id/main_tab_calendar_tv"
-            style="@style/main_tab"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/main_tab_ll"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="@string/tab_calendar" />
+            android:layout_alignParentBottom="true">
 
-        <TextView
-            android:id="@+id/main_tab_contact_tv"
-            style="@style/main_tab"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/tab_contact" />
+            <TextView
+                android:id="@+id/main_tab_calendar_tv"
+                style="@style/main_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="@string/tab_calendar"
+                android:onClick="@{tabBarVM.onTabBarClick(0)}"
+                />
 
-        <TextView
-            android:id="@+id/main_tab_inbox_tv"
-            style="@style/main_tab"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/tab_inbox" />
+            <TextView
+                android:id="@+id/main_tab_contact_tv"
+                style="@style/main_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="@string/tab_contact"
+                android:onClick="@{tabBarVM.onTabBarClick(1)}"
+                />
 
-        <TextView
-            android:id="@+id/main_tab_setting_tv"
-            style="@style/main_tab"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/tab_setting" />
-    </LinearLayout>
-</RelativeLayout>
+            <TextView
+                android:id="@+id/main_tab_inbox_tv"
+                style="@style/main_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="@string/tab_inbox"
+                android:onClick="@{tabBarVM.onTabBarClick(2)}"
+                />
 
+            <TextView
+                android:id="@+id/main_tab_setting_tv"
+                style="@style/main_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="@string/tab_setting"
+                android:onClick="@{tabBarVM.onTabBarClick(3)}"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

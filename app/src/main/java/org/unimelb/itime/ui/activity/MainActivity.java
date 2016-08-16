@@ -1,25 +1,25 @@
 package org.unimelb.itime.ui.activity;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.Menu;
-import android.view.View;
-import android.widget.TextView;
+
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseActivity;
+import org.unimelb.itime.databinding.ActivityMainBinding;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainContactsFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
 import org.unimelb.itime.ui.fragment.MainSettingsFragment;
+import org.unimelb.itime.ui.mvpview.MainTabBarView;
+import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
+import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-public class MainActivity extends BaseActivity{
+public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
 
     private final static String TAG = "MainActivity";
     private FragmentManager fragmentManager;
@@ -27,12 +27,22 @@ public class MainActivity extends BaseActivity{
 
     private Fragment[] tagFragments;
 
+    private ActivityMainBinding binding;
+    private MainTabBarViewModel tabBarViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        tabBarViewModel = new MainTabBarViewModel(getPresenter());
+        binding.setTabBarVM(tabBarViewModel);
         init();
+    }
+
+    @NonNull
+    @Override
+    public MainTabBarPresenter createPresenter() {
+        return new MainTabBarPresenter(this);
     }
 
     private void init(){
@@ -48,10 +58,12 @@ public class MainActivity extends BaseActivity{
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[2]);
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3]);
         fragmentTransaction.commit();
-        showMainFragments(0);
+        showFragmentById(0);
     }
 
-    private void showMainFragments(int pageId){
+
+    @Override
+    public void showFragmentById(int pageId) {
         fragmentTransaction = fragmentManager.beginTransaction();
         for (int i = 0; i < tagFragments.length; i++){
             if (pageId == i){
@@ -61,32 +73,7 @@ public class MainActivity extends BaseActivity{
             }
         }
         fragmentTransaction.commit();
+
     }
 
-    @OnClick({R.id.main_tab_calendar_tv, R.id.main_tab_contact_tv,
-            R.id.main_tab_inbox_tv, R.id.main_tab_setting_tv
-    })
-    void onMainTabClick(View v){
-        TextView tab = (TextView) v;
-        Log.d(TAG, "onMainTabClick:" + tab.getText().toString());
-        switch (tab.getId()) {
-            case R.id.main_tab_calendar_tv:
-                showMainFragments(0);
-                break;
-            case R.id.main_fragment_container:
-                showMainFragments(1);
-                break;
-            case R.id.main_tab_inbox_tv:
-                showMainFragments(2);
-                break;
-            case R.id.main_tab_setting_tv:
-                showMainFragments(3);
-                break;
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
 }
