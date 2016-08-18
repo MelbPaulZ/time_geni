@@ -8,6 +8,7 @@ import android.util.Log;
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.ITimeApplication;
 import org.unimelb.itime.databinding.ActivityLoginBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
@@ -34,7 +35,7 @@ public class LoginActivity extends MvpActivity<LoginMvpView, LoginPresenter> imp
     @NonNull
     @Override
     public LoginPresenter createPresenter() {
-        return new LoginPresenter(this);
+        return new LoginPresenter((ITimeApplication)getApplication(), this);
     }
 
 

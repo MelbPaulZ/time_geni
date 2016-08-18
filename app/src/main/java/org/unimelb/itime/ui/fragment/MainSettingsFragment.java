@@ -15,7 +15,7 @@ public class MainSettingsFragment extends BaseUiAuthFragment{
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_login;
+        return R.layout.fragment_main_settings;
     }
 
 
