@@ -5,14 +5,13 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unimelb.itime.base.ITimeApplication;
 import org.unimelb.itime.bean.JwtToken;
 import org.unimelb.itime.bean.User;
-import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.UserDao;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.util.AuthUtil;
+import org.unimelb.itime.util.GreenDaoUtil;
 import org.unimelb.itime.util.HttpUtil;
 
 import retrofit2.Call;
@@ -25,19 +24,15 @@ import retrofit2.Response;
 public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
     private static final String TAG = "LoginPresenter";
 
-    private ITimeApplication application;
     private Context context;
     private UserApi userApi;
 
-    private DaoSession daoSession;
     private UserDao userDao;
 
-    public LoginPresenter(ITimeApplication application, Context context) {
+    public LoginPresenter(Context context) {
         this.context = context;
-        this.application = application;
-        this.daoSession = application.getDaoSession();
         userApi = HttpUtil.createService(context, UserApi.class);
-        userDao = daoSession.getUserDao();
+        userDao = GreenDaoUtil.getDaoSession(context).getUserDao();
     }
 
     public void loginByEmail(String email, String password){

@@ -21,6 +21,10 @@ public class C {
         public final static String ITIME_JWT_TOKEN = "itime_jwt_token";
     }
 
+    public static class dao{
+        public final static String SCHEMA_NAME = "itime-db";
+    }
+
     public static class error{
     }
 
