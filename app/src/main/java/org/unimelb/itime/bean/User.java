@@ -1,10 +1,16 @@
 package org.unimelb.itime.bean;
 
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * Created by yinchuandong on 20/06/2016.
  */
 
+@Entity(
+        active = false
+)
 public class User {
 
     private String id;
@@ -23,6 +29,34 @@ public class User {
     private String averageRatingValue;
     private String createdAt;
     private String updatedAt;
+    @Generated(hash = 205950960)
+    public User(String id, String userId, String personalAlias, String bindingEmail,
+            String bindingFacebookId, String bindingPhone, String profilePhotoUrl,
+            long defaultEventAlertTimeId, String deviceToken, String deviceId,
+            String defaultRatingVisibilityTypeId, String defaultEventVisibilityTypeId,
+            String ifAcceptPublicEventPush, String averageRatingValue, String createdAt,
+            String updatedAt) {
+        this.id = id;
+        this.userId = userId;
+        this.personalAlias = personalAlias;
+        this.bindingEmail = bindingEmail;
+        this.bindingFacebookId = bindingFacebookId;
+        this.bindingPhone = bindingPhone;
+        this.profilePhotoUrl = profilePhotoUrl;
+        this.defaultEventAlertTimeId = defaultEventAlertTimeId;
+        this.deviceToken = deviceToken;
+        this.deviceId = deviceId;
+        this.defaultRatingVisibilityTypeId = defaultRatingVisibilityTypeId;
+        this.defaultEventVisibilityTypeId = defaultEventVisibilityTypeId;
+        this.ifAcceptPublicEventPush = ifAcceptPublicEventPush;
+        this.averageRatingValue = averageRatingValue;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    @Generated(hash = 586692638)
+    public User() {
+    }
 
     public String getId() {
         return id;
