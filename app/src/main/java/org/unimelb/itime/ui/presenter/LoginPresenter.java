@@ -17,6 +17,12 @@ import org.unimelb.itime.util.HttpUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.adapter.rxjava.HttpException;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by yinchuandong on 11/08/2016.
@@ -44,20 +50,26 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
         }
 
         AuthUtil.clearJwtToken(context);
-        Call<JwtToken> call = userApi.login("johncdyin@gmail.com", "123456");
-        call.enqueue(new Callback<JwtToken>() {
-            @Override
-            public void onResponse(Call<JwtToken> call, Response<JwtToken> response) {
-                JwtToken jwt = response.body();
-                Log.d(TAG, "login: onResponse: " + jwt.getToken());
-                AuthUtil.saveJwtToken(context, jwt.getToken());
-            }
+        userApi.login("johncdyin@gmail.com", "123456")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JwtToken>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted: ");
+                    }
 
-            @Override
-            public void onFailure(Call<JwtToken> call, Throwable t) {
-                Log.d(TAG, "login: onFailure: " + t.getMessage());
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: ");
+                    }
+
+                    @Override
+                    public void onNext(JwtToken jwtToken) {
+                        Log.d(TAG, "onNext: " + jwtToken.getToken());
+                        AuthUtil.saveJwtToken(context, jwtToken.getToken());
+                    }
+                });
     }
 
 
@@ -68,6 +80,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
             @Override
             public void onResponse(Call<JwtToken> call, Response<JwtToken> response) {
                 JwtToken jwt = response.body();
+                AuthUtil.saveJwtToken(context, jwt.getToken());
                 Log.d(TAG, "refresh: onResponse: " + jwt.getToken());
             }
 
@@ -80,21 +93,41 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
 
 
     public void listUser(){
-        Call<User> call = userApi.list();
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                User user = response.body();
-                if (user != null){
-                    Log.d(TAG, "listuser: onResponse: " + user.getUserId());
-                }
-            }
+        userApi.list()
+                .doOnNext(new Action1<User>() {
+                    @Override
+                    public void call(User user) {
+                        try {
+                            Log.d(TAG, "doOnNext: call: ");
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<User>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted: ");
+                    }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.d(TAG, "listuser: onFailure: " + t.getMessage());
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        HttpException he = (HttpException) e;
+                        Log.d(TAG, "onError: " + he.response().errorBody());
+                        Log.d(TAG, "onError: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(User user) {
+                        if (user != null){
+                            Log.d(TAG, "listuser: onNext : " + user.getUserId());
+                        }
+                    }
+                });
+
     }
 
 }

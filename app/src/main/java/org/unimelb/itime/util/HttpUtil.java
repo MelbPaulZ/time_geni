@@ -16,6 +16,7 @@ import okhttp3.Response;
 import okhttp3.Route;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -44,7 +45,8 @@ public class HttpUtil {
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(C.api.BASE)
-                .addConverterFactory(GsonConverterFactory.create());
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
 
         httpClientBuilder.addInterceptor(new Interceptor() {
             @Override
