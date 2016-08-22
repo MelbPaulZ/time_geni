@@ -71,6 +71,8 @@ dependencies {
     //badge view
     compile 'com.github.chaossss:BadgedView:1.1.1'
 
+//    compile 'org.unimelb.itime.vendor:vendor:1.0.0'
+
 
     // Unit test dependency
     // Set this dependency to use JUnit 4 rules

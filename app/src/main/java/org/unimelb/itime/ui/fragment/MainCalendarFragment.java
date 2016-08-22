@@ -27,6 +27,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     FragmentMainCalendarBinding binding;
     MainCalendarViewModel mainCalendarViewModel;
 
+    // put dayview and weekview in this page, set vi
     public MainCalendarFragment() {
 
     }
