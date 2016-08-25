@@ -41,7 +41,7 @@ public class Event extends BaseObservable implements ITimeEventInterface {
     private String url;
     private int duration;
 //    attendee repeat?
-    private long[] proposedTimeslots;
+    private ArrayList<Long> proposedTimeslots;
 
     public Event(String eventId,
                  String eventTitle,
@@ -66,7 +66,7 @@ public class Event extends BaseObservable implements ITimeEventInterface {
                  ArrayList<String> eventPhotos,
                  String url,
                  int duration,
-                 long[] proposedTimeslots) {
+                 ArrayList<Long> proposedTimeslots) {
         this.eventId = eventId;
         this.eventTitle = eventTitle;
         this.eventNote = eventNote;
@@ -96,236 +96,236 @@ public class Event extends BaseObservable implements ITimeEventInterface {
 
     @Override
     public String getEventId() {
-        return null;
+        return eventId;
     }
 
     @Override
     public void setTitle(String s) {
-
+        eventTitle = s;
     }
 
     @Override
     public String getTitle() {
-        return null;
+        return eventTitle;
     }
 
     @Override
     public void setNote(String s) {
-
+        eventNote = s;
     }
 
     @Override
     public String getNote() {
-        return null;
+        return eventNote;
     }
 
     @Override
     public void setLocationAddress(String s) {
-
+        currentLocationAddress = s;
     }
 
     @Override
     public String getLocationAddress() {
-        return null;
+        return currentLocationAddress;
     }
 
     @Override
     public void setLocationNote(String s) {
-
+        currentLocationNote = s;
     }
 
     @Override
     public String getLocationNote() {
-        return null;
+        return currentLocationNote;
     }
 
     @Override
     public void setLocationLatitude(double v) {
-
+        currentLocationLatitude = v;
     }
 
     @Override
     public Double getLocationLatitude() {
-        return null;
+        return currentLocationLatitude;
     }
 
     @Override
     public void setLocationLongitude(double v) {
-
+        currentLocationLongitude = v;
     }
 
     @Override
     public Double getLocationLongitude() {
-        return null;
+        return currentLocationLongitude;
     }
 
     @Override
     public void setRepeatTypeId(int i) {
-
+        currentRepeatTypeId = i;
     }
 
     @Override
     public int getRepeatTypeId() {
-        return 0;
+        return currentRepeatTypeId;
     }
 
     @Override
     public void setUserId(String s) {
-
+        userId = s;
     }
 
     @Override
     public String getUserId() {
-        return null;
+        return userId;
     }
 
     @Override
     public void setAlertTimeId(int i) {
-
+        alerTimeId = i;
     }
 
     @Override
     public int getAlertTimeId() {
-        return 0;
+        return alerTimeId;
     }
 
     @Override
     public void setEventTypeId(int i) {
-
+        eventTypeId = i;
     }
 
     @Override
     public int getEventTypeId() {
-        return 0;
+        return eventTypeId;
     }
 
     @Override
     public void setVisibilityTypeId(int i) {
-
+        visibilityTypeId = i;
     }
 
     @Override
     public int getVisibilityTypeId() {
-        return 0;
+        return visibilityTypeId;
     }
 
     @Override
     public void setEventSourceId(int i) {
-
+        eventSourceId = i;
     }
 
     @Override
     public int getEventSourceId() {
-        return 0;
+        return eventSourceId;
     }
 
     @Override
     public void setCalendarTypeId(String s) {
-
+        calendarTypedId = s;
     }
 
     @Override
     public String getCalendarTypeId() {
-        return null;
+        return calendarTypedId;
     }
 
     @Override
     public void setIsInfiniteRepeat(Boolean aBoolean) {
-
+        isInfiniteRepeat = aBoolean;
     }
 
     @Override
     public Boolean getIsInfiniteRepeat() {
-        return null;
+        return isInfiniteRepeat;
     }
 
     @Override
     public void setIsDeleted(Boolean aBoolean) {
-
+        isDeleted = aBoolean;
     }
 
     @Override
     public Boolean getIsDeleted() {
-        return null;
+        return isDeleted;
     }
 
     @Override
     public void setRepeatEndsTime(Integer integer) {
-
+        repeatEndsTime = integer;
     }
 
     @Override
     public Integer getRepeatEndsTime() {
-        return null;
+        return repeatEndsTime;
     }
 
     @Override
     public void setHostEventId(String s) {
-
+        hostEventId = s;
     }
 
     @Override
     public String getHostEventId() {
-        return null;
+        return hostEventId;
     }
 
     @Override
     public void setUserStatusId(int i) {
-
+        userStatusId = i;
     }
 
     @Override
     public int getUserStatusId() {
-        return 0;
+        return userStatusId;
     }
 
     @Override
-    public void setEventPhotos(ArrayList<URL> arrayList) {
-
+    public void setEventPhotos(ArrayList<String> arrayList) {
+        eventPhotos = arrayList;
     }
 
     @Override
-    public ArrayList<URL> getEventPhotos() {
-        return null;
+    public ArrayList<String> getEventPhotos() {
+        return eventPhotos;
     }
 
     @Override
     public void setUrl(String s) {
-
+        url = s;
     }
 
     @Override
     public String getUrl() {
-        return null;
+        return url;
     }
 
     @Override
     public void setDuration(int i) {
-
+        duration = i;
     }
 
     @Override
     public int getDuration() {
-        return 0;
+        return duration;
     }
 
     @Override
     public void setAttendees(ArrayList<String> arrayList) {
-
+        attendees = arrayList;
     }
 
     @Override
     public ArrayList<String> getAttendees() {
-        return null;
+        return attendees;
     }
 
     @Override
     public void setProposedTimeSlots(ArrayList<Long> arrayList) {
-
+        proposedTimeslots = arrayList;
     }
 
     @Override
     public ArrayList<Long> getProposedTimeSlots() {
-        return null;
+        return proposedTimeslots;
     }
 }
