@@ -85,4 +85,40 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+
+    <!--for create new event-->
+    <string name="cancel">Cancel</string>
+    <string name="new_event">New Event</string>
+    <string name="done">Done</string>
+    <string name="send">Send</string>
+    <string name="search">Search</string>
+    <string name="edit_event">Edit Event</string>
+    <string name="edit">Edit</string>
+
+    <string name="event_title">EventTitle</string>
+    <string name="event_attendee">EventAttendee</string>
+    <string name="event_select_time">EventSelectTime</string>
+    <string name="event_start_hour">EventStartHour</string>
+    <string name="event_start_minute">EventStartMinute</string>
+    <string name="event_end_hour">EventEndHour</string>
+    <string name="event_end_minute">EventEndMinute</string>
+    <string name="start_event_tag">StartEventTag</string>
+    <string name="end_event_tag">EndEventTag</string>
+    <string name="event_start_day_of_week">EventStartDayOfWeek</string>
+    <string name="event_start_day">EventStartDay</string>
+    <string name="event_start_month">EventStartMonth</string>
+    <string name="event_start_year">EventStartYear</string>
+    <string name="event_end_day_of_week">EventEndDayOfWeek</string>
+    <string name="event_end_day">EventEndDay</string>
+    <string name="event_end_month">EventEndMonth</string>
+    <string name="event_end_year">EventEndYear</string>
+    <string name="event_location">EventLocation</string>
+    <string name="event_repeat">EventRepeat</string>
+    <string name="event_url">EventUrl</string>
+    <string name="event_note">EventNote</string>
+    <string name="event_first_proposed_time">EventFirstProposedTime</string>
+    <string name="event_second_proposed_time">EventSecondProposedTime</string>
+    <string name="event_third_proposed_time">EventThirdProposedTime</string>
+    <string name="event_calendar_type">EventCalendarType</string>
 </resources>

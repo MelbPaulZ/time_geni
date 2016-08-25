@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+            <Button
+                android:id="@+id/create_event_cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel"
+                android:background="@null"
+                android:layout_gravity="left"
+                android:gravity="center_vertical|left"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_event"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_title" />
+            <Button
+                android:id="@+id/create_event_send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="@string/send"
+                android:layout_gravity="right"/>
+        </android.support.v7.widget.Toolbar>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarStyle="insideOverlay"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--blank for border-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/page_blank_row_height"
+                android:background="@drawable/table_row_border"
+                />
+            <!-- end -->
+            <LinearLayout
+                android:id="@+id/part_1"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp">
+                <!--Tittle Row-->
+                <EditText
+                    android:id="@+id/create_event_title_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_enable"
+                    android:textSize="@dimen/page_text_size"
+                    android:hint="Title"
+                    android:background="@drawable/table_row_border"/>
+
+                <!--Fst Row-->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_enable"
+                        android:textSize="@dimen/page_text_size"
+                        android:text="Location"
+                        />
+
+                    <TextView
+                        android:id="@+id/create_event_location_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:textSize="@dimen/page_text_size"
+                        android:textColor="@color/text_disable"
+                        android:gravity="right"
+                        android:text="Select"
+                        android:layout_weight="1"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/table_row_border">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_enable"
+                        android:textSize="@dimen/page_text_size"
+                        android:layout_centerVertical="true"
+                        android:text="Repeat"
+                        />
+                    <TextView
+                        android:id="@+id/create_event_repeat_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:textSize="@dimen/page_text_size"
+                        android:textColor="@color/text_disable"
+                        android:gravity="right"
+                        android:text="None"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/table_row_border">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_enable"
+                        android:textSize="@dimen/page_text_size"
+                        android:text="Attendee"
+                        />
+                    <TextView
+                        android:id="@+id/create_event_attendee_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:textColor="@color/text_disable"
+                        android:textSize="@dimen/page_text_size"
+                        android:text="attendees"
+                        android:layout_weight="1"
+                        />
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/arrow"
+                        android:layout_gravity="center_vertical|right"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_enable"
+                        android:textSize="16dp"
+                        android:text="Starts"/>
+                    <TextView
+                        android:id="@+id/create_event_start_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_enable"
+                        android:textSize="16dp"
+                        android:text="WED 20/7 12:00 PM"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_enable"
+                        android:textSize="16dp"
+                        android:text="Ends"/>
+                    <TextView
+                        android:id="@+id/create_event_end_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_enable"
+                        android:textSize="16dp"
+                        android:text="WED 20/7 13:00 PM"/>
+                </LinearLayout>
+
+                <!--Proposed time slot-->
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@drawable/table_row_border"-->
+                <!--&gt;-->
+                <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:id="@+id/leftLinear"-->
+                <!--android:layout_gravity="left"-->
+                <!--android:layout_weight="1"-->
+                <!--&gt;-->
+                <!--<TextView-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Proposed Timeslots"-->
+                <!--android:textColor="@color/text_enable"-->
+                <!--android:textSize="@dimen/page_text_size"/>-->
+                <!--<TextView-->
+                <!--android:id="@+id/proposed_fst"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="@color/text_disable"-->
+                <!--android:textSize="@dimen/page_text_size"-->
+                <!--android:text="WED 20/7 12:00 PM - 13:00PM"/>-->
+                <!--<TextView-->
+                <!--android:id="@+id/proposed_snd"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="@color/text_disable"-->
+                <!--android:textSize="@dimen/page_text_size"-->
+                <!--android:text="WED 20/7 12:00 PM - 13:00PM"/>-->
+                <!--<TextView-->
+                <!--android:id="@+id/proposed_thd"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="@color/text_disable"-->
+                <!--android:textSize="@dimen/page_text_size"-->
+                <!--android:text="WED 20/7 12:00 PM - 13:00PM"/>-->
+                <!--</LinearLayout>-->
+                <!--<ImageView-->
+                <!--android:id="@+id/selectDateTimeImageView"-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:src="@drawable/arrow"-->
+                <!--android:layout_gravity="center_vertical|right"-->
+                <!--/>-->
+                <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
+
+                <!--blank for border-->
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/page_blank_row_height"-->
+                <!--android:background="@drawable/table_row_border"-->
+                <!--/>-->
+                <!-- end -->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:background="@drawable/table_row_border">-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_enable"
+                        android:textSize="@dimen/page_text_size"
+                        android:text="Alert Time"
+                        android:layout_weight="1"
+                        />
+                    <ImageView
+                        android:id="@+id/create_event_alart_time_imgv"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/arrow"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/table_row_border">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_enable"
+                        android:textSize="@dimen/page_text_size"
+                        android:text="Calendar Type"
+
+                        />
+                    <TextView
+                        android:id="@+id/create_event_calendar_type_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_disable"
+                        android:textSize="@dimen/page_text_size"
+                        android:text="Work"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        />
+                </LinearLayout>
+
+                <!--</LinearLayout>-->
+
+                <!--blank for border-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border"
+                    />
+                <!-- end -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/create_event_url_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_disable"
+                        android:textSize="@dimen/page_text_size"
+                        android:hint="URL"
+                        android:inputType="textWebEmailAddress"
+                        android:autoLink="web"
+                        android:background="@drawable/table_row_border"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/table_row_border">
+                    <EditText
+                        android:id="@+id/create_event_note_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_disable"
+                        android:textSize="@dimen/page_text_size"
+                        android:hint="Note"
+                        android:background="@drawable/table_row_border"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
