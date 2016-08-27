@@ -7,4 +7,5 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
  */
 public interface EventCreateNewMvpView extends MvpView {
     void pickDate();
+    void gotoWeekViewCalendar();
 }

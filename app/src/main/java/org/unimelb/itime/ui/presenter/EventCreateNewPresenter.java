@@ -33,4 +33,10 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
         return context;
     }
 
+    public void gotoWeekViewCalendar(){
+        EventCreateNewMvpView view = getView();
+        if (view!=null)
+            view.gotoWeekViewCalendar();
+    }
+
 }

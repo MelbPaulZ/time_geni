@@ -151,6 +151,15 @@ public class EventCreateNewVIewModel extends BaseObservable {
         };
     }
 
+    public View.OnClickListener cancelNewEvent(){
+        return new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                presenter.gotoWeekViewCalendar();
+            }
+        };
+    }
+
 
     @Subscribe
     public void getDateChanged(MessageEventDate messageEventDate) {

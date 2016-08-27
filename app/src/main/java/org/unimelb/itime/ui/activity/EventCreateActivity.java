@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TimePicker;
 
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
@@ -32,6 +34,7 @@ import butterknife.Unbinder;
     private EventDatePickerFragment eventDatePickerFragment;
     private EventWeekViewFragment eventWeekViewFragment;
 
+    private PlaceAutocompleteFragment autocompleteFragment;
 
 
 
@@ -45,6 +48,8 @@ import butterknife.Unbinder;
 
         EventBus.getDefault().register(this);
 
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
 //        eventWeekViewFragment = new EventWeekViewFragment();
 //        getFragmentManager().beginTransaction().add(R.id.create_event_fragment,eventWeekViewFragment).commit();
@@ -84,6 +89,11 @@ import butterknife.Unbinder;
             getSupportFragmentManager().beginTransaction().show(eventCreateNewFragment).commit();
         }
     }
+
+        public void toWeekViewCalendar(EventCreateNewFragment fragment){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
 
     @Subscribe
     public void gotoUrl(MessageUrl messageUrl){

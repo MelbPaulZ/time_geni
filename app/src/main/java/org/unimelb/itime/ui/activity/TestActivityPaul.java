@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.activity;
 
+import android.app.Fragment;
 import android.app.usage.UsageEvents;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -10,6 +11,7 @@ import android.view.View;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.databinding.EventTestBinding;
+import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.TestEvent;
 
 /**
@@ -21,6 +23,9 @@ public class TestActivityPaul extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_paul);
+
+        EventLocationPickerFragment eventLocationPickerFragment = new EventLocationPickerFragment();
+        getFragmentManager().beginTransaction().add(R.id.test_paul_fragment, eventLocationPickerFragment).commit();
 
     }
 
