@@ -5,10 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.BindingAdapter;
+import android.databinding.ObservableField;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.android.databinding.library.baseAdapters.BR;
 
@@ -17,10 +21,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.messageevent.MessageEventTime;
+import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Paul on 25/08/2016.
@@ -31,6 +37,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
     private String eventLocationString;
     private String eventAttendeeInfoString;
     private String eventRepeatString;
+    private String eventEndRepeatString;
     private String eventStartTimeString;
     private String eventEndTimeString;
     private String eventAlertTimeString;
@@ -51,13 +58,16 @@ public class EventCreateNewVIewModel extends BaseObservable {
     private int endHour;
     private int endMinute;
 
+    private PickDateFromType pickDateFromType;
+    private ObservableField<Boolean> isEventRepeat;
     private boolean isEndTimeChanged = false;
-    private boolean isChangingStartTime = true;
+
 
 
     public EventCreateNewVIewModel(EventCreateNewPresenter presenter) {
         this.presenter = presenter;
         event = new Event();
+        isEventRepeat = new ObservableField<>(false);
         EventBus.getDefault().register(this);
     }
 
@@ -84,8 +94,8 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isChangingStartTime = true;
-                presenter.pickDate();
+                pickDateFromType = PickDateFromType.STARTTIME;
+                presenter.pickDate(pickDateFromType);
             }
         };
     }
@@ -101,9 +111,14 @@ public class EventCreateNewVIewModel extends BaseObservable {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         setEventRepeatString((String) repeats[i]);
+                        if (repeats[i].equals("Daily") || repeats[i].equals("Weekly") || repeats[i].equals("Monthly")){
+                            setIsEventRepeat(true);
+                            Log.i("choose", (String) repeats[i]);
+                        }
                     }
                 });
                 builder.show();
+                //
             }
 
         };
@@ -140,13 +155,27 @@ public class EventCreateNewVIewModel extends BaseObservable {
         };
     }
 
+    public enum PickDateFromType{
+        STARTTIME, ENDTIME, ENDREPEAT
+    }
+
 
     public View.OnClickListener pickEndDate() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isChangingStartTime = false;
-                presenter.pickDate();
+                pickDateFromType =PickDateFromType.ENDTIME;
+                presenter.pickDate(pickDateFromType);
+            }
+        };
+    }
+
+    public View.OnClickListener pickEndRepeatDate(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickDateFromType = PickDateFromType.ENDREPEAT;
+                presenter.pickDate(pickDateFromType);
             }
         };
     }
@@ -160,24 +189,55 @@ public class EventCreateNewVIewModel extends BaseObservable {
         };
     }
 
+    public View.OnClickListener locationPicker(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.pickLocation();
+            }
+        };
+    }
+
+    public View.OnClickListener attendeePicker(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.pickAttendee();
+            }
+        };
+    }
+
 
     @Subscribe
     public void getDateChanged(MessageEventDate messageEventDate) {
-        if (isChangingStartTime) {
-            startYear = messageEventDate.year;
-            startMonth = messageEventDate.month;
-            startDay = messageEventDate.day;
-        } else {
-            endYear = messageEventDate.year;
-            endMonth = messageEventDate.month;
-            endDay = messageEventDate.day;
+        switch (pickDateFromType){
+            case STARTTIME:
+                startYear = messageEventDate.year;
+                startMonth = messageEventDate.month;
+                startDay = messageEventDate.day;
+                break;
+            case ENDTIME:
+                endYear = messageEventDate.year;
+                endMonth = messageEventDate.month;
+                endDay = messageEventDate.day;
+                break;
+            case ENDREPEAT:
+                setEventEndRepeatString(getSelectDayString(messageEventDate.year,messageEventDate.month, messageEventDate.day));
+                break;
+            default:
+                break;
         }
 
     }
 
     @Subscribe
+    public void getLocationChanged(MessageLocation messageLocation){
+        setEventLocationString(messageLocation.locatioinString);
+    }
+
+    @Subscribe
     public void getTimeChanged(MessageEventTime messageEventTime) {
-        if (isChangingStartTime) {
+        if (pickDateFromType == PickDateFromType.STARTTIME) {
             startHour = messageEventTime.hour;
             startMinute = messageEventTime.mintue;
             setEventStartTimeString(getSelectDayTimeString(startYear, startMonth, startDay, startHour, startMinute));
@@ -188,13 +248,20 @@ public class EventCreateNewVIewModel extends BaseObservable {
                         calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
                         calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
             }
-        } else {
+        } else if (pickDateFromType == PickDateFromType.ENDTIME){
             isEndTimeChanged = true;
             endHour = messageEventTime.hour;
             endMinute = messageEventTime.mintue;
             setEventEndTimeString(getSelectDayTimeString(endYear, endMonth, endDay, endHour, endMinute));
         }
 
+    }
+
+    private String getSelectDayString(int year, int month, int day){
+        String eventYear = String.valueOf(year);
+        String eventMonth = getMonth(month);
+        String eventDay = String.valueOf(day);
+        return eventDay + " " + eventMonth + " "+eventYear;
     }
 
 
@@ -211,6 +278,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return eventDayOfWeek + " " + eventDayOfMonth + "/" +
                 eventMonth + " " + eventHour + ":" + eventMinute + " " + amOrPm;
     }
+
 
     private String getDayOfWeek(int dayOfWeek) {
         switch (dayOfWeek) {
@@ -230,6 +298,37 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 return "SUN";
         }
         return "error get day of week";
+    }
+
+    private String getMonth(int month){
+        switch (month){
+            case 0:
+                return "Jan";
+            case 1:
+                return "Feb";
+            case 2:
+                return "March";
+            case 3:
+                return "April";
+            case 4:
+                return "May";
+            case 5:
+                return "Jun";
+            case 6:
+                return "July";
+            case 7:
+                return "Aug";
+            case 8:
+                return "Sep";
+            case 9:
+                return "Oct";
+            case 10:
+                return "Nov";
+            case 11:
+                return "Dec";
+            default:
+                return "error get month";
+        }
     }
 
 
@@ -345,5 +444,33 @@ public class EventCreateNewVIewModel extends BaseObservable {
     public void setEventNoteString(String eventNoteString) {
         this.eventNoteString = eventNoteString;
         notifyPropertyChanged(BR.eventNoteString);
+    }
+
+    @Bindable
+    public String getEventEndRepeatString() {
+        return eventEndRepeatString;
+    }
+
+    public void setEventEndRepeatString(String eventEndRepeatString) {
+        this.eventEndRepeatString = eventEndRepeatString;
+        notifyPropertyChanged(BR.eventEndRepeatString);
+    }
+
+    @Bindable
+    public Boolean getIsEventRepeat() {
+        return isEventRepeat.get();
+    }
+
+    public void setIsEventRepeat(Boolean value) {
+        this.isEventRepeat.set(value);
+        notifyPropertyChanged(BR.isEventRepeat);
+    }
+
+    @BindingAdapter("android:layout_height")
+    public static void setLayoutHeight(LinearLayout view, float height)
+    {
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.height = (int)height;
+        view.setLayoutParams(layoutParams);
     }
 }

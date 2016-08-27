@@ -12,12 +12,15 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
+import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 
 /**
  * Created by Paul on 23/08/2016.
  */
 public class EventDatePickerFragment extends Fragment {
-   private View root;
+    private View root;
+    private EventCreateNewVIewModel.PickDateFromType pickDateFromType;
+
 
 //    private EventDatePickerCommunicator communicator;
 
@@ -36,14 +39,24 @@ public class EventDatePickerFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 DatePicker datePicker = (DatePicker) root.findViewById(R.id.date_picker);
-                EventBus.getDefault().post(new MessageEventDate(datePicker.getYear(), datePicker.getMonth(),datePicker.getDayOfMonth()));
-                gotoTimePicker();
+                if (pickDateFromType == EventCreateNewVIewModel.PickDateFromType.STARTTIME ||
+                        pickDateFromType == EventCreateNewVIewModel.PickDateFromType.ENDTIME) {
+                    EventBus.getDefault().post(new MessageEventDate(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
+                    gotoTimePicker();
+                }else if (pickDateFromType == EventCreateNewVIewModel.PickDateFromType.ENDREPEAT){
+                    EventBus.getDefault().post(new MessageEventDate(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
+                    gotoCreateNewEvent();
+                }
             }
         });
     }
 
     public void gotoTimePicker(){
         ((EventCreateActivity)getActivity()).toTimePicker(this);
+    }
+
+    public void gotoCreateNewEvent(){
+        ((EventCreateActivity)getActivity()).toCreateEventNewFragment(this);
     }
 
 
@@ -60,8 +73,8 @@ public class EventDatePickerFragment extends Fragment {
         super.onStop();
     }
 
-    //    public interface EventDatePickerCommunicator{
-//        void changeDate(int year, int month, int day);
-//    }
 
+    public void setPickDateFromType(EventCreateNewVIewModel.PickDateFromType pickDateFromType) {
+        this.pickDateFromType = pickDateFromType;
+    }
 }

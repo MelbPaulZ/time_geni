@@ -65,14 +65,25 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
 
 
 
+
     @Override
-    public void pickDate() {
-        ((EventCreateActivity)getActivity()).toDatePicker(this);
+    public void pickDate(EventCreateNewVIewModel.PickDateFromType pickDateFromType) {
+        ((EventCreateActivity)getActivity()).toDatePicker(this,pickDateFromType);
     }
 
     @Override
     public void gotoWeekViewCalendar() {
         ((EventCreateActivity)getActivity()).toWeekViewCalendar(this);
+    }
+
+    @Override
+    public void pickLocatioin() {
+        ((EventCreateActivity)getActivity()).toLocationPicker(this);
+    }
+
+    @Override
+    public void pickAttendee() {
+        ((EventCreateActivity)getActivity()).toAttendeePicker(this);
     }
 
 

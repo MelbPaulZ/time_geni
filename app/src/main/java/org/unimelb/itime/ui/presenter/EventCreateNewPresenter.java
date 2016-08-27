@@ -6,6 +6,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
+import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 
 /**
  * Created by Paul on 25/08/2016.
@@ -22,10 +23,11 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
 
     }
 
-    public void pickDate(){
+
+    public void pickDate(EventCreateNewVIewModel.PickDateFromType pickDateFromType){
         EventCreateNewMvpView view = getView();
         if (view!=null)
-            view.pickDate();
+            view.pickDate(pickDateFromType);
     }
 
 
@@ -37,6 +39,20 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
         EventCreateNewMvpView view = getView();
         if (view!=null)
             view.gotoWeekViewCalendar();
+    }
+
+    public void pickLocation(){
+        EventCreateNewMvpView view = getView();
+        if (view!=null){
+            view.pickLocatioin();
+        }
+    }
+
+    public void pickAttendee(){
+        EventCreateNewMvpView view = getView();
+        if (view!=null){
+            view.pickAttendee();
+        }
     }
 
 }

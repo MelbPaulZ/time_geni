@@ -109,7 +109,8 @@
                             android:layout_gravity="right|center_vertical"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{eventVM.eventTitleString}"
+                            android:onClick="@{eventVM.locationPicker()}"
+                            android:text="@{eventVM.eventLocationString}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -143,6 +144,31 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="@{eventVM.isEventRepeat ? @dimen/wrap_content :@dimen/hide,default = @dimen/hide}"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="End Repeat"
+                            android:textColor="@color/text_enable"
+                            android:textSize="16dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:onClick="@{eventVM.pickEndRepeatDate()}"
+                            android:text="@{eventVM.eventEndRepeatString}"
+                            android:textColor="@color/text_disable"
+                            android:textSize="16dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
                         android:orientation="horizontal">
@@ -160,6 +186,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
+                            android:onClick="@{eventVM.attendeePicker()}"
                             android:text="@{eventVM.eventAttendeeInfoString}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
@@ -361,7 +388,7 @@
 
                         <EditText
                             android:id="@+id/create_event_url_tv"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/table_row_border"
                             android:hint="URL"
