@@ -23,25 +23,31 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="horizontal">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:text="="/>
 
                 <TextView
                     android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center|center_horizontal"
                     android:gravity="center"
-                    android:text="Toolbar Title"
-                    android:textColor="@color/white" />
+                    android:text="@{calenarVM.toolbarTitle}"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:layout_weight="1"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="subtitle"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:text="+"
+                    android:onClick="@{calenarVM.gotoEventCreateActivity}"
+                    />
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
@@ -49,30 +55,17 @@
             android:id="@+id/content_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/green"
             android:layout_below="@+id/toolbar_layout">
 
-            <LinearLayout
+            <org.unimelb.itime.vendor.weekview.WeekView
+                android:id="@+id/week_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                app:onWeekViewChange="@{calenarVM.onWeekViewChange()}"
+                >
+            </org.unimelb.itime.vendor.weekview.WeekView>
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="test_http_get"
-                    android:onClick="@{calenarVM.testClick()}"
-                    />
 
-                <TextView
-                    android:id="@+id/username_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@={calenarVM.user.userId}"/>
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@={calenarVM.user.id}"/>
-            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
 </layout>

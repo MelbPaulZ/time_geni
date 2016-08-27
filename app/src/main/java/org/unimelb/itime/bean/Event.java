@@ -43,6 +43,9 @@ public class Event extends BaseObservable implements ITimeEventInterface {
 //    attendee repeat?
     private ArrayList<Long> proposedTimeslots;
 
+    public Event() {
+    }
+
     public Event(String eventId,
                  String eventTitle,
                  String eventNote,

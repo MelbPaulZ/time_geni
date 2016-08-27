@@ -1,11 +1,17 @@
 package org.unimelb.itime.ui.presenter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.base.C;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulapi.UserApi;
+import org.unimelb.itime.ui.activity.EventCreateActivity;
+import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 
 import retrofit2.Call;
@@ -19,6 +25,11 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 public class MainCalendarPresenter extends MvpBasePresenter<MainCalendarMvpView>{
     private static final String TAG = "LoginPresenter";
+    private Context context;
+
+    public MainCalendarPresenter(Context context){
+        this.context = context;
+    }
 
     public void testHttp(){
         Log.d(TAG, "testHttp: ");
@@ -44,4 +55,22 @@ public class MainCalendarPresenter extends MvpBasePresenter<MainCalendarMvpView>
             }
         });
     }
+
+//    public void test(){
+//        MainCalendarMvpView view = getView();
+//        if (view!=null){
+//
+//        }
+//    }
+
+    public void gotoCreateEventActivity(){
+//        EventBus.getDefault().post(new MessageEvent("createNewActivity"));
+        MainCalendarMvpView view = getView();
+        if (view!=null){
+            view.startCreateEventActivity();
+        }
+    }
+
+
+
 }
