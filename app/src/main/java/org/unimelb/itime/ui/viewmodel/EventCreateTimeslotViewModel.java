@@ -7,6 +7,7 @@ import android.util.Log;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.vendor.BR;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
+import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.Calendar;
@@ -41,8 +42,14 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
         notifyPropertyChanged(BR.toolbarString);
     }
 
-//    public TimeSlotView.OnTimeSlotWeekViewChangeListener onTimeSlotWeekViewChangeListener(){
-//        return new TimeSlotView.OnTimeSlotWeekViewChangeListener
-//    }
+    public WeekTimeSlotView.OnTimeSlotWeekViewChangeListener onTimeSlotWeekViewChange(){
+        return new WeekTimeSlotView.OnTimeSlotWeekViewChangeListener() {
+            @Override
+            public void onWeekChanged(Calendar calendar) {
+                String tmp = getMonthName(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
+                setToolbarString(tmp);
+            }
+        };
+    }
 
 }

@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <variable
+            name="eventEditVM"
+            type="org.unimelb.itime.ui.viewmodel.EventEditViewModel" />
+    </data>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+                <Button
+                    android:id="@+id/edit_event_cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:background="@null"
+                    android:gravity="center_vertical|left"
+                    android:text="@string/cancel" />
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/edit_event" />
+
+                <Button
+                    android:id="@+id/edit_event_done_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@null"
+                    android:text="@string/done" />
+            </android.support.v7.widget.Toolbar>
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scrollbarStyle="insideOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <!--blank for border-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/page_blank_row_height"
+                    android:background="@drawable/table_row_border" />
+                <!-- end -->
+                <LinearLayout
+                    android:id="@+id/part_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border"
+                    android:orientation="vertical"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="0dp">
+                    <!--Tittle Row-->
+                    <EditText
+                        android:id="@+id/edit_event_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:textColor="@color/text_enable"
+                        android:text="@={eventEditVM.eventEditViewTitle}"
+                        android:textSize="@dimen/page_text_size" />
+
+                    <!--Fst Row-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Location"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+
+                        <TextView
+                            android:id="@+id/edit_event_location_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@{eventEditVM.eventEditViewLocation}"
+                            android:textColor="@color/text_disable"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Repeat"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+
+                        <TextView
+                            android:id="@+id/edit_event_repeat_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@{eventEditVM.eventEditViewRepeat}"
+                            android:textColor="@color/text_disable"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Attendee"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+
+                        <TextView
+                            android:id="@+id/edit_event_attendee_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@{eventEditVM.eventEditViewAttendeeString}"
+                            android:textColor="@color/text_disable"
+                            android:textSize="@dimen/page_text_size" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical|right"
+                            android:src="@drawable/arrow" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border" />
+
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/table_row_border">-->
+                    <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/text_enable"-->
+                    <!--android:textSize="16dp"-->
+                    <!--android:text="Starts"/>-->
+                    <!--<TextView-->
+                    <!--android:id="@+id/startTimeTextView"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="right"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textColor="@color/text_enable"-->
+                    <!--android:textSize="16dp"-->
+                    <!--android:text="WED 20/7 12:00 PM"/>-->
+                    <!--</LinearLayout>-->
+
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/table_row_border">-->
+                    <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/text_enable"-->
+                    <!--android:textSize="16dp"-->
+                    <!--android:text="Ends"/>-->
+                    <!--<TextView-->
+                    <!--android:id="@+id/endTimeTextView"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="right"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textColor="@color/text_enable"-->
+                    <!--android:textSize="16dp"-->
+                    <!--android:text="WED 20/7 13:00 PM"/>-->
+                    <!--</LinearLayout>-->
+
+                    <!--Proposed time slot-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border">
+
+                        <LinearLayout
+                            android:id="@+id/leftLinear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:text="Proposed Timeslots"
+                                android:textColor="@color/text_enable"
+                                android:textSize="@dimen/page_text_size" />
+
+                            <TextView
+                                android:id="@+id/edit_event_proposed_fst"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{eventEditVM.eventEditViewSuggestTimeSlotFst}"
+                                android:textColor="@color/text_disable"
+                                android:textSize="@dimen/page_text_size" />
+
+                            <TextView
+                                android:id="@+id/edit_event_proposed_snd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{eventEditVM.eventEditViewSuggestTimeSlotSnd}"
+                                android:textColor="@color/text_disable"
+                                android:textSize="@dimen/page_text_size" />
+
+                            <TextView
+                                android:id="@+id/edit_event_proposed_thd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text='@{eventEditVM.eventEditViewSuggestTimeSlotTrd, default=PLACEHOLDER}'
+                                android:textColor="@color/text_disable"
+                                android:textSize="@dimen/page_text_size" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/edit_event_select_time_image_view"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical|right"
+                            android:src="@drawable/arrow" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!--blank for border-->
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/page_blank_row_height"-->
+                <!--android:background="@drawable/table_row_border"-->
+                <!--/>-->
+                <!--end -->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:background="@drawable/table_row_border">-->
+
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/table_row_border">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:text="Alert Time"-->
+                        <!--android:textColor="@color/text_enable"-->
+                        <!--android:textSize="@dimen/page_text_size" />-->
+
+                    <!--<ImageView-->
+                        <!--android:layout_width="20dp"-->
+                        <!--android:layout_height="20dp"-->
+                        <!--android:src="@drawable/arrow" />-->
+                <!--</LinearLayout>-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/table_row_border"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Calendar Type"-->
+                        <!--android:textColor="@color/text_enable"-->
+                        <!--android:textSize="@dimen/page_text_size"-->
+
+                        <!--/>-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/edit_event_calendar_type"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:gravity="right"-->
+                        <!--android:text="Work"-->
+                        <!--android:textColor="@color/text_disable"-->
+                        <!--android:textSize="@dimen/page_text_size" />-->
+                <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+
+                <!--blank for border-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border" />
+                <!-- end -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border"
+                    android:orientation="vertical"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border">
+
+                        <TextView
+                            android:id="@+id/edit_event_url"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text='@{eventEditVM.eventEditViewUrl, default = "Placeholder text Url"}'
+                            android:textColor="@color/text_disable"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/edit_event_note"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{eventEditVM.eventEditViewNote}"
+                            android:hint="Note"
+                            android:textColor="@color/text_disable"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/edit_event_delete_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="15"
+            android:background="@color/red"
+            android:text="@string/delete_event"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</layout>

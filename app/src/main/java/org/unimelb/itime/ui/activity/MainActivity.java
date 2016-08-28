@@ -25,6 +25,7 @@ import org.unimelb.itime.ui.fragment.MainSettingsFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
+import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
 
@@ -88,6 +89,11 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     public void startEventCreateActivity(){
         Intent intent = new Intent(this,EventCreateActivity.class);
         startActivity(intent);
+    }
+
+    public void startEventEditActivity(ITimeEventInterface iTimeEventInterface){
+        Intent intent = new Intent(this,EventDetailActivity.class);
+//        intent.putExtra("Event",iTimeEventInterface);
     }
 
 

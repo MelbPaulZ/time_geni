@@ -14,7 +14,6 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.EventTestBinding;
 import org.unimelb.itime.databinding.FragmentEventCreateNewBinding;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.activity.EventCreateActivity;

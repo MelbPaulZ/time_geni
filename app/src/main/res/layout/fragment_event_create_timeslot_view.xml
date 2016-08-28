@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="timeslotVM"
-            type="org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -23,47 +26,100 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <Button
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:text="@string/back" />
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/toolbar_title"
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:text="@string/back" />
+
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center|center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Scheduling"
+                        android:textColor="@color/black"
+                        android:textSize="20dp" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:onClick=""
+                        android:text="@string/next" />
+                </LinearLayout>
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center|center_horizontal"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@{timeslotVM.toolbarString}"
-                    android:textColor="@color/black"
-                    android:textSize="20dp" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:onClick=""
-                    android:text="@string/next" />
+                    android:layout_weight="2">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:textAlignment="center"
+                        android:textSize="12dp"
+                        android:text="@{timeslotVM.toolbarString}"/>
+                </RelativeLayout>
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/middle_relative_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_below="@+id/toolbar">
+            android:layout_below="@+id/toolbar"
+            android:orientation="vertical">
 
-            <org.unimelb.itime.vendor.timeslot.TimeSlotView
+            <org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView
+                android:id="@+id/week_time_slot_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+                app:onTimeSlotWeekViewChange="@{timeslotVM.onTimeSlotWeekViewChange()}">
+            </org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView>
+        </RelativeLayout>
 
-            </org.unimelb.itime.vendor.timeslot.TimeSlotView>
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/middle_relative_layout"
+            >
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/bottom_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:elevation="4dp"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Duration"
+                        android:textSize="20dp"
+                        android:layout_alignParentLeft="true"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="1 hrs"
+                        android:textSize="20dp"
+                        android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
         </RelativeLayout>
     </RelativeLayout>
 </layout>

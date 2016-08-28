@@ -7,8 +7,10 @@ import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
+import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.Calendar;
@@ -65,6 +67,15 @@ public class MainCalendarViewModel extends BaseObservable{
             @Override
             public void onClick(View view) {
                 presenter.gotoCreateEventActivity();
+            }
+        };
+    }
+
+    public WeekView.OnClickEventInterface onClickEvent(){
+        return new WeekView.OnClickEventInterface() {
+            @Override
+            public void editEvent(ITimeEventInterface iTimeEventInterface) {
+                presenter.gotoEditEventActivity(iTimeEventInterface);
             }
         };
     }

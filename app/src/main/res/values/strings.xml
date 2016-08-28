@@ -123,4 +123,6 @@
     <string name="event_calendar_type">EventCalendarType</string>
     <string name="next">next</string>
     <string name="back">back</string>
+    <string name="delete_event">delete_event</string>
+
 </resources>

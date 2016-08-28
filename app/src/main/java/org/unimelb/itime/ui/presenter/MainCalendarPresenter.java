@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.presenter;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -13,6 +14,7 @@ import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
+import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,6 +64,13 @@ public class MainCalendarPresenter extends MvpBasePresenter<MainCalendarMvpView>
 //
 //        }
 //    }
+
+    public void gotoEditEventActivity(ITimeEventInterface iTimeEventInterface){
+        MainCalendarMvpView mvpView = getView();
+        if (mvpView!=null){
+            mvpView.startEditEventActivity(iTimeEventInterface);
+        }
+    }
 
     public void gotoCreateEventActivity(){
 //        EventBus.getDefault().post(new MessageEvent("createNewActivity"));
