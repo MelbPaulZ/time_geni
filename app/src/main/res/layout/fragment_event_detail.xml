@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -8,13 +8,14 @@
             type="org.unimelb.itime.ui.viewmodel.EventDetailViewModel" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/page_bg"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/event_detail_title_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -55,349 +56,391 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_below="@+id/event_detail_title_bar"
+            android:background="#EFEFF4"
             android:scrollbarStyle="insideOverlay">
 
-            <LinearLayout
+            <!--background-->
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:tag="first_level_in_scrollView">
-
+                android:background="#EFEFF4">
+                <!--blue rectangle-->
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:paddingBottom="@dimen/activity_vertical_margin"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingRight="@dimen/activity_horizontal_margin"
-                    android:paddingTop="@dimen/activity_vertical_margin">
+                    android:id="@+id/first_part"
+                    android:layout_width="350dp"
+                    android:layout_height="89dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="@dimen/padding_10"
+                    android:layout_marginTop="23dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="3dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_event_group_a100"/>
 
-                    <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:background="@drawable/background_rectangle_blue"/>-->
-
-                    <!--event row-->
-                    <ImageView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="100"
-                        android:background="@drawable/background_rectangle_side_bar"
-                        android:tag="dark_side_bar" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/background_rectangle_blue"
-                        android:orientation="vertical"
-                        android:paddingBottom="@dimen/activity_vertical_margin"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:paddingTop="@dimen/activity_vertical_margin">
-
-                        <TextView
-                            android:id="@+id/event_detail_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@{eventDetailVM.eventDetailTitleString}"
-                            android:textSize="@dimen/page_text_size"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/event_detail_repeat_info"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@{eventDetailVM.eventDetailRepeatString}" />
-
-                        <TextView
-                            android:id="@+id/event_location_info"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@{eventDetailVM.eventDetailLocationString}" />
-                    </LinearLayout>
-                </LinearLayout>
-
-
-                <TextView
-                    android:id="@+id/blankTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/page_text_size" />
-                <!--Time slot part-->
-                <TextView
-                    android:tag="attendee select one time slot to confirm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text='@{eventDetailVM.eventDetailEvent.attendees.size()>1 ? "select one or more timeslot" : "select one timeslot"}'/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:tag="time slot 1 first level"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/table_row_border"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_circle" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.0"
-                                android:paddingLeft="4dp"
-                                android:text="WED 20/7 12:00 PM - 13:00PM"
-                                android:textColor="@color/text_enable"
-                                android:textSize="@dimen/page_text_size" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="6"
-                                android:textColor="@color/text_disable"
-                                android:textSize="@dimen/page_text_size" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/arrow" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:tag="time slot 2 first level"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/table_row_border"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_circle" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.0"
-                                android:paddingLeft="4dp"
-                                android:text="WED 20/7 12:00 PM - 13:00PM"
-                                android:textColor="@color/text_enable"
-                                android:textSize="@dimen/page_text_size" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="6"
-                                android:textColor="@color/text_disable"
-                                android:textSize="@dimen/page_text_size" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/arrow" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:tag="time slot 3 first level"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@drawable/table_row_border"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_circle" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.0"
-                                android:paddingLeft="4dp"
-                                android:text="WED 20/7 12:00 PM - 13:00PM"
-                                android:textColor="@color/text_enable"
-                                android:textSize="@dimen/page_text_size" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="6"
-                                android:textColor="@color/text_disable"
-                                android:textSize="@dimen/page_text_size" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/arrow" />
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="10dp"
-                        android:paddingLeft="10dp"
-                        >
-                        <TextView
-                            android:tag="view in calendar button"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:textSize="@dimen/page_text_size"
-                            android:text="View in Calendar"
-                            android:background="@drawable/table_row_border"
-                            />
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <!--Rest Info-->
-                <LinearLayout
-                    android:tag="attendee url and notes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_blank_row_height"
-                    android:orientation="vertical"
-                    android:paddingBottom="0dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Attendee"
-                            android:textColor="@color/text_enable"
-                            android:textSize="@dimen/page_text_size" />
-
-                        <TextView
-                            android:id="@+id/attendee_info"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:text="Attendee"
-                            android:textColor="@color/text_disable"
-                            android:textSize="@dimen/page_text_size" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical|right"
-                            android:src="@drawable/arrow" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border"
+                        android:background="@color/bg_event_group_a30"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="URL"
-                            android:textColor="@color/text_enable"
-                            android:textSize="@dimen/page_text_size" />
+                            android:layout_marginLeft="11dp"
+                            android:layout_marginTop="5dp"
+                            android:text="@{eventDetailVM.eventDetailTitleString??@string/no_title}"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/event_detail_url"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="www.unimelb.edu.au"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textSize="@dimen/page_text_size" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="14dp"
+                            android:text="@{eventDetailVM.eventDetailRepeatString?? @string/no_repeat}"
+                            android:textColor="@color/event_detail_repeat"
+                            android:textSize="15sp"
+
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="14dp"
+                            android:layout_marginTop="3dp"
+                            android:text="@{eventDetailVM.eventDetailLocationString ?? @string/no_location}"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/second_part"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/first_part"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="bottom"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginBottom="@dimen/padding_5"
+                        android:textColor="@color/gray_b2b2b2"
+                        android:text="@{eventDetailVM.eventDetailEvent.attendees.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:background="#ffffff"
+                        android:orientation="vertical">
+
+                        <!-- suggest time slot 1-->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp">
+
+                            <ImageView
+                                android:id="@+id/ic_circle_fst"
+                                android:layout_width="23dp"
+                                android:layout_height="23dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="14dp"
+                                android:background="@drawable/ic_circle" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="22dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="13dp"
+                                android:layout_toRightOf="@+id/ic_circle_fst"
+                                android:text="@{eventDetailVM.eventDetailSuggestTimeSlotFst?? @string/none}"
+                                android:textSize="17sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_below="@id/ic_circle_fst"
+                                android:layout_marginLeft="44dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@color/gray_b2b2b2" />
+                        </RelativeLayout>
+
+                        <!--suggest time slot 2-->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp">
+
+                            <ImageView
+                                android:id="@+id/ic_circle_snd"
+                                android:layout_width="23dp"
+                                android:layout_height="23dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="14dp"
+                                android:background="@drawable/ic_circle" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="22dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="13dp"
+                                android:layout_toRightOf="@+id/ic_circle_snd"
+                                android:text="@{eventDetailVM.eventDetailSuggestTimeSlotSnd?? @string/none}"
+                                android:textSize="17sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_below="@id/ic_circle_snd"
+                                android:layout_marginLeft="44dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@color/gray_b2b2b2" />
+                        </RelativeLayout>
+
+                        <!--suggest time slot third-->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp">
+
+                            <ImageView
+                                android:id="@+id/ic_circle_trd"
+                                android:layout_width="23dp"
+                                android:layout_height="23dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="14dp"
+                                android:background="@drawable/ic_circle" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="22dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="13dp"
+                                android:layout_toRightOf="@+id/ic_circle_trd"
+                                android:text="@{eventDetailVM.eventDetailSuggestTimeSlotTrd?? @string/none}"
+                                android:textSize="17sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_below="@id/ic_circle_trd"
+                                android:layout_marginLeft="44dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@color/gray_b2b2b2" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:gravity="center"
+                            android:text="@string/view_in_calendar"
+                            android:textColor="@color/event_detail_repeat"
+                            android:textSize="17dp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/event_detail_blank"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/second_part" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_detail_blank"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/padding_10">
+
+                    <!--Attendee -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/event_detail_attendee_title"
+                            android:layout_width="65dp"
+                            android:layout_height="45dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/invitee"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="22dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@+id/event_detail_attendee_arrow"
+                            android:text="@{eventDetailVM.eventDetailAttendeeString??@string/none}"
+                            android:textColor="@color/gray_b2b2b2"
+                            android:textSize="17dp" />
+
+                        <TextView
+                            android:id="@+id/event_detail_attendee_arrow"
+                            android:layout_width="8dp"
+                            android:layout_height="13dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/padding_10"
+                            android:background="@drawable/icon_general_arrow_right" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/event_detail_attendee_arrow"
+                            android:layout_marginTop="@dimen/padding_10"
+                            android:background="@color/gray_b2b2b2" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/url"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/event_detail_url_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="25dp"
+                            android:autoLink="web"
+                            android:gravity="center_vertical"
+                            android:hint="@string/url"
+                            android:textColor="@color/event_detail_repeat"
+                            android:textColorHint="@color/event_detail_repeat"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/event_detail_url_link"
+                            android:layout_marginTop="@dimen/padding_5"
+                            android:background="@color/gray_b2b2b2" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/table_row_border"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        <LinearLayout
+                        <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/note"
+                            android:textSize="17sp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:id="@+id/event_detail_note"
+                                android:layout_width="322dp"
                                 android:layout_height="wrap_content"
-                                android:text="Note"
-                                android:textColor="@color/text_enable"
-                                android:textSize="@dimen/page_text_size" />
+                                android:layout_marginLeft="@dimen/padding_10"
+                                android:layout_marginTop="@dimen/padding_5"
+                                android:text="@{eventDetailVM.eventDetailNote?? @string/none}"
+                                android:textColor="@color/gray_b2b2b2"
+                                android:textSize="17sp" />
 
                             <TextView
-                                android:id="@+id/event_detail_note_info"
+                                android:id="@+id/event_detail_note_arrow"
+                                android:layout_width="8dp"
+                                android:layout_height="13dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="@dimen/padding_10"
+                                android:background="@drawable/icon_general_arrow_right" />
+                            <TextView
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="10dp"
-                                android:text="AcxAcxAcxAcxAcxAcxAcxAcxAcxAcxAcxAcxAcxAcxAcxAcxAcxAcx"
-                                android:textColor="@color/text_disable"
-                                android:textSize="@dimen/page_text_size" />
-                        </LinearLayout>
+                                android:layout_height="1dp"
+                                android:layout_below="@id/event_detail_note"
+                                android:layout_marginTop="@dimen/padding_5"
+                                android:background="@color/gray_b2b2b2" />
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/arrow" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/event_detail_photo_RL"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:id="@+id/event_detail_photo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="@string/photo"
+                                android:textSize="17sp"/>
+                            <TextView
+                                android:id="@+id/event_detail_photo_arrow"
+                                android:layout_width="8dp"
+                                android:layout_height="13dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="@dimen/padding_10"
+                                android:background="@drawable/icon_general_arrow_right" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_below="@id/event_detail_photo"
+                                android:layout_marginTop="@dimen/padding_5"
+                                android:background="@color/gray_b2b2b2" />
+
+                        </RelativeLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_below="@+id/event_detail_photo_RL" />
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+
+            </RelativeLayout>
+
         </ScrollView>
 
-        <Button
-            android:id="@+id/confirm_btn"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="10"
-            android:background="@color/slategray"
-            android:text="confirm"
-            android:textAlignment="center"
-            android:textColor="@color/text_disable" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:paddingBottom="@dimen/padding_10"
+            android:paddingLeft="@dimen/padding_10"
+            android:paddingRight="@dimen/padding_10">
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/confirm_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="@dimen/padding_5"
+                android:layout_weight="1"
+                android:background="#63ADF2"
+                android:text="confirm"
+                android:textAlignment="center"
+                android:textColor="#4A4A4A" />
+
+            <Button
+                android:id="@+id/confirm_btn2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/padding_5"
+                android:layout_weight="1"
+                android:background="#F45B69"
+                android:text="@string/reject_all"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+    </RelativeLayout>
 </layout>

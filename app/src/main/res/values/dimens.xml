@@ -16,6 +16,8 @@
     <dimen name="hide">0dp</dimen>
     <dimen name="wrap_content">-2dp</dimen>
 
+    <dimen name="padding_10">10dp</dimen>
+    <dimen name="padding_5">5dp</dimen>
     <!-- Semantic definitions -->
 
     <dimen name="horizontal_page_margin">@dimen/margin_medium</dimen>

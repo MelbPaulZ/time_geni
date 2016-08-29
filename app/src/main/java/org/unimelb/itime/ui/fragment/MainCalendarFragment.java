@@ -97,6 +97,8 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         suggestTimeArrayList.add(calendar.getTimeInMillis() + 3600000 * 8);
         event.setProposedTimeSlots(suggestTimeArrayList);
 
+        event.setRepeatTypeId(1);
+
 
 
         WeekView weekView = (WeekView) binding.getRoot().findViewById(R.id.week_view);

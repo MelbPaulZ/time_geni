@@ -305,4 +305,17 @@
     <color name="gray_color">#AFAFAF</color>
     <color name="bg_sort_color">#EDEDED</color>
     <color name="page_bg_color">#efeef5</color>
+
+
+    <!-- a = alpha -->
+    <color name="bg_event_group_a100">#63ADF2</color>
+    <color name="bg_event_group_a30">#4D63ADF2</color>
+    <color name="event_detail_repeat">#06457F</color>
+    <color name="gray_b2b2b2">#B2B2B2</color>
+
+
+
+
+
+
 </resources>

@@ -124,18 +124,7 @@
     <string name="next">next</string>
     <string name="back">back</string>
     <string name="delete_event">delete_event</string>
-
-    <string name="select_one_or_more_timeslot">Select One Or More Timeslot</string>
-    <string name="select_one_timeslot">Select One Timeslot</string>
     <string name="no_repeat">No Repeat</string>
-    <string name="no_location">No Location</string>
-    <string name="reject_all">Reject All</string>
-    <string name="no_title">No Title</string>
-    <string name="none">None</string>
-    <string name="view_in_calendar">View in Calendar</string>
-    <string name="invitee">Invitee</string>
-    <string name="url">URL</string>
-    <string name="note">Note</string>
-    <string name="photo">Photo</string>
+
 
 </resources>
