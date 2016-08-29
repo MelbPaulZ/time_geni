@@ -93,7 +93,9 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     public void startEventEditActivity(ITimeEventInterface iTimeEventInterface){
         Intent intent = new Intent(this,EventDetailActivity.class);
-//        intent.putExtra("Event",iTimeEventInterface);
+        Event event = (Event) iTimeEventInterface;
+        intent.putExtra("Event",event);
+        startActivity(intent);
     }
 
 

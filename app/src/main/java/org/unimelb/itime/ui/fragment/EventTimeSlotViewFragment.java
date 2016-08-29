@@ -11,11 +11,12 @@ import android.view.ViewGroup;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
-import org.unimelb.itime.vendor.eventview.Event;
+
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
@@ -52,23 +53,43 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         calendar.set(Calendar.HOUR_OF_DAY,7);
         calendar.set(Calendar.MINUTE,30);
         simulateTimeSlots.add(calendar.getTime().getTime());
-        weekTimeSlotView.setTimeSlots(simulateTimeSlots,60);
 
-        // simulate Events
-        ArrayList<ITimeEventInterface> eventArrayList = new ArrayList<>();
+
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.DAY_OF_MONTH,30);
-        calendar1.set(Calendar.HOUR_OF_DAY, 3);
-        calendar1.set(Calendar.MINUTE,0);
-        Event event = new Event();
-        event.setTitle("itime meeting");
-        event.setStartTime(calendar1.getTimeInMillis());
-        event.setEndTime(calendar1.getTimeInMillis() + 3600000*2);
-        event.setEventType(Event.Type.GROUP);
-        event.setStatus(Event.Status.COMFIRM);
+        calendar1.set(Calendar.HOUR_OF_DAY,8);
+        calendar1.set(Calendar.MINUTE,45);
+        simulateTimeSlots.add(calendar1.getTime().getTime());
 
-        eventArrayList.add((ITimeEventInterface) event);
-        weekTimeSlotView.setEvent(eventArrayList);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set(Calendar.DAY_OF_MONTH, 30);
+        calendar2.set(Calendar.HOUR_OF_DAY,4);
+        calendar2.set(Calendar.MINUTE,0);
+        simulateTimeSlots.add(calendar2.getTimeInMillis());
+
+        weekTimeSlotView.setTimeSlots(simulateTimeSlots,60);
+
+
+
+
+        // simulate Events
+//        Event event = new Event();
+////        Event event = new Event();
+//        event.setTitle("itime meeting");
+//        event.setStatus(Event.Status.COMFIRM); // 5== pending, 6== confirm
+//        event.setEventType(1); //0 == private, 1== group, 2== public
+//        Calendar calendar1 =Calendar.getInstance();
+//        calendar1.set(Calendar.DAY_OF_MONTH,30);
+//        calendar1.set(Calendar.HOUR_OF_DAY,4);
+//        calendar1.set(Calendar.MINUTE,15);
+//        calendar1.set(Calendar.SECOND,0);
+//        event.setStartTime(calendar1.getTimeInMillis());
+//        event.setEndTime(calendar1.getTimeInMillis() + 3600000*2);
+//
+//        WeekView weekView = (WeekView) binding.getRoot().findViewById(R.id.week_view);
+//        weekView.setEvent(event);
+//
+//        weekTimeSlotView.setEvent(event);
 //
 
 

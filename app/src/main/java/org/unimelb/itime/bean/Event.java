@@ -8,6 +8,7 @@ import android.databinding.Bindable;
 //import org.unimelb.itime.BR;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 /**
  * Created by Paul on 23/08/2016.
  */
-public class Event extends BaseObservable implements ITimeEventInterface {
+public class Event extends BaseObservable implements ITimeEventInterface,Serializable {
     private String eventId;
     private String eventTitle;
     private String eventNote;
@@ -40,6 +41,8 @@ public class Event extends BaseObservable implements ITimeEventInterface {
     private ArrayList<String> eventPhotos;
     private String url;
     private int duration;
+    private long startTime;
+    private long endTime;
 //    attendee repeat?
     private ArrayList<Long> proposedTimeslots;
 
@@ -114,42 +117,47 @@ public class Event extends BaseObservable implements ITimeEventInterface {
 
     @Override
     public void setStartTime(long l) {
-
+        this.startTime = l;
     }
 
     @Override
     public long getStartTime() {
-        return 0;
+        return startTime;
     }
 
     @Override
     public void setEndTime(long l) {
-
+        this.endTime = l;
     }
 
     @Override
     public long getEndTime() {
-        return 0;
+        return this.endTime;
     }
 
     @Override
     public void setEventType(int i) {
-
+        this.eventTypeId = i;
     }
 
     @Override
     public int getEventType() {
-        return 0;
+        return eventTypeId;
     }
 
     @Override
     public void setStatus(int i) {
-
+        this.userStatusId = i;
     }
 
     @Override
     public int getStatus() {
-        return 0;
+        return userStatusId;
+    }
+
+    @Override
+    public void setProposedTimeSlots(ArrayList arrayList) {
+        this.proposedTimeslots = arrayList;
     }
 
 
@@ -354,12 +362,14 @@ public class Event extends BaseObservable implements ITimeEventInterface {
     }
 
 
-    public void setProposedTimeSlots(ArrayList<Long> arrayList) {
-        proposedTimeslots = arrayList;
-    }
 
 
     public ArrayList<Long> getProposedTimeSlots() {
         return proposedTimeslots;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }
