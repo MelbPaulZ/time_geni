@@ -85,7 +85,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="100"
-                            android:background="@drawable/background_rectangle_side_bar"
+                            android:background="@drawable/event_reject_edit_text_background"
                             android:tag="dark_side_bar" />
 
                         <LinearLayout
@@ -135,7 +135,7 @@
                         <!--android:layout_width="match_parent"-->
                         <!--android:layout_height="match_parent"-->
                         <!--android:layout_weight="100"-->
-                        <!--android:background="@drawable/background_rectangle_side_bar"-->
+                        <!--android:background="@drawable/event_reject_edit_text_background"-->
                         <!--android:tag="dark_side_bar" />-->
 
                     <!--<LinearLayout-->

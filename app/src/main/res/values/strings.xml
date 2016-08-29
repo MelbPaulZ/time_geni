@@ -137,5 +137,12 @@
     <string name="url">URL</string>
     <string name="note">Note</string>
     <string name="photo">Photo</string>
+    <string name="event_details">Event Details</string>
+    <string name="reason">Reason...</string>
+    <string name="please_enter_the_reason_of_rejecting_this_event">Please enter the reason of rejecting this event</string>
+    <string name="reject_this_event">Reject This Event</string>
+    <string name="reject">Reject</string>
+    <string name="time_slots_confirm_array">time slots confirm array</string>
+    <string name="event">event</string>
 
 </resources>

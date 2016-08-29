@@ -1,19 +1,30 @@
 package org.unimelb.itime.ui.viewmodel;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.preference.DialogPreference;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
+import org.unimelb.itime.BR;
+import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.ui.presenter.EventDetailPresenter;
+import org.unimelb.itime.ui.presenter.EventDetailForInviteePresenter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.zip.Inflater;
+
 
 /**
  * Created by Paul on 29/08/2016.
  */
-public class EventDetailViewModel extends BaseObservable {
-    private EventDetailPresenter presenter;
+public class EventDetailViewForInviteeViewModel extends BaseObservable {
+    private EventDetailForInviteePresenter presenter;
     private Event eventDetailEvent;
     private String eventDetailTitleString;
     private String eventDetailRepeatString;
@@ -24,12 +35,134 @@ public class EventDetailViewModel extends BaseObservable {
     private String eventDetailAttendeeString;
     private String eventDetailUrl;
     private String eventDetailNote;
-    private int numberOfAttendee;
+
+    private boolean[] timeSlotChooseArray;
+    private boolean isSelectTimeSlot;
+
+    private LayoutInflater inflater;
 
 
-    public EventDetailViewModel(EventDetailPresenter presenter) {
+    public EventDetailViewForInviteeViewModel(EventDetailForInviteePresenter presenter) {
         this.presenter = presenter;
+        timeSlotChooseArray = new boolean[]{false, false, false};
     }
+
+    public View.OnClickListener onClickToWeekViewCalendar(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.gotoWeekViewCalendar();
+            }
+        };
+    }
+
+    public View.OnClickListener onTimeSlotSelect1(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (timeSlotChooseArray[0] == false){
+                    timeSlotChooseArray[0] = true;
+                    view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
+                }else{
+                    timeSlotChooseArray[0] = false;
+                    view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                }
+
+                if (isHasSelectAtLeastOneTimeSlot()){
+                    setSelectTimeSlot(true);
+                }else{
+                    setSelectTimeSlot(false);
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener onTimeSlotSelect2(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (timeSlotChooseArray[1] == false){
+                    timeSlotChooseArray[1] = true;
+                    view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
+                }else{
+                    timeSlotChooseArray[1] = false;
+                    view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                }
+
+                if (isHasSelectAtLeastOneTimeSlot()){
+                    setSelectTimeSlot(true);
+                }else{
+                    setSelectTimeSlot(false);
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener onTimeSlotSelect3(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (timeSlotChooseArray[2] == false){
+                    timeSlotChooseArray[2] = true;
+                    view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
+                }else{
+                    timeSlotChooseArray[2] = false;
+                    view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                }
+
+                if (isHasSelectAtLeastOneTimeSlot()){
+                    setSelectTimeSlot(true);
+                }else{
+                    setSelectTimeSlot(false);
+                }
+            }
+        };
+    }
+
+
+    private boolean isHasSelectAtLeastOneTimeSlot(){
+        for (Boolean timeslotSelect: timeSlotChooseArray){
+            if (timeslotSelect)
+                return true;
+        }
+        return false;
+    }
+
+    public View.OnClickListener onClickRejectAll(){
+        return new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                inflater = presenter.getInflater();
+                builder.setView(inflater.inflate(R.layout.event_detail_reject_alert_view, null))
+                        .setPositiveButton(R.string.reject, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Log.i("reject","here ");
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Log.i("cancel","here here");
+                            }
+                        });
+                builder.show();
+            }
+        };
+    }
+
+    public View.OnClickListener onClickConfirm(){
+        return new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                presenter.confirmAndGotoWeekViewCalendar(eventDetailEvent,timeSlotChooseArray);
+            }
+        };
+    }
+
+
+
 
     @Bindable
     public Event getEventDetailEvent() {
@@ -38,6 +171,7 @@ public class EventDetailViewModel extends BaseObservable {
 
     public void setEventDetailEvent(Event eventDetailEvent) {
         this.eventDetailEvent = eventDetailEvent;
+        notifyPropertyChanged(BR.eventDetailEvent);
         updateAll(eventDetailEvent);
 
     }
@@ -161,6 +295,7 @@ public class EventDetailViewModel extends BaseObservable {
 
     public void setEventDetailTitleString(String eventDetailTitleString) {
         this.eventDetailTitleString = eventDetailTitleString;
+        notifyPropertyChanged(BR.eventDetailTitleString);
     }
 
     @Bindable
@@ -170,6 +305,7 @@ public class EventDetailViewModel extends BaseObservable {
 
     public void setEventDetailRepeatString(String eventDetailRepeatString) {
         this.eventDetailRepeatString = eventDetailRepeatString;
+        notifyPropertyChanged(BR.eventDetailRepeatString);
     }
 
     @Bindable
@@ -179,6 +315,7 @@ public class EventDetailViewModel extends BaseObservable {
 
     public void setEventDetailLocationString(String eventDetailLocationString) {
         this.eventDetailLocationString = eventDetailLocationString;
+        notifyPropertyChanged(BR.eventDetailLocationString);
     }
 
     @Bindable
@@ -188,6 +325,7 @@ public class EventDetailViewModel extends BaseObservable {
 
     public void setEventDetailSuggestTimeSlotFst(String eventDetailSuggestTimeSlotFst) {
         this.eventDetailSuggestTimeSlotFst = eventDetailSuggestTimeSlotFst;
+        notifyPropertyChanged(BR.eventDetailSuggestTimeSlotFst);
     }
 
     @Bindable
@@ -197,6 +335,7 @@ public class EventDetailViewModel extends BaseObservable {
 
     public void setEventDetailSuggestTimeSlotSnd(String eventDetailSuggestTimeSlotSnd) {
         this.eventDetailSuggestTimeSlotSnd = eventDetailSuggestTimeSlotSnd;
+        notifyPropertyChanged(BR.eventDetailSuggestTimeSlotSnd);
     }
 
     @Bindable
@@ -206,6 +345,7 @@ public class EventDetailViewModel extends BaseObservable {
 
     public void setEventDetailSuggestTimeSlotTrd(String eventDetailSuggestTimeSlotTrd) {
         this.eventDetailSuggestTimeSlotTrd = eventDetailSuggestTimeSlotTrd;
+        notifyPropertyChanged(BR.eventDetailSuggestTimeSlotTrd);
     }
 
     @Bindable
@@ -215,6 +355,7 @@ public class EventDetailViewModel extends BaseObservable {
 
     public void setEventDetailAttendeeString(String eventDetailAttendeeString) {
         this.eventDetailAttendeeString = eventDetailAttendeeString;
+        notifyPropertyChanged(BR.eventDetailAttendeeString);
     }
 
     @Bindable
@@ -224,6 +365,7 @@ public class EventDetailViewModel extends BaseObservable {
 
     public void setEventDetailUrl(String eventDetailUrl) {
         this.eventDetailUrl = eventDetailUrl;
+        notifyPropertyChanged(BR.eventDetailUrl);
     }
 
     @Bindable
@@ -233,13 +375,17 @@ public class EventDetailViewModel extends BaseObservable {
 
     public void setEventDetailNote(String eventDetailNote) {
         this.eventDetailNote = eventDetailNote;
+        notifyPropertyChanged(BR.eventDetailNote);
     }
 
-    public int getNumberOfAttendee() {
-        return numberOfAttendee;
+    @Bindable
+    public boolean isSelectTimeSlot() {
+        return isSelectTimeSlot;
     }
 
-    public void setNumberOfAttendee(int numberOfAttendee) {
-        this.numberOfAttendee = numberOfAttendee;
+    public void setSelectTimeSlot(boolean selectTimeSlot) {
+        isSelectTimeSlot = selectTimeSlot;
+        notifyPropertyChanged(BR.selectTimeSlot);
     }
+
 }

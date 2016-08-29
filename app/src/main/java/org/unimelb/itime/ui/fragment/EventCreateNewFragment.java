@@ -24,7 +24,6 @@ import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 /**
  * Created by Paul on 23/08/2016.
  */
-//public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, EventCreateNewPresenter> implements EventCreateNewMvpView, EventTimePickerFragment.EventTimePickerCommunicator{
 public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, EventCreateNewPresenter> implements EventCreateNewMvpView{
 
     private FragmentEventCreateNewBinding binding;

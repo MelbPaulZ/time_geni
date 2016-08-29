@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="eventDetailVM"
-            type="org.unimelb.itime.ui.viewmodel.EventDetailViewModel" />
+            name="eventDetailForInviteeVM"
+            type="org.unimelb.itime.ui.viewmodel.EventDetailViewForInviteeViewModel" />
     </data>
 
     <RelativeLayout
@@ -34,22 +34,24 @@
                     android:layout_gravity="left"
                     android:background="@null"
                     android:gravity="center_vertical|left"
-                    android:text="Back" />
+                    android:onClick="@{eventDetailForInviteeVM.onClickToWeekViewCalendar()}"
+                    android:text="@string/back" />
 
                 <TextView
                     android:id="@+id/toolbar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Event Details" />
+                    android:textSize="18dp"
+                    android:text="@string/event_details" />
 
-                <Button
-                    android:id="@+id/event_detail_edit_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:background="@null"
-                    android:text="@string/edit" />
+                <!--<Button-->
+                    <!--android:id="@+id/event_detail_edit_btn"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:background="@null"-->
+                    <!--android:text="@string/edit" />-->
             </android.support.v7.widget.Toolbar>
         </LinearLayout>
 
@@ -90,7 +92,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="11dp"
                             android:layout_marginTop="5dp"
-                            android:text="@{eventDetailVM.eventDetailTitleString??@string/no_title}"
+                            android:text="@{eventDetailForInviteeVM.eventDetailTitleString??@string/no_title}"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -98,7 +100,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="14dp"
-                            android:text="@{eventDetailVM.eventDetailRepeatString?? @string/no_repeat}"
+                            android:text="@{eventDetailForInviteeVM.eventDetailRepeatString?? @string/no_repeat}"
                             android:textColor="@color/event_detail_repeat"
                             android:textSize="15sp"
 
@@ -109,7 +111,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="14dp"
                             android:layout_marginTop="3dp"
-                            android:text="@{eventDetailVM.eventDetailLocationString ?? @string/no_location}"
+                            android:text="@{eventDetailForInviteeVM.eventDetailLocationString ?? @string/no_location}"
                             android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -128,7 +130,7 @@
                         android:layout_marginLeft="7dp"
                         android:layout_marginBottom="@dimen/padding_5"
                         android:textColor="@color/gray_b2b2b2"
-                        android:text="@{eventDetailVM.eventDetailEvent.attendees.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
+                        android:text="@{eventDetailForInviteeVM.eventDetailEvent.attendees.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -147,8 +149,9 @@
                                 android:layout_width="23dp"
                                 android:layout_height="23dp"
                                 android:layout_marginLeft="10dp"
+                                android:onClick="@{eventDetailForInviteeVM.onTimeSlotSelect1()}"
                                 android:layout_marginTop="14dp"
-                                android:background="@drawable/ic_circle" />
+                                android:background="@drawable/icon_event_attendee_unselected" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -156,7 +159,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="13dp"
                                 android:layout_toRightOf="@+id/ic_circle_fst"
-                                android:text="@{eventDetailVM.eventDetailSuggestTimeSlotFst?? @string/none}"
+                                android:text="@{eventDetailForInviteeVM.eventDetailSuggestTimeSlotFst?? @string/none}"
                                 android:textSize="17sp" />
 
                             <TextView
@@ -179,7 +182,8 @@
                                 android:layout_height="23dp"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="14dp"
-                                android:background="@drawable/ic_circle" />
+                                android:onClick="@{eventDetailForInviteeVM.onTimeSlotSelect2()}"
+                                android:background="@drawable/icon_event_attendee_unselected" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -187,7 +191,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="13dp"
                                 android:layout_toRightOf="@+id/ic_circle_snd"
-                                android:text="@{eventDetailVM.eventDetailSuggestTimeSlotSnd?? @string/none}"
+                                android:text="@{eventDetailForInviteeVM.eventDetailSuggestTimeSlotSnd?? @string/none}"
                                 android:textSize="17sp" />
 
                             <TextView
@@ -210,7 +214,8 @@
                                 android:layout_height="23dp"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="14dp"
-                                android:background="@drawable/ic_circle" />
+                                android:onClick="@{eventDetailForInviteeVM.onTimeSlotSelect3()}"
+                                android:background="@drawable/icon_event_attendee_unselected" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -218,7 +223,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="13dp"
                                 android:layout_toRightOf="@+id/ic_circle_trd"
-                                android:text="@{eventDetailVM.eventDetailSuggestTimeSlotTrd?? @string/none}"
+                                android:text="@{eventDetailForInviteeVM.eventDetailSuggestTimeSlotTrd?? @string/none}"
                                 android:textSize="17sp" />
 
                             <TextView
@@ -276,7 +281,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="5dp"
                             android:layout_toLeftOf="@+id/event_detail_attendee_arrow"
-                            android:text="@{eventDetailVM.eventDetailAttendeeString??@string/none}"
+                            android:text="@{eventDetailForInviteeVM.eventDetailAttendeeString??@string/none}"
                             android:textColor="@color/gray_b2b2b2"
                             android:textSize="17dp" />
 
@@ -315,9 +320,10 @@
                             android:layout_height="25dp"
                             android:autoLink="web"
                             android:gravity="center_vertical"
+                            android:text="@{eventDetailForInviteeVM.eventDetailUrl}"
                             android:hint="@string/url"
                             android:textColor="@color/event_detail_repeat"
-                            android:textColorHint="@color/event_detail_repeat"
+                            android:textColorHint="@color/gray_b2b2b2"
                             android:textSize="15sp" />
 
                         <TextView
@@ -350,7 +356,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_10"
                                 android:layout_marginTop="@dimen/padding_5"
-                                android:text="@{eventDetailVM.eventDetailNote?? @string/none}"
+                                android:text="@{eventDetailForInviteeVM.eventDetailNote?? @string/none}"
                                 android:textColor="@color/gray_b2b2b2"
                                 android:textSize="17sp" />
 
@@ -380,6 +386,7 @@
                                 android:id="@+id/event_detail_photo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
+                                android:gravity="center"
                                 android:text="@string/photo"
                                 android:textSize="17sp"/>
                             <TextView
@@ -424,22 +431,26 @@
                 android:layout_height="50dp"
                 android:layout_marginRight="@dimen/padding_5"
                 android:layout_weight="1"
-                android:background="#63ADF2"
+                android:background="@{eventDetailForInviteeVM.isSelectTimeSlot? @color/bg_event_group_a100 : @color/button_event_confirm_unable_blue}"
                 android:text="confirm"
+                android:clickable="@{eventDetailForInviteeVM.isSelectTimeSlot? true: false}"
+                android:onClick="@{eventDetailForInviteeVM.onClickConfirm()}"
                 android:textAlignment="center"
-                android:textColor="#4A4A4A" />
+                android:textColor="@{eventDetailForInviteeVM.isSelectTimeSlot? @color/white : @color/gray_b2b2b2}" />
 
             <Button
-                android:id="@+id/confirm_btn2"
+                android:id="@+id/reject_all_btn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/padding_5"
                 android:layout_weight="1"
-                android:background="#F45B69"
+                android:background="@{eventDetailForInviteeVM.isSelectTimeSlot?  @color/button_event_reject_unable_red : @color/button_event_reject_able_red}"
                 android:text="@string/reject_all"
                 android:textAlignment="center"
-                android:textColor="#FFFFFF" />
+                android:clickable="@{eventDetailForInviteeVM.isSelectTimeSlot? false:true}"
+                android:onClick="@{eventDetailForInviteeVM.onClickRejectAll()}"
+                android:textColor="@{eventDetailForInviteeVM.isSelectTimeSlot?  @color/gray_b2b2b2 : @color/white}" />
         </LinearLayout>
 
     </RelativeLayout>
