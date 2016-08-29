@@ -19,7 +19,8 @@ public class EventDetailActivity extends AppCompatActivity {
         Event event= (Event) getIntent().getSerializableExtra("Event");
 
         EventDetailFragment eventDetailFragment = new EventDetailFragment();
-        getFragmentManager().beginTransaction().add(R.id.event_detail_fragment,eventDetailFragment).commit();
+        eventDetailFragment.setEvent(event);
+        getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment,eventDetailFragment).commit();
 
 
 

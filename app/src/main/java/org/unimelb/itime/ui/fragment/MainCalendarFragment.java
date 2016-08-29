@@ -84,6 +84,21 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         event.setStartTime(calendar.getTimeInMillis());
         event.setEndTime(calendar.getTimeInMillis() + 3600000 * 2);
 
+        // set attendee
+        ArrayList<String> attendeeArrayList = new ArrayList<>();
+        attendeeArrayList.add("Paul");
+        attendeeArrayList.add("David");
+        attendeeArrayList.add("Tim");
+        event.setAttendees(attendeeArrayList);
+
+        ArrayList<Long> suggestTimeArrayList = new ArrayList<>();
+        suggestTimeArrayList.add(calendar.getTimeInMillis());
+        suggestTimeArrayList.add(calendar.getTimeInMillis() + 3600000 * 4);
+        suggestTimeArrayList.add(calendar.getTimeInMillis() + 3600000 * 8);
+        event.setProposedTimeSlots(suggestTimeArrayList);
+
+
+
         WeekView weekView = (WeekView) binding.getRoot().findViewById(R.id.week_view);
         weekView.addEvent(event);
         Log.i("calendar",calendar.getTime().toString());
