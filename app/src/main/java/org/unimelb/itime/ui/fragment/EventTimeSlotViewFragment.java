@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Paul on 27/08/2016.
@@ -42,35 +45,43 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_create_timeslot_view, container, false);
+        return binding.getRoot();
+    }
 
 
-//        ******************************simulate data
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        eventCreateTimeslotViewModel = new EventCreateTimeslotViewModel(getPresenter());
+        binding.setTimeslotVM(eventCreateTimeslotViewModel);
+        initData();
+    }
+
+    public void initData(){
+        //        ******************************simulate data
         WeekTimeSlotView weekTimeSlotView = (WeekTimeSlotView) binding.getRoot().findViewById(R.id.week_time_slot_view);
         // simulate timeSlots
-        ArrayList<Long> simulateTimeSlots = new ArrayList<>();
+        Map<Long,Boolean> simulateTimeSlots = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH,29);
         calendar.set(Calendar.HOUR_OF_DAY,7);
         calendar.set(Calendar.MINUTE,30);
-        simulateTimeSlots.add(calendar.getTime().getTime());
+        simulateTimeSlots.put(calendar.getTime().getTime(),false);
 
 
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.DAY_OF_MONTH,30);
         calendar1.set(Calendar.HOUR_OF_DAY,8);
         calendar1.set(Calendar.MINUTE,45);
-        simulateTimeSlots.add(calendar1.getTime().getTime());
+        simulateTimeSlots.put(calendar1.getTime().getTime(),true);
 
         Calendar calendar2 = Calendar.getInstance();
         calendar2.set(Calendar.DAY_OF_MONTH, 30);
         calendar2.set(Calendar.HOUR_OF_DAY,4);
         calendar2.set(Calendar.MINUTE,0);
-        simulateTimeSlots.add(calendar2.getTimeInMillis());
+        simulateTimeSlots.put(calendar2.getTimeInMillis(),false);
 
         weekTimeSlotView.setTimeSlots(simulateTimeSlots,60);
-
-
-
 
         // simulate Events
 //        Event event = new Event();
@@ -91,18 +102,6 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
 //
 //        weekTimeSlotView.setEvent(event);
 //
-
-
-
-
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        eventCreateTimeslotViewModel = new EventCreateTimeslotViewModel(getPresenter());
-        binding.setTimeslotVM(eventCreateTimeslotViewModel);
     }
 
     @Override

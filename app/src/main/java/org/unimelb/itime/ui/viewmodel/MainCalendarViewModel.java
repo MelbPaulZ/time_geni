@@ -74,7 +74,7 @@ public class MainCalendarViewModel extends BaseObservable{
     public WeekView.OnClickEventInterface onClickEvent(){
         return new WeekView.OnClickEventInterface() {
             @Override
-            public void editEvent(ITimeEventInterface iTimeEventInterface) {
+            public void onClickEditEvent(ITimeEventInterface iTimeEventInterface) {
                 presenter.gotoEditEventActivity(iTimeEventInterface);
             }
         };

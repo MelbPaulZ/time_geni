@@ -24,7 +24,6 @@ import org.unimelb.itime.ui.fragment.EventDatePickerFragment;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.EventTimePickerFragment;
 import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
-import org.unimelb.itime.ui.fragment.EventWeekViewFragment;
 import org.unimelb.itime.ui.fragment.MainContactsFragment;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 import org.unimelb.itime.vendor.weekview.WeekView;
@@ -41,7 +40,6 @@ import butterknife.Unbinder;
     private EventCreateNewFragment eventCreateNewFragment;
     private EventTimePickerFragment eventTimePickerFragment;
     private EventDatePickerFragment eventDatePickerFragment;
-    private EventWeekViewFragment eventWeekViewFragment;
         private EventLocationPickerFragment eventLocationPickerFragment;
         private EventAttendeeFragment eventAttendeeFragment;
         private EventTimeSlotViewFragment eventTimeSlotViewFragment;
@@ -59,8 +57,6 @@ import butterknife.Unbinder;
 
         EventBus.getDefault().register(this);
 
-//        eventWeekViewFragment = new EventWeekViewFragment();
-//        getFragmentManager().beginTransaction().add(R.id.create_event_fragment,eventWeekViewFragment).commit();
 
     }
 

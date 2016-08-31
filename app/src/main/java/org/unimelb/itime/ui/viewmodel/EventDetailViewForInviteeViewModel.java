@@ -6,9 +6,13 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.preference.DialogPreference;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
@@ -132,22 +136,30 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
         return new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
+
                 inflater = presenter.getInflater();
-                builder.setView(inflater.inflate(R.layout.event_detail_reject_alert_view, null))
-                        .setPositiveButton(R.string.reject, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Log.i("reject","here ");
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Log.i("cancel","here here");
-                            }
-                        });
-                builder.show();
+                View root = inflater.inflate(R.layout.event_detail_reject_alert_view, null);
+
+                TextView button_cancel = (TextView) root.findViewById(R.id.alert_message_cancel_button);
+                button_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                TextView button_reject=(TextView) root.findViewById(R.id.alert_message_reject_button);
+                button_reject.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CharSequence msg = "send reject message";
+                        Toast.makeText(presenter.getContext(),msg,Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.setView(root);
+                alertDialog.show();
             }
         };
     }

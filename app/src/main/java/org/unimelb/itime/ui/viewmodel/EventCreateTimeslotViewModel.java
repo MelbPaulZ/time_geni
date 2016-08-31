@@ -52,4 +52,13 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
         };
     }
 
+    public WeekTimeSlotView.OnTimeSlotClickListener onTimeSlotClick(){
+        return new WeekTimeSlotView.OnTimeSlotClickListener() {
+            @Override
+            public void onTimeSlotClick(long l) {
+
+            }
+        };
+    }
+
 }
