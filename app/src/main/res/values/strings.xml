@@ -144,5 +144,13 @@
     <string name="reject">Reject</string>
     <string name="time_slots_confirm_array">time slots confirm array</string>
     <string name="event">event</string>
+    <string name="timeslot_next_btn">text</string>
+    <string name="calendar_type">Calendar Type</string>
+    <string name="alert_time">Alert Time</string>
+    <string name="calendar_type_work">Work</string>
+    <string name="calendar_type_private">Private</string>
+    <string name="publish_to_public">Publish to Public</string>
+    <string name="allow_invitee_to_see_each_other">Allow Invitee to See Each Other</string>
+    <string name="all_day">All Day</string>
 
 </resources>

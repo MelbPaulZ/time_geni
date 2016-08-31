@@ -316,6 +316,9 @@
     <color name="button_event_confirm_unable_blue">#804A4A4A</color>
     <color name="button_event_reject_unable_red">#804A4A4A</color>
     <color name="button_event_reject_able_red">#F45B69</color>
+    <color name="bg_new_event_edit">#EFEFF4</color>
+    <color name="page_title_color">#6D6D6D</color>
+
 
 
 

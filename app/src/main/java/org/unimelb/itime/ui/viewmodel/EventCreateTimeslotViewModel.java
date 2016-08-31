@@ -61,4 +61,8 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
         };
     }
 
+    public void clickDoneBtn(){
+        eventCreateTimeSlotPresenter.toNewEventDetailBeforeSending();
+    }
+
 }

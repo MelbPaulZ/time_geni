@@ -46,10 +46,9 @@ public class MainCalendarViewModel extends BaseObservable{
         return new WeekView.OnWeekViewChangeListener() {
             @Override
             public void onWeekChanged(Calendar calendar) {
-
+                int month = calendar.get(Calendar.MONTH);
                 String tmp = getMonthName(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
                 setToolbarTitle(tmp);
-                Log.d(TAG, "onWeekChanged: " + toolbarTitle);
 
             }
         };

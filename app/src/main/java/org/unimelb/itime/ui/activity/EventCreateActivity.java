@@ -4,32 +4,26 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TimePicker;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.messageevent.MessageUrl;
-import org.unimelb.itime.ui.fragment.EventAttendeeFragment;
+import org.unimelb.itime.ui.fragment.EventCreateDetailBeforeSendingFragment;
+import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.fragment.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.EventDatePickerFragment;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.EventTimePickerFragment;
 import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
-import org.unimelb.itime.ui.fragment.MainContactsFragment;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
-import org.unimelb.itime.vendor.weekview.WeekView;
-import org.unimelb.itime.vendor.weekview.WeekViewHeader;
 
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 //public class EventCreateActivity extends AppCompatActivity implements
@@ -41,8 +35,9 @@ import butterknife.Unbinder;
     private EventTimePickerFragment eventTimePickerFragment;
     private EventDatePickerFragment eventDatePickerFragment;
         private EventLocationPickerFragment eventLocationPickerFragment;
-        private EventAttendeeFragment eventAttendeeFragment;
+        private InviteeFragment inviteeFragment;
         private EventTimeSlotViewFragment eventTimeSlotViewFragment;
+        private EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment;
 
 
 
@@ -117,13 +112,13 @@ import butterknife.Unbinder;
         }
 
         public void toAttendeePicker(EventCreateNewFragment fragment){
-            if (eventAttendeeFragment == null || !(eventAttendeeFragment.isAdded())){
-                eventAttendeeFragment = new EventAttendeeFragment();
+            if (inviteeFragment == null || !(inviteeFragment.isAdded())){
+                inviteeFragment = new InviteeFragment();
                 getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-                getFragmentManager().beginTransaction().add(R.id.create_event_fragment,eventAttendeeFragment).commit();
+                getFragmentManager().beginTransaction().add(R.id.create_event_fragment, inviteeFragment).commit();
             }else{
                 getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-                getFragmentManager().beginTransaction().show(eventAttendeeFragment).commit();
+                getFragmentManager().beginTransaction().show(inviteeFragment).commit();
             }
         }
 
@@ -135,6 +130,17 @@ import butterknife.Unbinder;
             }else{
                 getFragmentManager().beginTransaction().hide(fragment).commit();
                 getSupportFragmentManager().beginTransaction().show(eventTimeSlotViewFragment).commit();
+            }
+        }
+
+        public void toNewEventDetailBeforeSending(EventTimeSlotViewFragment fragment){
+            if (eventCreateDetailBeforeSendingFragment == null || !(eventCreateDetailBeforeSendingFragment.isAdded())){
+                eventCreateDetailBeforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
+                getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateDetailBeforeSendingFragment).commit();
+            }else{
+                getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+                getSupportFragmentManager().beginTransaction().show(eventCreateDetailBeforeSendingFragment).commit();
             }
         }
 

@@ -212,6 +212,7 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
     }
 
 
+
     private String getSuggestTimeStringFromLong(Long startTime,int duration){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime);

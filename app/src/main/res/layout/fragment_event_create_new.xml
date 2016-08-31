@@ -60,22 +60,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/bg_new_event_edit"
+                android:paddingLeft="@dimen/padding_10"
+                android:paddingRight="@dimen/padding_10"
                 android:orientation="vertical">
                 <!--blank for border-->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/page_blank_row_height"
-                    android:background="@drawable/table_row_border" />
+                    android:background="@color/bg_new_event_edit" />
                 <!-- end -->
                 <LinearLayout
                     android:id="@+id/part_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="0dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="0dp">
+                    android:orientation="vertical">
                     <!--Tittle Row-->
                     <EditText
                         android:id="@+id/create_event_title_edittext"
@@ -201,7 +200,26 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border" />
+                        android:background="@color/bg_new_event_edit" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/page_text_size"
+                            android:textColor="@color/text_enable"
+                            android:text="@string/all_day"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            />
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -379,42 +397,92 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border" />
+                        android:background="@color/bg_new_event_edit" />
                     <!-- end -->
 
-                    <LinearLayout
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
+
+                        <!--<EditText-->
+                            <!--android:id="@+id/create_event_url_tv"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:background="@drawable/table_row_border"-->
+                            <!--android:hint="URL"-->
+
+                            <!--android:onClick="@{eventVM.gotoUrl()}"-->
+                            <!--android:text="@={eventVM.eventUrlString}"-->
+                            <!--android:textColor="@color/text_disable"-->
+                            <!--android:autoLink="web"-->
+                            <!--android:textSize="@dimen/page_text_size" />-->
+                    <!--</LinearLayout>-->
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@drawable/table_row_border"-->
+                        <!--android:orientation="horizontal">-->
+
+                        <!--<EditText-->
+                            <!--android:id="@+id/create_event_note_edittext"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:background="@drawable/table_row_border"-->
+                            <!--android:text="@{eventVM.eventNoteString}"-->
+                            <!--android:hint="Note"-->
+                            <!--android:textColor="@color/text_disable"-->
+                            <!--android:textSize="@dimen/page_text_size" />-->
+                    <!--</LinearLayout>-->
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <EditText
-                            android:id="@+id/create_event_url_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/table_row_border"
-                            android:hint="URL"
-
-                            android:onClick="@{eventVM.gotoUrl()}"
-                            android:text="@={eventVM.eventUrlString}"
-                            android:textColor="@color/text_disable"
-                            android:autoLink="web"
-                            android:textSize="@dimen/page_text_size" />
-                    </LinearLayout>
-
+                        android:layout_height="40dp"
+                        android:background="@color/bg_new_event_edit"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border"
-                        android:orientation="horizontal">
-
-                        <EditText
-                            android:id="@+id/create_event_note_edittext"
+                        android:background="@color/white"
+                        android:paddingLeft="@dimen/padding_10"
+                        android:paddingRight="@dimen/padding_10"
+                        android:orientation="vertical">
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/table_row_border"
-                            android:text="@{eventVM.eventNoteString}"
-                            android:hint="Note"
-                            android:textColor="@color/text_disable"
-                            android:textSize="@dimen/page_text_size" />
+                            android:background="@drawable/table_row_border">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/page_text_size"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
+                                android:textColor="@color/text_enable"
+                                android:text="@string/publish_to_public"/>
+                            <Switch
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"/>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/table_row_border">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/page_text_size"
+                                android:text="@string/allow_invitee_to_see_each_other"
+                                android:textColor="@color/text_enable"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"/>
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"/>
+                        </RelativeLayout>
+
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

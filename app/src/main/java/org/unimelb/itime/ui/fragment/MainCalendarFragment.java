@@ -100,9 +100,12 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         event.setRepeatTypeId(1);
 
 
-
+        ArrayList<? extends ITimeEventInterface> eventArrayList = new ArrayList<>();
+        ArrayList<ITimeEventInterface> iTimeEventInterfacesArrayList;
+        iTimeEventInterfacesArrayList = (ArrayList<ITimeEventInterface>) eventArrayList;
+        iTimeEventInterfacesArrayList.add(event);
         WeekView weekView = (WeekView) binding.getRoot().findViewById(R.id.week_view);
-        weekView.addEvent(event);
+        weekView.setEvent(iTimeEventInterfacesArrayList);
         Log.i("calendar",calendar.getTime().toString());
     }
 

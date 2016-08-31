@@ -1,9 +1,11 @@
 package org.unimelb.itime.ui.presenter;
 
+import android.app.Fragment;
 import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 
 /**
@@ -15,6 +17,11 @@ public class EventCreateTimeSlotPresenter extends MvpBasePresenter<EventCreateNe
     public EventCreateTimeSlotPresenter(Context context) {
         this.context = context;
     }
-
+    public void toNewEventDetailBeforeSending(){
+        EventCreateNewTimeSlotMvpView view = getView();
+        if (view!=null){
+            view.toNewEventDetailBeforeSending();
+        }
+    }
 
 }

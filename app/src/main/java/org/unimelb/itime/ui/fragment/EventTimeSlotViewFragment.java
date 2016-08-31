@@ -14,6 +14,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
+import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
@@ -107,5 +108,10 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
     @Override
     public EventCreateTimeSlotPresenter createPresenter() {
         return new EventCreateTimeSlotPresenter(getContext());
+    }
+
+    @Override
+    public void toNewEventDetailBeforeSending() {
+        ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(this);
     }
 }

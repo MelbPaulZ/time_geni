@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * Created by Paul on 27/08/2016.
  */
-public class EventAttendeeFragment extends Fragment {
+public class InviteeFragment extends Fragment {
     public Map<Contact, ImageView> contacts_list = new HashMap<Contact, ImageView>();
 
     private static final String TAG = "MyAPP";
@@ -58,37 +58,31 @@ public class EventAttendeeFragment extends Fragment {
     private PinyinComparator pinyinComparator;
     private View root;
     private Context context;
-    private Button attendee_cancel_btn;
-    private Button attendee_next_btn;
 
-    private EventAttendeeFragment self = this;
+    private InviteeFragment self = this;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
         root = inflater.inflate(R.layout.fragment_event_attendee_picker, container, false);
-
-        attendee_cancel_btn = (Button) root.findViewById(R.id.attendee_picker_cancel_btn);
-        attendee_cancel_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((EventCreateActivity)getActivity()).toCreateEventNewFragment(self);
-            }
-        });
-
-        attendee_next_btn = (Button) root.findViewById(R.id.attendee_picker_next_btn);
-        attendee_next_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((EventCreateActivity)getActivity()).toTimeSlotView(self);
-            }
-        });
-
         // Inflate the layout for this fragment
         initView();
         initData();
 
         return root;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Button nextBtn = (Button) root.findViewById(R.id.attendee_picker_next_btn);
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((EventCreateActivity) getActivity()).toTimeSlotView(self);
+            }
+        });
+
     }
 
     public Map<Contact, ImageView> getAllSelectedContacts(){
@@ -314,4 +308,5 @@ public class EventAttendeeFragment extends Fragment {
             }
         }
     }
+
 }
