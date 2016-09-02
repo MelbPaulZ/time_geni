@@ -131,7 +131,6 @@
                         android:layout_height="wrap_content"
                         android:text="@{timeslotVM.durationTimeString}"
                         android:textSize="20dp"
-                        android:onClick="onDurationChange"
                         android:layout_marginRight="@dimen/padding_10"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"/>
