@@ -104,7 +104,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CharSequence repeats[] = new CharSequence[]{"None", "Daily", "Weekly", "Monthly"};
+                final CharSequence repeats[] = new CharSequence[]{"Never", "EvenyDay", "EveryWeek", "EvenyTwoWeeks","EventMonth","EvenyYear"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle("Choose a repeat type");
                 builder.setItems(repeats, new DialogInterface.OnClickListener() {

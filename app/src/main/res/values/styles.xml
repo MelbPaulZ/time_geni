@@ -33,4 +33,9 @@
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="AnimationPopup">
+        <item name="@android:windowEnterAnimation">@anim/popup_bottom_appear</item>
+        <item name="@android:windowExitAnimation">@anim/popup_bottom_disappear</item>
+    </style>
 </resources>

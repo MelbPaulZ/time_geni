@@ -122,7 +122,7 @@
     <string name="event_third_proposed_time">EventThirdProposedTime</string>
     <string name="event_calendar_type">EventCalendarType</string>
     <string name="next">next</string>
-    <string name="back">back</string>
+    <string name="back">Back</string>
     <string name="delete_event">delete_event</string>
 
     <string name="select_one_or_more_timeslot">Select One Or More Timeslot</string>
@@ -144,7 +144,7 @@
     <string name="reject">Reject</string>
     <string name="time_slots_confirm_array">time slots confirm array</string>
     <string name="event">event</string>
-    <string name="timeslot_next_btn">text</string>
+    <string name="timeslot_next_btn">next</string>
     <string name="calendar_type">Calendar Type</string>
     <string name="alert_time">Alert Time</string>
     <string name="calendar_type_work">Work</string>

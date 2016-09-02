@@ -55,14 +55,12 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/bg_new_event_edit"
             android:scrollbarStyle="insideOverlay">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/bg_new_event_edit"
-                android:paddingLeft="@dimen/padding_10"
-                android:paddingRight="@dimen/padding_10"
                 android:orientation="vertical">
                 <!--blank for border-->
                 <TextView
@@ -85,6 +83,7 @@
                         android:text="@={eventVM.event.title}"
                         android:onClick="@{eventVM.test()}"
                         android:textColor="@color/text_enable"
+                        android:paddingLeft="@dimen/padding_10"
                         android:textSize="@dimen/page_text_size" />
 
                     <!--Fst Row-->
@@ -98,6 +97,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Location"
+                            android:paddingLeft="@dimen/padding_10"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -125,6 +125,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="Repeat"
+                            android:paddingLeft="@dimen/padding_10"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -176,6 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Attendee"
+                            android:paddingLeft="@dimen/padding_10"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -199,18 +201,21 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:background="@color/bg_new_event_edit" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:background="@drawable/table_row_border">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/page_text_size"
                             android:textColor="@color/text_enable"
                             android:text="@string/all_day"
+                            android:paddingLeft="@dimen/padding_10"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
                             />
@@ -231,6 +236,7 @@
                             android:layout_height="wrap_content"
                             android:text="Starts"
                             android:textColor="@color/text_enable"
+                            android:paddingLeft="@dimen/padding_10"
                             android:textSize="16dp" />
 
                         <TextView
@@ -255,6 +261,7 @@
                             android:layout_height="wrap_content"
                             android:text="Ends"
                             android:textColor="@color/text_enable"
+                            android:paddingLeft="@dimen/padding_10"
                             android:textSize="16dp" />
 
                         <TextView
@@ -346,6 +353,7 @@
                             android:layout_weight="1"
                             android:text="Alert Time"
                             android:textColor="@color/text_enable"
+                            android:paddingLeft="@dimen/padding_10"
                             android:textSize="@dimen/page_text_size" />
 
                         <TextView
@@ -374,6 +382,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Calendar Type"
+                            android:layout_marginLeft="@dimen/padding_10"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size"
 
@@ -481,6 +490,66 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"/>
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/create_event_url_tv"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autoLink="web"
+                                android:hint="URL"
+                                android:background="@drawable/table_row_border"
+                                android:onClick="@{eventVM.gotoUrl()}"
+                                android:text="@={eventVM.eventUrlString}"
+                                android:textColor="@color/text_disable"
+                                android:textSize="@dimen/page_text_size" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/create_event_note_edittext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Note"
+                                android:text="@{eventVM.eventNoteString}"
+                                android:background="@drawable/table_row_border"
+                                android:textColor="@color/text_disable"
+                                android:textSize="@dimen/page_text_size" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/table_row_border">
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/table_row_border">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/photo"
+                                android:textColor="@color/text_enable"
+                                android:textSize="@dimen/page_text_size"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"/>
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical|right"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/arrow" />
                         </RelativeLayout>
 
                     </LinearLayout>

@@ -1,6 +1,8 @@
 package org.unimelb.itime.ui.activity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
@@ -8,6 +10,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.fragment.EventAttendeeTimeslotResponseFragment;
 import org.unimelb.itime.ui.fragment.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.EventCreateNewFragment;
+import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 
 import java.util.ArrayList;
@@ -54,9 +57,16 @@ public class TestActivityPaul extends BaseActivity {
 //        eventCreateDetailBeforeSendingFragment.setEvent(event);
 //
 
-        EventCreateNewFragment eventCreateNewFragment = new EventCreateNewFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, eventCreateNewFragment).commit();
+//        EventCreateNewFragment eventCreateNewFragment = new EventCreateNewFragment();
+//        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, eventCreateNewFragment).commit();
+
+        EventTimeSlotViewFragment eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, eventTimeSlotViewFragment).commit();
+
+
 
     }
+
+
 
 }

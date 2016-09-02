@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="?attr/colorPrimary">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="50dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Duration"
+                android:textSize="17dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+            <TextView
+                android:id="@+id/popup_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:textSize="17dp"
+                android:layout_marginRight="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/page_bg">
+        <com.wx.wheelview.widget.WheelView
+            android:id="@+id/hour_wheelview"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_weight="1" />
+
+        <com.wx.wheelview.widget.WheelView
+            android:id="@+id/minute_wheelview"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+</LinearLayout>
