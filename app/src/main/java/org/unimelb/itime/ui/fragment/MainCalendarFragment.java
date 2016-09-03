@@ -34,10 +34,14 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     FragmentMainCalendarBinding binding;
     MainCalendarViewModel mainCalendarViewModel;
+    WeekView weekView;
+    ArrayList<? extends ITimeEventInterface> eventArrayList = new ArrayList<>();
+    ArrayList<ITimeEventInterface> iTimeEventInterfacesArrayList = (ArrayList<ITimeEventInterface>) eventArrayList;;
 
     // put dayview and weekview in this page, set vi
-    public MainCalendarFragment() {
 
+    public void addNewEvent(Event event){
+        iTimeEventInterfacesArrayList.add(event);
     }
 
     @Override
@@ -51,13 +55,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_calendar, container, false);
 
-        // simulate event
-        // simulate Events here
-
-
-//            ArrayList<? extends ITimeEventInterface> interface1;
-//            ArrayList<Event> eventArrayList = new ArrayList<>();
-//            interface1 = eventArrayList;
 
         return binding.getRoot();
     }
@@ -77,7 +74,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         event.setStatus(5); // 5== pending, 6== confirm
         event.setEventType(1); //0 == private, 1== group, 2== public
         Calendar calendar =Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH,29);
+        calendar.set(Calendar.DAY_OF_MONTH,3);
         calendar.set(Calendar.HOUR_OF_DAY,4);
         calendar.set(Calendar.MINUTE,15);
         calendar.set(Calendar.SECOND,0);
@@ -100,13 +97,9 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         event.setRepeatTypeId(1);
 
 
-        ArrayList<? extends ITimeEventInterface> eventArrayList = new ArrayList<>();
-        ArrayList<ITimeEventInterface> iTimeEventInterfacesArrayList;
-        iTimeEventInterfacesArrayList = (ArrayList<ITimeEventInterface>) eventArrayList;
         iTimeEventInterfacesArrayList.add(event);
-        WeekView weekView = (WeekView) binding.getRoot().findViewById(R.id.week_view);
+        weekView = (WeekView) binding.getRoot().findViewById(R.id.week_view);
         weekView.setEvent(iTimeEventInterfacesArrayList);
-        Log.i("calendar",calendar.getTime().toString());
     }
 
 

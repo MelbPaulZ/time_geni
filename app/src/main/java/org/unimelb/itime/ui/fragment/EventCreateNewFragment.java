@@ -14,7 +14,9 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateNewBinding;
+import org.unimelb.itime.messageevent.MessageNewEvent;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
@@ -28,6 +30,7 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
 
     private FragmentEventCreateNewBinding binding;
     private EventCreateNewVIewModel eventCreateNewVIewModel;
+    private Event event;
 
     @Override
     public EventCreateNewPresenter createPresenter() {
@@ -47,11 +50,10 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //set bar
-//        ((EventCreateActivity)getActivity()).setSupportActionBar(eventToolBar);
-//        ((EventCreateActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        eventCreateNewVIewModel = new EventCreateNewVIewModel(getPresenter());
+
+        event = new Event();
+        eventCreateNewVIewModel = new EventCreateNewVIewModel(getPresenter(), event);
         binding.setEventVM(eventCreateNewVIewModel);
 
         // hide soft key board
@@ -81,7 +83,9 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
 
     @Override
     public void pickAttendee() {
-        ((EventCreateActivity)getActivity()).toAttendeePicker(this);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(getString(R.string.new_event), event);
+        ((EventCreateActivity)getActivity()).toAttendeePicker(this,bundle);
     }
 
 

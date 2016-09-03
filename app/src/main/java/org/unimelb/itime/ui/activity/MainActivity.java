@@ -45,6 +45,15 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
         init();
+        getNewEvent();
+    }
+
+    public void getNewEvent(){
+        Intent intent = getIntent();
+        if (intent.hasExtra(getString(R.string.new_event))) {
+            Event event = (Event) intent.getSerializableExtra(getString(R.string.new_event));
+            ((MainCalendarFragment)tagFragments[0]).addNewEvent(event);
+        }
     }
 
     @NonNull
@@ -94,7 +103,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     public void startEventEditActivity(ITimeEventInterface iTimeEventInterface){
         Intent intent = new Intent(this,EventDetailActivity.class);
         Event event = (Event) iTimeEventInterface;
-        intent.putExtra("Event",event);
+        intent.putExtra(getString(R.string.event),event);
         startActivity(intent);
     }
 

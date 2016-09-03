@@ -14,6 +14,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.fragment.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
@@ -23,23 +24,22 @@ import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.EventTimePickerFragment;
 import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
+import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import butterknife.Unbinder;
 
 //public class EventCreateActivity extends AppCompatActivity implements
 //        EventDatePickerFragment.EventDatePickerCommunicator, EventTimePickerFragment.EventTimePickerCommunicator{
 
-    public class EventCreateActivity extends AppCompatActivity implements PlaceSelectionListener {
+public class EventCreateActivity extends AppCompatActivity implements PlaceSelectionListener {
     private Unbinder butterKnifeUnbinder;
     private EventCreateNewFragment eventCreateNewFragment;
     private EventTimePickerFragment eventTimePickerFragment;
     private EventDatePickerFragment eventDatePickerFragment;
-        private EventLocationPickerFragment eventLocationPickerFragment;
-        private InviteeFragment inviteeFragment;
-        private EventTimeSlotViewFragment eventTimeSlotViewFragment;
-        private EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment;
-
-
+    private EventLocationPickerFragment eventLocationPickerFragment;
+    private InviteeFragment inviteeFragment;
+    private EventTimeSlotViewFragment eventTimeSlotViewFragment;
+    private EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment;
 
 
     @Override
@@ -48,105 +48,128 @@ import butterknife.Unbinder;
         setContentView(R.layout.activity_event_create);
 //
         eventCreateNewFragment = new EventCreateNewFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment,  eventCreateNewFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
 
         EventBus.getDefault().register(this);
 
 
     }
 
-        @Override
-        protected void onSaveInstanceState(Bundle outState) {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
 
-        }
+    }
 
-        public void toTimePicker(EventDatePickerFragment fragment){
-        if (eventTimePickerFragment == null || !(eventTimePickerFragment.isAdded())){
+    public void toTimePicker(EventDatePickerFragment fragment) {
+        if (eventTimePickerFragment == null || !(eventTimePickerFragment.isAdded())) {
             eventTimePickerFragment = new EventTimePickerFragment();
             getFragmentManager().beginTransaction().hide(fragment).commit();
             getFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventTimePickerFragment).commit();
-        }else{
+        } else {
             getFragmentManager().beginTransaction().hide(fragment).commit();
             getFragmentManager().beginTransaction().show(eventTimePickerFragment).commit();
         }
     }
 
-    public void toDatePicker(EventCreateNewFragment fragment, EventCreateNewVIewModel.PickDateFromType pickDateFromType){
-        if (eventDatePickerFragment == null || !(eventDatePickerFragment.isAdded())){
+    public void toDatePicker(EventCreateNewFragment fragment, EventCreateNewVIewModel.PickDateFromType pickDateFromType) {
+        if (eventDatePickerFragment == null || !(eventDatePickerFragment.isAdded())) {
             eventDatePickerFragment = new EventDatePickerFragment();
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             eventDatePickerFragment.setPickDateFromType(pickDateFromType);
             getFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventDatePickerFragment).commit();
-        }else{
+        } else {
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             eventDatePickerFragment.setPickDateFromType(pickDateFromType);
             getFragmentManager().beginTransaction().show(eventDatePickerFragment).commit();
         }
     }
-//
-    public void toCreateEventNewFragment(Fragment fragment){
-        if (eventCreateNewFragment == null || !(eventCreateNewFragment.isAdded())){
+
+    //
+    public void toCreateEventNewFragment(Fragment fragment) {
+        if (eventCreateNewFragment == null || !(eventCreateNewFragment.isAdded())) {
             eventCreateNewFragment = new EventCreateNewFragment();
             getFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
-        }else{
+        } else {
             getFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().show(eventCreateNewFragment).commit();
         }
     }
 
-        public void toWeekViewCalendar(EventCreateNewFragment fragment){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
+    public void toWeekViewCalendar(EventCreateNewFragment fragment) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 
-        public void toLocationPicker(EventCreateNewFragment fragment){
-            if (eventLocationPickerFragment == null || !(eventLocationPickerFragment.isAdded())){
-                eventLocationPickerFragment = new EventLocationPickerFragment();
-                getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-                getFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventLocationPickerFragment).commit();
-            }else{
-                getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-                getFragmentManager().beginTransaction().show(eventLocationPickerFragment).commit();
-            }
+    public void toLocationPicker(EventCreateNewFragment fragment) {
+        if (eventLocationPickerFragment == null || !(eventLocationPickerFragment.isAdded())) {
+            eventLocationPickerFragment = new EventLocationPickerFragment();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventLocationPickerFragment).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getFragmentManager().beginTransaction().show(eventLocationPickerFragment).commit();
         }
+    }
 
-        public void toAttendeePicker(EventCreateNewFragment fragment){
-            if (inviteeFragment == null || !(inviteeFragment.isAdded())){
-                inviteeFragment = new InviteeFragment();
-                getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-                getFragmentManager().beginTransaction().add(R.id.create_event_fragment, inviteeFragment).commit();
-            }else{
-                getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-                getFragmentManager().beginTransaction().show(inviteeFragment).commit();
-            }
+    public void toAttendeePicker(EventCreateNewFragment fragment, Bundle bundle) {
+        if (inviteeFragment == null || !(inviteeFragment.isAdded())) {
+            inviteeFragment = new InviteeFragment();
+            inviteeFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getFragmentManager().beginTransaction().add(R.id.create_event_fragment, inviteeFragment).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getFragmentManager().beginTransaction().show(inviteeFragment).commit();
         }
+    }
 
-        public void toTimeSlotView(Fragment fragment){
-            if (eventTimeSlotViewFragment == null || !(eventTimeSlotViewFragment.isAdded())){
-                eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
-                getFragmentManager().beginTransaction().hide(fragment).commit();
-                getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment,eventTimeSlotViewFragment).commit();
-            }else{
-                getFragmentManager().beginTransaction().hide(fragment).commit();
-                getSupportFragmentManager().beginTransaction().show(eventTimeSlotViewFragment).commit();
-            }
+    public void toTimeSlotView(Fragment fragment, Bundle bundle) {
+        if (eventTimeSlotViewFragment == null || !(eventTimeSlotViewFragment.isAdded())) {
+            eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
+            eventTimeSlotViewFragment.setArguments(bundle);
+            getFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventTimeSlotViewFragment).commit();
+        } else {
+            getFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventTimeSlotViewFragment).commit();
         }
+    }
 
-        public void toNewEventDetailBeforeSending(EventTimeSlotViewFragment fragment){
-            if (eventCreateDetailBeforeSendingFragment == null || !(eventCreateDetailBeforeSendingFragment.isAdded())){
-                eventCreateDetailBeforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
-                getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-                getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateDetailBeforeSendingFragment).commit();
-            }else{
-                getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-                getSupportFragmentManager().beginTransaction().show(eventCreateDetailBeforeSendingFragment).commit();
-            }
+    public void toNewEventDetailBeforeSending(EventTimeSlotViewFragment fragment, Bundle bundle) {
+        if (eventCreateDetailBeforeSendingFragment == null || !(eventCreateDetailBeforeSendingFragment.isAdded())) {
+            eventCreateDetailBeforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
+            eventCreateDetailBeforeSendingFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateDetailBeforeSendingFragment).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventCreateDetailBeforeSendingFragment).commit();
         }
+    }
+
+    public void goBackToTimeSlot(EventCreateDetailBeforeSendingFragment fragment){
+        if (eventTimeSlotViewFragment == null || !(eventTimeSlotViewFragment.isAdded())){
+            eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment,eventTimeSlotViewFragment).commit();
+        }else{
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventTimeSlotViewFragment).commit();
+        }
+    }
+
+
+    public void sendEvent(Event event){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(getString(R.string.new_event),event);
+        startActivity(intent);
+
+    }
 
     @Subscribe
-    public void gotoUrl(MessageUrl messageUrl){
-        Log.i("get subscribe",messageUrl.url);
+    public void gotoUrl(MessageUrl messageUrl) {
+        Log.i("get subscribe", messageUrl.url);
         Uri uri;
         if (messageUrl.url.startsWith("http")) {
             uri = Uri.parse(messageUrl.url);
@@ -157,19 +180,19 @@ import butterknife.Unbinder;
         startActivity(intent);
     }
 
-        @Override
-        protected void onStop() {
-            EventBus.getDefault().unregister(this);
-            super.onStop();
-        }
-
-        @Override
-        public void onPlaceSelected(Place place) {
-
-        }
-
-        @Override
-        public void onError(Status status) {
-
-        }
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
+
+    @Override
+    public void onPlaceSelected(Place place) {
+
+    }
+
+    @Override
+    public void onError(Status status) {
+
+    }
+}

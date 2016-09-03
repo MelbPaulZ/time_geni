@@ -62,9 +62,9 @@
                         />
 
                     <TextView
+                        android:id="@+id/timeslot_view_done_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:onClick="clickDoneBtn"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/padding_10"

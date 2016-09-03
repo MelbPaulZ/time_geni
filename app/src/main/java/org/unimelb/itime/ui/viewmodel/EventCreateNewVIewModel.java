@@ -18,10 +18,12 @@ import com.android.databinding.library.baseAdapters.BR;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.messageevent.MessageEventTime;
 import org.unimelb.itime.messageevent.MessageLocation;
+import org.unimelb.itime.messageevent.MessageNewEvent;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 
@@ -64,11 +66,14 @@ public class EventCreateNewVIewModel extends BaseObservable {
 
 
 
-    public EventCreateNewVIewModel(EventCreateNewPresenter presenter) {
+    public EventCreateNewVIewModel(EventCreateNewPresenter presenter, Event event) {
         this.presenter = presenter;
-        event = new Event();
+        this.event = event;
         isEventRepeat = new ObservableField<>(false);
         EventBus.getDefault().register(this);
+        eventRepeatString = presenter.getContext().getString(R.string.no_repeat);
+        eventAttendeeInfoString = presenter.getContext().getString(R.string.none);
+
     }
 
     public View.OnClickListener test() {
@@ -79,6 +84,8 @@ public class EventCreateNewVIewModel extends BaseObservable {
             }
         };
     }
+
+
 // ****************************************************
 
     public View.OnClickListener submit() {
@@ -111,9 +118,9 @@ public class EventCreateNewVIewModel extends BaseObservable {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         setEventRepeatString((String) repeats[i]);
-                        if (repeats[i].equals("Daily") || repeats[i].equals("Weekly") || repeats[i].equals("Monthly")){
+                        if (!repeats[i].equals("Never")){
                             setIsEventRepeat(true);
-                            Log.i("choose", (String) repeats[i]);
+                            event.setRepeatTypeId(i);
                         }
                     }
                 });
@@ -135,6 +142,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         setEventCalendarTypeString((String) types[i]);
+                        event.setCalendarTypeId((String) types[i]);
                     }
                 });
                 builder.show();
@@ -149,7 +157,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 String url = getEventUrlString();
-                Log.i("on click",url);
                 EventBus.getDefault().post(new MessageUrl(url));
             }
         };
@@ -215,14 +222,23 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 startYear = messageEventDate.year;
                 startMonth = messageEventDate.month;
                 startDay = messageEventDate.day;
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.set(startYear,startMonth,startDay);
+//                event.setStartTime(calendar.getTimeInMillis());
                 break;
             case ENDTIME:
                 endYear = messageEventDate.year;
                 endMonth = messageEventDate.month;
                 endDay = messageEventDate.day;
+//                Calendar calendarEnd = Calendar.getInstance();
+//                calendarEnd.set(endYear, endMonth, endDay);
+//                event.setEndTime(calendarEnd.getTimeInMillis());
                 break;
             case ENDREPEAT:
                 setEventEndRepeatString(getSelectDayString(messageEventDate.year,messageEventDate.month, messageEventDate.day));
+//                Calendar calendarEndRepeat = Calendar.getInstance();
+//                calendarEndRepeat.set(messageEventDate.year,messageEventDate.month, messageEventDate.day);
+//                event.setRepeatEndsTime(calendarEndRepeat.getTimeInMillis());
                 break;
             default:
                 break;
@@ -233,6 +249,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
     @Subscribe
     public void getLocationChanged(MessageLocation messageLocation){
         setEventLocationString(messageLocation.locatioinString);
+        event.setLocationAddress(messageLocation.locatioinString);
     }
 
     @Subscribe
@@ -241,18 +258,28 @@ public class EventCreateNewVIewModel extends BaseObservable {
             startHour = messageEventTime.hour;
             startMinute = messageEventTime.mintue;
             setEventStartTimeString(getSelectDayTimeString(startYear, startMonth, startDay, startHour, startMinute));
+            // update event data
+            Calendar startTime = Calendar.getInstance();
+            startTime.set(startYear, startMonth, startDay, startHour, startMinute);
+            event.setStartTime(startTime.getTimeInMillis());
+
             if (!isEndTimeChanged) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(startYear, startMonth, startDay, startHour + 1, startMinute);
                 setEventEndTimeString(getSelectDayTimeString(
                         calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
                         calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
+                // update event data
+                event.setEndTime(calendar.getTimeInMillis());
             }
         } else if (pickDateFromType == PickDateFromType.ENDTIME){
             isEndTimeChanged = true;
             endHour = messageEventTime.hour;
             endMinute = messageEventTime.mintue;
             setEventEndTimeString(getSelectDayTimeString(endYear, endMonth, endDay, endHour, endMinute));
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(endYear, endMonth, endDay, endHour, endMinute);
+            event.setEndTime(calendar.getTimeInMillis());
         }
 
     }

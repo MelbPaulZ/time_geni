@@ -22,12 +22,6 @@ public class EventCreateTimeSlotPresenter extends MvpBasePresenter<EventCreateNe
         this.context = context;
         this.inflater = inflater;
     }
-    public void toNewEventDetailBeforeSending(){
-        EventCreateNewTimeSlotMvpView view = getView();
-        if (view!=null){
-            view.toNewEventDetailBeforeSending();
-        }
-    }
 
     public Context getContext() {
         return context;

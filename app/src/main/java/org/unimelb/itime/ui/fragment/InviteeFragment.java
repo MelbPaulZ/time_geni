@@ -20,7 +20,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.messageevent.MessageAttendeeEvent;
+import org.unimelb.itime.messageevent.MessageNewEvent;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
@@ -59,6 +64,8 @@ public class InviteeFragment extends Fragment {
     private View root;
     private Context context;
 
+    private Event event;
+
     private InviteeFragment self = this;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,14 +82,26 @@ public class InviteeFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        this.event = (Event) bundle.getSerializable(getString(R.string.new_event));
+
         Button nextBtn = (Button) root.findViewById(R.id.attendee_picker_next_btn);
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((EventCreateActivity) getActivity()).toTimeSlotView(self);
+                Bundle attendeeBundle = new Bundle();
+                attendeeBundle.putSerializable(getString(R.string.new_event),event);
+                ((EventCreateActivity) getActivity()).toTimeSlotView(self,attendeeBundle);
             }
         });
 
+
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     public Map<Contact, ImageView> getAllSelectedContacts(){

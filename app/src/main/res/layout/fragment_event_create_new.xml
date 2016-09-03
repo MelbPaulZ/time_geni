@@ -33,6 +33,7 @@
                     android:background="@null"
                     android:onClick="@{eventVM.cancelNewEvent()}"
                     android:gravity="center_vertical|left"
+                    android:textColor="@color/page_title_color"
                     android:text="@string/cancel" />
 
                 <TextView
@@ -40,12 +41,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:textColor="@color/page_title_color"
                     android:text="@string/new_event" />
 
                 <Button
                     android:id="@+id/create_event_send_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/page_title_color"
                     android:layout_gravity="right"
                     android:background="@null"
                     android:text="@string/send" />
@@ -72,6 +75,7 @@
                     android:id="@+id/part_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:orientation="vertical">
                     <!--Tittle Row-->
                     <EditText
@@ -82,8 +86,8 @@
                         android:hint="Title"
                         android:text="@={eventVM.event.title}"
                         android:onClick="@{eventVM.test()}"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:textColor="@color/text_enable"
-                        android:paddingLeft="@dimen/padding_10"
                         android:textSize="@dimen/page_text_size" />
 
                     <!--Fst Row-->
@@ -91,13 +95,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Location"
-                            android:paddingLeft="@dimen/padding_10"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -108,6 +112,7 @@
                             android:layout_gravity="right|center_vertical"
                             android:layout_weight="1"
                             android:gravity="right"
+                            android:layout_marginRight="@dimen/padding_10"
                             android:onClick="@{eventVM.locationPicker()}"
                             android:text="@{eventVM.eventLocationString}"
                             android:textColor="@color/text_disable"
@@ -118,6 +123,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:orientation="horizontal">
 
                         <TextView
@@ -125,7 +131,6 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="Repeat"
-                            android:paddingLeft="@dimen/padding_10"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -135,9 +140,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|center_vertical"
                             android:layout_weight="1"
+                            android:layout_marginRight="@dimen/padding_10"
                             android:gravity="right"
                             android:onClick="@{eventVM.chooseRepeat()}"
-                            android:text="@{eventVM.eventRepeatString}"
+                            android:text="@{eventVM.eventRepeatString, default=@string/no_repeat}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -146,6 +152,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@{eventVM.isEventRepeat ? @dimen/wrap_content :@dimen/hide,default = @dimen/hide}"
                         android:background="@drawable/table_row_border"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="wrap_content"
@@ -160,6 +167,7 @@
                             android:layout_gravity="right|center_vertical"
                             android:layout_weight="1"
                             android:gravity="right"
+                            android:paddingRight="@dimen/padding_10"
                             android:onClick="@{eventVM.pickEndRepeatDate()}"
                             android:text="@{eventVM.eventEndRepeatString}"
                             android:textColor="@color/text_disable"
@@ -171,13 +179,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Attendee"
-                            android:paddingLeft="@dimen/padding_10"
+                            android:text="@string/invitee"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -188,7 +196,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:onClick="@{eventVM.attendeePicker()}"
-                            android:text="@{eventVM.eventAttendeeInfoString}"
+                            android:text="@{eventVM.eventAttendeeInfoString, default = @string/none}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -207,6 +215,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border">
 
                         <TextView
@@ -215,7 +224,6 @@
                             android:textSize="@dimen/page_text_size"
                             android:textColor="@color/text_enable"
                             android:text="@string/all_day"
-                            android:paddingLeft="@dimen/padding_10"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
                             />
@@ -229,6 +237,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border">
 
                         <TextView
@@ -236,7 +245,6 @@
                             android:layout_height="wrap_content"
                             android:text="Starts"
                             android:textColor="@color/text_enable"
-                            android:paddingLeft="@dimen/padding_10"
                             android:textSize="16dp" />
 
                         <TextView
@@ -245,6 +253,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
+                            android:layout_marginRight="@dimen/padding_10"
                             android:text="@{eventVM.eventStartTimeString}"
                             android:onClick="@{eventVM.pickStartDate()}"
                             android:textColor="@color/text_enable"
@@ -254,6 +263,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border">
 
                         <TextView
@@ -261,7 +271,6 @@
                             android:layout_height="wrap_content"
                             android:text="Ends"
                             android:textColor="@color/text_enable"
-                            android:paddingLeft="@dimen/padding_10"
                             android:textSize="16dp" />
 
                         <TextView
@@ -270,6 +279,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
+                            android:layout_marginRight="@dimen/padding_10"
                             android:onClick="@{eventVM.pickEndDate()}"
                             android:text="@{eventVM.eventEndTimeString}"
                             android:textColor="@color/text_enable"
@@ -345,6 +355,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border">
 
                         <TextView
@@ -353,7 +364,6 @@
                             android:layout_weight="1"
                             android:text="Alert Time"
                             android:textColor="@color/text_enable"
-                            android:paddingLeft="@dimen/padding_10"
                             android:textSize="@dimen/page_text_size" />
 
                         <TextView
@@ -375,6 +385,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border"
                         android:orientation="horizontal">
 
@@ -382,7 +393,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Calendar Type"
-                            android:layout_marginLeft="@dimen/padding_10"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size"
 
@@ -445,7 +455,7 @@
                     <!--</LinearLayout>-->
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="20dp"
                         android:background="@color/bg_new_event_edit"/>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -454,24 +464,24 @@
                         android:paddingLeft="@dimen/padding_10"
                         android:paddingRight="@dimen/padding_10"
                         android:orientation="vertical">
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/table_row_border">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/page_text_size"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:textColor="@color/text_enable"
-                                android:text="@string/publish_to_public"/>
-                            <Switch
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"/>
-                        </RelativeLayout>
+                        <!--<RelativeLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:background="@drawable/table_row_border">-->
+                            <!--<TextView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:textSize="@dimen/page_text_size"-->
+                                <!--android:layout_alignParentLeft="true"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:textColor="@color/text_enable"-->
+                                <!--android:text="@string/publish_to_public"/>-->
+                            <!--<Switch-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_alignParentEnd="true"-->
+                                <!--android:layout_centerVertical="true"/>-->
+                        <!--</RelativeLayout>-->
 
                         <RelativeLayout
                             android:layout_width="match_parent"

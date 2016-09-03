@@ -19,7 +19,10 @@ import android.widget.Toast;
 import com.wx.wheelview.adapter.ArrayWheelAdapter;
 import com.wx.wheelview.widget.WheelView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.messageevent.MessageEventEvent;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.TestActivityPaul;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
@@ -28,21 +31,36 @@ import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Paul on 27/08/2016.
  */
 public class EventCreateTimeslotViewModel extends BaseObservable {
     private final String TAG = "TimeslotViewModel";
-    private String toolbarString = getMonthName(Calendar.getInstance().get(Calendar.MONTH)) + " " + Calendar.getInstance().get(Calendar.YEAR);
+    private String toolbarString = initToolBarTitle();
     private EventCreateTimeSlotPresenter eventCreateTimeSlotPresenter;
     private ObservableField<Boolean> isChangeDuration = new ObservableField<>(false);
     private String durationTimeString = "1 hour";
+    private Event newEvent;
 
-    public EventCreateTimeslotViewModel(EventCreateTimeSlotPresenter eventCreateTimeSlotPresenter) {
+    public EventCreateTimeslotViewModel(EventCreateTimeSlotPresenter eventCreateTimeSlotPresenter,Event event) {
         super();
         this.eventCreateTimeSlotPresenter = eventCreateTimeSlotPresenter;
+        this.newEvent = event;
     }
+
+
+    public String initToolBarTitle(){
+        Calendar calendar = Calendar.getInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        int delta = -(calendar.get(Calendar.DAY_OF_WEEK)-1);
+        calendar.add(Calendar.DATE,delta);
+        return getMonthName(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
+    }
+
+
 
 
     //    ************************************************
@@ -80,12 +98,6 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
             }
         };
     }
-
-    public void clickDoneBtn(){
-        eventCreateTimeSlotPresenter.toNewEventDetailBeforeSending();
-
-    }
-
 
 
 

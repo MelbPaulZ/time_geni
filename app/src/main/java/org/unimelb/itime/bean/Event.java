@@ -34,7 +34,7 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     private String calendarTypedId;
     private Boolean isInfiniteRepeat;
     private Boolean isDeleted;
-    private int repeatEndsTime;
+    private long repeatEndsTime;
     private String hostEventId;
     private int userStatusId;
     private ArrayList<String> attendees; // need to be checked
@@ -65,7 +65,7 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
                  String calendarTypedId,
                  Boolean isInfiniteRepeat,
                  Boolean isDeleted,
-                 int repeatEndsTime,
+                 long repeatEndsTime,
                  String hostEventId,
                  int userStatusId,
                  ArrayList<String> attendees,
@@ -99,6 +99,45 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
         this.proposedTimeslots = proposedTimeslots;
     }
 
+    public boolean hasEventTitle(){
+        return eventTitle!=null;
+    }
+
+    public boolean hasEventId(){
+        return eventId!=null;
+    }
+
+    public boolean hasEventLocationAddress(){
+        return currentLocationAddress!=null;
+    }
+
+    public boolean hasEventNote(){
+        return eventNote!=null;
+    }
+
+    public boolean hasCalendarTypedId(){return calendarTypedId!=null;}
+
+    public boolean hasHostEventId(){return hostEventId!=null;}
+
+    public boolean hasAttendee(){ return attendees!=null;}
+
+    public boolean hasEventPhotos(){ return eventPhotos!=null;}
+
+    public boolean hasUrl(){return url!=null;}
+
+    public boolean hasProposedTimeslots(){return proposedTimeslots!=null;}
+
+//    public boolean hasLocationLatitude(){
+//        return currentLocationLatitude==0;
+//    }
+//
+//    public boolean hasLocationLongtitude(){
+//        return currentLocationLongitude==0;
+//    }
+//
+//    public boolean hasCurrentTypeId(){
+//        return currentRepeatTypeId==0;
+//    }
 
 
     public String getEventId() {
@@ -292,12 +331,12 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     }
 
 
-    public void setRepeatEndsTime(Integer integer) {
+    public void setRepeatEndsTime(long integer) {
         repeatEndsTime = integer;
     }
 
 
-    public Integer getRepeatEndsTime() {
+    public long getRepeatEndsTime() {
         return repeatEndsTime;
     }
 

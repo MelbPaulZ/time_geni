@@ -32,18 +32,20 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
 
     private EventCreateDetailBeforeSendingPresenter presenter;
 
-    public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter) {
+    public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter,Event event) {
         this.presenter = presenter;
+        this.newEvDtlEvent = event;
+        updateAllInfo();
     }
 
     public void updateAllInfo(){
-        if (newEvDtlEvent.getTitle()!=null)
+        if (newEvDtlEvent.hasEventTitle())
             setNewEvDtlTitleStr(newEvDtlEvent.getTitle());
-        if (newEvDtlEvent.getLocationAddress()!=null)
+        if (newEvDtlEvent.hasEventLocationAddress())
             setNewEvDtlLocationStr(newEvDtlEvent.getLocationAddress());
 
         setNewEvDtlRepeatStr(getRepeatString(newEvDtlEvent.getRepeatTypeId()));
-        if (newEvDtlEvent.getAttendees()!=null)
+        if (newEvDtlEvent.hasAttendee())
             setNewEvDtlAttendeeStr(getAttendeeString(newEvDtlEvent.getAttendees()));
 
         setNewEvDtlTimeSlotFst(getSuggestTimeStringFromLong(
@@ -52,11 +54,11 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
                 newEvDtlEvent.getProposedTimeSlots().get(1), newEvDtlEvent.getDuration()));
         setNewEvDtlTimeSlotTrd(getSuggestTimeStringFromLong(
                 newEvDtlEvent.getProposedTimeSlots().get(2), newEvDtlEvent.getDuration()));
-        if (newEvDtlEvent.getCalendarTypeId()!=null)
+        if (newEvDtlEvent.hasCalendarTypedId())
             setNewEvDtlCldTpStr(newEvDtlEvent.getCalendarTypeId());
-        if (newEvDtlEvent.getUrl()!=null)
+        if (newEvDtlEvent.hasUrl())
             setNewEvDtlUrlStr(newEvDtlEvent.getUrl());
-        if (newEvDtlEvent.getNote()!=null)
+        if (newEvDtlEvent.hasEventNote())
             setNewEvDtlNotes(newEvDtlEvent.getNote());
     }
 
