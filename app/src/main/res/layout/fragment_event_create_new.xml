@@ -45,13 +45,13 @@
                     android:text="@string/new_event" />
 
                 <Button
-                    android:id="@+id/create_event_send_button"
+                    android:id="@+id/create_event_done_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/page_title_color"
                     android:layout_gravity="right"
                     android:background="@null"
-                    android:text="@string/send" />
+                    android:text="@string/done" />
             </android.support.v7.widget.Toolbar>
         </LinearLayout>
 

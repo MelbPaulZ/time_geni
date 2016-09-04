@@ -70,11 +70,11 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     private void init(){
         Event event = new Event();
-        event.setTitle("itime meeting");
+        event.setTitle("host event");
         event.setStatus(5); // 5== pending, 6== confirm
         event.setEventType(1); //0 == private, 1== group, 2== public
         Calendar calendar =Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH,3);
+        calendar.set(Calendar.DAY_OF_MONTH,5);
         calendar.set(Calendar.HOUR_OF_DAY,4);
         calendar.set(Calendar.MINUTE,15);
         calendar.set(Calendar.SECOND,0);
@@ -95,9 +95,50 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         event.setProposedTimeSlots(suggestTimeArrayList);
 
         event.setRepeatTypeId(1);
+        event.setHost(true);
 
+        // event2
+        Event event2 = new Event();
+        event2.setTitle("invite event");
+        event2.setStatus(5);
+        event2.setEventType(1);
+
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set(calendar2.get(Calendar.YEAR),calendar2.get(Calendar.MONTH), calendar2.get(Calendar.DAY_OF_MONTH)+2, 2, 0);
+        event2.setStartTime(calendar2.getTimeInMillis());
+        event2.setEndTime(calendar2.getTimeInMillis() + 3600000*2);
+
+        // set invitees
+        ArrayList<String> event2Invitees = new ArrayList<>();
+        event2Invitees.add("Jack");
+        event2Invitees.add("Peter");
+        event2Invitees.add("Zzzz");
+
+        ArrayList<Long> suggestTimeArrayList2 = new ArrayList<>();
+        suggestTimeArrayList2.add(calendar2.getTimeInMillis() + 3600000 * 3);
+        suggestTimeArrayList2.add(calendar2.getTimeInMillis() + 3600000 * 8);
+        suggestTimeArrayList2.add(calendar2.getTimeInMillis() + 3600000 * 24);
+        event2.setProposedTimeSlots(suggestTimeArrayList2);
+        event2.setDuration(120);
+
+        event2.setRepeatTypeId(2);
+        event2.setHost(false);
+
+
+        Event event3 = new Event();
+        event3.setTitle("solo event");
+        event3.setStatus(6);
+        event3.setEventType(0);
+
+        event3.setStartTime(calendar2.getTimeInMillis()+3600000*25);
+        event3.setEndTime(calendar2.getTimeInMillis() + 3600000*26);
+        event3.setDuration(60);
+        event3.setRepeatTypeId(0);
+        event3.setHost(true);
 
         iTimeEventInterfacesArrayList.add(event);
+        iTimeEventInterfacesArrayList.add(event2);
+        iTimeEventInterfacesArrayList.add(event3);
         weekView = (WeekView) binding.getRoot().findViewById(R.id.week_view);
         weekView.setEvent(iTimeEventInterfacesArrayList);
     }

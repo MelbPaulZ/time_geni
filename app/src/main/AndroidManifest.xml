@@ -25,6 +25,7 @@
 
         <activity
             android:name=".ui.activity.MainActivity"
+            android:launchMode="singleTask"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -75,6 +76,7 @@
 
 
         <activity android:name=".ui.activity.EventCreateActivity"
+            android:launchMode="singleTask"
             android:label="create new event">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -83,6 +85,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.EventDetailActivity"
+            android:launchMode="singleTask"
             android:label="event details">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

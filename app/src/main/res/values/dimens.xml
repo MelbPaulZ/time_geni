@@ -25,4 +25,5 @@
     <dimen name="duration_bar">300dp</dimen>
     <dimen name="timeslot_weekview_partly">200dp</dimen>
     <dimen name="timeslot_weekview_allshow">460dp</dimen>
+    <dimen name="subtitle_14dp">14dp</dimen>
 </resources>

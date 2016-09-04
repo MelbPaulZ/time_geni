@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.activity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.databinding.Bindable;
 import android.databinding.DataBindingUtil;
@@ -97,7 +98,9 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     public void startEventCreateActivity(){
         Intent intent = new Intent(this,EventCreateActivity.class);
-        startActivity(intent);
+        Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
+
+        startActivity(intent, bundleAnimation);
     }
 
     public void startEventEditActivity(ITimeEventInterface iTimeEventInterface){

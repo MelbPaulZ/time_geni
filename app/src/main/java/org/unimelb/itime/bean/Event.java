@@ -43,6 +43,7 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     private int duration;
     private long startTime;
     private long endTime;
+    private boolean isHost; // can be delete later, only for test
 //    attendee repeat?
     private ArrayList<Long> proposedTimeslots;
 
@@ -127,17 +128,6 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
 
     public boolean hasProposedTimeslots(){return proposedTimeslots!=null;}
 
-//    public boolean hasLocationLatitude(){
-//        return currentLocationLatitude==0;
-//    }
-//
-//    public boolean hasLocationLongtitude(){
-//        return currentLocationLongitude==0;
-//    }
-//
-//    public boolean hasCurrentTypeId(){
-//        return currentRepeatTypeId==0;
-//    }
 
 
     public String getEventId() {
@@ -410,5 +400,13 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     @Override
     public int compareTo(Object o) {
         return 0;
+    }
+
+    public boolean isHost() {
+        return isHost;
+    }
+
+    public void setHost(boolean host) {
+        isHost = host;
     }
 }

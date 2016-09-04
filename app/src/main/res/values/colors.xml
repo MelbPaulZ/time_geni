@@ -315,6 +315,11 @@
     <color name="bg_new_event_edit">#EFEFF4</color>
     <color name="page_title_color">#6D6D6D</color>
     <color name="duration_bar_color">#FDFEFE</color>
+    <color name="bg_event_solo_a100">#06457F</color>
+    <color name="bg_event_solo_a20">#3306457F</color>
+    <color name="blue_567B9D">#567B9D</color>
+    <color name="red_9E5259">#9E5259</color>
+
 
 
 

@@ -202,20 +202,20 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         // simulate timeSlots
         simulateTimeSlots = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH,1);
+        calendar.set(Calendar.DAY_OF_MONTH,6);
         calendar.set(Calendar.HOUR_OF_DAY,7);
         calendar.set(Calendar.MINUTE,30);
         simulateTimeSlots.put(calendar.getTime().getTime(),false);
 
 
         Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(Calendar.DAY_OF_MONTH,2);
+        calendar1.set(Calendar.DAY_OF_MONTH,7);
         calendar1.set(Calendar.HOUR_OF_DAY,8);
         calendar1.set(Calendar.MINUTE,45);
         simulateTimeSlots.put(calendar1.getTime().getTime(),true);
 
         Calendar calendar2 = Calendar.getInstance();
-        calendar2.set(Calendar.DAY_OF_MONTH, 3);
+        calendar2.set(Calendar.DAY_OF_MONTH, 9);
         calendar2.set(Calendar.HOUR_OF_DAY,4);
         calendar2.set(Calendar.MINUTE,0);
         simulateTimeSlots.put(calendar2.getTimeInMillis(),false);

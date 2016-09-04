@@ -96,6 +96,17 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         }
     }
 
+    public void toCreateEventNewFragment(android.support.v4.app.Fragment fragment){
+        if (eventCreateNewFragment == null || !(eventCreateNewFragment.isAdded())) {
+            eventCreateNewFragment = new EventCreateNewFragment();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventCreateNewFragment).commit();
+        }
+    }
+
     public void toWeekViewCalendar(EventCreateNewFragment fragment) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -105,10 +116,10 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         if (eventLocationPickerFragment == null || !(eventLocationPickerFragment.isAdded())) {
             eventLocationPickerFragment = new EventLocationPickerFragment();
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            getFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventLocationPickerFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventLocationPickerFragment).commit();
         } else {
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            getFragmentManager().beginTransaction().show(eventLocationPickerFragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventLocationPickerFragment).commit();
         }
     }
 
@@ -159,9 +170,17 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         }
     }
 
+    public void createSoloEvent(Event event){
+        Intent intent = new Intent(this,MainActivity.class);
+        event.setHost(true);
+        intent.putExtra(getString(R.string.new_event),event);
+        startActivity(intent);
+    }
+
 
     public void sendEvent(Event event){
         Intent intent = new Intent(this, MainActivity.class);
+        event.setHost(true);
         intent.putExtra(getString(R.string.new_event),event);
         startActivity(intent);
 

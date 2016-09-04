@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -61,10 +64,27 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
 
+        initListener();
+
     }
 
+    public void initListener(){
+        Button sendBtn = (Button) binding.getRoot().findViewById(R.id.create_event_done_button);
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((EventCreateActivity)getActivity()).createSoloEvent(eventCreateNewVIewModel.getEvent());
+            }
+        });
+    }
 
-
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        // hide soft key board
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+    }
 
     @Override
     public void pickDate(EventCreateNewVIewModel.PickDateFromType pickDateFromType) {

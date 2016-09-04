@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
+import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
@@ -23,6 +25,7 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
 
     private FragmentEventEditDetailBinding binding;
     private EventEditViewModel eventEditViewModel;
+    private Event event;
 
     @Nullable
     @Override
@@ -33,14 +36,24 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
 
     @Override
     public EventEditPresenter createPresenter() {
-        return new EventEditPresenter();
+        return new EventEditPresenter(getContext());
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         eventEditViewModel = new EventEditViewModel(getPresenter());
+        eventEditViewModel.setEventEditViewEvent(event);
         binding.setEventEditVM(eventEditViewModel);
 
+    }
+
+    public void setEvent(Event event){
+        this.event = event;
+    }
+
+    @Override
+    public void toHostEventDetail(Event event) {
+        ((EventDetailActivity)getActivity()).toEventDetail(event);
     }
 }

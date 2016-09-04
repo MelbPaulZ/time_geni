@@ -70,13 +70,13 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
         String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         String startTimeHour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-        String startMinute = String.valueOf(calendar.get(Calendar.MINUTE));
+        String startMinute = calendar.get(Calendar.MINUTE)<10? "0" + String.valueOf(calendar.get(Calendar.MINUTE)) : String.valueOf(calendar.get(Calendar.MINUTE));
         String startAmOrPm = calendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
 
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.setTimeInMillis(startTime + duration * 60 * 1000);
         String endTimeHour = String.valueOf(endCalendar.get(Calendar.HOUR_OF_DAY));
-        String endTimeMinute = String.valueOf(endCalendar.get(Calendar.MINUTE));
+        String endTimeMinute = endCalendar.get(Calendar.MINUTE)<10? "0" + String.valueOf(endCalendar.get(Calendar.MINUTE)) : String.valueOf(endCalendar.get(Calendar.MINUTE));
         String endAmOrPm = endCalendar.get(Calendar.HOUR_OF_DAY) >=12? "PM": "AM";
 
         return dayOfWeek + " " + day + "/" + month + " " + startTimeHour + ":" + startMinute +

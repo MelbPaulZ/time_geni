@@ -10,7 +10,9 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.fragment.EventAttendeeTimeslotResponseFragment;
 import org.unimelb.itime.ui.fragment.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.EventCreateNewFragment;
+import org.unimelb.itime.ui.fragment.EventDetailHostFragment;
 import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
+import org.unimelb.itime.ui.fragment.InviteeTimeslotFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 
 import java.util.ArrayList;
@@ -60,8 +62,12 @@ public class TestActivityPaul extends BaseActivity {
 //        EventCreateNewFragment eventCreateNewFragment = new EventCreateNewFragment();
 //        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, eventCreateNewFragment).commit();
 
-        EventTimeSlotViewFragment eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, eventTimeSlotViewFragment).commit();
+//        EventTimeSlotViewFragment eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
+//        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, eventTimeSlotViewFragment).commit();
+//        InviteeTimeslotFragment inviteeTimeslotFragment = new InviteeTimeslotFragment();
+//        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, inviteeTimeslotFragment).commit();
+        EventDetailHostFragment eventDetailHostFragment = new EventDetailHostFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment,eventDetailHostFragment).commit();
 
 
 
