@@ -42,6 +42,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     public void addNewEvent(Event event){
         iTimeEventInterfacesArrayList.add(event);
+        weekView.setEvent(iTimeEventInterfacesArrayList);
     }
 
     @Override
