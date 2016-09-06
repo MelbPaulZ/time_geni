@@ -44,6 +44,7 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
     private boolean isSelectTimeSlot;
 
     private LayoutInflater inflater;
+    private ArrayList<View> timeslots = new ArrayList<>();
 
 
     public EventDetailViewForInviteeViewModel(EventDetailForInviteePresenter presenter) {
@@ -60,22 +61,48 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
         };
     }
 
-    public View.OnClickListener onTimeSlotSelect1(){
+    public View.OnClickListener onTimeSlotSelect1() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (timeSlotChooseArray[0] == false){
-                    timeSlotChooseArray[0] = true;
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
-                }else{
-                    timeSlotChooseArray[0] = false;
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
-                }
 
-                if (isHasSelectAtLeastOneTimeSlot()){
-                    setSelectTimeSlot(true);
-                }else{
-                    setSelectTimeSlot(false);
+                if (eventDetailEvent.getAttendees().size() > 2) {
+
+
+                    if (timeSlotChooseArray[0] == false) {
+                        timeSlotChooseArray[0] = true;
+                        view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
+                    } else {
+                        timeSlotChooseArray[0] = false;
+                        view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                    }
+
+                    if (isHasSelectAtLeastOneTimeSlot()) {
+                        setSelectTimeSlot(true);
+                    } else {
+                        setSelectTimeSlot(false);
+                    }
+                } else {
+                    if (timeSlotChooseArray[0] == false) {
+                        setTimeSlotChooseArray(new boolean[]{true, false, false});
+                        for (View timeslot : timeslots) {
+                            timeslot.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                            timeslots.remove(timeslot);
+                        }
+
+                        view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
+                        timeslots.add(view);
+                    } else {
+                        timeSlotChooseArray[0] = false;
+                        view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                        timeslots.remove(view);
+                    }
+
+                    if (isHasSelectAtLeastOneTimeSlot()) {
+                        setSelectTimeSlot(true);
+                    } else {
+                        setSelectTimeSlot(false);
+                    }
                 }
             }
         };
@@ -85,39 +112,85 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (timeSlotChooseArray[1] == false){
-                    timeSlotChooseArray[1] = true;
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
-                }else{
-                    timeSlotChooseArray[1] = false;
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
-                }
 
-                if (isHasSelectAtLeastOneTimeSlot()){
-                    setSelectTimeSlot(true);
+                if (eventDetailEvent.getAttendees().size() > 2) {
+                    if (timeSlotChooseArray[1] == false) {
+                        timeSlotChooseArray[1] = true;
+                        view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
+                    } else {
+                        timeSlotChooseArray[1] = false;
+                        view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                    }
+
+                    if (isHasSelectAtLeastOneTimeSlot()) {
+                        setSelectTimeSlot(true);
+                    } else {
+                        setSelectTimeSlot(false);
+                    }
                 }else{
-                    setSelectTimeSlot(false);
+                        if (timeSlotChooseArray[1] == false) {
+                            setTimeSlotChooseArray(new boolean[]{false, true, false});
+                            for (View timeslot : timeslots) {
+                                timeslot.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                                timeslots.remove(timeslot);
+                            }
+
+                            view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
+                            timeslots.add(view);
+                        } else {
+                            timeSlotChooseArray[1] = false;
+                            view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                            timeslots.remove(view);
+                        }
+
+                        if (isHasSelectAtLeastOneTimeSlot()) {
+                            setSelectTimeSlot(true);
+                        } else {
+                            setSelectTimeSlot(false);
+                        }
                 }
-            }
-        };
+            }};
     }
 
     public View.OnClickListener onTimeSlotSelect3(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (timeSlotChooseArray[2] == false){
-                    timeSlotChooseArray[2] = true;
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
-                }else{
-                    timeSlotChooseArray[2] = false;
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
-                }
+                if (eventDetailEvent.getAttendees().size()>2) {
+                    if (timeSlotChooseArray[2] == false) {
+                        timeSlotChooseArray[2] = true;
+                        view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
+                    } else {
+                        timeSlotChooseArray[2] = false;
+                        view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                    }
 
-                if (isHasSelectAtLeastOneTimeSlot()){
-                    setSelectTimeSlot(true);
+                    if (isHasSelectAtLeastOneTimeSlot()) {
+                        setSelectTimeSlot(true);
+                    } else {
+                        setSelectTimeSlot(false);
+                    }
                 }else{
-                    setSelectTimeSlot(false);
+                        if (timeSlotChooseArray[2] == false) {
+                            setTimeSlotChooseArray(new boolean[]{false, false, true});
+                            for (View timeslot : timeslots) {
+                                timeslot.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                                timeslots.remove(timeslot);
+                            }
+
+                            view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
+                            timeslots.add(view);
+                        } else {
+                            timeSlotChooseArray[2] = false;
+                            view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
+                            timeslots.remove(view);
+                        }
+
+                        if (isHasSelectAtLeastOneTimeSlot()) {
+                            setSelectTimeSlot(true);
+                        } else {
+                            setSelectTimeSlot(false);
+                        }
                 }
             }
         };
@@ -399,6 +472,11 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
     public void setSelectTimeSlot(boolean selectTimeSlot) {
         isSelectTimeSlot = selectTimeSlot;
         notifyPropertyChanged(BR.selectTimeSlot);
+    }
+
+    public void setTimeSlotChooseArray(boolean[] timeSlotChooseArray) {
+        this.timeSlotChooseArray = timeSlotChooseArray;
+
     }
 
 }

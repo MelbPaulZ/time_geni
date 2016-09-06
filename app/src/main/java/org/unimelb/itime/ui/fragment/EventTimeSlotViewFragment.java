@@ -150,7 +150,8 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
             }
         });
 
-        PopupWindow popupWindow = new PopupWindow(root,ViewGroup.LayoutParams.MATCH_PARENT,850);
+
+        final PopupWindow popupWindow = new PopupWindow(root,ViewGroup.LayoutParams.MATCH_PARENT,850);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.AnimationPopup);
         popupWindow.showAtLocation(binding.getRoot().findViewById(R.id.bottom_bar), Gravity.BOTTOM,0, -600);
@@ -159,8 +160,15 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
             public void onDismiss() {
                 eventCreateTimeslotViewModel.setDurationTimeString(getTimeString(pickHour[0],pickMinute[0]));
                 eventCreateTimeslotViewModel.setIsChangeDuration(true);
-
                 weekTimeSlotView.setTimeSlots(simulateTimeSlots, pickHour[0] * 60 + pickMinute[0]);
+            }
+        });
+
+        TextView duration = (TextView) root.findViewById(R.id.popup_duration);
+        duration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
             }
         });
     }
@@ -174,24 +182,21 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
 
     private ArrayList<String> createHours() {
         ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < 24; i++) {
+        for (int i = 1; i < 24; i++) {
             if (i < 10) {
                 list.add(String.valueOf(i));
             } else {
                 list.add("" + i);
             }
         }
+        list.add("0");
         return list;
     }
 
     private ArrayList<String> createMinutes() {
         ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < 60; i++) {
-            if (i < 10) {
-                list.add("" + i);
-            } else {
-                list.add("" + i);
-            }
+        for (int i = 0; i < 4; i++) {
+            list.add("" + i*15);
         }
         return list;
     }
@@ -226,27 +231,6 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         newEvent.setProposedTimeSlots(new ArrayList(simulateTimeSlots.keySet()));
         newEvent.setDuration(60);
 
-
-
-        // simulate Events
-//        Event event = new Event();
-////        Event event = new Event();
-//        event.setTitle("itime meeting");
-//        event.setStatus(Event.Status.COMFIRM); // 5== pending, 6== confirm
-//        event.setEventType(1); //0 == private, 1== group, 2== public
-//        Calendar calendar1 =Calendar.getInstance();
-//        calendar1.set(Calendar.DAY_OF_MONTH,30);
-//        calendar1.set(Calendar.HOUR_OF_DAY,4);
-//        calendar1.set(Calendar.MINUTE,15);
-//        calendar1.set(Calendar.SECOND,0);
-//        event.setStartTime(calendar1.getTimeInMillis());
-//        event.setEndTime(calendar1.getTimeInMillis() + 3600000*2);
-//
-//        WeekView weekView = (WeekView) binding.getRoot().findViewById(R.id.week_view);
-//        weekView.setEvent(event);
-//
-//        weekTimeSlotView.setEvent(event);
-//
     }
 
 

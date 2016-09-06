@@ -46,55 +46,39 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_create);
-//
         eventCreateNewFragment = new EventCreateNewFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
-
         EventBus.getDefault().register(this);
-
-
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
 
-    }
 
-    public void toTimePicker(EventDatePickerFragment fragment) {
+    public void toTimePicker(EventDatePickerFragment fragment, String tag) {
         if (eventTimePickerFragment == null || !(eventTimePickerFragment.isAdded())) {
             eventTimePickerFragment = new EventTimePickerFragment();
-            getFragmentManager().beginTransaction().hide(fragment).commit();
-            getFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventTimePickerFragment).commit();
+            eventTimePickerFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventTimePickerFragment).commit();
         } else {
-            getFragmentManager().beginTransaction().hide(fragment).commit();
-            getFragmentManager().beginTransaction().show(eventTimePickerFragment).commit();
+            eventTimePickerFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventTimePickerFragment).commit();
         }
     }
 
-    public void toDatePicker(EventCreateNewFragment fragment, EventCreateNewVIewModel.PickDateFromType pickDateFromType) {
+    public void toDatePicker(EventCreateNewFragment fragment, String tag) {
         if (eventDatePickerFragment == null || !(eventDatePickerFragment.isAdded())) {
             eventDatePickerFragment = new EventDatePickerFragment();
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            eventDatePickerFragment.setPickDateFromType(pickDateFromType);
-            getFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventDatePickerFragment).commit();
+            eventDatePickerFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventDatePickerFragment).commit();
         } else {
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            eventDatePickerFragment.setPickDateFromType(pickDateFromType);
-            getFragmentManager().beginTransaction().show(eventDatePickerFragment).commit();
+            eventDatePickerFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().show(eventDatePickerFragment).commit();
         }
     }
 
-    //
-    public void toCreateEventNewFragment(Fragment fragment) {
-        if (eventCreateNewFragment == null || !(eventCreateNewFragment.isAdded())) {
-            eventCreateNewFragment = new EventCreateNewFragment();
-            getFragmentManager().beginTransaction().hide(fragment).commit();
-            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
-        } else {
-            getFragmentManager().beginTransaction().hide(fragment).commit();
-            getSupportFragmentManager().beginTransaction().show(eventCreateNewFragment).commit();
-        }
-    }
 
     public void toCreateEventNewFragment(android.support.v4.app.Fragment fragment){
         if (eventCreateNewFragment == null || !(eventCreateNewFragment.isAdded())) {
@@ -112,12 +96,14 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         startActivity(intent);
     }
 
-    public void toLocationPicker(EventCreateNewFragment fragment) {
+    public void toLocationPicker(EventCreateNewFragment fragment, String tag) {
         if (eventLocationPickerFragment == null || !(eventLocationPickerFragment.isAdded())) {
             eventLocationPickerFragment = new EventLocationPickerFragment();
+            eventLocationPickerFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventLocationPickerFragment).commit();
         } else {
+            eventLocationPickerFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().show(eventLocationPickerFragment).commit();
         }

@@ -24,10 +24,10 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
     }
 
 
-    public void pickDate(EventCreateNewVIewModel.PickDateFromType pickDateFromType){
+    public void pickDate(String tag){
         EventCreateNewMvpView view = getView();
         if (view!=null)
-            view.pickDate(pickDateFromType);
+            view.pickDate(tag);
     }
 
 
@@ -41,10 +41,10 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
             view.gotoWeekViewCalendar();
     }
 
-    public void pickLocation(){
+    public void pickLocation(String tag){
         EventCreateNewMvpView view = getView();
         if (view!=null){
-            view.pickLocatioin();
+            view.pickLocatioin(tag);
         }
     }
 

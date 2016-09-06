@@ -159,4 +159,27 @@
     <string name="repeat">Repeat</string>
     <string name="work">Work</string>
 
+    <!--tags are for fragment tag listener-->
+    <string name="tag_create_event">tag create new event</string>
+    <string name="tag_edit_event">tag edit event</string>
+    <string name="tag_start_time">tag start time</string>
+    <string name="tag_end_time">tag end time</string>
+    <string name="tag_end_repeat">tag end repeat</string>
+    
+    <string name="day_of_week_1_full">Sunday</string>
+    <string name="day_of_week_2_full">Monday</string>
+    <string name="day_of_week_3_full">Tuesday</string>
+    <string name="day_of_week_4_full">Wednesday</string>
+    <string name="day_of_week_5_full">Thursday</string>
+    <string name="day_of_week_6_full">Friday</string>
+    <string name="day_of_week_7_full">Saturday</string>
+    
+    <string name="day_of_week_1_abbr">Sun</string>
+    <string name="day_of_week_2_abbr">Mon</string>
+    <string name="day_of_week_3_abbr">Tue</string>
+    <string name="day_of_week_4_abbr">Wed</string>
+    <string name="day_of_week_5_abbr">Thu</string>
+    <string name="day_of_week_6_abbr">Fri</string>
+    <string name="day_of_week_7_abbr">Sat</string>
+
 </resources>

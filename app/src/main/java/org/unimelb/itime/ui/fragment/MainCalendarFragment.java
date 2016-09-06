@@ -114,6 +114,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         event2Invitees.add("Jack");
         event2Invitees.add("Peter");
         event2Invitees.add("Zzzz");
+        event2.setAttendees(event2Invitees);
 
         ArrayList<Long> suggestTimeArrayList2 = new ArrayList<>();
         suggestTimeArrayList2.add(calendar2.getTimeInMillis() + 3600000 * 3);
@@ -137,9 +138,41 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         event3.setRepeatTypeId(0);
         event3.setHost(true);
 
+
+
+//
+        Event event4 = new Event();
+        event4.setTitle("invite 2 people event");
+        event4.setStatus(5);
+        event4.setEventType(1);
+
+        Calendar calendar4 = Calendar.getInstance();
+        calendar4.set(calendar4.get(Calendar.YEAR),calendar4.get(Calendar.MONTH), calendar4.get(Calendar.DAY_OF_MONTH)-1, 2, 0);
+        event4.setStartTime(calendar4.getTimeInMillis());
+        event4.setEndTime(calendar4.getTimeInMillis() + 3600000*2);
+
+        // set invitees
+        ArrayList<String> event4Invitees = new ArrayList<>();
+        event4Invitees.add("Jack");
+        event4Invitees.add("Peter");
+
+
+        ArrayList<Long> suggestTimeArrayList4 = new ArrayList<>();
+        suggestTimeArrayList4.add(calendar4.getTimeInMillis() + 3600000 * 3);
+        suggestTimeArrayList4.add(calendar4.getTimeInMillis() + 3600000 * 8);
+        suggestTimeArrayList4.add(calendar4.getTimeInMillis() + 3600000 * 24);
+        event4.setProposedTimeSlots(suggestTimeArrayList4);
+        event4.setDuration(120);
+
+        event4.setRepeatTypeId(2);
+        event4.setHost(false);
+        event4.setAttendees(event4Invitees);
+
+
         iTimeEventInterfacesArrayList.add(event);
         iTimeEventInterfacesArrayList.add(event2);
         iTimeEventInterfacesArrayList.add(event3);
+        iTimeEventInterfacesArrayList.add(event4);
         weekView = (WeekView) binding.getRoot().findViewById(R.id.week_view);
         weekView.setEvent(iTimeEventInterfacesArrayList);
     }

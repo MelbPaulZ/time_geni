@@ -59,11 +59,12 @@ public class EventCreateNewVIewModel extends BaseObservable {
     private int endDay;
     private int endHour;
     private int endMinute;
+    private String tag;
 
-    private PickDateFromType pickDateFromType;
     private ObservableField<Boolean> isEventRepeat;
     private boolean isEndTimeChanged = false;
 
+    private CharSequence repeats[]=null;
 
 
     public EventCreateNewVIewModel(EventCreateNewPresenter presenter, Event event) {
@@ -73,6 +74,28 @@ public class EventCreateNewVIewModel extends BaseObservable {
         EventBus.getDefault().register(this);
         eventRepeatString = presenter.getContext().getString(R.string.no_repeat);
         eventAttendeeInfoString = presenter.getContext().getString(R.string.none);
+        tag =presenter.getContext().getString(R.string.tag_create_event);
+
+        Calendar eventCalendar = Calendar.getInstance(); // should not be used, only for initial default
+        setEventStartTimeString(getSelectDayTimeString(
+                eventCalendar.get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH), eventCalendar.get(Calendar.DAY_OF_MONTH),
+                eventCalendar.get(Calendar.HOUR_OF_DAY), eventCalendar.get(Calendar.MINUTE)));
+        event.setStartTime(eventCalendar.getTimeInMillis());
+
+        // here init repeats strings
+        String dayOfWeek = getDayOfWeek(eventCalendar.get(Calendar.DAY_OF_WEEK));
+        repeats= new CharSequence[]{"Never", "EveryDay", String.format("Every Week ( every %s )",dayOfWeek),
+                "Every Two Weeks","Event Month","Every Year"};
+
+        eventCalendar.set(eventCalendar.get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH), eventCalendar.get(Calendar.DAY_OF_MONTH),
+                eventCalendar.get(Calendar.HOUR_OF_DAY) + 1, eventCalendar.get(Calendar.MINUTE));
+        setEventEndTimeString(getSelectDayTimeString(
+                eventCalendar.get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH), eventCalendar.get(Calendar.DAY_OF_MONTH),
+                eventCalendar.get(Calendar.HOUR_OF_DAY), eventCalendar.get(Calendar.MINUTE)
+        ));
+        event.setEndTime(eventCalendar.getTimeInMillis());
+
+
 
     }
 
@@ -101,8 +124,8 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pickDateFromType = PickDateFromType.STARTTIME;
-                presenter.pickDate(pickDateFromType);
+                tag = presenter.getContext().getString(R.string.tag_start_time);
+                presenter.pickDate(tag);
             }
         };
     }
@@ -111,7 +134,12 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CharSequence repeats[] = new CharSequence[]{"Never", "EvenyDay", "EveryWeek", "EvenyTwoWeeks","EventMonth","EvenyYear"};
+//                CharSequence repeats[] = new CharSequence[6];
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(event.getStartTime());
+                String dayOfWeek = getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
+
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle("Choose a repeat type");
                 builder.setItems(repeats, new DialogInterface.OnClickListener() {
@@ -162,17 +190,14 @@ public class EventCreateNewVIewModel extends BaseObservable {
         };
     }
 
-    public enum PickDateFromType{
-        STARTTIME, ENDTIME, ENDREPEAT
-    }
 
 
     public View.OnClickListener pickEndDate() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pickDateFromType =PickDateFromType.ENDTIME;
-                presenter.pickDate(pickDateFromType);
+                tag = presenter.getContext().getString(R.string.tag_end_time);
+                presenter.pickDate(tag);
             }
         };
     }
@@ -181,8 +206,8 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pickDateFromType = PickDateFromType.ENDREPEAT;
-                presenter.pickDate(pickDateFromType);
+                tag = presenter.getContext().getString(R.string.tag_end_repeat);
+                presenter.pickDate(tag);
             }
         };
     }
@@ -200,7 +225,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.pickLocation();
+                presenter.pickLocation(tag);
             }
         };
     }
@@ -217,53 +242,51 @@ public class EventCreateNewVIewModel extends BaseObservable {
 
     @Subscribe
     public void getDateChanged(MessageEventDate messageEventDate) {
-        switch (pickDateFromType){
-            case STARTTIME:
-                startYear = messageEventDate.year;
-                startMonth = messageEventDate.month;
-                startDay = messageEventDate.day;
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.set(startYear,startMonth,startDay);
-//                event.setStartTime(calendar.getTimeInMillis());
-                break;
-            case ENDTIME:
-                endYear = messageEventDate.year;
-                endMonth = messageEventDate.month;
-                endDay = messageEventDate.day;
-//                Calendar calendarEnd = Calendar.getInstance();
-//                calendarEnd.set(endYear, endMonth, endDay);
-//                event.setEndTime(calendarEnd.getTimeInMillis());
-                break;
-            case ENDREPEAT:
-                setEventEndRepeatString(getSelectDayString(messageEventDate.year,messageEventDate.month, messageEventDate.day));
-//                Calendar calendarEndRepeat = Calendar.getInstance();
-//                calendarEndRepeat.set(messageEventDate.year,messageEventDate.month, messageEventDate.day);
-//                event.setRepeatEndsTime(calendarEndRepeat.getTimeInMillis());
-                break;
-            default:
-                break;
+        if (messageEventDate.tag == presenter.getContext().getString(R.string.tag_start_time)) {
+            startYear = messageEventDate.year;
+            startMonth = messageEventDate.month;
+            startDay = messageEventDate.day;
+            Calendar calendarStart = Calendar.getInstance();
+            calendarStart.set(startYear, startMonth, startDay);
+            repeats[2] = String.format("Every Week ( Every %s )",getDayOfWeek(calendarStart.get(Calendar.DAY_OF_WEEK)));
+            setEventRepeatString((String) repeats[event.getRepeatTypeId()]);
+        }else if (messageEventDate.tag == presenter.getContext().getString(R.string.tag_end_time)){
+            endYear = messageEventDate.year;
+            endMonth = messageEventDate.month;
+            endDay = messageEventDate.day;
+//            Calendar calendarEnd = Calendar.getInstance();
+//            calendarEnd.set(endYear, endMonth, endDay);
+//            event.setEndTime(calendarEnd.getTimeInMillis());
+        }else if (messageEventDate.tag == presenter.getContext().getString(R.string.tag_end_repeat)){
+            setEventEndRepeatString(getSelectDayString(messageEventDate.year, messageEventDate.month, messageEventDate.day));
+            Calendar calendarEndRepeat = Calendar.getInstance();
+            calendarEndRepeat.set(messageEventDate.year,messageEventDate.month, messageEventDate.day);
+            event.setRepeatEndsTime(calendarEndRepeat.getTimeInMillis());
         }
-
     }
 
     @Subscribe
     public void getLocationChanged(MessageLocation messageLocation){
-        setEventLocationString(messageLocation.locatioinString);
-        event.setLocationAddress(messageLocation.locatioinString);
+        if (messageLocation.tag == presenter.getContext().getString(R.string.tag_create_event)) {
+            setEventLocationString(messageLocation.locationString);
+            event.setLocationAddress(messageLocation.locationString);
+        }
     }
 
     @Subscribe
     public void getTimeChanged(MessageEventTime messageEventTime) {
-        if (pickDateFromType == PickDateFromType.STARTTIME) {
+        if (messageEventTime.tag == presenter.getContext().getString(R.string.tag_start_time)){
             startHour = messageEventTime.hour;
-            startMinute = messageEventTime.mintue;
-            setEventStartTimeString(getSelectDayTimeString(startYear, startMonth, startDay, startHour, startMinute));
-            // update event data
-            Calendar startTime = Calendar.getInstance();
-            startTime.set(startYear, startMonth, startDay, startHour, startMinute);
-            event.setStartTime(startTime.getTimeInMillis());
+            startMinute = messageEventTime.minute;
+            setEventStartTimeString( getSelectDayTimeString(startYear, startMonth, startDay, startHour, startMinute));
+            Calendar calendarStartTime = Calendar.getInstance();
+            calendarStartTime.set(startYear, startMonth, startDay, startHour, startMinute);
+            event.setStartTime(calendarStartTime.getTimeInMillis());
 
-            if (!isEndTimeChanged) {
+            String dayOfWeek = getDayOfWeek(calendarStartTime.get(Calendar.DAY_OF_WEEK));
+
+
+            if (!isEndTimeChanged){
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(startYear, startMonth, startDay, startHour + 1, startMinute);
                 setEventEndTimeString(getSelectDayTimeString(
@@ -272,16 +295,15 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 // update event data
                 event.setEndTime(calendar.getTimeInMillis());
             }
-        } else if (pickDateFromType == PickDateFromType.ENDTIME){
+        }else if (messageEventTime.tag == presenter.getContext().getString(R.string.tag_end_time)) {
             isEndTimeChanged = true;
             endHour = messageEventTime.hour;
-            endMinute = messageEventTime.mintue;
+            endMinute = messageEventTime.minute;
             setEventEndTimeString(getSelectDayTimeString(endYear, endMonth, endDay, endHour, endMinute));
             Calendar calendar = Calendar.getInstance();
             calendar.set(endYear, endMonth, endDay, endHour, endMinute);
             event.setEndTime(calendar.getTimeInMillis());
         }
-
     }
 
     private String getSelectDayString(int year, int month, int day){
@@ -299,7 +321,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
         String eventDayOfMonth = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
         String eventMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         String eventHour = String.valueOf(hour);
-        String eventMinute = String.valueOf(minute);
+        String eventMinute = minute<10? "0"+String.valueOf(minute): String.valueOf(minute);
         String amOrPm = hour >= 12 ? "PM" : "AM";
 
         return eventDayOfWeek + " " + eventDayOfMonth + "/" +
@@ -310,19 +332,19 @@ public class EventCreateNewVIewModel extends BaseObservable {
     private String getDayOfWeek(int dayOfWeek) {
         switch (dayOfWeek) {
             case 1:
-                return "SUN";
+                return presenter.getContext().getString(R.string.day_of_week_1_full);
             case 2:
-                return "MON";
+                return presenter.getContext().getString(R.string.day_of_week_2_full);
             case 3:
-                return "TUE";
+                return presenter.getContext().getString(R.string.day_of_week_3_full);
             case 4:
-                return "WED";
+                return presenter.getContext().getString(R.string.day_of_week_4_full);
             case 5:
-                return "FRI";
+                return presenter.getContext().getString(R.string.day_of_week_5_full);
             case 6:
-                return "SAT";
+                return presenter.getContext().getString(R.string.day_of_week_6_full);
             case 7:
-                return "SUN";
+                return presenter.getContext().getString(R.string.day_of_week_7_full);
         }
         return "error get day of week";
     }
@@ -500,4 +522,5 @@ public class EventCreateNewVIewModel extends BaseObservable {
         layoutParams.height = (int)height;
         view.setLayoutParams(layoutParams);
     }
+
 }

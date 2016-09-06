@@ -1,20 +1,29 @@
 package org.unimelb.itime.ui.fragment;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -31,6 +40,8 @@ import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.AutocompletePredictionBuffer;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
@@ -40,6 +51,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 
@@ -49,25 +61,25 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Paul on 27/08/2016.
  */
-public class EventLocationPickerFragment extends android.support.v4.app.Fragment implements GoogleApiClient.OnConnectionFailedListener{
+public class EventLocationPickerFragment extends android.support.v4.app.Fragment implements GoogleApiClient.OnConnectionFailedListener,FragmentTagListener{
     private View root;
+
 
     protected GoogleApiClient mGoogleApiClient;
 
     private PlaceAutoCompleteAdapter mAdapter;
+    private ArrayAdapter<String> strAdapter;
 
     private AutoCompleteTextView mAutocompleteView;
 
-    private TextView mPlaceDetailsText;
-
-    private android.support.v4.app.Fragment self;
-
-    private TextView mPlaceDetailsAttribution;
-
-    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
-            new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
-
     private String TAG = "TAG";
+    private String tag;
+    private static final int MY_PERMISSIONS_REQUEST_LOC = 30;
+    private String place;
+    String[] currentLocation;
+    private EventLocationPickerFragment self;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,112 +89,189 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         return root;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .enableAutoManage(getActivity(), 0 /* clientId */, this)
-                .addApi(Places.GEO_DATA_API)
-                .build();
-        mGoogleApiClient.connect();
 
-        mAutocompleteView = (AutoCompleteTextView)
-                root.findViewById(R.id.autocomplete_places);
+        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOC);
 
-        // Register a listener that receives callbacks when a suggestion has been selected
-        mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
+            return;
+        }else {
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
 
-        // Retrieve the TextViews that will display details and attributions of the selected place.
-//        mPlaceDetailsText = (TextView) root.findViewById(R.id.place_details);
-//        mPlaceDetailsAttribution = (TextView) root.findViewById(R.id.place_attribution);
+            // dynamically calculate location and search by this
+            LatLngBounds locationNearByBounds = new LatLngBounds( // set the bias area
+                    new LatLng(latitude - 0.15, longitude - 0.15), new LatLng(latitude + 0.15, longitude + 0.15));
 
-        // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
-        // the entire world.
-        mAdapter = new PlaceAutoCompleteAdapter(getContext(), mGoogleApiClient, BOUNDS_GREATER_SYDNEY,
-                null);
-        mAutocompleteView.setAdapter(mAdapter);
+            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                    .enableAutoManage(getActivity(), 0 /* clientId */, this)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
+                    .build();
+            mGoogleApiClient.connect();
 
+            mAutocompleteView = (AutoCompleteTextView)
+                    root.findViewById(R.id.autocomplete_places);
+
+            // Register a listener that receives callbacks when a suggestion has been selected
+
+
+            // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+            // the entire world.
+            mAdapter = new PlaceAutoCompleteAdapter(getContext(), mGoogleApiClient, locationNearByBounds,
+                    null);
+
+            currentLocation = new String[]{"current location"};
+
+            strAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, currentLocation);
+
+            mAutocompleteView.setOnItemClickListener(currentLocationListener);
+            mAutocompleteView.setAdapter(strAdapter);
+            mAutocompleteView.setText("");
+
+            initListeners();
+            getCurrentLocation();
+        }
+    }
+
+
+
+    public void initListeners(){
         TextView backBtn = (TextView) root.findViewById(R.id.location_picker_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((EventCreateActivity)getActivity()).toCreateEventNewFragment(self);
+                if (tag == getResources().getString(R.string.tag_create_event))
+                    ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+            }
+        });
+
+
+        mAutocompleteView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mAutocompleteView.showDropDown();
+                return false;
+            }
+        });
+
+        TextView doneBtn = (TextView) root.findViewById(R.id.location_picker_done_btn);
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tag == getResources().getString(R.string.tag_create_event)) {
+                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
+                    ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+                }
+            }
+        });
+
+
+        mAutocompleteView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 0 && mAutocompleteView.getAdapter().equals(mAdapter)) {
+                    mAutocompleteView.setAdapter(strAdapter);
+                    mAutocompleteView.setOnItemClickListener(currentLocationListener);
+                    mAutocompleteView.showDropDown();
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() == 1 && mAutocompleteView.getAdapter().equals(strAdapter)) {
+                    mAutocompleteView.setAdapter(mAdapter);
+                    mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
+                }else if (editable.length() == 0 && mAutocompleteView.getAdapter().equals(mAdapter)) {
+                    mAutocompleteView.setAdapter(strAdapter);
+                    mAutocompleteView.setOnItemClickListener(currentLocationListener);
+                    mAutocompleteView.showDropDown();
+                }
             }
         });
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-//        mAutocompleteView.setText("");
+    public String getCurrentLocation() {
+        if (mGoogleApiClient.isConnected()) {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOC);
+            }else {
+                final PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
+                        .getCurrentPlace(mGoogleApiClient, null);
+
+                result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+                    @Override
+                    public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                        String bestMatch = "";
+                        double bestLikelihood = 0.0;
+
+                        for (PlaceLikelihood placeLikelihood : likelyPlaces) {
+                            if (placeLikelihood.getLikelihood()>bestLikelihood){
+                                bestMatch = (String) placeLikelihood.getPlace().getName();
+                                bestLikelihood = placeLikelihood.getLikelihood();
+                            }
+                        }
+                        likelyPlaces.release();
+                        place = bestMatch;
+                        EventBus.getDefault().post(new MessageLocation(tag, place));
+                        mAutocompleteView.setText(place);
+                    }
+                });
+            }
+        }
+        return place;
     }
+
+    private AdapterView.OnItemClickListener currentLocationListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            mAutocompleteView.setText(getCurrentLocation());
+            mAutocompleteView.setAdapter(mAdapter);
+            mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
+            if (tag == getString(R.string.tag_create_event)) {
+//                EventBus.getDefault().post(new MessageLocation(tag, place));
+                ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+            }
+        }
+    };
+
+
 
     private AdapterView.OnItemClickListener mAutocompleteClickListener
             = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            /*
-             Retrieve the place ID of the selected item from the Adapter.
-             The adapter stores each Place suggestion in a AutocompletePrediction from which we
-             read the place ID and title.
-              */
             final AutocompletePrediction item = mAdapter.getItem(position);
-            final String placeId = item.getPlaceId();
             final CharSequence primaryText = item.getPrimaryText(null);
 
-            Log.i(TAG, "Autocomplete item selected: " + primaryText);
-
-            /*
-             Issue a request to the Places Geo Data API to retrieve a Place object with additional
-             details about the place.
-              */
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-
-//            Toast.makeText(getContext(), "Clicked: " + primaryText,
-//                    Toast.LENGTH_SHORT).show();
-//            Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
-        }
-    };
-
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
-            = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                // Request did not complete successfully
-                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
-                places.release();
-                return;
+            if (tag == getString(R.string.tag_create_event)) {
+                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
+                ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
             }
-            // Get the Place object from the buffer.
-            final Place place = places.get(0);
-
-//            // Format details of the place for display and show it in a TextView.
-//            mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
-//                    place.getId(), place.getAddress(), place.getPhoneNumber(),
-//                    place.getWebsiteUri()));
-
-            // Display the third party attributions if set.
-//            final CharSequence thirdPartyAttribution = places.getAttributions();
-//            if (thirdPartyAttribution == null) {
-//                mPlaceDetailsAttribution.setVisibility(View.GONE);
-//            } else {
-//                mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
-//                mPlaceDetailsAttribution.setText(Html.fromHtml(thirdPartyAttribution.toString()));
-//            }
-
-            Log.i(TAG, "Place details received: " + place.getName());
-
-            EventBus.getDefault().post(new MessageLocation((String) place.getName()));
-            places.release();
-            ((EventCreateActivity)getActivity()).toCreateEventNewFragment(self);
         }
     };
 
@@ -196,6 +285,11 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         Toast.makeText(getContext(),
                 "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public class PlaceAutoCompleteAdapter
