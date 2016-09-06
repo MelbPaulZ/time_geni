@@ -76,7 +76,8 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
     private String tag;
     private static final int MY_PERMISSIONS_REQUEST_LOC = 30;
     private String place;
-    String[] currentLocation;
+//    String[] currentLocation;
+    ArrayList<String> locations = new ArrayList<>();
     private EventLocationPickerFragment self;
 
 
@@ -138,16 +139,21 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             mAdapter = new PlaceAutoCompleteAdapter(getContext(), mGoogleApiClient, locationNearByBounds,
                     null);
 
-            currentLocation = new String[]{"current location"};
+//            currentLocation = new String[]{"current location"};
+            locations.add(getString(R.string.current_location));
 
-            strAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, currentLocation);
+            strAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, locations){
+                @Override
+                public int getCount() {
+                    return locations.size();
+                }
+            };
 
             mAutocompleteView.setOnItemClickListener(currentLocationListener);
             mAutocompleteView.setAdapter(strAdapter);
             mAutocompleteView.setText("");
 
             initListeners();
-            getCurrentLocation();
         }
     }
 
@@ -187,11 +193,6 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         mAutocompleteView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() == 0 && mAutocompleteView.getAdapter().equals(mAdapter)) {
-                    mAutocompleteView.setAdapter(strAdapter);
-                    mAutocompleteView.setOnItemClickListener(currentLocationListener);
-                    mAutocompleteView.showDropDown();
-                }
             }
 
             @Override
@@ -249,11 +250,15 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
     private AdapterView.OnItemClickListener currentLocationListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            mAutocompleteView.setText(getCurrentLocation());
+            String clickStr = locations.get(i);
+            if ( i ==0){
+                mAutocompleteView.setText(getCurrentLocation());
+            }else{
+                mAutocompleteView.setText(clickStr);
+            }
             mAutocompleteView.setAdapter(mAdapter);
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
             if (tag == getString(R.string.tag_create_event)) {
-//                EventBus.getDefault().post(new MessageLocation(tag, place));
                 ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
             }
         }
@@ -267,7 +272,9 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final AutocompletePrediction item = mAdapter.getItem(position);
             final CharSequence primaryText = item.getPrimaryText(null);
-
+            locations.add(1,(String) primaryText);
+            // find a way fix here later
+            strAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, locations);
             if (tag == getString(R.string.tag_create_event)) {
                 EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
                 ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
