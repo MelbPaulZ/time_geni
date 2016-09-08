@@ -176,7 +176,8 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         mAutocompleteView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                mAutocompleteView.showDropDown();
+                if (mAutocompleteView.getAdapter().equals(strAdapter))
+                    mAutocompleteView.showDropDown();
                 return false;
             }
         });
@@ -207,7 +208,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.length() == 1 && mAutocompleteView.getAdapter().equals(strAdapter)) {
+                if (editable.length() ==1 && mAutocompleteView.getAdapter().equals(strAdapter)) {
                     mAutocompleteView.setAdapter(mAdapter);
                     mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
                 }else if (editable.length() == 0 && mAutocompleteView.getAdapter().equals(mAdapter)) {
@@ -246,6 +247,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                         place = bestMatch;
                         EventBus.getDefault().post(new MessageLocation(tag, place));
                         mAutocompleteView.setText(place);
+                        mAutocompleteView.setAdapter(mAdapter);
                     }
                 });
             }

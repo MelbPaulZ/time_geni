@@ -66,6 +66,7 @@
                 android:id="@+id/week_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 app:onClickEditEvent="@{calenarVM.onClickEvent()}"
                 app:onWeekViewChange="@{calenarVM.onWeekViewChange()}"
                 >
@@ -75,7 +76,7 @@
                 android:id="@+id/month_day_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
             <org.unimelb.itime.vendor.agendaview.MonthAgendaView
                 android:id="@+id/month_agenda_view"

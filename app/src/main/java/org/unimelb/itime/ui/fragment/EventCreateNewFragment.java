@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,20 @@ import android.widget.Button;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateNewBinding;
 import org.unimelb.itime.helper.FragmentTagListener;
-import org.unimelb.itime.messageevent.MessageNewEvent;
-import org.unimelb.itime.messageevent.MessageUrl;
+import org.unimelb.itime.messageevent.MessageEventDate;
+import org.unimelb.itime.messageevent.MessageEventTime;
+import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
+
+import java.util.Calendar;
 
 /**
  * Created by Paul on 23/08/2016.
@@ -37,10 +42,15 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
     private EventCreateNewVIewModel eventCreateNewVIewModel;
     private Event event;
     private String tag;
+    private EventCreateNewPresenter presenter;
+    private int year,month,day,hour,minute;
 
     @Override
     public EventCreateNewPresenter createPresenter() {
-        return new EventCreateNewPresenter(getContext());
+        if (presenter==null)
+            return new EventCreateNewPresenter(getContext());
+        else
+            return presenter;
     }
 
 
@@ -54,14 +64,33 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        event = new Event();
-        eventCreateNewVIewModel = new EventCreateNewVIewModel(getPresenter(), event);
+        if (event == null) {
+            event = new Event();
+        }
+        if (eventCreateNewVIewModel==null) {
+            eventCreateNewVIewModel = new EventCreateNewVIewModel(getPresenter());
+            eventCreateNewVIewModel.setEvent(event);
+        }
         binding.setEventVM(eventCreateNewVIewModel);
 
         // hide soft key board
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
+    }
+
+    public void setStartTime(long time){
+        if (event == null) {
+            event = new Event();
+        }
+        event.setStartTime(time);
+    }
+
+    public void setEndTime(long time){
+        if (event == null){
+            event = new Event();
+        }
+        event.setEndTime(time);
     }
 
 
@@ -103,5 +132,59 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
     @Override
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    @Subscribe
+    public void getDateChange(MessageEventDate messageEventDate){
+        if (messageEventDate.tag == getString(R.string.tag_start_time)){
+            year = messageEventDate.year;
+            month = messageEventDate.month;
+            day = messageEventDate.day;
+        }else if (messageEventDate.tag == getString(R.string.tag_end_time)){
+            year = messageEventDate.year;
+            month = messageEventDate.month;
+            day = messageEventDate.day;
+        }else if (messageEventDate.tag == getString(R.string.tag_end_repeat)){
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(messageEventDate.year, messageEventDate.month, messageEventDate.day);
+            event.setRepeatEndsTime(calendar.getTimeInMillis());
+            eventCreateNewVIewModel.setEvent(event);
+        }
+    }
+
+    @Subscribe
+    public void getTimeChange(MessageEventTime messageEventTime){
+        Calendar calendar = Calendar.getInstance();
+        hour = messageEventTime.hour;
+        minute = messageEventTime.minute;
+        calendar.set( year, month, day, hour, minute);
+        if (messageEventTime.tag == getString(R.string.tag_start_time)){
+            event.setStartTime(calendar.getTimeInMillis());
+            eventCreateNewVIewModel.setEvent(event);
+        }else if (messageEventTime.tag == getString(R.string.tag_end_time)){
+            event.setEndTime(calendar.getTimeInMillis());
+            eventCreateNewVIewModel.setEvent(event);
+        }
+    }
+
+    @Subscribe
+    public void getLocationChange(MessageLocation messageLocation){
+        if (messageLocation.tag == getString(R.string.tag_create_event)){
+        event.setLocationAddress(messageLocation.locationString);
+        eventCreateNewVIewModel.setEvent(event);
+        }
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }

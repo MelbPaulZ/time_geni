@@ -158,6 +158,8 @@
     <string name="confirm">confirm</string>
     <string name="repeat">Repeat</string>
     <string name="work">Work</string>
+    <string name="private_calendar">Private</string>
+    <string name="more_invitees"> %1$s and %2$d more</string>
 
     <!--tags are for fragment tag listener-->
     <string name="tag_create_event">tag create new event</string>
@@ -183,10 +185,30 @@
     <string name="day_of_week_6_abbr">Fri</string>
     <string name="day_of_week_7_abbr">Sat</string>
 
+    <string name="month_1st_Abbr">Jan</string>
+    <string name="month_2nd_Abbr">Feb</string>
+    <string name="month_3rd_Abbr">Mar</string>
+    <string name="month_4th_Abbr">Apr</string>
+    <string name="month_5th_Abbr">May</string>
+    <string name="month_6th_Abbr">Jun</string>
+    <string name="month_7th_Abbr">July</string>
+    <string name="month_8th_Abbr">Aug</string>
+    <string name="month_9th_Abbr">Sep</string>
+    <string name="month_10th_Abbr">Oct</string>
+    <string name="month_11th_Abbr">Nov</string>
+    <string name="month_12th_Abbr">Dec</string>
+
     <string name="current_location">Current Location</string>
 
     <string name="month_day_view">Day View</string>
     <string name="week_view">Week View</string>
     <string name="agenda_view">Agenda View</string>
+
+    <string name="repeat_never">Never</string>
+    <string name="repeat_everyday">Everyday</string>
+    <string name="repeat_everyweek">Every Week ( Every %1$s )</string>
+    <string name="repeat_every_twoweek">Every Two Weeks</string>
+    <string name="repeat_every_month">Every Month</string>
+    <string name="repeat_every_year">Every Year</string>
 
 </resources>

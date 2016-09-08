@@ -27,6 +27,8 @@ import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
 
+import java.util.Calendar;
+
 import butterknife.Unbinder;
 
 //public class EventCreateActivity extends AppCompatActivity implements
@@ -49,6 +51,16 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         setContentView(R.layout.activity_event_create);
         eventCreateNewFragment = new EventCreateNewFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
+
+        if (getIntent().hasExtra(getString(R.string.new_event))) {
+            Long startTime = getIntent().getExtras().getLong(getString(R.string.new_event));
+            eventCreateNewFragment.setStartTime(startTime);
+            eventCreateNewFragment.setEndTime(startTime + 3600000); // default 1 hour event
+        }else{
+            eventCreateNewFragment.setStartTime(Calendar.getInstance().getTimeInMillis());
+            eventCreateNewFragment.setEndTime(Calendar.getInstance().getTimeInMillis() + 3600000);
+        }
+
         EventBus.getDefault().register(this);
     }
 

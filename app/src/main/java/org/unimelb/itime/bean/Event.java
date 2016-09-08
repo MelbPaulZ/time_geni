@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class Event extends BaseObservable implements ITimeEventInterface,Serializable {
     private String eventId;
     private String eventTitle;
-    private String eventNote;
+    private String eventNote="";
     private String currentLocationAddress;
     private String currentLocationNote;
     private double currentLocationLatitude;
@@ -31,7 +31,7 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     private int eventTypeId;
     private int visibilityTypeId;
     private int eventSourceId;
-    private String calendarTypedId;
+    private String calendarTypedId="";
     private Boolean isInfiniteRepeat;
     private Boolean isDeleted;
     private long repeatEndsTime;
@@ -39,7 +39,7 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     private int userStatusId;
     private ArrayList<String> attendees; // need to be checked
     private ArrayList<String> eventPhotos;
-    private String url;
+    private String url = "";
     private int duration;
     private long startTime;
     private long endTime;
@@ -48,6 +48,7 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     private ArrayList<Long> proposedTimeslots;
 
     public Event() {
+
     }
 
     public Event(String eventId,

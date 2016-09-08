@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -15,10 +16,13 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
+import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
+import org.unimelb.itime.vendor.dayview.DayViewBodyController;
+import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
@@ -35,15 +39,12 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     FragmentMainCalendarBinding binding;
     MainCalendarViewModel mainCalendarViewModel;
-    WeekView weekView;
     ArrayList<? extends ITimeEventInterface> eventArrayList = new ArrayList<>();
     ArrayList<ITimeEventInterface> iTimeEventInterfacesArrayList = (ArrayList<ITimeEventInterface>) eventArrayList;;
 
-    // put dayview and weekview in this page, set vi
-
     public void addNewEvent(Event event){
         iTimeEventInterfacesArrayList.add(event);
-        weekView.setEvent(iTimeEventInterfacesArrayList);
+        binding.weekView.setEvent(iTimeEventInterfacesArrayList);
     }
 
     @Override
@@ -68,19 +69,17 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
         binding.setCalenarVM(mainCalendarViewModel);
 
-
-
-        initSpinner();
-        binding.threeLines.setOnClickListener(new View.OnClickListener() {
+        binding.monthDayView.setOnCreateNewEvent(new DayViewBodyController.OnCreateNewEvent() {
             @Override
-            public void onClick(View view) {
-                binding.monthDayView.setVisibility(View.VISIBLE);
-                binding.weekView.setVisibility(View.GONE);
+            public void createNewEvent(MyCalendar myCalendar) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(myCalendar.getYear(), myCalendar.getMonth(), myCalendar.getDay(), myCalendar.getHour(), myCalendar.getMinute());
+                ((MainActivity)getActivity()).startEventCreateActivity(calendar);
+
             }
         });
-
-
-//        init();
+        initSpinner();
+        init();
     }
 
 
@@ -91,8 +90,32 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         viewOptionsArrayList.add(getString(R.string.agenda_view));
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, viewOptionsArrayList);
-        
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.threeLines.setAdapter(arrayAdapter);
+        binding.threeLines.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 0){
+                    changeView(View.VISIBLE, View.GONE, View.GONE);
+                }else if (i == 1){
+                    changeView(View.GONE, View.VISIBLE, View.GONE);
+                }else if ( i == 2 ){
+                    changeView(View.GONE, View.GONE, View.VISIBLE);
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+    }
+
+    public void changeView(int monthDayView, int weekView, int agendaView){
+        binding.monthDayView.setVisibility(monthDayView);
+        binding.weekView.setVisibility(weekView);
+        binding.monthAgendaView.setVisibility(agendaView);
     }
 
     private void init(){
@@ -199,8 +222,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         iTimeEventInterfacesArrayList.add(event2);
         iTimeEventInterfacesArrayList.add(event3);
         iTimeEventInterfacesArrayList.add(event4);
-        weekView = (WeekView) binding.getRoot().findViewById(R.id.week_view);
-        weekView.setEvent(iTimeEventInterfacesArrayList);
+        binding.weekView.setEvent(iTimeEventInterfacesArrayList);
     }
 
 
