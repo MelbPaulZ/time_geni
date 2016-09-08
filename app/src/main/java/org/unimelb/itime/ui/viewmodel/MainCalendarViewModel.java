@@ -22,12 +22,20 @@ public class MainCalendarViewModel extends BaseObservable{
     public final static String TAG = "MainCalendarViewModel";
     private MainCalendarPresenter presenter;
 
-    private String toolbarTitle = getMonthName(Calendar.getInstance().get(Calendar.MONTH)) + " " + Calendar.getInstance().get(Calendar.YEAR);
+    private String toolbarTitle = initToolBarTitle();
 
 
     public MainCalendarViewModel(MainCalendarPresenter presenter) {
         super();
         this.presenter = presenter;
+    }
+
+    public String initToolBarTitle(){
+        Calendar calendar = Calendar.getInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        int delta = -(calendar.get(Calendar.DAY_OF_WEEK)-1);
+        calendar.add(Calendar.DATE,delta);
+        return getMonthName(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
     }
 
 
@@ -46,10 +54,9 @@ public class MainCalendarViewModel extends BaseObservable{
         return new WeekView.OnWeekViewChangeListener() {
             @Override
             public void onWeekChanged(Calendar calendar) {
-
+                int month = calendar.get(Calendar.MONTH);
                 String tmp = getMonthName(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
                 setToolbarTitle(tmp);
-                Log.d(TAG, "onWeekChanged: " + toolbarTitle);
 
             }
         };
@@ -74,7 +81,7 @@ public class MainCalendarViewModel extends BaseObservable{
     public WeekView.OnClickEventInterface onClickEvent(){
         return new WeekView.OnClickEventInterface() {
             @Override
-            public void editEvent(ITimeEventInterface iTimeEventInterface) {
+            public void onClickEditEvent(ITimeEventInterface iTimeEventInterface) {
                 presenter.gotoEditEventActivity(iTimeEventInterface);
             }
         };

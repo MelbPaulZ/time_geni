@@ -2,13 +2,17 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
+import android.databinding.BindingAdapter;
+import android.databinding.ObservableField;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.vendor.BR;
-import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
-import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.Calendar;
 
@@ -17,13 +21,30 @@ import java.util.Calendar;
  */
 public class EventCreateTimeslotViewModel extends BaseObservable {
     private final String TAG = "TimeslotViewModel";
-    private String toolbarString = getMonthName(Calendar.getInstance().get(Calendar.MONTH)) + " " + Calendar.getInstance().get(Calendar.YEAR);
-    private EventCreateTimeSlotPresenter eventCreateTimeSlotPresenter;
+    private String toolbarString = initToolBarTitle();
+    private EventCreateTimeSlotPresenter presenter;
+    private ObservableField<Boolean> isChangeDuration = new ObservableField<>(false);
+    private String durationTimeString = "1 hour";
+    private Event newEvent;
+    private String tag;
 
-    public EventCreateTimeslotViewModel(EventCreateTimeSlotPresenter eventCreateTimeSlotPresenter) {
+    public EventCreateTimeslotViewModel(EventCreateTimeSlotPresenter presenter, Event event) {
         super();
-        this.eventCreateTimeSlotPresenter = eventCreateTimeSlotPresenter;
+        this.presenter = presenter;
+        this.newEvent = event;
     }
+
+
+    public String initToolBarTitle(){
+        Calendar calendar = Calendar.getInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        int delta = -(calendar.get(Calendar.DAY_OF_WEEK)-1);
+        calendar.add(Calendar.DATE,delta);
+        return getMonthName(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
+    }
+
+
+
 
     //    ************************************************
     private String getMonthName(int index){
@@ -52,4 +73,68 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
         };
     }
 
+    public WeekTimeSlotView.OnTimeSlotClickListener onTimeSlotClick(){
+        return new WeekTimeSlotView.OnTimeSlotClickListener() {
+            @Override
+            public void onTimeSlotClick(long l) {
+
+            }
+        };
+    }
+
+    public View.OnClickListener toInviteePicker(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.toInviteePicker(tag);
+            }
+        };
+    }
+
+
+
+
+    @BindingAdapter("android:layout_height")
+    public static void setLayoutHeight(LinearLayout view, float height)
+    {
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.height = (int)height;
+        view.setLayoutParams(layoutParams);
+    }
+
+    @BindingAdapter("android:layout_height")
+    public static void setLayoutHeight(RelativeLayout view, float height)
+    {
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.height = (int)height;
+        view.setLayoutParams(layoutParams);
+    }
+
+    @Bindable
+    public boolean getIsChangeDuration() {
+        return isChangeDuration.get();
+    }
+
+    public void setIsChangeDuration(boolean isChangeDuration) {
+        this.isChangeDuration.set(isChangeDuration);
+        notifyPropertyChanged(BR.isChangeDuration);
+    }
+
+    @Bindable
+    public String getDurationTimeString() {
+        return durationTimeString;
+    }
+
+    public void setDurationTimeString(String durationTimeString) {
+        this.durationTimeString = durationTimeString;
+        notifyPropertyChanged(BR.durationTimeString);
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }

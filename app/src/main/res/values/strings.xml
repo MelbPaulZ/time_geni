@@ -122,7 +122,67 @@
     <string name="event_third_proposed_time">EventThirdProposedTime</string>
     <string name="event_calendar_type">EventCalendarType</string>
     <string name="next">next</string>
-    <string name="back">back</string>
-    <string name="delete_event">delete_event</string>
+    <string name="back">Back</string>
+    <string name="delete_event">Delete Event</string>
+
+    <string name="select_one_or_more_timeslot">Select One Or More Timeslot</string>
+    <string name="select_one_timeslot">Select One Timeslot</string>
+    <string name="no_repeat">No Repeat</string>
+    <string name="no_location">No Location</string>
+    <string name="reject_all">Reject All</string>
+    <string name="no_title">No Title</string>
+    <string name="none">None</string>
+    <string name="view_in_calendar">View in Calendar</string>
+    <string name="invitee">Invitee</string>
+    <string name="url">URL</string>
+    <string name="note">Note</string>
+    <string name="photo">Photo</string>
+    <string name="event_details">Event Details</string>
+    <string name="reason">Reason...</string>
+    <string name="please_enter_the_reason_of_rejecting_this_event">Please enter the reason of rejecting this event</string>
+    <string name="reject_this_event">Reject This Event</string>
+    <string name="reject">Reject</string>
+    <string name="time_slots_confirm_array">time slots confirm array</string>
+    <string name="event">event</string>
+    <string name="timeslot_next_btn">next</string>
+    <string name="calendar_type">Calendar Type</string>
+    <string name="alert_time">Alert Time</string>
+    <string name="calendar_type_work">Work</string>
+    <string name="calendar_type_private">Private</string>
+    <string name="publish_to_public">Publish to Public</string>
+    <string name="allow_invitee_to_see_each_other">Allow Invitee to See Each Other</string>
+    <string name="all_day">All Day</string>
+    <string name="accept">Accept</string>
+    <string name="rejected">Rejected</string>
+    <string name="not_responded">Not Responded</string>
+    <string name="confirm">confirm</string>
+    <string name="repeat">Repeat</string>
+    <string name="work">Work</string>
+
+    <!--tags are for fragment tag listener-->
+    <string name="tag_create_event">tag create new event</string>
+    <string name="tag_edit_event">tag edit event</string>
+    <string name="tag_start_time">tag start time</string>
+    <string name="tag_end_time">tag end time</string>
+    <string name="tag_end_repeat">tag end repeat</string>
+    <string name="tag_create_event_before_sending">tag create event before sending</string>
+    
+    <string name="day_of_week_1_full">Sunday</string>
+    <string name="day_of_week_2_full">Monday</string>
+    <string name="day_of_week_3_full">Tuesday</string>
+    <string name="day_of_week_4_full">Wednesday</string>
+    <string name="day_of_week_5_full">Thursday</string>
+    <string name="day_of_week_6_full">Friday</string>
+    <string name="day_of_week_7_full">Saturday</string>
+    
+    <string name="day_of_week_1_abbr">Sun</string>
+    <string name="day_of_week_2_abbr">Mon</string>
+    <string name="day_of_week_3_abbr">Tue</string>
+    <string name="day_of_week_4_abbr">Wed</string>
+    <string name="day_of_week_5_abbr">Thu</string>
+    <string name="day_of_week_6_abbr">Fri</string>
+    <string name="day_of_week_7_abbr">Sat</string>
+
+    <string name="current_location">Current Location</string>
 
 </resources>

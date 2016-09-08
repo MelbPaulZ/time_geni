@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#FF5722</color>
-    <color name="color_primary_dark">#E64A19</color>
-
-
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#1063ADF2</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color><!--白色 -->
@@ -305,4 +301,30 @@
     <color name="gray_color">#AFAFAF</color>
     <color name="bg_sort_color">#EDEDED</color>
     <color name="page_bg_color">#efeef5</color>
+
+
+    <!-- a = alpha -->
+    <color name="bg_event_group_a100">#63ADF2</color>
+    <color name="bg_event_group_a50">#8063ADF2</color>
+    <color name="bg_event_group_a30">#4D63ADF2</color>
+    <color name="event_detail_repeat">#06457F</color>
+    <color name="gray_b2b2b2">#B2B2B2</color>
+    <color name="button_event_confirm_unable_blue">#804A4A4A</color>
+    <color name="button_event_reject_unable_red">#804A4A4A</color>
+    <color name="button_event_reject_able_red">#F45B69</color>
+    <color name="bg_new_event_edit">#EFEFF4</color>
+    <color name="page_title_color">#6D6D6D</color>
+    <color name="duration_bar_color">#FDFEFE</color>
+    <color name="bg_event_solo_a100">#06457F</color>
+    <color name="bg_event_solo_a20">#3306457F</color>
+    <color name="blue_567B9D">#567B9D</color>
+    <color name="red_9E5259">#9E5259</color>
+
+
+
+
+
+
+
+
 </resources>

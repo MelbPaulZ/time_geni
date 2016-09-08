@@ -1,22 +1,22 @@
 package org.unimelb.itime.ui.activity;
 
-import android.app.Fragment;
-import android.app.usage.UsageEvents;
-import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
-import org.unimelb.itime.databinding.EventTestBinding;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.fragment.EventAttendeeTimeslotResponseFragment;
-import org.unimelb.itime.ui.fragment.EventDetailFragment;
-import org.unimelb.itime.ui.fragment.EventEditFragment;
-import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.EventReceiveDetailFragment;
-import org.unimelb.itime.ui.fragment.TestEvent;
+import org.unimelb.itime.ui.fragment.EventCreateDetailBeforeSendingFragment;
+import org.unimelb.itime.ui.fragment.EventCreateNewFragment;
+import org.unimelb.itime.ui.fragment.EventDetailHostFragment;
+import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
+import org.unimelb.itime.ui.fragment.InviteeTimeslotFragment;
+import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Paul on 23/08/2016.
@@ -29,11 +29,50 @@ public class TestActivityPaul extends BaseActivity {
         setContentView(R.layout.activity_test_paul);
 
 //        EventEditFragment eventEditFragment = new EventEditFragment();
-//        EventDetailFragment eventDetailFragment = new EventDetailFragment();
+//        EventDetailForInviteeFragment eventDetailFragment = new EventDetailForInviteeFragment();
 //        EventReceiveDetailFragment eventReceiveDetailFragment = new EventReceiveDetailFragment();
-        EventAttendeeTimeslotResponseFragment eventAttendeeTimeslotResponseFragment = new EventAttendeeTimeslotResponseFragment();
-        getFragmentManager().beginTransaction().add(R.id.test_paul_fragment,eventAttendeeTimeslotResponseFragment).commit();
+//        EventAttendeeTimeslotResponseFragment eventAttendeeTimeslotResponseFragment = new EventAttendeeTimeslotResponseFragment();
+//        getFragmentManager().beginTransaction().add(R.id.test_paul_fragment,eventAttendeeTimeslotResponseFragment).commit();
+
+//        simulate data
+//        Event event = new Event();
+//        event.setTitle("Dinner");
+//        event.setLocationAddress("Melbourne");
+//        event.setRepeatTypeId(0);
+//        ArrayList<String> names = new ArrayList<>();
+//        names.add("Paul");
+//        names.add("Tom");
+//        event.setAttendees(names);
+//        event.setLocationAddress("Melbourne");
+//        event.setNote("with teammates");
+//        event.setUrl("www.unimelb.edu.au");
+//
+//        ArrayList<Long> timeSlots = new ArrayList<>();
+//        Calendar calendar = Calendar.getInstance();
+//        long timeLong = calendar.getTimeInMillis();
+//        timeSlots.add(timeLong);
+//        timeSlots.add(timeLong + 3600000*3);
+//        timeSlots.add(timeLong + 3600000*24);
+//        event.setProposedTimeSlots(timeSlots);
+//
+//        EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
+//        eventCreateDetailBeforeSendingFragment.setEvent(event);
+//
+
+//        EventCreateNewFragment eventCreateNewFragment = new EventCreateNewFragment();
+//        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, eventCreateNewFragment).commit();
+
+//        EventTimeSlotViewFragment eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
+//        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, eventTimeSlotViewFragment).commit();
+//        InviteeTimeslotFragment inviteeTimeslotFragment = new InviteeTimeslotFragment();
+//        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, inviteeTimeslotFragment).commit();
+        EventDetailHostFragment eventDetailHostFragment = new EventDetailHostFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment,eventDetailHostFragment).commit();
+
+
 
     }
+
+
 
 }

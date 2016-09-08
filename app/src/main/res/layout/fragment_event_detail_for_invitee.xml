@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="eventDetailForInviteeVM"
+            type="org.unimelb.itime.ui.viewmodel.EventDetailViewForInviteeViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/page_bg"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/event_detail_title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+                <Button
+                    android:id="@+id/event_detail_back_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:background="@null"
+                    android:gravity="center_vertical|left"
+                    android:onClick="@{eventDetailForInviteeVM.onClickToWeekViewCalendar()}"
+                    android:text="@string/back" />
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="18dp"
+                    android:text="@string/event_details" />
+
+                <!--<Button-->
+                    <!--android:id="@+id/event_detail_edit_btn"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:background="@null"-->
+                    <!--android:text="@string/edit" />-->
+            </android.support.v7.widget.Toolbar>
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/event_detail_title_bar"
+            android:background="#EFEFF4"
+            android:scrollbarStyle="insideOverlay">
+
+            <!--background-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#EFEFF4">
+                <!--blue rectangle-->
+                <LinearLayout
+                    android:id="@+id/first_part"
+                    android:layout_width="350dp"
+                    android:layout_height="89dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="@dimen/padding_10"
+                    android:layout_marginTop="23dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="3dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_event_group_a100"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_event_group_a30"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="11dp"
+                            android:layout_marginTop="5dp"
+                            android:text="@{eventDetailForInviteeVM.eventDetailTitleString??@string/no_title}"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="14dp"
+                            android:text="@{eventDetailForInviteeVM.eventDetailRepeatString?? @string/no_repeat}"
+                            android:textColor="@color/event_detail_repeat"
+                            android:textSize="15sp"
+
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="14dp"
+                            android:layout_marginTop="3dp"
+                            android:text="@{eventDetailForInviteeVM.eventDetailLocationString ?? @string/no_location}"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/second_part"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/first_part"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="bottom"
+                        android:layout_marginLeft="7dp"
+                        android:layout_marginBottom="@dimen/padding_5"
+                        android:textColor="@color/gray_b2b2b2"
+                        android:text="@{eventDetailForInviteeVM.eventDetailEvent.attendees.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:background="#ffffff"
+                        android:orientation="vertical">
+
+                        <!-- suggest time slot 1-->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp">
+
+                            <ImageView
+                                android:id="@+id/ic_circle_fst"
+                                android:layout_width="23dp"
+                                android:layout_height="23dp"
+                                android:layout_marginLeft="10dp"
+                                android:onClick="@{eventDetailForInviteeVM.onTimeSlotSelect1()}"
+                                android:layout_marginTop="14dp"
+                                android:background="@drawable/icon_event_attendee_unselected" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="22dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="13dp"
+                                android:layout_toRightOf="@+id/ic_circle_fst"
+                                android:text="@{eventDetailForInviteeVM.eventDetailSuggestTimeSlotFst?? @string/none}"
+                                android:textSize="17sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_below="@id/ic_circle_fst"
+                                android:layout_marginLeft="44dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@color/gray_b2b2b2" />
+                        </RelativeLayout>
+
+                        <!--suggest time slot 2-->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp">
+
+                            <ImageView
+                                android:id="@+id/ic_circle_snd"
+                                android:layout_width="23dp"
+                                android:layout_height="23dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="14dp"
+                                android:onClick="@{eventDetailForInviteeVM.onTimeSlotSelect2()}"
+                                android:background="@drawable/icon_event_attendee_unselected" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="22dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="13dp"
+                                android:layout_toRightOf="@+id/ic_circle_snd"
+                                android:text="@{eventDetailForInviteeVM.eventDetailSuggestTimeSlotSnd?? @string/none}"
+                                android:textSize="17sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_below="@id/ic_circle_snd"
+                                android:layout_marginLeft="44dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@color/gray_b2b2b2" />
+                        </RelativeLayout>
+
+                        <!--suggest time slot third-->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp">
+
+                            <ImageView
+                                android:id="@+id/ic_circle_trd"
+                                android:layout_width="23dp"
+                                android:layout_height="23dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="14dp"
+                                android:onClick="@{eventDetailForInviteeVM.onTimeSlotSelect3()}"
+                                android:background="@drawable/icon_event_attendee_unselected" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="22dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="13dp"
+                                android:layout_toRightOf="@+id/ic_circle_trd"
+                                android:text="@{eventDetailForInviteeVM.eventDetailSuggestTimeSlotTrd?? @string/none}"
+                                android:textSize="17sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_below="@id/ic_circle_trd"
+                                android:layout_marginLeft="44dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@color/gray_b2b2b2" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:gravity="center"
+                            android:text="@string/view_in_calendar"
+                            android:textColor="@color/event_detail_repeat"
+                            android:textSize="17dp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/event_detail_blank"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/second_part" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_detail_blank"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/padding_10">
+
+                    <!--Attendee -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/event_detail_attendee_title"
+                            android:layout_width="65dp"
+                            android:layout_height="45dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/invitee"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="22dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@+id/event_detail_attendee_arrow"
+                            android:text="@{eventDetailForInviteeVM.eventDetailAttendeeString??@string/none}"
+                            android:textColor="@color/gray_b2b2b2"
+                            android:textSize="17dp" />
+
+                        <TextView
+                            android:id="@+id/event_detail_attendee_arrow"
+                            android:layout_width="8dp"
+                            android:layout_height="13dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/padding_10"
+                            android:background="@drawable/icon_general_arrow_right" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/event_detail_attendee_arrow"
+                            android:layout_marginTop="@dimen/padding_10"
+                            android:background="@color/gray_b2b2b2" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/url"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/event_detail_url_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="25dp"
+                            android:autoLink="web"
+                            android:gravity="center_vertical"
+                            android:text="@{eventDetailForInviteeVM.eventDetailUrl}"
+                            android:hint="@string/url"
+                            android:textColor="@color/event_detail_repeat"
+                            android:textColorHint="@color/gray_b2b2b2"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/event_detail_url_link"
+                            android:layout_marginTop="@dimen/padding_5"
+                            android:background="@color/gray_b2b2b2" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/note"
+                            android:textSize="17sp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/event_detail_note"
+                                android:layout_width="322dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/padding_10"
+                                android:layout_marginTop="@dimen/padding_5"
+                                android:text="@{eventDetailForInviteeVM.eventDetailNote?? @string/none}"
+                                android:textColor="@color/gray_b2b2b2"
+                                android:textSize="17sp" />
+
+                            <TextView
+                                android:id="@+id/event_detail_note_arrow"
+                                android:layout_width="8dp"
+                                android:layout_height="13dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="@dimen/padding_10"
+                                android:background="@drawable/icon_general_arrow_right" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_below="@id/event_detail_note"
+                                android:layout_marginTop="@dimen/padding_5"
+                                android:background="@color/gray_b2b2b2" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/event_detail_photo_RL"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:id="@+id/event_detail_photo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="@string/photo"
+                                android:textSize="17sp"/>
+                            <TextView
+                                android:id="@+id/event_detail_photo_arrow"
+                                android:layout_width="8dp"
+                                android:layout_height="13dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="@dimen/padding_10"
+                                android:background="@drawable/icon_general_arrow_right" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_below="@id/event_detail_photo"
+                                android:layout_marginTop="@dimen/padding_5"
+                                android:background="@color/gray_b2b2b2" />
+
+                        </RelativeLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_below="@+id/event_detail_photo_RL" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:paddingBottom="@dimen/padding_10"
+            android:paddingLeft="@dimen/padding_10"
+            android:paddingRight="@dimen/padding_10">
+
+            <Button
+                android:id="@+id/confirm_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="@dimen/padding_5"
+                android:layout_weight="1"
+                android:background="@{eventDetailForInviteeVM.isSelectTimeSlot? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"
+                android:text="confirm"
+                android:clickable="@{eventDetailForInviteeVM.isSelectTimeSlot? true: false}"
+                android:onClick="@{eventDetailForInviteeVM.onClickConfirm()}"
+                android:textAlignment="center"
+                android:textColor="@{eventDetailForInviteeVM.isSelectTimeSlot? @color/white : @color/gray_b2b2b2}" />
+
+            <Button
+                android:id="@+id/reject_all_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/padding_5"
+                android:layout_weight="1"
+                android:background="@{eventDetailForInviteeVM.isSelectTimeSlot?  @drawable/background_round_radius_unable_red : @drawable/background_round_radius_able_red}"
+                android:text="@string/reject_all"
+                android:textAlignment="center"
+                android:clickable="@{eventDetailForInviteeVM.isSelectTimeSlot? false:true}"
+                android:onClick="@{eventDetailForInviteeVM.onClickRejectAll()}"
+                android:textColor="@{eventDetailForInviteeVM.isSelectTimeSlot?  @color/gray_b2b2b2 : @color/white}" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

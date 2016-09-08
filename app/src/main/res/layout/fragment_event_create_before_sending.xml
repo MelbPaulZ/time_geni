@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="newEventDetailVM"
+            type="org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel" />
+    </data>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+                <Button
+                    android:id="@+id/event_detail_before_sending_cancel_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:background="@null"
+                    android:gravity="center_vertical|left"
+                    android:onClick="@{newEventDetailVM.backToTimeSlotView()}"
+                    android:textColor="@color/page_title_color"
+                    android:text="@string/cancel" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/page_text_size"
+                    android:textColor="@color/page_title_color"
+                    android:text="@string/new_event" />
+
+                <Button
+                    android:id="@+id/event_detail_before_sending_send_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@null"
+                    android:onClick="@{newEventDetailVM.sendEvent()}"
+                    android:textColor="@color/page_title_color"
+                    android:text="@string/send" />
+            </android.support.v7.widget.Toolbar>
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scrollbarStyle="insideOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_new_event_edit"
+                android:orientation="vertical">
+                <!--blank for border-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/page_blank_row_height"
+                    android:layout_marginLeft="@dimen/padding_10"
+                    android:layout_marginRight="@dimen/padding_10"
+                    android:background="@color/bg_new_event_edit" />
+                <!-- end -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border"
+                    android:orientation="vertical"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="0dp">
+                    <!--Tittle Row-->
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:text="@={newEventDetailVM.newEvDtlTitleStr}"
+                        android:textColor="@color/text_enable"
+                        android:textSize="@dimen/page_text_size" />
+
+                    <!--Fst Row-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Location"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:onClick="@{newEventDetailVM.changeLocation()}"
+                            android:text="@{newEventDetailVM.newEvDtlLocationStr ?? @string/none}"
+                            android:textColor="@color/text_disable"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Repeat"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@{newEventDetailVM.newEvDtlRepeatStr ?? @string/no_repeat}"
+                            android:textColor="@color/text_disable"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Attendee"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@{newEventDetailVM.newEvDtlAttendeeStr ?? @string/none}"
+                            android:textColor="@color/text_disable"
+                            android:textSize="@dimen/page_text_size" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical|right"
+                            android:src="@drawable/arrow" />
+                    </LinearLayout>
+
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/table_row_border">-->
+                    <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/text_enable"-->
+                    <!--android:textSize="16dp"-->
+                    <!--android:text="Starts"/>-->
+                    <!--<TextView-->
+                    <!--android:id="@+id/startTimeTextView"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="right"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textColor="@color/text_enable"-->
+                    <!--android:textSize="16dp"-->
+                    <!--android:text="WED 20/7 12:00 PM"/>-->
+                    <!--</LinearLayout>-->
+
+                    <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/table_row_border">-->
+                    <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/text_enable"-->
+                    <!--android:textSize="16dp"-->
+                    <!--android:text="Ends"/>-->
+                    <!--<TextView-->
+                    <!--android:id="@+id/endTimeTextView"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="right"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:textColor="@color/text_enable"-->
+                    <!--android:textSize="16dp"-->
+                    <!--android:text="WED 20/7 13:00 PM"/>-->
+                    <!--</LinearLayout>-->
+
+                    <!--Proposed time slot-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:text="Proposed Timeslots"
+                                android:textColor="@color/text_enable"
+                                android:textSize="@dimen/page_text_size" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="22dp"
+                                android:text="@{newEventDetailVM.newEvDtlTimeSlotFst ?? @string/none}"
+                                android:textColor="@color/text_disable"
+                                android:textSize="@dimen/page_text_size" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="22dp"
+                                android:text="@{newEventDetailVM.newEvDtlTimeSlotSnd ?? @string/none}"
+                                android:textColor="@color/text_disable"
+                                android:textSize="@dimen/page_text_size" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="22dp"
+                                android:text='@{newEventDetailVM.newEvDtlTimeSlotTrd ?? @string/none}'
+                                android:textColor="@color/text_disable"
+                                android:textSize="@dimen/page_text_size" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:onClick="@{newEventDetailVM.reviewTimeSlots()}"
+                            android:layout_gravity="center_vertical|right"
+                            android:src="@drawable/arrow" />
+                    </LinearLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/page_text_size"
+                            android:text="@string/allow_invitee_to_see_each_other"
+                            android:textColor="@color/text_enable"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"/>
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <!--blank for border-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/page_blank_row_height"
+                    android:background="@color/bg_new_event_edit" />
+                <!--end -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
+                    android:background="@drawable/table_row_border"
+                    android:orientation="vertical">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:text="@string/alert_time"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/arrow" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/calendar_type"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size"
+
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@{newEventDetailVM.newEvDtlCldTpStr ?? @string/none}"
+                            android:textColor="@color/text_disable"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--blank for border-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/bg_new_event_edit" />
+                <!-- end -->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@color/white"-->
+                    <!--android:paddingLeft="@dimen/padding_10"-->
+                    <!--android:paddingRight="@dimen/padding_10"-->
+                    <!--android:orientation="vertical">-->
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@drawable/table_row_border">-->
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:textSize="@dimen/page_text_size"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:textColor="@color/text_enable"-->
+                            <!--android:text="@string/publish_to_public"/>-->
+                        <!--<Switch-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentEnd="true"-->
+                            <!--android:layout_centerVertical="true"/>-->
+                    <!--</RelativeLayout>-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@drawable/table_row_border">-->
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:textSize="@dimen/page_text_size"-->
+                            <!--android:text="@string/allow_invitee_to_see_each_other"-->
+                            <!--android:textColor="@color/text_enable"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_centerVertical="true"/>-->
+                        <!--<Switch-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentEnd="true"-->
+                            <!--android:layout_centerVertical="true"/>-->
+                    <!--</RelativeLayout>-->
+
+                <!--</LinearLayout>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border"
+                    android:orientation="vertical"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="URL"
+                            android:textColorHint="@color/text_disable"
+                            android:text="@{newEventDetailVM.newEvDtlUrlStr}"
+                            android:autoLink="all"
+                            android:linksClickable="true"
+                            android:textColor="@color/blue"
+                            android:background="@android:color/transparent"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/page_text_size"
+                            android:text="@string/note"
+                            android:textColor="@color/text_disable"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Note"
+                            android:text="@={newEventDetailVM.newEvDtlNotes}"
+                            android:background="@android:color/transparent"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="@string/photo"
+                            android:textSize="@dimen/page_text_size" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+
+    </LinearLayout>
+</layout>

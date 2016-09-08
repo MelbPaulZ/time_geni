@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.activity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.databinding.Bindable;
 import android.databinding.DataBindingUtil;
@@ -45,6 +46,26 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
         init();
+//        getNewEvent();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        getNewEvent(intent);
+    }
+
+    public void getNewEvent(Intent intent){
+        if (intent.hasExtra(getString(R.string.new_event))) {
+            Event event = (Event) intent.getSerializableExtra(getString(R.string.new_event));
+            ((MainCalendarFragment)tagFragments[0]).addNewEvent(event);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        getNewEvent();
     }
 
     @NonNull
@@ -88,13 +109,15 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     public void startEventCreateActivity(){
         Intent intent = new Intent(this,EventCreateActivity.class);
-        startActivity(intent);
+        Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
+
+        startActivity(intent, bundleAnimation);
     }
 
     public void startEventEditActivity(ITimeEventInterface iTimeEventInterface){
         Intent intent = new Intent(this,EventDetailActivity.class);
         Event event = (Event) iTimeEventInterface;
-        intent.putExtra("Event",event);
+        intent.putExtra(getString(R.string.event),event);
         startActivity(intent);
     }
 

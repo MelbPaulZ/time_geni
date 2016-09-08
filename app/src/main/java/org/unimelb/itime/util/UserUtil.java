@@ -26,4 +26,9 @@ public class UserUtil {
 
     }
 
+
+    public int getUserUid(){
+        return 1;
+    }
+
 }

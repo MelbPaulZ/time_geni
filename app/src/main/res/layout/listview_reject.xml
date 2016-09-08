@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:background="@color/white">
+    <ImageView
+        android:id="@+id/reject_icon"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/icon_event_status_rejected"/>
+    <TextView
+        android:id="@+id/accept_reject_name"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/text_enable"
+        android:layout_toRightOf="@id/reject_icon"
+        />
+
+</RelativeLayout>

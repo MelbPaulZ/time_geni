@@ -33,6 +33,9 @@
                     android:layout_gravity="left"
                     android:background="@null"
                     android:gravity="center_vertical|left"
+                    android:textSize="17dp"
+                    android:textColor="@color/page_title_color"
+                    android:onClick="@{eventEditVM.cancelEdit()}"
                     android:text="@string/cancel" />
 
                 <TextView
@@ -40,6 +43,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:textSize="17dp"
+                    android:textColor="@color/page_title_color"
                     android:text="@string/edit_event" />
 
                 <Button
@@ -48,6 +53,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:background="@null"
+                    android:textSize="17dp"
+                    android:onClick="@{eventEditVM.finishEdit()}"
+                    android:textColor="@color/page_title_color"
                     android:text="@string/done" />
             </android.support.v7.widget.Toolbar>
         </LinearLayout>
@@ -61,18 +69,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/bg_new_event_edit"
                 android:orientation="vertical">
+
                 <!--blank for border-->
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/page_blank_row_height"
-                    android:background="@drawable/table_row_border" />
+                    android:layout_height="@dimen/page_blank_row_height" />
                 <!-- end -->
                 <LinearLayout
                     android:id="@+id/part_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/table_row_border"
+                    android:background="@color/white"
                     android:orientation="vertical"
                     android:paddingBottom="0dp"
                     android:paddingLeft="10dp"
@@ -109,12 +118,12 @@
                             android:layout_gravity="right|center_vertical"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{eventEditVM.eventEditViewLocation}"
+                            android:text="@{eventEditVM.eventEditViewLocation?? @string/no_location}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
@@ -123,7 +132,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Repeat"
+                            android:text="@string/repeat"
+                            android:layout_centerVertical="true"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -131,15 +141,21 @@
                             android:id="@+id/edit_event_repeat_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:text="@{eventEditVM.eventEditViewRepeat}"
+                            android:layout_toLeftOf="@+id/edit_event_repeat_arrow"
+                            android:layout_marginRight="@dimen/padding_10"
+                            android:text="@{eventEditVM.eventEditViewRepeat ?? @string/no_repeat}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/edit_event_repeat_arrow"
+                            android:layout_width="10dp"
+                            android:layout_height="15dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:background="@drawable/icon_general_arrow_right"/>
+                    </RelativeLayout>
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
@@ -148,31 +164,30 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Attendee"
+                            android:text="@string/invitee"
                             android:textColor="@color/text_enable"
+                            android:layout_centerVertical="true"
                             android:textSize="@dimen/page_text_size" />
 
                         <TextView
                             android:id="@+id/edit_event_attendee_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{eventEditVM.eventEditViewAttendeeString}"
+                            android:text="@{eventEditVM.eventEditViewAttendeeString ?? @string/none}"
                             android:textColor="@color/text_disable"
+                            android:layout_toLeftOf="@+id/edit_event_attendee_arrow"
+                            android:layout_marginRight="@dimen/padding_10"
                             android:textSize="@dimen/page_text_size" />
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical|right"
-                            android:src="@drawable/arrow" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border" />
+                            android:id="@+id/edit_event_attendee_arrow"
+                            android:layout_width="10dp"
+                            android:layout_height="15dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/icon_general_arrow_right" />
+                    </RelativeLayout>
 
                     <!--<LinearLayout-->
                     <!--android:layout_width="match_parent"-->
@@ -217,7 +232,7 @@
                     <!--</LinearLayout>-->
 
                     <!--Proposed time slot-->
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border">
@@ -226,8 +241,7 @@
                             android:id="@+id/leftLinear"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_weight="1"
+                            android:layout_alignParentLeft="true"
                             android:orientation="vertical">
 
                             <TextView
@@ -242,7 +256,7 @@
                                 android:id="@+id/edit_event_proposed_fst"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{eventEditVM.eventEditViewSuggestTimeSlotFst}"
+                                android:text="@{eventEditVM.eventEditViewSuggestTimeSlotFst ?? @string/none}"
                                 android:textColor="@color/text_disable"
                                 android:textSize="@dimen/page_text_size" />
 
@@ -250,7 +264,7 @@
                                 android:id="@+id/edit_event_proposed_snd"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{eventEditVM.eventEditViewSuggestTimeSlotSnd}"
+                                android:text="@{eventEditVM.eventEditViewSuggestTimeSlotSnd ?? @string/none}"
                                 android:textColor="@color/text_disable"
                                 android:textSize="@dimen/page_text_size" />
 
@@ -258,18 +272,19 @@
                                 android:id="@+id/edit_event_proposed_thd"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text='@{eventEditVM.eventEditViewSuggestTimeSlotTrd, default=PLACEHOLDER}'
+                                android:text='@{eventEditVM.eventEditViewSuggestTimeSlotTrd ?? @string/none }'
                                 android:textColor="@color/text_disable"
                                 android:textSize="@dimen/page_text_size" />
                         </LinearLayout>
 
                         <ImageView
                             android:id="@+id/edit_event_select_time_image_view"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical|right"
-                            android:src="@drawable/arrow" />
-                    </LinearLayout>
+                            android:layout_width="10dp"
+                            android:layout_height="15dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/icon_general_arrow_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--blank for border-->
@@ -337,9 +352,71 @@
                 <!--blank for border-->
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/table_row_border" />
+                    android:layout_height="35dp"
+                    />
                 <!-- end -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:background="@drawable/table_row_border">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="17dp"
+                            android:text="@string/alert_time"
+                            android:textColor="@color/text_enable"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            />
+                        <ImageView
+                            android:id="@+id/edit_event_alert_time_arrow"
+                            android:layout_width="10dp"
+                            android:layout_height="15dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/icon_general_arrow_right" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:background="@drawable/table_row_border">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="17dp"
+                            android:text="@string/calendar_type"
+                            android:textColor="@color/text_enable"
+                            android:layout_centerVertical="true" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="17dp"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@+id/event_edit_calendarType_arrow"
+                            android:layout_marginRight="@dimen/padding_10"
+                            android:text="@{eventEditVM.eventEditCalendarType ?? @string/work}"/>
+                        <ImageView
+                            android:id="@+id/event_edit_calendarType_arrow"
+                            android:layout_width="10dp"
+                            android:layout_height="15dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/icon_general_arrow_right"/>
+                    </RelativeLayout>
+                </LinearLayout>
+                
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -356,11 +433,13 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border">
 
-                        <TextView
+                        <EditText
                             android:id="@+id/edit_event_url"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text='@{eventEditVM.eventEditViewUrl, default = "Placeholder text Url"}'
+                            android:hint="@string/url"
+                            android:text="@{eventEditVM.eventEditViewUrl}"
+                            android:background="#00000000"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -373,11 +452,12 @@
 
                         <EditText
                             android:id="@+id/edit_event_note"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="@string/note"
                             android:text="@{eventEditVM.eventEditViewNote}"
-                            android:hint="Note"
                             android:textColor="@color/text_disable"
+                            android:background="#00000000"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
                 </LinearLayout>
@@ -387,11 +467,12 @@
         <Button
             android:id="@+id/edit_event_delete_btn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="15"
-            android:background="@color/red"
+            android:layout_height="50dp"
+            android:background="@drawable/background_round_radius_red"
             android:text="@string/delete_event"
             android:textAlignment="center"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:layout_marginRight="@dimen/padding_10"
             android:textColor="@color/white" />
     </LinearLayout>
 </layout>

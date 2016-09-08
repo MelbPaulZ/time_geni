@@ -28,36 +28,49 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:layout_weight="1">
 
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="5"
+                    <TextView
+                        android:id="@+id/timeslot_weekview_back_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:onClick="@{timeslotVM.toInviteePicker()}"
+                        android:layout_toRightOf="@+id/timeslot_weekview_back_arrow"
                         android:text="@string/back" />
 
                     <TextView
                         android:id="@+id/toolbar_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center|center_horizontal"
-                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:gravity="center"
                         android:text="Scheduling"
                         android:textColor="@color/black"
                         android:textSize="20dp" />
 
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:onClick=""
-                        android:text="@string/next" />
-                </LinearLayout>
+                    <ImageView
+                        android:id="@+id/timeslot_weekview_back_arrow"
+                        android:layout_width="12dp"
+                        android:layout_height="21dp"
+                        android:background="@drawable/icon_general_back"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        />
+
+                    <TextView
+                        android:id="@+id/timeslot_view_done_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/padding_10"
+                        android:text="@string/done"/>
+                </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -76,7 +89,7 @@
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/middle_relative_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/timeslot_weekview_allshow"
             android:layout_below="@+id/toolbar"
             android:orientation="vertical">
 
@@ -84,14 +97,14 @@
                 android:id="@+id/week_time_slot_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:onTimeSlotClick="@{timeslotVM.onTimeSlotClick()}"
                 app:onTimeSlotWeekViewChange="@{timeslotVM.onTimeSlotWeekViewChange()}">
             </org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView>
         </RelativeLayout>
-
         <RelativeLayout
+            android:id="@+id/duration_part"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
+            android:layout_height="50dp"
             android:layout_below="@+id/middle_relative_layout"
             >
             <android.support.v7.widget.Toolbar
@@ -103,21 +116,25 @@
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
                 <RelativeLayout
+                    android:id="@+id/duration_relative_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="Duration"
                         android:textSize="20dp"
-                        android:layout_alignParentLeft="true"/>
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"/>
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="1 hrs"
+                        android:layout_height="wrap_content"
+                        android:text="@{timeslotVM.durationTimeString}"
                         android:textSize="20dp"
-                        android:layout_alignParentRight="true"/>
+                        android:layout_marginRight="@dimen/padding_10"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"/>
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </RelativeLayout>

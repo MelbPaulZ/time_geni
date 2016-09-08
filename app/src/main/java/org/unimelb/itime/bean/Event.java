@@ -34,7 +34,7 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     private String calendarTypedId;
     private Boolean isInfiniteRepeat;
     private Boolean isDeleted;
-    private int repeatEndsTime;
+    private long repeatEndsTime;
     private String hostEventId;
     private int userStatusId;
     private ArrayList<String> attendees; // need to be checked
@@ -43,6 +43,7 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     private int duration;
     private long startTime;
     private long endTime;
+    private boolean isHost; // can be delete later, only for test
 //    attendee repeat?
     private ArrayList<Long> proposedTimeslots;
 
@@ -65,7 +66,7 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
                  String calendarTypedId,
                  Boolean isInfiniteRepeat,
                  Boolean isDeleted,
-                 int repeatEndsTime,
+                 long repeatEndsTime,
                  String hostEventId,
                  int userStatusId,
                  ArrayList<String> attendees,
@@ -98,6 +99,34 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
         this.duration = duration;
         this.proposedTimeslots = proposedTimeslots;
     }
+
+    public boolean hasEventTitle(){
+        return eventTitle!=null;
+    }
+
+    public boolean hasEventId(){
+        return eventId!=null;
+    }
+
+    public boolean hasEventLocationAddress(){
+        return currentLocationAddress!=null;
+    }
+
+    public boolean hasEventNote(){
+        return eventNote!=null;
+    }
+
+    public boolean hasCalendarTypedId(){return calendarTypedId!=null;}
+
+    public boolean hasHostEventId(){return hostEventId!=null;}
+
+    public boolean hasAttendee(){ return attendees!=null;}
+
+    public boolean hasEventPhotos(){ return eventPhotos!=null;}
+
+    public boolean hasUrl(){return url!=null;}
+
+    public boolean hasProposedTimeslots(){return proposedTimeslots!=null;}
 
 
 
@@ -153,6 +182,16 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     @Override
     public int getStatus() {
         return userStatusId;
+    }
+
+    @Override
+    public void setLocation(String s) {
+
+    }
+
+    @Override
+    public String getLocation() {
+        return null;
     }
 
     @Override
@@ -292,12 +331,12 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     }
 
 
-    public void setRepeatEndsTime(Integer integer) {
+    public void setRepeatEndsTime(long integer) {
         repeatEndsTime = integer;
     }
 
 
-    public Integer getRepeatEndsTime() {
+    public long getRepeatEndsTime() {
         return repeatEndsTime;
     }
 
@@ -369,7 +408,25 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     }
 
     @Override
+    public String getInvitees_urls() {
+        return null;
+    }
+
+    @Override
+    public void setInvitees_urls(String s) {
+
+    }
+
+    @Override
     public int compareTo(Object o) {
         return 0;
+    }
+
+    public boolean isHost() {
+        return isHost;
+    }
+
+    public void setHost(boolean host) {
+        isHost = host;
     }
 }
