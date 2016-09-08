@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateNewBinding;
+import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageNewEvent;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
@@ -30,11 +31,12 @@ import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 /**
  * Created by Paul on 23/08/2016.
  */
-public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, EventCreateNewPresenter> implements EventCreateNewMvpView{
+public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, EventCreateNewPresenter> implements EventCreateNewMvpView,FragmentTagListener{
 
     private FragmentEventCreateNewBinding binding;
     private EventCreateNewVIewModel eventCreateNewVIewModel;
     private Event event;
+    private String tag;
 
     @Override
     public EventCreateNewPresenter createPresenter() {
@@ -52,8 +54,6 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
         event = new Event();
         eventCreateNewVIewModel = new EventCreateNewVIewModel(getPresenter(), event);
         binding.setEventVM(eventCreateNewVIewModel);
@@ -62,20 +62,8 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
-
-        initListener();
-
     }
 
-    public void initListener(){
-        Button sendBtn = (Button) binding.getRoot().findViewById(R.id.create_event_done_button);
-        sendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((EventCreateActivity)getActivity()).createSoloEvent(eventCreateNewVIewModel.getEvent());
-            }
-        });
-    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
@@ -105,5 +93,15 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
         Bundle bundle = new Bundle();
         bundle.putSerializable(getString(R.string.new_event), event);
         ((EventCreateActivity)getActivity()).toAttendeePicker(this,bundle);
+    }
+
+    @Override
+    public void toCreateSoloEvent(Event event) {
+        ((EventCreateActivity)getActivity()).createSoloEvent(event);
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

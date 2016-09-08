@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.mvpview;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 
 /**
@@ -12,4 +13,5 @@ public interface EventCreateNewMvpView extends MvpView {
     void gotoWeekViewCalendar();
     void pickLocatioin(String tag);
     void pickAttendee();
+    void toCreateSoloEvent(Event event);
 }

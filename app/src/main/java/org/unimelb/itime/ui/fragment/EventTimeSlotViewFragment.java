@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -26,6 +28,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
+import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageAttendeeEvent;
 import org.unimelb.itime.messageevent.MessageEventEvent;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
@@ -47,7 +50,7 @@ import java.util.zip.Inflater;
  * Created by Paul on 27/08/2016.
  */
 public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlotMvpView,EventCreateTimeSlotPresenter>
-        implements EventCreateNewTimeSlotMvpView{
+        implements EventCreateNewTimeSlotMvpView,FragmentTagListener{
 
 
     FragmentEventCreateTimeslotViewBinding binding;
@@ -58,7 +61,7 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
     WeekTimeSlotView weekTimeSlotView;
     Map<Long,Boolean> simulateTimeSlots;
     private Event newEvent;
-
+    private String tag;
 
     public void setEvent(Event event){
         this.newEvent = event;
@@ -81,6 +84,7 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
 
         initData();
         eventCreateTimeslotViewModel = new EventCreateTimeslotViewModel(getPresenter(),this.newEvent);
+        eventCreateTimeslotViewModel.setTag(this.tag);
         binding.setTimeslotVM(eventCreateTimeslotViewModel);
         initListeners();
     }
@@ -233,6 +237,14 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
 
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        // hide soft key board
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+    }
+
 
 
     @Override
@@ -245,4 +257,13 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(this, bundle);
     }
 
+    @Override
+    public void toInviteePicker(String tag) {
+        ((EventCreateActivity)getActivity()).backToInviteePicker(this,tag);
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }

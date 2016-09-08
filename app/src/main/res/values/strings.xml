@@ -165,6 +165,7 @@
     <string name="tag_start_time">tag start time</string>
     <string name="tag_end_time">tag end time</string>
     <string name="tag_end_repeat">tag end repeat</string>
+    <string name="tag_create_event_before_sending">tag create event before sending</string>
     
     <string name="day_of_week_1_full">Sunday</string>
     <string name="day_of_week_2_full">Monday</string>

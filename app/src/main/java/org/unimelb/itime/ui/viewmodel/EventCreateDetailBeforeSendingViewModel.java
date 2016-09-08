@@ -2,11 +2,15 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
     private String newEvDtlCldTpStr;
     private String newEvDtlUrlStr;
     private String newEvDtlNotes;
+    private String tag;
 
 
     private EventCreateDetailBeforeSendingPresenter presenter;
@@ -35,8 +40,56 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
     public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter,Event event) {
         this.presenter = presenter;
         this.newEvDtlEvent = event;
+        tag=presenter.getContext().getString(R.string.tag_create_event_before_sending);
+        EventBus.getDefault().register(this);
         updateAllInfo();
     }
+
+
+
+    public View.OnClickListener sendEvent(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.sendEvent(newEvDtlEvent);
+            }
+        };
+    }
+
+    public View.OnClickListener backToTimeSlotView(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.backToTimeSlotView();
+            }
+        };
+    }
+
+    public View.OnClickListener changeLocation(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.changeLocation(tag);
+            }
+        };
+    }
+
+    public View.OnClickListener reviewTimeSlots(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.backToTimeSlotView();
+            }
+        };
+    }
+
+    @Subscribe
+    public void getLocation(MessageLocation messageLocation){
+        if (messageLocation.tag == presenter.getContext().getString(R.string.tag_create_event_before_sending)){
+            setNewEvDtlLocationStr(messageLocation.locationString);
+        }
+    }
+
 
     public void updateAllInfo(){
         if (newEvDtlEvent.hasEventTitle())

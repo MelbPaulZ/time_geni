@@ -25,6 +25,7 @@ import org.unimelb.itime.ui.fragment.EventTimePickerFragment;
 import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
+import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
 
 import butterknife.Unbinder;
 
@@ -96,7 +97,7 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         startActivity(intent);
     }
 
-    public void toLocationPicker(EventCreateNewFragment fragment, String tag) {
+    public void toLocationPicker(android.support.v4.app.Fragment fragment, String tag) {
         if (eventLocationPickerFragment == null || !(eventLocationPickerFragment.isAdded())) {
             eventLocationPickerFragment = new EventLocationPickerFragment();
             eventLocationPickerFragment.setTag(tag);
@@ -108,6 +109,9 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
             getSupportFragmentManager().beginTransaction().show(eventLocationPickerFragment).commit();
         }
     }
+
+
+//    public void toLocationPicker(EventCreateDetailBeforeSendingFragment fragment, String tag)
 
     public void toAttendeePicker(EventCreateNewFragment fragment, Bundle bundle) {
         if (inviteeFragment == null || !(inviteeFragment.isAdded())) {
@@ -133,7 +137,7 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         }
     }
 
-    public void toNewEventDetailBeforeSending(EventTimeSlotViewFragment fragment, Bundle bundle) {
+    public void toNewEventDetailBeforeSending(android.support.v4.app.Fragment fragment, Bundle bundle) {
         if (eventCreateDetailBeforeSendingFragment == null || !(eventCreateDetailBeforeSendingFragment.isAdded())) {
             eventCreateDetailBeforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
             eventCreateDetailBeforeSendingFragment.setArguments(bundle);
@@ -144,6 +148,18 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
             getSupportFragmentManager().beginTransaction().show(eventCreateDetailBeforeSendingFragment).commit();
         }
     }
+
+    public void toNewEventDetailBeforeSending(android.support.v4.app.Fragment fragment) {
+        if (eventCreateDetailBeforeSendingFragment == null || !(eventCreateDetailBeforeSendingFragment.isAdded())) {
+            eventCreateDetailBeforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateDetailBeforeSendingFragment).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventCreateDetailBeforeSendingFragment).commit();
+        }
+    }
+
 
     public void goBackToTimeSlot(EventCreateDetailBeforeSendingFragment fragment){
         if (eventTimeSlotViewFragment == null || !(eventTimeSlotViewFragment.isAdded())){
@@ -169,8 +185,19 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         event.setHost(true);
         intent.putExtra(getString(R.string.new_event),event);
         startActivity(intent);
-
     }
+
+    public void backToInviteePicker(EventTimeSlotViewFragment fragment, String tag){
+        if (inviteeFragment == null || !(inviteeFragment.isAdded())){
+            inviteeFragment = new InviteeFragment();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getFragmentManager().beginTransaction().add(R.id.create_event_fragment,inviteeFragment).commit();
+        }else{
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getFragmentManager().beginTransaction().show(inviteeFragment).commit();
+        }
+    }
+
 
     @Subscribe
     public void gotoUrl(MessageUrl messageUrl) {

@@ -31,6 +31,7 @@
                     android:layout_gravity="left"
                     android:background="@null"
                     android:gravity="center_vertical|left"
+                    android:onClick="@{newEventDetailVM.backToTimeSlotView()}"
                     android:textColor="@color/page_title_color"
                     android:text="@string/cancel" />
 
@@ -48,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:background="@null"
+                    android:onClick="@{newEventDetailVM.sendEvent()}"
                     android:textColor="@color/page_title_color"
                     android:text="@string/send" />
             </android.support.v7.widget.Toolbar>
@@ -110,6 +112,7 @@
                             android:layout_gravity="right|center_vertical"
                             android:layout_weight="1"
                             android:gravity="right"
+                            android:onClick="@{newEventDetailVM.changeLocation()}"
                             android:text="@{newEventDetailVM.newEvDtlLocationStr ?? @string/none}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
@@ -256,9 +259,28 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:onClick="@{newEventDetailVM.reviewTimeSlots()}"
                             android:layout_gravity="center_vertical|right"
                             android:src="@drawable/arrow" />
                     </LinearLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/page_text_size"
+                            android:text="@string/allow_invitee_to_see_each_other"
+                            android:textColor="@color/text_enable"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"/>
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--blank for border-->
@@ -332,13 +354,13 @@
                     android:layout_height="40dp"
                     android:background="@color/bg_new_event_edit" />
                 <!-- end -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10"
-                    android:orientation="vertical">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@color/white"-->
+                    <!--android:paddingLeft="@dimen/padding_10"-->
+                    <!--android:paddingRight="@dimen/padding_10"-->
+                    <!--android:orientation="vertical">-->
                     <!--<RelativeLayout-->
                         <!--android:layout_width="match_parent"-->
                         <!--android:layout_height="wrap_content"-->
@@ -358,82 +380,91 @@
                             <!--android:layout_centerVertical="true"/>-->
                     <!--</RelativeLayout>-->
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/page_text_size"
-                            android:text="@string/allow_invitee_to_see_each_other"
-                            android:textColor="@color/text_enable"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"/>
-                        <Switch
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"/>
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/table_row_border"-->
-                    <!--android:orientation="vertical"-->
-                    <!--android:paddingBottom="0dp"-->
-                    <!--android:paddingLeft="10dp"-->
-                    <!--android:paddingRight="10dp"-->
-                    <!--android:paddingTop="0dp">-->
-
-                    <!--<LinearLayout-->
+                    <!--<RelativeLayout-->
                         <!--android:layout_width="match_parent"-->
                         <!--android:layout_height="wrap_content"-->
                         <!--android:background="@drawable/table_row_border">-->
-
-                        <!--<EditView-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:hint="URL"-->
-                            <!--android:hintColor="@color/text_disable"-->
-                            <!--android:text="@={newEventDetailVM.newEvDtlUrlStr}"-->
-                            <!--android:textColor="@color/text_enable"-->
-                            <!--android:textSize="@dimen/page_text_size" />-->
-                    <!--</LinearLayout>-->
-
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:background="@drawable/table_row_border"-->
-                        <!--android:orientation="horizontal">-->
-
-                        <!--<EditText-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:hint="Note"-->
-                            <!--android:text="@={newEventDetailVM.newEvDtlNotes}"-->
-                            <!--android:textColor="@color/text_enable"-->
-                            <!--android:hintColor="@color/text_disable"-->
-                            <!--android:textSize="@dimen/page_text_size" />-->
-                    <!--</LinearLayout>-->
-
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:background="@drawable/table_row_border"-->
-                        <!--android:orientation="horizontal">-->
-
                         <!--<TextView-->
                             <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="match_parent"-->
-                            <!--android:text="@string/photo"-->
-                            <!--android:textSize="@dimen/page_text_size" />-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:textSize="@dimen/page_text_size"-->
+                            <!--android:text="@string/allow_invitee_to_see_each_other"-->
+                            <!--android:textColor="@color/text_enable"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_centerVertical="true"/>-->
+                        <!--<Switch-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentEnd="true"-->
+                            <!--android:layout_centerVertical="true"/>-->
+                    <!--</RelativeLayout>-->
 
-                    <!--</LinearLayout>-->
                 <!--</LinearLayout>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_row_border"
+                    android:orientation="vertical"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="URL"
+                            android:textColorHint="@color/text_disable"
+                            android:text="@{newEventDetailVM.newEvDtlUrlStr}"
+                            android:autoLink="all"
+                            android:linksClickable="true"
+                            android:textColor="@color/blue"
+                            android:background="@android:color/transparent"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/page_text_size"
+                            android:text="@string/note"
+                            android:textColor="@color/text_disable"/>
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Note"
+                            android:text="@={newEventDetailVM.newEvDtlNotes}"
+                            android:background="@android:color/transparent"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="@string/photo"
+                            android:textSize="@dimen/page_text_size" />
+
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

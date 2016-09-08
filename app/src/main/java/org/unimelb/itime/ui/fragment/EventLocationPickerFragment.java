@@ -164,8 +164,11 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tag == getResources().getString(R.string.tag_create_event))
+                if (tag == getString(R.string.tag_create_event))
                     ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+                else if (tag == getString(R.string.tag_create_event_before_sending)){
+                    ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
+                }
             }
         });
 
@@ -185,6 +188,9 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                 if (tag == getResources().getString(R.string.tag_create_event)) {
                     EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
                     ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+                }else if (tag == getString(R.string.tag_create_event_before_sending)){
+                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
+                    ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
                 }
             }
         });
@@ -260,6 +266,8 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
             if (tag == getString(R.string.tag_create_event)) {
                 ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+            }else if (tag == getString(R.string.tag_create_event_before_sending)){
+                ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
             }
         }
     };
@@ -278,6 +286,9 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             if (tag == getString(R.string.tag_create_event)) {
                 EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
                 ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+            }else if (tag == getString(R.string.tag_create_event_before_sending)){
+                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
+                ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
             }
         }
     };

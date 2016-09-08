@@ -31,4 +31,11 @@ public class EventCreateTimeSlotPresenter extends MvpBasePresenter<EventCreateNe
     public LayoutInflater getInflater() {
         return inflater;
     }
+
+    public void toInviteePicker(String tag){
+        EventCreateNewTimeSlotMvpView view = getView();
+        if (view!=null){
+            view.toInviteePicker(tag);
+        }
+    }
 }

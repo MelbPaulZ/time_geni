@@ -11,5 +11,6 @@ import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
  */
 public interface EventCreateNewTimeSlotMvpView extends MvpView {
     void toNewEventDetailBeforeSending(Bundle bundle);
+    void toInviteePicker(String tag);
 
 }

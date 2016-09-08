@@ -230,6 +230,19 @@ public class EventCreateNewVIewModel extends BaseObservable {
         };
     }
 
+    // click done btn
+    public View.OnClickListener toCreateSoloEvent(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!event.hasEventTitle()){
+                    event.setTitle(presenter.getContext().getString(R.string.new_event));
+                }
+                presenter.toCreateSoloEvent(event);
+            }
+        };
+    }
+
     public View.OnClickListener attendeePicker(){
         return new View.OnClickListener() {
             @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel;
 
@@ -22,5 +23,26 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public void sendEvent(Event event){
+        EventCreateDetailBeforeSendingMvpView view = getView();
+        if (view!=null){
+            view.sendEvent(event);
+        }
+    }
+
+    public void backToTimeSlotView(){
+        EventCreateDetailBeforeSendingMvpView view = getView();
+        if (view!=null){
+            view.backToTimeSlotView();
+        }
+    }
+
+    public void changeLocation(String tag){
+        EventCreateDetailBeforeSendingMvpView view = getView();
+        if (view!=null){
+            view.changeLocation(tag);
+        }
     }
 }

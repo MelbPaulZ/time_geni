@@ -1,38 +1,20 @@
 package org.unimelb.itime.ui.viewmodel;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.wx.wheelview.adapter.ArrayWheelAdapter;
-import com.wx.wheelview.widget.WheelView;
-
-import org.greenrobot.eventbus.EventBus;
-import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.messageevent.MessageEventEvent;
-import org.unimelb.itime.ui.activity.EventCreateActivity;
-import org.unimelb.itime.ui.activity.TestActivityPaul;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.vendor.BR;
 import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Paul on 27/08/2016.
@@ -40,14 +22,15 @@ import java.util.Map;
 public class EventCreateTimeslotViewModel extends BaseObservable {
     private final String TAG = "TimeslotViewModel";
     private String toolbarString = initToolBarTitle();
-    private EventCreateTimeSlotPresenter eventCreateTimeSlotPresenter;
+    private EventCreateTimeSlotPresenter presenter;
     private ObservableField<Boolean> isChangeDuration = new ObservableField<>(false);
     private String durationTimeString = "1 hour";
     private Event newEvent;
+    private String tag;
 
-    public EventCreateTimeslotViewModel(EventCreateTimeSlotPresenter eventCreateTimeSlotPresenter,Event event) {
+    public EventCreateTimeslotViewModel(EventCreateTimeSlotPresenter presenter, Event event) {
         super();
-        this.eventCreateTimeSlotPresenter = eventCreateTimeSlotPresenter;
+        this.presenter = presenter;
         this.newEvent = event;
     }
 
@@ -99,6 +82,16 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
         };
     }
 
+    public View.OnClickListener toInviteePicker(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.toInviteePicker(tag);
+            }
+        };
+    }
+
+
 
 
     @BindingAdapter("android:layout_height")
@@ -135,5 +128,13 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
     public void setDurationTimeString(String durationTimeString) {
         this.durationTimeString = durationTimeString;
         notifyPropertyChanged(BR.durationTimeString);
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }
