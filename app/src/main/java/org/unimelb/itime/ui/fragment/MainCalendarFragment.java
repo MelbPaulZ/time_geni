@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -68,7 +69,30 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         binding.setCalenarVM(mainCalendarViewModel);
 
 
+
+        initSpinner();
+        binding.threeLines.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.monthDayView.setVisibility(View.VISIBLE);
+                binding.weekView.setVisibility(View.GONE);
+            }
+        });
+
+
 //        init();
+    }
+
+
+    public void initSpinner(){
+        ArrayList<String> viewOptionsArrayList = new ArrayList<>();
+        viewOptionsArrayList.add(getString(R.string.month_day_view));
+        viewOptionsArrayList.add(getString(R.string.week_view));
+        viewOptionsArrayList.add(getString(R.string.agenda_view));
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, viewOptionsArrayList);
+        
+
     }
 
     private void init(){
