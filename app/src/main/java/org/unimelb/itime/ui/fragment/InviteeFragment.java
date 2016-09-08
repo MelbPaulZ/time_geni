@@ -30,11 +30,11 @@ import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
 import org.unimelb.itime.vendor.contact.helper.ClearEditText;
-import org.unimelb.itime.vendor.contact.helper.LoadImgHelper;
 import org.unimelb.itime.vendor.contact.helper.PinyinComparator;
 import org.unimelb.itime.vendor.contact.widgets.Contact;
 import org.unimelb.itime.vendor.contact.widgets.SideBar;
 import org.unimelb.itime.vendor.contact.widgets.SortModel;
+import org.unimelb.itime.vendor.helper.LoadImgHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -221,7 +221,7 @@ public class InviteeFragment extends Fragment {
                             params.setMargins(margin, margin/2, 0, margin/2);
                             img_v.setLayoutParams(params);
                             contacts_list.put(contact, img_v);
-                            LoadImgHelper.getInstance().bindUrlWithImageView(
+                            LoadImgHelper.getInstance().bindContactWithImageView(
                                     context, contact, img_v);
                             ll_checkedList.addView(img_v);
                             ll_checkedList.invalidate();

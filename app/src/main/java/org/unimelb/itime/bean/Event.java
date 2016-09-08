@@ -185,6 +185,16 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
     }
 
     @Override
+    public void setLocation(String s) {
+
+    }
+
+    @Override
+    public String getLocation() {
+        return null;
+    }
+
+    @Override
     public void setProposedTimeSlots(ArrayList arrayList) {
         this.proposedTimeslots = arrayList;
     }
@@ -395,6 +405,16 @@ public class Event extends BaseObservable implements ITimeEventInterface,Seriali
 
     public ArrayList<Long> getProposedTimeSlots() {
         return proposedTimeslots;
+    }
+
+    @Override
+    public String getInvitees_urls() {
+        return null;
+    }
+
+    @Override
+    public void setInvitees_urls(String s) {
+
     }
 
     @Override
