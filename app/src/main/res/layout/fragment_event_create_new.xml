@@ -142,7 +142,7 @@
                             android:layout_marginRight="@dimen/padding_10"
                             android:gravity="right"
                             android:onClick="@{eventVM.chooseRepeat()}"
-                            android:text="@{EventUtil.parseRepeatIdToRepeat(eventVM.context, eventVM.event.repeatTypeId,eventVM.event.startTime)}"
+                            android:text="@{EventUtil.parseRepeatIdToRepeat(context, eventVM.event.repeatTypeId,eventVM.event.startTime)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -168,7 +168,7 @@
                             android:gravity="right"
                             android:paddingRight="@dimen/padding_10"
                             android:onClick="@{eventVM.pickEndRepeatDate()}"
-                            android:text="@{EventUtil.parseDateToString(eventVM.context, eventVM.event.repeatEndsTime)}"
+                            android:text="@{EventUtil.parseDateToString(context, eventVM.event.repeatEndsTime)}"
                             android:textColor="@color/text_disable"
                             android:textSize="16dp"/>
 
@@ -195,7 +195,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:onClick="@{eventVM.attendeePicker()}"
-                            android:text="@{eventVM.event.hasAttendee()?EventUtil.getAttendeeString(eventVM.context, eventVM.event.attendees) : @string/none}"
+                            android:text="@{eventVM.event.hasAttendee()?EventUtil.getAttendeeString(context, eventVM.event.attendees) : @string/none}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -253,7 +253,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:layout_marginRight="@dimen/padding_10"
-                            android:text="@{EventUtil.parseTimeToString(eventVM.context, eventVM.event.startTime)}"
+                            android:text="@{EventUtil.parseTimeToString(context, eventVM.event.startTime)}"
                             android:onClick="@{eventVM.pickStartDate()}"
                             android:textColor="@color/text_enable"
                             android:textSize="16dp" />
@@ -280,7 +280,7 @@
                             android:gravity="right"
                             android:layout_marginRight="@dimen/padding_10"
                             android:onClick="@{eventVM.pickEndDate()}"
-                            android:text="@{EventUtil.parseTimeToString(eventVM.context, eventVM.event.endTime)}"
+                            android:text="@{EventUtil.parseTimeToString(context, eventVM.event.endTime)}"
                             android:textColor="@color/text_enable"
                             android:textSize="16dp" />
                     </LinearLayout>
