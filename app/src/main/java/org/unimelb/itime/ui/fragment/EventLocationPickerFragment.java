@@ -139,7 +139,6 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             mAdapter = new PlaceAutoCompleteAdapter(getContext(), mGoogleApiClient, locationNearByBounds,
                     null);
 
-//            currentLocation = new String[]{"current location"};
             locations.add(getString(R.string.current_location));
 
             strAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, locations){
@@ -152,6 +151,8 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             mAutocompleteView.setOnItemClickListener(currentLocationListener);
             mAutocompleteView.setAdapter(strAdapter);
             mAutocompleteView.setText("");
+
+//            getCurrentLocation();
 
             initListeners();
         }
@@ -245,7 +246,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                         }
                         likelyPlaces.release();
                         place = bestMatch;
-                        EventBus.getDefault().post(new MessageLocation(tag, place));
+//                        EventBus.getDefault().post(new MessageLocation(tag, place));
                         mAutocompleteView.setText(place);
                         mAutocompleteView.setAdapter(mAdapter);
                     }
@@ -266,6 +267,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             }
             mAutocompleteView.setAdapter(mAdapter);
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
+            EventBus.getDefault().post(new MessageLocation(tag, place));
             if (tag == getString(R.string.tag_create_event)) {
                 ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
             }else if (tag == getString(R.string.tag_create_event_before_sending)){
