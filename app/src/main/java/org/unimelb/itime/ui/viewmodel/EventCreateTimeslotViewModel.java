@@ -77,7 +77,7 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
         return new WeekTimeSlotView.OnTimeSlotClickListener() {
             @Override
             public void onTimeSlotClick(long l) {
-
+                // here change the event timeslot
             }
         };
     }

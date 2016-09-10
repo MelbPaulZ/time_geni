@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.fragment;
 
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +15,10 @@ import android.widget.ArrayAdapter;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
@@ -23,6 +27,7 @@ import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
 import org.unimelb.itime.vendor.dayview.DayViewBodyController;
 import org.unimelb.itime.vendor.helper.MyCalendar;
+import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
@@ -120,7 +125,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     private void init(){
         Event event = new Event();
-        event.setTitle("host event");
+        event.setTitle("Host event");
         event.setStatus(5); // 5== pending, 6== confirm
         event.setEventType(1); //0 == private, 1== group, 2== public
         Calendar calendar =Calendar.getInstance();
@@ -132,96 +137,126 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         event.setEndTime(calendar.getTimeInMillis() + 3600000 * 2);
 
         // set attendee
-        ArrayList<String> attendeeArrayList = new ArrayList<>();
-        attendeeArrayList.add("Paul");
-        attendeeArrayList.add("David");
-        attendeeArrayList.add("Tim");
-        event.setAttendees(attendeeArrayList);
+        ArrayList<Invitee> attendeeArrayList = new ArrayList<>();
+        attendeeArrayList.add(new Invitee(null,"AGE", "2") );
+        attendeeArrayList.add(new Invitee("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "9"));
+        attendeeArrayList.add(new Invitee("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "10"));
+        attendeeArrayList.add(new Invitee("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "19"));
+        attendeeArrayList.add(new Invitee("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "29"));
+        attendeeArrayList.add(new Invitee("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "39"));
+        event.setInvitee(attendeeArrayList);
 
-        ArrayList<Long> suggestTimeArrayList = new ArrayList<>();
-        suggestTimeArrayList.add(calendar.getTimeInMillis());
-        suggestTimeArrayList.add(calendar.getTimeInMillis() + 3600000 * 4);
-        suggestTimeArrayList.add(calendar.getTimeInMillis() + 3600000 * 8);
-        event.setProposedTimeSlots(suggestTimeArrayList);
 
-        event.setRepeatTypeId(1);
+        ArrayList<TimeSlot> timeSlots = new ArrayList<>();
+        TimeSlot timeSlot1 = new TimeSlot();
+        timeSlot1.setStartTime(calendar.getTimeInMillis());
+        timeSlot1.setEndTime(calendar.getTimeInMillis() + 3600000 * 2);
+        timeSlot1.setStatus(getString(R.string.timeslot_status_pending));
+        timeSlots.add(timeSlot1);
+
+        TimeSlot timeSlot2 = new TimeSlot();
+        timeSlot2.setStartTime(calendar.getTimeInMillis() + 3600000 * 6);
+        timeSlot2.setEndTime(calendar.getTimeInMillis() + 3600000 * 8);
+        timeSlot2.setStatus(getString(R.string.timeslot_status_pending));
+        timeSlots.add(timeSlot2);
+
+        TimeSlot timeSlot3 = new TimeSlot();
+        timeSlot3.setStartTime(calendar.getTimeInMillis() + 3600000 * 24);
+        timeSlot3.setEndTime(calendar.getTimeInMillis() + 3600000 * 26);
+        timeSlot3.setStatus(getString(R.string.timeslot_status_pending));
+        timeSlots.add(timeSlot3);
+
+        event.setLocationAddress("Melbourne");
+        event.setUrl("www.google.com");
+        event.setNote("Bring your own laptop.");
+        event.setTimeSlots(timeSlots);
         event.setHost(true);
 
-        // event2
-        Event event2 = new Event();
-        event2.setTitle("invite event");
-        event2.setStatus(5);
-        event2.setEventType(1);
 
-        Calendar calendar2 = Calendar.getInstance();
-        calendar2.set(calendar2.get(Calendar.YEAR),calendar2.get(Calendar.MONTH), calendar2.get(Calendar.DAY_OF_MONTH)+2, 2, 0);
-        event2.setStartTime(calendar2.getTimeInMillis());
-        event2.setEndTime(calendar2.getTimeInMillis() + 3600000*2);
-
-        // set invitees
-        ArrayList<String> event2Invitees = new ArrayList<>();
-        event2Invitees.add("Jack");
-        event2Invitees.add("Peter");
-        event2Invitees.add("Zzzz");
-        event2.setAttendees(event2Invitees);
-
-        ArrayList<Long> suggestTimeArrayList2 = new ArrayList<>();
-        suggestTimeArrayList2.add(calendar2.getTimeInMillis() + 3600000 * 3);
-        suggestTimeArrayList2.add(calendar2.getTimeInMillis() + 3600000 * 8);
-        suggestTimeArrayList2.add(calendar2.getTimeInMillis() + 3600000 * 24);
-        event2.setProposedTimeSlots(suggestTimeArrayList2);
-        event2.setDuration(120);
-
-        event2.setRepeatTypeId(2);
-        event2.setHost(false);
-
-
-        Event event3 = new Event();
-        event3.setTitle("solo event");
-        event3.setStatus(6);
-        event3.setEventType(0);
-
-        event3.setStartTime(calendar2.getTimeInMillis()+3600000*25);
-        event3.setEndTime(calendar2.getTimeInMillis() + 3600000*26);
-        event3.setDuration(60);
-        event3.setRepeatTypeId(0);
-        event3.setHost(true);
-
-
-
+//        ArrayList<Long> endTimeSlotArrayList = new ArrayList<>(); // set the end time
+//        endTimeSlotArrayList.add(calendar.getTimeInMillis() + 3600000 * 2);
+//        endTimeSlotArrayList.add(calendar.getTimeInMillis() + 3600000 * 6);
+//        endTimeSlotArrayList.add(calendar.getTimeInMillis() + 3600000 * 10);
+//        event.setProposedEndTimeslots(endTimeSlotArrayList);
 //
-        Event event4 = new Event();
-        event4.setTitle("invite 2 people event");
-        event4.setStatus(5);
-        event4.setEventType(1);
-
-        Calendar calendar4 = Calendar.getInstance();
-        calendar4.set(calendar4.get(Calendar.YEAR),calendar4.get(Calendar.MONTH), calendar4.get(Calendar.DAY_OF_MONTH)-1, 2, 0);
-        event4.setStartTime(calendar4.getTimeInMillis());
-        event4.setEndTime(calendar4.getTimeInMillis() + 3600000*2);
-
-        // set invitees
-        ArrayList<String> event4Invitees = new ArrayList<>();
-        event4Invitees.add("Jack");
-        event4Invitees.add("Peter");
-
-
-        ArrayList<Long> suggestTimeArrayList4 = new ArrayList<>();
-        suggestTimeArrayList4.add(calendar4.getTimeInMillis() + 3600000 * 3);
-        suggestTimeArrayList4.add(calendar4.getTimeInMillis() + 3600000 * 8);
-        suggestTimeArrayList4.add(calendar4.getTimeInMillis() + 3600000 * 24);
-        event4.setProposedTimeSlots(suggestTimeArrayList4);
-        event4.setDuration(120);
-
-        event4.setRepeatTypeId(2);
-        event4.setHost(false);
-        event4.setAttendees(event4Invitees);
-
-
+//        event.setRepeatTypeId(1);
+//        event.setHost(true);
+//
+//        // event2
+//        Event event2 = new Event();
+//        event2.setTitle("invite event");
+//        event2.setStatus(5);
+//        event2.setEventType(1);
+//
+//        Calendar calendar2 = Calendar.getInstance();
+//        calendar2.set(calendar2.get(Calendar.YEAR),calendar2.get(Calendar.MONTH), calendar2.get(Calendar.DAY_OF_MONTH)+2, 2, 0);
+//        event2.setStartTime(calendar2.getTimeInMillis());
+//        event2.setEndTime(calendar2.getTimeInMillis() + 3600000*2);
+//
+//        // set invitees
+//        ArrayList<ITimeContactInterface> event2Invitees = new ArrayList<>();
+//        event2Invitees.add(new Contact(null,"Tom", "25"));
+//        event2Invitees.add(new Contact(null,"AGE", "26"));
+//        event2Invitees.add(new Contact(null,"AGELOL", "27"));
+//        event2.setAttendees(event2Invitees);
+//
+//        ArrayList<Long> suggestTimeArrayList2 = new ArrayList<>();
+//        suggestTimeArrayList2.add(calendar2.getTimeInMillis() + 3600000 * 3);
+//        suggestTimeArrayList2.add(calendar2.getTimeInMillis() + 3600000 * 8);
+//        suggestTimeArrayList2.add(calendar2.getTimeInMillis() + 3600000 * 24);
+//        event2.setProposedTimeSlots(suggestTimeArrayList2);
+//        event2.setDuration(120);
+//
+//        event2.setRepeatTypeId(2);
+//        event2.setHost(false);
+//
+//
+//        Event event3 = new Event();
+//        event3.setTitle("solo event");
+//        event3.setStatus(6);
+//        event3.setEventType(0);
+//
+//        event3.setStartTime(calendar2.getTimeInMillis()+3600000*25);
+//        event3.setEndTime(calendar2.getTimeInMillis() + 3600000*26);
+//        event3.setDuration(60);
+//        event3.setRepeatTypeId(0);
+//        event3.setHost(true);
+//
+//
+//
+////
+//        Event event4 = new Event();
+//        event4.setTitle("invite 2 people event");
+//        event4.setStatus(5);
+//        event4.setEventType(1);
+//
+//        Calendar calendar4 = Calendar.getInstance();
+//        calendar4.set(calendar4.get(Calendar.YEAR),calendar4.get(Calendar.MONTH), calendar4.get(Calendar.DAY_OF_MONTH)-1, 2, 0);
+//        event4.setStartTime(calendar4.getTimeInMillis());
+//        event4.setEndTime(calendar4.getTimeInMillis() + 3600000*2);
+//
+//        // set invitees
+//        ArrayList<ITimeContactInterface> event4Invitees = new ArrayList<>();
+//        event4Invitees.add(new Contact(null,"SAGE", "12"));
+//        event4Invitees.add(new Contact(null,"WAGE", "112"));
+//
+//
+//        ArrayList<Long> suggestTimeArrayList4 = new ArrayList<>();
+//        suggestTimeArrayList4.add(calendar4.getTimeInMillis() + 3600000 * 3);
+//        suggestTimeArrayList4.add(calendar4.getTimeInMillis() + 3600000 * 8);
+//        suggestTimeArrayList4.add(calendar4.getTimeInMillis() + 3600000 * 24);
+//        event4.setProposedTimeSlots(suggestTimeArrayList4);
+//        event4.setDuration(120);
+//
+//        event4.setRepeatTypeId(2);
+//        event4.setHost(false);
+//        event4.setAttendees(event4Invitees);
+//
+//
         iTimeEventInterfacesArrayList.add(event);
-        iTimeEventInterfacesArrayList.add(event2);
-        iTimeEventInterfacesArrayList.add(event3);
-        iTimeEventInterfacesArrayList.add(event4);
+//        iTimeEventInterfacesArrayList.add(event2);
+//        iTimeEventInterfacesArrayList.add(event3);
+//        iTimeEventInterfacesArrayList.add(event4);
         binding.weekView.setEvent(iTimeEventInterfacesArrayList);
     }
 

@@ -130,7 +130,7 @@
                         android:layout_marginLeft="7dp"
                         android:layout_marginBottom="@dimen/padding_5"
                         android:textColor="@color/gray_b2b2b2"
-                        android:text="@{eventDetailForInviteeVM.eventDetailEvent.attendees.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
+                        android:text="@{eventDetailForInviteeVM.eventDetailEvent.invitee.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
                         android:textSize="12sp" />
 
                     <LinearLayout

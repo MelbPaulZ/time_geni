@@ -11,4 +11,5 @@ public interface EventCreateDetailBeforeSendingMvpView extends MvpView {
     void sendEvent(Event event);
     void backToTimeSlotView();
     void changeLocation(String tag);
+    void changeEndRepeatDate(String tag);
 }

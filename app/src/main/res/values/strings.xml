@@ -168,6 +168,7 @@
     <string name="tag_end_time">tag end time</string>
     <string name="tag_end_repeat">tag end repeat</string>
     <string name="tag_create_event_before_sending">tag create event before sending</string>
+    <string name="tag_host_event_detail">tag host event detail</string>
     
     <string name="day_of_week_1_full">Sunday</string>
     <string name="day_of_week_2_full">Monday</string>
@@ -210,5 +211,12 @@
     <string name="repeat_every_twoweek">Every Two Weeks</string>
     <string name="repeat_every_month">Every Month</string>
     <string name="repeat_every_year">Every Year</string>
+    <string name="end_repeat">End Repeat</string>
+
+
+    <string name="timeslot_status_pending">timeslot status pending</string>
+    <string name="timeslot_status_accept">timeslot status accept</string>
+    <string name="timeslot_status_reject">timeslot status reject</string>
+    <string name="timeslot_status_delete">timeslot status delete</string>
 
 </resources>

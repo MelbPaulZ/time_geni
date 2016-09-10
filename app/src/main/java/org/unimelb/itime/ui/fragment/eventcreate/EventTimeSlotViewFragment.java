@@ -1,9 +1,11 @@
-package org.unimelb.itime.ui.fragment;
+package org.unimelb.itime.ui.fragment.eventcreate;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.databinding.Bindable;
 import android.databinding.DataBindingUtil;
+import android.databinding.tool.util.L;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +29,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
 import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageAttendeeEvent;
@@ -40,6 +43,7 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -63,6 +67,8 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
     private Event newEvent;
     private String tag;
 
+    // tag can be tag_create_event, tag_event_detail_before_sending
+
     public void setEvent(Event event){
         this.newEvent = event;
     }
@@ -80,6 +86,7 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
+
         this.newEvent = (Event) bundle.getSerializable(getString(R.string.new_event));
 
         initData();
@@ -88,6 +95,8 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         binding.setTimeslotVM(eventCreateTimeslotViewModel);
         initListeners();
     }
+
+
 
     public void initListeners(){
         durationRelativeLayout = (RelativeLayout) getActivity().findViewById(R.id.duration_relative_layout);
@@ -210,11 +219,17 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         weekTimeSlotView = (WeekTimeSlotView) binding.getRoot().findViewById(R.id.week_time_slot_view);
         // simulate timeSlots
         simulateTimeSlots = new HashMap<>();
+        ArrayList<TimeSlot> timeSlots = new ArrayList<>();
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH,6);
         calendar.set(Calendar.HOUR_OF_DAY,7);
         calendar.set(Calendar.MINUTE,30);
         simulateTimeSlots.put(calendar.getTime().getTime(),false);
+        TimeSlot timeSlot1 = new TimeSlot();
+        timeSlot1.setStartTime(calendar.getTimeInMillis());
+        timeSlot1.setEndTime(calendar.getTimeInMillis() + 3600000);
+        timeSlots.add(timeSlot1);
 
 
         Calendar calendar1 = Calendar.getInstance();
@@ -222,20 +237,28 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         calendar1.set(Calendar.HOUR_OF_DAY,8);
         calendar1.set(Calendar.MINUTE,45);
         simulateTimeSlots.put(calendar1.getTime().getTime(),true);
+        TimeSlot timeSlot2 = new TimeSlot();
+        timeSlot2.setStartTime(calendar1.getTimeInMillis());
+        timeSlot2.setEndTime(calendar1.getTimeInMillis() + 3600000);
+        timeSlots.add(timeSlot2);
 
         Calendar calendar2 = Calendar.getInstance();
         calendar2.set(Calendar.DAY_OF_MONTH, 9);
         calendar2.set(Calendar.HOUR_OF_DAY,4);
         calendar2.set(Calendar.MINUTE,0);
         simulateTimeSlots.put(calendar2.getTimeInMillis(),false);
+        TimeSlot timeSlot3 = new TimeSlot();
+        timeSlot3.setStartTime(calendar2.getTimeInMillis());
+        timeSlot3.setEndTime(calendar2.getTimeInMillis()+3600000);
+        timeSlots.add(timeSlot3);
 
         weekTimeSlotView.setTimeSlots(simulateTimeSlots,60);
 
 //        newEvent = new Event();
-        newEvent.setProposedTimeSlots(new ArrayList(simulateTimeSlots.keySet()));
-        newEvent.setDuration(60);
-
+        newEvent.setTimeSlots(timeSlots);
     }
+
+
 
     @Override
     public void onHiddenChanged(boolean hidden) {

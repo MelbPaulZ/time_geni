@@ -3,7 +3,8 @@
 <layout>
 
     <data>
-
+        <import type="org.unimelb.itime.util.EventUtil"/>
+        <import type="org.unimelb.itime.util.TimeSlotUtil"/>
         <variable
             name="eventEditVM"
             type="org.unimelb.itime.ui.viewmodel.EventEditViewModel" />
@@ -94,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
                         android:textColor="@color/text_enable"
-                        android:text="@={eventEditVM.eventEditViewTitle}"
+                        android:text="@={eventEditVM.eventEditViewEvent.title}"
                         android:textSize="@dimen/page_text_size" />
 
                     <!--Fst Row-->
@@ -118,7 +119,7 @@
                             android:layout_gravity="right|center_vertical"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{eventEditVM.eventEditViewLocation?? @string/no_location}"
+                            android:text="@{eventEditVM.eventEditViewEvent.locationAddress?? @string/no_location}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -143,7 +144,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toLeftOf="@+id/edit_event_repeat_arrow"
                             android:layout_marginRight="@dimen/padding_10"
-                            android:text="@{eventEditVM.eventEditViewRepeat ?? @string/no_repeat}"
+                            android:text="@{EventUtil.parseRepeatIdToRepeat(context, eventEditVM.eventEditViewEvent.repeatTypeId,eventEditVM.eventEditViewEvent.startTime)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                         <ImageView
@@ -174,7 +175,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="right"
-                            android:text="@{eventEditVM.eventEditViewAttendeeString ?? @string/none}"
+                            android:text="@{EventUtil.getAttendeeString(context, EventUtil.fromInviteeListToArraylist(eventEditVM.eventEditViewEvent.invitee))}"
                             android:textColor="@color/text_disable"
                             android:layout_toLeftOf="@+id/edit_event_attendee_arrow"
                             android:layout_marginRight="@dimen/padding_10"
@@ -256,7 +257,7 @@
                                 android:id="@+id/edit_event_proposed_fst"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{eventEditVM.eventEditViewSuggestTimeSlotFst ?? @string/none}"
+                                android:text="@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(0).startTime, eventEditVM.eventEditViewEvent.timeslots.get(0).endTime)}"
                                 android:textColor="@color/text_disable"
                                 android:textSize="@dimen/page_text_size" />
 
@@ -264,7 +265,7 @@
                                 android:id="@+id/edit_event_proposed_snd"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{eventEditVM.eventEditViewSuggestTimeSlotSnd ?? @string/none}"
+                                android:text="@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(1).startTime, eventEditVM.eventEditViewEvent.timeslots.get(1).endTime)}"
                                 android:textColor="@color/text_disable"
                                 android:textSize="@dimen/page_text_size" />
 
@@ -272,7 +273,7 @@
                                 android:id="@+id/edit_event_proposed_thd"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text='@{eventEditVM.eventEditViewSuggestTimeSlotTrd ?? @string/none }'
+                                android:text='@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(2).startTime, eventEditVM.eventEditViewEvent.timeslots.get(2).endTime) }'
                                 android:textColor="@color/text_disable"
                                 android:textSize="@dimen/page_text_size" />
                         </LinearLayout>
@@ -403,7 +404,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toLeftOf="@+id/event_edit_calendarType_arrow"
                             android:layout_marginRight="@dimen/padding_10"
-                            android:text="@{eventEditVM.eventEditCalendarType ?? @string/work}"/>
+                            android:text="@{eventEditVM.eventEditViewEvent.calendarTypeId}"/>
                         <ImageView
                             android:id="@+id/event_edit_calendarType_arrow"
                             android:layout_width="10dp"
@@ -438,7 +439,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/url"
-                            android:text="@{eventEditVM.eventEditViewUrl}"
+                            android:text="@={eventEditVM.eventEditViewEvent.url}"
                             android:background="#00000000"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
@@ -455,7 +456,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/note"
-                            android:text="@{eventEditVM.eventEditViewNote}"
+                            android:text="@={eventEditVM.eventEditViewEvent.note}"
                             android:textColor="@color/text_disable"
                             android:background="#00000000"
                             android:textSize="@dimen/page_text_size" />

@@ -45,4 +45,11 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
             view.changeLocation(tag);
         }
     }
+
+    public void pickEndRepeatDate(String tag){
+        EventCreateDetailBeforeSendingMvpView view = getView();
+        if (view!=null){
+            view.changeEndRepeatDate(tag);
+        }
+    }
 }

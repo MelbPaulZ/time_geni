@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment;
+package org.unimelb.itime.ui.fragment.eventdetail;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -46,6 +46,7 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
         if (eventDetailForHostViewModel!=null) {
             eventDetailForHostViewModel.setEvDtlHostEvent(event);
         }
+        
     }
 
     @Override
@@ -67,6 +68,11 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
     @Override
     public void toEditEvent(Event event) {
         ((EventDetailActivity)getActivity()).toEditEvent(event);
+    }
+
+    @Override
+    public void viewInCalendar(String tag) {
+        ((EventDetailActivity)getActivity()).toTimeSlotView(tag,event);
     }
 
 

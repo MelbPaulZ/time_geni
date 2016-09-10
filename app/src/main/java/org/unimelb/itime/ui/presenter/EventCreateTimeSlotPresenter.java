@@ -1,15 +1,11 @@
 package org.unimelb.itime.ui.presenter;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.view.LayoutInflater;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
-
-import java.util.zip.Inflater;
 
 /**
  * Created by Paul on 27/08/2016.

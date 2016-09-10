@@ -8,10 +8,11 @@ import android.widget.Toast;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.ui.fragment.EventDetailForInviteeFragment;
-import org.unimelb.itime.ui.fragment.EventDetailForSoloFragment;
-import org.unimelb.itime.ui.fragment.EventDetailHostFragment;
-import org.unimelb.itime.ui.fragment.EventEditFragment;
+import org.unimelb.itime.ui.fragment.eventdetail.EventDetailForInviteeFragment;
+import org.unimelb.itime.ui.fragment.eventdetail.EventDetailForSoloFragment;
+import org.unimelb.itime.ui.fragment.eventdetail.EventDetailHostFragment;
+import org.unimelb.itime.ui.fragment.eventdetail.EventDetailHostTimeSlotFragment;
+import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.fragment.InviteeTimeslotFragment;
 
 public class EventDetailActivity extends AppCompatActivity {
@@ -21,6 +22,7 @@ public class EventDetailActivity extends AppCompatActivity {
     private EventDetailForSoloFragment eventDetailForSoloFragment;
     private InviteeTimeslotFragment inviteeTimeslotFragment;
     private EventEditFragment eventEditFragment;
+    private EventDetailHostTimeSlotFragment eventDetailHostTimeSlotFragment;
     private Event event;
 
 
@@ -34,7 +36,7 @@ public class EventDetailActivity extends AppCompatActivity {
         if (event.isHost()){
             if (event.hasAttendee()){
                 // group event, and is host
-                if (event.getAttendees().size()==1){
+                if (event.getInvitee().size()==1){
                     Toast.makeText(getBaseContext(),"this is two people event",Toast.LENGTH_SHORT);
                 }else{
                     Toast.makeText(getBaseContext(),"this is more people event",Toast.LENGTH_SHORT);
@@ -50,7 +52,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailForSoloFragment).commit();
             }
         }else{
-            Toast.makeText(getBaseContext(),"this is attendee",Toast.LENGTH_SHORT);
+            Toast.makeText(getBaseContext(),"this is attendee",Toast.LENGTH_SHORT).show();
             eventDetailForInviteeFragment = new EventDetailForInviteeFragment();
             eventDetailForInviteeFragment.setEvent(event);
             getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment,eventDetailForInviteeFragment).commit();
@@ -114,6 +116,33 @@ public class EventDetailActivity extends AppCompatActivity {
             eventDetailHostFragment = new EventDetailHostFragment();
             eventDetailHostFragment.setEvent(event);
             getSupportFragmentManager().beginTransaction().hide(eventEditFragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventDetailHostFragment).commit();
+        }
+    }
+
+    public void toTimeSlotView(String tag, Event event){
+        if (eventDetailHostTimeSlotFragment!=null && eventDetailHostTimeSlotFragment.isAdded()){
+            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
+            eventDetailHostTimeSlotFragment.setEvent(event);
+            eventDetailHostTimeSlotFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
+        }else{
+            eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
+            eventDetailHostTimeSlotFragment.setEvent(event);
+            eventDetailHostTimeSlotFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
+        }
+    }
+
+    public void toHostEventDetail(Fragment fragment){
+        if (eventDetailHostFragment != null && eventDetailHostFragment.isAdded()){
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventDetailHostFragment).commit();
+        }else{
+            eventDetailHostFragment = new EventDetailHostFragment();
+            eventDetailHostFragment.setEvent(event);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().show(eventDetailHostFragment).commit();
         }
     }

@@ -152,8 +152,6 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             mAutocompleteView.setAdapter(strAdapter);
             mAutocompleteView.setText("");
 
-//            getCurrentLocation();
-
             initListeners();
         }
     }
@@ -177,7 +175,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         mAutocompleteView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (mAutocompleteView.getAdapter().equals(strAdapter))
+                if (mAutocompleteView.getAdapter().equals(strAdapter)&&mAutocompleteView.getText().length()==0)
                     mAutocompleteView.showDropDown();
                 return false;
             }
@@ -222,6 +220,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
     }
 
     public String getCurrentLocation() {
+        mGoogleApiClient.connect();
         if (mGoogleApiClient.isConnected()) {
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -246,7 +245,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                         }
                         likelyPlaces.release();
                         place = bestMatch;
-//                        EventBus.getDefault().post(new MessageLocation(tag, place));
+                        EventBus.getDefault().post(new MessageLocation(tag, place));
                         mAutocompleteView.setText(place);
                         mAutocompleteView.setAdapter(mAdapter);
                     }
@@ -267,7 +266,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             }
             mAutocompleteView.setAdapter(mAdapter);
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
-            EventBus.getDefault().post(new MessageLocation(tag, place));
+//            EventBus.getDefault().post(new MessageLocation(tag, place));
             if (tag == getString(R.string.tag_create_event)) {
                 ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
             }else if (tag == getString(R.string.tag_create_event_before_sending)){

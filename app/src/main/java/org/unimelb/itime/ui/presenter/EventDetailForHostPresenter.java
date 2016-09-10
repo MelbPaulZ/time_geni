@@ -40,6 +40,13 @@ public class EventDetailForHostPresenter extends MvpBasePresenter<EventDetailFor
         }
     }
 
+    public void viewInCalendar(String tag){
+        EventDetailForHostMvpView view = getView();
+        if (view!=null){
+            view.viewInCalendar(tag);
+        }
+    }
+
     public Context getContext() {
         return context;
     }
@@ -47,4 +54,5 @@ public class EventDetailForHostPresenter extends MvpBasePresenter<EventDetailFor
     public void setContext(Context context) {
         this.context = context;
     }
+
 }

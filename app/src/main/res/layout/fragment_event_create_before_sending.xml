@@ -2,7 +2,7 @@
 <layout>
 
     <data>
-
+        <import type="org.unimelb.itime.util.EventUtil"/>
         <variable
             name="newEventDetailVM"
             type="org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel" />
@@ -88,7 +88,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
-                        android:text="@={newEventDetailVM.newEvDtlTitleStr}"
+                        android:text="@={newEventDetailVM.newEvDtlEvent.title}"
                         android:textColor="@color/text_enable"
                         android:textSize="@dimen/page_text_size" />
 
@@ -113,7 +113,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:onClick="@{newEventDetailVM.changeLocation()}"
-                            android:text="@{newEventDetailVM.newEvDtlLocationStr ?? @string/none}"
+                            android:text="@{newEventDetailVM.newEvDtlEvent.locationAddress}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -137,9 +137,36 @@
                             android:layout_gravity="right|center_vertical"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{newEventDetailVM.newEvDtlRepeatStr ?? @string/no_repeat}"
+                            android:onClick="@{newEventDetailVM.chooseRepeat()}"
+                            android:text="@{EventUtil.parseRepeatIdToRepeat(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.repeatTypeId, newEventDetailVM.newEvDtlEvent.startTime)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@{newEventDetailVM.newEvDtlEvent.repeatEndsTime>0? @dimen/wrap_content: @dimen/hide,default = @dimen/hide}"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/end_repeat"
+                            android:textColor="@color/text_enable"
+                            android:textSize="16dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:paddingRight="@dimen/padding_10"
+                            android:onClick="@{newEventDetailVM.pickEndRepeatDate()}"
+                            android:text="@{EventUtil.parseDateToString(context, newEventDetailVM.newEvDtlEvent.repeatEndsTime)}"
+                            android:textColor="@color/text_disable"
+                            android:textSize="16dp"/>
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -160,7 +187,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{newEventDetailVM.newEvDtlAttendeeStr ?? @string/none}"
+                            android:text="@{EventUtil.getAttendeeString(context, EventUtil.fromInviteeListToArraylist(newEventDetailVM.newEvDtlEvent.invitee))}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -237,21 +264,21 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="22dp"
-                                android:text="@{newEventDetailVM.newEvDtlTimeSlotFst ?? @string/none}"
+                                android:text="@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(0).startTime, newEventDetailVM.newEvDtlEvent.timeslots.get(0).startTime) : @string/none}"
                                 android:textColor="@color/text_disable"
                                 android:textSize="@dimen/page_text_size" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="22dp"
-                                android:text="@{newEventDetailVM.newEvDtlTimeSlotSnd ?? @string/none}"
+                                android:text="@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(1).startTime,newEventDetailVM.newEvDtlEvent.timeslots.get(1).endTime) : @string/none}"
                                 android:textColor="@color/text_disable"
                                 android:textSize="@dimen/page_text_size" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="22dp"
-                                android:text='@{newEventDetailVM.newEvDtlTimeSlotTrd ?? @string/none}'
+                                android:text='@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(2).startTime,newEventDetailVM.newEvDtlEvent.timeslots.get(2).endTime) : @string/none}'
                                 android:textColor="@color/text_disable"
                                 android:textSize="@dimen/page_text_size" />
                         </LinearLayout>
@@ -341,7 +368,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{newEventDetailVM.newEvDtlCldTpStr ?? @string/none}"
+                            android:text="@{newEventDetailVM.newEvDtlEvent.hasCalendarTypedId()?  newEventDetailVM.newEvDtlEvent.calendarTypeId : @string/private_calendar}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -421,7 +448,7 @@
                             android:layout_height="wrap_content"
                             android:hint="URL"
                             android:textColorHint="@color/text_disable"
-                            android:text="@{newEventDetailVM.newEvDtlUrlStr}"
+                            android:text="@={newEventDetailVM.newEvDtlEvent.url}"
                             android:autoLink="all"
                             android:linksClickable="true"
                             android:textColor="@color/blue"
@@ -433,7 +460,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -445,7 +472,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="Note"
-                            android:text="@={newEventDetailVM.newEvDtlNotes}"
+                            android:text="@={newEventDetailVM.newEvDtlEvent.note}"
                             android:background="@android:color/transparent"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />

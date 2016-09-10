@@ -157,7 +157,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="End Repeat"
+                            android:text="@string/end_repeat"
                             android:textColor="@color/text_enable"
                             android:textSize="16dp"/>
                         <TextView
@@ -195,7 +195,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:onClick="@{eventVM.attendeePicker()}"
-                            android:text="@{eventVM.event.hasAttendee()?EventUtil.getAttendeeString(context, eventVM.event.attendees) : @string/none}"
+                            android:text="@{eventVM.event.hasAttendee()?EventUtil.getAttendeeString(context, EventUtil.fromInviteeListToArraylist(eventVM.event.invitee)) : @string/none}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
 

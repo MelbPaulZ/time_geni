@@ -18,13 +18,8 @@ import android.widget.LinearLayout;
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.messageevent.MessageEventDate;
-import org.unimelb.itime.messageevent.MessageEventTime;
-import org.unimelb.itime.messageevent.MessageLocation;
-import org.unimelb.itime.messageevent.MessageNewEvent;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 import org.unimelb.itime.util.EventUtil;
@@ -112,10 +107,9 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                CharSequence repeats[] = new CharSequence[6];
                 final Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(event.getStartTime());
-                String dayOfWeek = getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
+                String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(),calendar.get(Calendar.DAY_OF_WEEK));
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle("Choose a repeat type");
@@ -133,7 +127,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
                     }
                 });
                 builder.show();
-                //
             }
 
         };
@@ -233,28 +226,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
     }
 
 
-
-
-
-    private String getDayOfWeek(int dayOfWeek) {
-        switch (dayOfWeek) {
-            case 1:
-                return presenter.getContext().getString(R.string.day_of_week_1_full);
-            case 2:
-                return presenter.getContext().getString(R.string.day_of_week_2_full);
-            case 3:
-                return presenter.getContext().getString(R.string.day_of_week_3_full);
-            case 4:
-                return presenter.getContext().getString(R.string.day_of_week_4_full);
-            case 5:
-                return presenter.getContext().getString(R.string.day_of_week_5_full);
-            case 6:
-                return presenter.getContext().getString(R.string.day_of_week_6_full);
-            case 7:
-                return presenter.getContext().getString(R.string.day_of_week_7_full);
-        }
-        return "error get day of week";
-    }
 
 
 //    ****************************************************************

@@ -5,9 +5,12 @@ import android.content.Context;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.C;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Paul on 8/09/2016.
@@ -42,6 +45,45 @@ public class EventUtil{
             return String.format("%s and %d more", attendeesArrayList.get(0), attendeesArrayList.size() - 1);
         }
     }
+
+    public static ArrayList<String> fromContactListToArrayList(ArrayList<ITimeContactInterface> contactList){
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (ITimeContactInterface contact: contactList){
+            arrayList.add(contact.getName());
+        }
+        return arrayList;
+    }
+
+    public static ArrayList<String> fromInviteeListToArraylist(List<Invitee> inviteeArrayList){
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (Invitee invitee: inviteeArrayList) {
+            arrayList.add(invitee.getName());
+        }
+        return arrayList;
+    }
+
+
+    public static String getSuggestTimeStringFromLong(Context context, Long startTime,Long endtime){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(startTime);
+        String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
+        String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        String startTimeHour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+        String startMinute = calendar.get(Calendar.MINUTE)<10? "0" + String.valueOf(calendar.get(Calendar.MINUTE)) : String.valueOf(calendar.get(Calendar.MINUTE));
+        String startAmOrPm = calendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
+
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTimeInMillis(endtime);
+        String endTimeHour = String.valueOf(endCalendar.get(Calendar.HOUR_OF_DAY));
+        String endTimeMinute = endCalendar.get(Calendar.MINUTE)<10? "0" + String.valueOf(endCalendar.get(Calendar.MINUTE)) : String.valueOf(endCalendar.get(Calendar.MINUTE));
+        String endAmOrPm = endCalendar.get(Calendar.HOUR_OF_DAY) >=12? "PM": "AM";
+
+        return dayOfWeek + " " + day + "/" + month + " " + startTimeHour + ":" + startMinute +
+                " " + startAmOrPm + " - " + endTimeHour + ":" + endTimeMinute + endAmOrPm;
+
+    }
+
 
 
     public static String parseRepeatIdToRepeat(Context context,int repeat, long startTime){

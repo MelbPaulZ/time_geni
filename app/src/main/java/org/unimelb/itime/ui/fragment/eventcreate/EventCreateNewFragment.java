@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment;
+package org.unimelb.itime.ui.fragment.eventcreate;
 
 import android.content.Context;
 import android.content.Intent;
