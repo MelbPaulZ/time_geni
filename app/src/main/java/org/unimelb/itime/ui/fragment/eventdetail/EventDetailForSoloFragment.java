@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment;
+package org.unimelb.itime.ui.fragment.eventdetail;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;

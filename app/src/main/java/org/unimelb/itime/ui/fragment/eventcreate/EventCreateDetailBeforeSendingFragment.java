@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment;
+package org.unimelb.itime.ui.fragment.eventcreate;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -20,11 +18,14 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateBeforeSendingBinding;
 import org.unimelb.itime.helper.FragmentTagListener;
-import org.unimelb.itime.messageevent.MessageEventEvent;
+import org.unimelb.itime.messageevent.MessageEventDate;
+import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel;
+
+import java.util.Calendar;
 
 /**
  * Created by Paul on 31/08/2016.
@@ -48,7 +49,13 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
-        this.event = (Event) bundle.getSerializable(getString(R.string.new_event));
+        if (bundle==null){
+            this.event = new Event();
+        }else{
+            if (bundle.containsKey(getString(R.string.new_event))) {
+                this.event = (Event) bundle.getSerializable(getString(R.string.new_event));
+            }
+        }
         eventCreateDetailBeforeSendingViewModel = new EventCreateDetailBeforeSendingViewModel(getPresenter(),this.event);
         binding.setNewEventDetailVM(eventCreateDetailBeforeSendingViewModel);
         // hide soft key board
@@ -56,6 +63,24 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
 
+    }
+
+    @Subscribe
+    public void getLocationChange(MessageLocation messageLocation){
+        if (messageLocation.tag == getString(R.string.tag_create_event_before_sending)){
+            event.setLocation(messageLocation.locationString);
+            eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(event);
+        }
+    }
+
+    @Subscribe
+    public void getEndRepeatDate(MessageEventDate messageEventDate){
+        if (messageEventDate.tag == getString(R.string.tag_create_event_before_sending)){
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(messageEventDate.year, messageEventDate.month, messageEventDate.day);
+            event.setRepeatEndsTime(calendar.getTimeInMillis());
+            eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(event);
+        }
     }
 
     @Override
@@ -82,6 +107,8 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
         ((EventCreateActivity)getActivity()).sendEvent(event);
     }
 
+
+    // this is for review timeslot or click back to rechoose timeslot
     @Override
     public void backToTimeSlotView() {
         ((EventCreateActivity)getActivity()).goBackToTimeSlot(eventCreateDetailBeforeSendingFragment);
@@ -93,7 +120,24 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
     }
 
     @Override
+    public void changeEndRepeatDate(String tag) {
+        ((EventCreateActivity)getActivity()).toDatePicker(this,tag);
+    }
+
+    @Override
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }

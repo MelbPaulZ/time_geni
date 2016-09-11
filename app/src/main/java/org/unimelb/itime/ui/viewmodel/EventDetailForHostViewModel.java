@@ -1,18 +1,22 @@
 package org.unimelb.itime.ui.viewmodel;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.presenter.EventDetailForHostPresenter;
-
-import java.util.ArrayList;
-import java.util.Calendar;
+import org.unimelb.itime.util.TimeSlotUtil;
+import org.unimelb.itime.util.UserUtil;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -20,50 +24,22 @@ import java.util.Calendar;
 public class EventDetailForHostViewModel extends BaseObservable {
     private EventDetailForHostPresenter presenter;
     private Event EvDtlHostEvent;
-    private String EvDtlHostTitleStr;
-    private String EvDtlHostRepeatStr;
-    private String EvDtlHostLocaStr;
-    private String EvDtlHostTimeSltFst;
-    private String EvDtlHostTimeSltSnd;
-    private String EvDtlHostTimeSltTrd;
-    private String EvDtlHostAtdStr;
-    private String EvDtlHostUrlStr;
-    private String EvDtlHostNoteStr;
+    private LayoutInflater inflater;
 
-    private boolean isSelectTimeSlot;
-    private boolean[] timeSlotChooseArray = {false, false, false};
-    private ArrayList<View> timeslots = new ArrayList<>();
+    private String tag;
 
     public EventDetailForHostViewModel(EventDetailForHostPresenter presenter) {
         this.presenter = presenter;
+        this.inflater = presenter.getInflater();
+        tag = presenter.getContext().getString(R.string.tag_host_event_detail);
     }
 
-    public void updateAll(){
-        if (EvDtlHostEvent.hasEventTitle()){
-            setEvDtlHostTitleStr(EvDtlHostEvent.getTitle());
-        }
-        EvDtlHostRepeatStr = getRepeatString(EvDtlHostEvent.getRepeatTypeId());
-        if (EvDtlHostEvent.hasEventLocationAddress()){
-            setEvDtlHostLocaStr(EvDtlHostEvent.getLocationAddress());
-        }
-        if (EvDtlHostEvent.hasProposedTimeslots()){
-            setEvDtlHostTimeSltFst(getSuggestTimeStringFromLong(EvDtlHostEvent.getProposedTimeSlots().get(0), EvDtlHostEvent.getDuration()));
-            setEvDtlHostTimeSltSnd(getSuggestTimeStringFromLong(EvDtlHostEvent.getProposedTimeSlots().get(1), EvDtlHostEvent.getDuration()));
-            setEvDtlHostTimeSltTrd(getSuggestTimeStringFromLong(EvDtlHostEvent.getProposedTimeSlots().get(2), EvDtlHostEvent.getDuration()));
-        }
-        if (EvDtlHostEvent.hasAttendee()){
-            setEvDtlHostAtdStr(getAttendeeString(EvDtlHostEvent.getAttendees()));
-        }
-        if (EvDtlHostEvent.hasUrl()){
-            setEvDtlHostUrlStr(EvDtlHostEvent.getUrl());
-        }
-        if (EvDtlHostEvent.hasEventNote()){
-            setEvDtlHostNoteStr(EvDtlHostEvent.getNote());
-        }
+    public Context getContext() {
+        return presenter.getContext();
     }
 
-    public View.OnClickListener editEvent(){
-        return new View.OnClickListener(){
+    public View.OnClickListener editEvent() {
+        return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 presenter.toEditEvent(EvDtlHostEvent);
@@ -71,30 +47,38 @@ public class EventDetailForHostViewModel extends BaseObservable {
         };
     }
 
+    private void unSelectRestTimeSlots(int selectTimeSlotIndex) {
+        for (int i = 0; i < EvDtlHostEvent.getTimeslots().size(); i++) {
+            if (i != selectTimeSlotIndex) {
+                EvDtlHostEvent.getTimeslots().get(i).setStatus(getContext().getString(R.string.timeslot_status_pending));
+            }
+        }
+    }
+
     public View.OnClickListener onHostTimeSlotSelect1() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (timeSlotChooseArray[0] == false) {
-                    setTimeSlotChooseArray(new boolean[]{true, false, false});
-                    for (View timeslot : timeslots) {
-                        timeslot.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
-                        timeslots.remove(timeslot);
+                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
+                    // this is for host choose timeslot
+                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(0))) {
+                        EvDtlHostEvent.getTimeslots().get(0).setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    } else {
+                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(), EvDtlHostEvent.getTimeslots())) {
+                            unSelectRestTimeSlots(0);
+                        }
+                        EvDtlHostEvent.getTimeslots().get(0).setStatus(getContext().getString(R.string.timeslot_status_accept));
                     }
-
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
-                    timeslots.add(view);
+//                    setEvDtlHostEvent(EvDtlHostEvent);
                 } else {
-                    timeSlotChooseArray[0] = false;
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
-                    timeslots.remove(view);
+                    // this is for invitee choose timeslots
+                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(0))) {
+                        EvDtlHostEvent.getTimeslots().get(0).setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    } else {
+                        EvDtlHostEvent.getTimeslots().get(0).setStatus(getContext().getString(R.string.timeslot_status_accept));
+                    }
                 }
-
-                if (isHasSelectAtLeastOneTimeSlot()) {
-                    setSelectTimeSlot(true);
-                } else {
-                    setSelectTimeSlot(false);
-                }
+                setEvDtlHostEvent(EvDtlHostEvent); // update
             }
         };
     }
@@ -104,28 +88,26 @@ public class EventDetailForHostViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (timeSlotChooseArray[1] == false) {
-//                    timeSlotChooseArray[1] = true;
-                    setTimeSlotChooseArray(new boolean[]{false, true, false});
-
-                    for (View timeslot : timeslots) {
-                        timeslot.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
-                        timeslots.remove(timeslot);
+                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
+                    // host picks timeslot
+                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(1))) {
+                        EvDtlHostEvent.getTimeslots().get(1).setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    } else {
+                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(), EvDtlHostEvent.getTimeslots())) {
+                            unSelectRestTimeSlots(1);
+                        }
+                        EvDtlHostEvent.getTimeslots().get(1).setStatus(getContext().getString(R.string.timeslot_status_accept));
                     }
-
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
-                    timeslots.add(view);
+//                    setEvDtlHostEvent(EvDtlHostEvent);
                 } else {
-                    timeSlotChooseArray[1] = false;
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
-                    timeslots.remove(view);
+                    // invitee picks timeslot
+                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(1))) {
+                        EvDtlHostEvent.getTimeslots().get(1).setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    } else {
+                        EvDtlHostEvent.getTimeslots().get(1).setStatus(getContext().getString(R.string.timeslot_status_accept));
+                    }
                 }
-
-                if (isHasSelectAtLeastOneTimeSlot()) {
-                    setSelectTimeSlot(true);
-                } else {
-                    setSelectTimeSlot(false);
-                }
+                setEvDtlHostEvent(EvDtlHostEvent);
             }
         };
     }
@@ -135,33 +117,49 @@ public class EventDetailForHostViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (timeSlotChooseArray[2] == false) {
-//                    timeSlotChooseArray[2] = true;
-                    setTimeSlotChooseArray(new boolean[]{false, false, true});
-                    for (View timeslot : timeslots) {
-                        timeslot.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
-                        timeslots.remove(timeslot);
+                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
+                    // host picks timeslot
+                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(2))) {
+                        EvDtlHostEvent.getTimeslots().get(2).setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    } else {
+                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(), EvDtlHostEvent.getTimeslots())) {
+                            unSelectRestTimeSlots(2);
+                        }
+                        EvDtlHostEvent.getTimeslots().get(2).setStatus(getContext().getString(R.string.timeslot_status_accept));
                     }
-
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
-                    timeslots.add(view);
+//                setEvDtlHostEvent(EvDtlHostEvent);
                 } else {
-                    timeSlotChooseArray[2] = false;
-                    view.setBackgroundResource(R.drawable.icon_event_attendee_unselected);
-                    timeslots.remove(view);
+                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(2))) {
+                        EvDtlHostEvent.getTimeslots().get(2).setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    } else {
+                        EvDtlHostEvent.getTimeslots().get(2).setStatus(getContext().getString(R.string.timeslot_status_accept));
+                    }
                 }
-
-                if (isHasSelectAtLeastOneTimeSlot()) {
-                    setSelectTimeSlot(true);
-                } else {
-                    setSelectTimeSlot(false);
-                }
+                setEvDtlHostEvent(EvDtlHostEvent);
             }
         };
     }
 
+    public View.OnClickListener viewInCalendar() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.viewInCalendar(tag);
+            }
+        };
+    }
 
-    public View.OnClickListener onClickConfirm() {
+    public View.OnClickListener gotoUrl() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = EvDtlHostEvent.getUrl();
+                EventBus.getDefault().post(new MessageUrl(url));
+            }
+        };
+    }
+
+    public View.OnClickListener onClickHostConfirm() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -171,8 +169,8 @@ public class EventDetailForHostViewModel extends BaseObservable {
         };
     }
 
-    public View.OnClickListener onClickBack(){
-        return new View.OnClickListener(){
+    public View.OnClickListener onClickBack() {
+        return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                presenter.toEventDetailHost(); // wrong
@@ -181,136 +179,74 @@ public class EventDetailForHostViewModel extends BaseObservable {
         };
     }
 
-    public View.OnClickListener toAttendeeView1(){
-        return new View.OnClickListener(){
+    public View.OnClickListener toAttendeeView1() {
+        return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.toAttendeeView(EvDtlHostEvent.getProposedTimeSlots().get(0));
+                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(0).getStartTime());
             }
         };
     }
 
-    public View.OnClickListener toAttendeeView2(){
-        return new View.OnClickListener(){
+    public View.OnClickListener toAttendeeView2() {
+        return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.toAttendeeView(EvDtlHostEvent.getProposedTimeSlots().get(1));
+                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(1).getStartTime());
             }
         };
     }
 
-    public View.OnClickListener toAttendeeView3(){
-        return new View.OnClickListener(){
+    public View.OnClickListener toAttendeeView3() {
+        return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.toAttendeeView(EvDtlHostEvent.getProposedTimeSlots().get(2));
+                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(2).getStartTime());
             }
         };
     }
 
+    public View.OnClickListener onClickRejectAll() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
 
+                inflater = presenter.getInflater();
+                View root = inflater.inflate(R.layout.event_detail_reject_alert_view, null);
 
-    private boolean isHasSelectAtLeastOneTimeSlot() {
-        for (Boolean timeslotSelect : timeSlotChooseArray) {
-            if (timeslotSelect)
-                return true;
-        }
-        return false;
+                TextView button_cancel = (TextView) root.findViewById(R.id.alert_message_cancel_button);
+                button_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                TextView button_reject = (TextView) root.findViewById(R.id.alert_message_reject_button);
+                button_reject.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CharSequence msg = "send reject message";
+                        Toast.makeText(presenter.getContext(), msg, Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.setView(root);
+                alertDialog.show();
+            }
+        };
     }
 
-
-    public void setSelectTimeSlot(boolean selectTimeSlot) {
-        isSelectTimeSlot = selectTimeSlot;
-        notifyPropertyChanged(BR.selectTimeSlot);
+    public View.OnClickListener onClickConfirm() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.confirmAndGotoWeekViewCalendar(EvDtlHostEvent);
+            }
+        };
     }
 
-    private String getSuggestTimeStringFromLong(Long startTime, int duration) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(startTime);
-        String dayOfWeek = getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
-        String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-        String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
-        String startTimeHour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-        String startMinute = calendar.get(Calendar.MINUTE)<10? "0" +String.valueOf(calendar.get(Calendar.MINUTE)) : String.valueOf(calendar.get(Calendar.MINUTE));
-        String startAmOrPm = calendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
-
-        Calendar endCalendar = Calendar.getInstance();
-        endCalendar.setTimeInMillis(startTime + duration * 60 * 1000);
-        String endTimeHour = String.valueOf(endCalendar.get(Calendar.HOUR_OF_DAY));
-        String endTimeMinute = endCalendar.get(Calendar.MINUTE)<10? "0"+String.valueOf(endCalendar.get(Calendar.MINUTE)) :String.valueOf(endCalendar.get(Calendar.MINUTE));
-        String endAmOrPm = endCalendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
-
-        return dayOfWeek + " " + day + "/" + month + " " + startTimeHour + ":" + startMinute +
-                " " + startAmOrPm + " - " + endTimeHour + ":" + endTimeMinute + endAmOrPm;
-
-    }
-
-    public String getAttendeeString(ArrayList<String> attendeesArrayList) {
-        if (attendeesArrayList.size() == 0) {
-            return "None";
-        } else if (attendeesArrayList.size() == 1)
-            return attendeesArrayList.get(0);
-        else {
-            return String.format("%s and %d more", attendeesArrayList.get(0), attendeesArrayList.size() - 1);
-        }
-    }
-
-
-    private String getRepeatString(int repeatTypeId) {
-        String[] repeats = {"None", "Daily", "Weekly", "Monthly"};
-        return repeats[repeatTypeId];
-    }
-
-    private String getDayOfWeek(int dayOfWeek) {
-        switch (dayOfWeek) {
-            case 1:
-                return "SUN";
-            case 2:
-                return "MON";
-            case 3:
-                return "TUE";
-            case 4:
-                return "WED";
-            case 5:
-                return "FRI";
-            case 6:
-                return "SAT";
-            case 7:
-                return "SUN";
-        }
-        return "error get day of week";
-    }
-
-    private String getMonth(int month) {
-        switch (month) {
-            case 0:
-                return "Jan";
-            case 1:
-                return "Feb";
-            case 2:
-                return "March";
-            case 3:
-                return "April";
-            case 4:
-                return "May";
-            case 5:
-                return "Jun";
-            case 6:
-                return "July";
-            case 7:
-                return "Aug";
-            case 8:
-                return "Sep";
-            case 9:
-                return "Oct";
-            case 10:
-                return "Nov";
-            case 11:
-                return "Dec";
-            default:
-                return "error get month";
-        }
-    }
 
 //    ***************************************************************
 
@@ -322,107 +258,12 @@ public class EventDetailForHostViewModel extends BaseObservable {
     public void setEvDtlHostEvent(Event evDtlHostEvent) {
         EvDtlHostEvent = evDtlHostEvent;
         notifyPropertyChanged(BR.evDtlHostEvent);
-        updateAll();
     }
 
-    @Bindable
-    public String getEvDtlHostTitleStr() {
-        return EvDtlHostTitleStr;
-    }
 
-    public void setEvDtlHostTitleStr(String evDtlHostTitleStr) {
-        EvDtlHostTitleStr = evDtlHostTitleStr;
-        notifyPropertyChanged(BR.evDtlHostTitleStr);
-    }
-
-    @Bindable
-    public String getEvDtlHostRepeatStr() {
-        return EvDtlHostRepeatStr;
-    }
-
-    public void setEvDtlHostRepeatStr(String evDtlHostRepeatStr) {
-        EvDtlHostRepeatStr = evDtlHostRepeatStr;
-        notifyPropertyChanged(BR.evDtlHostRepeatStr);
-    }
-
-    @Bindable
-    public String getEvDtlHostLocaStr() {
-        return EvDtlHostLocaStr;
-    }
-
-    public void setEvDtlHostLocaStr(String evDtlHostLocaStr) {
-        EvDtlHostLocaStr = evDtlHostLocaStr;
-        notifyPropertyChanged(BR.evDtlHostLocaStr);
-    }
-
-    @Bindable
-    public String getEvDtlHostTimeSltFst() {
-        return EvDtlHostTimeSltFst;
-    }
-
-    public void setEvDtlHostTimeSltFst(String evDtlHostTimeSltFst) {
-        EvDtlHostTimeSltFst = evDtlHostTimeSltFst;
-        notifyPropertyChanged(BR.evDtlHostTimeSltFst);
-    }
-
-    @Bindable
-    public String getEvDtlHostTimeSltSnd() {
-        return EvDtlHostTimeSltSnd;
-    }
-
-    public void setEvDtlHostTimeSltSnd(String evDtlHostTimeSltSnd) {
-        EvDtlHostTimeSltSnd = evDtlHostTimeSltSnd;
-        notifyPropertyChanged(BR.evDtlHostTimeSltSnd);
-    }
-
-    @Bindable
-    public String getEvDtlHostTimeSltTrd() {
-        return EvDtlHostTimeSltTrd;
-    }
-
-    public void setEvDtlHostTimeSltTrd(String evDtlHostTimeSltTrd) {
-        EvDtlHostTimeSltTrd = evDtlHostTimeSltTrd;
-        notifyPropertyChanged(BR.evDtlHostTimeSltTrd);
-    }
-
-    @Bindable
-    public String getEvDtlHostAtdStr() {
-        return EvDtlHostAtdStr;
-    }
-
-    public void setEvDtlHostAtdStr(String evDtlHostAtdStr) {
-        EvDtlHostAtdStr = evDtlHostAtdStr;
-        notifyPropertyChanged(BR.evDtlHostAtdStr);
-    }
-
-    @Bindable
-    public String getEvDtlHostUrlStr() {
-        return EvDtlHostUrlStr;
-    }
-
-    public void setEvDtlHostUrlStr(String evDtlHostUrlStr) {
-        EvDtlHostUrlStr = evDtlHostUrlStr;
-        notifyPropertyChanged(BR.evDtlHostUrlStr);
-    }
-
-    @Bindable
-    public String getEvDtlHostNoteStr() {
-        return EvDtlHostNoteStr;
-    }
-
-    public void setEvDtlHostNoteStr(String evDtlHostNoteStr) {
-        EvDtlHostNoteStr = evDtlHostNoteStr;
-        notifyPropertyChanged(BR.evDtlHostNoteStr);
-    }
-
-    @Bindable
-    public boolean isSelectTimeSlot() {
-        return isSelectTimeSlot;
-    }
-
-    public void setTimeSlotChooseArray(boolean[] timeSlotChooseArray) {
-        this.timeSlotChooseArray = timeSlotChooseArray;
-
-    }
+//    public void setTimeSlotChooseArray(boolean[] timeSlotChooseArray) {
+//        this.timeSlotChooseArray = timeSlotChooseArray;
+//
+//    }
 
 }

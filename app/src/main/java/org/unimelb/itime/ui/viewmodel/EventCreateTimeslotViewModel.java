@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.viewmodel;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -9,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.vendor.BR;
 import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
@@ -43,7 +46,9 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
         return getMonthName(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
     }
 
-
+    public Context getContext(){
+        return presenter.getContext();
+    }
 
 
     //    ************************************************
@@ -77,7 +82,16 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
         return new WeekTimeSlotView.OnTimeSlotClickListener() {
             @Override
             public void onTimeSlotClick(long l) {
-
+                for (TimeSlot timeSlot: newEvent.getTimeslots()){
+                    if (timeSlot.getStartTime() == l){
+                        if (timeSlot.getStatus() == getContext().getString(R.string.timeslot_status_pending)){
+                            timeSlot.setStatus(getContext().getString(R.string.accept));
+                        }else{
+                            timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+                        }
+                    }
+                }
+                setNewEvent(newEvent);
             }
         };
     }
@@ -136,5 +150,16 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+
+    public void setNewEvent(Event event){
+        this.newEvent = event;
+        notifyPropertyChanged(BR.newEvent);
+    }
+
+    @Bindable
+    public Event getNewEvent(){
+        return newEvent;
     }
 }

@@ -28,6 +28,8 @@ import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
+import java.util.Calendar;
+
 public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
 
     private final static String TAG = "MainActivity";
@@ -113,6 +115,14 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
         startActivity(intent, bundleAnimation);
     }
+    public void startEventCreateActivity(Calendar startTime){
+        Intent intent = new Intent(this, EventCreateActivity.class);
+        Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
+        intent.putExtra(getString(R.string.new_event),startTime.getTimeInMillis());
+        startActivity(intent, bundleAnimation);
+
+    }
+
 
     public void startEventEditActivity(ITimeEventInterface iTimeEventInterface){
         Intent intent = new Intent(this,EventDetailActivity.class);

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="org.unimelb.itime.util.EventUtil"/>
+        <import type="org.unimelb.itime.util.TimeSlotUtil"/>
+        <import type="org.unimelb.itime.util.UserUtil"/>
+        <import type="android.view.View"/>
         <variable
             name="hostDetailVM"
             type="org.unimelb.itime.ui.viewmodel.EventDetailForHostViewModel"/>
@@ -50,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:background="@null"
+                android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getUserUid())? View.VISIBLE : View.INVISIBLE}"
                 android:onClick="@{hostDetailVM.editEvent()}"
                 android:textColor="@color/page_title_color"
                 android:text="@string/edit" />
@@ -93,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="11dp"
                         android:layout_marginTop="5dp"
-                        android:text="@{hostDetailVM.evDtlHostTitleStr??@string/no_title}"
+                        android:text="@{hostDetailVM.evDtlHostEvent.title}"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -101,7 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="14dp"
-                        android:text="@{hostDetailVM.evDtlHostRepeatStr?? @string/no_repeat}"
+                        android:text="@{EventUtil.parseRepeatIdToRepeat(context, hostDetailVM.evDtlHostEvent.recurrence, hostDetailVM.evDtlHostEvent.startTime)}"
                         android:textColor="@color/event_detail_repeat"
                         android:textSize="15sp"
 
@@ -112,7 +117,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="14dp"
                         android:layout_marginTop="3dp"
-                        android:text="@{hostDetailVM.evDtlHostLocaStr ?? @string/no_location}"
+                        android:text="@{hostDetailVM.evDtlHostEvent.location}"
                         android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -131,7 +136,7 @@
                     android:layout_marginLeft="7dp"
                     android:layout_marginBottom="@dimen/padding_5"
                     android:textColor="@color/gray_b2b2b2"
-                    android:text="@{hostDetailVM.evDtlHostEvent.attendees.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
+                    android:text="@{hostDetailVM.evDtlHostEvent.invitee.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
                     android:textSize="12sp" />
 
                 <LinearLayout
@@ -152,7 +157,7 @@
                             android:layout_marginLeft="10dp"
                             android:onClick="@{hostDetailVM.onHostTimeSlotSelect1()}"
                             android:layout_marginTop="14dp"
-                            android:background="@drawable/icon_event_attendee_unselected" />
+                            android:background="@{TimeSlotUtil.isTimeSlotSelected(context,hostDetailVM.evDtlHostEvent.timeslots.get(0)) ? @drawable/icon_event_attendee_selected: @drawable/icon_event_attendee_unselected}" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -160,7 +165,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="13dp"
                             android:layout_toRightOf="@+id/event_detail_host_ic_circle_fst"
-                            android:text="@{hostDetailVM.evDtlHostTimeSltFst?? @string/none}"
+                            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, hostDetailVM.evDtlHostEvent.timeslots.get(0).startTime, hostDetailVM.evDtlHostEvent.timeslots.get(0).endTime)}"
                             android:textColor="@color/text_enable"
                             android:textSize="17sp" />
 
@@ -205,7 +210,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="14dp"
                             android:onClick="@{hostDetailVM.onHostTimeSlotSelect2()}"
-                            android:background="@drawable/icon_event_attendee_unselected" />
+                            android:background="@{TimeSlotUtil.isTimeSlotSelected(context, hostDetailVM.evDtlHostEvent.timeslots.get(1)) ? @drawable/icon_event_attendee_selected: @drawable/icon_event_attendee_unselected}" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -214,7 +219,7 @@
                             android:layout_marginTop="13dp"
                             android:layout_toRightOf="@+id/event_detail_host_ic_circle_snd"
                             android:textColor="@color/text_enable"
-                            android:text="@{hostDetailVM.evDtlHostTimeSltSnd?? @string/none}"
+                            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, hostDetailVM.evDtlHostEvent.timeslots.get(1).startTime, hostDetailVM.evDtlHostEvent.timeslots.get(1).endTime)}"
                             android:textSize="17sp" />
 
                         <ImageView
@@ -258,7 +263,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="14dp"
                             android:onClick="@{hostDetailVM.onHostTimeSlotSelect3()}"
-                            android:background="@drawable/icon_event_attendee_unselected" />
+                            android:background="@{TimeSlotUtil.isTimeSlotSelected(context, hostDetailVM.evDtlHostEvent.timeslots.get(2)) ? @drawable/icon_event_attendee_selected: @drawable/icon_event_attendee_unselected}" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -266,7 +271,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="13dp"
                             android:layout_toRightOf="@+id/event_detail_host_ic_circle_trd"
-                            android:text="@{hostDetailVM.evDtlHostTimeSltTrd?? @string/none}"
+                            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, hostDetailVM.evDtlHostEvent.timeslots.get(2).startTime, hostDetailVM.evDtlHostEvent.timeslots.get(2).endTime)}"
                             android:textColor="@color/text_enable"
                             android:textSize="17sp" />
 
@@ -305,6 +310,7 @@
                         android:gravity="center"
                         android:text="@string/view_in_calendar"
                         android:textColor="@color/event_detail_repeat"
+                        android:onClick="@{hostDetailVM.viewInCalendar()}"
                         android:textSize="17dp" />
                 </LinearLayout>
 
@@ -345,7 +351,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="5dp"
                         android:layout_toLeftOf="@+id/event_detail_host_attendee_arrow"
-                        android:text="@{hostDetailVM.evDtlHostAtdStr??@string/none}"
+                        android:text="@{EventUtil.getAttendeeString(context,EventUtil.fromInviteeListToArraylist(hostDetailVM.evDtlHostEvent.invitee))}"
                         android:textColor="@color/gray_b2b2b2"
                         android:textSize="17dp" />
 
@@ -384,9 +390,10 @@
                         android:layout_height="25dp"
                         android:autoLink="web"
                         android:gravity="center_vertical"
-                        android:text="@{hostDetailVM.evDtlHostUrlStr}"
+                        android:text="@{hostDetailVM.evDtlHostEvent.url}"
                         android:hint="@string/url"
-                        android:textColor="@color/event_detail_repeat"
+                        android:onClick="@{hostDetailVM.gotoUrl()}"
+                        android:textColor="@color/blue"
                         android:textColorHint="@color/gray_b2b2b2"
                         android:textSize="15sp" />
 
@@ -420,7 +427,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/padding_10"
                             android:layout_marginTop="@dimen/padding_5"
-                            android:text="@{hostDetailVM.evDtlHostNoteStr?? @string/none}"
+                            android:text="@{hostDetailVM.evDtlHostEvent.note}"
                             android:textColor="@color/gray_b2b2b2"
                             android:textSize="17sp" />
 
@@ -480,6 +487,7 @@
 
     </ScrollView>
 
+    <!-- if it is host event, this show-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -487,6 +495,7 @@
         android:gravity="center"
         android:paddingBottom="@dimen/padding_10"
         android:paddingLeft="@dimen/padding_10"
+        android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance.getUserUid())? View.VISIBLE : View.GONE }"
         android:paddingRight="@dimen/padding_10">
 
         <Button
@@ -495,13 +504,53 @@
             android:layout_height="50dp"
             android:layout_marginRight="@dimen/padding_5"
             android:layout_marginLeft="@dimen/padding_5"
-            android:background="@{hostDetailVM.isSelectTimeSlot? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"
+            android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"
             android:text="@string/confirm"
-            android:clickable="@{hostDetailVM.isSelectTimeSlot? true: false}"
+            android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? true: false}"
+            android:onClick="@{hostDetailVM.onClickHostConfirm()}"
+            android:textAlignment="center"
+            android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @color/white : @color/gray_b2b2b2}" />
+
+    </LinearLayout>
+
+
+    <!--if this is invite event, this show-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance.getUserUid)?  View.GONE:View.VISIBLE }"
+        android:paddingBottom="@dimen/padding_10"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
+
+        <Button
+            android:id="@+id/confirm_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginRight="@dimen/padding_5"
+            android:layout_weight="1"
+            android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"
+            android:text="confirm"
+            android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? true: false}"
             android:onClick="@{hostDetailVM.onClickConfirm()}"
             android:textAlignment="center"
-            android:textColor="@{hostDetailVM.isSelectTimeSlot? @color/white : @color/gray_b2b2b2}" />
+            android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @color/white : @color/gray_b2b2b2}" />
 
+        <Button
+            android:id="@+id/reject_all_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/padding_5"
+            android:layout_weight="1"
+            android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)?  @drawable/background_round_radius_unable_red : @drawable/background_round_radius_able_red}"
+            android:text="@string/reject_all"
+            android:textAlignment="center"
+            android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? false:true}"
+            android:onClick="@{hostDetailVM.onClickRejectAll()}"
+            android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)?  @color/gray_b2b2b2 : @color/white}" />
     </LinearLayout>
 
 </RelativeLayout>

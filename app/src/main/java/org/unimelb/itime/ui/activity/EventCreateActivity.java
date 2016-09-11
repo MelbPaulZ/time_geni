@@ -16,16 +16,15 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageUrl;
-import org.unimelb.itime.ui.fragment.EventCreateDetailBeforeSendingFragment;
+import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
-import org.unimelb.itime.ui.fragment.EventCreateNewFragment;
+import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.EventDatePickerFragment;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.EventTimePickerFragment;
-import org.unimelb.itime.ui.fragment.EventTimeSlotViewFragment;
-import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
-import org.unimelb.itime.vendor.listener.ITimeEventInterface;
-import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
+import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
+
+import java.util.Calendar;
 
 import butterknife.Unbinder;
 
@@ -49,6 +48,16 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         setContentView(R.layout.activity_event_create);
         eventCreateNewFragment = new EventCreateNewFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
+
+        if (getIntent().hasExtra(getString(R.string.new_event))) {
+            Long startTime = getIntent().getExtras().getLong(getString(R.string.new_event));
+            eventCreateNewFragment.setStartTime(startTime);
+            eventCreateNewFragment.setEndTime(startTime + 3600000); // default 1 hour event
+        }else{
+            eventCreateNewFragment.setStartTime(Calendar.getInstance().getTimeInMillis());
+            eventCreateNewFragment.setEndTime(Calendar.getInstance().getTimeInMillis() + 3600000);
+        }
+
         EventBus.getDefault().register(this);
     }
 
@@ -67,7 +76,7 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         }
     }
 
-    public void toDatePicker(EventCreateNewFragment fragment, String tag) {
+    public void toDatePicker(android.support.v4.app.Fragment fragment, String tag) {
         if (eventDatePickerFragment == null || !(eventDatePickerFragment.isAdded())) {
             eventDatePickerFragment = new EventDatePickerFragment();
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
@@ -164,10 +173,12 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
     public void goBackToTimeSlot(EventCreateDetailBeforeSendingFragment fragment){
         if (eventTimeSlotViewFragment == null || !(eventTimeSlotViewFragment.isAdded())){
             eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
+            eventTimeSlotViewFragment.setTag(getString(R.string.tag_create_event_before_sending));
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment,eventTimeSlotViewFragment).commit();
         }else{
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            eventTimeSlotViewFragment.setTag(getString(R.string.tag_create_event_before_sending));
             getSupportFragmentManager().beginTransaction().show(eventTimeSlotViewFragment).commit();
         }
     }

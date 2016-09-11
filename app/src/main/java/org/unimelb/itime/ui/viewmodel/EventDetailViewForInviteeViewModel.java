@@ -18,6 +18,7 @@ import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.presenter.EventDetailForInviteePresenter;
+import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,7 +67,7 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
 
-                if (eventDetailEvent.getAttendees().size() > 2) {
+                if (eventDetailEvent.getInvitee().size() > 2) {
 
 
                     if (timeSlotChooseArray[0] == false) {
@@ -113,7 +114,7 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
 
-                if (eventDetailEvent.getAttendees().size() > 2) {
+                if (eventDetailEvent.getInvitee().size() > 2) {
                     if (timeSlotChooseArray[1] == false) {
                         timeSlotChooseArray[1] = true;
                         view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
@@ -156,7 +157,7 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (eventDetailEvent.getAttendees().size()>2) {
+                if (eventDetailEvent.getInvitee().size()>2) {
                     if (timeSlotChooseArray[2] == false) {
                         timeSlotChooseArray[2] = true;
                         view.setBackgroundResource(R.drawable.icon_event_attendee_selected);
@@ -257,32 +258,32 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
     public void setEventDetailEvent(Event eventDetailEvent) {
         this.eventDetailEvent = eventDetailEvent;
         notifyPropertyChanged(BR.eventDetailEvent);
-        updateAll(eventDetailEvent);
+//        updateAll(eventDetailEvent);
 
     }
 
-    private void updateAll(Event event){
-        if (event.getTitle()!=null)
-            setEventDetailTitleString(event.getTitle());
-
-        setEventDetailRepeatString(getRepeatString(event.getRepeatTypeId()));
-
-        if (event.getLocationAddress()!=null)
-            setEventDetailLocationString(event.getLocationAddress());
-
-        if (event.getProposedTimeSlots()!=null){
-            setEventDetailSuggestTimeSlotFst(getSuggestTimeStringFromLong(event.getProposedTimeSlots().get(0), event.getDuration()));
-            setEventDetailSuggestTimeSlotSnd(getSuggestTimeStringFromLong(event.getProposedTimeSlots().get(1), event.getDuration()));
-            setEventDetailSuggestTimeSlotTrd(getSuggestTimeStringFromLong(event.getProposedTimeSlots().get(2), event.getDuration()));
-        }
-        if (event.getAttendees()!=null)
-            setEventDetailAttendeeString(getAttendeeString(event.getAttendees()));
-
-        if (event.getUrl()!=null)
-            setEventDetailUrl(event.getUrl());
-        if (event.getNote()!=null)
-            setEventDetailNote(event.getNote());
-    }
+//    private void updateAll(Event event){
+//        if (event.getTitle()!=null)
+//            setEventDetailTitleString(event.getTitle());
+//
+//        setEventDetailRepeatString(getRepeatString(event.getRepeatTypeId()));
+//
+//        if (event.get!=null)
+//            setEventDetailLocationString(event.getLocationAddress());
+//
+//        if (event.getTimeslots()!=null){
+//            setEventDetailSuggestTimeSlotFst(getSuggestTimeStringFromLong(event.getTimeslots().get(0).getStartTime(), event.getDuration()));
+//            setEventDetailSuggestTimeSlotSnd(getSuggestTimeStringFromLong(event.getTimeslots().get(1).getStartTime(), event.getDuration()));
+//            setEventDetailSuggestTimeSlotTrd(getSuggestTimeStringFromLong(event.getTimeslots().get(2).getStartTime(), event.getDuration()));
+//        }
+//        if (event.getInvitee()!=null)
+//            setEventDetailAttendeeString(getAttendeeString(EventUtil.fromInviteeListToArraylist(event.getInvitee())));
+//
+//        if (event.getUrl()!=null)
+//            setEventDetailUrl(event.getUrl());
+//        if (event.getNote()!=null)
+//            setEventDetailNote(event.getNote());
+//    }
 
 
 
