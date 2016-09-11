@@ -280,7 +280,8 @@ public class InviteeFragment extends Fragment {
 				Event event = (Event) bundle.getSerializable(getString(R.string.new_event));
 				ArrayList<Invitee> invitees = new ArrayList<Invitee>();
 				for (ITimeContactInterface iTimeContactInterface: getAllSelectedContacts()){
-					invitees.add((Invitee) iTimeContactInterface);
+					Invitee invitee = contactToInvitee((Contact)iTimeContactInterface , event); // convert contact to invitee
+					invitees.add(invitee);
 				}
 				event.setInvitee(invitees);
 				Bundle newBundle = new Bundle();
@@ -288,6 +289,14 @@ public class InviteeFragment extends Fragment {
 				((EventCreateActivity)getActivity()).toTimeSlotView(self,newBundle);
 			}
 		});
+	}
+
+	private Invitee contactToInvitee(Contact contact, Event event){
+		Invitee invitee = new Invitee();
+		invitee.setEventUid(event.getEventUid());
+		invitee.setInviteeUid(contact.getContactUid());
+
+		return invitee;
 	}
 
 

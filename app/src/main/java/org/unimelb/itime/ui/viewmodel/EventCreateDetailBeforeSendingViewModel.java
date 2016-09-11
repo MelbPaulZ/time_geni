@@ -20,6 +20,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -100,9 +101,10 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (newEvDtlEvent.getTitle()!=null){
+                if (newEvDtlEvent.getTitle()==null){
                     newEvDtlEvent.setTitle(getContext().getString(R.string.new_event));
                 }
+                newEvDtlEvent.setHostUserUid(UserUtil.getUserUid());
                 presenter.sendEvent(newEvDtlEvent);
             }
         };

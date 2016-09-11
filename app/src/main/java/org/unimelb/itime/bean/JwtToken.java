@@ -1,9 +1,11 @@
 package org.unimelb.itime.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by yinchuandong on 12/08/2016.
  */
-public class JwtToken {
+public class JwtToken implements Serializable{
     private String token;
     private String error;
 

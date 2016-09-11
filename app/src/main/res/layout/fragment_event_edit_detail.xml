@@ -145,6 +145,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toLeftOf="@+id/edit_event_repeat_arrow"
                             android:layout_marginRight="@dimen/padding_10"
+                            android:onClick="@{eventEditVM.chooseRepeat()}"
                             android:text="@{EventUtil.parseRepeatIdToRepeat(context, eventEditVM.eventEditViewEvent.recurrence,eventEditVM.eventEditViewEvent.startTime)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />

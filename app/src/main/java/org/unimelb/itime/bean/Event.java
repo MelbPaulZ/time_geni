@@ -4,7 +4,6 @@ import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.ToMany;
@@ -13,10 +12,8 @@ import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.InviteeDao;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
-import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import org.unimelb.itime.dao.TimeSlotDao;
 
@@ -35,7 +32,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private String recurringEventId;
     private String calendarUid;
     private String iCalUID;
-    private String userUid; // add by paul
+    private String hostUserUid; // add by paul
     private String recurrence;
     private String summary;
     private String url;
@@ -81,9 +78,11 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
 
 
 
-    @Generated(hash = 635070849)
+
+
+    @Generated(hash = 902139853)
     public Event(String eventUid, String eventId, String recurringEventUid, String recurringEventId,
-            String calendarUid, String iCalUID, String userUid, String recurrence, String summary,
+            String calendarUid, String iCalUID, String hostUserUid, String recurrence, String summary,
             String url, String location, String locationNote, double locationLatitude,
             double locationLongitude, String note, long startTime, long endTime, int eventType,
             int status) {
@@ -93,7 +92,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.recurringEventId = recurringEventId;
         this.calendarUid = calendarUid;
         this.iCalUID = iCalUID;
-        this.userUid = userUid;
+        this.hostUserUid = hostUserUid;
         this.recurrence = recurrence;
         this.summary = summary;
         this.url = url;
@@ -107,6 +106,9 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.eventType = eventType;
         this.status = status;
     }
+
+
+
 
 
 
@@ -450,11 +452,13 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         isHost = host;
     }
 
-    public String getUserUid() {
-        return userUid;
+    public String getHostUserUid() {
+        return hostUserUid;
     }
 
-    public void setUserUid(String userUid) {
-        this.userUid = userUid;
+    public void setHostUserUid(String hostUserUid) {
+        this.hostUserUid = hostUserUid;
     }
+
+
 }

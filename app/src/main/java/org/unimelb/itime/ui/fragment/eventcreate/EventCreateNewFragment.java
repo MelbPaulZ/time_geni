@@ -31,6 +31,7 @@ import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import java.util.Calendar;
 
@@ -74,6 +75,7 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
             eventCreateNewVIewModel.setEvent(event);
         }
         event.setEventUid(EventUtil.generateUid());
+        event.setHostUserUid(UserUtil.getUserUid());
         binding.setEventVM(eventCreateNewVIewModel);
 
         // hide soft key board

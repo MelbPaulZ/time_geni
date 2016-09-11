@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -15,16 +13,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.presenter.EventDetailForHostPresenter;
-import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
-
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -67,7 +59,7 @@ public class EventDetailForHostViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (EvDtlHostEvent.getUserUid().equals(UserUtil.getUserUid())) {
+                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
                     // this is for host choose timeslot
                     if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(0))) {
                         EvDtlHostEvent.getTimeslots().get(0).setStatus(getContext().getString(R.string.timeslot_status_pending));
@@ -96,7 +88,7 @@ public class EventDetailForHostViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (EvDtlHostEvent.getUserUid().equals(UserUtil.getUserUid())) {
+                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
                     // host picks timeslot
                     if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(1))) {
                         EvDtlHostEvent.getTimeslots().get(1).setStatus(getContext().getString(R.string.timeslot_status_pending));
@@ -125,7 +117,7 @@ public class EventDetailForHostViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (EvDtlHostEvent.getUserUid().equals(UserUtil.getUserUid())) {
+                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
                     // host picks timeslot
                     if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(2))) {
                         EvDtlHostEvent.getTimeslots().get(2).setStatus(getContext().getString(R.string.timeslot_status_pending));

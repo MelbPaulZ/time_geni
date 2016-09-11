@@ -174,6 +174,13 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
                 eventCreateTimeslotViewModel.setDurationTimeString(getTimeString(pickHour[0],pickMinute[0]));
                 eventCreateTimeslotViewModel.setIsChangeDuration(true);
                 weekTimeSlotView.setTimeSlots(simulateTimeSlots, pickHour[0] * 60 + pickMinute[0]);
+
+                for (TimeSlot timeSlot: newEvent.getTimeslots()){
+                    timeSlot.setEndTime(timeSlot.getStartTime() + 1000 * 60 * (pickHour[0] * 60 + pickMinute[0]));
+                }
+
+                eventCreateTimeslotViewModel.setNewEvent(newEvent);
+
             }
         });
 
@@ -222,8 +229,8 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         ArrayList<TimeSlot> timeSlots = new ArrayList<>();
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH,6);
-        calendar.set(Calendar.HOUR_OF_DAY,7);
+        calendar.set(Calendar.DAY_OF_MONTH,13);
+        calendar.set(Calendar.HOUR_OF_DAY,5);
         calendar.set(Calendar.MINUTE,30);
         simulateTimeSlots.put(calendar.getTime().getTime(),false);
         TimeSlot timeSlot1 = new TimeSlot();
@@ -233,18 +240,18 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
 
 
         Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(Calendar.DAY_OF_MONTH,7);
-        calendar1.set(Calendar.HOUR_OF_DAY,8);
+        calendar1.set(Calendar.DAY_OF_MONTH,14);
+        calendar1.set(Calendar.HOUR_OF_DAY,7);
         calendar1.set(Calendar.MINUTE,45);
-        simulateTimeSlots.put(calendar1.getTime().getTime(),true);
+        simulateTimeSlots.put(calendar1.getTime().getTime(),false);
         TimeSlot timeSlot2 = new TimeSlot();
         timeSlot2.setStartTime(calendar1.getTimeInMillis());
         timeSlot2.setEndTime(calendar1.getTimeInMillis() + 3600000);
         timeSlots.add(timeSlot2);
 
         Calendar calendar2 = Calendar.getInstance();
-        calendar2.set(Calendar.DAY_OF_MONTH, 9);
-        calendar2.set(Calendar.HOUR_OF_DAY,4);
+        calendar2.set(Calendar.DAY_OF_MONTH, 15);
+        calendar2.set(Calendar.HOUR_OF_DAY,9);
         calendar2.set(Calendar.MINUTE,0);
         simulateTimeSlots.put(calendar2.getTimeInMillis(),false);
         TimeSlot timeSlot3 = new TimeSlot();

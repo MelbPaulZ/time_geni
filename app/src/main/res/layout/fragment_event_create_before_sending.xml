@@ -264,7 +264,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="22dp"
-                                android:text="@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(0).startTime, newEventDetailVM.newEvDtlEvent.timeslots.get(0).startTime) : @string/none}"
+                                android:text="@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(0).startTime, newEventDetailVM.newEvDtlEvent.timeslots.get(0).endTime) : @string/none}"
                                 android:textColor="@color/text_disable"
                                 android:textSize="@dimen/page_text_size" />
 

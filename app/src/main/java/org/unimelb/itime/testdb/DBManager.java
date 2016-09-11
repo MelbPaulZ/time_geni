@@ -4,15 +4,16 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.InviteeDao;
 
 import java.util.List;
-
 
 /**
  * Created by yuhaoliu on 28/08/16.
@@ -55,6 +56,13 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         InviteeDao inviteeDao = daoSession.getInviteeDao();
         inviteeDao.insert(invitee);
+    }
+
+    public void insertContact(Contact contact) {
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        ContactDao contactDao = daoSession.getContactDao();
+        contactDao.insert(contact);
     }
 
     public void insertEventList(List<Event> events) {
@@ -105,12 +113,24 @@ public class DBManager {
         return list;
     }
 
+    public Event getEvent(String uid){
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        EventDao eventDao = daoSession.getEventDao();
+        QueryBuilder<Event> qb = eventDao.queryBuilder();
+        qb.where(EventDao.Properties.EventUid.eq(uid));
+        return  qb.list().get(0);
+    }
+
     public void clearDB(){
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
-        EventDao eventDaoDao = daoSession.getEventDao();
-//        EventDao eventDaoDao = daoSession.getEventDao();
-        eventDaoDao.deleteAll();
+        EventDao eventDao = daoSession.getEventDao();
+        ContactDao contactDao = daoSession.getContactDao();
+        InviteeDao inviteeDao = daoSession.getInviteeDao();
+        eventDao.deleteAll();
+        contactDao.deleteAll();
+        inviteeDao.deleteAll();
     }
 
     private SQLiteDatabase getReadableDatabase() {

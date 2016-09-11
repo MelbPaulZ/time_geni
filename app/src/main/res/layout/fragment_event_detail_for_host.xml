@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:background="@null"
-                android:visibility="@{hostDetailVM.evDtlHostEvent.userUid.equals(UserUtil.userUid)? View.VISIBLE : View.INVISIBLE}"
+                android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getUserUid())? View.VISIBLE : View.INVISIBLE}"
                 android:onClick="@{hostDetailVM.editEvent()}"
                 android:textColor="@color/page_title_color"
                 android:text="@string/edit" />
@@ -495,7 +495,7 @@
         android:gravity="center"
         android:paddingBottom="@dimen/padding_10"
         android:paddingLeft="@dimen/padding_10"
-        android:visibility="@{hostDetailVM.evDtlHostEvent.userUid.equals(UserUtil.getInstance.getUserUid())? View.VISIBLE : View.GONE }"
+        android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance.getUserUid())? View.VISIBLE : View.GONE }"
         android:paddingRight="@dimen/padding_10">
 
         <Button
@@ -520,7 +520,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:visibility="@{hostDetailVM.evDtlHostEvent.userUid.equals(UserUtil.getInstance.getUserUid)?  View.GONE:View.VISIBLE }"
+        android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance.getUserUid)?  View.GONE:View.VISIBLE }"
         android:paddingBottom="@dimen/padding_10"
         android:paddingLeft="@dimen/padding_10"
         android:paddingRight="@dimen/padding_10">
