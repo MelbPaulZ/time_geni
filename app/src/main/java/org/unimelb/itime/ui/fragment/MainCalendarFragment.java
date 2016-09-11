@@ -24,11 +24,8 @@ import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
-import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.DayViewBodyController;
 import org.unimelb.itime.vendor.helper.MyCalendar;
-import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
@@ -254,7 +251,14 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 //        List<Invitee> list =  DBManager.getInstance(getContext()).getAllInvitee();
 
         List<Event> list = DBManager.getInstance(getContext()).getAllEvents();
-        List<Invitee> v1 = list.get(0).getInvitee();
+        for (Event ev: list) {
+            ev.getTimeslots();
+            List<Invitee> inviteeList =  ev.getInvitee();
+            for(Invitee iv: inviteeList){
+                iv.getContact();
+            }
+        }
+//        List<Invitee> v1 = list.get(0).getInvitee();
         binding.weekView.setEvent(new ArrayList<ITimeEventInterface>(list));
     }
 
@@ -311,6 +315,18 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
             }
 
             event.setEndTime(realEnd);
+
+            /* for time slot*/
+
+            List<TimeSlot> timeslotList = new ArrayList<>();
+            for(int k = 0; k < 3; k++){
+                TimeSlot slot = new TimeSlot();
+                slot.setStartTime(calendar.getTimeInMillis() + 2 * k * 3600 * 1000);
+                slot.setEndTime(calendar.getTimeInMillis() + 3 * k *3600*1000);
+                slot.setStatus(getString(R.string.timeslot_status_pending));
+                timeslotList.add(slot);
+            }
+            event.setTimeslots(timeslotList);
             events.add(event);
 
 //            if (duration >= 24 * 3600 * 1000 && alldayCount < 3){
