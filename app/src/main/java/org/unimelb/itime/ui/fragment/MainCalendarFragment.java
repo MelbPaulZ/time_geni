@@ -262,7 +262,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
 
 //        DBManager.getInstance(getContext()).clearDB();
-        initDB();
+//        initDB();
 
 //        List<Invitee> list =  DBManager.getInstance(getContext()).getAllInvitee();
 
@@ -338,10 +338,13 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
             List<TimeSlot> timeslotList = new ArrayList<>();
             for(int k = 0; k < 3; k++){
                 TimeSlot slot = new TimeSlot();
+                slot.setTimeSlotUid((long)(Math.random() * 1000000));
+                slot.setEventUid("" + i);
                 slot.setStartTime(calendar.getTimeInMillis() + 2 * k * 3600 * 1000);
                 slot.setEndTime(calendar.getTimeInMillis() + 3 * k *3600*1000);
                 slot.setStatus(getString(R.string.timeslot_status_pending));
                 timeslotList.add(slot);
+                DBManager.getInstance(getContext()).insertTimeSlot(slot);
             }
             event.setTimeslots(timeslotList);
             events.add(event);
@@ -371,8 +374,8 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     private List<Contact> initContact(){
         List<Contact> contacts = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            Contact contact = new Contact(""+i, "http://img.zybus.com/uploads/allimg/131213/1-131213111353.jpg", "name " + i);
+        for (int i = 0; i < 20; i++) {
+            Contact contact = new Contact("contact:"+i, "http://img.zybus.com/uploads/allimg/131213/1-131213111353.jpg", "name " + i);
             contacts.add(contact);
             DBManager.getInstance(getContext()).insertContact(contact);
         }

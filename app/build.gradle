@@ -45,7 +45,7 @@ android {
 }
 
 greendao {
-    schemaVersion 6
+    schemaVersion 8
     daoPackage "org.unimelb.itime.dao"
 }
 

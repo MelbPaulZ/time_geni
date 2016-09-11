@@ -12,8 +12,8 @@ import java.io.Serializable;
  */
 @Entity
 public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
-    @Id
-    private int timeSlotUid;
+
+    private long timeSlotUid;
     private String eventUid;
     private long startTime;
     private long endTime;
@@ -26,9 +26,9 @@ public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
     @Generated(hash = 1337764006)
     public TimeSlot() {
     }
-    @Generated(hash = 1838777863)
-    public TimeSlot(int timeSlotUid, String eventUid, long startTime, long endTime,
-            String status, int accetpedNum, int totalNum) {
+    @Generated(hash = 2063048340)
+    public TimeSlot(long timeSlotUid, String eventUid, long startTime,
+            long endTime, String status, int accetpedNum, int totalNum) {
         this.timeSlotUid = timeSlotUid;
         this.eventUid = eventUid;
         this.startTime = startTime;
@@ -88,11 +88,11 @@ public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
     }
 
 
-    public int getTimeSlotUid() {
+    public long getTimeSlotUid() {
         return timeSlotUid;
     }
 
-    public void setTimeSlotUid(int timeSlotUid) {
+    public void setTimeSlotUid(long timeSlotUid) {
         this.timeSlotUid = timeSlotUid;
     }
 

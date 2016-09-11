@@ -64,11 +64,12 @@ public class EventEditViewModel extends BaseObservable {
         };
     }
 
+    // click done btn
     public View.OnClickListener finishEdit(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // do something
+                presenter.toHostEventDetail(eventEditViewEvent);
             }
         };
     }

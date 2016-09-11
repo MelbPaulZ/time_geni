@@ -104,6 +104,7 @@ public class EventDetailActivity extends AppCompatActivity {
     public void toEditEvent(Event event) {
         if (eventEditFragment != null && eventEditFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
+            eventEditFragment.setEvent(event);
             getSupportFragmentManager().beginTransaction().show(eventEditFragment).commit();
         } else {
             eventEditFragment = new EventEditFragment();

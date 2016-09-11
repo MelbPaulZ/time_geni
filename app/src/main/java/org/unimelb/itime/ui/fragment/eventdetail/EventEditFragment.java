@@ -58,6 +58,9 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
 
     public void setEvent(Event event){
         this.event = event;
+        if (eventEditViewModel!=null){
+            eventEditViewModel.setEventEditViewEvent(event);
+        }
     }
 
     @Override

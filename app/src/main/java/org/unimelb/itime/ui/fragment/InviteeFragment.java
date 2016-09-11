@@ -36,6 +36,7 @@ import org.unimelb.itime.vendor.contact.widgets.SortModel;
 import org.unimelb.itime.vendor.helper.LoadImgHelper;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -279,7 +280,8 @@ public class InviteeFragment extends Fragment {
 				Bundle bundle = getArguments();
 				Event event = (Event) bundle.getSerializable(getString(R.string.new_event));
 				ArrayList<Invitee> invitees = new ArrayList<Invitee>();
-				for (ITimeContactInterface iTimeContactInterface: getAllSelectedContacts()){
+				ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
+				for (ITimeContactInterface iTimeContactInterface: contacts){
 					Invitee invitee = contactToInvitee((Contact)iTimeContactInterface , event); // convert contact to invitee
 					invitees.add(invitee);
 				}
