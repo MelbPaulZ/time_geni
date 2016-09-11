@@ -122,6 +122,15 @@ public class DBManager {
         return list;
     }
 
+    public List<Contact> getAllContact(){
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        ContactDao contactDao = daoSession.getContactDao();
+        QueryBuilder<Contact> qb = contactDao.queryBuilder();
+        List<Contact> list = qb.list();
+        return list;
+    }
+
     public Event getEvent(String uid){
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
         DaoSession daoSession = daoMaster.newSession();

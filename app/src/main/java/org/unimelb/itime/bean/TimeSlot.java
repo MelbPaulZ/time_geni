@@ -12,7 +12,6 @@ import java.io.Serializable;
  */
 @Entity
 public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
-
     private long timeSlotUid;
     private String eventUid;
     private long startTime;
@@ -20,8 +19,6 @@ public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
     private String status;
     private int accetpedNum;
     private int totalNum;
-
-    
 
     @Generated(hash = 1337764006)
     public TimeSlot() {
@@ -86,7 +83,6 @@ public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
     public void setTotalNum(int i) {
         this.totalNum = i;
     }
-
 
     public long getTimeSlotUid() {
         return timeSlotUid;
