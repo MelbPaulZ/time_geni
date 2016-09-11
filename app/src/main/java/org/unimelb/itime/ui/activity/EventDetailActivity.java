@@ -37,6 +37,7 @@ public class EventDetailActivity extends AppCompatActivity {
         event = (Event) getIntent().getSerializableExtra(getString(R.string.event));
 
         if (event.getHostUserUid().equals(UserUtil.getInstance().getUserUid())) {
+//            if (true){ // for test only
             if (event.getInvitee()!=null) {
                 // group event, and is host
                 if (event.getInvitee().size() == 2) {
@@ -45,7 +46,7 @@ public class EventDetailActivity extends AppCompatActivity {
                     eventDetailHostFragment.setEvent(event);
                     getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostFragment).commit();
                 } else {
-                    Toast.makeText(getBaseContext(), "this is more people event", Toast.LENGTH_SHORT);
+                    Toast.makeText(getBaseContext(), "this is more people event", Toast.LENGTH_SHORT).show();
                     eventDetailHostFragment = new EventDetailHostFragment();
                     eventDetailHostFragment.setEvent(event);
                     getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostFragment).commit();
