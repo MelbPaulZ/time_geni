@@ -74,6 +74,11 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
     }
 
     @Override
+    public void toTimeSlotView(String tag) {
+        ((EventDetailActivity)getActivity()).fromHostEditToTimeSlotView(tag, this);
+    }
+
+    @Override
     public void setTag(String tag) {
         this.tag = tag;
     }

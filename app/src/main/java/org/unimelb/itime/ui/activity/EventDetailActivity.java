@@ -168,6 +168,22 @@ public class EventDetailActivity extends AppCompatActivity {
         }
     }
 
+
+    public void fromHostEditToTimeSlotView(String tag, Fragment fragment){
+        if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()){
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            eventDetailHostTimeSlotFragment.setEvent(event);
+            eventDetailHostTimeSlotFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
+        }else{
+            eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
+            eventDetailHostTimeSlotFragment.setEvent(event);
+            eventDetailHostTimeSlotFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
+        }
+    }
+
     // from location picker to edit event page
     public void toEditEvent(Fragment fragment) {
         if (eventEditFragment != null && eventEditFragment.isAdded()) {

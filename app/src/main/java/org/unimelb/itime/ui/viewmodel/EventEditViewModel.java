@@ -37,12 +37,15 @@ public class EventEditViewModel extends BaseObservable {
 
     private EventEditViewModel viewModel;
 
+    private String tag;
+
 
 
     public EventEditViewModel(EventEditPresenter eventEditPresenter) {
         this.presenter = eventEditPresenter;
         editEventIsRepeat = new ObservableField<>();
         viewModel = this;
+        tag = getContext().getString(R.string.tag_host_event_edit);
 
     }
 
@@ -70,6 +73,15 @@ public class EventEditViewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 presenter.toHostEventDetail(eventEditViewEvent);
+            }
+        };
+    }
+
+    public View.OnClickListener editTimeSlot(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.toTimeSlotView(tag); // tiao zhuan wei zhi 
             }
         };
     }

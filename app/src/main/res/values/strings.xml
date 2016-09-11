@@ -169,6 +169,7 @@
     <string name="tag_end_repeat">tag end repeat</string>
     <string name="tag_create_event_before_sending">tag create event before sending</string>
     <string name="tag_host_event_detail">tag host event detail</string>
+    <string name="tag_host_event_edit">tag host event edit</string>
     
     <string name="day_of_week_1_full">Sunday</string>
     <string name="day_of_week_2_full">Monday</string>
