@@ -69,7 +69,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
                             if (newEvDtlEvent.getRepeatEndsTime()==0){
                                 newEvDtlEvent.setRepeatEndsTime(newEvDtlEvent.getStartTime()+24*3600000);//default another day
                             }
-                            newEvDtlEvent.setRepeatTypeId(i);
+//                            newEvDtlEvent.setRepeatTypeId(i);
                             viewModel.setNewEvDtlEvent(newEvDtlEvent);
                         }
                     }
@@ -100,7 +100,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!newEvDtlEvent.hasEventTitle()){
+                if (newEvDtlEvent.getTitle()!=null){
                     newEvDtlEvent.setTitle(getContext().getString(R.string.new_event));
                 }
                 presenter.sendEvent(newEvDtlEvent);

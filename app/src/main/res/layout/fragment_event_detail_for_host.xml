@@ -3,6 +3,8 @@
     <data>
         <import type="org.unimelb.itime.util.EventUtil"/>
         <import type="org.unimelb.itime.util.TimeSlotUtil"/>
+        <import type="org.unimelb.itime.util.UserUtil"/>
+        <import type="android.view.View"/>
         <variable
             name="hostDetailVM"
             type="org.unimelb.itime.ui.viewmodel.EventDetailForHostViewModel"/>
@@ -52,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:background="@null"
+                android:visibility="@{hostDetailVM.evDtlHostEvent.userUid.equals(UserUtil.userUid)? View.VISIBLE : View.INVISIBLE}"
                 android:onClick="@{hostDetailVM.editEvent()}"
                 android:textColor="@color/page_title_color"
                 android:text="@string/edit" />
@@ -103,7 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="14dp"
-                        android:text="@{EventUtil.parseRepeatIdToRepeat(context, hostDetailVM.evDtlHostEvent.repeatTypeId, hostDetailVM.evDtlHostEvent.startTime)}"
+                        android:text="@{EventUtil.parseRepeatIdToRepeat(context, hostDetailVM.evDtlHostEvent.recurrence, hostDetailVM.evDtlHostEvent.startTime)}"
                         android:textColor="@color/event_detail_repeat"
                         android:textSize="15sp"
 
@@ -114,7 +117,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="14dp"
                         android:layout_marginTop="3dp"
-                        android:text="@{hostDetailVM.evDtlHostEvent.locationAddress}"
+                        android:text="@{hostDetailVM.evDtlHostEvent.location}"
                         android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -484,6 +487,7 @@
 
     </ScrollView>
 
+    <!-- if it is host event, this show-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -491,6 +495,7 @@
         android:gravity="center"
         android:paddingBottom="@dimen/padding_10"
         android:paddingLeft="@dimen/padding_10"
+        android:visibility="@{hostDetailVM.evDtlHostEvent.userUid.equals(UserUtil.getInstance.getUserUid())? View.VISIBLE : View.GONE }"
         android:paddingRight="@dimen/padding_10">
 
         <Button
@@ -502,10 +507,50 @@
             android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"
             android:text="@string/confirm"
             android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? true: false}"
+            android:onClick="@{hostDetailVM.onClickHostConfirm()}"
+            android:textAlignment="center"
+            android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @color/white : @color/gray_b2b2b2}" />
+
+    </LinearLayout>
+
+
+    <!--if this is invite event, this show-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:visibility="@{hostDetailVM.evDtlHostEvent.userUid.equals(UserUtil.getInstance.getUserUid)?  View.GONE:View.VISIBLE }"
+        android:paddingBottom="@dimen/padding_10"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
+
+        <Button
+            android:id="@+id/confirm_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginRight="@dimen/padding_5"
+            android:layout_weight="1"
+            android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"
+            android:text="confirm"
+            android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? true: false}"
             android:onClick="@{hostDetailVM.onClickConfirm()}"
             android:textAlignment="center"
             android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @color/white : @color/gray_b2b2b2}" />
 
+        <Button
+            android:id="@+id/reject_all_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/padding_5"
+            android:layout_weight="1"
+            android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)?  @drawable/background_round_radius_unable_red : @drawable/background_round_radius_able_red}"
+            android:text="@string/reject_all"
+            android:textAlignment="center"
+            android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? false:true}"
+            android:onClick="@{hostDetailVM.onClickRejectAll()}"
+            android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)?  @color/gray_b2b2b2 : @color/white}" />
     </LinearLayout>
 
 </RelativeLayout>

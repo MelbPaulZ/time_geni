@@ -255,7 +255,7 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         weekTimeSlotView.setTimeSlots(simulateTimeSlots,60);
 
 //        newEvent = new Event();
-        newEvent.setTimeSlots(timeSlots);
+        newEvent.setTimeslots(timeSlots);
     }
 
 

@@ -20,11 +20,15 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
+import org.unimelb.itime.testdb.DBManager;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
+import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.DayViewBodyController;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
@@ -49,7 +53,12 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     public void addNewEvent(Event event){
         iTimeEventInterfacesArrayList.add(event);
+
+        DBManager.getInstance(getContext()).insertEvent(event);
+        EventManager.getInstance().addEvent(event);
+        binding.monthDayView.reloadCurrentBodyEvents();
         binding.weekView.setEvent(iTimeEventInterfacesArrayList);
+
     }
 
     @Override
@@ -129,7 +138,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         event.setStatus(5); // 5== pending, 6== confirm
         event.setEventType(1); //0 == private, 1== group, 2== public
         Calendar calendar =Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH,5);
+        calendar.set(Calendar.DAY_OF_MONTH,12);
         calendar.set(Calendar.HOUR_OF_DAY,4);
         calendar.set(Calendar.MINUTE,15);
         calendar.set(Calendar.SECOND,0);
@@ -138,12 +147,13 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
         // set attendee
         ArrayList<Invitee> attendeeArrayList = new ArrayList<>();
-        attendeeArrayList.add(new Invitee(null,"AGE", "2") );
-        attendeeArrayList.add(new Invitee("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "9"));
-        attendeeArrayList.add(new Invitee("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "10"));
-        attendeeArrayList.add(new Invitee("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "19"));
-        attendeeArrayList.add(new Invitee("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "29"));
-        attendeeArrayList.add(new Invitee("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "39"));
+        attendeeArrayList.add(new Invitee("1001",UserUtil.getInstance().getUserUid(),"Me","My Name"));
+        attendeeArrayList.add(new Invitee("1001",null,"AGE", "2") );
+        attendeeArrayList.add(new Invitee("1001","http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "9"));
+        attendeeArrayList.add(new Invitee("1001","http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "10"));
+        attendeeArrayList.add(new Invitee("1001","http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "19"));
+        attendeeArrayList.add(new Invitee("1001","http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "29"));
+        attendeeArrayList.add(new Invitee("1001","http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "39"));
         event.setInvitee(attendeeArrayList);
 
 
@@ -166,12 +176,58 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         timeSlot3.setStatus(getString(R.string.timeslot_status_pending));
         timeSlots.add(timeSlot3);
 
-        event.setLocationAddress("Melbourne");
+        event.setLocation("Melbourne");
         event.setUrl("www.google.com");
         event.setNote("Bring your own laptop.");
-        event.setTimeSlots(timeSlots);
-        event.setHost(true);
+        event.setTimeslots(timeSlots);
+        event.setUserUid(UserUtil.getInstance().getUserUid());
 
+
+        Event event2 = new Event();
+        event2.setTitle("Invitation event");
+        event2.setEventUid(EventUtil.generateUid());
+        event2.setStatus(5); // 5== pending, 6== confirm
+
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set(Calendar.DAY_OF_MONTH, calendar2.get(Calendar.DAY_OF_MONTH)+2);
+        calendar2.set(Calendar.HOUR_OF_DAY,2);
+        event2.setStartTime(calendar2.getTimeInMillis());
+        event2.setEndTime(calendar2.getTimeInMillis() + 3600000);
+        event2.setUserUid("3"); // my user id is 1
+
+        ArrayList<Invitee> attendeeArrayList2 = new ArrayList<>();
+        attendeeArrayList2.add(new Invitee("1002","3","Host","Host name"));
+        attendeeArrayList2.add(new Invitee("1002",null,"AGE", "2") );
+        attendeeArrayList2.add(new Invitee("1002","http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "9"));
+        attendeeArrayList2.add(new Invitee("1002","http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "10"));
+        attendeeArrayList2.add(new Invitee("1002","http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "19"));
+        attendeeArrayList2.add(new Invitee("1002","http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "29"));
+        attendeeArrayList2.add(new Invitee("1002","http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂", "39"));
+        event2.setInvitee(attendeeArrayList2);
+
+        ArrayList<TimeSlot> timeSlots2 = new ArrayList<>();
+        TimeSlot timeSlot21 = new TimeSlot();
+        timeSlot21.setStartTime(calendar2.getTimeInMillis() + 3600000 * 2);
+        timeSlot21.setEndTime(calendar2.getTimeInMillis() + 3600000 * 3);
+        timeSlot21.setStatus(getString(R.string.timeslot_status_pending));
+        timeSlot21.setEventUid("1002");
+        timeSlots2.add(timeSlot21);
+        // need to set accept number later
+
+        TimeSlot timeslot22 = new TimeSlot();
+        timeslot22.setStartTime(calendar2.getTimeInMillis() + 3600000 * 6);
+        timeslot22.setStartTime(calendar2.getTimeInMillis() + 3600000 * 7);
+        timeslot22.setStatus(getString(R.string.timeslot_status_pending));
+        timeslot22.setEventUid("1002");
+        timeSlots2.add(timeslot22);
+
+        TimeSlot timeslot23 = new TimeSlot();
+        timeslot23.setStartTime(calendar2.getTimeInMillis() + 3600000 * 24);
+        timeslot23.setEndTime(calendar2.getTimeInMillis() + 3600000 * 25);
+        timeslot23.setStatus(getString(R.string.timeslot_status_pending));
+        timeslot23.setEventUid("1002");
+        timeSlots2.add(timeslot23);
+        event2.setTimeslots(timeSlots2);
 
 //        ArrayList<Long> endTimeSlotArrayList = new ArrayList<>(); // set the end time
 //        endTimeSlotArrayList.add(calendar.getTimeInMillis() + 3600000 * 2);
@@ -254,7 +310,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 //
 //
         iTimeEventInterfacesArrayList.add(event);
-//        iTimeEventInterfacesArrayList.add(event2);
+        iTimeEventInterfacesArrayList.add(event2);
 //        iTimeEventInterfacesArrayList.add(event3);
 //        iTimeEventInterfacesArrayList.add(event4);
         binding.weekView.setEvent(iTimeEventInterfacesArrayList);

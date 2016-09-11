@@ -14,24 +14,28 @@ import java.io.Serializable;
 public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
     @Id
     private int timeSlotUid;
+    private String eventUid;
     private long startTime;
     private long endTime;
     private String status;
     private int accetpedNum;
     private int totalNum;
-    @Generated(hash = 1270889899)
-    public TimeSlot(int timeSlotUid, long startTime, long endTime, String status,
-            int accetpedNum, int totalNum) {
+
+    
+
+    @Generated(hash = 1337764006)
+    public TimeSlot() {
+    }
+    @Generated(hash = 1838777863)
+    public TimeSlot(int timeSlotUid, String eventUid, long startTime, long endTime,
+            String status, int accetpedNum, int totalNum) {
         this.timeSlotUid = timeSlotUid;
+        this.eventUid = eventUid;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
         this.accetpedNum = accetpedNum;
         this.totalNum = totalNum;
-    }
-
-    @Generated(hash = 1337764006)
-    public TimeSlot() {
     }
     @Override
     public void setStartTime(long l) {
@@ -98,5 +102,14 @@ public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
 
     public void setAccetpedNum(int accetpedNum) {
         this.accetpedNum = accetpedNum;
+    }
+
+
+    public String getEventUid() {
+        return eventUid;
+    }
+
+    public void setEventUid(String eventUid) {
+        this.eventUid = eventUid;
     }
 }

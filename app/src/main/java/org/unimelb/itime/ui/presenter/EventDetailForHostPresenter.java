@@ -13,10 +13,11 @@ import org.unimelb.itime.ui.mvpview.EventDetailForHostMvpView;
  */
 public class EventDetailForHostPresenter extends MvpBasePresenter<EventDetailForHostMvpView> {
     private Context context;
-//    private LayoutInflater inflater;
+    private LayoutInflater inflater;
 
-    public EventDetailForHostPresenter(Context context) {
+    public EventDetailForHostPresenter(Context context, LayoutInflater inflater) {
         this.context = context;
+        this.inflater = inflater;
     }
 
     public void toWeekView(){
@@ -47,12 +48,28 @@ public class EventDetailForHostPresenter extends MvpBasePresenter<EventDetailFor
         }
     }
 
+    public void confirmAndGotoWeekViewCalendar(Event event){
+        EventDetailForHostMvpView view = getView();
+        if (view!=null){
+            view.confirmAndGotoWeekViewCalendar(event);
+        }
+    }
+
+
     public Context getContext() {
         return context;
     }
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public LayoutInflater getInflater() {
+        return inflater;
+    }
+
+    public void setInflater(LayoutInflater inflater) {
+        this.inflater = inflater;
     }
 
 }

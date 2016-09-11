@@ -113,7 +113,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:onClick="@{newEventDetailVM.changeLocation()}"
-                            android:text="@{newEventDetailVM.newEvDtlEvent.locationAddress}"
+                            android:text="@{newEventDetailVM.newEvDtlEvent.location}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -138,7 +138,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:onClick="@{newEventDetailVM.chooseRepeat()}"
-                            android:text="@{EventUtil.parseRepeatIdToRepeat(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.repeatTypeId, newEventDetailVM.newEvDtlEvent.startTime)}"
+                            android:text="@{EventUtil.parseRepeatIdToRepeat(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.recurrence, newEventDetailVM.newEvDtlEvent.startTime)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -368,7 +368,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{newEventDetailVM.newEvDtlEvent.hasCalendarTypedId()?  newEventDetailVM.newEvDtlEvent.calendarTypeId : @string/private_calendar}"
+                            android:text="need to change later, calendar type"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>

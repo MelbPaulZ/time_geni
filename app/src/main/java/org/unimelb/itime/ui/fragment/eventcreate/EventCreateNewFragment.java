@@ -30,6 +30,7 @@ import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
+import org.unimelb.itime.util.EventUtil;
 
 import java.util.Calendar;
 
@@ -66,11 +67,13 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
         super.onActivityCreated(savedInstanceState);
         if (event == null) {
             event = new Event();
+//            event.setEventUid(EventUtil.generateUid());
         }
         if (eventCreateNewVIewModel==null) {
             eventCreateNewVIewModel = new EventCreateNewVIewModel(getPresenter());
             eventCreateNewVIewModel.setEvent(event);
         }
+        event.setEventUid(EventUtil.generateUid());
         binding.setEventVM(eventCreateNewVIewModel);
 
         // hide soft key board
@@ -170,7 +173,7 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
     @Subscribe
     public void getLocationChange(MessageLocation messageLocation){
         if (messageLocation.tag == getString(R.string.tag_create_event)){
-        event.setLocationAddress(messageLocation.locationString);
+        event.setLocation(messageLocation.locationString);
         eventCreateNewVIewModel.setEvent(event);
         }
     }

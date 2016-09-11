@@ -25,4 +25,11 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         }
     }
 
+    public void changeLocation(){
+        EventEditMvpView view = getView();
+        if (view != null){
+            view.changeLocation();
+        }
+    }
+
 }

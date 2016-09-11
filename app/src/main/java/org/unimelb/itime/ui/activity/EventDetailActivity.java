@@ -8,12 +8,14 @@ import android.widget.Toast;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventDetailForInviteeFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventDetailForSoloFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventDetailHostFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventDetailHostTimeSlotFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.fragment.InviteeTimeslotFragment;
+import org.unimelb.itime.util.UserUtil;
 
 public class EventDetailActivity extends AppCompatActivity {
 
@@ -23,6 +25,7 @@ public class EventDetailActivity extends AppCompatActivity {
     private InviteeTimeslotFragment inviteeTimeslotFragment;
     private EventEditFragment eventEditFragment;
     private EventDetailHostTimeSlotFragment eventDetailHostTimeSlotFragment;
+    private EventLocationPickerFragment locationPickerFragment;
     private Event event;
 
 
@@ -33,10 +36,10 @@ public class EventDetailActivity extends AppCompatActivity {
 
         event= (Event) getIntent().getSerializableExtra(getString(R.string.event));
 
-        if (event.isHost()){
+        if (event.getUserUid().equals(UserUtil.getInstance().getUserUid())){
             if (event.hasAttendee()){
                 // group event, and is host
-                if (event.getInvitee().size()==1){
+                if (event.getInvitee().size()==2){
                     Toast.makeText(getBaseContext(),"this is two people event",Toast.LENGTH_SHORT);
                 }else{
                     Toast.makeText(getBaseContext(),"this is more people event",Toast.LENGTH_SHORT);
@@ -53,9 +56,12 @@ public class EventDetailActivity extends AppCompatActivity {
             }
         }else{
             Toast.makeText(getBaseContext(),"this is attendee",Toast.LENGTH_SHORT).show();
-            eventDetailForInviteeFragment = new EventDetailForInviteeFragment();
-            eventDetailForInviteeFragment.setEvent(event);
-            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment,eventDetailForInviteeFragment).commit();
+            eventDetailHostFragment = new EventDetailHostFragment();
+            eventDetailHostFragment.setEvent(event);
+            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostFragment).commit();
+//            eventDetailForInviteeFragment = new EventDetailForInviteeFragment();
+//            eventDetailForInviteeFragment.setEvent(event);
+//            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment,eventDetailForInviteeFragment).commit();
         }
 
 
@@ -143,7 +149,39 @@ public class EventDetailActivity extends AppCompatActivity {
             eventDetailHostFragment = new EventDetailHostFragment();
             eventDetailHostFragment.setEvent(event);
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            getSupportFragmentManager().beginTransaction().show(eventDetailHostFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostFragment).commit();
         }
+    }
+
+    public void toLocationPicker(String tag, Fragment fragment){
+        if (locationPickerFragment != null && locationPickerFragment.isAdded()){
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            locationPickerFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().show(locationPickerFragment).commit();
+        }else{
+            locationPickerFragment = new EventLocationPickerFragment();
+            locationPickerFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment,locationPickerFragment).commit();
+        }
+    }
+
+    // from location picker to edit event page
+    public void toEditEvent(Fragment fragment){
+        if (eventEditFragment != null && eventEditFragment.isAdded()){
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventEditFragment).commit();
+        }else{
+            eventEditFragment = new EventEditFragment();
+            eventEditFragment.setEvent(event);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventEditFragment).commit();
+        }
+    }
+
+    // this is for invitee confirm
+    public void confirmAndGotoWeekViewCalendar(Event event){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

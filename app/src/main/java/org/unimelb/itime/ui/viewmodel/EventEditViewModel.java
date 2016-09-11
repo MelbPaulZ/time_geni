@@ -20,9 +20,9 @@ public class EventEditViewModel extends BaseObservable {
 
     private Event eventEditViewEvent;
 
-    private EventEditPresenter eventEditPresenter;
+    private EventEditPresenter presenter;
     public EventEditViewModel(EventEditPresenter eventEditPresenter) {
-        this.eventEditPresenter = eventEditPresenter;
+        this.presenter = eventEditPresenter;
     }
 
 
@@ -43,6 +43,17 @@ public class EventEditViewModel extends BaseObservable {
             }
         };
     }
+
+    public View.OnClickListener changeLocation(){
+        return new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                presenter.changeLocation();
+            }
+        };
+    }
+
+
 
 
     @Bindable

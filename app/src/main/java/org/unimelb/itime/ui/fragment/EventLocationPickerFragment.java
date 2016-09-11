@@ -26,6 +26,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
+import org.unimelb.itime.ui.activity.EventDetailActivity;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -167,6 +169,8 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                     ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
                 else if (tag == getString(R.string.tag_create_event_before_sending)){
                     ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
+                }else if (tag.equals(getString(R.string.tag_edit_event))){
+                    ((EventDetailActivity)getActivity()).toEditEvent(self);
                 }
             }
         });
@@ -191,6 +195,9 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                 }else if (tag == getString(R.string.tag_create_event_before_sending)){
                     EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
                     ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
+                }else if (tag.equals(getString(R.string.tag_edit_event))){
+                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
+                    ((EventDetailActivity)getActivity()).toEditEvent(self);
                 }
             }
         });
@@ -215,6 +222,15 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                     mAutocompleteView.setOnItemClickListener(currentLocationListener);
                     mAutocompleteView.showDropDown();
                 }
+            }
+        });
+
+        ImageView cleanBtn = (ImageView) root.findViewById(R.id.location_picker_clean_btn);
+        cleanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAutocompleteView.setText("");
+                mAutocompleteView.setAdapter(strAdapter);
             }
         });
     }
@@ -271,6 +287,8 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                 ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
             }else if (tag == getString(R.string.tag_create_event_before_sending)){
                 ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
+            }else if (tag.equals(getString(R.string.tag_edit_event))){
+                ((EventDetailActivity)getActivity()).toEditEvent(self);
             }
         }
     };
@@ -292,6 +310,9 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             }else if (tag == getString(R.string.tag_create_event_before_sending)){
                 EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
                 ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
+            }else if (tag.equals(getString(R.string.tag_edit_event))){
+                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
+                ((EventDetailActivity)getActivity()).toEditEvent(self);
             }
         }
     };

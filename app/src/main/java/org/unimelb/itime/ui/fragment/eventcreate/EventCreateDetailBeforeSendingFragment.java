@@ -68,7 +68,7 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
     @Subscribe
     public void getLocationChange(MessageLocation messageLocation){
         if (messageLocation.tag == getString(R.string.tag_create_event_before_sending)){
-            event.setLocationAddress(messageLocation.locationString);
+            event.setLocation(messageLocation.locationString);
             eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(event);
         }
     }

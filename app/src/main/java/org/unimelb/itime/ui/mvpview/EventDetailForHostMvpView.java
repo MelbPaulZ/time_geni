@@ -12,4 +12,5 @@ public interface EventDetailForHostMvpView extends MvpView {
     void toAttendeeView(long time);
     void toEditEvent(Event event);
     void viewInCalendar(String tag);
+    void confirmAndGotoWeekViewCalendar(Event event);
 }

@@ -258,32 +258,32 @@ public class EventDetailViewForInviteeViewModel extends BaseObservable {
     public void setEventDetailEvent(Event eventDetailEvent) {
         this.eventDetailEvent = eventDetailEvent;
         notifyPropertyChanged(BR.eventDetailEvent);
-        updateAll(eventDetailEvent);
+//        updateAll(eventDetailEvent);
 
     }
 
-    private void updateAll(Event event){
-        if (event.getTitle()!=null)
-            setEventDetailTitleString(event.getTitle());
-
-        setEventDetailRepeatString(getRepeatString(event.getRepeatTypeId()));
-
-        if (event.getLocationAddress()!=null)
-            setEventDetailLocationString(event.getLocationAddress());
-
-        if (event.getTimeslots()!=null){
-            setEventDetailSuggestTimeSlotFst(getSuggestTimeStringFromLong(event.getTimeslots().get(0).getStartTime(), event.getDuration()));
-            setEventDetailSuggestTimeSlotSnd(getSuggestTimeStringFromLong(event.getTimeslots().get(1).getStartTime(), event.getDuration()));
-            setEventDetailSuggestTimeSlotTrd(getSuggestTimeStringFromLong(event.getTimeslots().get(2).getStartTime(), event.getDuration()));
-        }
-        if (event.getInvitee()!=null)
-            setEventDetailAttendeeString(getAttendeeString(EventUtil.fromInviteeListToArraylist(event.getInvitee())));
-
-        if (event.getUrl()!=null)
-            setEventDetailUrl(event.getUrl());
-        if (event.getNote()!=null)
-            setEventDetailNote(event.getNote());
-    }
+//    private void updateAll(Event event){
+//        if (event.getTitle()!=null)
+//            setEventDetailTitleString(event.getTitle());
+//
+//        setEventDetailRepeatString(getRepeatString(event.getRepeatTypeId()));
+//
+//        if (event.get!=null)
+//            setEventDetailLocationString(event.getLocationAddress());
+//
+//        if (event.getTimeslots()!=null){
+//            setEventDetailSuggestTimeSlotFst(getSuggestTimeStringFromLong(event.getTimeslots().get(0).getStartTime(), event.getDuration()));
+//            setEventDetailSuggestTimeSlotSnd(getSuggestTimeStringFromLong(event.getTimeslots().get(1).getStartTime(), event.getDuration()));
+//            setEventDetailSuggestTimeSlotTrd(getSuggestTimeStringFromLong(event.getTimeslots().get(2).getStartTime(), event.getDuration()));
+//        }
+//        if (event.getInvitee()!=null)
+//            setEventDetailAttendeeString(getAttendeeString(EventUtil.fromInviteeListToArraylist(event.getInvitee())));
+//
+//        if (event.getUrl()!=null)
+//            setEventDetailUrl(event.getUrl());
+//        if (event.getNote()!=null)
+//            setEventDetailNote(event.getNote());
+//    }
 
 
 

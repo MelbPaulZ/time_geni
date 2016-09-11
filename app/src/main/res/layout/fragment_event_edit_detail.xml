@@ -119,7 +119,8 @@
                             android:layout_gravity="right|center_vertical"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{eventEditVM.eventEditViewEvent.locationAddress?? @string/no_location}"
+                            android:onClick="@{eventEditVM.changeLocation()}"
+                            android:text="@{eventEditVM.eventEditViewEvent.location?? @string/no_location}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -144,7 +145,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toLeftOf="@+id/edit_event_repeat_arrow"
                             android:layout_marginRight="@dimen/padding_10"
-                            android:text="@{EventUtil.parseRepeatIdToRepeat(context, eventEditVM.eventEditViewEvent.repeatTypeId,eventEditVM.eventEditViewEvent.startTime)}"
+                            android:text="@{EventUtil.parseRepeatIdToRepeat(context, eventEditVM.eventEditViewEvent.recurrence,eventEditVM.eventEditViewEvent.startTime)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                         <ImageView
@@ -404,7 +405,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toLeftOf="@+id/event_edit_calendarType_arrow"
                             android:layout_marginRight="@dimen/padding_10"
-                            android:text="@{eventEditVM.eventEditViewEvent.calendarTypeId}"/>
+                            android:text="calenda type id"/>
                         <ImageView
                             android:id="@+id/event_edit_calendarType_arrow"
                             android:layout_width="10dp"

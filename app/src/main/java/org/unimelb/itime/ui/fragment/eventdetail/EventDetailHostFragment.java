@@ -24,12 +24,14 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
     private FragmentEventDetailForHostBinding binding;
     private EventDetailForHostViewModel eventDetailForHostViewModel;
     private Event event;
+    private LayoutInflater inflater;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_detail_for_host, container, false);
+        this.inflater = inflater;
         return binding.getRoot();
     }
 
@@ -51,7 +53,7 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
 
     @Override
     public EventDetailForHostPresenter createPresenter() {
-        return new EventDetailForHostPresenter(getContext());
+        return new EventDetailForHostPresenter(getContext(),inflater);
     }
 
 
@@ -73,6 +75,11 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
     @Override
     public void viewInCalendar(String tag) {
         ((EventDetailActivity)getActivity()).toTimeSlotView(tag,event);
+    }
+
+    @Override
+    public void confirmAndGotoWeekViewCalendar(Event event) {
+        ((EventDetailActivity)getActivity()).confirmAndGotoWeekViewCalendar(event);
     }
 
 

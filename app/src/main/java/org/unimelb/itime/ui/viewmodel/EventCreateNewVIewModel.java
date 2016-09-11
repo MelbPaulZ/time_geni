@@ -121,7 +121,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
                             if (!isEndRepeatChanged) { // if the user didn't change end repeat time before
                                 event.setRepeatEndsTime(calendar.getTimeInMillis() + 24*3600000); // default end in next day
                             }
-                            event.setRepeatTypeId(i);
+//                            event.setRepeatTypeId(i);
                             viewModel.setEvent(event);
                         }
                     }
@@ -142,7 +142,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 builder.setItems(types, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        event.setCalendarTypeId((String) types[i]);
+//                        event.setCalendarTypeId((String) types[i]);
                         viewModel.setEvent(event);
                     }
                 });
@@ -208,7 +208,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!event.hasEventTitle()) {
+                if (event.getTitle()==null) {
                     event.setTitle(presenter.getContext().getString(R.string.new_event));
                 }
                 presenter.toCreateSoloEvent(event);

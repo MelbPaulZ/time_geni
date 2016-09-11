@@ -18,17 +18,17 @@ public class UserUtil {
         return instance;
     }
 
-    public void login(Context ctx){
+    public static void login(Context ctx){
 
     }
 
-    public void logot(Context ctx){
+    public static void logot(Context ctx){
 
     }
 
 
-    public int getUserUid(){
-        return 1;
+    public static String getUserUid(){
+        return "1";
     }
 
 }
