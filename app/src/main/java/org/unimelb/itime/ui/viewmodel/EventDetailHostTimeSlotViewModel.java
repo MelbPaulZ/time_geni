@@ -1,11 +1,13 @@
 package org.unimelb.itime.ui.viewmodel;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 
 import android.databinding.Bindable;
 import android.view.View;
 
 import org.unimelb.itime.BR;
+import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.util.EventUtil;
@@ -51,7 +53,11 @@ public class EventDetailHostTimeSlotViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.toHostEventDetail();
+                if (tag.equals(getContext().getString(R.string.tag_host_event_detail))){
+                    presenter.toHostEventDetail();
+                }else if (tag.equals(getContext().getString(R.string.tag_host_event_edit))){
+                    presenter.toHostEventEdit();
+                }
             }
         };
     }
@@ -63,6 +69,10 @@ public class EventDetailHostTimeSlotViewModel extends BaseObservable {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public Context getContext(){
+        return presenter.getContext();
     }
 
     @Bindable

@@ -84,6 +84,11 @@ public class EventUtil{
     }
 
 
+    public static int generateTimeSlotUid(){
+        int uid = (int)(Math.random() * 1000000);
+        return uid;
+    }
+
 
     public static String parseRepeatIdToRepeat(Context context,String repeat, long startTime){
         Calendar calendar = Calendar.getInstance();

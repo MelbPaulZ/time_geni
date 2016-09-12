@@ -67,6 +67,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/padding_10"
+                        android:onClick="@{timeSlotHostVM.toHostEventDetail()}"
                         android:text="@string/done" />
                 </RelativeLayout>
 

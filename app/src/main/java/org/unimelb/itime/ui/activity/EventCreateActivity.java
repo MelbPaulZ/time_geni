@@ -101,6 +101,17 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         }
     }
 
+    public void toCreateEventNewFragment(InviteeFragment fragment){
+        if (eventCreateNewFragment == null || !(eventCreateNewFragment.isAdded())) {
+            eventCreateNewFragment = new EventCreateNewFragment();
+            getFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
+        } else {
+            getFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(eventCreateNewFragment).commit();
+        }
+    }
+
     public void toWeekViewCalendar(EventCreateNewFragment fragment) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -126,10 +137,12 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         if (inviteeFragment == null || !(inviteeFragment.isAdded())) {
             inviteeFragment = new InviteeFragment();
             inviteeFragment.setArguments(bundle);
+            inviteeFragment.setTag(getString(R.string.tag_create_event));
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getFragmentManager().beginTransaction().add(R.id.create_event_fragment, inviteeFragment).commit();
         } else {
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            inviteeFragment.setTag(getString(R.string.tag_create_event));
             getFragmentManager().beginTransaction().show(inviteeFragment).commit();
         }
     }
@@ -154,7 +167,12 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
             getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateDetailBeforeSendingFragment).commit();
         } else {
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            getSupportFragmentManager().beginTransaction().show(eventCreateDetailBeforeSendingFragment).commit();
+            // need remove exist fragment first
+            getSupportFragmentManager().beginTransaction().remove(eventCreateDetailBeforeSendingFragment).commit();
+            // then add a new fragment
+            eventCreateDetailBeforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
+            eventCreateDetailBeforeSendingFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateDetailBeforeSendingFragment).commit();
         }
     }
 

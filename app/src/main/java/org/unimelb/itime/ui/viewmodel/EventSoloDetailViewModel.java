@@ -5,7 +5,6 @@ import android.databinding.Bindable;
 
 import org.unimelb.itime.BR;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.ui.presenter.EventDetailForInviteePresenter;
 import org.unimelb.itime.ui.presenter.EventDetailForSoloPresenter;
 
 /**

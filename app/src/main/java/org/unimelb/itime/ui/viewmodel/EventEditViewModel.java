@@ -130,6 +130,15 @@ public class EventEditViewModel extends BaseObservable {
         };
     }
 
+    public View.OnClickListener toInviteePicker(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.toInviteePicker(tag);
+            }
+        };
+    }
+
 
 
 

@@ -150,7 +150,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_below="@id/event_detail_url_link"
+                            android:layout_below="@id/solo_event_detail_url_link"
                             android:layout_marginTop="@dimen/padding_5"
                             android:background="@color/gray_b2b2b2" />
                     </LinearLayout>
@@ -221,7 +221,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:layout_below="@id/event_detail_photo"
+                                android:layout_below="@id/solo_event_detail_photo"
                                 android:layout_marginTop="@dimen/padding_5"
                                 android:background="@color/gray_b2b2b2" />
 

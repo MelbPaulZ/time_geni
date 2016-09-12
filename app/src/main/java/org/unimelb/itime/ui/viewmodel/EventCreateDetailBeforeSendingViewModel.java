@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 import org.unimelb.itime.util.EventUtil;
@@ -24,6 +25,7 @@ import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Paul on 31/08/2016.
@@ -104,6 +106,15 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
                 if (newEvDtlEvent.getTitle()==null){
                     newEvDtlEvent.setTitle(getContext().getString(R.string.new_event));
                 }
+
+                // pending Timeslots filtered out timeslots which not is not chosed by host
+                List<TimeSlot> pendingTimeslots = new ArrayList<>();
+                for (TimeSlot timeSlot : newEvDtlEvent.getTimeslots()){
+                    if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
+                        pendingTimeslots.add(timeSlot);
+                    }
+                }
+                newEvDtlEvent.setTimeslots(pendingTimeslots);
                 newEvDtlEvent.setHostUserUid(UserUtil.getUserUid());
                 presenter.sendEvent(newEvDtlEvent);
             }

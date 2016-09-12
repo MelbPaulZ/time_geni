@@ -39,6 +39,7 @@ import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
 
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
@@ -180,6 +181,9 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
                 }
 
                 eventCreateTimeslotViewModel.setNewEvent(newEvent);
+                for (TimeSlot timeSlot: newEvent.getTimeslots()){
+                    timeSlot.setStatus(getString(R.string.timeslot_status_create));
+                }
 
             }
         });
@@ -234,6 +238,9 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         calendar.set(Calendar.MINUTE,30);
         simulateTimeSlots.put(calendar.getTime().getTime(),false);
         TimeSlot timeSlot1 = new TimeSlot();
+        timeSlot1.setTimeSlotUid(EventUtil.generateTimeSlotUid());
+        timeSlot1.setStatus(getString(R.string.timeslot_status_create));
+        timeSlot1.setEventUid(newEvent.getEventUid());
         timeSlot1.setStartTime(calendar.getTimeInMillis());
         timeSlot1.setEndTime(calendar.getTimeInMillis() + 3600000);
         timeSlots.add(timeSlot1);
@@ -245,6 +252,9 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         calendar1.set(Calendar.MINUTE,45);
         simulateTimeSlots.put(calendar1.getTime().getTime(),false);
         TimeSlot timeSlot2 = new TimeSlot();
+        timeSlot2.setTimeSlotUid(EventUtil.generateTimeSlotUid());
+        timeSlot2.setEventUid(newEvent.getEventUid());
+        timeSlot2.setStatus(getString(R.string.timeslot_status_create));
         timeSlot2.setStartTime(calendar1.getTimeInMillis());
         timeSlot2.setEndTime(calendar1.getTimeInMillis() + 3600000);
         timeSlots.add(timeSlot2);
@@ -255,6 +265,9 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         calendar2.set(Calendar.MINUTE,0);
         simulateTimeSlots.put(calendar2.getTimeInMillis(),false);
         TimeSlot timeSlot3 = new TimeSlot();
+        timeSlot3.setStatus(getString(R.string.timeslot_status_create));
+        timeSlot3.setTimeSlotUid(EventUtil.generateTimeSlotUid());
+        timeSlot3.setEventUid(newEvent.getEventUid());
         timeSlot3.setStartTime(calendar2.getTimeInMillis());
         timeSlot3.setEndTime(calendar2.getTimeInMillis()+3600000);
         timeSlots.add(timeSlot3);

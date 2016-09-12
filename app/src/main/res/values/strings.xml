@@ -219,5 +219,6 @@
     <string name="timeslot_status_accept">timeslot status accept</string>
     <string name="timeslot_status_reject">timeslot status reject</string>
     <string name="timeslot_status_delete">timeslot status delete</string>
+    <string name="timeslot_status_create">timeslot status create</string>
 
 </resources>

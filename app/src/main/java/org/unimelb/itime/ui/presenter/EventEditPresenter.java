@@ -39,6 +39,13 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         }
     }
 
+    public void toInviteePicker(String tag){
+        EventEditMvpView view= getView();
+        if (view != null){
+            view.toInviteePicker(tag);
+        }
+    }
+
     public Context getContext() {
         return context;
     }

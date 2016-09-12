@@ -7,4 +7,5 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
  */
 public interface EventDetailHostTimeSlotMvpVIew extends MvpView {
     void toHostEventDetail();
+    void toHostEventEdit();
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -16,6 +17,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventCreateBeforeSendingBinding;
 import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageEventDate;
@@ -24,7 +26,9 @@ import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel;
+import org.unimelb.itime.util.EventUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -58,12 +62,27 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
         }
         eventCreateDetailBeforeSendingViewModel = new EventCreateDetailBeforeSendingViewModel(getPresenter(),this.event);
         binding.setNewEventDetailVM(eventCreateDetailBeforeSendingViewModel);
+
+        //set timeslot listview
+        ArrayList<String> timeslotsArrayList = new ArrayList<>();
+        for (TimeSlot timeSlot: event.getTimeslots()){
+            // only display chosed timeslot
+            if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending)))
+                timeslotsArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()) );
+        }
+
+        ArrayAdapter timeslotAdapter = new ArrayAdapter<String>(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotsArrayList);
+
+        binding.beforeSendingListview.setAdapter(timeslotAdapter);
+
         // hide soft key board
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
 
     }
+
+
 
     @Subscribe
     public void getLocationChange(MessageLocation messageLocation){

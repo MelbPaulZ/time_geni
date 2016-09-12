@@ -56,6 +56,9 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
     @Override
     public void setTag(String tag) {
         this.tag = tag;
+        if (viewModel!=null){
+            viewModel.setTag(tag);
+        }
     }
 
     @Override
@@ -90,5 +93,10 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
     @Override
     public void toHostEventDetail() {
         ((EventDetailActivity)getActivity()).toHostEventDetail(this);
+    }
+
+    @Override
+    public void toHostEventEdit() {
+        ((EventDetailActivity)getActivity()).fromTimeSlotToHostEdit(this);
     }
 }

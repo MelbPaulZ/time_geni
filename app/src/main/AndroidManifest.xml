@@ -89,7 +89,8 @@
         </activity>
         <activity android:name=".ui.activity.EventDetailActivity"
             android:launchMode="singleTask"
-            android:label="event details">
+            android:label="event details"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

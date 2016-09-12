@@ -177,6 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="right"
+                            android:onClick="@{eventEditVM.toInviteePicker()}"
                             android:text="@{EventUtil.getAttendeeString(context, EventUtil.fromInviteeListToArraylist(eventEditVM.eventEditViewEvent.invitee))}"
                             android:textColor="@color/text_disable"
                             android:layout_toLeftOf="@+id/edit_event_attendee_arrow"
@@ -191,48 +192,6 @@
                             android:layout_centerVertical="true"
                             android:background="@drawable/icon_general_arrow_right" />
                     </RelativeLayout>
-
-                    <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/table_row_border">-->
-                    <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textColor="@color/text_enable"-->
-                    <!--android:textSize="16dp"-->
-                    <!--android:text="Starts"/>-->
-                    <!--<TextView-->
-                    <!--android:id="@+id/startTimeTextView"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:gravity="right"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:textColor="@color/text_enable"-->
-                    <!--android:textSize="16dp"-->
-                    <!--android:text="WED 20/7 12:00 PM"/>-->
-                    <!--</LinearLayout>-->
-
-                    <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/table_row_border">-->
-                    <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textColor="@color/text_enable"-->
-                    <!--android:textSize="16dp"-->
-                    <!--android:text="Ends"/>-->
-                    <!--<TextView-->
-                    <!--android:id="@+id/endTimeTextView"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:gravity="right"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:textColor="@color/text_enable"-->
-                    <!--android:textSize="16dp"-->
-                    <!--android:text="WED 20/7 13:00 PM"/>-->
-                    <!--</LinearLayout>-->
 
                     <!--Proposed time slot-->
                     <RelativeLayout
@@ -255,29 +214,36 @@
                                 android:textColor="@color/text_enable"
                                 android:textSize="@dimen/page_text_size" />
 
-                            <TextView
-                                android:id="@+id/edit_event_proposed_fst"
+                            <org.unimelb.itime.widget.NonScrollListView
+                                android:id="@+id/event_edit_listview"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(0).startTime, eventEditVM.eventEditViewEvent.timeslots.get(0).endTime)}"
-                                android:textColor="@color/text_disable"
-                                android:textSize="@dimen/page_text_size" />
+                                android:divider="#00000000">
+                            </org.unimelb.itime.widget.NonScrollListView>
 
-                            <TextView
-                                android:id="@+id/edit_event_proposed_snd"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(1).startTime, eventEditVM.eventEditViewEvent.timeslots.get(1).endTime)}"
-                                android:textColor="@color/text_disable"
-                                android:textSize="@dimen/page_text_size" />
+                            <!--<TextView-->
+                                <!--android:id="@+id/edit_event_proposed_fst"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:text="@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(0).startTime, eventEditVM.eventEditViewEvent.timeslots.get(0).endTime)}"-->
+                                <!--android:textColor="@color/text_disable"-->
+                                <!--android:textSize="@dimen/page_text_size" />-->
 
-                            <TextView
-                                android:id="@+id/edit_event_proposed_thd"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text='@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(2).startTime, eventEditVM.eventEditViewEvent.timeslots.get(2).endTime) }'
-                                android:textColor="@color/text_disable"
-                                android:textSize="@dimen/page_text_size" />
+                            <!--<TextView-->
+                                <!--android:id="@+id/edit_event_proposed_snd"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:text="@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(1).startTime, eventEditVM.eventEditViewEvent.timeslots.get(1).endTime)}"-->
+                                <!--android:textColor="@color/text_disable"-->
+                                <!--android:textSize="@dimen/page_text_size" />-->
+
+                            <!--<TextView-->
+                                <!--android:id="@+id/edit_event_proposed_thd"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:text='@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(2).startTime, eventEditVM.eventEditViewEvent.timeslots.get(2).endTime) }'-->
+                                <!--android:textColor="@color/text_disable"-->
+                                <!--android:textSize="@dimen/page_text_size" />-->
                         </LinearLayout>
 
                         <LinearLayout
@@ -298,69 +264,6 @@
                     </RelativeLayout>
                 </LinearLayout>
 
-                <!--blank for border-->
-                <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/page_blank_row_height"-->
-                <!--android:background="@drawable/table_row_border"-->
-                <!--/>-->
-                <!--end -->
-
-                <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="vertical"-->
-                <!--android:background="@drawable/table_row_border">-->
-
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/table_row_border">-->
-
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:text="Alert Time"-->
-                        <!--android:textColor="@color/text_enable"-->
-                        <!--android:textSize="@dimen/page_text_size" />-->
-
-                    <!--<ImageView-->
-                        <!--android:layout_width="20dp"-->
-                        <!--android:layout_height="20dp"-->
-                        <!--android:src="@drawable/arrow" />-->
-                <!--</LinearLayout>-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/table_row_border"-->
-                    <!--android:orientation="horizontal">-->
-
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="Calendar Type"-->
-                        <!--android:textColor="@color/text_enable"-->
-                        <!--android:textSize="@dimen/page_text_size"-->
-
-                        <!--/>-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/edit_event_calendar_type"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:gravity="right"-->
-                        <!--android:text="Work"-->
-                        <!--android:textColor="@color/text_disable"-->
-                        <!--android:textSize="@dimen/page_text_size" />-->
-                <!--</LinearLayout>-->
-
-                <!--</LinearLayout>-->
-
-                <!--blank for border-->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="35dp"

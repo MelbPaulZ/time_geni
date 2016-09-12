@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <import type="org.unimelb.itime.util.TimeSlotUtil"/>
+        <import type="org.unimelb.itime.util.EventUtil"/>
+        <variable
+            name="listTimeslotVM"
+            type="org.unimelb.itime.ui.viewmodel.ListPickTimeSlotViewModel"/>
+    </data>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="vertical">
+
+        <!--this is the icon for select timeslot-->
+        <ImageView
+            android:id="@+id/event_detail_host_ic_circle"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="14dp"
+            android:onClick="@{listTimeslotVM.onClickTimeSlot()}"
+            android:background="@{TimeSlotUtil.isTimeSlotSelected(context, listTimeslotVM.listPickTSEvent.timeslots.get(listTimeslotVM.position)) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}" />
+
+        <!--this is timeslot string-->
+        <TextView
+            android:id="@+id/timeslot_event_detail_text"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="13dp"
+            android:layout_toRightOf="@+id/event_detail_host_ic_circle"
+            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, listTimeslotVM.listPickTSEvent.timeslots.get(listTimeslotVM.position).getStartTime(),listTimeslotVM.listPickTSEvent.timeslots.get(listTimeslotVM.position).getEndTime() )}"
+            android:textColor="@color/text_enable"
+            android:textSize="17sp" />
+
+        <!--this is arrow image-->
+        <ImageView
+            android:id="@+id/host_timeslot_right_arrow"
+            android:layout_width="10dp"
+            android:layout_height="15dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/padding_10"
+            android:background="@drawable/icon_general_arrow_right" />
+
+        <!--this is showing accept number of invitees-->
+        <TextView
+            android:id="@+id/timeslot_listview_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/padding_10"
+            android:layout_toLeftOf="@+id/host_timeslot_right_arrow"
+            android:text="10"
+            android:onClick="@{listTimeslotVM.viewInviteeResponse()}"
+            android:textColor="@color/gray_b2b2b2"
+            android:textSize="17dp" />
+
+        <!--this is the under line-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/event_detail_host_ic_circle"
+            android:layout_marginLeft="44dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/gray_b2b2b2" />
+    </RelativeLayout>
+
+</layout>

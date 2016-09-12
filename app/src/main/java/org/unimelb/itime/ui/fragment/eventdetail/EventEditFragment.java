@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -16,6 +18,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageLocation;
@@ -23,6 +26,9 @@ import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
+import org.unimelb.itime.util.EventUtil;
+
+import java.util.ArrayList;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -54,6 +60,13 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
         binding.setEventEditVM(eventEditViewModel);
         tag = getString(R.string.tag_edit_event);
 
+        ArrayList<String> timeslotArrayList = new ArrayList<>();
+        for (TimeSlot timeSlot: event.getTimeslots()){
+            timeslotArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()));
+        }
+        ArrayAdapter stringAdapter = new ArrayAdapter(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotArrayList);
+        binding.eventEditListview.setAdapter(stringAdapter);
+
     }
 
     public void setEvent(Event event){
@@ -76,6 +89,11 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
     @Override
     public void toTimeSlotView(String tag) {
         ((EventDetailActivity)getActivity()).fromHostEditToTimeSlotView(tag, this);
+    }
+
+    @Override
+    public void toInviteePicker(String tag) {
+        ((EventDetailActivity)getActivity()).toInviteePicker(tag, this);
     }
 
     @Override

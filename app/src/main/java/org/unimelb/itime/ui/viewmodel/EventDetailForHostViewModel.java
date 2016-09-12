@@ -47,99 +47,6 @@ public class EventDetailForHostViewModel extends BaseObservable {
         };
     }
 
-    private void unSelectRestTimeSlots(int selectTimeSlotIndex) {
-        for (int i = 0; i < EvDtlHostEvent.getTimeslots().size(); i++) {
-            if (i != selectTimeSlotIndex) {
-                EvDtlHostEvent.getTimeslots().get(i).setStatus(getContext().getString(R.string.timeslot_status_pending));
-            }
-        }
-    }
-
-    public View.OnClickListener onHostTimeSlotSelect1() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
-                    // this is for host choose timeslot
-                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(0))) {
-                        EvDtlHostEvent.getTimeslots().get(0).setStatus(getContext().getString(R.string.timeslot_status_pending));
-                    } else {
-                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(), EvDtlHostEvent.getTimeslots())) {
-                            unSelectRestTimeSlots(0);
-                        }
-                        EvDtlHostEvent.getTimeslots().get(0).setStatus(getContext().getString(R.string.timeslot_status_accept));
-                    }
-//                    setEvDtlHostEvent(EvDtlHostEvent);
-                } else {
-                    // this is for invitee choose timeslots
-                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(0))) {
-                        EvDtlHostEvent.getTimeslots().get(0).setStatus(getContext().getString(R.string.timeslot_status_pending));
-                    } else {
-                        EvDtlHostEvent.getTimeslots().get(0).setStatus(getContext().getString(R.string.timeslot_status_accept));
-                    }
-                }
-                setEvDtlHostEvent(EvDtlHostEvent); // update
-            }
-        };
-    }
-
-
-    public View.OnClickListener onHostTimeSlotSelect2() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
-                    // host picks timeslot
-                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(1))) {
-                        EvDtlHostEvent.getTimeslots().get(1).setStatus(getContext().getString(R.string.timeslot_status_pending));
-                    } else {
-                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(), EvDtlHostEvent.getTimeslots())) {
-                            unSelectRestTimeSlots(1);
-                        }
-                        EvDtlHostEvent.getTimeslots().get(1).setStatus(getContext().getString(R.string.timeslot_status_accept));
-                    }
-//                    setEvDtlHostEvent(EvDtlHostEvent);
-                } else {
-                    // invitee picks timeslot
-                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(1))) {
-                        EvDtlHostEvent.getTimeslots().get(1).setStatus(getContext().getString(R.string.timeslot_status_pending));
-                    } else {
-                        EvDtlHostEvent.getTimeslots().get(1).setStatus(getContext().getString(R.string.timeslot_status_accept));
-                    }
-                }
-                setEvDtlHostEvent(EvDtlHostEvent);
-            }
-        };
-    }
-
-
-    public View.OnClickListener onHostTimeSlotSelect3() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
-                    // host picks timeslot
-                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(2))) {
-                        EvDtlHostEvent.getTimeslots().get(2).setStatus(getContext().getString(R.string.timeslot_status_pending));
-                    } else {
-                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(), EvDtlHostEvent.getTimeslots())) {
-                            unSelectRestTimeSlots(2);
-                        }
-                        EvDtlHostEvent.getTimeslots().get(2).setStatus(getContext().getString(R.string.timeslot_status_accept));
-                    }
-//                setEvDtlHostEvent(EvDtlHostEvent);
-                } else {
-                    if (TimeSlotUtil.isTimeSlotSelected(getContext(), EvDtlHostEvent.getTimeslots().get(2))) {
-                        EvDtlHostEvent.getTimeslots().get(2).setStatus(getContext().getString(R.string.timeslot_status_pending));
-                    } else {
-                        EvDtlHostEvent.getTimeslots().get(2).setStatus(getContext().getString(R.string.timeslot_status_accept));
-                    }
-                }
-                setEvDtlHostEvent(EvDtlHostEvent);
-            }
-        };
-    }
-
     public View.OnClickListener viewInCalendar() {
         return new View.OnClickListener() {
             @Override
@@ -230,6 +137,7 @@ public class EventDetailForHostViewModel extends BaseObservable {
                         CharSequence msg = "send reject message";
                         Toast.makeText(presenter.getContext(), msg, Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
+                        presenter.toWeekView();
                     }
                 });
                 alertDialog.setView(root);

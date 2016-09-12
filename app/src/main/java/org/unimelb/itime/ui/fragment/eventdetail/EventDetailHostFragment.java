@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.adapter.EventTimeSlotAdapter;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventDetailForHostBinding;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
@@ -41,6 +42,11 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
         eventDetailForHostViewModel = new EventDetailForHostViewModel(getPresenter());
         eventDetailForHostViewModel.setEvDtlHostEvent(event);
         binding.setHostDetailVM(eventDetailForHostViewModel);
+
+        // for timeslots, use list view to show
+        EventTimeSlotAdapter timeSlotAdapter = new EventTimeSlotAdapter(getContext(), R.layout.listview_timeslot_pick, event.getTimeslots());
+        timeSlotAdapter.setAdapterEvent(event);
+        binding.eventDetailTimeslotListview.setAdapter(timeSlotAdapter);
     }
 
     public void setEvent(Event event){
@@ -81,6 +87,7 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
     public void confirmAndGotoWeekViewCalendar(Event event) {
         ((EventDetailActivity)getActivity()).confirmAndGotoWeekViewCalendar(event);
     }
+
 
 
 }

@@ -30,4 +30,11 @@ public class EventDetailHostTimeSlotPresenter extends MvpBasePresenter<EventDeta
             view.toHostEventDetail();
         }
     }
+
+    public void toHostEventEdit(){
+        EventDetailHostTimeSlotMvpVIew view = getView();
+        if (view != null){
+            view.toHostEventEdit();
+        }
+    }
 }

@@ -84,9 +84,11 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
             public void onTimeSlotClick(long l) {
                 for (TimeSlot timeSlot: newEvent.getTimeslots()){
                     if (timeSlot.getStartTime() == l){
-                        if (timeSlot.getStatus() == getContext().getString(R.string.timeslot_status_pending)){
-                            timeSlot.setStatus(getContext().getString(R.string.accept));
-                        }else{
+                        if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
+                            // if it is choosed, not init create status
+                            timeSlot.setStatus(getContext().getString(R.string.timeslot_status_create));
+                        }else if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_create))){
+                            // pending means it will be the suggest timeslot showing for invitees and host
                             timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
                         }
                     }
@@ -142,6 +144,7 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
     public void setDurationTimeString(String durationTimeString) {
         this.durationTimeString = durationTimeString;
         notifyPropertyChanged(BR.durationTimeString);
+        // need to update event duration
     }
 
     public String getTag() {

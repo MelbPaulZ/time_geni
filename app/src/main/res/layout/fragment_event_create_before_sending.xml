@@ -261,26 +261,33 @@
                                 android:textColor="@color/text_enable"
                                 android:textSize="@dimen/page_text_size" />
 
-                            <TextView
+                            <org.unimelb.itime.widget.NonScrollListView
+                                android:id="@+id/before_sending_listview"
                                 android:layout_width="wrap_content"
-                                android:layout_height="22dp"
-                                android:text="@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(0).startTime, newEventDetailVM.newEvDtlEvent.timeslots.get(0).endTime) : @string/none}"
-                                android:textColor="@color/text_disable"
-                                android:textSize="@dimen/page_text_size" />
+                                android:layout_height="wrap_content"
+                                android:divider="#00000000">
+                            </org.unimelb.itime.widget.NonScrollListView>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="22dp"
-                                android:text="@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(1).startTime,newEventDetailVM.newEvDtlEvent.timeslots.get(1).endTime) : @string/none}"
-                                android:textColor="@color/text_disable"
-                                android:textSize="@dimen/page_text_size" />
+                            <!--<TextView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="22dp"-->
+                                <!--android:text="@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(0).startTime, newEventDetailVM.newEvDtlEvent.timeslots.get(0).endTime) : @string/none}"-->
+                                <!--android:textColor="@color/text_disable"-->
+                                <!--android:textSize="@dimen/page_text_size" />-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="22dp"
-                                android:text='@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(2).startTime,newEventDetailVM.newEvDtlEvent.timeslots.get(2).endTime) : @string/none}'
-                                android:textColor="@color/text_disable"
-                                android:textSize="@dimen/page_text_size" />
+                            <!--<TextView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="22dp"-->
+                                <!--android:text="@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(1).startTime,newEventDetailVM.newEvDtlEvent.timeslots.get(1).endTime) : @string/none}"-->
+                                <!--android:textColor="@color/text_disable"-->
+                                <!--android:textSize="@dimen/page_text_size" />-->
+
+                            <!--<TextView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="22dp"-->
+                                <!--android:text='@{newEventDetailVM.newEvDtlEvent.hasTimeslots() ? EventUtil.getSuggestTimeStringFromLong(newEventDetailVM.context, newEventDetailVM.newEvDtlEvent.timeslots.get(2).startTime,newEventDetailVM.newEvDtlEvent.timeslots.get(2).endTime) : @string/none}'-->
+                                <!--android:textColor="@color/text_disable"-->
+                                <!--android:textSize="@dimen/page_text_size" />-->
                         </LinearLayout>
 
                         <ImageView
