@@ -44,8 +44,9 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
         binding.setHostDetailVM(eventDetailForHostViewModel);
 
         // for timeslots, use list view to show
-        EventTimeSlotAdapter timeSlotAdapter = new EventTimeSlotAdapter(getContext(), R.layout.listview_timeslot_pick, event.getTimeslots());
+        EventTimeSlotAdapter timeSlotAdapter = new EventTimeSlotAdapter(getContext(), R.layout.listview_timeslot_pick, event.getTimeslots(), eventDetailForHostViewModel);
         timeSlotAdapter.setAdapterEvent(event);
+        // listviewmodel(presenter)
         binding.eventDetailTimeslotListview.setAdapter(timeSlotAdapter);
     }
 

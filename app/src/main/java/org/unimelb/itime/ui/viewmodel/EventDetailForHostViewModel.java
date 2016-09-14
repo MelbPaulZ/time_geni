@@ -13,7 +13,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.messageevent.MessageUrl;
+import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.presenter.EventDetailForHostPresenter;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -27,11 +29,13 @@ public class EventDetailForHostViewModel extends BaseObservable {
     private LayoutInflater inflater;
 
     private String tag;
+    private Context context;
 
     public EventDetailForHostViewModel(EventDetailForHostPresenter presenter) {
         this.presenter = presenter;
         this.inflater = presenter.getInflater();
         tag = presenter.getContext().getString(R.string.tag_host_event_detail);
+        this.context = getContext();
     }
 
     public Context getContext() {
@@ -156,6 +160,50 @@ public class EventDetailForHostViewModel extends BaseObservable {
     }
 
 
+    public View.OnClickListener onClickTimeSlot(final int position){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimeSlot timeSlot = EvDtlHostEvent.getTimeslots().get(position);
+                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
+                    // host can only confirm one timeslot
+                    if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))){
+                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(),EvDtlHostEvent.getTimeslots())){
+                            // already has one timeslot
+                            unselectRestTimeSlots(position);
+                            timeSlot.setStatus(context.getString(R.string.timeslot_status_accept));
+                        }else{
+                            timeSlot.setStatus(context.getString(R.string.timeslot_status_accept));
+                        }
+                    }else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
+                        timeSlot.setStatus(context.getString(R.string.timeslot_status_pending));
+                    }
+                }else {
+                    // can choose any number of timeslots
+//                    TimeSlot timeSlot = EvDtlHostEvent.getTimeslots().get(position);
+                    if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))) {
+                        timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
+                    } else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))) {
+                        timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    }
+                }
+                setEvDtlHostEvent(EvDtlHostEvent);
+                // here show let the editEventFragment know the event is change
+            }
+        };
+    }
+
+
+    public View.OnClickListener viewInviteeResponse(final int position){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((EventDetailActivity)context).toAttendeeView(EvDtlHostEvent.getTimeslots().get(position).getStartTime());
+            }
+        };
+    }
+
+
 //    ***************************************************************
 
     @Bindable
@@ -168,10 +216,11 @@ public class EventDetailForHostViewModel extends BaseObservable {
         notifyPropertyChanged(BR.evDtlHostEvent);
     }
 
-
-//    public void setTimeSlotChooseArray(boolean[] timeSlotChooseArray) {
-//        this.timeSlotChooseArray = timeSlotChooseArray;
-//
-//    }
-
+    public void unselectRestTimeSlots(int notChangePostion){
+        for (int i = 0 ; i < EvDtlHostEvent.getTimeslots().size() ; i ++){
+            if (i != notChangePostion){
+                EvDtlHostEvent.getTimeslots().get(i).setStatus(context.getString(R.string.timeslot_status_pending));
+            }
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package org.unimelb.itime.ui.fragment.eventdetail;
 
-import android.databinding.Bindable;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -53,7 +52,7 @@ public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMv
 
     @Override
     public EventDetailForSoloPresenter createPresenter() {
-        return new EventDetailForSoloPresenter();
+        return new EventDetailForSoloPresenter(getContext());
     }
 
 

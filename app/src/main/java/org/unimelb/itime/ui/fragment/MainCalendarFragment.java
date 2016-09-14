@@ -123,12 +123,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
             }
         });
 
-//        binding.monthDayView.reloadCurrentBodyEvents();
-
-        // here  load agenda view
-
-
-
     }
 
 
@@ -169,12 +163,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     private void init(){
 
-//        DBManager.getInstance(getContext()).clearDB();
-//        initDB();
-
-//        List<Invitee> list =  DBManager.getInstance(getContext()).getAllInvitee();
-
-
         long start = System.currentTimeMillis();
         EventManager.getInstance().getEventsMap().clear();
         List<Event> list = DBManager.getInstance(getContext()).getAllEvents();
@@ -189,19 +177,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         long end = System.currentTimeMillis();
         long delay = (end - start) / 1000;
 
-//        List<Event> list1 = DBManager.getInstance(getContext()).getAllEvents();
         binding.weekView.setEvent(new ArrayList<ITimeEventInterface>(list));
-//
-//        binding.monthDayView.setOnLoadEvents(new DayViewBodyController.OnLoadEvents() {
-//            @Override
-//            public List<ITimeEventInterface> loadEvents(long l) {
-//                if (EventManager.getInstance().getEventsMap().containsKey(l)){
-//                    return EventManager.getInstance().getEventsMap().get(l);
-//                }
-//                return null;
-//            }
-//        });
-//        binding.monthDayView.reloadCurrentBodyEvents();
     }
 
     private void initDB(){
@@ -273,23 +249,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
             }
             event.setTimeslots(timeslotList);
             events.add(event);
-
-//            if (duration >= 24 * 3600 * 1000 && alldayCount < 3){
-//                String title = "All day";
-//                for (int j = 0; j < 4; j++) {
-//                    Event event_clone = new Event();
-//                    event_clone.setTitle(title);
-//                    event_clone.setEventType(0);
-//                    event_clone.setStatus(0);
-//                    event_clone.setStartTime(startTime);
-//                    event_clone.setEndTime(endTime);
-//                    event_clone.setLocation("here");
-////                    event_clone.setInviteesUrls("");
-//                    title = title + " all day";
-//                }
-//                alldayCount = 0;
-//            }
-
             calendar.setTimeInMillis(endTime);
 
         }

@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <import type="org.unimelb.itime.util.EventUtil"/>
         <variable
             name="soloDetailVM"
             type="org.unimelb.itime.ui.viewmodel.EventSoloDetailViewModel" />
@@ -84,7 +84,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="11dp"
                             android:layout_marginTop="5dp"
-                            android:text="@{soloDetailVM.soloEventTitleString??@string/no_title}"
+                            android:text="@{soloDetailVM.soloEvent.title}"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -92,7 +92,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="14dp"
-                            android:text="@{soloDetailVM.soloEventRepeatString?? @string/no_repeat}"
+                            android:text="@{soloDetailVM.soloEvent.location?? @string/none}"
                             android:textColor="@color/event_detail_repeat"
                             android:textSize="15sp"
 
@@ -103,7 +103,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="14dp"
                             android:layout_marginTop="3dp"
-                            android:text="@{soloDetailVM.soloEventLocationString ?? @string/no_location}"
+                            android:textColor="@color/event_detail_repeat"
+                            android:text="@{EventUtil.getSuggestTimeStringFromLong(context ,soloDetailVM.soloEvent.startTime, soloDetailVM.soloEvent.endTime)}"
                             android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -123,114 +124,141 @@
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/padding_10">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="45dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/calendar_type"
+                            android:textSize="@dimen/page_text_size"
+                            android:layout_centerVertical="true"
+                            />
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:gravity="center_vertical"
-                            android:text="@string/url"
-                            android:textSize="17sp" />
-
+                            android:id="@+id/solo_event_calendar_type_arrow"
+                            android:layout_width="10dp"
+                            android:layout_height="15dp"
+                            android:background="@drawable/icon_general_arrow_right"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
                         <TextView
-                            android:id="@+id/solo_event_detail_url_link"
-                            android:layout_width="match_parent"
-                            android:layout_height="25dp"
-                            android:autoLink="web"
-                            android:gravity="center_vertical"
-                            android:text="@{soloDetailVM.soloEventUrl}"
-                            android:hint="@string/url"
-                            android:textColor="@color/event_detail_repeat"
-                            android:textColorHint="@color/gray_b2b2b2"
-                            android:textSize="15sp" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/padding_5"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@+id/solo_event_calendar_type_arrow"
+                            android:text="Work"/>
+                    </RelativeLayout>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_below="@id/solo_event_detail_url_link"
-                            android:layout_marginTop="@dimen/padding_5"
-                            android:background="@color/gray_b2b2b2" />
-                    </LinearLayout>
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="vertical">-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="40dp"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:text="@string/url"-->
+                            <!--android:textSize="17sp" />-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:gravity="center_vertical"
-                            android:text="@string/note"
-                            android:textSize="17sp" />
+                        <!--<TextView-->
+                            <!--android:id="@+id/solo_event_detail_url_link"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="25dp"-->
+                            <!--android:autoLink="web"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:text="@{soloDetailVM.soloEventUrl}"-->
+                            <!--android:hint="@string/url"-->
+                            <!--android:textColor="@color/event_detail_repeat"-->
+                            <!--android:textColorHint="@color/gray_b2b2b2"-->
+                            <!--android:textSize="15sp" />-->
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="1dp"-->
+                            <!--android:layout_below="@id/solo_event_detail_url_link"-->
+                            <!--android:layout_marginTop="@dimen/padding_5"-->
+                            <!--android:background="@color/gray_b2b2b2" />-->
+                    <!--</LinearLayout>-->
 
-                            <TextView
-                                android:id="@+id/solo_event_detail_note"
-                                android:layout_width="322dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/padding_10"
-                                android:layout_marginTop="@dimen/padding_5"
-                                android:text="@{soloDetailVM.soloEventNote?? @string/none}"
-                                android:textColor="@color/gray_b2b2b2"
-                                android:textSize="17sp" />
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="vertical">-->
 
-                            <TextView
-                                android:id="@+id/solo_event_detail_note_arrow"
-                                android:layout_width="8dp"
-                                android:layout_height="13dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="@dimen/padding_10"
-                                android:background="@drawable/icon_general_arrow_right" />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_below="@id/solo_event_detail_note"
-                                android:layout_marginTop="@dimen/padding_5"
-                                android:background="@color/gray_b2b2b2" />
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="40dp"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:text="@string/note"-->
+                            <!--android:textSize="17sp" />-->
 
-                        </RelativeLayout>
+                        <!--<RelativeLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content">-->
 
-                        <RelativeLayout
-                            android:id="@+id/solo_event_detail_photo_RL"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:gravity="center_vertical">
-                            <TextView
-                                android:id="@+id/solo_event_detail_photo"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="@string/photo"
-                                android:textSize="17sp"/>
-                            <TextView
-                                android:id="@+id/solo_event_detail_photo_arrow"
-                                android:layout_width="8dp"
-                                android:layout_height="13dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="@dimen/padding_10"
-                                android:background="@drawable/icon_general_arrow_right" />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_below="@id/solo_event_detail_photo"
-                                android:layout_marginTop="@dimen/padding_5"
-                                android:background="@color/gray_b2b2b2" />
+                            <!--<TextView-->
+                                <!--android:id="@+id/solo_event_detail_note"-->
+                                <!--android:layout_width="322dp"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginLeft="@dimen/padding_10"-->
+                                <!--android:layout_marginTop="@dimen/padding_5"-->
+                                <!--android:text="@{soloDetailVM.soloEventNote?? @string/none}"-->
+                                <!--android:textColor="@color/gray_b2b2b2"-->
+                                <!--android:textSize="17sp" />-->
 
-                        </RelativeLayout>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_below="@+id/solo_event_detail_photo_RL" />
-                    </LinearLayout>
+                            <!--<TextView-->
+                                <!--android:id="@+id/solo_event_detail_note_arrow"-->
+                                <!--android:layout_width="8dp"-->
+                                <!--android:layout_height="13dp"-->
+                                <!--android:layout_alignParentEnd="true"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:layout_marginRight="@dimen/padding_10"-->
+                                <!--android:background="@drawable/icon_general_arrow_right" />-->
+                            <!--<TextView-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="1dp"-->
+                                <!--android:layout_below="@id/solo_event_detail_note"-->
+                                <!--android:layout_marginTop="@dimen/padding_5"-->
+                                <!--android:background="@color/gray_b2b2b2" />-->
+
+                        <!--</RelativeLayout>-->
+
+                        <!--<RelativeLayout-->
+                            <!--android:id="@+id/solo_event_detail_photo_RL"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="50dp"-->
+                            <!--android:gravity="center_vertical">-->
+                            <!--<TextView-->
+                                <!--android:id="@+id/solo_event_detail_photo"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="match_parent"-->
+                                <!--android:gravity="center"-->
+                                <!--android:text="@string/photo"-->
+                                <!--android:textSize="17sp"/>-->
+                            <!--<TextView-->
+                                <!--android:id="@+id/solo_event_detail_photo_arrow"-->
+                                <!--android:layout_width="8dp"-->
+                                <!--android:layout_height="13dp"-->
+                                <!--android:layout_alignParentEnd="true"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:layout_marginRight="@dimen/padding_10"-->
+                                <!--android:background="@drawable/icon_general_arrow_right" />-->
+                            <!--<TextView-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="1dp"-->
+                                <!--android:layout_below="@id/solo_event_detail_photo"-->
+                                <!--android:layout_marginTop="@dimen/padding_5"-->
+                                <!--android:background="@color/gray_b2b2b2" />-->
+
+                        <!--</RelativeLayout>-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="50dp"-->
+                            <!--android:layout_below="@+id/solo_event_detail_photo_RL" />-->
+                    <!--</LinearLayout>-->
                 </LinearLayout>
 
             </RelativeLayout>

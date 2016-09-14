@@ -5,8 +5,11 @@
         <import type="org.unimelb.itime.util.TimeSlotUtil"/>
         <import type="org.unimelb.itime.util.EventUtil"/>
         <variable
-            name="listTimeslotVM"
-            type="org.unimelb.itime.ui.viewmodel.ListPickTimeSlotViewModel"/>
+            name="viewmodel"
+            type="org.unimelb.itime.ui.viewmodel.EventDetailForHostViewModel"/>
+        <variable
+            name="position"
+            type="Integer" />
     </data>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -20,8 +23,8 @@
             android:layout_height="23dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="14dp"
-            android:onClick="@{listTimeslotVM.onClickTimeSlot()}"
-            android:background="@{TimeSlotUtil.isTimeSlotSelected(context, listTimeslotVM.listPickTSEvent.timeslots.get(listTimeslotVM.position)) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}" />
+            android:onClick="@{viewmodel.onClickTimeSlot(position)}"
+            android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent.timeslots.get(position)) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}" />
 
         <!--this is timeslot string-->
         <TextView
@@ -31,7 +34,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="13dp"
             android:layout_toRightOf="@+id/event_detail_host_ic_circle"
-            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, listTimeslotVM.listPickTSEvent.timeslots.get(listTimeslotVM.position).getStartTime(),listTimeslotVM.listPickTSEvent.timeslots.get(listTimeslotVM.position).getEndTime() )}"
+            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, viewmodel.evDtlHostEvent.timeslots.get(position).getStartTime(),viewmodel.evDtlHostEvent.timeslots.get(position).getEndTime() )}"
             android:textColor="@color/text_enable"
             android:textSize="17sp" />
 
@@ -54,7 +57,7 @@
             android:layout_marginRight="@dimen/padding_10"
             android:layout_toLeftOf="@+id/host_timeslot_right_arrow"
             android:text="10"
-            android:onClick="@{listTimeslotVM.viewInviteeResponse()}"
+            android:onClick="@{viewmodel.viewInviteeResponse(position)}"
             android:textColor="@color/gray_b2b2b2"
             android:textSize="17dp" />
 
