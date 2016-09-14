@@ -17,6 +17,9 @@ android {
         // Unit test
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    dexOptions{
+        javaMaxHeapSize "4g"
+    }
 
     signingConfigs {
         debug {
@@ -73,6 +76,8 @@ dependencies {
     compile 'com.github.chaossss:BadgedView:1.1.1'
 
     compile 'org.unimelb.itime.vendor:vendor:1.0.0'
+    compile 'com.lling.photopicker:photopicker:1.0.0'
+
 
     // Unit test dependency
     // Set this dependency to use JUnit 4 rules

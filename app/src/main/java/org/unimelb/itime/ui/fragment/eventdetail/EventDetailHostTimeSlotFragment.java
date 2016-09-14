@@ -86,8 +86,6 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
         if (binding!=null){
             binding.detailHostTimeslot.setTimeSlots(TimeSlotUtil.fromTimeSlotsToMap(getContext(), event.getTimeslots()), event.getDuration());
         }
-//        viewModel.setEventDetailHostEvent(event);
-
     }
 
     @Override

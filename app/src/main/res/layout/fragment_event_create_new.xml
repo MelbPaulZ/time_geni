@@ -438,6 +438,7 @@
                                 android:layout_gravity="center_vertical|right"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
+                                android:onClick="@{eventVM.pickPhoto()}"
                                 android:src="@drawable/arrow" />
                         </RelativeLayout>
 

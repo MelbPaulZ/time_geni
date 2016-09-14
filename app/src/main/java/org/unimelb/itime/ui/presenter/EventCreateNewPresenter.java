@@ -62,5 +62,12 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
         }
     }
 
+    public void pickPhoto(){
+        EventCreateNewMvpView view = getView();
+        if (view!=null){
+            view.pickPhoto();
+        }
+    }
+
 
 }

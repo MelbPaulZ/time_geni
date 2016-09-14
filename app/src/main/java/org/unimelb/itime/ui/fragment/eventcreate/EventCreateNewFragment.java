@@ -1,7 +1,10 @@
 package org.unimelb.itime.ui.fragment.eventcreate;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
+import com.lling.photopicker.PhotoPickerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,6 +37,7 @@ import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -46,6 +51,8 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
     private String tag;
     private EventCreateNewPresenter presenter;
     private int year,month,day,hour,minute;
+
+    private final int ACTIVITY_PHOTOPICKER = 1;
 
     @Override
     public EventCreateNewPresenter createPresenter() {
@@ -98,6 +105,9 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
         event.setEndTime(time);
     }
 
+    public void setPhotoUrls(ArrayList<String> urls){
+    }
+
 
     @Override
     public void onHiddenChanged(boolean hidden) {
@@ -133,6 +143,11 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
     public void toCreateSoloEvent(Event event) {
         ((EventCreateActivity)getActivity()).createSoloEvent(event);
     }
+
+    public void pickPhoto(){
+        ((EventCreateActivity)getActivity()).checkPermission();
+    }
+
 
     @Override
     public void setTag(String tag) {

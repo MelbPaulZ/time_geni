@@ -9,6 +9,7 @@ import android.view.View;
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView;
@@ -33,7 +34,12 @@ public class EventDetailHostTimeSlotViewModel extends BaseObservable {
         return new WeekTimeSlotView.OnTimeSlotClickListener() {
             @Override
             public void onTimeSlotClick(long l) {
-                // here change the event timeslot
+                for (TimeSlot timeSlot: eventDetailHostEvent.getTimeslots()){
+                    if (timeSlot.getStartTime() == l){
+//                        if()   todo finish this
+
+                    }
+                }
             }
         };
     }

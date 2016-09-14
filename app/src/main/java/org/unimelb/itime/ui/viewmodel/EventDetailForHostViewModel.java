@@ -89,33 +89,33 @@ public class EventDetailForHostViewModel extends BaseObservable {
             }
         };
     }
-
-    public View.OnClickListener toAttendeeView1() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(0).getStartTime());
-            }
-        };
-    }
-
-    public View.OnClickListener toAttendeeView2() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(1).getStartTime());
-            }
-        };
-    }
-
-    public View.OnClickListener toAttendeeView3() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(2).getStartTime());
-            }
-        };
-    }
+//
+//    public View.OnClickListener toAttendeeView1() {
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(0).getStartTime());
+//            }
+//        };
+//    }
+//
+//    public View.OnClickListener toAttendeeView2() {
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(1).getStartTime());
+//            }
+//        };
+//    }
+//
+//    public View.OnClickListener toAttendeeView3() {
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(2).getStartTime());
+//            }
+//        };
+//    }
 
     public View.OnClickListener onClickRejectAll() {
         return new View.OnClickListener() {

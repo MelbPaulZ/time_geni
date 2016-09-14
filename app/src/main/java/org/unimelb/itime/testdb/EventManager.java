@@ -54,4 +54,5 @@ public class EventManager {
 
         return calendar.getTimeInMillis();
     }
+
 }

@@ -1,9 +1,11 @@
 package org.unimelb.itime.ui.fragment;
 
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +22,13 @@ import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
-import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.UserUtil;
-import org.unimelb.itime.vendor.dayview.DayViewBodyController;
+import org.unimelb.itime.vendor.dayview.DayViewBody;
+import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
@@ -40,6 +42,7 @@ import java.util.List;
 public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainCalendarPresenter> implements MainCalendarMvpView {
 
     private final static String TAG = "MainCalendarFragment";
+    private final int ACTIVITY_EDITEVENT = 1;
 
     FragmentMainCalendarBinding binding;
     MainCalendarViewModel mainCalendarViewModel;
@@ -71,7 +74,9 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
             EventManager.getInstance().addEvent(ev);
         }
 
-        binding.monthDayView.reloadCurrentBodyEvents();
+
+        binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        binding.monthDayView.notifyDatasetChanged();
         binding.weekView.setEvent(new ArrayList<ITimeEventInterface>(eventList));
 
     }
@@ -98,29 +103,66 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
         binding.setCalenarVM(mainCalendarViewModel);
 
+//        DBManager.getInstance(getContext()).clearDB();
+//        initDB();
+
 
         initSpinner();
         init();
 
-        binding.monthDayView.setOnLoadEvents(new DayViewBodyController.OnLoadEvents() {
-            @Override
-            public List<ITimeEventInterface> loadEvents(long beginOfDayM) {
-                if (EventManager.getInstance().getEventsMap().containsKey(beginOfDayM)){
-                    return EventManager.getInstance().getEventsMap().get(beginOfDayM);
-                }
-                return null;
-            }
-        });
 
+        binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        binding.monthDayView.setEventClassName(Event.class);
+        binding.monthDayView.setOnBodyOuterListener(new DayViewBody.OnBodyListener() {
 
-        binding.monthDayView.setOnCreateNewEvent(new DayViewBodyController.OnCreateNewEvent() {
             @Override
-            public void createNewEvent(MyCalendar myCalendar) {
+            public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(myCalendar.getYear(), myCalendar.getMonth(), myCalendar.getDay(), myCalendar.getHour(), myCalendar.getMinute());
+                calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
                 ((MainActivity)getActivity()).startEventCreateActivity(calendar);
+            }
+
+            @Override
+            public void onEventClick(DayDraggableEventView dayDraggableEventView) {
+                startEditEventActivity(dayDraggableEventView.getEvent());
+            }
+
+            @Override
+            public void onEventDragStart(DayDraggableEventView dayDraggableEventView) {
 
             }
+
+            @Override
+            public void onEventDragging(DayDraggableEventView dayDraggableEventView, int i, int i1) {
+
+            }
+
+            @Override
+            public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
+
+
+                long startTime = dayDraggableEventView.getStartTimeM();
+                long endTime = dayDraggableEventView.getEndTimeM();
+
+
+                Event event = (Event) dayDraggableEventView.getEvent();
+                event.setStartTime(startTime);
+                event.setEndTime(endTime);
+                Calendar test = Calendar.getInstance();
+                test.setTimeInMillis(startTime);
+                Log.i("asda", String.valueOf(test.getTime()));
+
+                Log.i("my calendar",dayDraggableEventView.getNewCalendar().toString());
+                startEditEventActivity(event);
+            }
+
+//            @Override
+//            public void onEventDragEnd(DayDraggableEventView dayDraggableEventView, long fakeStartTime, long fakeEndTime) {
+//                Event event = (Event) dayDraggableEventView.getEvent();
+//                event.setStartTime(fakeStartTime);
+//                event.setEndTime(fakeEndTime);
+//                ((MainActivity)getActivity()).startEventEditActivity(event);
+//            }
         });
 
     }
@@ -241,8 +283,8 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
                 TimeSlot slot = new TimeSlot();
                 slot.setTimeSlotUid((long)(Math.random() * 1000000));
                 slot.setEventUid("" + i);
-                slot.setStartTime(calendar.getTimeInMillis() + 2 * k * 3600 * 1000);
-                slot.setEndTime(calendar.getTimeInMillis() + 3 * k *3600*1000);
+                slot.setStartTime(calendar.getTimeInMillis() + k * 3600 * 1000);
+                slot.setEndTime(calendar.getTimeInMillis() + (1 + k) *3600*1000);
                 slot.setStatus(getString(R.string.timeslot_status_pending));
                 timeslotList.add(slot);
                 DBManager.getInstance(getContext()).insertTimeSlot(slot);
@@ -275,6 +317,18 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     @Override
     public void startEditEventActivity(ITimeEventInterface iTimeEventInterface) {
-        ((MainActivity)getActivity()).startEventEditActivity(iTimeEventInterface);
+        Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+        Event event = (Event) iTimeEventInterface;
+        intent.putExtra(getString(R.string.event), event);
+        startActivityForResult(intent, ACTIVITY_EDITEVENT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ACTIVITY_EDITEVENT){
+            Log.i("here here","main calendar fragment");
+        }
+
     }
 }

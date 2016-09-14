@@ -14,4 +14,5 @@ public interface EventCreateNewMvpView extends MvpView {
     void pickLocatioin(String tag);
     void pickAttendee();
     void toCreateSoloEvent(Event event);
+    void pickPhoto();
 }

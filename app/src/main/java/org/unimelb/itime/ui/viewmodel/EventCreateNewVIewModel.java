@@ -226,6 +226,15 @@ public class EventCreateNewVIewModel extends BaseObservable {
     }
 
 
+    public View.OnClickListener pickPhoto(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.pickPhoto();
+            }
+        };
+    }
+
 
 
 //    ****************************************************************

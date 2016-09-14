@@ -124,12 +124,15 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     }
 
 
-    public void startEventEditActivity(ITimeEventInterface iTimeEventInterface){
-        Intent intent = new Intent(this,EventDetailActivity.class);
-        Event event = (Event) iTimeEventInterface;
-        intent.putExtra(getString(R.string.event),event);
-        startActivity(intent);
+//    public void startEventEditActivity(ITimeEventInterface iTimeEventInterface){
+//        Intent intent = new Intent(this,EventDetailActivity.class);
+//        Event event = (Event) iTimeEventInterface;
+//        intent.putExtra(getString(R.string.event),event);
+//        startActivityForResult(intent,1);
+//    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
-
-
 }
