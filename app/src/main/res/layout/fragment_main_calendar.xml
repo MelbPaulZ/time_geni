@@ -62,16 +62,6 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar_layout">
 
-            <org.unimelb.itime.vendor.weekview.WeekView
-                android:id="@+id/week_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                app:onClickEditEvent="@{calenarVM.onClickEvent()}"
-                app:onWeekViewChange="@{calenarVM.onWeekViewChange()}"
-                >
-            </org.unimelb.itime.vendor.weekview.WeekView>
-
             <org.unimelb.itime.vendor.dayview.MonthDayView
                 android:id="@+id/month_day_view"
                 android:layout_width="match_parent"
@@ -84,6 +74,16 @@
                 android:layout_height="match_parent"
                 android:visibility="gone">
             </org.unimelb.itime.vendor.agendaview.MonthAgendaView>
+
+            <org.unimelb.itime.vendor.weekview.WeekView
+                android:id="@+id/week_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:onClickEditEvent="@{calenarVM.onClickEvent()}"
+                app:onWeekViewChange="@{calenarVM.onWeekViewChange()}"
+                >
+            </org.unimelb.itime.vendor.weekview.WeekView>
 
 
 

@@ -46,7 +46,7 @@ public class LoginViewModel extends BaseObservable{
             public void onClick(View view) {
                 Log.d(TAG, "onEmailLoginClick: " + getEmail() +
                         "/" + getPassword());
-                presenter.loginByEmail(getEmail(), getPassword());
+//                presenter.loginByEmail(getEmail(), getPassword());
             }
         };
     }
