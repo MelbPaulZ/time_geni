@@ -23,6 +23,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:theme"
+        android:name=".base.ITimeApplication"
         >
         <!--tools:replace = "android:theme"-->
 

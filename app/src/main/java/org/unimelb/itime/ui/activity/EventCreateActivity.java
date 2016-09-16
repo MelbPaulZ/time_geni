@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.lling.photopicker.PhotoPickerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -249,7 +248,7 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         switch (requestCode){
             case ACTIVITY_PHOTOPICKER: {
                 if (resultCode == Activity.RESULT_OK) {
-                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+//                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
                     // the result is urls
                 }
             }
@@ -257,13 +256,13 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
     }
 
     public void toPhotoPicker(){
-        Intent intent = new Intent(this, PhotoPickerActivity.class);
-        int selectedMode = PhotoPickerActivity.MODE_MULTI;
-        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-        int maxNum = 9;
-        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
-        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA,true);
-        startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
+//        Intent intent = new Intent(this, PhotoPickerActivity.class);
+//        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+//        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+//        int maxNum = 9;
+//        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
+//        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA,true);
+//        startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
     }
 
 

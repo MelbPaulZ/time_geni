@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
-import com.lling.photopicker.PhotoPickerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
