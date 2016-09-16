@@ -1,5 +1,10 @@
 package org.unimelb.itime.bean;
 
+import android.databinding.tool.util.L;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -7,6 +12,8 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.ToMany;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.InviteeDao;
@@ -14,6 +21,8 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 import org.unimelb.itime.dao.TimeSlotDao;
 
@@ -41,6 +50,10 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private double locationLatitude;
     private double locationLongitude;
     private String note;
+
+
+    private transient List<PhotoUrl> photoList = null;
+    private String photo = "[]";
 
     @ToMany(referencedJoinProperty = "eventUid")
     private List<TimeSlot> timeslots = null;
@@ -76,16 +89,12 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
 
 
 
-
-
-
-
-    @Generated(hash = 902139853)
+    @Generated(hash = 1130552805)
     public Event(String eventUid, String eventId, String recurringEventUid, String recurringEventId,
             String calendarUid, String iCalUID, String hostUserUid, String recurrence, String summary,
             String url, String location, String locationNote, double locationLatitude,
-            double locationLongitude, String note, long startTime, long endTime, int eventType,
-            int status) {
+            double locationLongitude, String note, String photo, long startTime, long endTime,
+            int eventType, int status) {
         this.eventUid = eventUid;
         this.eventId = eventId;
         this.recurringEventUid = recurringEventUid;
@@ -101,16 +110,12 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
         this.note = note;
+        this.photo = photo;
         this.startTime = startTime;
         this.endTime = endTime;
         this.eventType = eventType;
         this.status = status;
     }
-
-
-
-
-
 
 
 
@@ -460,5 +465,31 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.hostUserUid = hostUserUid;
     }
 
+
+    public List<PhotoUrl> getPhotoList() {
+            Gson gson = new Gson();
+            Type collectionType = new TypeToken<Collection<PhotoUrl>>(){}.getType();
+
+
+        return gson.fromJson(photo, collectionType);
+    }
+
+    public void setPhoto(List<PhotoUrl> photoUrls) {
+        Gson gson = new Gson();
+        this.photo = gson.toJson(photoUrls);
+        this.photoList = photoUrls;
+    }
+
+
+
+    public String getPhoto() {
+        return this.photo;
+    }
+
+
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
 }

@@ -8,22 +8,29 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.vendor.helper.DensityUtil;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -79,6 +86,39 @@ public class EventCreateNewVIewModel extends BaseObservable {
 
             }
         };
+    }
+
+    public void setPhotos(ArrayList<String> urls){
+        event.setPhoto(EventUtil.fromStringToPhotoUrlList(urls));
+        setEvent(event);
+    }
+
+
+//    @BindingAdapter({"bind:imageUrl1"})
+//    public void loadImage(ImageView view, Event event) {
+//        Picasso.with(view.getContext())
+//                .load(event.getPhotoList().get(0).getUrl())
+//                .placeholder(R.drawable.ic_photo_loading)
+//                .into(view);
+//    }
+
+    public String getPhotoUrl1(){
+        if (event.getPhotoList().size()>0)
+            return event.getPhotoList().get(0).getUrl();
+        else
+            return "";
+    }
+
+
+    @BindingAdapter({"android:src"})
+    public static void loadBackground(ImageView view, String photoUrl1){
+        File f = new File(photoUrl1);
+        int size = DensityUtil.dip2px(view.getContext(), 40);
+        Picasso.with(view.getContext())
+                .load(f)
+                .resize(size ,size)
+                .centerCrop()
+                .into(view);
     }
 
 

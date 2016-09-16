@@ -104,8 +104,10 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
         event.setEndTime(time);
     }
 
-    public void setPhotoUrls(ArrayList<String> urls){
+    public void setPhotos(ArrayList<String> photos){
+        eventCreateNewVIewModel.setPhotos(photos);
     }
+
 
 
     @Override

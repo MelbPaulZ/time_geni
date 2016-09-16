@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <import type="org.unimelb.itime.util.EventUtil" />
+        <import type="android.view.View"/>
         <variable
             name="eventVM"
             type="org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel" />
@@ -422,7 +424,7 @@
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="60dp"
                             android:background="@drawable/table_row_border">
                             <TextView
                                 android:layout_width="wrap_content"
@@ -433,6 +435,14 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_centerVertical="true"/>
                             <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@+id/create_event_photo_arrow"
+                                android:src="@{eventVM.event.photoList.size()>0 ?eventVM.event.photoList.get(0).getUrl() : @string/none}"
+                                />
+                            <ImageView
+                                android:id="@+id/create_event_photo_arrow"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_gravity="center_vertical|right"

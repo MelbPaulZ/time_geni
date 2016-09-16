@@ -6,6 +6,7 @@ import android.content.Context;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.C;
 import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 
 import java.util.ArrayList;
@@ -91,6 +92,14 @@ public class EventUtil{
     public static int generateTimeSlotUid(){
         int uid = (int)(Math.random() * 1000000);
         return uid;
+    }
+
+    public static ArrayList<PhotoUrl> fromStringToPhotoUrlList(ArrayList<String> urls){
+        ArrayList<PhotoUrl> arrayList = new ArrayList<>();
+        for (String url: urls){
+            arrayList.add(new PhotoUrl(url));
+        }
+        return arrayList;
     }
 
 

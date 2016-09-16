@@ -248,21 +248,21 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         switch (requestCode){
             case ACTIVITY_PHOTOPICKER: {
                 if (resultCode == Activity.RESULT_OK) {
-//                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-                    // the result is urls
+                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+                    eventCreateNewFragment.setPhotos(result);
                 }
             }
         }
     }
 
     public void toPhotoPicker(){
-//        Intent intent = new Intent(this, PhotoPickerActivity.class);
-//        int selectedMode = PhotoPickerActivity.MODE_MULTI;
-//        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-//        int maxNum = 9;
-//        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
-//        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA,true);
-//        startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
+        Intent intent = new Intent(this, PhotoPickerActivity.class);
+        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+        int maxNum = 9;
+        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA,true);
+        startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
     }
 
 

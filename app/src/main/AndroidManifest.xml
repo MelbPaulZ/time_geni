@@ -102,6 +102,14 @@
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.PhotoPickerActivity"
+            android:launchMode="singleTask"
+            android:label="pick photos">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
