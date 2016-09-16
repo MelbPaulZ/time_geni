@@ -37,8 +37,12 @@ public class EventUtil{
     }
 
     public static String getAttendeeString(Context context,ArrayList<String> attendeesArrayList) {
+        ArrayList<String> arrayList = attendeesArrayList;
+        if (attendeesArrayList==null){
+            return "solo event";
+        }
         // attendees arraylist = 0 means no attendee selected, attendees arraylist = 1 means only it self, need to change later!!
-        if ( attendeesArrayList.size()==0  && attendeesArrayList.size() == 1) {
+        if ( attendeesArrayList.size()==0  || attendeesArrayList.size() == 1) {
             return context.getString(R.string.none);
         } else {
             return String.format("%s and %d more", attendeesArrayList.get(0), attendeesArrayList.size() - 1);
