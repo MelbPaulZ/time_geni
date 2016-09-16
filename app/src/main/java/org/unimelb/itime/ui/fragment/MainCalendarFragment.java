@@ -102,13 +102,8 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
         binding.setCalenarVM(mainCalendarViewModel);
 
-//        DBManager.getInstance(getContext()).clearDB();
-//        initDB();
-
-
         initSpinner();
         init();
-
 
         binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
         binding.monthDayView.setEventClassName(Event.class);
