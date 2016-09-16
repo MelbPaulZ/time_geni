@@ -14,6 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
 
+        multiDexEnabled true
         // Unit test
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

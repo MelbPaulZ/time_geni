@@ -118,6 +118,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
             public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
+                Log.i("starttime", String.valueOf(calendar.getTime()));
                 ((MainActivity)getActivity()).startEventCreateActivity(calendar);
             }
 
