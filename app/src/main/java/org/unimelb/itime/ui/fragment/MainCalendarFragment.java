@@ -76,7 +76,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
 
         binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
-        binding.monthDayView.notifyDatasetChanged();
+        binding.monthDayView.reloadEvents();
         binding.weekView.setEvent(new ArrayList<ITimeEventInterface>(eventList));
 
     }
@@ -91,7 +91,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_calendar, container, false);
-
 
         return binding.getRoot();
     }
@@ -150,9 +149,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
                 event.setEndTime(endTime);
                 Calendar test = Calendar.getInstance();
                 test.setTimeInMillis(startTime);
-                Log.i("asda", String.valueOf(test.getTime()));
-
-                Log.i("my calendar",dayDraggableEventView.getNewCalendar().toString());
                 startEditEventActivity(event);
             }
 
