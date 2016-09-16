@@ -76,6 +76,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
 
         binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        binding.monthDayView.reloadEvents();
 
         binding.weekView.setEvent(new ArrayList<ITimeEventInterface>(eventList));
 
@@ -135,21 +136,21 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
             @Override
             public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
-
-
                 long startTime = dayDraggableEventView.getStartTimeM();
                 long endTime = dayDraggableEventView.getEndTimeM();
-
-
                 Event event = (Event) dayDraggableEventView.getEvent();
                 event.setStartTime(startTime);
                 event.setEndTime(endTime);
-                Calendar test = Calendar.getInstance();
-                test.setTimeInMillis(startTime);
-                Log.i("asda", String.valueOf(test.getTime()));
 
-                Log.i("my calendar",dayDraggableEventView.getNewCalendar().toString());
-                startEditEventActivity(event);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(startTime);
+                Log.i("asd",calendar.getTime() + "");
+
+                event.update();
+
+                binding.monthDayView.reloadEvents();
+
+//                startEditEventActivity(event);
             }
 
 //            @Override

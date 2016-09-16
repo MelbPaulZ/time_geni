@@ -121,7 +121,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 .into(view);
     }
 
-
 // ****************************************************
 
     public View.OnClickListener submit() {
