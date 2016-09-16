@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.lling.photopicker.PhotoPickerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -250,6 +249,7 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
             case ACTIVITY_PHOTOPICKER: {
                 if (resultCode == Activity.RESULT_OK) {
                     ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+                    eventCreateNewFragment.setPhotos(result);
                     // the result is urls
                 }
             }
