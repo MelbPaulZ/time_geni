@@ -435,12 +435,34 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_centerVertical="true"/>
                             <ImageView
+                                android:id="@+id/photo1"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_centerVertical="true"
                                 android:layout_toLeftOf="@+id/create_event_photo_arrow"
+                                android:visibility="@{eventVM.event.photoList.size()>0? View.VISIBLE : View.GONE}"
                                 android:src="@{eventVM.event.photoList.size()>0 ?eventVM.event.photoList.get(0).getUrl() : @string/none}"
                                 />
+
+                            <ImageView
+                                android:id="@+id/photo2"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@+id/photo1"
+                                android:layout_marginRight="@dimen/padding_5"
+                                android:visibility="@{eventVM.event.photoList.size()>1 ? View.VISIBLE : View.GONE}"
+                                android:src="@{eventVM.event.photoList.size()>1? eventVM.event.photoList.get(1).getUrl() : @string/none}"/>
+
+                            <ImageView
+                                android:id="@+id/photo3"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@+id/photo2"
+                                android:layout_marginRight="@dimen/padding_5"
+                                android:visibility="@{eventVM.event.photoList.size()>2? View.VISIBLE : View.GONE}"
+                                android:src="@{eventVM.event.photoList.size()>2? eventVM.event.photoList.get(2).getUrl : @string/none}"/>
                             <ImageView
                                 android:id="@+id/create_event_photo_arrow"
                                 android:layout_width="20dp"

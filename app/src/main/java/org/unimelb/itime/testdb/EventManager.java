@@ -55,4 +55,14 @@ public class EventManager {
         return calendar.getTimeInMillis();
     }
 
+    public void updateEvent(Event oldEvent, long newStartTime, long newEndTime){
+        long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
+        if (this.eventMap.containsKey(oldBeginTime)){
+            this.eventMap.get(oldBeginTime).remove(oldEvent);
+            oldEvent.setStartTime(newStartTime);
+            oldEvent.setEndTime(newEndTime);
+            this.addEvent(oldEvent);
+        }
+    }
+
 }

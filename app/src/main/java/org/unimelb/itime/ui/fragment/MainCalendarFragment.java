@@ -31,6 +31,7 @@ import org.unimelb.itime.vendor.dayview.DayViewBody;
 import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
+import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,7 +78,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
         binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
         binding.monthDayView.reloadEvents();
-
         binding.weekView.setEvent(new ArrayList<ITimeEventInterface>(eventList));
 
     }
@@ -93,7 +93,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_calendar, container, false);
 
-
         return binding.getRoot();
     }
 
@@ -106,6 +105,13 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
         initSpinner();
         init();
+
+        binding.weekView.setOnClickEventInterface(new WeekView.OnClickEventInterface() {
+            @Override
+            public void onClickEditEvent(ITimeEventInterface iTimeEventInterface) {
+                startEditEventActivity(iTimeEventInterface);
+            }
+        });
 
         binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
         binding.monthDayView.setEventClassName(Event.class);
@@ -136,30 +142,14 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
             @Override
             public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
-                long startTime = dayDraggableEventView.getStartTimeM();
-                long endTime = dayDraggableEventView.getEndTimeM();
-                Event event = (Event) dayDraggableEventView.getEvent();
-                event.setStartTime(startTime);
-                event.setEndTime(endTime);
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(startTime);
-                Log.i("asd",calendar.getTime() + "");
-
-                event.update();
+                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
+                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
+                ((Event)dayDraggableEventView.getEvent()).update();
 
                 binding.monthDayView.reloadEvents();
 
-//                startEditEventActivity(event);
             }
 
-//            @Override
-//            public void onEventDragEnd(DayDraggableEventView dayDraggableEventView, long fakeStartTime, long fakeEndTime) {
-//                Event event = (Event) dayDraggableEventView.getEvent();
-//                event.setStartTime(fakeStartTime);
-//                event.setEndTime(fakeEndTime);
-//                ((MainActivity)getActivity()).startEventEditActivity(event);
-//            }
         });
 
     }

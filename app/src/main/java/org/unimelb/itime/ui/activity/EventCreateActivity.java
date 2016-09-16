@@ -50,8 +50,10 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
     private InviteeFragment inviteeFragment;
     private EventTimeSlotViewFragment eventTimeSlotViewFragment;
     private EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment;
+    private String TAG = "EventCreateActivity";
 
     private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
     private final int ACTIVITY_PHOTOPICKER = 2;
 
 
@@ -215,23 +217,29 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
     }
 
     public void checkPermission(){
-       if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+       if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
+            || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
            ActivityCompat.requestPermissions(this,
-                   new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                   new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA},
                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
         }else{
            ActivityCompat.requestPermissions(this,
-                   new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                   new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA},
                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
        }
     }
+
+
+    // todo alert dialog show image
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:{
-                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
                     toPhotoPicker();
                 }else {
                     Toast.makeText(getBaseContext(), "retry",Toast.LENGTH_SHORT).show();
@@ -250,7 +258,6 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
                 if (resultCode == Activity.RESULT_OK) {
                     ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
                     eventCreateNewFragment.setPhotos(result);
-                    // the result is urls
                 }
             }
         }
