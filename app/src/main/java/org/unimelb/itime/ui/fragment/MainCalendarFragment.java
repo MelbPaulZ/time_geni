@@ -157,6 +157,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 //            }
         });
 
+        binding.monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsMap());
     }
 
 
