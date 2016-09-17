@@ -232,8 +232,6 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
 
     // todo alert dialog show image
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
