@@ -94,22 +94,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
     }
 
 
-//    @BindingAdapter({"bind:imageUrl1"})
-//    public void loadImage(ImageView view, Event event) {
-//        Picasso.with(view.getContext())
-//                .load(event.getPhotoList().get(0).getUrl())
-//                .placeholder(R.drawable.ic_photo_loading)
-//                .into(view);
-//    }
-
-    public String getPhotoUrl1(){
-        if (event.getPhotoList().size()>0)
-            return event.getPhotoList().get(0).getUrl();
-        else
-            return "";
-    }
-
-
     @BindingAdapter({"android:src"})
     public static void loadBackground(ImageView view, String photoUrl1){
         File f = new File(photoUrl1);
@@ -120,7 +104,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 .centerCrop()
                 .into(view);
     }
-
 
 // ****************************************************
 
