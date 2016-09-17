@@ -45,7 +45,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private String recurrence;
     private String summary;
     private String url;
-    private String location;
+    private String location = "";
     private String locationNote;
     private double locationLatitude;
     private double locationLongitude;

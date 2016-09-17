@@ -27,6 +27,7 @@ import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
+import org.unimelb.itime.vendor.agendaview.AgendaViewBody;
 import org.unimelb.itime.vendor.dayview.DayViewBody;
 import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
@@ -78,7 +79,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
         binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
         binding.monthDayView.reloadEvents();
-        binding.weekView.setEvent(new ArrayList<ITimeEventInterface>(eventList));
+        binding.weekView.setEventMap(EventManager.getInstance().getEventsMap());
 
     }
 
@@ -106,12 +107,19 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         initSpinner();
         init();
 
-        binding.weekView.setOnClickEventInterface(new WeekView.OnClickEventInterface() {
-            @Override
-            public void onClickEditEvent(ITimeEventInterface iTimeEventInterface) {
-                startEditEventActivity(iTimeEventInterface);
-            }
-        });
+
+        DBManager.getInstance(getContext()).clearDB();
+        initDB();
+        initCalendars();
+
+    }
+
+    public void initCalendars(){
+        // week view
+
+        binding.weekView.setEventMap(EventManager.getInstance().getEventsMap());
+
+        // month day view
 
         binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
         binding.monthDayView.setEventClassName(Event.class);
@@ -149,10 +157,17 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
                 binding.monthDayView.reloadEvents();
 
             }
-
         });
 
+        // agenda view
+
         binding.monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        binding.monthAgendaView.setOnEventClickListener(new AgendaViewBody.OnEventClickListener() {
+            @Override
+            public void onEventClick(ITimeEventInterface iTimeEventInterface) {
+                startEditEventActivity(iTimeEventInterface);
+            }
+        });
     }
 
 
@@ -207,7 +222,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         long end = System.currentTimeMillis();
         long delay = (end - start) / 1000;
 
-        binding.weekView.setEvent(new ArrayList<ITimeEventInterface>(list));
     }
 
     private void initDB(){
