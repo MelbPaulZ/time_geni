@@ -65,8 +65,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class EventLocationPickerFragment extends android.support.v4.app.Fragment implements GoogleApiClient.OnConnectionFailedListener,FragmentTagListener{
     private View root;
-
-
     protected GoogleApiClient mGoogleApiClient;
 
     private PlaceAutoCompleteAdapter mAdapter;
@@ -121,7 +119,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
 
             // dynamically calculate location and search by this
             LatLngBounds locationNearByBounds = new LatLngBounds( // set the bias area
-                    new LatLng(latitude - 0.15, longitude - 0.15), new LatLng(latitude + 0.15, longitude + 0.15));
+                    new LatLng(latitude - 0.10, longitude - 0.10), new LatLng(latitude + 0.10, longitude + 0.10));
 
             mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                     .enableAutoManage(getActivity(), 0 /* clientId */, this)
@@ -176,14 +174,34 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         });
 
 
-        mAutocompleteView.setOnTouchListener(new View.OnTouchListener() {
+        mAutocompleteView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (mAutocompleteView.getAdapter().equals(strAdapter)&&mAutocompleteView.getText().length()==0)
+            public void onClick(View view) {
+                if (mAutocompleteView.getAdapter().equals(strAdapter)&&mAutocompleteView.getText().length()==0 && !mAutocompleteView.isShown()) {
                     mAutocompleteView.showDropDown();
-                return false;
+                }
             }
         });
+
+        mAutocompleteView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    if (mAutocompleteView.getAdapter().equals(strAdapter)&&mAutocompleteView.getText().length()==0) {
+                        mAutocompleteView.showDropDown();
+                    }
+                }
+            }
+        });
+
+//        mAutocompleteView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                if (mAutocompleteView.getAdapter().equals(strAdapter)&&mAutocompleteView.getText().length()==0)
+//                    mAutocompleteView.showDropDown();
+//                return false;
+//            }
+//        });
 
         TextView doneBtn = (TextView) root.findViewById(R.id.location_picker_done_btn);
         doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -202,7 +220,6 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             }
         });
 
-
         mAutocompleteView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -214,10 +231,10 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.length() ==1 && mAutocompleteView.getAdapter().equals(strAdapter)) {
+                if (editable.length() == 1 && mAutocompleteView.getAdapter().equals(strAdapter)) {
                     mAutocompleteView.setAdapter(mAdapter);
                     mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
-                }else if (editable.length() == 0 && mAutocompleteView.getAdapter().equals(mAdapter)) {
+                } else if (editable.length() == 0 && mAutocompleteView.getAdapter().equals(mAdapter)) {
                     mAutocompleteView.setAdapter(strAdapter);
                     mAutocompleteView.setOnItemClickListener(currentLocationListener);
                     mAutocompleteView.showDropDown();
@@ -231,6 +248,8 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             public void onClick(View view) {
                 mAutocompleteView.setText("");
                 mAutocompleteView.setAdapter(strAdapter);
+                mAutocompleteView.showDropDown();
+                int count = strAdapter.getCount();
             }
         });
     }
@@ -250,17 +269,16 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                 result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
                     @Override
                     public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                        String bestMatch = "";
                         double bestLikelihood = 0.0;
-
+                        String fullAddress = "";
                         for (PlaceLikelihood placeLikelihood : likelyPlaces) {
                             if (placeLikelihood.getLikelihood()>bestLikelihood){
-                                bestMatch = (String) placeLikelihood.getPlace().getName();
+                                fullAddress = (String) placeLikelihood.getPlace().getAddress(); // here will get a long address
                                 bestLikelihood = placeLikelihood.getLikelihood();
                             }
                         }
                         likelyPlaces.release();
-                        place = bestMatch;
+                        place = fullAddress;
                         EventBus.getDefault().post(new MessageLocation(tag, place));
                         mAutocompleteView.setText(place);
                         mAutocompleteView.setAdapter(mAdapter);
@@ -282,7 +300,9 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             }
             mAutocompleteView.setAdapter(mAdapter);
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
-//            EventBus.getDefault().post(new MessageLocation(tag, place));
+            strAdapter.notifyDataSetChanged();
+
+            EventBus.getDefault().post(new MessageLocation(tag, clickStr));
             if (tag == getString(R.string.tag_create_event)) {
                 ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
             }else if (tag == getString(R.string.tag_create_event_before_sending)){
@@ -342,7 +362,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         /**
          * Current results returned by this adapter.
          */
-        private ArrayList<AutocompletePrediction> mResultList;
+        private ArrayList<AutocompletePrediction> mResultList = new ArrayList<>();
 
         /**
          * Handles autocomplete requests.
@@ -445,14 +465,15 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
 
                 @Override
                 protected void publishResults(CharSequence constraint, FilterResults results) {
-
-                    if (results != null && results.count > 0) {
-                        // The API returned at least one result, update the data.
-                        mResultList = (ArrayList<AutocompletePrediction>) results.values;
-                        notifyDataSetChanged();
-                    } else {
-                        // The API did not return any results, invalidate the data set.
-                        notifyDataSetInvalidated();
+                    if (mAutocompleteView!=null && mAutocompleteView.getAdapter().equals(mAdapter)) {
+                        if (results != null && results.count > 0) {
+                            // The API returned at least one result, update the data.
+                            mResultList = (ArrayList<AutocompletePrediction>) results.values;
+                            notifyDataSetChanged();
+                        } else {
+                            // The API did not return any results, invalidate the data set.
+                            notifyDataSetInvalidated();
+                        }
                     }
                 }
 

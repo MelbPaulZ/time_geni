@@ -10,8 +10,10 @@ import com.android.databinding.library.baseAdapters.BR;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
+import org.unimelb.itime.vendor.eventview.WeekDraggableEventView;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.weekview.WeekView;
+import org.unimelb.itime.vendor.weekview.WeekViewBody;
 
 import java.util.Calendar;
 
@@ -54,6 +56,8 @@ public class MainCalendarViewModel extends BaseObservable{
         return new WeekView.OnWeekViewChangeListener() {
             @Override
             public void onWeekChanged(Calendar calendar) {
+
+                Log.i(TAG, "onWeekChanged: " + calendar.getTime());
                 int month = calendar.get(Calendar.MONTH);
                 String tmp = getMonthName(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
                 setToolbarTitle(tmp);
@@ -78,14 +82,46 @@ public class MainCalendarViewModel extends BaseObservable{
         };
     }
 
-    public WeekView.OnClickEventInterface onClickEvent(){
-        return new WeekView.OnClickEventInterface() {
+
+    public WeekViewBody.OnWeekBodyListener onWeekBodyListener(){
+        return new WeekViewBody.OnWeekBodyListener() {
             @Override
-            public void onClickEditEvent(ITimeEventInterface iTimeEventInterface) {
-                presenter.gotoEditEventActivity(iTimeEventInterface);
+            public void onEventCreate(WeekDraggableEventView weekDraggableEventView) {
+
+            }
+
+            @Override
+            public void onEventClick(WeekDraggableEventView weekDraggableEventView) {
+                presenter.gotoEditEventActivity(weekDraggableEventView.getEvent());
+            }
+
+            @Override
+            public void onEventDragStart(WeekDraggableEventView weekDraggableEventView) {
+
+            }
+
+            @Override
+            public void onEventDragging(WeekDraggableEventView weekDraggableEventView, int i, int i1) {
+
+            }
+
+            @Override
+            public void onEventDragDrop(WeekDraggableEventView weekDraggableEventView) {
+
             }
         };
     }
+
+
+
+//    public WeekView.OnClickEventInterface onClickEvent(){
+//        return new WeekView.OnClickEventInterface() {
+//            @Override
+//            public void onClickEditEvent(ITimeEventInterface iTimeEventInterface) {
+//                presenter.gotoEditEventActivity(iTimeEventInterface);
+//            }
+//        };
+//    }
 
 
 }

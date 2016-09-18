@@ -165,7 +165,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 builder.setItems(types, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-//                        event.setCalendarTypeId((String) types[i]);
                         viewModel.setEvent(event);
                     }
                 });

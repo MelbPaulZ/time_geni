@@ -30,9 +30,11 @@ import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
 import org.unimelb.itime.vendor.agendaview.AgendaViewBody;
 import org.unimelb.itime.vendor.dayview.DayViewBody;
 import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
+import org.unimelb.itime.vendor.eventview.WeekDraggableEventView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.weekview.WeekView;
+import org.unimelb.itime.vendor.weekview.WeekViewBody;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -106,20 +108,33 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
         initSpinner();
         init();
+        binding.weekView.setOnWeekBodyOutterListener(new WeekViewBody.OnWeekBodyListener() {
+            @Override
+            public void onEventCreate(WeekDraggableEventView weekDraggableEventView) {
 
+            }
 
-        DBManager.getInstance(getContext()).clearDB();
-        initDB();
-        initCalendars();
+            @Override
+            public void onEventClick(WeekDraggableEventView weekDraggableEventView) {
+                startEditEventActivity(weekDraggableEventView.getEvent());
+            }
 
-    }
+            @Override
+            public void onEventDragStart(WeekDraggableEventView weekDraggableEventView) {
 
-    public void initCalendars(){
-        // week view
+            }
 
-        binding.weekView.setEventMap(EventManager.getInstance().getEventsMap());
+            @Override
+            public void onEventDragging(WeekDraggableEventView weekDraggableEventView, int i, int i1) {
 
-        // month day view
+            }
+
+            @Override
+            public void onEventDragDrop(WeekDraggableEventView weekDraggableEventView) {
+
+            }
+        });
+
 
         binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
         binding.monthDayView.setEventClassName(Event.class);
@@ -222,6 +237,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         long end = System.currentTimeMillis();
         long delay = (end - start) / 1000;
 
+        binding.weekView.setEventMap(EventManager.getInstance().getEventsMap());
     }
 
     private void initDB(){
