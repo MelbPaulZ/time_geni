@@ -265,11 +265,12 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         Intent intent = new Intent(this, PhotoPickerActivity.class);
         int selectedMode = PhotoPickerActivity.MODE_MULTI;
         intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-        int maxNum = 9;
+        int maxNum = 3;
         intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
         intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA,true);
         startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
     }
+
 
 
     public void createSoloEvent(Event event){

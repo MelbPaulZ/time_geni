@@ -214,6 +214,10 @@
     <string name="repeat_every_year">Every Year</string>
     <string name="end_repeat">End Repeat</string>
 
+    <string name="camera_done_num">DONE (%1$d/%2$d)</string>
+    <string name="camera_done">DONE</string>
+    <string name="photos_num">%1$d CHOOSE</string>
+
 
     <string name="timeslot_status_pending">timeslot status pending</string>
     <string name="timeslot_status_accept">timeslot status accept</string>

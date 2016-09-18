@@ -1,10 +1,14 @@
 package org.unimelb.itime.ui.fragment.eventdetail;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +80,10 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
         }
     }
 
+    public void setPhotos(ArrayList<String> photos){
+        eventEditViewModel.setPhotos(photos);
+    }
+
     @Override
     public void toHostEventDetail(Event event) {
         ((EventDetailActivity)getActivity()).toEventDetail(event);
@@ -94,6 +102,12 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
     @Override
     public void toInviteePicker(String tag) {
         ((EventDetailActivity)getActivity()).toInviteePicker(tag, this);
+    }
+
+
+    @Override
+    public void toPhotoPicker(String tag) {
+        ((EventDetailActivity)getActivity()).toPhotoPicker();
     }
 
     @Override

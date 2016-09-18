@@ -139,6 +139,20 @@ public class EventEditViewModel extends BaseObservable {
         };
     }
 
+    public View.OnClickListener pickPhoto(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.toPhotoPicker(tag);
+            }
+        };
+    }
+
+    public void setPhotos(ArrayList<String> photos){
+        eventEditViewEvent.setPhoto(EventUtil.fromStringToPhotoUrlList(photos));
+        setEventEditViewEvent(eventEditViewEvent);
+    }
+
 
 
 

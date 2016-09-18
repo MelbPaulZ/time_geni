@@ -5,6 +5,7 @@
     <data>
         <import type="org.unimelb.itime.util.EventUtil"/>
         <import type="org.unimelb.itime.util.TimeSlotUtil"/>
+        <import type="android.view.View"/>
         <variable
             name="eventEditVM"
             type="org.unimelb.itime.ui.viewmodel.EventEditViewModel" />
@@ -221,32 +222,9 @@
                                 android:divider="#00000000">
                             </org.unimelb.itime.widget.NonScrollListView>
 
-                            <!--<TextView-->
-                                <!--android:id="@+id/edit_event_proposed_fst"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:text="@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(0).startTime, eventEditVM.eventEditViewEvent.timeslots.get(0).endTime)}"-->
-                                <!--android:textColor="@color/text_disable"-->
-                                <!--android:textSize="@dimen/page_text_size" />-->
-
-                            <!--<TextView-->
-                                <!--android:id="@+id/edit_event_proposed_snd"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:text="@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(1).startTime, eventEditVM.eventEditViewEvent.timeslots.get(1).endTime)}"-->
-                                <!--android:textColor="@color/text_disable"-->
-                                <!--android:textSize="@dimen/page_text_size" />-->
-
-                            <!--<TextView-->
-                                <!--android:id="@+id/edit_event_proposed_thd"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:text='@{EventUtil.getSuggestTimeStringFromLong(context, eventEditVM.eventEditViewEvent.timeslots.get(2).startTime, eventEditVM.eventEditViewEvent.timeslots.get(2).endTime) }'-->
-                                <!--android:textColor="@color/text_disable"-->
-                                <!--android:textSize="@dimen/page_text_size" />-->
                         </LinearLayout>
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_alignParentEnd="true"
@@ -260,7 +238,7 @@
                                 android:layout_centerVertical="true"
                                 android:background="@drawable/icon_general_arrow_right" />
 
-                        </LinearLayout>
+                        </RelativeLayout>
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -374,6 +352,55 @@
                             android:background="#00000000"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:textSize="@dimen/page_text_size"
+                            android:textColor="@color/text_enable"
+                            android:text="@string/photo"
+                            android:layout_alignParentLeft="true"/>
+                        <ImageView
+                            android:id="@+id/edit_photo1"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_toLeftOf="@+id/edit_event_photo_arrow"
+                            android:layout_centerVertical="true"
+                            android:visibility="@{eventEditVM.eventEditViewEvent.photoList.size()>0 ? View.VISIBLE : View.GONE}"
+                            android:src="@{eventEditVM.eventEditViewEvent.photoList.size()>0 ? eventEditVM.eventEditViewEvent.photoList.get(0).getUrl() : @string/none}"/>
+                        <ImageView
+                            android:id="@+id/edit_photo2"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_toLeftOf="@+id/edit_photo1"
+                            android:layout_marginRight="@dimen/padding_5"
+                            android:layout_centerVertical="true"
+                            android:visibility="@{eventEditVM.eventEditViewEvent.photoList.size()>1 ? View.VISIBLE : View.GONE}"
+                            android:src="@{eventEditVM.eventEditViewEvent.photoList.size()>1 ? eventEditVM.eventEditViewEvent.photoList.get(1).getUrl() : @string/none}"/>
+                        <ImageView
+                            android:id="@+id/edit_photo3"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_toLeftOf="@+id/edit_photo2"
+                            android:layout_marginRight="@dimen/padding_5"
+                            android:layout_centerVertical="true"
+                            android:visibility="@{eventEditVM.eventEditViewEvent.photoList.size()>2 ? View.VISIBLE :View.GONE}"
+                            android:src="@{eventEditVM.eventEditViewEvent.photoList.size() > 2 ? eventEditVM.eventEditViewEvent.photoList.get(2).getUrl() : @string/none}"/>
+                        <ImageView
+                            android:id="@+id/edit_event_photo_arrow"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:onClick="@{eventEditVM.pickPhoto()}"
+                            android:src="@drawable/arrow" />
+                    </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

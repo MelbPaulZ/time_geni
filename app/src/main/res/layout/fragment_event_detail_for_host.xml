@@ -299,7 +299,7 @@
                     <RelativeLayout
                         android:id="@+id/event_detail_host_photo_RL"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="60dp"
                         android:gravity="center_vertical">
                         <TextView
                             android:id="@+id/event_detail_host_photo"
@@ -308,21 +308,42 @@
                             android:gravity="center"
                             android:text="@string/photo"
                             android:textSize="17sp"/>
-                        <TextView
-                            android:id="@+id/event_detail_host_photo_arrow"
-                            android:layout_width="8dp"
-                            android:layout_height="13dp"
+
+                        <ImageView
+                            android:id="@+id/detail_photo1"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
                             android:layout_marginRight="@dimen/padding_10"
-                            android:background="@drawable/icon_general_arrow_right" />
+                            android:layout_centerVertical="true"
+                            android:visibility="@{hostDetailVM.evDtlHostEvent.photoList.size()>0? View.VISIBLE : View.GONE}"
+                            android:src="@{hostDetailVM.evDtlHostEvent.photoList.size()>0? hostDetailVM.evDtlHostEvent.photoList.get(0).getUrl() : @string/none}"
+                            />
+                        <ImageView
+                            android:id="@+id/detail_photo2"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_toLeftOf="@+id/detail_photo1"
+                            android:layout_marginRight="@dimen/padding_5"
+                            android:layout_centerVertical="true"
+                            android:visibility="@{hostDetailVM.evDtlHostEvent.photoList.size() > 1 ? View.VISIBLE : View.GONE}"
+                            android:src="@{hostDetailVM.evDtlHostEvent.photoList.size() > 1 ? hostDetailVM.evDtlHostEvent.photoList.get(1).getUrl() : @string/none}" />
+                        <ImageView
+                            android:id="@+id/detail_photo3"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_toLeftOf="@id/detail_photo2"
+                            android:layout_marginRight="@dimen/padding_5"
+                            android:layout_centerVertical="true"
+                            android:visibility="@{hostDetailVM.evDtlHostEvent.photoList.size() > 2 ? View.VISIBLE : View.GONE}"
+                            android:src="@{hostDetailVM.evDtlHostEvent.photoList.size() > 2 ? hostDetailVM.evDtlHostEvent.photoList.get(2).getUrl() : @string/none}"/>
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_below="@id/event_detail_host_photo"
                             android:layout_marginTop="@dimen/padding_5"
                             android:background="@color/gray_b2b2b2" />
-
                     </RelativeLayout>
                     <TextView
                         android:layout_width="match_parent"

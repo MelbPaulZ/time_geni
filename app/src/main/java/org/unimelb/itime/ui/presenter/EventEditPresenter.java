@@ -46,6 +46,13 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         }
     }
 
+    public void toPhotoPicker(String tag){
+        EventEditMvpView view= getView();
+        if (view != null){
+            view.toPhotoPicker(tag);
+        }
+    }
+
     public Context getContext() {
         return context;
     }

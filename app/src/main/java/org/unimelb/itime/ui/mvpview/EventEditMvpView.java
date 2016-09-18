@@ -12,4 +12,5 @@ public interface EventEditMvpView extends MvpView {
     void changeLocation();
     void toTimeSlotView(String tag);
     void toInviteePicker(String tag);
+    void toPhotoPicker(String tag);
 }

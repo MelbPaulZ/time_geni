@@ -1,8 +1,14 @@
 package org.unimelb.itime.ui.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -17,6 +23,8 @@ import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.fragment.InviteeTimeslotFragment;
 import org.unimelb.itime.util.UserUtil;
 
+import java.util.ArrayList;
+
 public class EventDetailActivity extends AppCompatActivity {
 
     private EventDetailHostFragment eventDetailHostFragment;
@@ -27,6 +35,10 @@ public class EventDetailActivity extends AppCompatActivity {
     private EventLocationPickerFragment locationPickerFragment;
     private InviteeFragment inviteeFragment;
     private Event event;
+
+    private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
+    private final int ACTIVITY_PHOTOPICKER = 2;
 
 
     @Override
@@ -233,6 +245,58 @@ public class EventDetailActivity extends AppCompatActivity {
             eventEditFragment.setEvent(event);
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().show(eventEditFragment).commit();
+        }
+    }
+
+    public void checkPermission(String tag){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA},
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        }else{
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA},
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:{
+                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                    toPhotoPicker();
+                }else {
+                    Toast.makeText(getBaseContext(), "retry",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
+    }
+
+    public void toPhotoPicker(){
+        Intent intent = new Intent(this, PhotoPickerActivity.class);
+        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+        int maxNum = 3;
+        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA,true);
+        startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // this is the recall for photo urls
+        switch (requestCode){
+            case ACTIVITY_PHOTOPICKER: {
+                if (resultCode == Activity.RESULT_OK) {
+                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+                    eventEditFragment.setPhotos(result);
+                }
+            }
         }
     }
 

@@ -33,6 +33,8 @@ import com.lling.photopicker.utils.LogUtils;
 import com.lling.photopicker.utils.OtherUtils;
 import com.lling.photopicker.utils.PhotoUtils;
 
+import org.unimelb.itime.R;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +64,7 @@ public class PhotoPickerActivity extends Activity implements PhotoAdapter.PhotoC
     /** 默认最大选择数量 */
     public final static int DEFAULT_NUM = 9;
 
-    private final static String ALL_PHOTO = "所有图片";
+    private final static String ALL_PHOTO = "All Photos"; // need to be same in vendor
     /** 是否显示相机，默认不显示 */
     private boolean mIsShowCamera = false;
     /** 照片选择模式，默认是单选模式 */
@@ -209,10 +211,10 @@ public class PhotoPickerActivity extends Activity implements PhotoAdapter.PhotoC
         if(list != null && list.size()>0) {
             mCommitBtn.setEnabled(true);
             mCommitBtn.setText(OtherUtils.formatResourceString(getApplicationContext(),
-                    com.lling.photopicker.R.string.commit_num, list.size(), mMaxNum));
+                    R.string.camera_done_num, list.size(), mMaxNum));
         } else {
             mCommitBtn.setEnabled(false);
-            mCommitBtn.setText(com.lling.photopicker.R.string.commit);
+            mCommitBtn.setText(R.string.camera_done);
         }
     }
 

@@ -47,17 +47,11 @@
             </android.support.v7.widget.Toolbar>
         </LinearLayout>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/event_detail_title_bar"
-            android:background="#EFEFF4"
-            android:scrollbarStyle="insideOverlay">
-
             <!--background-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@+id/event_detail_title_bar"
                 android:background="#EFEFF4">
                 <!--blue rectangle-->
                 <LinearLayout
@@ -117,6 +111,7 @@
                     android:layout_below="@+id/solo_first_part" />
 
                 <LinearLayout
+                    android:id="@+id/solo_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/solo_event_detail_blank"
@@ -125,6 +120,7 @@
                     android:paddingLeft="@dimen/padding_10">
 
                     <RelativeLayout
+                        android:id="@+id/solo_event_calendar_rl"
                         android:layout_width="match_parent"
                         android:layout_height="45dp">
                         <TextView
@@ -150,119 +146,17 @@
                             android:layout_toLeftOf="@+id/solo_event_calendar_type_arrow"
                             android:text="Work"/>
                     </RelativeLayout>
-
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="vertical">-->
-
-                        <!--<TextView-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="40dp"-->
-                            <!--android:gravity="center_vertical"-->
-                            <!--android:text="@string/url"-->
-                            <!--android:textSize="17sp" />-->
-
-                        <!--<TextView-->
-                            <!--android:id="@+id/solo_event_detail_url_link"-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="25dp"-->
-                            <!--android:autoLink="web"-->
-                            <!--android:gravity="center_vertical"-->
-                            <!--android:text="@{soloDetailVM.soloEventUrl}"-->
-                            <!--android:hint="@string/url"-->
-                            <!--android:textColor="@color/event_detail_repeat"-->
-                            <!--android:textColorHint="@color/gray_b2b2b2"-->
-                            <!--android:textSize="15sp" />-->
-
-                        <!--<TextView-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="1dp"-->
-                            <!--android:layout_below="@id/solo_event_detail_url_link"-->
-                            <!--android:layout_marginTop="@dimen/padding_5"-->
-                            <!--android:background="@color/gray_b2b2b2" />-->
-                    <!--</LinearLayout>-->
-
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="vertical">-->
-
-                        <!--<TextView-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="40dp"-->
-                            <!--android:gravity="center_vertical"-->
-                            <!--android:text="@string/note"-->
-                            <!--android:textSize="17sp" />-->
-
-                        <!--<RelativeLayout-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content">-->
-
-                            <!--<TextView-->
-                                <!--android:id="@+id/solo_event_detail_note"-->
-                                <!--android:layout_width="322dp"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:layout_marginLeft="@dimen/padding_10"-->
-                                <!--android:layout_marginTop="@dimen/padding_5"-->
-                                <!--android:text="@{soloDetailVM.soloEventNote?? @string/none}"-->
-                                <!--android:textColor="@color/gray_b2b2b2"-->
-                                <!--android:textSize="17sp" />-->
-
-                            <!--<TextView-->
-                                <!--android:id="@+id/solo_event_detail_note_arrow"-->
-                                <!--android:layout_width="8dp"-->
-                                <!--android:layout_height="13dp"-->
-                                <!--android:layout_alignParentEnd="true"-->
-                                <!--android:layout_centerVertical="true"-->
-                                <!--android:layout_marginRight="@dimen/padding_10"-->
-                                <!--android:background="@drawable/icon_general_arrow_right" />-->
-                            <!--<TextView-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="1dp"-->
-                                <!--android:layout_below="@id/solo_event_detail_note"-->
-                                <!--android:layout_marginTop="@dimen/padding_5"-->
-                                <!--android:background="@color/gray_b2b2b2" />-->
-
-                        <!--</RelativeLayout>-->
-
-                        <!--<RelativeLayout-->
-                            <!--android:id="@+id/solo_event_detail_photo_RL"-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="50dp"-->
-                            <!--android:gravity="center_vertical">-->
-                            <!--<TextView-->
-                                <!--android:id="@+id/solo_event_detail_photo"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="match_parent"-->
-                                <!--android:gravity="center"-->
-                                <!--android:text="@string/photo"-->
-                                <!--android:textSize="17sp"/>-->
-                            <!--<TextView-->
-                                <!--android:id="@+id/solo_event_detail_photo_arrow"-->
-                                <!--android:layout_width="8dp"-->
-                                <!--android:layout_height="13dp"-->
-                                <!--android:layout_alignParentEnd="true"-->
-                                <!--android:layout_centerVertical="true"-->
-                                <!--android:layout_marginRight="@dimen/padding_10"-->
-                                <!--android:background="@drawable/icon_general_arrow_right" />-->
-                            <!--<TextView-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="1dp"-->
-                                <!--android:layout_below="@id/solo_event_detail_photo"-->
-                                <!--android:layout_marginTop="@dimen/padding_5"-->
-                                <!--android:background="@color/gray_b2b2b2" />-->
-
-                        <!--</RelativeLayout>-->
-                        <!--<TextView-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="50dp"-->
-                            <!--android:layout_below="@+id/solo_event_detail_photo_RL" />-->
-                    <!--</LinearLayout>-->
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_below="@+id/solo_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="#EFEFF4">
+                </LinearLayout>
+
 
             </RelativeLayout>
 
-        </ScrollView>
     </RelativeLayout>
 </layout>
