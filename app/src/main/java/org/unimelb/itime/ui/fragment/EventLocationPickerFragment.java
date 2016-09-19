@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -58,17 +59,22 @@ import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Paul on 27/08/2016.
  */
 public class EventLocationPickerFragment extends android.support.v4.app.Fragment implements GoogleApiClient.OnConnectionFailedListener,FragmentTagListener{
+//public class EventLocationPickerFragment extends android.support.v4.app.Fragment implements  FragmentTagListener{
+
     private View root;
     protected GoogleApiClient mGoogleApiClient;
 
     private PlaceAutoCompleteAdapter mAdapter;
-    private ArrayAdapter<String> strAdapter;
+//    private ArrayAdapter<String> strAdapter;
+
+    private ITimeLocationAdapter strAdapter;
 
     private AutoCompleteTextView mAutocompleteView;
 
@@ -76,7 +82,6 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
     private String tag;
     private static final int MY_PERMISSIONS_REQUEST_LOC = 30;
     private String place;
-//    String[] currentLocation;
     ArrayList<String> locations = new ArrayList<>();
     private EventLocationPickerFragment self;
 
@@ -131,29 +136,24 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             mAutocompleteView = (AutoCompleteTextView)
                     root.findViewById(R.id.autocomplete_places);
 
-            // Register a listener that receives callbacks when a suggestion has been selected
-
-
-            // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
-            // the entire world.
+//             Register a listener that receives callbacks when a suggestion has been selected
+//
+//
+//             Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+//             the entire world.
             mAdapter = new PlaceAutoCompleteAdapter(getContext(), mGoogleApiClient, locationNearByBounds,
                     null);
 
             locations.add(getString(R.string.current_location));
 
-            strAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, locations){
-                @Override
-                public int getCount() {
-                    return locations.size();
-                }
-            };
+            strAdapter = new ITimeLocationAdapter(getContext());
 
             mAutocompleteView.setOnItemClickListener(currentLocationListener);
             mAutocompleteView.setAdapter(strAdapter);
             mAutocompleteView.setText("");
-
             initListeners();
         }
+
     }
 
 
@@ -174,34 +174,17 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         });
 
 
-        mAutocompleteView.setOnClickListener(new View.OnClickListener() {
+        mAutocompleteView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                if (mAutocompleteView.getAdapter().equals(strAdapter)&&mAutocompleteView.getText().length()==0 && !mAutocompleteView.isShown()) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (mAutocompleteView.getAdapter().equals(strAdapter)&&mAutocompleteView.getText().length()==0) {
                     mAutocompleteView.showDropDown();
                 }
+                return false;
             }
         });
 
-        mAutocompleteView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b){
-                    if (mAutocompleteView.getAdapter().equals(strAdapter)&&mAutocompleteView.getText().length()==0) {
-                        mAutocompleteView.showDropDown();
-                    }
-                }
-            }
-        });
 
-//        mAutocompleteView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                if (mAutocompleteView.getAdapter().equals(strAdapter)&&mAutocompleteView.getText().length()==0)
-//                    mAutocompleteView.showDropDown();
-//                return false;
-//            }
-//        });
 
         TextView doneBtn = (TextView) root.findViewById(R.id.location_picker_done_btn);
         doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -231,6 +214,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
 
             @Override
             public void afterTextChanged(Editable editable) {
+
                 if (editable.length() == 1 && mAutocompleteView.getAdapter().equals(strAdapter)) {
                     mAutocompleteView.setAdapter(mAdapter);
                     mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
@@ -248,8 +232,9 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             public void onClick(View view) {
                 mAutocompleteView.setText("");
                 mAutocompleteView.setAdapter(strAdapter);
+                mAutocompleteView.setOnItemClickListener(currentLocationListener);
+                strAdapter.notifyDataSetChanged();
                 mAutocompleteView.showDropDown();
-                int count = strAdapter.getCount();
             }
         });
     }
@@ -282,6 +267,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                         EventBus.getDefault().post(new MessageLocation(tag, place));
                         mAutocompleteView.setText(place);
                         mAutocompleteView.setAdapter(mAdapter);
+                        mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener); // change listener
                     }
                 });
             }
@@ -292,17 +278,19 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
     private AdapterView.OnItemClickListener currentLocationListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            String clickStr = locations.get(i);
+            String clickStr = (String) strAdapter.getItem(i);
             if ( i ==0){
                 mAutocompleteView.setText(getCurrentLocation());
             }else{
                 mAutocompleteView.setText(clickStr);
             }
             mAutocompleteView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
-            strAdapter.notifyDataSetChanged();
-
             EventBus.getDefault().post(new MessageLocation(tag, clickStr));
+
+            // tiao zhuan
+
             if (tag == getString(R.string.tag_create_event)) {
                 ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
             }else if (tag == getString(R.string.tag_create_event_before_sending)){
@@ -321,9 +309,15 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final AutocompletePrediction item = mAdapter.getItem(position);
             final CharSequence primaryText = item.getPrimaryText(null);
-            locations.add(1,(String) primaryText);
-            // find a way fix here later
-            strAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, locations);
+
+            locations.add(1, (String) primaryText);
+            if (locations.size()>5){
+                locations.remove(5);
+            }
+            mAutocompleteView.setAdapter(strAdapter);
+            mAutocompleteView.setOnItemClickListener(currentLocationListener);
+            strAdapter.notifyDataSetChanged();
+//             find a way fix here later
             if (tag == getString(R.string.tag_create_event)) {
                 EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
                 ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
@@ -542,5 +536,62 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         }
 
 
+    }
+
+    public class ITimeLocationAdapter extends BaseAdapter implements Filterable{
+        LayoutInflater inflater;
+        LocationFilter locationFilter;
+
+        public ITimeLocationAdapter(Context context){
+            inflater = LayoutInflater.from(context);
+        }
+        @Override
+        public int getCount() {
+            return locations.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return locations.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            if(view == null){
+                view = inflater.inflate(android.R.layout.simple_dropdown_item_1line, viewGroup, false);
+            }
+            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+            textView.setText(locations.get(i));
+            return view;
+        }
+
+        @Override
+        public Filter getFilter() {
+            if (locationFilter == null){
+                locationFilter = new LocationFilter();
+            }
+            return locationFilter;
+        }
+
+        public class LocationFilter extends Filter{
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constrains) {
+                FilterResults filterResults = new FilterResults();
+                filterResults.count = locations.size();
+                filterResults.values = locations;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+
+            }
+        }
     }
 }
