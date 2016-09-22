@@ -36,8 +36,11 @@ public class EventDetailHostTimeSlotViewModel extends BaseObservable {
             public void onTimeSlotClick(long l) {
                 for (TimeSlot timeSlot: eventDetailHostEvent.getTimeslots()){
                     if (timeSlot.getStartTime() == l){
-//                        if()   todo finish this
-
+                        if (timeSlot.getStatus()==getContext().getString(R.string.timeslot_status_pending))
+                            timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
+                        else if(timeSlot.getStatus() == getContext().getString(R.string.timeslot_status_accept)){
+                            timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+                        }
                     }
                 }
             }
@@ -49,7 +52,7 @@ public class EventDetailHostTimeSlotViewModel extends BaseObservable {
             @Override
             public void onWeekChanged(Calendar calendar) {
                 String tmp = EventUtil.getMonth(presenter.getContext() ,calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
-//                setHostToolBarString(tmp);
+                // here should show the month and year
             }
         };
     }

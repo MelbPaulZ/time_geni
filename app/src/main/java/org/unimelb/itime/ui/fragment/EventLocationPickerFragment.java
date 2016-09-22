@@ -259,6 +259,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                         for (PlaceLikelihood placeLikelihood : likelyPlaces) {
                             if (placeLikelihood.getLikelihood()>bestLikelihood){
                                 fullAddress = (String) placeLikelihood.getPlace().getAddress(); // here will get a long address
+                                locations.add(fullAddress);
                                 bestLikelihood = placeLikelihood.getLikelihood();
                             }
                         }

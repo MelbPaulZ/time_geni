@@ -56,6 +56,8 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
     private final int ACTIVITY_PHOTOPICKER = 2;
 
+    private String tag = ""; // this is for identifying which request is it
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +121,10 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
     public void toCreateEventNewFragment(InviteeFragment fragment){
         if (eventCreateNewFragment == null || !(eventCreateNewFragment.isAdded())) {
             eventCreateNewFragment = new EventCreateNewFragment();
-            getFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
         } else {
-            getFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().show(eventCreateNewFragment).commit();
         }
     }
@@ -154,22 +156,37 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
             inviteeFragment.setArguments(bundle);
             inviteeFragment.setTag(getString(R.string.tag_create_event));
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            getFragmentManager().beginTransaction().add(R.id.create_event_fragment, inviteeFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, inviteeFragment).commit();
         } else {
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             inviteeFragment.setTag(getString(R.string.tag_create_event));
-            getFragmentManager().beginTransaction().show(inviteeFragment).commit();
+            getSupportFragmentManager().beginTransaction().show(inviteeFragment).commit();
         }
     }
 
-    public void toTimeSlotView(Fragment fragment, Bundle bundle) {
+    public void toInviteePicker(android.support.v4.app.Fragment fragment, String tag, Event event){
+        if(inviteeFragment == null || !(inviteeFragment.isAdded())){
+            inviteeFragment = new InviteeFragment();
+            inviteeFragment.setTag(tag);
+            inviteeFragment.setEvent(event);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, inviteeFragment).commit();
+        }else{
+            inviteeFragment.setTag(tag);
+            inviteeFragment.setEvent(event);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().show(inviteeFragment).commit();
+        }
+    }
+
+    public void toTimeSlotView(android.support.v4.app.Fragment fragment, Bundle bundle) {
         if (eventTimeSlotViewFragment == null || !(eventTimeSlotViewFragment.isAdded())) {
             eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
             eventTimeSlotViewFragment.setArguments(bundle);
-            getFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventTimeSlotViewFragment).commit();
         } else {
-            getFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().show(eventTimeSlotViewFragment).commit();
         }
     }
@@ -203,20 +220,21 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
     }
 
 
-    public void goBackToTimeSlot(EventCreateDetailBeforeSendingFragment fragment){
+    public void goBackToTimeSlot(EventCreateDetailBeforeSendingFragment fragment, String tag){
         if (eventTimeSlotViewFragment == null || !(eventTimeSlotViewFragment.isAdded())){
             eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
-            eventTimeSlotViewFragment.setTag(getString(R.string.tag_create_event_before_sending));
+            eventTimeSlotViewFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment,eventTimeSlotViewFragment).commit();
         }else{
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            eventTimeSlotViewFragment.setTag(getString(R.string.tag_create_event_before_sending));
+            eventTimeSlotViewFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().show(eventTimeSlotViewFragment).commit();
         }
     }
 
-    public void checkPermission(){
+    public void checkPermission(String tag){
+        this.tag = tag;
        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
             || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
            ActivityCompat.requestPermissions(this,
@@ -234,7 +252,6 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:{
                 if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
@@ -255,7 +272,11 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
             case ACTIVITY_PHOTOPICKER: {
                 if (resultCode == Activity.RESULT_OK) {
                     ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-                    eventCreateNewFragment.setPhotos(result);
+                    if (tag==getString(R.string.tag_create_event)){
+                        eventCreateNewFragment.setPhotos(result);
+                    }else if (tag== getString(R.string.tag_create_event_before_sending)){
+                        eventCreateDetailBeforeSendingFragment.setPhotos(result);
+                    }
                 }
             }
         }
@@ -267,7 +288,7 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
         int maxNum = 3;
         intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
-        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA,true);
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, true);
         startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
     }
 
@@ -292,10 +313,10 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         if (inviteeFragment == null || !(inviteeFragment.isAdded())){
             inviteeFragment = new InviteeFragment();
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            getFragmentManager().beginTransaction().add(R.id.create_event_fragment,inviteeFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment,inviteeFragment).commit();
         }else{
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            getFragmentManager().beginTransaction().show(inviteeFragment).commit();
+            getSupportFragmentManager().beginTransaction().show(inviteeFragment).commit();
         }
     }
 

@@ -21,6 +21,7 @@ import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventCreateBeforeSendingBinding;
 import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageEventDate;
+import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
@@ -82,6 +83,10 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
 
     }
 
+    public void setPhotos(ArrayList<String> photos){
+        eventCreateDetailBeforeSendingViewModel.setPhotos(photos);
+    }
+
 
 
     @Subscribe
@@ -98,6 +103,14 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
             Calendar calendar = Calendar.getInstance();
             calendar.set(messageEventDate.year, messageEventDate.month, messageEventDate.day);
             event.setRepeatEndsTime(calendar.getTimeInMillis());
+            eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(event);
+        }
+    }
+
+    @Subscribe
+    public void getinvitees(MessageInvitees messageInvitees){
+        if (messageInvitees.tag == getString(R.string.tag_create_event_before_sending)){
+            event.setInvitee(messageInvitees.invitees);
             eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(event);
         }
     }
@@ -129,8 +142,8 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
 
     // this is for review timeslot or click back to rechoose timeslot
     @Override
-    public void backToTimeSlotView() {
-        ((EventCreateActivity)getActivity()).goBackToTimeSlot(eventCreateDetailBeforeSendingFragment);
+    public void backToTimeSlotView(String tag) {
+        ((EventCreateActivity)getActivity()).goBackToTimeSlot(eventCreateDetailBeforeSendingFragment,tag);
     }
 
     @Override
@@ -141,6 +154,16 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
     @Override
     public void changeEndRepeatDate(String tag) {
         ((EventCreateActivity)getActivity()).toDatePicker(this,tag);
+    }
+
+    @Override
+    public void pickInvitees(String tag) {
+        ((EventCreateActivity)getActivity()).toInviteePicker(this, tag , event);
+    }
+
+    @Override
+    public void pickPhoto(String tag) {
+        ((EventCreateActivity)getActivity()).checkPermission(tag);
     }
 
     @Override

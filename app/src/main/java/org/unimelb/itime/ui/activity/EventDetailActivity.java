@@ -213,24 +213,26 @@ public class EventDetailActivity extends AppCompatActivity {
     public void toInviteePicker(String tag, Fragment fragment){
         if (inviteeFragment != null && inviteeFragment.isAdded()){
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            inviteeFragment.setEvent(event);
             inviteeFragment.setTag(tag);
-            getFragmentManager().beginTransaction().show(inviteeFragment).commit();
+            getSupportFragmentManager().beginTransaction().show(inviteeFragment).commit();
         }else{
             inviteeFragment = new InviteeFragment();
+            inviteeFragment.setEvent(event);
             inviteeFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            getFragmentManager().beginTransaction().add(R.id.event_detail_fragment, inviteeFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, inviteeFragment).commit();
         }
     }
 
     public void fromInviteeToEditEvent(){
         if (eventEditFragment != null && eventEditFragment.isAdded()){
-            getFragmentManager().beginTransaction().hide(inviteeFragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(inviteeFragment).commit();
             getSupportFragmentManager().beginTransaction().show(eventEditFragment).commit();
         }else{
             // should never call this
             eventEditFragment = new EventEditFragment();
-            getFragmentManager().beginTransaction().hide(inviteeFragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(inviteeFragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventEditFragment).commit();
         }
     }

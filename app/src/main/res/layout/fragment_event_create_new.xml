@@ -307,6 +307,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:text=""
+                            android:onClick="@{eventVM.pickAlertTime()}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -314,6 +315,7 @@
                             android:id="@+id/create_event_alart_time_imgv"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:onClick="@{eventVM.pickAlertTime()}"
                             android:src="@drawable/arrow" />
                     </LinearLayout>
 
@@ -463,6 +465,13 @@
                                 android:layout_marginRight="@dimen/padding_5"
                                 android:visibility="@{eventVM.event.photoList.size()>2? View.VISIBLE : View.GONE}"
                                 android:src="@{eventVM.event.photoList.size()>2? eventVM.event.photoList.get(2).getUrl : @string/none}"/>
+                            <!--this is for expanding the onclick area-->
+                            <TextView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:onClick="@{eventVM.pickPhoto()}"/>
                             <ImageView
                                 android:id="@+id/create_event_photo_arrow"
                                 android:layout_width="20dp"
@@ -470,7 +479,6 @@
                                 android:layout_gravity="center_vertical|right"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:onClick="@{eventVM.pickPhoto()}"
                                 android:src="@drawable/arrow" />
                         </RelativeLayout>
 

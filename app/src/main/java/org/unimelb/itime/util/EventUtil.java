@@ -1,13 +1,18 @@
 package org.unimelb.itime.util;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.C;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
+import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,6 +22,8 @@ import java.util.List;
  * Created by Paul on 8/09/2016.
  */
 public class EventUtil{
+    public static final int ACTIVITY_EDITEVENT = 1;
+
     public static String parseTimeToString(Context context, long time){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
@@ -43,9 +50,12 @@ public class EventUtil{
             return "solo event";
         }
         // attendees arraylist = 0 means no attendee selected, attendees arraylist = 1 means only it self, need to change later!!
-        if ( attendeesArrayList.size()==0  || attendeesArrayList.size() == 1) {
+        if ( attendeesArrayList.size()==0) {
             return context.getString(R.string.none);
-        } else {
+        }else if (attendeesArrayList.size()==1){
+            return attendeesArrayList.get(0);
+        }
+        else {
             return String.format("%s and %d more", attendeesArrayList.get(0), attendeesArrayList.size() - 1);
         }
     }
@@ -200,5 +210,12 @@ public class EventUtil{
 
     public static String generateUid(){
         return (int)(Math.random() * 100000) + "";
+    }
+
+    public static void startEditEventActivity(Context context, Activity activity, ITimeEventInterface iTimeEventInterface) {
+        Intent intent = new Intent(activity, EventDetailActivity.class);
+        Event event = (Event) iTimeEventInterface;
+        intent.putExtra(context.getString(R.string.event), event);
+        activity.startActivityForResult(intent, ACTIVITY_EDITEVENT);
     }
 }

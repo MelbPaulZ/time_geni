@@ -36,6 +36,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
     private CharSequence repeats[] = null;
     private ObservableField<Boolean> evDtlIsEventRepeat ;
     private EventCreateDetailBeforeSendingViewModel viewModel;
+    private CharSequence alertTimes[] = null;
 
 
     private EventCreateDetailBeforeSendingPresenter presenter;
@@ -83,6 +84,38 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         };
     }
 
+    public View.OnClickListener pickAlertTime(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                builder.setTitle(getContext().getString(R.string.choose_alert_time));
+                alertTimes = new CharSequence[]{
+                        getContext().getString(R.string.none),
+                        getContext().getString(R.string.ten_minutes_before),
+                        getContext().getString(R.string.one_hour_before),
+                        getContext().getString(R.string.one_week_before)
+                };
+                builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // need to add later
+                    }
+                });
+                builder.show();
+            }
+        };
+    }
+
+    public View.OnClickListener pickPhoto(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.pickPhoto(tag);
+            }
+        };
+    }
+
 
     public View.OnClickListener pickEndRepeatDate() {
         return new View.OnClickListener() {
@@ -92,6 +125,20 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
                 presenter.pickEndRepeatDate(tag);
             }
         };
+    }
+
+    public View.OnClickListener pickInvitees(){
+        return new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                presenter.pickInvitees(tag);
+            }
+        };
+    }
+
+    public void setPhotos(ArrayList<String> photos){
+        newEvDtlEvent.setPhoto(EventUtil.fromStringToPhotoUrlList(photos));
+        setNewEvDtlEvent(newEvDtlEvent);
     }
 
     @Bindable
@@ -125,7 +172,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.backToTimeSlotView();
+                presenter.backToTimeSlotView(getContext().getString(R.string.tag_before_sending_back));
             }
         };
     }
@@ -143,7 +190,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.backToTimeSlotView();
+                presenter.backToTimeSlotView(getContext().getString(R.string.tag_before_sending_review));
             }
         };
     }
@@ -180,7 +227,6 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         layoutParams.height = (int) height;
         view.setLayoutParams(layoutParams);
     }
-
 
 //    *******************************************************************************************************
 

@@ -118,7 +118,24 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
                 toNewEventDetailBeforeSending(bundle);
             }
         });
+
+        TextView backBtn = (TextView) binding.getRoot().findViewById(R.id.timeslot_weekview_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tag==getString(R.string.tag_before_sending_review)){
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(getString(R.string.new_event),newEvent);
+                    toNewEventDetailBeforeSending(bundle);
+
+                }else if (tag==getString(R.string.tag_before_sending_back)){
+                    toInviteePicker(tag);
+                }
+            }
+        });
     }
+
+
 
     public void initWheelPickers(){
         View root = inflater.inflate(R.layout.timeslot_duration_picker, null);

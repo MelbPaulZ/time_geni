@@ -5,6 +5,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -98,6 +99,7 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
         };
     }
 
+
     public View.OnClickListener toInviteePicker(){
         return new View.OnClickListener() {
             @Override
@@ -106,7 +108,6 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
             }
         };
     }
-
 
 
 

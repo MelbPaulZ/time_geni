@@ -25,6 +25,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.helper.FragmentTagListener;
+import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
@@ -119,6 +120,14 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
     public void getLocation(MessageLocation messageLocation){
         if (messageLocation.tag.equals(tag)){
             event.setLocation(messageLocation.locationString);
+            eventEditViewModel.setEventEditViewEvent(event);
+        }
+    }
+
+    @Subscribe
+    public void getInvitees(MessageInvitees messageInvitees){
+        if (messageInvitees.tag == getString(R.string.tag_host_event_edit)){
+            event.setInvitee(messageInvitees.invitees);
             eventEditViewModel.setEventEditViewEvent(event);
         }
     }

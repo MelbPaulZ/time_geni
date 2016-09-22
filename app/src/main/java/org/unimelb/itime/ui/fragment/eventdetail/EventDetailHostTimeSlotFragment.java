@@ -49,8 +49,10 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
         viewModel.setTag(tag);
         viewModel.setEventDetailHostEvent(event);
         binding.setTimeSlotHostVM(viewModel);
-        int test = event.getDuration();
-        binding.detailHostTimeslot.setTimeSlots(TimeSlotUtil.fromTimeSlotsToMap(getContext(), event.getTimeslots()), event.getDuration());
+        if(event.getTimeslots().size()>0) {
+            int duration = (int) ((event.getTimeslots().get(0).getEndTime() - event.getTimeslots().get(0).getStartTime())/1000/60);
+            binding.detailHostTimeslot.setTimeSlots(TimeSlotUtil.fromTimeSlotsToMap(getContext(), event.getTimeslots()), duration);
+        }
     }
 
     @Override
@@ -84,7 +86,10 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
             viewModel.setEventDetailHostEvent(event);
         }
         if (binding!=null){
-            binding.detailHostTimeslot.setTimeSlots(TimeSlotUtil.fromTimeSlotsToMap(getContext(), event.getTimeslots()), event.getDuration());
+            if (event.getTimeslots().size()>0) {
+                int duration = (int) ((event.getTimeslots().get(0).getEndTime() - event.getTimeslots().get(0).getStartTime())/1000/60);
+                binding.detailHostTimeslot.setTimeSlots(TimeSlotUtil.fromTimeSlotsToMap(getContext(), event.getTimeslots()), duration);
+            }
         }
     }
 

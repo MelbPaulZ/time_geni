@@ -37,8 +37,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
 
     public LoginPresenter(Context context) {
         this.context = context;
-//        userApi = HttpUtil.createService(context, UserApi.class);
-//        userDao = GreenDaoUtil.getDaoSession(context).getUserDao();
+        userApi = HttpUtil.createService(context, UserApi.class);
+        userDao = GreenDaoUtil.getDaoSession(context).getUserDao();
     }
 
     public void loginByEmail(String email, String password){

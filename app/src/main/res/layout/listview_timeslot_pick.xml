@@ -34,9 +34,18 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="13dp"
             android:layout_toRightOf="@+id/event_detail_host_ic_circle"
+            android:onClick="@{viewmodel.onClickTimeSlot(position)}"
             android:text="@{EventUtil.getSuggestTimeStringFromLong(context, viewmodel.evDtlHostEvent.timeslots.get(position).getStartTime(),viewmodel.evDtlHostEvent.timeslots.get(position).getEndTime() )}"
             android:textColor="@color/text_enable"
             android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:onClick="@{viewmodel.viewInviteeResponse(position)}"
+            />
 
         <!--this is arrow image-->
         <ImageView
@@ -57,7 +66,6 @@
             android:layout_marginRight="@dimen/padding_10"
             android:layout_toLeftOf="@+id/host_timeslot_right_arrow"
             android:text="10"
-            android:onClick="@{viewmodel.viewInviteeResponse(position)}"
             android:textColor="@color/gray_b2b2b2"
             android:textSize="17dp" />
 

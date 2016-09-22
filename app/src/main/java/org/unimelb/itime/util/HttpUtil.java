@@ -48,6 +48,7 @@ public class HttpUtil {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
 
+        // called before sending every request
         httpClientBuilder.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -60,12 +61,15 @@ public class HttpUtil {
                 return chain.proceed(newRequest);
             }
         });
+
+        // called if server throws a 500 error, which means token expired
         httpClientBuilder.authenticator(new Authenticator() {
             @Override
             public Request authenticate(Route route, Response response) throws IOException {
                 UserApi userApi = createServiceWithoutToken(context, UserApi.class);
                 String authToken = AuthUtil.getJwtToken(context);
                 Call<JwtToken> call = userApi.refreshToken(authToken);
+                // refresh token needs to be synchronous doing
                 retrofit2.Response<JwtToken> refreshRep = call.execute();
                 JwtToken jwt = refreshRep.body();
                 if (jwt == null){

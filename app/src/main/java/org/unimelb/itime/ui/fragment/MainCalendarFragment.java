@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +15,26 @@ import android.widget.ArrayAdapter;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
+import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.fragment.calendars.CalendarAgendaFragment;
+import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
+import org.unimelb.itime.ui.fragment.calendars.CalendarWeekFragment;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.agendaview.AgendaViewBody;
 import org.unimelb.itime.vendor.dayview.DayViewBody;
 import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
@@ -46,7 +54,10 @@ import java.util.List;
 public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainCalendarPresenter> implements MainCalendarMvpView {
 
     private final static String TAG = "MainCalendarFragment";
-    private final int ACTIVITY_EDITEVENT = 1;
+    private CalendarMonthDayFragment monthDayFragment;
+    private CalendarAgendaFragment agendaFragment;
+    private CalendarWeekFragment weekFragment;
+
 
     FragmentMainCalendarBinding binding;
     MainCalendarViewModel mainCalendarViewModel;
@@ -79,9 +90,9 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         }
 
 
-        binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
-        binding.monthDayView.reloadEvents();
-        binding.weekView.setEventMap(EventManager.getInstance().getEventsMap());
+//        binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
+//        binding.monthDayView.reloadEvents();
+//        binding.weekView.setEventMap(EventManager.getInstance().getEventsMap());
 
     }
 
@@ -105,84 +116,9 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         super.onActivityCreated(savedInstanceState);
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
         binding.setCalenarVM(mainCalendarViewModel);
-
         initSpinner();
         init();
-        binding.weekView.setOnWeekBodyOutterListener(new WeekViewBody.OnWeekBodyListener() {
-            @Override
-            public void onEventCreate(WeekDraggableEventView weekDraggableEventView) {
-
-            }
-
-            @Override
-            public void onEventClick(WeekDraggableEventView weekDraggableEventView) {
-                startEditEventActivity(weekDraggableEventView.getEvent());
-            }
-
-            @Override
-            public void onEventDragStart(WeekDraggableEventView weekDraggableEventView) {
-
-            }
-
-            @Override
-            public void onEventDragging(WeekDraggableEventView weekDraggableEventView, int i, int i1) {
-
-            }
-
-            @Override
-            public void onEventDragDrop(WeekDraggableEventView weekDraggableEventView) {
-
-            }
-        });
-
-
-        binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
-        binding.monthDayView.setEventClassName(Event.class);
-        binding.monthDayView.setOnBodyOuterListener(new DayViewBody.OnBodyListener() {
-
-            @Override
-            public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
-                Log.i("starttime", String.valueOf(calendar.getTime()));
-                ((MainActivity)getActivity()).startEventCreateActivity(calendar);
-            }
-
-            @Override
-            public void onEventClick(DayDraggableEventView dayDraggableEventView) {
-                startEditEventActivity(dayDraggableEventView.getEvent());
-            }
-
-            @Override
-            public void onEventDragStart(DayDraggableEventView dayDraggableEventView) {
-
-            }
-
-            @Override
-            public void onEventDragging(DayDraggableEventView dayDraggableEventView, int i, int i1) {
-
-            }
-
-            @Override
-            public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
-                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
-                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
-                ((Event)dayDraggableEventView.getEvent()).update();
-
-                binding.monthDayView.reloadEvents();
-
-            }
-        });
-
-        // agenda view
-
-        binding.monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsMap());
-        binding.monthAgendaView.setOnEventClickListener(new AgendaViewBody.OnEventClickListener() {
-            @Override
-            public void onEventClick(ITimeEventInterface iTimeEventInterface) {
-                startEditEventActivity(iTimeEventInterface);
-            }
-        });
+        initCalendars();
     }
 
 
@@ -199,11 +135,11 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 0){
-                    changeView(View.VISIBLE, View.GONE, View.GONE);
+                    changeView(i);
                 }else if (i == 1){
-                    changeView(View.GONE, View.VISIBLE, View.GONE);
+                    changeView(i);
                 }else if ( i == 2 ){
-                    changeView(View.GONE, View.GONE, View.VISIBLE);
+                    changeView(i);
                 }
             }
 
@@ -215,10 +151,27 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     }
 
-    public void changeView(int monthDayView, int weekView, int agendaView){
-        binding.monthDayView.setVisibility(monthDayView);
-        binding.weekView.setVisibility(weekView);
-        binding.monthAgendaView.setVisibility(agendaView);
+    public void changeView(int index){
+        switch (index){
+            case 0:
+                showCalendar(monthDayFragment);
+                break;
+            case 1:
+                showCalendar(weekFragment);
+                break;
+            case 2:
+                showCalendar(agendaFragment);
+                break;
+            default:
+                showCalendar(monthDayFragment);
+        }
+
+    }
+
+    public void showCalendar(Fragment fragment){
+        if (!fragment.isAdded()){
+            getFragmentManager().beginTransaction().replace(R.id.calendar_framelayout, fragment).commit();
+        }
     }
 
     private void init(){
@@ -237,7 +190,14 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         long end = System.currentTimeMillis();
         long delay = (end - start) / 1000;
 
-        binding.weekView.setEventMap(EventManager.getInstance().getEventsMap());
+    }
+
+    public void initCalendars(){
+        monthDayFragment = new CalendarMonthDayFragment();
+        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, monthDayFragment).commit();
+
+        weekFragment = new CalendarWeekFragment();
+        agendaFragment = new CalendarAgendaFragment();
     }
 
     private void initDB(){
@@ -328,6 +288,25 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     }
 
 
+    @Subscribe
+    public void setYearMonthHeader(MessageMonthYear messageMonthYear){
+        String month = EventUtil.getMonth(getContext(),messageMonthYear.month);
+        String year = messageMonthYear.year + "";
+        mainCalendarViewModel.setToolbarTitle( month + " " + year);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
     @Override
     public void startCreateEventActivity() {
         ((MainActivity) getActivity()).startEventCreateActivity();
@@ -335,18 +314,11 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
     @Override
     public void startEditEventActivity(ITimeEventInterface iTimeEventInterface) {
-        Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-        Event event = (Event) iTimeEventInterface;
-        intent.putExtra(getString(R.string.event), event);
-        startActivityForResult(intent, ACTIVITY_EDITEVENT);
+        EventUtil.startEditEventActivity(getContext(), getActivity(), iTimeEventInterface);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ACTIVITY_EDITEVENT){
-            Log.i("here here","main calendar fragment");
-        }
-
     }
 }

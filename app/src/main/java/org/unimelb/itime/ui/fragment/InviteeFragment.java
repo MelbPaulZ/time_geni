@@ -1,10 +1,10 @@
 package org.unimelb.itime.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,11 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.helper.FragmentTagListener;
+import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
@@ -65,7 +67,7 @@ public class InviteeFragment extends Fragment implements FragmentTagListener{
     private View root;
     private Context context;
     private InviteeFragment self;
-
+    private Event event;
     private String tag;
 
     @Override
@@ -291,10 +293,17 @@ public class InviteeFragment extends Fragment implements FragmentTagListener{
             public void onClick(View view) {
 
                 if (tag == getString(R.string.tag_host_event_edit)){
+                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
+                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
+                    for (ITimeContactInterface iTimeContactInterface : contacts) {
+                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
+                        invitees.add(invitee);
+                    }
+                    EventBus.getDefault().post(new MessageInvitees(tag, invitees));
                     ((EventDetailActivity)getActivity()).fromInviteeToEditEvent();
-                }else{
+                }else if (tag == getString(R.string.tag_create_event)){
                     Bundle bundle = getArguments();
-                    Event event = (Event) bundle.getSerializable(getString(R.string.new_event));
+                    event = (Event) bundle.getSerializable(getString(R.string.new_event));
                     ArrayList<Invitee> invitees = new ArrayList<Invitee>();
                     ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
                     for (ITimeContactInterface iTimeContactInterface : contacts) {
@@ -306,6 +315,16 @@ public class InviteeFragment extends Fragment implements FragmentTagListener{
                     Bundle newBundle = new Bundle();
                     newBundle.putSerializable(getString(R.string.new_event), event);
                     ((EventCreateActivity) getActivity()).toTimeSlotView(self, newBundle);
+                }else if (tag == getString(R.string.tag_create_event_before_sending)){
+                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
+                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
+                    for (ITimeContactInterface iTimeContactInterface : contacts) {
+                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
+                        invitees.add(invitee);
+                    }
+                    EventBus.getDefault().post(new MessageInvitees(tag,invitees));
+                    ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(self);
+
                 }
             }
         });
@@ -331,6 +350,10 @@ public class InviteeFragment extends Fragment implements FragmentTagListener{
         invitee.setContact(contact);
 
         return invitee;
+    }
+
+    public void setEvent(Event event){
+        this.event = event;
     }
 
 

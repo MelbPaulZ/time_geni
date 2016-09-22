@@ -32,10 +32,10 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
         }
     }
 
-    public void backToTimeSlotView(){
+    public void backToTimeSlotView(String tag){
         EventCreateDetailBeforeSendingMvpView view = getView();
         if (view!=null){
-            view.backToTimeSlotView();
+            view.backToTimeSlotView(tag);
         }
     }
 
@@ -50,6 +50,20 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
         EventCreateDetailBeforeSendingMvpView view = getView();
         if (view!=null){
             view.changeEndRepeatDate(tag);
+        }
+    }
+
+    public void pickInvitees(String tag){
+        EventCreateDetailBeforeSendingMvpView view = getView();
+        if (view!=null){
+            view.pickInvitees(tag);
+        }
+    }
+
+    public void pickPhoto(String tag){
+        EventCreateDetailBeforeSendingMvpView view = getView();
+        if (view!=null){
+            view.pickPhoto(tag);
         }
     }
 }

@@ -252,7 +252,32 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.pickPhoto();
+                tag = getContext().getString(R.string.tag_create_event);
+                presenter.pickPhoto(tag);
+            }
+        };
+    }
+
+    public View.OnClickListener pickAlertTime(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CharSequence[] alertTimes;
+                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                builder.setTitle(getContext().getString(R.string.choose_alert_time));
+                alertTimes = new CharSequence[]{
+                        getContext().getString(R.string.none),
+                        getContext().getString(R.string.ten_minutes_before),
+                        getContext().getString(R.string.one_hour_before),
+                        getContext().getString(R.string.one_week_before)
+                };
+                builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // need to add later
+                    }
+                });
+                builder.show();
             }
         };
     }

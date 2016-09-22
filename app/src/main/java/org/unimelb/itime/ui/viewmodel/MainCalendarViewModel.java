@@ -52,19 +52,19 @@ public class MainCalendarViewModel extends BaseObservable{
     }
 
 
-    public WeekView.OnWeekViewChangeListener onWeekViewChange(){
-        return new WeekView.OnWeekViewChangeListener() {
-            @Override
-            public void onWeekChanged(Calendar calendar) {
-
-                Log.i(TAG, "onWeekChanged: " + calendar.getTime());
-                int month = calendar.get(Calendar.MONTH);
-                String tmp = getMonthName(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
-                setToolbarTitle(tmp);
-
-            }
-        };
-    }
+//    public WeekView.OnWeekViewChangeListener onWeekViewChange(){
+//        return new WeekView.OnWeekViewChangeListener() {
+//            @Override
+//            public void onWeekChanged(Calendar calendar) {
+//
+//                Log.i(TAG, "onWeekChanged: " + calendar.getTime());
+//                int month = calendar.get(Calendar.MONTH);
+//                String tmp = getMonthName(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
+//                setToolbarTitle(tmp);
+//
+//            }
+//        };
+//    }
 
 
     private String getMonthName(int index){
@@ -83,34 +83,34 @@ public class MainCalendarViewModel extends BaseObservable{
     }
 
 
-    public WeekViewBody.OnWeekBodyListener onWeekBodyListener(){
-        return new WeekViewBody.OnWeekBodyListener() {
-            @Override
-            public void onEventCreate(WeekDraggableEventView weekDraggableEventView) {
-
-            }
-
-            @Override
-            public void onEventClick(WeekDraggableEventView weekDraggableEventView) {
-                presenter.gotoEditEventActivity(weekDraggableEventView.getEvent());
-            }
-
-            @Override
-            public void onEventDragStart(WeekDraggableEventView weekDraggableEventView) {
-
-            }
-
-            @Override
-            public void onEventDragging(WeekDraggableEventView weekDraggableEventView, int i, int i1) {
-
-            }
-
-            @Override
-            public void onEventDragDrop(WeekDraggableEventView weekDraggableEventView) {
-
-            }
-        };
-    }
+//    public WeekViewBody.OnWeekBodyListener onWeekBodyListener(){
+//        return new WeekViewBody.OnWeekBodyListener() {
+//            @Override
+//            public void onEventCreate(WeekDraggableEventView weekDraggableEventView) {
+//
+//            }
+//
+//            @Override
+//            public void onEventClick(WeekDraggableEventView weekDraggableEventView) {
+//                presenter.gotoEditEventActivity(weekDraggableEventView.getEvent());
+//            }
+//
+//            @Override
+//            public void onEventDragStart(WeekDraggableEventView weekDraggableEventView) {
+//
+//            }
+//
+//            @Override
+//            public void onEventDragging(WeekDraggableEventView weekDraggableEventView, int i, int i1) {
+//
+//            }
+//
+//            @Override
+//            public void onEventDragDrop(WeekDraggableEventView weekDraggableEventView) {
+//
+//            }
+//        };
+//    }
 
 
 

@@ -145,8 +145,8 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
         ((EventCreateActivity)getActivity()).createSoloEvent(event);
     }
 
-    public void pickPhoto(){
-        ((EventCreateActivity)getActivity()).checkPermission();
+    public void pickPhoto(String tag){
+        ((EventCreateActivity)getActivity()).checkPermission(tag);
     }
 
 

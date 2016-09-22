@@ -160,6 +160,10 @@
     <string name="work">Work</string>
     <string name="private_calendar">Private</string>
     <string name="more_invitees"> %1$s and %2$d more</string>
+    <string name="choose_alert_time">Choose Alert Time</string>
+    <string name="ten_minutes_before">10 minutes before</string>
+    <string name="one_hour_before">1 hour before</string>
+    <string name="one_week_before">1 week before, as email</string>
 
     <!--tags are for fragment tag listener-->
     <string name="tag_create_event">tag create new event</string>
@@ -170,6 +174,8 @@
     <string name="tag_create_event_before_sending">tag create event before sending</string>
     <string name="tag_host_event_detail">tag host event detail</string>
     <string name="tag_host_event_edit">tag host event edit</string>
+    <string name="tag_before_sending_review">tag before sending review</string>
+    <string name="tag_before_sending_back">tag before sending back</string>
     
     <string name="day_of_week_1_full">Sunday</string>
     <string name="day_of_week_2_full">Monday</string>
