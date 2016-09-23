@@ -1,58 +1,33 @@
 package org.unimelb.itime.ui.activity;
 
-import android.databinding.DataBindingUtil;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.util.Log;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
-import com.hannesdorfmann.mosby.mvp.MvpActivity;
-
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.ActivityLoginBinding;
-import org.unimelb.itime.ui.mvpview.LoginMvpView;
-import org.unimelb.itime.ui.presenter.LoginPresenter;
-import org.unimelb.itime.ui.viewmodel.LoginViewModel;
-
+import org.unimelb.itime.messageevent.MessageEvent;
+import org.unimelb.itime.ui.fragment.LoginFragment;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends MvpActivity<LoginMvpView, LoginPresenter> implements LoginMvpView{
+public class LoginActivity extends AppCompatActivity{
 
     private static final String TAG = "LoginActivity";
-
-    private ActivityLoginBinding binding;
-    private LoginViewModel loginVM;
-
+    private LoginFragment loginFragment;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        loginVM = new LoginViewModel(getPresenter());
-        binding.setLoginVM(loginVM);
+        setContentView(R.layout.activity_login);
+        initFragment();
     }
 
-    @NonNull
-    @Override
-    public LoginPresenter createPresenter() {
-        return new LoginPresenter(this);
+    public void initFragment(){
+        loginFragment = new LoginFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, loginFragment).commit();
     }
-
-
-    @Override
-    public void onLoginStart() {
-        Log.d(TAG, "onLoginStart: ");
-    }
-
-    @Override
-    public void onLoginSucceed() {
-        Log.d(TAG, "onLoginSucceed: ");
-    }
-
-    @Override
-    public void onLoginFail(int errorCode, int errorMsg) {
-        Log.d(TAG, "onLoginFail: " + errorCode + "--" + errorMsg);
-    }
-
 
 }
 

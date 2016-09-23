@@ -130,6 +130,52 @@ public class EventEditViewModel extends BaseObservable {
         };
     }
 
+    public View.OnClickListener onChooseAlertTime(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CharSequence[] alertTimes;
+                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                builder.setTitle(getContext().getString(R.string.choose_alert_time));
+                alertTimes = new CharSequence[]{
+                        getContext().getString(R.string.none),
+                        getContext().getString(R.string.ten_minutes_before),
+                        getContext().getString(R.string.one_hour_before),
+                        getContext().getString(R.string.one_week_before)
+                };
+                builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // need to add later
+                    }
+                });
+                builder.show();
+            }
+        };
+    }
+
+    public View.OnClickListener onChooseCalendarType(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CharSequence[] calendarType;
+                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                builder.setTitle(getContext().getString(R.string.choose_alert_time));
+                calendarType = new CharSequence[]{
+                        getContext().getString(R.string.calendar_type_work),
+                        getContext().getString(R.string.calendar_type_private)
+                };
+                builder.setItems(calendarType, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // need to add later
+                    }
+                });
+                builder.show();
+            }
+        };
+    }
+
     public View.OnClickListener toInviteePicker(){
         return new View.OnClickListener() {
             @Override

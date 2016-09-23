@@ -80,6 +80,8 @@ public class EventDetailForHostViewModel extends BaseObservable {
         };
     }
 
+
+
     public View.OnClickListener onClickBack() {
         return new View.OnClickListener() {
             @Override

@@ -2,6 +2,7 @@ package org.unimelb.itime.restfulapi;
 
 import org.unimelb.itime.bean.JwtToken;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.restfulresponse.UserLoginRes;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -16,18 +17,18 @@ import rx.Observable;
  */
 public interface UserApi {
 
-    @GET("users/test")
+    @GET("user/test")
     Call<String> test();
 
     @FormUrlEncoded
-    @POST("users/login")
-    Observable<JwtToken> login(@Field("userId") String userId, @Field("password") String password);
+    @POST("user/signin")
+    Observable<UserLoginRes> login(@Field("userId") String userId, @Field("password") String password);
 
     // only refreshToken needs to be original retrofit version
-    @GET("users/refresh_token")
+    @GET("user/refresh_token")
     Call<JwtToken> refreshToken(@Query("token") String token);
 
-    @GET("users/list")
+    @GET("user/list")
     Observable<User> list();
 
 }

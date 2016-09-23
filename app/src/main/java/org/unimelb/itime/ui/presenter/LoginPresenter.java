@@ -9,10 +9,12 @@ import org.unimelb.itime.bean.JwtToken;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.dao.UserDao;
 import org.unimelb.itime.restfulapi.UserApi;
+import org.unimelb.itime.restfulresponse.UserLoginRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.util.GreenDaoUtil;
 import org.unimelb.itime.util.HttpUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,10 +52,10 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
         }
 
         AuthUtil.clearJwtToken(context);
-        userApi.login("johncdyin@gmail.com", "123456")
+        userApi.login(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<JwtToken>() {
+                .subscribe(new Subscriber<UserLoginRes>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "onCompleted: ");
@@ -65,9 +67,14 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
                     }
 
                     @Override
-                    public void onNext(JwtToken jwtToken) {
-                        Log.d(TAG, "onNext: " + jwtToken.getToken());
-                        AuthUtil.saveJwtToken(context, jwtToken.getToken());
+                    public void onNext(UserLoginRes userLoginRes) {
+                        Log.d(TAG, "onNext: " + userLoginRes.getToken());
+                        AuthUtil.saveJwtToken(context, userLoginRes.getToken());
+
+                        UserUtil.getInstance().setUserLoginRes(userLoginRes);
+                        if(getView() != null){
+                            getView().onLoginSucceed();
+                        }
                     }
                 });
     }

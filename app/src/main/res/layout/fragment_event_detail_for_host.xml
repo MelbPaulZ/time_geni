@@ -199,7 +199,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="5dp"
                         android:layout_toLeftOf="@+id/event_detail_host_attendee_arrow"
-                        android:text="@{hostDetailVM.evDtlHostEvent.title!= null ? EventUtil.getAttendeeString(context,EventUtil.fromInviteeListToArraylist(hostDetailVM.evDtlHostEvent.invitee)) : @string/none}"
+                        android:text="@{hostDetailVM.evDtlHostEvent.invitee!= null ? EventUtil.getAttendeeString(context,EventUtil.fromInviteeListToArraylist(hostDetailVM.evDtlHostEvent.invitee)) : @string/none}"
                         android:textColor="@color/gray_b2b2b2"
                         android:textSize="17dp" />
 

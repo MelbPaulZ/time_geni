@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
@@ -52,5 +54,25 @@ public class CalendarAgendaFragment extends Fragment {
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });
+    }
+
+
+    @Subscribe
+    public void loadData(MessageEvent messageEvent){
+        if (messageEvent.task == MessageEvent.INIT_DB) {
+            monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }

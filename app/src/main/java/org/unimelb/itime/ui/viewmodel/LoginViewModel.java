@@ -15,8 +15,8 @@ public class LoginViewModel extends BaseObservable{
     private static final String TAG = "LoginViewModel";
     LoginPresenter presenter;
 
-    private String email;
-    private String password;
+    private String email = "johncdyin@gmail.com";
+    private String password = "123456";
 
     public LoginViewModel(LoginPresenter presenter){
         this.presenter = presenter;
@@ -46,7 +46,7 @@ public class LoginViewModel extends BaseObservable{
             public void onClick(View view) {
                 Log.d(TAG, "onEmailLoginClick: " + getEmail() +
                         "/" + getPassword());
-//                presenter.loginByEmail(getEmail(), getPassword());
+                presenter.loginByEmail(getEmail(), getPassword());
             }
         };
     }

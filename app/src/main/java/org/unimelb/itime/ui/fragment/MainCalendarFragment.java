@@ -23,6 +23,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
@@ -117,7 +118,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
         binding.setCalenarVM(mainCalendarViewModel);
         initSpinner();
-        init();
+//        init();
         initCalendars();
     }
 
@@ -174,23 +175,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         }
     }
 
-    private void init(){
-
-        long start = System.currentTimeMillis();
-        EventManager.getInstance().getEventsMap().clear();
-        List<Event> list = DBManager.getInstance(getContext()).getAllEvents();
-        for (Event ev: list) {
-            ev.getTimeslots();
-            List<Invitee> inviteeList =  ev.getInvitee();
-            for(Invitee iv: inviteeList){
-                iv.getContact();
-            }
-            EventManager.getInstance().addEvent(ev);
-        }
-        long end = System.currentTimeMillis();
-        long delay = (end - start) / 1000;
-
-    }
 
     public void initCalendars(){
         monthDayFragment = new CalendarMonthDayFragment();
@@ -200,7 +184,8 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         agendaFragment = new CalendarAgendaFragment();
     }
 
-    private void initDB(){
+
+    private void createDB(){
         Calendar calendar = Calendar.getInstance();
         List<Event> events = new ArrayList<>();
         List<Contact> contacts = initContact();

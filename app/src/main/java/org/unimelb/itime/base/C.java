@@ -6,7 +6,7 @@ package org.unimelb.itime.base;
  */
 public class C {
     public static class api{
-        public final static String BASE = "http://itime.demo.com/api/";
+        public final static String BASE = "http://dev.timegenii.com/api/";
     }
 
     /**

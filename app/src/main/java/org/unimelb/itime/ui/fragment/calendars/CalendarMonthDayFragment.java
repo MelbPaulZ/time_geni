@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.fragment.calendars;
 
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
@@ -40,6 +44,8 @@ public class CalendarMonthDayFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        int size = EventManager.getInstance().getEventsMap().size();
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
         monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
         monthDayView.setEventClassName(Event.class);
@@ -80,5 +86,28 @@ public class CalendarMonthDayFragment extends Fragment {
                 monthDayView.reloadEvents();
             }
         });
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loadData(MessageEvent messageEvent){
+        if (messageEvent.task == MessageEvent.INIT_DB) {
+            int size = EventManager.getInstance().getEventsMap().size();
+            monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
+            monthDayView.reloadEvents();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }
+

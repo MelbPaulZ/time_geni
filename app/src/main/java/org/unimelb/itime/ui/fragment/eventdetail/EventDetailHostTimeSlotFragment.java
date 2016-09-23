@@ -45,7 +45,7 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = new EventDetailHostTimeSlotViewModel(presenter);
-        tag = getString(R.string.tag_host_event_detail);
+//        tag = getString(R.string.tag_host_event_detail);
         viewModel.setTag(tag);
         viewModel.setEventDetailHostEvent(event);
         binding.setTimeSlotHostVM(viewModel);

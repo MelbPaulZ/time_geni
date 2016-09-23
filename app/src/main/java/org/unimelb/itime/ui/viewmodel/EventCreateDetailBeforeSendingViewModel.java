@@ -107,6 +107,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         };
     }
 
+
     public View.OnClickListener pickPhoto(){
         return new View.OnClickListener() {
             @Override

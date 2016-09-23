@@ -58,6 +58,12 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
     public void toCreateSoloEvent(Event event){
         EventCreateNewMvpView view = getView();
         if (view!=null){
+            // here to do http request to create solo event
+
+
+
+
+
             view.toCreateSoloEvent(event);
         }
     }
