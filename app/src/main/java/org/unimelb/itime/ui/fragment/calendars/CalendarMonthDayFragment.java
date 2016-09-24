@@ -19,7 +19,7 @@ import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.dayview.DayViewBody;
+import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.dayview.MonthDayView;
 import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
@@ -45,7 +45,6 @@ public class CalendarMonthDayFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        int size = EventManager.getInstance().getEventsMap().size();
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
         monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
         monthDayView.setEventClassName(Event.class);
@@ -55,7 +54,7 @@ public class CalendarMonthDayFragment extends Fragment {
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });
-        monthDayView.setOnBodyOuterListener(new DayViewBody.OnBodyListener() {
+        monthDayView.setOnBodyOuterListener(new FlexibleLenViewBody.OnBodyListener() {
             @Override
             public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
                 Calendar calendar = Calendar.getInstance();
@@ -83,6 +82,7 @@ public class CalendarMonthDayFragment extends Fragment {
                 EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
                         dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
                 ((Event)dayDraggableEventView.getEvent()).update();
+
                 monthDayView.reloadEvents();
             }
         });
@@ -92,9 +92,9 @@ public class CalendarMonthDayFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.INIT_DB) {
-            int size = EventManager.getInstance().getEventsMap().size();
             monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
             monthDayView.reloadEvents();
+            monthDayView.requestLayout();
         }
     }
 

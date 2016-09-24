@@ -8,6 +8,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.unimelb.itime.bean.JwtToken;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.dao.UserDao;
+import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
@@ -34,12 +35,14 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
 
     private Context context;
     private UserApi userApi;
+    private EventApi eventApi;
 
     private UserDao userDao;
 
     public LoginPresenter(Context context) {
         this.context = context;
         userApi = HttpUtil.createService(context, UserApi.class);
+        eventApi = HttpUtil.createService(context, EventApi.class);
         userDao = GreenDaoUtil.getDaoSession(context).getUserDao();
     }
 
@@ -77,7 +80,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
                         }
                     }
                 });
+
+        // here to fetch event;
+//        eventApi.fetch(UserUtil.getInstance().getUserLoginRes().getUser().ge)
+
     }
+
 
 
     public void refreshToken(){

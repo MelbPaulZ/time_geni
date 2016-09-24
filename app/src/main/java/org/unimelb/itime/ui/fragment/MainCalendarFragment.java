@@ -36,14 +36,7 @@ import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.agendaview.AgendaViewBody;
-import org.unimelb.itime.vendor.dayview.DayViewBody;
-import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
-import org.unimelb.itime.vendor.eventview.WeekDraggableEventView;
-import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
-import org.unimelb.itime.vendor.weekview.WeekView;
-import org.unimelb.itime.vendor.weekview.WeekViewBody;
 
 import java.util.ArrayList;
 import java.util.Calendar;

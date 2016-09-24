@@ -6,14 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
-
-import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
-import org.unimelb.itime.vendor.eventview.WeekDraggableEventView;
-import org.unimelb.itime.vendor.listener.ITimeEventInterface;
-import org.unimelb.itime.vendor.weekview.WeekView;
-import org.unimelb.itime.vendor.weekview.WeekViewBody;
 
 import java.util.Calendar;
 
