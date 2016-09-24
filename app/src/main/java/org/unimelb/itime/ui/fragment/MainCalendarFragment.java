@@ -72,21 +72,21 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         }
         // here should insert invitee and timeslots
 
-        List<Event> eventList = DBManager.getInstance(getContext()).getAllEvents();
-        EventManager.getInstance().getEventsMap().clear();
-        for (Event ev: eventList) {
-            ev.getTimeslots();
-            List<Invitee> inviteeList =  ev.getInvitee();
-            for(Invitee iv: inviteeList){
-                iv.getContact();
-            }
-            EventManager.getInstance().addEvent(ev);
-        }
+//        List<Event> eventList = DBManager.getInstance(getContext()).getAllEvents();
+//        EventManager.getInstance().getEventsMap().clear();
+//        for (Event ev: eventList) {
+//            ev.getTimeslots();
+//            List<Invitee> inviteeList =  ev.getInvitee();
+//            for(Invitee iv: inviteeList){
+//                iv.getContact();
+//            }
+//            EventManager.getInstance().addEvent(ev);
+//        }
+        EventManager.getInstance().addEvent(event);
 
-
-//        binding.monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
-//        binding.monthDayView.reloadEvents();
-//        binding.weekView.setEventMap(EventManager.getInstance().getEventsMap());
+        monthDayFragment.calendarNotifyDataSetChanged();
+        agendaFragment.calendarNotifyDataSetChanged();
+        weekFragment.calendarNotifyDataSetChanged();
 
     }
 

@@ -42,6 +42,11 @@ public class CalendarMonthDayFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -89,6 +94,13 @@ public class CalendarMonthDayFragment extends Fragment {
 
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden){
+
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.INIT_DB) {
@@ -108,6 +120,12 @@ public class CalendarMonthDayFragment extends Fragment {
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    public void calendarNotifyDataSetChanged(){
+        if(monthDayView!=null) {
+            monthDayView.reloadEvents();
+        }
     }
 }
 

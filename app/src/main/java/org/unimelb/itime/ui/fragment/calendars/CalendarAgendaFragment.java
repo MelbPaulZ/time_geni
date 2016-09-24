@@ -75,4 +75,11 @@ public class CalendarAgendaFragment extends Fragment {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
+    public void calendarNotifyDataSetChanged(){
+        if (monthAgendaView!=null) {
+            monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        }
+    }
+
 }

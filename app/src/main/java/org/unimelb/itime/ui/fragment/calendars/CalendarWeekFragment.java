@@ -105,4 +105,10 @@ public class CalendarWeekFragment extends Fragment {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
+    public void calendarNotifyDataSetChanged(){
+        if (weekView!=null) {
+            weekView.reloadEvents();
+        }
+    }
 }
