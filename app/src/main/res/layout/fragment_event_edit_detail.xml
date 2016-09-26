@@ -163,6 +163,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
+                        android:visibility="@{(eventEditVM.eventEditViewEvent.hasAttendee() &amp;&amp; eventEditVM.eventEditViewEvent.invitee.size()>0)? View.VISIBLE : View.GONE}"
                         android:orientation="horizontal">
 
                         <TextView
@@ -198,6 +199,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="@{eventEditVM.eventEditViewEvent.hasAttendee() &amp;&amp; eventEditVM.eventEditViewEvent.invitee.size()>0? View.VISIBLE:View.GONE}"
                         android:background="@drawable/table_row_border">
 
                         <LinearLayout

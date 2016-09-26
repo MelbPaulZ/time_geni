@@ -26,23 +26,38 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <Button
+                        android:id="@+id/event_solo_detail_back_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:onClick="@{soloDetailVM.backToWeekView()}"
+                        android:textColor="@color/title_6D6D6D"
+                        android:text="@string/back" />
 
-                <Button
-                    android:id="@+id/event_solo_detail_back_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:background="@null"
-                    android:gravity="center_vertical|left"
-                    android:text="@string/back" />
-
-                <TextView
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textSize="18dp"
-                    android:text="@string/event_details" />
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:textSize="18dp"
+                        android:text="@string/event_details" />
+                    <Button
+                        android:id="@+id/event_solo_detail_edit_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/title_6D6D6D"
+                        android:onClick="@{soloDetailVM.toEditEvent()}"
+                        android:background="@null"
+                        android:text="@string/edit"/>
+                </RelativeLayout>
 
             </android.support.v7.widget.Toolbar>
         </LinearLayout>

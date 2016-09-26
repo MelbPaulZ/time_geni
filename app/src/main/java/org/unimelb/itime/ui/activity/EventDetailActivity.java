@@ -115,13 +115,13 @@ public class EventDetailActivity extends AppCompatActivity {
 
     public void toEditEvent(Event event) {
         if (eventEditFragment != null && eventEditFragment.isAdded()) {
-            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(eventDetailForSoloFragment).commit();
             eventEditFragment.setEvent(event);
             getSupportFragmentManager().beginTransaction().show(eventEditFragment).commit();
         } else {
             eventEditFragment = new EventEditFragment();
             eventEditFragment.setEvent(event);
-            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(eventDetailForSoloFragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventEditFragment).commit();
         }
     }
@@ -250,6 +250,21 @@ public class EventDetailActivity extends AppCompatActivity {
         }
     }
 
+    // from host edit solo page to solo detail page
+    public void toDetailSoloEvent(Event event){
+        if (eventDetailForSoloFragment != null && eventDetailForSoloFragment.isAdded()){
+            getSupportFragmentManager().beginTransaction().hide(eventEditFragment).commit();
+            eventDetailForSoloFragment.setEvent(event);
+            getSupportFragmentManager().beginTransaction().show(eventDetailForSoloFragment).commit();
+        }else{
+            eventDetailForSoloFragment = new EventDetailForSoloFragment();
+            eventDetailForSoloFragment.setEvent(event);
+            getSupportFragmentManager().beginTransaction().hide(eventEditFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailForSoloFragment).commit();
+        }
+    }
+
+
     public void checkPermission(String tag){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
@@ -307,4 +322,5 @@ public class EventDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
 }

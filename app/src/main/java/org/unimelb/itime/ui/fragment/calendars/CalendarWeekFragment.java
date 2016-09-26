@@ -47,43 +47,43 @@ public class CalendarWeekFragment extends Fragment {
         weekView = (WeekView) root.findViewById(R.id.week_view);
         weekView.setDayEventMap(EventManager.getInstance().getEventsMap());
         weekView.setEventClassName(Event.class);
-//        weekView.setOnHeaderListener(new WeekView.OnHeaderListener() {
-//            @Override
-//            public void onMonthChanged(MyCalendar myCalendar) {
-//                EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
-//            }
-//        });
-//        weekView.setOnBodyOuterListener(new FlexibleLenViewBody.OnBodyListener() {
-//            @Override
-//            public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
-//                ((MainActivity)getActivity()).startEventCreateActivity(calendar);
-//            }
-//
-//            @Override
-//            public void onEventClick(DayDraggableEventView dayDraggableEventView) {
-//                EventUtil.startEditEventActivity(getContext(), getActivity(), dayDraggableEventView.getEvent());
-//            }
-//
-//            @Override
-//            public void onEventDragStart(DayDraggableEventView dayDraggableEventView) {
-//
-//            }
-//
-//            @Override
-//            public void onEventDragging(DayDraggableEventView dayDraggableEventView, int i, int i1) {
-//
-//            }
-//
-//            @Override
-//            public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
-//                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
-//                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
-//                ((Event)dayDraggableEventView.getEvent()).update();
-//                weekView.reloadEvents();
-//            }
-//        });
+        weekView.setOnHeaderListener(new WeekView.OnHeaderListener() {
+            @Override
+            public void onMonthChanged(MyCalendar myCalendar) {
+                EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
+            }
+        });
+        weekView.setOnBodyOuterListener(new FlexibleLenViewBody.OnBodyListener() {
+            @Override
+            public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
+                ((MainActivity)getActivity()).startEventCreateActivity(calendar);
+            }
+
+            @Override
+            public void onEventClick(DayDraggableEventView dayDraggableEventView) {
+                EventUtil.startEditEventActivity(getContext(), getActivity(), dayDraggableEventView.getEvent());
+            }
+
+            @Override
+            public void onEventDragStart(DayDraggableEventView dayDraggableEventView) {
+
+            }
+
+            @Override
+            public void onEventDragging(DayDraggableEventView dayDraggableEventView, int i, int i1) {
+
+            }
+
+            @Override
+            public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
+                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
+                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
+                ((Event)dayDraggableEventView.getEvent()).update();
+                weekView.reloadEvents();
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -108,7 +108,7 @@ public class CalendarWeekFragment extends Fragment {
 
     public void calendarNotifyDataSetChanged(){
         if (weekView!=null) {
-//            weekView.reloadEvents();
+            weekView.reloadEvents();
         }
     }
 }

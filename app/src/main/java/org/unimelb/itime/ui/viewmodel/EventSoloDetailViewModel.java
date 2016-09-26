@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.viewmodel;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.view.View;
 
 import org.unimelb.itime.BR;
 import org.unimelb.itime.bean.Event;
@@ -22,6 +23,28 @@ public class EventSoloDetailViewModel extends BaseObservable {
 
     public Context getContext(){
         return presenter.getContext();
+    }
+
+    public View.OnClickListener backToWeekView(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (presenter.getView()!=null){
+                    presenter.getView().toWeekView();
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener toEditEvent(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (presenter.getView()!=null){
+                    presenter.getView().toEditEvent();
+                }
+            }
+        };
     }
 
 

@@ -112,6 +112,16 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
     }
 
     @Override
+    public void toSoloEventDetail() {
+        ((EventDetailActivity)getActivity()).toDetailSoloEvent(event);
+    }
+
+    @Override
+    public void toSoloEventDetail(Event event) {
+        ((EventDetailActivity)getActivity()).toDetailSoloEvent(event);
+    }
+
+    @Override
     public void setTag(String tag) {
         this.tag = tag;
     }

@@ -62,7 +62,11 @@ public class EventEditViewModel extends BaseObservable {
                 EventDao eventDao = GreenDaoUtil.getDaoSession(getContext()).getEventDao();
                 String uid = eventEditViewEvent.getEventUid();
                 Event event = DBManager.getInstance(getContext()).getEvent(eventEditViewEvent.getEventUid());
-                presenter.toHostEventDetail(event); // try to do
+                if (event.hasAttendee() && event.getInvitee().size()>0) {
+                    presenter.toHostEventDetail(event);
+                }else{
+                    presenter.toSoloEventDetail();
+                }
             }
         };
     }
@@ -72,7 +76,11 @@ public class EventEditViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.toHostEventDetail(eventEditViewEvent);
+                if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>0) {
+                    presenter.toHostEventDetail(eventEditViewEvent);
+                }else{
+                    presenter.toSoloEventDetail(eventEditViewEvent);
+                }
             }
         };
     }

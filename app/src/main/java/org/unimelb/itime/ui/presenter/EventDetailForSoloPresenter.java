@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.presenter;
 import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import org.unimelb.itime.ui.mvpview.EventDetailForSoloMvpView;
 
@@ -19,4 +20,5 @@ public class EventDetailForSoloPresenter extends MvpBasePresenter<EventDetailFor
     public Context getContext() {
         return context;
     }
+
 }

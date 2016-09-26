@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +17,12 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
-import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
-import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarAgendaFragment;
 import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
@@ -39,7 +34,6 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -72,16 +66,16 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         }
         // here should insert invitee and timeslots
 
-//        List<Event> eventList = DBManager.getInstance(getContext()).getAllEvents();
-//        EventManager.getInstance().getEventsMap().clear();
-//        for (Event ev: eventList) {
-//            ev.getTimeslots();
-//            List<Invitee> inviteeList =  ev.getInvitee();
-//            for(Invitee iv: inviteeList){
-//                iv.getContact();
-//            }
-//            EventManager.getInstance().addEvent(ev);
-//        }
+        List<Event> eventList = DBManager.getInstance(getContext()).getAllEvents();
+        EventManager.getInstance().getEventsMap().clear();
+        for (Event ev: eventList) {
+            ev.getTimeslots();
+            List<Invitee> inviteeList =  ev.getInvitee();
+            for(Invitee iv: inviteeList){
+                iv.getContact();
+            }
+            EventManager.getInstance().addEvent(ev);
+        }
         EventManager.getInstance().addEvent(event);
 
         monthDayFragment.calendarNotifyDataSetChanged();
@@ -128,7 +122,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         binding.threeLines.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                changeView(i);
+                changeView(i);
             }
 
             @Override
@@ -164,11 +158,11 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
 
     public void initCalendars(){
-//        monthDayFragment = new CalendarMonthDayFragment();
+        monthDayFragment = new CalendarMonthDayFragment();
         weekFragment = new CalendarWeekFragment();
 
         getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, weekFragment).commit();
-//        agendaFragment = new CalendarAgendaFragment();
+        agendaFragment = new CalendarAgendaFragment();
     }
 
 

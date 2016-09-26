@@ -53,6 +53,20 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         }
     }
 
+    public void toSoloEventDetail(){
+        EventEditMvpView view= getView();
+        if (view != null){
+            view.toSoloEventDetail();
+        }
+    }
+
+    public void toSoloEventDetail(Event event){
+        EventEditMvpView view= getView();
+        if (view != null){
+            view.toSoloEventDetail(event);
+        }
+    }
+
     public Context getContext() {
         return context;
     }

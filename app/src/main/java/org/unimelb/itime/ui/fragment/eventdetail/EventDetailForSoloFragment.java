@@ -21,7 +21,7 @@ import org.unimelb.itime.ui.viewmodel.EventSoloDetailViewModel;
 /**
  * Created by Paul on 3/09/2016.
  */
-public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMvpView, EventDetailForSoloPresenter> {
+public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMvpView, EventDetailForSoloPresenter> implements EventDetailForSoloMvpView {
     private FragmentSoloEventDetailBinding binding;
     private Event event;
 
@@ -37,18 +37,8 @@ public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMv
         super.onActivityCreated(savedInstanceState);
         EventSoloDetailViewModel eventSoloDetailViewModel = new EventSoloDetailViewModel(getPresenter(),this.event);
         binding.setSoloDetailVM(eventSoloDetailViewModel);
-        initListener();
     }
 
-    public void initListener(){
-        Button cancelBtn = (Button) binding.getRoot().findViewById(R.id.event_solo_detail_back_btn);
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((EventDetailActivity)getActivity()).gotoWeekViewCalendar();
-            }
-        });
-    }
 
     @Override
     public EventDetailForSoloPresenter createPresenter() {
@@ -62,5 +52,15 @@ public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMv
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    @Override
+    public void toWeekView() {
+        ((EventDetailActivity)getActivity()).gotoWeekViewCalendar();
+    }
+
+    @Override
+    public void toEditEvent() {
+        ((EventDetailActivity)getActivity()).toEditEvent(event);
     }
 }
