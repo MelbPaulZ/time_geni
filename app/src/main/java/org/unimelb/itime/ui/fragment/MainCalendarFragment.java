@@ -128,13 +128,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         binding.threeLines.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0){
-                    changeView(i);
-                }else if (i == 1){
-                    changeView(i);
-                }else if ( i == 2 ){
-                    changeView(i);
-                }
+//                changeView(i);
             }
 
             @Override
@@ -170,100 +164,13 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
 
     public void initCalendars(){
-        monthDayFragment = new CalendarMonthDayFragment();
-        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, monthDayFragment).commit();
-
+//        monthDayFragment = new CalendarMonthDayFragment();
         weekFragment = new CalendarWeekFragment();
-        agendaFragment = new CalendarAgendaFragment();
+
+        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, weekFragment).commit();
+//        agendaFragment = new CalendarAgendaFragment();
     }
 
-
-    private void createDB(){
-        Calendar calendar = Calendar.getInstance();
-        List<Event> events = new ArrayList<>();
-        List<Contact> contacts = initContact();
-
-        int[] type = {0,1,2};
-        int[] status = {0,1};
-        long interval = 3600 * 1000;
-        int alldayCount = 0;
-        for (int i = 1; i < 100; i++) {
-
-            long startTime = calendar.getTimeInMillis();
-            long endTime = startTime + interval * (i%30);
-            long duration = (endTime - startTime);
-
-            Event event = new Event();
-            event.setEventUid("" + i);
-            event.setTitle("" + i);
-            event.setEventType(i%type.length);
-            event.setStatus(i%status.length);
-            event.setLocation("here");
-            event.setStartTime(startTime);
-            if (i%2 == 0) {
-                event.setHostUserUid("1"); // "1" refers to I am host
-            }else{
-                event.setHostUserUid("2"); // "2" refers to invitee
-            }
-
-            List<Invitee> inviteeList = new ArrayList<>();
-
-            Invitee invitee1 = new Invitee();
-            invitee1.setEventUid("" + i);
-            invitee1.setContact(contacts.get(0));
-            invitee1.setInviteeUid(contacts.get(0).getContactUid());
-            inviteeList.add(invitee1);
-
-            Invitee invitee2 = new Invitee();
-            invitee2.setEventUid("" + i);
-            invitee2.setContact(contacts.get(1));
-            invitee2.setInviteeUid(contacts.get(1).getContactUid());
-            inviteeList.add(invitee2);
-
-            DBManager.getInstance(getContext()).insertInviteeList(inviteeList);
-            event.setInvitee(inviteeList);
-
-            long realEnd = endTime;
-            long temp = duration;
-            while (temp > 3 * 60 * 60 * 1000 ){
-                temp = temp/2;
-                realEnd -= temp;
-            }
-
-            event.setEndTime(realEnd);
-
-            /* for time slot*/
-
-            List<TimeSlot> timeslotList = new ArrayList<>();
-            for(int k = 0; k < 3; k++){
-                TimeSlot slot = new TimeSlot();
-                slot.setTimeSlotUid((long)(Math.random() * 1000000));
-                slot.setEventUid("" + i);
-                slot.setStartTime(calendar.getTimeInMillis() + k * 3600 * 1000);
-                slot.setEndTime(calendar.getTimeInMillis() + (1 + k) *3600*1000);
-                slot.setStatus(getString(R.string.timeslot_status_pending));
-                timeslotList.add(slot);
-                DBManager.getInstance(getContext()).insertTimeSlot(slot);
-            }
-            event.setTimeslots(timeslotList);
-            events.add(event);
-            calendar.setTimeInMillis(endTime);
-
-        }
-
-        DBManager.getInstance(getContext()).insertEventList(events);
-    }
-
-    private List<Contact> initContact(){
-        List<Contact> contacts = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            Contact contact = new Contact("contact:"+i, "http://img.zybus.com/uploads/allimg/131213/1-131213111353.jpg", "name " + i);
-            contacts.add(contact);
-            DBManager.getInstance(getContext()).insertContact(contact);
-        }
-
-        return contacts;
-    }
 
 
     @Subscribe

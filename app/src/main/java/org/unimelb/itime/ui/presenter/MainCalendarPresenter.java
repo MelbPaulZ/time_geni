@@ -1,21 +1,12 @@
 package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-import android.view.View;
-
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
-import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.base.C;
-import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulapi.UserApi;
-import org.unimelb.itime.ui.activity.EventCreateActivity;
-import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,12 +49,6 @@ public class MainCalendarPresenter extends MvpBasePresenter<MainCalendarMvpView>
         });
     }
 
-//    public void test(){
-//        MainCalendarMvpView view = getView();
-//        if (view!=null){
-//
-//        }
-//    }
 
     public void gotoEditEventActivity(ITimeEventInterface iTimeEventInterface){
         MainCalendarMvpView mvpView = getView();

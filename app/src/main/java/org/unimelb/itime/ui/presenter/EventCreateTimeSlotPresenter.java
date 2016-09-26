@@ -14,9 +14,9 @@ public class EventCreateTimeSlotPresenter extends MvpBasePresenter<EventCreateNe
     private final String TAG = "EventCreateTimeSlotPresenter";
     private Context context;
     private LayoutInflater inflater;
-    public EventCreateTimeSlotPresenter(Context context, LayoutInflater inflater) {
+    public EventCreateTimeSlotPresenter(Context context) {
         this.context = context;
-        this.inflater = inflater;
+        this.inflater = LayoutInflater.from(context);
     }
 
     public Context getContext() {

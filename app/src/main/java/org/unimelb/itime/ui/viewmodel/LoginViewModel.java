@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import android.util.Log;
 import android.view.View;
 
+import org.unimelb.itime.BR;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 
 /**
@@ -20,6 +21,7 @@ public class LoginViewModel extends BaseObservable{
 
     public LoginViewModel(LoginPresenter presenter){
         this.presenter = presenter;
+
     }
 
     @Bindable
@@ -29,6 +31,7 @@ public class LoginViewModel extends BaseObservable{
 
     public void setEmail(String email) {
         this.email = email;
+        notifyPropertyChanged(BR.email);
     }
 
     @Bindable
@@ -38,6 +41,7 @@ public class LoginViewModel extends BaseObservable{
 
     public void setPassword(String password) {
         this.password = password;
+        notifyPropertyChanged(BR.password);
     }
 
     public View.OnClickListener onBtnEmailLogin(){

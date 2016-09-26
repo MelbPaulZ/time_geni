@@ -63,7 +63,7 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
         Toast.makeText(getContext(), "signin success", Toast.LENGTH_SHORT).show();
         Intent mainIntent = new Intent(getActivity(), MainActivity.class);
         startActivity(mainIntent);
-
+        getActivity().finish();
     }
 
     @Override

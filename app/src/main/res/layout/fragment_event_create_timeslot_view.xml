@@ -57,7 +57,7 @@
                         android:layout_below="@+id/toolbar_title"
                         android:textSize="11sp"
                         android:textColor="@color/title_6D6D6D"
-                        android:text="@{timeslotVM.toolbarString}"/>
+                        android:text="@{timeslotVM.titleString}"/>
 
                     <ImageView
                         android:id="@+id/timeslot_weekview_back_arrow"
@@ -86,14 +86,13 @@
             android:layout_height="@dimen/timeslot_weekview_allshow"
             android:layout_below="@+id/toolbar"
             android:orientation="vertical">
-
-            <org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView
-                android:id="@+id/week_time_slot_view"
+            <org.unimelb.itime.vendor.weekview.WeekView
+                android:id="@+id/timeslot_week_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:onTimeSlotClick="@{timeslotVM.onTimeSlotClick()}"
-                app:onTimeSlotWeekViewChange="@{timeslotVM.onTimeSlotWeekViewChange()}">
-            </org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView>
+                app:onWeekViewChange="@{timeslotVM.onWeekViewChange()}">
+            </org.unimelb.itime.vendor.weekview.WeekView>
+
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/duration_part"

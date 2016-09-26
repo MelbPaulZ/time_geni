@@ -140,20 +140,20 @@ public class EventDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void toTimeSlotView(String tag, Event event) {
-        if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()) {
-            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
-            eventDetailHostTimeSlotFragment.setEvent(event);
-            eventDetailHostTimeSlotFragment.setTag(tag);
-            getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
-        } else {
-            eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
-            eventDetailHostTimeSlotFragment.setEvent(event);
-            eventDetailHostTimeSlotFragment.setTag(tag);
-            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
-            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
-        }
-    }
+//    public void toTimeSlotView(String tag, Event event) {
+//        if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()) {
+//            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
+//            eventDetailHostTimeSlotFragment.setEvent(event);
+//            eventDetailHostTimeSlotFragment.setTag(tag);
+//            getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
+//        } else {
+//            eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
+//            eventDetailHostTimeSlotFragment.setEvent(event);
+//            eventDetailHostTimeSlotFragment.setTag(tag);
+//            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
+//            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
+//        }
+//    }
 
     public void toHostEventDetail(Fragment fragment) {
         if (eventDetailHostFragment != null && eventDetailHostFragment.isAdded()) {
@@ -195,20 +195,20 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
 
-    public void fromHostEditToTimeSlotView(String tag, Fragment fragment){
-        if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()){
-            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            eventDetailHostTimeSlotFragment.setEvent(event);
-            eventDetailHostTimeSlotFragment.setTag(tag);
-            getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
-        }else{
-            eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
-            eventDetailHostTimeSlotFragment.setEvent(event);
-            eventDetailHostTimeSlotFragment.setTag(tag);
-            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
-        }
-    }
+//    public void fromHostEditToTimeSlotView(String tag, Fragment fragment){
+//        if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()){
+//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+//            eventDetailHostTimeSlotFragment.setEvent(event);
+//            eventDetailHostTimeSlotFragment.setTag(tag);
+//            getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
+//        }else{
+//            eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
+//            eventDetailHostTimeSlotFragment.setEvent(event);
+//            eventDetailHostTimeSlotFragment.setTag(tag);
+//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+//            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
+//        }
+//    }
 
     public void toInviteePicker(String tag, Fragment fragment){
         if (inviteeFragment != null && inviteeFragment.isAdded()){

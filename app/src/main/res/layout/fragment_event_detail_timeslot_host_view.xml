@@ -38,7 +38,6 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/detail_timeslot_back_arrow"
-                        android:onClick="@{timeSlotHostVM.toHostEventDetail()}"
                         android:text="@string/back" />
 
                     <TextView
@@ -66,7 +65,6 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/padding_10"
-                        android:onClick="@{timeSlotHostVM.toHostEventDetail()}"
                         android:text="@string/done" />
                 </RelativeLayout>
 
@@ -80,7 +78,6 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
                         android:textAlignment="center"
-                        android:text="@{timeSlotHostVM.hostToolBarString}"
                         android:textSize="12dp" />
 
                 </RelativeLayout>
@@ -94,12 +91,6 @@
             android:layout_below="@+id/toolbar"
             android:orientation="vertical">
 
-            <org.unimelb.itime.vendor.timeslotview.WeekTimeSlotView
-                android:id="@+id/detail_host_timeslot"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:onTimeSlotClick="@{timeSlotHostVM.onTimeSlotClick()}"
-                app:onTimeSlotWeekViewChange="@{timeSlotHostVM.onTimeSlotWeekViewChange()}"/>
         </RelativeLayout>
     </RelativeLayout>
 </layout>

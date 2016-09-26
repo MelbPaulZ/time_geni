@@ -81,7 +81,7 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
 
     @Override
     public void viewInCalendar(String tag) {
-        ((EventDetailActivity)getActivity()).toTimeSlotView(tag, eventDetailForHostViewModel.getEvDtlHostEvent());
+//        ((EventDetailActivity)getActivity()).toTimeSlotView(tag, eventDetailForHostViewModel.getEvDtlHostEvent());
     }
 
     @Override
