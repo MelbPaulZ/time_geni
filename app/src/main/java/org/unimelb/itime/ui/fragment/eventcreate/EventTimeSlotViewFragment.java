@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +30,10 @@ import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
+import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.sql.Time;
@@ -75,6 +78,7 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         this.event = (Event) bundle.getSerializable(getString(R.string.new_event));
         timeslotWeekView = (WeekView) binding.getRoot().findViewById(R.id.timeslot_week_view);
         initData();
+        initTimeSlots(); // this must after  initData()
         initListeners();
 
     }
@@ -85,6 +89,7 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
                 WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
                 struct.startTime = timeSlot.getStartTime();
                 struct.endTime = timeSlot.getEndTime();
+                struct.object = timeSlot;
                 timeslotWeekView.addTimeSlot(struct);
             }
         }
@@ -104,10 +109,10 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
 //
 //    // tag can be tag_create_event, tag_event_detail_before_sending
 //
-    public void setEvent(Event event){
-        this.event = event;
-        initTimeSlots();
-    }
+//    public void setEvent(Event event){
+//        this.event = event;
+//        initTimeSlots();
+//    }
 //
 //    @Nullable
 //    @Override
@@ -168,33 +173,66 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
                 }
             }
         });
+        timeslotWeekView.setEventClassName(Event.class);
+        timeslotWeekView.enableTimeSlot();
+        timeslotWeekView.setOnTimeSlotOuterListener(new FlexibleLenViewBody.OnTimeSlotListener() {
+           @Override
+           public void onTimeSlotCreate(TimeSlotView timeSlotView) {
+               TimeSlot timeSlot = new TimeSlot(EventUtil.generateTimeSlotUid(),
+                       event.getEventUid(),
+                       ((WeekView.TimeSlotStruct)timeSlotView.getTag()).startTime,
+                       ((WeekView.TimeSlotStruct)timeSlotView.getTag()).endTime,
+                       getString(R.string.timeslot_status_create),
+                       0,
+                       0);
+               event.getTimeslots().add(timeSlot);
+               WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct)timeSlotView.getTag();
+               struct.object =timeSlot;
 
-        timeslotWeekView.setOnBodyOuterListener(new FlexibleLenViewBody.OnBodyListener() {
-            @Override
-            public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
+           }
 
-            }
+           @Override
+           public void onTimeSlotClick(TimeSlotView timeSlotView) {
+               // change status of view and struct
+               boolean newStatus = !timeSlotView.isSelect();
+               timeSlotView.setStatus(newStatus);
+               ((WeekView.TimeSlotStruct)timeSlotView.getTag()).status = newStatus;
 
-            @Override
-            public void onEventClick(DayDraggableEventView dayDraggableEventView) {
 
-            }
+               // change event attributes
+               TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+               TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
+               if (timeSlot!=null) {
+                   if (timeSlot.getStatus() == getString(R.string.timeslot_status_create)) {
+                       timeSlot.setStatus(getString(R.string.timeslot_status_pending));
+                   } else if (timeSlot.getStatus() == getString(R.string.timeslot_status_pending)) {
+                       timeSlot.setStatus(getString(R.string.timeslot_status_create));
+                   }
+               }else{
+                   Log.i("error", "onTimeSlotClick: " + "no timeslot found");
+               }
+           }
 
-            @Override
-            public void onEventDragStart(DayDraggableEventView dayDraggableEventView) {
+           @Override
+           public void onTimeSlotDragStart(TimeSlotView timeSlotView) {
 
-            }
+           }
 
-            @Override
-            public void onEventDragging(DayDraggableEventView dayDraggableEventView, int i, int i1) {
+           @Override
+           public void onTimeSlotDragging(TimeSlotView timeSlotView, int i, int i1) {
 
-            }
+           }
 
-            @Override
-            public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
-
-            }
-        });
+           @Override
+           public void onTimeSlotDragDrop(TimeSlotView timeSlotView) {
+               TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+               TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
+               if (timeSlot!=null) {
+                   timeSlot.setStartTime(timeSlotView.getStartTimeM());
+                   timeSlot.setEndTime(timeSlotView.getEndTimeM());
+               }
+           }
+       });
     }
 //
 //
@@ -265,9 +303,6 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
                 }
 
                 viewModel.setEvent(event);
-                for (TimeSlot timeSlot: event.getTimeslots()){
-                    timeSlot.setStatus(getString(R.string.timeslot_status_create));
-                }
             }
         });
 
@@ -358,7 +393,7 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         WeekView.TimeSlotStruct timeSlotStruct1 = new WeekView.TimeSlotStruct();
         timeSlotStruct1.startTime = timeSlot1.getStartTime();
         timeSlotStruct1.endTime = timeSlot1.getEndTime();
-        timeSlotStruct1.status = true;
+        timeSlotStruct1.status = false;
         timeslotWeekView.addTimeSlot(timeSlotStruct1);
 
         WeekView.TimeSlotStruct timeSlotStruct2 = new WeekView.TimeSlotStruct();

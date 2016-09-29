@@ -3,6 +3,7 @@ package org.unimelb.itime.util;
 import android.content.Context;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 
 import java.sql.Time;
@@ -48,4 +49,14 @@ public class TimeSlotUtil {
         }
         return false;
     }
+
+    public static TimeSlot getTimeSlot(Event event, TimeSlot timeSlot){
+        for (TimeSlot eventTimeSlot : event.getTimeslots()){
+            if (eventTimeSlot.equals(timeSlot)){
+                return eventTimeSlot;
+            }
+        }
+        return null;
+    }
+
 }
