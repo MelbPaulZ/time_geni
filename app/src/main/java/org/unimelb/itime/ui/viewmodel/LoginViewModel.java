@@ -70,7 +70,8 @@ public class LoginViewModel extends BaseObservable{
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.listUser();
+//                presenter.listUser();
+                presenter.testList();
             }
         };
     }
