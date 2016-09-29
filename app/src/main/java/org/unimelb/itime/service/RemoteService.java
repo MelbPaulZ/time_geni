@@ -75,8 +75,6 @@ public class RemoteService extends Service{
                 break;
             }
         }
-
-
     }
 
     private void createDB(){

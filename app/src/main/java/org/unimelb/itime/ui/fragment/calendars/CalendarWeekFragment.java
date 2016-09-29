@@ -12,8 +12,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
+import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.util.EventUtil;
@@ -23,6 +25,7 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Paul on 21/09/2016.
@@ -45,6 +48,9 @@ public class CalendarWeekFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         weekView = (WeekView) root.findViewById(R.id.week_view);
+
+//        initDB(); // this is for test paul activity, need to delete for main project
+
         weekView.setDayEventMap(EventManager.getInstance().getEventsMap());
         weekView.setEventClassName(Event.class);
         weekView.setOnHeaderListener(new WeekView.OnHeaderListener() {
@@ -84,6 +90,28 @@ public class CalendarWeekFragment extends Fragment {
                 weekView.reloadEvents();
             }
         });
+    }
+
+    private void initDB(){
+
+        long start = System.currentTimeMillis();
+        EventManager.getInstance().getEventsMap().clear();
+        List<Event> list = DBManager.getInstance(getContext()).getAllEvents();
+        int i = 0;
+        for (Event ev: list) {
+            ev.getTimeslots();
+            List<Invitee> inviteeList =  ev.getInvitee();
+            for(Invitee iv: inviteeList){
+                iv.getContact();
+            }
+
+//            9-595
+            EventManager.getInstance().addEvent(ev);
+            i++;
+            if(i > 100){
+                break;
+            }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

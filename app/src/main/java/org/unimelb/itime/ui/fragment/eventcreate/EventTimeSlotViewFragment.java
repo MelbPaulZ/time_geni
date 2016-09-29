@@ -29,6 +29,8 @@ import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
+import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.sql.Time;
@@ -166,6 +168,33 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
                 }
             }
         });
+
+        timeslotWeekView.setOnBodyOuterListener(new FlexibleLenViewBody.OnBodyListener() {
+            @Override
+            public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
+
+            }
+
+            @Override
+            public void onEventClick(DayDraggableEventView dayDraggableEventView) {
+
+            }
+
+            @Override
+            public void onEventDragStart(DayDraggableEventView dayDraggableEventView) {
+
+            }
+
+            @Override
+            public void onEventDragging(DayDraggableEventView dayDraggableEventView, int i, int i1) {
+
+            }
+
+            @Override
+            public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
+
+            }
+        });
     }
 //
 //
@@ -225,7 +254,7 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
 
                 viewModel.setDurationTimeString(getTimeString(pickHour[0],pickMinute[0]));
                 viewModel.setIsChangeDuration(true);
-                timeslotWeekView.updateTimeSlotsDuration((pickHour[0] * 60 + pickMinute[0])*60*1000);
+                timeslotWeekView.updateTimeSlotsDuration((pickHour[0] * 60 + pickMinute[0])*60*1000, true); // ? animate?
 
                 // avoid of no timeslot error
                 if (!event.hasTimeslots()){

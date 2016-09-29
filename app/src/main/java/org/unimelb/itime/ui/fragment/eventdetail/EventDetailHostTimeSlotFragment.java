@@ -29,69 +29,69 @@ import java.util.Map;
  */
 public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHostTimeSlotMvpVIew, EventDetailHostTimeSlotPresenter>
         implements EventDetailHostTimeSlotMvpVIew, FragmentTagListener{
-//    private String tag;
-//    private FragmentEventDetailTimeslotHostViewBinding binding;
-//    private EventDetailHostTimeSlotViewModel viewModel;
-//    private Event event;
+    private String tag;
+    private FragmentEventDetailTimeslotHostViewBinding binding;
+    private EventDetailHostTimeSlotViewModel viewModel;
+    private Event event;
 
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-////        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_detail_timeslot_host_view, container, false);
-////        return binding.getRoot();
-//    }
-//
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        viewModel = new EventDetailHostTimeSlotViewModel(presenter);
-////        tag = getString(R.string.tag_host_event_detail);
-//        viewModel.setTag(tag);
-//        viewModel.setEventDetailHostEvent(event);
-//        binding.setTimeSlotHostVM(viewModel);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_detail_timeslot_host_view, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewModel = new EventDetailHostTimeSlotViewModel(presenter);
+//        tag = getString(R.string.tag_host_event_detail);
+        viewModel.setTag(tag);
+        viewModel.setEventDetailHostEvent(event);
+        binding.setTimeSlotHostVM(viewModel);
 //        if(event.getTimeslots().size()>0) {
 //            int duration = (int) ((event.getTimeslots().get(0).getEndTime() - event.getTimeslots().get(0).getStartTime())/1000/60);
 //            binding.detailHostTimeslot.setTimeSlots(TimeSlotUtil.fromTimeSlotsToMap(getContext(), event.getTimeslots()), duration);
 //        }
-//    }
+    }
 //
-//    @Override
-//    public void setTag(String tag) {
-//        this.tag = tag;
-//        if (viewModel!=null){
-//            viewModel.setTag(tag);
-//        }
-//    }
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
+        if (viewModel!=null){
+            viewModel.setTag(tag);
+        }
+    }
 //
 //    @Override
 //    public EventDetailHostTimeSlotPresenter createPresenter() {
 //        return new EventDetailHostTimeSlotPresenter(getContext());
 //    }
 //
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//        // hide soft key board
-//        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-//    }
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        // hide soft key board
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+    }
 //
-//    public Event getEvent() {
-//        return event;
-//    }
+    public Event getEvent() {
+        return event;
+    }
 //
-//    public void setEvent(Event event) {
-//        this.event = event;
-//        if (viewModel!=null){
-//            viewModel.setEventDetailHostEvent(event);
-//        }
+    public void setEvent(Event event) {
+        this.event = event;
+        if (viewModel!=null){
+            viewModel.setEventDetailHostEvent(event);
+        }
 //        if (binding!=null){
 //            if (event.getTimeslots().size()>0) {
 //                int duration = (int) ((event.getTimeslots().get(0).getEndTime() - event.getTimeslots().get(0).getStartTime())/1000/60);
 //                binding.detailHostTimeslot.setTimeSlots(TimeSlotUtil.fromTimeSlotsToMap(getContext(), event.getTimeslots()), duration);
 //            }
 //        }
-//    }
+    }
 
     @Override
     public void toHostEventDetail() {
@@ -103,13 +103,9 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
         ((EventDetailActivity)getActivity()).fromTimeSlotToHostEdit(this);
     }
 
-    @Override
-    public void setTag(String tag) {
-
-    }
 
     @Override
     public EventDetailHostTimeSlotPresenter createPresenter() {
-        return null;
+        return new EventDetailHostTimeSlotPresenter(getContext());
     }
 }
