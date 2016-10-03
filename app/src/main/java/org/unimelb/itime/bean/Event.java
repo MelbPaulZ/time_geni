@@ -50,6 +50,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private double locationLatitude;
     private double locationLongitude;
     private String note;
+    private int alertTime;
 
 
     private transient List<PhotoUrl> photoList = null;
@@ -89,12 +90,12 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
 
 
 
-    @Generated(hash = 1130552805)
+    @Generated(hash = 1170169819)
     public Event(String eventUid, String eventId, String recurringEventUid, String recurringEventId,
             String calendarUid, String iCalUID, String hostUserUid, String recurrence, String summary,
             String url, String location, String locationNote, double locationLatitude,
-            double locationLongitude, String note, String photo, long startTime, long endTime,
-            int eventType, int status) {
+            double locationLongitude, String note, int alertTime, String photo, long startTime,
+            long endTime, int eventType, int status) {
         this.eventUid = eventUid;
         this.eventId = eventId;
         this.recurringEventUid = recurringEventUid;
@@ -110,6 +111,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
         this.note = note;
+        this.alertTime = alertTime;
         this.photo = photo;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -495,4 +497,11 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.photo = photo;
     }
 
+    public int getAlertTime() {
+        return alertTime;
+    }
+
+    public void setAlertTime(int alertTime) {
+        this.alertTime = alertTime;
+    }
 }

@@ -13,6 +13,6 @@ public interface EventCreateNewMvpView extends MvpView {
     void gotoWeekViewCalendar();
     void pickLocation();
     void pickInvitee();
-    void toCreateSoloEvent(Event event);
+    void toCreateSoloEvent();
     void pickPhoto(String tag);
 }

@@ -79,6 +79,21 @@ public class EventUtil{
         return arrayList;
     }
 
+    public static CharSequence[] getAlertTimes(Context context){
+        CharSequence[] alertTimes = new CharSequence[]{
+                context.getString(R.string.none),
+                context.getString(R.string.five_mintues_before),
+                context.getString(R.string.fifteen_minutes_before),
+                context.getString(R.string.thirty_minutes_before),
+                context.getString(R.string.one_hour_before),
+                context.getString(R.string.two_hours_before),
+                context.getString(R.string.one_day_before),
+                context.getString(R.string.two_days_before),
+                context.getString(R.string.one_week_before)
+        };
+                return alertTimes;
+    }
+
 
     public static String getSuggestTimeStringFromLong(Context context, Long startTime,Long endtime){
         Calendar calendar = Calendar.getInstance();
@@ -127,23 +142,29 @@ public class EventUtil{
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        return "every day( change later )";
-//        switch (repeat){
-//            case 0:
-//                return context.getString(R.string.repeat_never);
-//            case 1:
-//                return context.getString(R.string.repeat_everyday);
-//            case 2:
-//                return String.format(context.getString(R.string.repeat_everyweek), getDayOfWeekFull(context,dayOfWeek));
-//            case 3:
-//                return context.getString(R.string.repeat_every_twoweek);
-//            case 4:
-//                return context.getString(R.string.repeat_every_month);
-//            case 5:
-//                return context.getString(R.string.repeat_every_year);
-//            default:
-//                return context.getString(R.string.repeat_never);
-//        }
+//        return "every day( change later )";
+        if (context==null){
+            return null;
+        }
+        if (repeat==null){
+            return context.getString(R.string.repeat_never);
+        }
+        switch (repeat){
+            case "0":
+                return context.getString(R.string.repeat_never);
+            case "1":
+                return context.getString(R.string.repeat_everyday);
+            case "2":
+                return String.format(context.getString(R.string.repeat_everyweek), getDayOfWeekFull(context,dayOfWeek));
+            case "3":
+                return context.getString(R.string.repeat_every_twoweek);
+            case "4":
+                return context.getString(R.string.repeat_every_month);
+            case "5":
+                return context.getString(R.string.repeat_every_year);
+            default:
+                return context.getString(R.string.repeat_never);
+        }
     }
 
     public static String getDayOfWeekFull(Context context,int dayOfWeek) {

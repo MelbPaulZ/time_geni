@@ -65,6 +65,15 @@ public class EventCreateNewVIewModel extends BaseObservable {
 
     public EventCreateNewVIewModel(EventCreateNewPresenter presenter) {
         this.presenter = presenter;
+        init();
+
+    }
+
+    public Context getContext() {
+        return presenter.getContext();
+    }
+
+    public void init() {
         isEventRepeat = new ObservableField<>(false);
         isAllDay = new ObservableField<>(false);
         tag = presenter.getContext().getString(R.string.tag_create_event);
@@ -85,18 +94,8 @@ public class EventCreateNewVIewModel extends BaseObservable {
         event.setStartTime(startTime);
         event.setEndTime(endTime);
 
-    }
-
-    public Context getContext() {
-        return presenter.getContext();
-    }
-
-    public void init() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
-        if (!isEndTimeChanged) {
-            event.setEndTime(event.getStartTime() + 3600000);
-        }
         String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(), calendar.get(Calendar.DAY_OF_WEEK));
         repeats = new CharSequence[]{
                 getContext().getString(R.string.repeat_never),
@@ -106,6 +105,13 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 String.format(getContext().getString(R.string.repeat_every_year))};
     }
 
+
+    public void updateRepeats(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(event.getStartTime());
+        String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(), calendar.get(Calendar.DAY_OF_WEEK));
+        repeats[2] = String.format(getContext().getString(R.string.repeat_everyweek), dayOfWeek);
+    }
 
 
     public void setPhotos(ArrayList<String> urls){
@@ -165,6 +171,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
                                     isEndTimeChanged = true;
                                 }
                                 viewModel.setEvent(event);
+                                updateRepeats();
                                 popupWindow.dismiss();
                                 timePopupWindow.dismiss();
                             }
@@ -191,20 +198,23 @@ public class EventCreateNewVIewModel extends BaseObservable {
             public void onClick(View view) {
                 final Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(event.getStartTime());
-                String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(),calendar.get(Calendar.DAY_OF_WEEK));
+//                String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(),calendar.get(Calendar.DAY_OF_WEEK));
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle("Choose a repeat type");
                 builder.setItems(repeats, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        event.setRecurrence(i+"");
                         if (!repeats[i].equals(getContext().getString(R.string.repeat_never))) {
                             setIsEventRepeat(true);
                             if (!isEndRepeatChanged) { // if the user didn't change end repeat time before
                                 event.setRepeatEndsTime(calendar.getTimeInMillis() + 24*3600000); // default end in next day
                             }
-                            viewModel.setEvent(event);
+                        }else{
+                            setIsEventRepeat(false);
                         }
+                        viewModel.setEvent(event);
                     }
                 });
                 builder.show();
@@ -243,20 +253,12 @@ public class EventCreateNewVIewModel extends BaseObservable {
     }
 
 
-    public View.OnClickListener pickEndDate() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        };
-    }
-
     public View.OnClickListener onClickEndRepeat() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isEndRepeatChanged = true;
+
                 // change now
 //                tag = presenter.getContext().getString(R.string.tag_end_repeat);
 //                presenter.pickDate(tag);
@@ -295,8 +297,9 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 if (event.getTitle()==null) {
                     event.setTitle(presenter.getContext().getString(R.string.new_event));
                 }
+                EventManager.getInstance().setCurrentEvent(event);
                 if (mvpView!=null){
-                    mvpView.toCreateSoloEvent(event);
+                    mvpView.toCreateSoloEvent();
                 }
             }
         };
@@ -333,16 +336,12 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 CharSequence[] alertTimes;
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle(getContext().getString(R.string.choose_alert_time));
-                alertTimes = new CharSequence[]{
-                        getContext().getString(R.string.none),
-                        getContext().getString(R.string.ten_minutes_before),
-                        getContext().getString(R.string.one_hour_before),
-                        getContext().getString(R.string.one_week_before)
-                };
+                alertTimes = EventUtil.getAlertTimes(getContext());
                 builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // need to add later
+                        event.setAlertTime(i);
+                        setEvent(event);
                     }
                 });
                 builder.show();
@@ -362,7 +361,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
     public void setEvent(Event event) {
         this.event = event;
         notifyPropertyChanged(BR.event);
-//        init();
     }
 
 

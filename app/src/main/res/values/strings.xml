@@ -161,8 +161,13 @@
     <string name="private_calendar">Private</string>
     <string name="more_invitees"> %1$s and %2$d more</string>
     <string name="choose_alert_time">Choose Alert Time</string>
-    <string name="ten_minutes_before">10 minutes before</string>
+    <string name="five_mintues_before">5 minutes before</string>
+    <string name="fifteen_minutes_before">15 minutes before</string>
+    <string name="thirty_minutes_before">30 minutes before</string>
     <string name="one_hour_before">1 hour before</string>
+    <string name="two_hours_before">2 hours before</string>
+    <string name="one_day_before">1 day before</string>
+    <string name="two_days_before">2 days before</string>
     <string name="one_week_before">1 week before, as email</string>
 
     <!--tags are for fragment tag listener-->

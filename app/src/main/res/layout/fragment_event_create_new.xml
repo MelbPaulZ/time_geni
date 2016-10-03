@@ -144,7 +144,7 @@
                             android:layout_marginRight="@dimen/padding_10"
                             android:gravity="right"
                             android:onClick="@{eventVM.onClickRepeat()}"
-                            android:text="@{EventUtil.parseRepeatIdToRepeat(context, eventVM.event.recurrence,eventVM.event.startTime)}"
+                            android:text="@{EventUtil.parseRepeatIdToRepeat(eventVM.context, eventVM.event.recurrence,eventVM.event.startTime)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
@@ -308,7 +308,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text=""
+                            android:text="@{EventUtil.getAlertTimes(eventVM.context)[eventVM.event.alertTime]}"
                             android:onClick="@{eventVM.pickAlertTime()}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />

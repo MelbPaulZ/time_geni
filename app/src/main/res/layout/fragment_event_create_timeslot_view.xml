@@ -34,6 +34,7 @@
                         android:layout_toRightOf="@+id/timeslot_weekview_back_arrow"
                         android:layout_marginLeft="@dimen/padding_5"
                         android:textSize="17dp"
+                        android:onClick="@{timeslotVM.onClickBack}"
                         android:text="@string/back" />
 
                     <TextView
@@ -75,6 +76,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/padding_10"
                         android:textSize="17dp"
+                        android:onClick="@{timeslotVM.onClickDone}"
                         android:text="@string/done"/>
                 </RelativeLayout>
         </android.support.v7.widget.Toolbar>

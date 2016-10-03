@@ -162,8 +162,9 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     }
 
     @Override
-    public void toCreateSoloEvent(Event event) {
-
+    public void toCreateSoloEvent() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
 
     public void pickPhoto(String tag){

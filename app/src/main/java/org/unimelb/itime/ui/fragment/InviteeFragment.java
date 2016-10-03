@@ -32,9 +32,11 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.testdb.DBManager;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
+import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.presenter.EmptyPresenter;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
@@ -78,13 +80,7 @@ public class InviteeFragment extends BaseUiFragment {
                              Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
         root = inflater.inflate(R.layout.fragment_event_attendee_picker, container, false);
-        // Inflate the layout for this fragment
-        //set load methods
-
         self = this;
-//		initView();
-//		initData();
-//		initListener();
         return root;
     }
 
@@ -293,12 +289,24 @@ public class InviteeFragment extends BaseUiFragment {
         adapter.updateListView(filterDateList);
     }
 
+    public void setSelectInvitees(){
+        // get all invitess
+        ArrayList<Invitee> invitees = new ArrayList<>();
+        ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
+        for (ITimeContactInterface iTimeContactInterface : contacts) {
+            Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
+            invitees.add(invitee);
+        }
+        event.setInvitee(invitees);
+        EventManager.getInstance().setCurrentEvent(event);
+    }
+
     public void initListener() {
         Button cancelBtn = (Button) root.findViewById(R.id.attendee_picker_cancel_btn);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getFrom() instanceof EventCreateNewFragment){
+                if (getFrom() instanceof EventCreateNewFragment || getFrom() instanceof EventTimeSlotViewFragment){
                     EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
                     eventCreateNewFragment.setFrom(self);
                     switchFragment(self, eventCreateNewFragment);
@@ -306,6 +314,22 @@ public class InviteeFragment extends BaseUiFragment {
             }
         });
 
+        Button nextBtn = (Button) root.findViewById(R.id.attendee_picker_next_btn);
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getFrom() instanceof EventCreateNewFragment){
+                    setSelectInvitees();
+                    EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+                    eventTimeSlotViewFragment.setFrom(self);
+                    switchFragment(self, eventTimeSlotViewFragment);
+                }else if (getFrom() instanceof EventTimeSlotViewFragment){
+                    setSelectInvitees();
+                    ((EventTimeSlotViewFragment)getFrom()).setFrom(self);
+                    switchFragment(self, (EventTimeSlotViewFragment)getFrom());
+                }
+            }
+        });
 
 //        Button nextBtn = (Button) getActivity().findViewById(R.id.attendee_picker_next_btn);
 //        nextBtn.setOnClickListener(new View.OnClickListener() {
@@ -363,6 +387,13 @@ public class InviteeFragment extends BaseUiFragment {
 //            }
 //        });
 
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden){
+            event = EventManager.getInstance().getCurrentEvent();
+        }
     }
 
     private Invitee contactToInvitee(Contact contact, Event event) {

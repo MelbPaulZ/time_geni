@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.vendor.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
@@ -32,11 +35,43 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
     private String tag;
     private ObservableField<Boolean> isChangeDuration = new ObservableField<>(false);
     private String durationTimeString = "1 hour";
+    private EventCreateNewTimeSlotMvpView mvpView;
 
     public EventCreateTimeslotViewModel(EventCreateTimeSlotPresenter presenter){
         this.presenter = presenter;
         titleString = initToolBarTitle();
+        event= EventManager.getInstance().getCurrentEvent();
+        mvpView = presenter.getView();
+        presenter.initData(event);
+        initTimeSlots();
+    }
 
+    public void initTimeSlots(){
+        if (mvpView!=null){
+            mvpView.initTimeSlots(event);
+        }
+    }
+
+    public View.OnClickListener onClickBack(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mvpView!=null){
+                    mvpView.toInviteePicker();
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener onClickDone(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mvpView!=null){
+                    mvpView.toNewEventDetailBeforeSending();
+                }
+            }
+        };
     }
 
     public WeekView.OnHeaderListener onWeekViewChange(){

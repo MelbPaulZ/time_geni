@@ -269,47 +269,48 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
 //
 //    // todo alert dialog show image
 //
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        switch (requestCode){
-//            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:{
-//                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
-//                    toPhotoPicker();
-//                }else {
-//                    Toast.makeText(getBaseContext(), "retry",Toast.LENGTH_SHORT).show();
-//                }
-//            }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:{
+                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                    toPhotoPicker();
+                }else {
+                    Toast.makeText(getBaseContext(), "retry",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
+    }
 //
-//        }
-//    }
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        // this is the recall for photo urls
-//        switch (requestCode){
-//            case ACTIVITY_PHOTOPICKER: {
-//                if (resultCode == Activity.RESULT_OK) {
-//                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-//                    if (tag==getString(R.string.tag_create_event)){
-//                        eventCreateNewFragment.setPhotos(result);
-//                    }else if (tag== getString(R.string.tag_create_event_before_sending)){
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // this is the recall for photo urls
+        switch (requestCode){
+            case ACTIVITY_PHOTOPICKER: {
+                if (resultCode == Activity.RESULT_OK) {
+                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+                    if (tag==getString(R.string.tag_create_event)){
+                        EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getSupportFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
+                        eventCreateNewFragment.setPhotos(result);
+                    }else if (tag== getString(R.string.tag_create_event_before_sending)){
 //                        eventCreateDetailBeforeSendingFragment.setPhotos(result);
-//                    }
-//                }
-//            }
-//        }
-//    }
+                    }
+                }
+            }
+        }
+    }
 //
-//    public void toPhotoPicker(){
-//        Intent intent = new Intent(this, PhotoPickerActivity.class);
-//        int selectedMode = PhotoPickerActivity.MODE_MULTI;
-//        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-//        int maxNum = 3;
-//        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
-//        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, true);
-//        startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
-//    }
+    public void toPhotoPicker(){
+        Intent intent = new Intent(this, PhotoPickerActivity.class);
+        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+        int maxNum = 3;
+        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, true);
+        startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
+    }
 //
 //
 //

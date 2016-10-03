@@ -21,24 +21,6 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
     }
 
 
-
-
-    public void pickAttendee(){
-        EventCreateNewMvpView view = getView();
-        if (view!=null){
-            view.pickInvitee();
-        }
-    }
-
-    public void toCreateSoloEvent(Event event){
-        EventCreateNewMvpView view = getView();
-        if (view!=null){
-            // here to do http request to create solo event
-
-            view.toCreateSoloEvent(event);
-        }
-    }
-
     public void pickPhoto(String tag){
         EventCreateNewMvpView view = getView();
         if (view!=null){

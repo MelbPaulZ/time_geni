@@ -150,12 +150,7 @@ public class EventEditViewModel extends BaseObservable {
                 CharSequence[] alertTimes;
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle(getContext().getString(R.string.choose_alert_time));
-                alertTimes = new CharSequence[]{
-                        getContext().getString(R.string.none),
-                        getContext().getString(R.string.ten_minutes_before),
-                        getContext().getString(R.string.one_hour_before),
-                        getContext().getString(R.string.one_week_before)
-                };
+                alertTimes = EventUtil.getAlertTimes(getContext());
                 builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
