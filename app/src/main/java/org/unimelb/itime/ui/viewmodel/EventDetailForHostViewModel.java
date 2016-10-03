@@ -31,6 +31,8 @@ public class EventDetailForHostViewModel extends BaseObservable {
     private String tag;
     private Context context;
 
+
+
     public EventDetailForHostViewModel(EventDetailForHostPresenter presenter) {
         this.presenter = presenter;
         this.inflater = presenter.getInflater();
@@ -230,4 +232,6 @@ public class EventDetailForHostViewModel extends BaseObservable {
             }
         }
     }
+
+
 }

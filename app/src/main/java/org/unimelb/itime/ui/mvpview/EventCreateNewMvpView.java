@@ -11,8 +11,8 @@ import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 public interface EventCreateNewMvpView extends MvpView {
     void pickDate(String tag);
     void gotoWeekViewCalendar();
-    void pickLocatioin(String tag);
-    void pickAttendee();
+    void pickLocation();
+    void pickInvitee();
     void toCreateSoloEvent(Event event);
     void pickPhoto(String tag);
 }

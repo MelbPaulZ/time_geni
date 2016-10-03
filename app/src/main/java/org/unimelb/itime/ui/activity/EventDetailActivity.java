@@ -148,12 +148,12 @@ public class EventDetailActivity extends AppCompatActivity {
         if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
             eventDetailHostTimeSlotFragment.setEvent(event);
-            eventDetailHostTimeSlotFragment.setTag(tag);
+//            eventDetailHostTimeSlotFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
         } else {
             eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
             eventDetailHostTimeSlotFragment.setEvent(event);
-            eventDetailHostTimeSlotFragment.setTag(tag);
+//            eventDetailHostTimeSlotFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
         }
@@ -189,11 +189,11 @@ public class EventDetailActivity extends AppCompatActivity {
     public void toLocationPicker(String tag, Fragment fragment) {
         if (locationPickerFragment != null && locationPickerFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-            locationPickerFragment.setTag(tag);
+//            locationPickerFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().show(locationPickerFragment).commit();
         } else {
             locationPickerFragment = new EventLocationPickerFragment();
-            locationPickerFragment.setTag(tag);
+//            locationPickerFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, locationPickerFragment).commit();
         }
@@ -204,12 +204,12 @@ public class EventDetailActivity extends AppCompatActivity {
         if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()){
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             eventDetailHostTimeSlotFragment.setEvent(event);
-            eventDetailHostTimeSlotFragment.setTag(tag);
+//            eventDetailHostTimeSlotFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
         }else{
             eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
             eventDetailHostTimeSlotFragment.setEvent(event);
-            eventDetailHostTimeSlotFragment.setTag(tag);
+//            eventDetailHostTimeSlotFragment.setTag(tag);
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
         }

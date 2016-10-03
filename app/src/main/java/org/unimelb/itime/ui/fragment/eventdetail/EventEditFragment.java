@@ -1,19 +1,13 @@
 package org.unimelb.itime.ui.fragment.eventdetail;
 
-import android.Manifest;
-import android.app.Fragment;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -24,7 +18,6 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
-import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
@@ -38,7 +31,7 @@ import java.util.ArrayList;
 /**
  * Created by Paul on 28/08/2016.
  */
-public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPresenter> implements EventEditMvpView, FragmentTagListener {
+public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPresenter> implements EventEditMvpView {
 
     private FragmentEventEditDetailBinding binding;
     private EventEditViewModel eventEditViewModel;
@@ -123,10 +116,10 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
         ((EventDetailActivity)getActivity()).toDetailSoloEvent(event);
     }
 
-    @Override
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
+//    @Override
+//    public void setTag(String tag) {
+//        this.tag = tag;
+//    }
 
     @Subscribe
     public void getLocation(MessageLocation messageLocation){
@@ -156,11 +149,4 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
         super.onStop();
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        // hide soft key board
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-    }
 }

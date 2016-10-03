@@ -19,12 +19,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -40,33 +38,30 @@ import com.google.android.gms.common.data.DataBufferUtils;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.AutocompletePredictionBuffer;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.helper.FragmentTagListener;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.messageevent.MessageLocation;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
+import org.unimelb.itime.ui.presenter.EmptyPresenter;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Paul on 27/08/2016.
  */
-public class EventLocationPickerFragment extends android.support.v4.app.Fragment implements GoogleApiClient.OnConnectionFailedListener,FragmentTagListener{
-//public class EventLocationPickerFragment extends android.support.v4.app.Fragment implements  FragmentTagListener{
+public class EventLocationPickerFragment extends BaseUiFragment implements GoogleApiClient.OnConnectionFailedListener{
 
     private View root;
     protected GoogleApiClient mGoogleApiClient;
@@ -97,9 +92,19 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
 
 
     @Override
+    public MvpPresenter createPresenter() {
+        return new EmptyPresenter();
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        init();
+        initListeners();
+    }
 
+
+    private void init(){
         LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -151,9 +156,7 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             mAutocompleteView.setOnItemClickListener(currentLocationListener);
             mAutocompleteView.setAdapter(strAdapter);
             mAutocompleteView.setText("");
-            initListeners();
         }
-
     }
 
 
@@ -163,13 +166,18 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tag == getString(R.string.tag_create_event))
-                    ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
-                else if (tag == getString(R.string.tag_create_event_before_sending)){
-                    ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
-                }else if (tag.equals(getString(R.string.tag_edit_event))){
-                    ((EventDetailActivity)getActivity()).toEditEvent(self);
+                if (getFrom() instanceof EventCreateNewFragment){
+                    // no need of set from for event create new fragment
+                    EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
+                    switchFragment(self, eventCreateNewFragment);
                 }
+//                if (tag == getString(R.string.tag_create_event))
+//                    ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+//                else if (tag == getString(R.string.tag_create_event_before_sending)){
+//                    ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
+//                }else if (tag.equals(getString(R.string.tag_edit_event))){
+//                    ((EventDetailActivity)getActivity()).toEditEvent(self);
+//                }
             }
         });
 
@@ -190,16 +198,22 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tag == getResources().getString(R.string.tag_create_event)) {
-                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
-                    ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
-                }else if (tag == getString(R.string.tag_create_event_before_sending)){
-                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
-                    ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
-                }else if (tag.equals(getString(R.string.tag_edit_event))){
-                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
-                    ((EventDetailActivity)getActivity()).toEditEvent(self);
+                if (getFrom() instanceof EventCreateNewFragment){
+                    // no need of set from for event create new fragment
+                    EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
+                    EventManager.getInstance().getCurrentEvent().setLocation(mAutocompleteView.getText().toString());
+                    switchFragment(self, eventCreateNewFragment);
                 }
+//                if (tag == getResources().getString(R.string.tag_create_event)) {
+//                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
+//                    ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+//                }else if (tag == getString(R.string.tag_create_event_before_sending)){
+//                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
+//                    ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
+//                }else if (tag.equals(getString(R.string.tag_edit_event))){
+//                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
+//                    ((EventDetailActivity)getActivity()).toEditEvent(self);
+//                }
             }
         });
 
@@ -265,7 +279,10 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
                         }
                         likelyPlaces.release();
                         place = fullAddress;
-                        EventBus.getDefault().post(new MessageLocation(tag, place));
+                        // this might be delayed by network, so need eventbus
+                        if(getFrom() instanceof EventCreateNewFragment){
+                            EventBus.getDefault().post(new MessageLocation(EventCreateNewFragment.class.getSimpleName(), place));
+                        }
                         mAutocompleteView.setText(place);
                         mAutocompleteView.setAdapter(mAdapter);
                         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener); // change listener
@@ -288,17 +305,22 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             mAutocompleteView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
-            EventBus.getDefault().post(new MessageLocation(tag, clickStr));
+//            EventBus.getDefault().post(new MessageLocation(tag, clickStr));
 
             // tiao zhuan
-
-            if (tag == getString(R.string.tag_create_event)) {
-                ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
-            }else if (tag == getString(R.string.tag_create_event_before_sending)){
-                ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
-            }else if (tag.equals(getString(R.string.tag_edit_event))){
-                ((EventDetailActivity)getActivity()).toEditEvent(self);
+            if (getFrom() instanceof EventCreateNewFragment){
+                // no need of set from for event create new fragment
+                EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
+                EventManager.getInstance().getCurrentEvent().setLocation(clickStr);
+                switchFragment(self, eventCreateNewFragment);
             }
+//            if (tag == getString(R.string.tag_create_event)) {
+//                ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+//            }else if (tag == getString(R.string.tag_create_event_before_sending)){
+//                ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
+//            }else if (tag.equals(getString(R.string.tag_edit_event))){
+//                ((EventDetailActivity)getActivity()).toEditEvent(self);
+//            }
         }
     };
 
@@ -315,20 +337,27 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
             if (locations.size()>5){
                 locations.remove(5);
             }
-            mAutocompleteView.setAdapter(strAdapter);
-            mAutocompleteView.setOnItemClickListener(currentLocationListener);
+            // here should change to mAdapter, after click on autoComplete Text
+            mAutocompleteView.setAdapter(mAdapter);
+            mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
             strAdapter.notifyDataSetChanged();
 //             find a way fix here later
-            if (tag == getString(R.string.tag_create_event)) {
-                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
-                ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
-            }else if (tag == getString(R.string.tag_create_event_before_sending)){
-                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
-                ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
-            }else if (tag.equals(getString(R.string.tag_edit_event))){
-                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
-                ((EventDetailActivity)getActivity()).toEditEvent(self);
+            if (getFrom() instanceof EventCreateNewFragment){
+                // no need of set from for event create new fragment
+                EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
+                EventManager.getInstance().getCurrentEvent().setLocation((String)primaryText);
+                switchFragment(self, eventCreateNewFragment);
             }
+//            if (tag == getString(R.string.tag_create_event)) {
+//                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
+//                ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
+//            }else if (tag == getString(R.string.tag_create_event_before_sending)){
+//                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
+//                ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
+//            }else if (tag.equals(getString(R.string.tag_edit_event))){
+//                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
+//                ((EventDetailActivity)getActivity()).toEditEvent(self);
+//            }
         }
     };
 
@@ -342,11 +371,6 @@ public class EventLocationPickerFragment extends android.support.v4.app.Fragment
         Toast.makeText(getContext(),
                 "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
                 Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void setTag(String tag) {
-        this.tag = tag;
     }
 
     public class PlaceAutoCompleteAdapter

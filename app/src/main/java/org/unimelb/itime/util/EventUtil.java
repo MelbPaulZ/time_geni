@@ -71,8 +71,10 @@ public class EventUtil{
 
     public static ArrayList<String> fromInviteeListToArraylist(List<Invitee> inviteeArrayList){
         ArrayList<String> arrayList = new ArrayList<>();
-        for (Invitee invitee: inviteeArrayList) {
-            arrayList.add(invitee.getName());
+        if (inviteeArrayList!=null) {
+            for (Invitee invitee : inviteeArrayList) {
+                arrayList.add(invitee.getName());
+            }
         }
         return arrayList;
     }

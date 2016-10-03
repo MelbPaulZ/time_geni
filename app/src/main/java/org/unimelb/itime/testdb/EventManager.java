@@ -16,6 +16,8 @@ public class EventManager {
     private final String TAG = "MyAPP";
     private static EventManager ourInstance = new EventManager();
 
+    private Event currentEvent = new Event();
+
     Map<Long, List<ITimeEventInterface>> eventMap = new HashMap<>();
     Calendar calendar = Calendar.getInstance();
 
@@ -69,4 +71,11 @@ public class EventManager {
         }
     }
 
+    public Event getCurrentEvent() {
+        return currentEvent;
+    }
+
+    public void setCurrentEvent(Event currentEvent) {
+        this.currentEvent = currentEvent;
+    }
 }

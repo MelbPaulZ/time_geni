@@ -20,11 +20,10 @@ import com.wx.wheelview.adapter.ArrayWheelAdapter;
 import com.wx.wheelview.widget.WheelView;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
-import org.unimelb.itime.databinding.FragmentLoginBinding;
-import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
@@ -33,11 +32,9 @@ import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
-import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -47,8 +44,8 @@ import java.util.Map;
 /**
  * Created by Paul on 27/08/2016.
  */
-public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlotMvpView,EventCreateTimeSlotPresenter>
-        implements EventCreateNewTimeSlotMvpView,FragmentTagListener{
+public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTimeSlotMvpView,EventCreateTimeSlotPresenter>
+        implements EventCreateNewTimeSlotMvpView{
 
     FragmentEventCreateTimeslotViewBinding binding;
     EventCreateTimeslotViewModel viewModel;
@@ -75,11 +72,11 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         viewModel.setTag(this.tag);
         inflater=LayoutInflater.from(getContext());
 
-        Bundle bundle = getArguments();
-        this.event = (Event) bundle.getSerializable(getString(R.string.new_event));
+//        Bundle bundle = getArguments();
+//        this.event = (Event) bundle.getSerializable(getString(R.string.new_event));
         timeslotWeekView = (WeekView) binding.getRoot().findViewById(R.id.timeslot_week_view);
-        initData();
-        initTimeSlots(); // this must after  initData()
+//        initData();
+//        initTimeSlots(); // this must after  initData()
         initListeners();
 
     }
@@ -401,29 +398,20 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
     }
 
 
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        // hide soft key board
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-    }
-
     @Override
     public void toNewEventDetailBeforeSending(Bundle bundle) {
-        ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(this, bundle);
+//        ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(this, bundle);
     }
 
     @Override
     public void toInviteePicker(String tag) {
-        ((EventCreateActivity)getActivity()).backToInviteePicker(this,tag);
+//        ((EventCreateActivity)getActivity()).backToInviteePicker(this,tag);
     }
-
-    @Override
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
+//
+//    @Override
+//    public void setTag(String tag) {
+//        this.tag = tag;
+//    }
 
     @Override
     public EventCreateTimeSlotPresenter createPresenter() {

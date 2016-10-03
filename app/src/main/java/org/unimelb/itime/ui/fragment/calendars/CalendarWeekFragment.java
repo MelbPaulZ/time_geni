@@ -123,14 +123,6 @@ public class CalendarWeekFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden){
-            weekView.setDayEventMap(EventManager.getInstance().getEventsMap());
-            weekView.setEventClassName(Event.class);
-        }
-    }
 
 
     @Override

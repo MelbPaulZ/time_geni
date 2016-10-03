@@ -15,23 +15,18 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
-import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailHostTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailHostTimeSlotViewModel;
-import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.weekview.WeekView;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Paul on 10/09/2016.
  */
 public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHostTimeSlotMvpVIew, EventDetailHostTimeSlotPresenter>
-        implements EventDetailHostTimeSlotMvpVIew, FragmentTagListener{
+        implements EventDetailHostTimeSlotMvpVIew{
     private String tag;
     private FragmentEventDetailTimeslotHostViewBinding binding;
     private EventDetailHostTimeSlotViewModel viewModel;
@@ -72,21 +67,15 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
         }
     }
 //
-    @Override
-    public void setTag(String tag) {
-        this.tag = tag;
-        if (viewModel!=null){
-            viewModel.setTag(tag);
-        }
-    }
+//    @Override
+//    public void setTag(String tag) {
+//        this.tag = tag;
+//        if (viewModel!=null){
+//            viewModel.setTag(tag);
+//        }
+//    }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        // hide soft key board
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-    }
+
 //
     public Event getEvent() {
         return event;
