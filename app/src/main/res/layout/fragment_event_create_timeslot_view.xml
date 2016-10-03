@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -80,19 +79,11 @@
                 </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
-            <org.unimelb.itime.vendor.weekview.WeekView
-                android:id="@+id/timeslot_week_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/toolbar"
-                app:onWeekViewChange="@{timeslotVM.onWeekViewChange()}">
-            </org.unimelb.itime.vendor.weekview.WeekView>
-
         <RelativeLayout
             android:id="@+id/duration_part"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@+id/timeslot_week_view"
+            android:layout_alignParentBottom="true"
             >
             <android.support.v7.widget.Toolbar
                 android:id="@+id/bottom_bar"
@@ -125,5 +116,15 @@
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </RelativeLayout>
+
+        <org.unimelb.itime.vendor.weekview.WeekView
+            android:id="@+id/timeslot_week_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_above="@+id/duration_part"
+            app:onWeekViewChange="@{timeslotVM.onWeekViewChange()}">
+        </org.unimelb.itime.vendor.weekview.WeekView>
     </RelativeLayout>
+
 </layout>

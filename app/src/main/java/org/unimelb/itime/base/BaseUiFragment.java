@@ -8,11 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hannesdorfmann.mosby.mvp.MvpFragment;
+import com.hannesdorfmann.mosby.mvp.MvpPresenter;
+import com.hannesdorfmann.mosby.mvp.MvpView;
+
 
 /**
  * provide some common methods and initialise parameters
  */
-public abstract class BaseUiFragment extends Fragment{
+public abstract class BaseUiFragment extends MvpFragment<V extends MvpView, P extends MvpPresenter>{
 
     protected View mRootView;
 

@@ -183,9 +183,13 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         if (eventTimeSlotViewFragment == null || !(eventTimeSlotViewFragment.isAdded())) {
             eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
             eventTimeSlotViewFragment.setArguments(bundle);
+            eventTimeSlotViewFragment.setTag(getString(R.string.tag_create_event));
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventTimeSlotViewFragment).commit();
         } else {
+            eventTimeSlotViewFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().remove(eventTimeSlotViewFragment);
+            eventTimeSlotViewFragment.setTag(getString(R.string.tag_create_event));
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().show(eventTimeSlotViewFragment).commit();
         }

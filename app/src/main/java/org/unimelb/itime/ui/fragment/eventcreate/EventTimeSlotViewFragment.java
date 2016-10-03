@@ -171,6 +171,9 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
 
                 }else if (tag==getString(R.string.tag_before_sending_back)){
                     toInviteePicker(tag);
+                }else if (tag == getString(R.string.tag_create_event)){
+                    // from invitee picker to timeslot and back to invitee picker
+                    toInviteePicker(tag);
                 }
             }
         });

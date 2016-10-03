@@ -32,6 +32,7 @@ import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
 import org.unimelb.itime.vendor.contact.helper.ClearEditText;
@@ -335,8 +336,10 @@ public class InviteeFragment extends Fragment implements FragmentTagListener{
             public void onClick(View view) {
                 if (tag.equals(getString(R.string.tag_host_event_edit))){
                     ((EventDetailActivity)getActivity()).fromInviteeToEditEvent();
-                }else{
+                }else if (tag.equals(getString(R.string.tag_create_event))){
                     ((EventCreateActivity)getActivity()).toCreateEventNewFragment(self);
+                }else if (tag.equals(getString(R.string.tag_create_event_before_sending))){
+                    ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(self);
                 }
             }
         });
