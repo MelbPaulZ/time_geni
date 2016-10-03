@@ -76,12 +76,17 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
             }
             EventManager.getInstance().addEvent(ev);
         }
-        EventManager.getInstance().addEvent(event);
+//        EventManager.getInstance().addEvent(event);
 
         monthDayFragment.calendarNotifyDataSetChanged();
         agendaFragment.calendarNotifyDataSetChanged();
         weekFragment.calendarNotifyDataSetChanged();
+    }
 
+    public void updateEvents(){
+        monthDayFragment.calendarNotifyDataSetChanged();
+        agendaFragment.calendarNotifyDataSetChanged();
+        weekFragment.calendarNotifyDataSetChanged();
     }
 
     @Override

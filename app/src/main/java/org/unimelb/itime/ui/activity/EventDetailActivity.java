@@ -40,6 +40,9 @@ public class EventDetailActivity extends AppCompatActivity {
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
     private final int ACTIVITY_PHOTOPICKER = 2;
 
+    public static final String request = "request";
+    public static final int UPDATE_EVENT = 1000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
     public void gotoWeekViewCalendar() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(request, UPDATE_EVENT);
         startActivity(intent);
     }
 
@@ -113,15 +117,15 @@ public class EventDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void toEditEvent(Event event) {
+    public void toEditEvent(Fragment fragment, Event event) {
         if (eventEditFragment != null && eventEditFragment.isAdded()) {
-            getSupportFragmentManager().beginTransaction().hide(eventDetailForSoloFragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             eventEditFragment.setEvent(event);
             getSupportFragmentManager().beginTransaction().show(eventEditFragment).commit();
         } else {
             eventEditFragment = new EventEditFragment();
             eventEditFragment.setEvent(event);
-            getSupportFragmentManager().beginTransaction().hide(eventDetailForSoloFragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventEditFragment).commit();
         }
     }
@@ -140,24 +144,25 @@ public class EventDetailActivity extends AppCompatActivity {
         }
     }
 
-//    public void toTimeSlotView(String tag, Event event) {
-//        if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()) {
-//            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
-//            eventDetailHostTimeSlotFragment.setEvent(event);
-//            eventDetailHostTimeSlotFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
-//        } else {
-//            eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
-//            eventDetailHostTimeSlotFragment.setEvent(event);
-//            eventDetailHostTimeSlotFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
-//        }
-//    }
+    public void toTimeSlotView(String tag, Event event) {
+        if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
+            eventDetailHostTimeSlotFragment.setEvent(event);
+            eventDetailHostTimeSlotFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
+        } else {
+            eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
+            eventDetailHostTimeSlotFragment.setEvent(event);
+            eventDetailHostTimeSlotFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().hide(eventDetailHostFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
+        }
+    }
 
-    public void toHostEventDetail(Fragment fragment) {
+    public void toHostEventDetail(Event event, Fragment fragment) {
         if (eventDetailHostFragment != null && eventDetailHostFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            eventDetailHostFragment.setEvent(event);
             getSupportFragmentManager().beginTransaction().show(eventDetailHostFragment).commit();
         } else {
             eventDetailHostFragment = new EventDetailHostFragment();
@@ -168,7 +173,7 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     // from timeslot push cancle button
-    public void fromTimeSlotToHostEdit(Fragment fragment){
+    public void fromTimeSlotToHostEdit(Event event,Fragment fragment){
         if (eventEditFragment != null && eventEditFragment.isAdded()){
             getSupportFragmentManager().beginTransaction().hide(fragment).commit();
             eventEditFragment.setEvent(event);
@@ -195,20 +200,20 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
 
-//    public void fromHostEditToTimeSlotView(String tag, Fragment fragment){
-//        if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()){
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            eventDetailHostTimeSlotFragment.setEvent(event);
-//            eventDetailHostTimeSlotFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
-//        }else{
-//            eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
-//            eventDetailHostTimeSlotFragment.setEvent(event);
-//            eventDetailHostTimeSlotFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
-//        }
-//    }
+    public void fromHostEditToTimeSlotView(String tag, Event event,Fragment fragment){
+        if (eventDetailHostTimeSlotFragment != null && eventDetailHostTimeSlotFragment.isAdded()){
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            eventDetailHostTimeSlotFragment.setEvent(event);
+            eventDetailHostTimeSlotFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().show(eventDetailHostTimeSlotFragment).commit();
+        }else{
+            eventDetailHostTimeSlotFragment = new EventDetailHostTimeSlotFragment();
+            eventDetailHostTimeSlotFragment.setEvent(event);
+            eventDetailHostTimeSlotFragment.setTag(tag);
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, eventDetailHostTimeSlotFragment).commit();
+        }
+    }
 
     public void toInviteePicker(String tag, Fragment fragment){
         if (inviteeFragment != null && inviteeFragment.isAdded()){

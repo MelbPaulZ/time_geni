@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.testdb.DBManager;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventDetailForHostMvpView;
 
 /**
@@ -18,6 +20,20 @@ public class EventDetailForHostPresenter extends MvpBasePresenter<EventDetailFor
     public EventDetailForHostPresenter(Context context, LayoutInflater inflater) {
         this.context = context;
         this.inflater = inflater;
+    }
+
+    public void toWeekView(Event event){
+        EventDetailForHostMvpView view = getView();
+        if (view!=null){
+            Event oldEvent = DBManager.getInstance(context).getEvent(event.getEventUid());
+            // here update EventManager
+            EventManager.getInstance().updateEvent(oldEvent, event.getStartTime(), event.getEndTime());
+            // update db or eventmanager?
+            // here update DB
+            oldEvent.setStartTime(event.getStartTime());
+            oldEvent.setEndTime(event.getEndTime());
+            view.toWeekView();
+        }
     }
 
     public void toWeekView(){

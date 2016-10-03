@@ -97,7 +97,8 @@ public class CalendarMonthDayFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (!hidden){
-
+            monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
+            monthDayView.setEventClassName(Event.class);
         }
     }
 

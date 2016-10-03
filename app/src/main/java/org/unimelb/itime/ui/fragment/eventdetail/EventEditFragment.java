@@ -65,13 +65,14 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
         binding.setEventEditVM(eventEditViewModel);
         tag = getString(R.string.tag_edit_event);
 
-        ArrayList<String> timeslotArrayList = new ArrayList<>();
-        for (TimeSlot timeSlot: event.getTimeslots()){
-            timeslotArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()));
+        if (event.hasTimeslots()){
+            ArrayList<String> timeslotArrayList = new ArrayList<>();
+            for (TimeSlot timeSlot: event.getTimeslots()){
+                timeslotArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()));
+            }
+            ArrayAdapter stringAdapter = new ArrayAdapter(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotArrayList);
+            binding.eventEditListview.setAdapter(stringAdapter);
         }
-        ArrayAdapter stringAdapter = new ArrayAdapter(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotArrayList);
-        binding.eventEditListview.setAdapter(stringAdapter);
-
     }
 
     public void setEvent(Event event){
@@ -79,6 +80,7 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
         if (eventEditViewModel!=null){
             eventEditViewModel.setEventEditViewEvent(event);
         }
+
     }
 
     public void setPhotos(ArrayList<String> photos){
@@ -96,8 +98,8 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
     }
 
     @Override
-    public void toTimeSlotView(String tag) {
-//        ((EventDetailActivity)getActivity()).fromHostEditToTimeSlotView(tag, this);
+    public void toTimeSlotView(String tag, Event event) {
+        ((EventDetailActivity)getActivity()).fromHostEditToTimeSlotView(tag, event,this);
     }
 
     @Override

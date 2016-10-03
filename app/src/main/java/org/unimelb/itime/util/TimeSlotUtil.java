@@ -41,6 +41,24 @@ public class TimeSlotUtil {
         }
     }
 
+    //get all selected timeslots
+    public static List<TimeSlot> getSelectedTimeSlots(Context context,List<TimeSlot> timeSlotList){
+        List<TimeSlot> selectedTimeSlots = new ArrayList<>();
+        for (TimeSlot timeSlot:timeSlotList){
+            if (timeslotStatusEquals(timeSlot, context.getString(R.string.timeslot_status_accept))){
+                selectedTimeSlots.add(timeSlot);
+            }
+        }
+        return selectedTimeSlots;
+    }
+
+    public static boolean timeslotStatusEquals(TimeSlot timeSlot, String status){
+        if (timeSlot.getStatus().equals(status) || timeSlot.getStatus() == status){
+            return true;
+        }
+        return false;
+    }
+
     public static boolean chooseAtLeastOnTimeSlot(Context context, List<TimeSlot> timeSlots){
         for (TimeSlot timeSlot: timeSlots){
             if (isTimeSlotSelected(context, timeSlot)){

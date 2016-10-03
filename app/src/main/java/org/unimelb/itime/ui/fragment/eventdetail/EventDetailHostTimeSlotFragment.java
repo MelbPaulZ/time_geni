@@ -13,13 +13,16 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.helper.FragmentTagListener;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailHostTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailHostTimeSlotViewModel;
 import org.unimelb.itime.util.TimeSlotUtil;
+import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +36,7 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
     private FragmentEventDetailTimeslotHostViewBinding binding;
     private EventDetailHostTimeSlotViewModel viewModel;
     private Event event;
+    private WeekView weekView;
 
     @Nullable
     @Override
@@ -45,14 +49,27 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = new EventDetailHostTimeSlotViewModel(presenter);
-//        tag = getString(R.string.tag_host_event_detail);
         viewModel.setTag(tag);
         viewModel.setEventDetailHostEvent(event);
         binding.setTimeSlotHostVM(viewModel);
-//        if(event.getTimeslots().size()>0) {
-//            int duration = (int) ((event.getTimeslots().get(0).getEndTime() - event.getTimeslots().get(0).getStartTime())/1000/60);
-//            binding.detailHostTimeslot.setTimeSlots(TimeSlotUtil.fromTimeSlotsToMap(getContext(), event.getTimeslots()), duration);
-//        }
+
+        weekView = (WeekView) binding.getRoot().findViewById(R.id.edit_timeslot_weekview);
+        weekView.enableTimeSlot();
+        weekView.setEventClassName(Event.class);
+        weekView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        initTimeSlots();
+    }
+
+    public void initTimeSlots(){
+        if (event.hasTimeslots()) {
+            for (TimeSlot timeSlot : event.getTimeslots()) {
+                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
+                struct.startTime = timeSlot.getStartTime();
+                struct.endTime = timeSlot.getEndTime();
+                struct.object = timeSlot;
+                weekView.addTimeSlot(struct);
+            }
+        }
     }
 //
     @Override
@@ -62,12 +79,7 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
             viewModel.setTag(tag);
         }
     }
-//
-//    @Override
-//    public EventDetailHostTimeSlotPresenter createPresenter() {
-//        return new EventDetailHostTimeSlotPresenter(getContext());
-//    }
-//
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
@@ -85,27 +97,22 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
         if (viewModel!=null){
             viewModel.setEventDetailHostEvent(event);
         }
-//        if (binding!=null){
-//            if (event.getTimeslots().size()>0) {
-//                int duration = (int) ((event.getTimeslots().get(0).getEndTime() - event.getTimeslots().get(0).getStartTime())/1000/60);
-//                binding.detailHostTimeslot.setTimeSlots(TimeSlotUtil.fromTimeSlotsToMap(getContext(), event.getTimeslots()), duration);
-//            }
-//        }
-    }
 
-    @Override
-    public void toHostEventDetail() {
-        ((EventDetailActivity)getActivity()).toHostEventDetail(this);
-    }
-
-    @Override
-    public void toHostEventEdit() {
-        ((EventDetailActivity)getActivity()).fromTimeSlotToHostEdit(this);
     }
 
 
     @Override
     public EventDetailHostTimeSlotPresenter createPresenter() {
         return new EventDetailHostTimeSlotPresenter(getContext());
+    }
+
+    @Override
+    public void toHostEventDetail(Event event) {
+        ((EventDetailActivity)getActivity()).toHostEventDetail(event, this);
+    }
+
+    @Override
+    public void toHostEventEdit(Event event) {
+        ((EventDetailActivity)getActivity()).fromTimeSlotToHostEdit(event,this);
     }
 }

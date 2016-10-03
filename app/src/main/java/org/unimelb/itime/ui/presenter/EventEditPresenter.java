@@ -32,10 +32,10 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         }
     }
 
-    public void toTimeSlotView(String tag){
+    public void toTimeSlotView(String tag, Event event){
         EventEditMvpView view= getView();
         if (view != null){
-            view.toTimeSlotView(tag);
+            view.toTimeSlotView(tag, event);
         }
     }
 

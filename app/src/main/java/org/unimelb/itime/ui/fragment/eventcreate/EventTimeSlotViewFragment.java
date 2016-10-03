@@ -25,6 +25,7 @@ import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
 import org.unimelb.itime.databinding.FragmentLoginBinding;
 import org.unimelb.itime.helper.FragmentTagListener;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
@@ -390,25 +391,10 @@ public class EventTimeSlotViewFragment extends MvpFragment<EventCreateNewTimeSlo
         timeSlot3.setEndTime(calendar2.getTimeInMillis()+3600000);
         timeSlots.add(timeSlot3);
 
-        WeekView.TimeSlotStruct timeSlotStruct1 = new WeekView.TimeSlotStruct();
-        timeSlotStruct1.startTime = timeSlot1.getStartTime();
-        timeSlotStruct1.endTime = timeSlot1.getEndTime();
-        timeSlotStruct1.status = false;
-        timeslotWeekView.addTimeSlot(timeSlotStruct1);
-
-        WeekView.TimeSlotStruct timeSlotStruct2 = new WeekView.TimeSlotStruct();
-        timeSlotStruct2.startTime = timeSlot2.getStartTime();
-        timeSlotStruct2.endTime = timeSlot2.getEndTime();
-        timeSlotStruct2.status = false;
-        timeslotWeekView.addTimeSlot(timeSlotStruct2);
-
-        WeekView.TimeSlotStruct timeSlotStruct3 = new WeekView.TimeSlotStruct();
-        timeSlotStruct3.startTime = timeSlot3.getStartTime();
-        timeSlotStruct3.endTime = timeSlot3.getEndTime();
-        timeSlotStruct3.status = false;
-        timeslotWeekView.addTimeSlot(timeSlotStruct3);
-
         event.setTimeslots(timeSlots);
+
+        timeslotWeekView.setEventClassName(Event.class);
+        timeslotWeekView.setDayEventMap(EventManager.getInstance().getEventsMap());
     }
 
 

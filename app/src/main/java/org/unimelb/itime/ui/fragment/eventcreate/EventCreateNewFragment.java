@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.Bindable;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -208,4 +209,5 @@ public class EventCreateNewFragment extends MvpFragment<EventCreateNewMvpView, E
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
 }

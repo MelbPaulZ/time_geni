@@ -80,25 +80,19 @@
                 </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/middle_relative_layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/timeslot_weekview_allshow"
-            android:layout_below="@+id/toolbar"
-            android:orientation="vertical">
             <org.unimelb.itime.vendor.weekview.WeekView
                 android:id="@+id/timeslot_week_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/toolbar"
                 app:onWeekViewChange="@{timeslotVM.onWeekViewChange()}">
             </org.unimelb.itime.vendor.weekview.WeekView>
 
-        </RelativeLayout>
         <RelativeLayout
             android:id="@+id/duration_part"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@+id/middle_relative_layout"
+            android:layout_below="@+id/timeslot_week_view"
             >
             <android.support.v7.widget.Toolbar
                 android:id="@+id/bottom_bar"

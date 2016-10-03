@@ -56,9 +56,13 @@ public class EventManager {
     }
 
     public void updateEvent(Event oldEvent, long newStartTime, long newEndTime){
+        // problem here
         long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
         if (this.eventMap.containsKey(oldBeginTime)){
+            int sizeBeforeRM = eventMap.get(oldBeginTime).size();
+            Event event = (Event) this.eventMap.get(oldBeginTime).get(0);
             this.eventMap.get(oldBeginTime).remove(oldEvent);
+            int sizeAfterRM = eventMap.get(oldBeginTime).size();
             oldEvent.setStartTime(newStartTime);
             oldEvent.setEndTime(newEndTime);
             this.addEvent(oldEvent);

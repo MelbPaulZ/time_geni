@@ -10,6 +10,7 @@ import org.unimelb.itime.base.C;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -110,6 +111,13 @@ public class EventUtil{
             arrayList.add(new PhotoUrl(url));
         }
         return arrayList;
+    }
+
+    public static Event getEventInDB(Context context,String eventUid){
+        Event event = DBManager.getInstance(context).getEvent(eventUid);
+        event.getInvitee();
+        event.getTimeslots();
+        return event;
     }
 
 

@@ -48,7 +48,6 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
         init();
-//        getNewEvent();
     }
 
     @Override
@@ -61,6 +60,10 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         if (intent.hasExtra(getString(R.string.new_event))) {
             Event event = (Event) intent.getSerializableExtra(getString(R.string.new_event));
             ((MainCalendarFragment)tagFragments[0]).addNewEvent(event);
+        }else if (intent.hasExtra(EventDetailActivity.request)){
+            if (intent.getIntExtra(EventDetailActivity.request, -1)==EventDetailActivity.UPDATE_EVENT){
+                ((MainCalendarFragment)tagFragments[0]).updateEvents();
+            }
         }
     }
 

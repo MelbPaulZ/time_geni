@@ -49,12 +49,13 @@ public class EventCreateNewVIewModel extends BaseObservable {
     private CharSequence repeats[] = null;
     EventCreateNewVIewModel viewModel;
     private boolean isEndRepeatChanged = false;
-
+    private ObservableField<Boolean> isAllDay;
 
     public EventCreateNewVIewModel(EventCreateNewPresenter presenter) {
         this.presenter = presenter;
         isEventRepeat = new ObservableField<>(false);
 //        EventBus.getDefault().register(this);
+        isAllDay = new ObservableField<>(false);
         tag = presenter.getContext().getString(R.string.tag_create_event);
         this.viewModel = this;
     }
@@ -314,5 +315,47 @@ public class EventCreateNewVIewModel extends BaseObservable {
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = (int) height;
         view.setLayoutParams(layoutParams);
+    }
+
+
+    @Bindable
+    public boolean getIsAllDay() {
+        return isAllDay.get();
+    }
+
+//    public void setIsAllDay(boolean allDay) {
+//        isAllDay.set(allDay);
+//        if (isAllDay.get()){
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.setTimeInMillis(event.getStartTime());
+//            calendar.set(Calendar.MINUTE, 0);
+//            calendar.set(Calendar.SECOND, 0);
+//            calendar.set(Calendar.MILLISECOND, 0);
+//            event.setStartTime(calendar.getTimeInMillis());
+//            event.setEndTime(event.getStartTime() + 3600 * 1000 * 24);
+//            setEvent(event);
+//        }
+//        notifyPropertyChanged(BR.isAllDay);
+//    }
+
+    public void setIsAllDay(boolean isAllDay) {
+        this.isAllDay.set(isAllDay);
+        if (this.isAllDay.get()){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(event.getStartTime());
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            event.setStartTime(calendar.getTimeInMillis());
+            event.setEndTime(event.getStartTime() + 3600 * 1000 * 24);
+            setEvent(event);
+        }else{
+            Calendar calendar = Calendar.getInstance();
+            event.setStartTime(calendar.getTimeInMillis());
+            event.setEndTime(calendar.getTimeInMillis() + 3600 * 1000);
+            setEvent(event);
+        }
+        notifyPropertyChanged(BR.isAllDay);
     }
 }

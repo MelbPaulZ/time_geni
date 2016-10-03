@@ -15,6 +15,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.testdb.DBManager;
+import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.GreenDaoUtil;
@@ -39,8 +40,6 @@ public class EventEditViewModel extends BaseObservable {
 
     private String tag;
 
-
-
     public EventEditViewModel(EventEditPresenter eventEditPresenter) {
         this.presenter = eventEditPresenter;
         editEventIsRepeat = new ObservableField<>();
@@ -62,6 +61,8 @@ public class EventEditViewModel extends BaseObservable {
                 EventDao eventDao = GreenDaoUtil.getDaoSession(getContext()).getEventDao();
                 String uid = eventEditViewEvent.getEventUid();
                 Event event = DBManager.getInstance(getContext()).getEvent(eventEditViewEvent.getEventUid());
+                event.getInvitee();
+                event.getTimeslots();
                 if (event.hasAttendee() && event.getInvitee().size()>0) {
                     presenter.toHostEventDetail(event);
                 }else{
@@ -86,10 +87,14 @@ public class EventEditViewModel extends BaseObservable {
     }
 
     public View.OnClickListener editTimeSlot(){
+        // chuan can shu next to do
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.toTimeSlotView(tag); // tiao zhuan wei zhi 
+                EventEditMvpView mvpView = presenter.getView();
+                if (mvpView!=null){
+                    mvpView.toTimeSlotView(tag, eventEditViewEvent);// tiao zhuan wei zhi
+                }
             }
         };
     }
