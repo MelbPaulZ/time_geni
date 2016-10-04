@@ -94,6 +94,10 @@ public class EventUtil{
                 return alertTimes;
     }
 
+    public static String getAlertTimeFromIndex(Context context,int index){
+        return (String) getAlertTimes(context)[index];
+    }
+
 
     public static String getSuggestTimeStringFromLong(Context context, Long startTime,Long endtime){
         Calendar calendar = Calendar.getInstance();
@@ -135,6 +139,27 @@ public class EventUtil{
         event.getInvitee();
         event.getTimeslots();
         return event;
+    }
+
+    public static CharSequence[] getCalendarTypes(Context context){
+        return new CharSequence[]{"Work", "Private", "Group", "Public"};
+    }
+
+    public static String getCalendarTypeFromIndex(Context context, int index){
+        return (String) getCalendarTypes(context)[index];
+    }
+
+    public static CharSequence[] getRepeats(Context context, Event event){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(event.getStartTime());
+        String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
+        return new CharSequence[]{
+                context.getString(R.string.repeat_never),
+                context.getString(R.string.repeat_everyday),
+                String.format(context.getString(R.string.repeat_everyweek), dayOfWeek),
+                String.format(context.getString(R.string.repeat_every_twoweek)),
+                String.format(context.getString(R.string.repeat_every_month)),
+                String.format(context.getString(R.string.repeat_every_year))};
     }
 
 

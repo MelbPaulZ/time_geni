@@ -38,10 +38,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import butterknife.Unbinder;
-
-//public class EventCreateActivity extends AppCompatActivity implements
-//        EventDatePickerFragment.EventDatePickerCommunicator, EventTimePickerFragment.EventTimePickerCommunicator{
 
 public class EventCreateActivity extends AppCompatActivity implements PlaceSelectionListener {
     private String TAG = "EventCreateActivity";
@@ -50,7 +46,6 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
     private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
     private final int ACTIVITY_PHOTOPICKER = 2;
-
     private String tag = ""; // this is for identifying which request is it
 
 
@@ -58,21 +53,7 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_create);
-//        eventCreateNewFragment = new EventCreateNewFragment();
-//        getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
-
-//        if (getIntent().hasExtra(getString(R.string.new_event))) {
-//            Long startTime = getIntent().getExtras().getLong(getString(R.string.new_event));
-//            eventCreateNewFragment.setStartTime(startTime);
-//            eventCreateNewFragment.setEndTime(startTime + 3600000); // default 1 hour event
-//        }else{
-//            eventCreateNewFragment.setStartTime(Calendar.getInstance().getTimeInMillis());
-//            eventCreateNewFragment.setEndTime(Calendar.getInstance().getTimeInMillis() + 3600000);
-//        }
-
         initFragments();
-
-        EventBus.getDefault().register(this);
     }
 
     public void initFragments(){
@@ -92,166 +73,6 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         }
 
     }
-
-
-
-//    public void toTimePicker(EventDatePickerFragment fragment, String tag) {
-//        if (eventTimePickerFragment == null || !(eventTimePickerFragment.isAdded())) {
-//            eventTimePickerFragment = new EventTimePickerFragment();
-//            eventTimePickerFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventTimePickerFragment).commit();
-//        } else {
-//            eventTimePickerFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().show(eventTimePickerFragment).commit();
-//        }
-//    }
-//
-//    public void toDatePicker(android.support.v4.app.Fragment fragment, String tag) {
-//        if (eventDatePickerFragment == null || !(eventDatePickerFragment.isAdded())) {
-//            eventDatePickerFragment = new EventDatePickerFragment();
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            eventDatePickerFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventDatePickerFragment).commit();
-//        } else {
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            eventDatePickerFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().show(eventDatePickerFragment).commit();
-//        }
-//    }
-//
-//
-//    public void toCreateEventNewFragment(android.support.v4.app.Fragment fragment){
-//        if (eventCreateNewFragment == null || !(eventCreateNewFragment.isAdded())) {
-//            eventCreateNewFragment = new EventCreateNewFragment();
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
-//        } else {
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().show(eventCreateNewFragment).commit();
-//        }
-//    }
-//
-//    public void toCreateEventNewFragment(InviteeFragment fragment){
-//        if (eventCreateNewFragment == null || !(eventCreateNewFragment.isAdded())) {
-//            eventCreateNewFragment = new EventCreateNewFragment();
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateNewFragment).commit();
-//        } else {
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().show(eventCreateNewFragment).commit();
-//        }
-//    }
-//
-//    public void toWeekViewCalendar(EventCreateNewFragment fragment) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
-//    }
-//
-//    public void toLocationPicker(android.support.v4.app.Fragment fragment, String tag) {
-//        if (eventLocationPickerFragment == null || !(eventLocationPickerFragment.isAdded())) {
-//            eventLocationPickerFragment = new EventLocationPickerFragment();
-//            eventLocationPickerFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventLocationPickerFragment).commit();
-//        } else {
-//            eventLocationPickerFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().show(eventLocationPickerFragment).commit();
-//        }
-//    }
-//
-//
-////    public void toLocationPicker(EventCreateDetailBeforeSendingFragment fragment, String tag)
-//
-//    public void toAttendeePicker(EventCreateNewFragment fragment, Bundle bundle) {
-//        if (inviteeFragment == null || !(inviteeFragment.isAdded())) {
-//            inviteeFragment = new InviteeFragment();
-//            inviteeFragment.setArguments(bundle);
-//            inviteeFragment.setTag(getString(R.string.tag_create_event));
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, inviteeFragment).commit();
-//        } else {
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            inviteeFragment.setTag(getString(R.string.tag_create_event));
-//            getSupportFragmentManager().beginTransaction().show(inviteeFragment).commit();
-//        }
-//    }
-//
-//    public void toInviteePicker(android.support.v4.app.Fragment fragment, String tag, Event event){
-//        if(inviteeFragment == null || !(inviteeFragment.isAdded())){
-//            inviteeFragment = new InviteeFragment();
-//            inviteeFragment.setTag(tag);
-//            inviteeFragment.setEvent(event);
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, inviteeFragment).commit();
-//        }else{
-//            inviteeFragment.setTag(tag);
-//            inviteeFragment.setEvent(event);
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().show(inviteeFragment).commit();
-//        }
-//    }
-//
-//    public void toTimeSlotView(android.support.v4.app.Fragment fragment, Bundle bundle) {
-//        if (eventTimeSlotViewFragment == null || !(eventTimeSlotViewFragment.isAdded())) {
-//            eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
-//            eventTimeSlotViewFragment.setArguments(bundle);
-//            eventTimeSlotViewFragment.setTag(getString(R.string.tag_create_event));
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventTimeSlotViewFragment).commit();
-//        } else {
-//            eventTimeSlotViewFragment.setArguments(bundle);
-//            getSupportFragmentManager().beginTransaction().remove(eventTimeSlotViewFragment);
-//            eventTimeSlotViewFragment.setTag(getString(R.string.tag_create_event));
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().show(eventTimeSlotViewFragment).commit();
-//        }
-//    }
-//
-//    public void toNewEventDetailBeforeSending(android.support.v4.app.Fragment fragment, Bundle bundle) {
-//        if (eventCreateDetailBeforeSendingFragment == null || !(eventCreateDetailBeforeSendingFragment.isAdded())) {
-//            eventCreateDetailBeforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
-//            eventCreateDetailBeforeSendingFragment.setArguments(bundle);
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateDetailBeforeSendingFragment).commit();
-//        } else {
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            // need remove exist fragment first
-//            getSupportFragmentManager().beginTransaction().remove(eventCreateDetailBeforeSendingFragment).commit();
-//            // then add a new fragment
-//            eventCreateDetailBeforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
-//            eventCreateDetailBeforeSendingFragment.setArguments(bundle);
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateDetailBeforeSendingFragment).commit();
-//        }
-//    }
-//
-//    public void toNewEventDetailBeforeSending(android.support.v4.app.Fragment fragment) {
-//        if (eventCreateDetailBeforeSendingFragment == null || !(eventCreateDetailBeforeSendingFragment.isAdded())) {
-//            eventCreateDetailBeforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, eventCreateDetailBeforeSendingFragment).commit();
-//        } else {
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().show(eventCreateDetailBeforeSendingFragment).commit();
-//        }
-//    }
-//
-//
-//    public void goBackToTimeSlot(EventCreateDetailBeforeSendingFragment fragment, String tag){
-//        if (eventTimeSlotViewFragment == null || !(eventTimeSlotViewFragment.isAdded())){
-//            eventTimeSlotViewFragment = new EventTimeSlotViewFragment();
-//            eventTimeSlotViewFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment,eventTimeSlotViewFragment).commit();
-//        }else{
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            eventTimeSlotViewFragment.setTag(tag);
-//            getSupportFragmentManager().beginTransaction().show(eventTimeSlotViewFragment).commit();
-//        }
-//    }
-//
     public void checkPermission(String tag){
         this.tag = tag;
        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
@@ -311,35 +132,6 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, true);
         startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
     }
-//
-//
-//
-//    public void createSoloEvent(Event event){
-//        Intent intent = new Intent(this,MainActivity.class);
-//        event.setHost(true);
-//        intent.putExtra(getString(R.string.new_event),event);
-//        startActivity(intent);
-//    }
-//
-//
-//    public void sendEvent(Event event){
-//        Intent intent = new Intent(this, MainActivity.class);
-//        event.setHost(true);
-//        intent.putExtra(getString(R.string.new_event),event);
-//        startActivity(intent);
-//    }
-//
-//    public void backToInviteePicker(EventTimeSlotViewFragment fragment, String tag){
-//        if (inviteeFragment == null || !(inviteeFragment.isAdded())){
-//            inviteeFragment = new InviteeFragment();
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment,inviteeFragment).commit();
-//        }else{
-//            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//            getSupportFragmentManager().beginTransaction().show(inviteeFragment).commit();
-//        }
-//    }
-
 
     @Subscribe
     public void gotoUrl(MessageUrl messageUrl) {
@@ -352,6 +144,12 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         }
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override

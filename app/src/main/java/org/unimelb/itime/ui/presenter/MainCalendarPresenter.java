@@ -66,5 +66,7 @@ public class MainCalendarPresenter extends MvpBasePresenter<MainCalendarMvpView>
     }
 
 
-
+    public Context getContext() {
+        return context;
+    }
 }

@@ -22,6 +22,7 @@ import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.unimelb.itime.dao.TimeSlotDao;
@@ -57,7 +58,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private String photo = "[]";
 
     @ToMany(referencedJoinProperty = "eventUid")
-    private List<TimeSlot> timeslots = null;
+    private List<TimeSlot> timeslots = new ArrayList<>();
 
     // later delete
     private transient long repeatEndsTime;
@@ -77,7 +78,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private int status;
 
     @ToMany(referencedJoinProperty = "eventUid")
-    private List<Invitee> invitee = null;
+    private List<Invitee> invitee = new ArrayList<>();
     /** Used for active entity operations. */
     @Generated(hash = 1542254534)
     private transient EventDao myDao;

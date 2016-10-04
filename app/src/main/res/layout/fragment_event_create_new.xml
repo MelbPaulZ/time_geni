@@ -153,6 +153,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@{eventVM.isEventRepeat ? @dimen/wrap_content :@dimen/hide,default = @dimen/hide}"
                         android:background="@drawable/table_row_border"
+                        android:onClick="@{eventVM.onClickEndRepeat()}"
                         android:layout_marginLeft="@dimen/padding_10"
                         android:orientation="horizontal">
                         <TextView
@@ -169,7 +170,6 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:paddingRight="@dimen/padding_10"
-                            android:onClick="@{eventVM.onClickEndRepeat()}"
                             android:text="@{EventUtil.parseDateToString(context, eventVM.event.repeatEndsTime)}"
                             android:textColor="@color/text_disable"
                             android:textSize="16dp"/>
@@ -345,7 +345,7 @@
                             android:gravity="right"
                             android:layout_marginRight="@dimen/padding_10"
                             android:onClick="@{eventVM.chooseCalendarType()}"
-                            android:text="calendar type change later"
+                            android:text="@{eventVM.event.calendarUid}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>

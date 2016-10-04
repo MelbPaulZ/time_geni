@@ -97,9 +97,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_calendar, container, false);
-
         return binding.getRoot();
     }
 
@@ -166,7 +164,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         monthDayFragment = new CalendarMonthDayFragment();
         weekFragment = new CalendarWeekFragment();
 
-        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, weekFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, monthDayFragment).commit();
         agendaFragment = new CalendarAgendaFragment();
     }
 

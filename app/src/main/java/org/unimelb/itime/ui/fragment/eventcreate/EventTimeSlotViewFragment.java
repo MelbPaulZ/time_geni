@@ -84,34 +84,6 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
                 initWheelPickers();
             }
         });
-
-//        TextView timeSlotDoneBtn = (TextView) binding.getRoot().findViewById(R.id.timeslot_view_done_btn);
-//        timeSlotDoneBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable(getString(R.string.new_event),event);
-//                toNewEventDetailBeforeSending(bundle);
-//            }
-//        });
-//
-//        TextView backBtn = (TextView) binding.getRoot().findViewById(R.id.timeslot_weekview_back_btn);
-//        backBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (tag==getString(R.string.tag_before_sending_review)){
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable(getString(R.string.new_event),event);
-//                    toNewEventDetailBeforeSending(bundle);
-//
-//                }else if (tag==getString(R.string.tag_before_sending_back)){
-//                    toInviteePicker(tag);
-//                }else if (tag == getString(R.string.tag_create_event)){
-//                    // from invitee picker to timeslot and back to invitee picker
-//                    toInviteePicker(tag);
-//                }
-//            }
-//        });
         timeslotWeekView.setEventClassName(Event.class);
         timeslotWeekView.enableTimeSlot();
         timeslotWeekView.setOnTimeSlotOuterListener(new FlexibleLenViewBody.OnTimeSlotListener() {
@@ -283,15 +255,25 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     }
 
     @Override
-    public void toNewEventDetailBeforeSending() {
-        EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-        switchFragment(this, beforeSendingFragment);
+    public void onClickDone() {
+        if (getFrom() instanceof InviteeFragment) {
+            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+            switchFragment(this, beforeSendingFragment);
+        }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
+            switchFragment(this, (EventCreateDetailBeforeSendingFragment)getFrom());
+        }
     }
 
     @Override
-    public void toInviteePicker() {
-        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        switchFragment(this, inviteeFragment);
+    public void onClickBack() {
+        if (getFrom() instanceof InviteeFragment) {
+            switchFragment(this, (InviteeFragment)getFrom());
+        }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof InviteeFragment){
+            InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+            switchFragment(this, inviteeFragment);
+        }else if (getFrom() instanceof  EventCreateDetailBeforeSendingFragment && getTo() instanceof EventCreateDetailBeforeSendingFragment){
+            switchFragment(this, (EventCreateDetailBeforeSendingFragment)getFrom());
+        }
     }
 
     @Override

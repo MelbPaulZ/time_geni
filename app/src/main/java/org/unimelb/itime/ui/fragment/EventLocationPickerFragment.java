@@ -52,6 +52,7 @@ import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.presenter.EmptyPresenter;
 
@@ -168,8 +169,9 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             public void onClick(View view) {
                 if (getFrom() instanceof EventCreateNewFragment){
                     // no need of set from for event create new fragment
-                    EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-                    switchFragment(self, eventCreateNewFragment);
+                    switchFragment(self, (EventCreateNewFragment)getFrom());
+                }else if(getFrom() instanceof EventCreateDetailBeforeSendingFragment){
+                    switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
                 }
 //                if (tag == getString(R.string.tag_create_event))
 //                    ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
@@ -198,11 +200,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EventManager.getInstance().getCurrentEvent().setLocation(mAutocompleteView.getText().toString());
                 if (getFrom() instanceof EventCreateNewFragment){
                     // no need of set from for event create new fragment
                     EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-                    EventManager.getInstance().getCurrentEvent().setLocation(mAutocompleteView.getText().toString());
                     switchFragment(self, eventCreateNewFragment);
+                }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
+                    switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
                 }
 //                if (tag == getResources().getString(R.string.tag_create_event)) {
 //                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
@@ -282,7 +286,10 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                         // this might be delayed by network, so need eventbus
                         if(getFrom() instanceof EventCreateNewFragment){
                             EventBus.getDefault().post(new MessageLocation(EventCreateNewFragment.class.getSimpleName(), place));
+                        }else if (getFrom() instanceof  EventCreateDetailBeforeSendingFragment){
+                            EventBus.getDefault().post(new MessageLocation(((EventCreateDetailBeforeSendingFragment) getFrom()).getClassName(), place));
                         }
+
                         mAutocompleteView.setText(place);
                         mAutocompleteView.setAdapter(mAdapter);
                         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener); // change listener
@@ -307,12 +314,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
 //            EventBus.getDefault().post(new MessageLocation(tag, clickStr));
 
+            EventManager.getInstance().getCurrentEvent().setLocation(clickStr);
             // tiao zhuan
             if (getFrom() instanceof EventCreateNewFragment){
                 // no need of set from for event create new fragment
-                EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-                EventManager.getInstance().getCurrentEvent().setLocation(clickStr);
-                switchFragment(self, eventCreateNewFragment);
+                switchFragment(self, (EventCreateNewFragment)getFrom());
+            }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
+                switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
             }
 //            if (tag == getString(R.string.tag_create_event)) {
 //                ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
@@ -341,12 +349,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             mAutocompleteView.setAdapter(mAdapter);
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
             strAdapter.notifyDataSetChanged();
+            EventManager.getInstance().getCurrentEvent().setLocation((String)primaryText);
 //             find a way fix here later
             if (getFrom() instanceof EventCreateNewFragment){
                 // no need of set from for event create new fragment
-                EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-                EventManager.getInstance().getCurrentEvent().setLocation((String)primaryText);
-                switchFragment(self, eventCreateNewFragment);
+                switchFragment(self, (EventCreateNewFragment)getFrom());
+            }else if (getFrom() instanceof  EventCreateDetailBeforeSendingFragment){
+                switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
             }
 //            if (tag == getString(R.string.tag_create_event)) {
 //                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));

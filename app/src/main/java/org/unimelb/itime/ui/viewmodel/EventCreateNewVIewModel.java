@@ -97,12 +97,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
         String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(), calendar.get(Calendar.DAY_OF_WEEK));
-        repeats = new CharSequence[]{
-                getContext().getString(R.string.repeat_never),
-                getContext().getString(R.string.repeat_everyday),
-                String.format(getContext().getString(R.string.repeat_everyweek), dayOfWeek),
-                String.format(getContext().getString(R.string.repeat_every_month)),
-                String.format(getContext().getString(R.string.repeat_every_year))};
+        repeats = EventUtil.getRepeats(getContext(), event);
     }
 
 
@@ -227,12 +222,13 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CharSequence types[] = new CharSequence[]{"Work", "Private", "Group", "Public"};
+                final CharSequence types[] = EventUtil.getCalendarTypes(getContext());
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle("Choose a calendar type");
                 builder.setItems(types, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
+                        event.setCalendarUid((String) types[i]);
                         viewModel.setEvent(event);
                     }
                 });
@@ -258,10 +254,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 isEndRepeatChanged = true;
-
-                // change now
-//                tag = presenter.getContext().getString(R.string.tag_end_repeat);
-//                presenter.pickDate(tag);
             }
         };
     }

@@ -49,6 +49,15 @@ public abstract class BaseUiFragment<V extends MvpView, P extends MvpPresenter<V
         getFragmentManager().beginTransaction().hide(from).show(to).commit();
     }
 
+    // to is only use for forcing page go to which fragment, use when only necessary, i.e. before sending page has two entrance on timeslot view
+    public void setTo(BaseUiFragment to){
+        this.to = to;
+    }
+
+    public Fragment getTo(){
+        return to;
+    }
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);

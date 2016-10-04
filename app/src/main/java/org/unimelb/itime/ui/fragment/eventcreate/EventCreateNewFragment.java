@@ -88,58 +88,10 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         );
     }
 
-//    public void setStartTime(long time){
-//        if (event == null) {
-//            event = new Event();
-//        }
-//        event.setStartTime(time);
-//    }
-//
-//    public void setEndTime(long time){
-//        if (event == null){
-//            event = new Event();
-//        }
-//        event.setEndTime(time);
-//    }
-
     public void setPhotos(ArrayList<String> photos){
         viewModel.setPhotos(photos);
     }
 
-
-
-
-//    @Override
-//    public void pickDate(String tag) {
-//        ((EventCreateActivity)getActivity()).toDatePicker(this, tag);
-//    }
-//
-//    @Override
-//    public void gotoWeekViewCalendar() {
-//        ((EventCreateActivity)getActivity()).toWeekViewCalendar(this);
-//    }
-//
-//    @Override
-//    public void pickLocation(String tag) {
-//        ((EventCreateActivity)getActivity()).toLocationPicker(this, tag);
-//    }
-//
-//    @Override
-//    public void pickInvitee() {
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable(getString(R.string.new_event), event);
-//        ((EventCreateActivity)getActivity()).toAttendeePicker(this,bundle);
-//    }
-//
-//    @Override
-//    public void toCreateSoloEvent(Event event) {
-//        ((EventCreateActivity)getActivity()).createSoloEvent(event);
-//    }
-
-    @Override
-    public void pickDate(String tag) {
-
-    }
 
     @Override
     public void gotoWeekViewCalendar() {
