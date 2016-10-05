@@ -18,6 +18,10 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by yinchuandong on 12/08/2016.
@@ -86,6 +90,19 @@ public class HttpUtil {
         OkHttpClient client = httpClientBuilder.build();
         Retrofit retrofit = retrofitBuilder.client(client).build();
         return retrofit.create(serviceClass);
+    }
+
+
+    /**
+     * for quickly to write an subscriber
+     * @param observable
+     * @param subscriber
+     * @param <T>
+     */
+    public static <T> void subscribe(Observable<T> observable, Subscriber<T> subscriber){
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
     }
 
 }

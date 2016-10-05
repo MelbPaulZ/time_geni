@@ -13,13 +13,13 @@ import org.unimelb.itime.dao.UserDao;
 import org.unimelb.itime.restfulapi.CalendarApi;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.UserApi;
+import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.GreenDaoUtil;
 import org.unimelb.itime.util.HttpUtil;
-import org.unimelb.itime.util.UserUtil;
 
 import java.util.List;
 
@@ -27,16 +27,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
-import rx.Observer;
+import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by yinchuandong on 11/08/2016.
  */
-public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
+public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
     private static final String TAG = "LoginPresenter";
 
     private Context context;
@@ -54,98 +52,92 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
         userDao = GreenDaoUtil.getDaoSession(context).getUserDao();
     }
 
-    public void loginByEmail(String email, String password){
+    public void loginByEmail(String email, String password) {
 
         LoginMvpView view = getView();
-        if (view != null){
+        if (view != null) {
             // call retrofit
             view.onLoginStart();
         }
 
         AuthUtil.clearJwtToken(context);
-        userApi.login(email, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UserLoginRes>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted: ");
-                    }
+        Observable<HttpResult<UserLoginRes>> observable = userApi.login(email, password);
+        Subscriber<HttpResult<UserLoginRes>> subscriber = new Subscriber<HttpResult<UserLoginRes>>() {
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "onCompleted: ");
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError: ");
-                    }
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError: ");
+            }
 
-                    @Override
-                    public void onNext(UserLoginRes userLoginRes) {
-                        Log.d(TAG, "onNext: " + userLoginRes.getToken());
-                        AuthUtil.saveJwtToken(context, userLoginRes.getToken());
-
-                        UserUtil.getInstance().setUserLoginRes(userLoginRes);
-                        if(getView() != null){
-                            getView().onLoginSucceed();
-                        }
-                        fetchCalendar();
-                    }
-                });
-
+            @Override
+            public void onNext(HttpResult<UserLoginRes> userLoginRes) {
+//                        Log.d(TAG, "onNext: " + userLoginRes.getToken());
+//                        AuthUtil.saveJwtToken(context, userLoginRes.getToken());
+//
+//                        UserUtil.getInstance().setUserLoginRes(userLoginRes);
+//                        if(getView() != null){
+//                            getView().onLoginSucceed();
+//                        }
+                fetchCalendar();
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void fetchCalendar(){
+    public void fetchCalendar() {
         // here to fetch calendar;
-        calendarApi.fetch()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Calendar[]>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.i(TAG, "onCompleted: " + "calendarApi");
-                    }
+        Subscriber<Calendar[]> subscriber = new Subscriber<Calendar[]>() {
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: " + "calendarApi");
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i(TAG, "onError: " + "calendarApi");
-                    }
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: " + "calendarApi");
+            }
 
-                    @Override
-                    public void onNext(Calendar[] calendars) {
-                        Log.i(TAG, "onNext: " + calendars[0].toString());
-                        Log.i(TAG, "onNext: " + calendars.length);
-                        CalendarUtil.getInstance().setCalendar(calendars);
+            @Override
+            public void onNext(Calendar[] calendars) {
+                Log.i(TAG, "onNext: " + calendars[0].toString());
+                Log.i(TAG, "onNext: " + calendars.length);
+                CalendarUtil.getInstance().setCalendar(calendars);
 
-                        fetchEvents();
-                    }
+                fetchEvents();
+            }
 
-                });
+        };
+        HttpUtil.subscribe(calendarApi.fetch(), subscriber);
     }
 
-    public void fetchEvents(){
+    public void fetchEvents() {
         // here to fetch events
-        eventApi.fetch(CalendarUtil.getInstance().getCalendar()[0].getCalendarUid())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Event>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.i(TAG, "onCompleted: " + "eventApi");
-                    }
+        Observable<List<Event>> observable = eventApi.fetch(CalendarUtil.getInstance().getCalendar()[0].getCalendarUid());
+        Subscriber<List<Event>> subscriber = new Subscriber<List<Event>>() {
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: " + "eventApi");
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i(TAG, "onError: " + "eventApi");
-                    }
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: " + "eventApi");
+            }
 
-                    @Override
-                    public void onNext(List<Event> events) {
-                        Log.i(TAG, "onNext: " + events.size());
-                    }
-                });
+            @Override
+            public void onNext(List<Event> events) {
+                Log.i(TAG, "onNext: " + events.size());
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
     }
 
 
-
-    public void refreshToken(){
+    public void refreshToken() {
         String authToken = AuthUtil.getJwtToken(context);
         Call<JwtToken> call = userApi.refreshToken(authToken);
         call.enqueue(new Callback<JwtToken>() {
@@ -164,8 +156,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
     }
 
 
-    public void listUser(){
-        userApi.list()
+    public void listUser() {
+        Observable<User> observable = userApi.list()
                 .doOnNext(new Action1<User>() {
                     @Override
                     public void call(User user) {
@@ -176,30 +168,49 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView>{
                             e.printStackTrace();
                         }
                     }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<User>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted: ");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        HttpException he = (HttpException) e;
-                        Log.d(TAG, "onError: " + he.response().errorBody());
-                        Log.d(TAG, "onError: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(User user) {
-                        if (user != null){
-                            Log.d(TAG, "listuser: onNext : " + user.getUserId());
-                        }
-                    }
                 });
+        Subscriber<User> subscriber = new Subscriber<User>() {
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "onCompleted: ");
+            }
 
+            @Override
+            public void onError(Throwable e) {
+                HttpException he = (HttpException) e;
+                Log.d(TAG, "onError: " + he.response().errorBody());
+                Log.d(TAG, "onError: " + e.getMessage());
+            }
+
+            @Override
+            public void onNext(User user) {
+                if (user != null) {
+                    Log.d(TAG, "listuser: onNext : " + user.getUserId());
+                }
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
+
+    public void testList() {
+        String name = HttpUtil.class.getSimpleName();
+        Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError: ");
+            }
+
+            @Override
+            public void onNext(HttpResult<List<User>> listHttpResult) {
+                Log.d(TAG, "onNext: ");
+            }
+        };
+        HttpUtil.subscribe(userApi.test(), subscriber);
     }
 
 }
