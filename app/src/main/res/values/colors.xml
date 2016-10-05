@@ -295,6 +295,8 @@
     <color name="page_bg">#ffff</color>
 
     <color name="text_disable">#a2a2a2</color>
+    <color name="color_FF9600">#FF9600</color>
+    <color name="color_EFEFEF">#EFEFEF</color>
 
     <color name="whites">#ffffff</color>
 

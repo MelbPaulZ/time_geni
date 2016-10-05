@@ -23,7 +23,7 @@ public class MainCalendarViewModel extends BaseObservable{
     public final static String TAG = "MainCalendarViewModel";
     private MainCalendarPresenter presenter;
 
-    private String toolbarTitle = initToolBarTitle();
+    private String toolbarTitle;
     private MainCalendarMvpView mvpView;
 
 
@@ -31,6 +31,7 @@ public class MainCalendarViewModel extends BaseObservable{
         super();
         this.presenter = presenter;
         mvpView = presenter.getView();
+        toolbarTitle = initToolBarTitle();
     }
 
     public String initToolBarTitle(){
@@ -67,47 +68,6 @@ public class MainCalendarViewModel extends BaseObservable{
             }
         };
     }
-
-
-//    public WeekViewBody.OnWeekBodyListener onWeekBodyListener(){
-//        return new WeekViewBody.OnWeekBodyListener() {
-//            @Override
-//            public void onEventCreate(WeekDraggableEventView weekDraggableEventView) {
-//
-//            }
-//
-//            @Override
-//            public void onEventClick(WeekDraggableEventView weekDraggableEventView) {
-//                presenter.gotoEditEventActivity(weekDraggableEventView.getEvent());
-//            }
-//
-//            @Override
-//            public void onEventDragStart(WeekDraggableEventView weekDraggableEventView) {
-//
-//            }
-//
-//            @Override
-//            public void onEventDragging(WeekDraggableEventView weekDraggableEventView, int i, int i1) {
-//
-//            }
-//
-//            @Override
-//            public void onEventDragDrop(WeekDraggableEventView weekDraggableEventView) {
-//
-//            }
-//        };
-//    }
-
-
-
-//    public WeekView.OnClickEventInterface onClickEvent(){
-//        return new WeekView.OnClickEventInterface() {
-//            @Override
-//            public void onClickEditEvent(ITimeEventInterface iTimeEventInterface) {
-//                presenter.gotoEditEventActivity(iTimeEventInterface);
-//            }
-//        };
-//    }
 
 
 }

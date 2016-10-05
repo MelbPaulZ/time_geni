@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.fragment.eventcreate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
+import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
@@ -127,9 +129,12 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         this.event = event;
     }
 
+
+
     @Override
-    public void sendEvent(Event event) {
-//        ((EventCreateActivity)getActivity()).sendEvent(event);
+    public void onClickSend() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

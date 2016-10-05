@@ -41,7 +41,7 @@ public class RemoteService extends Service{
             @Override
             public void run(){
 
-                createDB();
+//                createDB();
                 try {
                     Thread.sleep(5000);
                     initDB();

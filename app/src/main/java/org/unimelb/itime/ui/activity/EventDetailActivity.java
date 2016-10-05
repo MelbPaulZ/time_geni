@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventDetailForSoloFragment;
@@ -49,11 +50,10 @@ public class EventDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
 
-        event = (Event) getIntent().getSerializableExtra(getString(R.string.event));
+        event = EventManager.getInstance().getCurrentEvent();
 
         if (event.getHostUserUid().equals(UserUtil.getInstance().getUserUid())) {
-//            if (true){ // for test only
-            if (event.hasAttendee() && event.getInvitee().size()>0) {
+            if (event.getInvitee().size()>0) {
                 // group event, and is host
                 if (event.getInvitee().size() == 2) {
                     Toast.makeText(getBaseContext(), "I am host", Toast.LENGTH_SHORT).show();

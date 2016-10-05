@@ -11,6 +11,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.testdb.DBManager;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -270,8 +271,9 @@ public class EventUtil{
 
     public static void startEditEventActivity(Context context, Activity activity, ITimeEventInterface iTimeEventInterface) {
         Intent intent = new Intent(activity, EventDetailActivity.class);
-        Event event = (Event) iTimeEventInterface;
-        intent.putExtra(context.getString(R.string.event), event);
+        Event event = (Event)iTimeEventInterface;
+        event.getInvitee();
+        EventManager.getInstance().setCurrentEvent((Event)iTimeEventInterface);
         activity.startActivityForResult(intent, ACTIVITY_EDITEVENT);
     }
 }

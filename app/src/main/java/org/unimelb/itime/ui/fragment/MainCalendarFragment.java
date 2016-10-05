@@ -112,7 +112,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         initCalendars();
     }
 
-
     public void initSpinner(){
         ArrayList<String> viewOptionsArrayList = new ArrayList<>();
         viewOptionsArrayList.add(getString(R.string.month_day_view));
