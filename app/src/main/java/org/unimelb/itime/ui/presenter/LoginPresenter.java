@@ -193,6 +193,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
     }
 
     public void testList() {
+        String name = HttpUtil.class.getSimpleName();
         Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
             @Override
             public void onCompleted() {
