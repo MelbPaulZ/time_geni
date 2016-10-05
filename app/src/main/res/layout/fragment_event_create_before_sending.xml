@@ -189,7 +189,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{EventUtil.getAttendeeString(context, EventUtil.fromInviteeListToArraylist(newEventDetailVM.newEvDtlEvent.invitee))}"
+                            android:text="@{EventUtil.getAttendeeString(context, EventUtil.fromInviteeListToArraylist(newEventDetailVM.newEvDtlEvent.getInvitee()))}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
 

@@ -43,6 +43,7 @@ import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
 import org.unimelb.itime.vendor.contact.helper.ClearEditText;
 import org.unimelb.itime.vendor.contact.helper.PinyinComparator;
+import org.unimelb.itime.vendor.contact.helper.PublicEntity;
 import org.unimelb.itime.vendor.contact.widgets.SideBar;
 import org.unimelb.itime.vendor.contact.widgets.SortModel;
 import org.unimelb.itime.vendor.helper.LoadImgHelper;
@@ -75,6 +76,7 @@ public class InviteeFragment extends BaseUiFragment {
     private InviteeFragment self;
     private Event event;
     private String tag;
+    private View thePublicView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -153,12 +155,13 @@ public class InviteeFragment extends BaseUiFragment {
         protected Integer doInBackground(Integer... arg0) {
             int result = -1;
             //load contacts info
+            List<ITimeContactInterface> contact_models = loadContacts();
 
-            List<? extends ITimeContactInterface> contact_models = loadContacts();
-            for (ITimeContactInterface contact_model : contact_models
+            for (ITimeContactInterface contact_model :contact_models
                     ) {
                 contacts.put(contact_model.getContactUid(), contact_model);
             }
+
             result = 1;
 
             return result;
@@ -171,6 +174,7 @@ public class InviteeFragment extends BaseUiFragment {
                 SourceDateList = filledData(contacts);
 
                 Collections.sort(SourceDateList, pinyinComparator);
+
                 adapter = new SortAdapter(getActivity().getApplicationContext(), SourceDateList, contacts);
                 sortListView.setAdapter(adapter);
 
@@ -180,7 +184,7 @@ public class InviteeFragment extends BaseUiFragment {
 
                     @Override
                     public void onFocusChange(View arg0, boolean arg1) {
-                        mClearEditText.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+                        mClearEditText.setGravity(Gravity.LEFT|Gravity.CENTER_VERTICAL);
 
                     }
                 });
@@ -206,28 +210,45 @@ public class InviteeFragment extends BaseUiFragment {
                 adapter.setCircleCheckOnClickListener(new SortAdapter.CircleCheckOnClickListener() {
                     LinearLayout ll_checkedList = (LinearLayout) root.findViewById(R.id.checked_contacts_list);
                     int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-                    int margin = width / 40;
-
+                    int margin = width/40;
                     @Override
                     public void synCheckedContactsList(ITimeContactInterface contact, boolean add) {
                         if (add) {
                             ImageView img_v = new ImageView(context);
                             img_v.setOnClickListener(new ContactViewTouchListener());
                             img_v.setTag(contact);
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width / 8, width / 8);
+
+                            int imgParam = (int) context.getResources().getDimension(R.dimen.invitee_icon_width);
+                            LinearLayout.LayoutParams params =
+                                    new LinearLayout.LayoutParams(imgParam, imgParam);
                             params.setMargins(margin, margin / 2, 0, margin / 2);
+                            params.gravity = Gravity.CENTER_VERTICAL;
                             img_v.setLayoutParams(params);
+
+                            if (!(contact instanceof PublicEntity)) {
+                                LoadImgHelper.getInstance().bindContactWithImageView(
+                                        context, contact, img_v);
+                            }else {
+                                //if The Public is selected
+                                ll_checkedList.removeAllViews();
+                                contacts_list.clear();
+                                img_v.setImageResource(R.drawable.invitee_selected_default_picture);
+                                adapter.updateListView(new ArrayList<SortModel>());
+                                mClearEditText.setVisibility(View.GONE);
+                            }
                             contacts_list.put(contact, img_v);
-                            LoadImgHelper.getInstance().bindContactWithImageView(
-                                    context, contact, img_v);
                             ll_checkedList.addView(img_v);
                             ll_checkedList.invalidate();
-                            Log.i(TAG, "add: ");
                         } else {
+                            if (!(contact instanceof PublicEntity)){
+
+                            }else {
+                                mClearEditText.setVisibility(View.VISIBLE);
+                                filterData("");
+                            }
                             ll_checkedList.removeView(contacts_list.get(contact));
                             contacts_list.remove(contact);
                             ll_checkedList.invalidate();
-                            Log.i(TAG, "remove: ");
                         }
                     }
 
@@ -236,6 +257,8 @@ public class InviteeFragment extends BaseUiFragment {
                         return contacts_list;
                     }
                 });
+                addPublicHeaderView();
+
             }
         }
 
@@ -246,10 +269,45 @@ public class InviteeFragment extends BaseUiFragment {
 
     }
 
-    private List<SortModel> filledData(Map<String, ITimeContactInterface> map) {
+    private void addPublicHeaderView(){
+        TextView tvLetter;
+        TextView tvTitle;
+        ImageView icon;
+        ImageView check_circle;
+
+        thePublicView = LayoutInflater.from(context).inflate(org.unimelb.itime.vendor.R.layout.itime_contact_item, null);
+        int width = context.getResources().getDisplayMetrics().widthPixels;
+
+        tvTitle = (TextView) thePublicView.findViewById(org.unimelb.itime.vendor.R.id.title);
+        tvTitle.setText("The Public");
+
+        tvLetter = (TextView) thePublicView.findViewById(org.unimelb.itime.vendor.R.id.catalog);
+        ((ViewGroup) thePublicView).removeView(tvLetter);
+
+        icon = (ImageView) thePublicView.findViewById(org.unimelb.itime.vendor.R.id.icon);
+        LinearLayout.LayoutParams iconParams = (LinearLayout.LayoutParams) icon.getLayoutParams();
+        icon.setLayoutParams(iconParams);
+        icon.setImageResource(R.drawable.invitee_selected_default_picture);
+
+        check_circle = (ImageView) thePublicView.findViewById(org.unimelb.itime.vendor.R.id.check_circle);
+        LinearLayout.LayoutParams circleParams = (LinearLayout.LayoutParams) check_circle.getLayoutParams();;
+        check_circle.setLayoutParams(circleParams);
+        check_circle.setImageResource(R.drawable.invitee_selected_check_circle);
+
+        PublicEntity publicEntity = new PublicEntity();
+
+        SortAdapter.CircleClickListener publicCircleCheckOnClickListener;
+        publicCircleCheckOnClickListener = adapter.new CircleClickListener(publicEntity, check_circle);
+        thePublicView.setOnClickListener(publicCircleCheckOnClickListener);
+
+        sortListView.addHeaderView(thePublicView);
+
+    }
+
+    private List<SortModel> filledData(Map<String,ITimeContactInterface> map) {
         List<SortModel> mSortList = new ArrayList<SortModel>();
 
-        for (Map.Entry<String, ITimeContactInterface> contact : map.entrySet()) {
+        for(Map.Entry<String,ITimeContactInterface> contact : map.entrySet()){
             SortModel sortModel = new SortModel();
             sortModel.setName(contact.getValue().getName());
             sortModel.setId(contact.getValue().getContactUid());
@@ -290,16 +348,45 @@ public class InviteeFragment extends BaseUiFragment {
         adapter.updateListView(filterDateList);
     }
 
+    class ContactViewTouchListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+
+            if (parent != null){
+                parent.removeView(view);
+                contacts_list.remove(view.getTag());
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+
     public void setSelectInvitees(){
         // get all invitess
         ArrayList<Invitee> invitees = new ArrayList<>();
         ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
-        for (ITimeContactInterface iTimeContactInterface : contacts) {
-            Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
-            invitees.add(invitee);
+
+        if (hasPublicEntity(contacts)){
+            // means choose the public, 0=solo, 1=group, 2=public
+            event.setEventType(2);
+        }else{
+            for (ITimeContactInterface iTimeContactInterface : contacts) {
+
+                Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
+                invitees.add(invitee);
+            }
+            event.setInvitee(invitees);
         }
-        event.setInvitee(invitees);
-        EventManager.getInstance().setCurrentEvent(event);
+    }
+
+    public boolean hasPublicEntity(ArrayList<ITimeContactInterface> contacts){
+        for (ITimeContactInterface iTimeContactInterface : contacts) {
+            if (iTimeContactInterface instanceof PublicEntity)
+                return true;
+        }
+        return false;
     }
 
     public void initListener() {
@@ -323,81 +410,23 @@ public class InviteeFragment extends BaseUiFragment {
                 if(getFrom() instanceof EventCreateNewFragment){
                     setSelectInvitees();
                     EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+                    eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
                     switchFragment(self, eventTimeSlotViewFragment);
                 }else if (getFrom() instanceof EventTimeSlotViewFragment){
                     setSelectInvitees();
+                    EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment)getFrom();
+                    eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
                     switchFragment(self, (EventTimeSlotViewFragment)getFrom());
                 }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
                     setSelectInvitees();
+                    EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment)getFrom();
+                    beforeSendingFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
                     switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
                 }
             }
         });
-
-//        Button nextBtn = (Button) getActivity().findViewById(R.id.attendee_picker_next_btn);
-//        nextBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                if (tag == getString(R.string.tag_host_event_edit)){
-//                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
-//                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
-//                    for (ITimeContactInterface iTimeContactInterface : contacts) {
-//                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
-//                        invitees.add(invitee);
-//                    }
-//                    EventBus.getDefault().post(new MessageInvitees(tag, invitees));
-//                    ((EventDetailActivity)getActivity()).fromInviteeToEditEvent();
-//                }else if (tag == getString(R.string.tag_create_event)){
-//                    Bundle bundle = getArguments();
-//                    event = (Event) bundle.getSerializable(getString(R.string.new_event));
-//                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
-//                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
-//                    for (ITimeContactInterface iTimeContactInterface : contacts) {
-//                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
-//                        invitees.add(invitee);
-//                    }
-//
-//                    event.setInvitee(invitees);
-//                    Bundle newBundle = new Bundle();
-//                    newBundle.putSerializable(getString(R.string.new_event), event);
-//                    ((EventCreateActivity) getActivity()).toTimeSlotView(self, newBundle);
-//                }else if (tag == getString(R.string.tag_create_event_before_sending)){
-//                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
-//                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
-//                    for (ITimeContactInterface iTimeContactInterface : contacts) {
-//                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
-//                        invitees.add(invitee);
-//                    }
-//                    EventBus.getDefault().post(new MessageInvitees(tag,invitees));
-//                    ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(self);
-//
-//                }
-//            }
-//        });
-//
-//        Button cancelBtn = (Button) root.findViewById(R.id.attendee_picker_cancel_btn);
-//        cancelBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (tag.equals(getString(R.string.tag_host_event_edit))){
-//                    ((EventDetailActivity)getActivity()).fromInviteeToEditEvent();
-//                }else if (tag.equals(getString(R.string.tag_create_event))){
-//                    ((EventCreateActivity)getActivity()).toCreateEventNewFragment(self);
-//                }else if (tag.equals(getString(R.string.tag_create_event_before_sending))){
-//                    ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(self);
-//                }
-//            }
-//        });
-
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden){
-            event = EventManager.getInstance().getCurrentEvent();
-        }
-    }
 
     private Invitee contactToInvitee(Contact contact, Event event) {
         Invitee invitee = new Invitee();
@@ -413,40 +442,23 @@ public class InviteeFragment extends BaseUiFragment {
     }
 
 
-    class ContactViewTouchListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            ViewGroup parent = (ViewGroup) view.getParent();
-
-            if (parent != null) {
-                parent.removeView(view);
-                contacts_list.remove(view.getTag());
-                adapter.notifyDataSetChanged();
-            }
-        }
-    }
 
     /***********************************
      * load contacts
      ***********************************************/
-    public List<? extends ITimeContactInterface> loadContacts() {
-        return DBManager.getInstance(context).getAllContact();
+    /*********************************** load contacts ***********************************************/
+    public List<ITimeContactInterface> loadContacts() {
+        return simulateContacts();
     }
 
-    private List<ITimeContactInterface> simulateContacts() {
+    private List<ITimeContactInterface> simulateContacts(){
         List<ITimeContactInterface> contacts = new ArrayList<>();
-        contacts.add(new Contact(null, "赵普", "1"));
-        contacts.add(new Contact(null, "AGE", "2"));
-        contacts.add(new Contact(null, "B", "3"));
-        contacts.add(new Contact(null, "C", "4"));
-        contacts.add(new Contact(null, "D", "5"));
-        contacts.add(new Contact(null, "F", "6"));
-        contacts.add(new Contact(null, "Crron", "7"));
-        contacts.add(new Contact(null, "Bob", "8"));
-        contacts.add(new Contact("http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg", "周二珂", "9"));
 
+        for (int i = 0; i < 5; i++) {
+            contacts.add(new Contact("" + i ,"http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂 " + i));
+        }
         return contacts;
     }
+
 
 }

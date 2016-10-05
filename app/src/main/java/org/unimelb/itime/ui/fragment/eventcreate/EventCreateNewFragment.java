@@ -53,10 +53,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
 
     @Override
     public EventCreateNewPresenter createPresenter() {
-        if (presenter==null)
             return new EventCreateNewPresenter(getContext());
-        else
-            return presenter;
     }
 
 
@@ -70,22 +67,17 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        if (event == null) {
-//            event = new Event();
-////            event.setEventUid(EventUtil.generateUid());
-//        }
         if (viewModel ==null) {
             viewModel = new EventCreateNewVIewModel(getPresenter());
         }
-//        event.setEventUid(EventUtil.generateUid());
-//        event.setHostUserUid(UserUtil.getUserUid());
         binding.setEventVM(viewModel);
         event = EventManager.getInstance().getCurrentEvent();
-
         // hide soft key board
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
+
+        
     }
 
     public void setPhotos(ArrayList<String> photos){
@@ -102,14 +94,13 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     @Override
     public void pickLocation() {
         EventLocationPickerFragment locationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
-        locationPickerFragment.setFrom(this);
         switchFragment(this, locationPickerFragment);
     }
 
     @Override
     public void pickInvitee() {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        inviteeFragment.setFrom(this);
+        inviteeFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
         switchFragment(this, inviteeFragment);
     }
 

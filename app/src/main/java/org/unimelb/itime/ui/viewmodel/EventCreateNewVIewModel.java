@@ -65,6 +65,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
 
     public EventCreateNewVIewModel(EventCreateNewPresenter presenter) {
         this.presenter = presenter;
+        mvpView = presenter.getView();
         init();
 
     }
@@ -79,24 +80,8 @@ public class EventCreateNewVIewModel extends BaseObservable {
         tag = presenter.getContext().getString(R.string.tag_create_event);
         this.viewModel = this;
 
-        mvpView = presenter.getView();
-        if(mvpView== null){
-            Log.i(TAG, "EventCreateNewVIewModel: " + "mvpview is null");
-        }
-
-        // initial default values for new event
-        EventManager.getInstance().setCurrentEvent(new Event());
-        event = EventManager.getInstance().getCurrentEvent();
-        event.setEventUid(EventUtil.generateUid());
-        event.setHostUserUid(UserUtil.getUserUid());
-        long startTime = CalendarUtil.getInstance().getNowCalendar().getTimeInMillis();
-        long endTime = CalendarUtil.getInstance().getNowCalendar().getTimeInMillis() + 3600 * 1000;
-        event.setStartTime(startTime);
-        event.setEndTime(endTime);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(event.getStartTime());
-        String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(), calendar.get(Calendar.DAY_OF_WEEK));
+        presenter.initNewEvent();
+        setEvent(EventManager.getInstance().getCurrentEvent());
         repeats = EventUtil.getRepeats(getContext(), event);
     }
 
@@ -185,7 +170,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
             }
         };
     }
-
 
     public View.OnClickListener onClickRepeat() {
         return new View.OnClickListener() {

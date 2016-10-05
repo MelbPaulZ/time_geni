@@ -58,7 +58,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private String photo = "[]";
 
     @ToMany(referencedJoinProperty = "eventUid")
-    private List<TimeSlot> timeslots = new ArrayList<>();
+    private List<TimeSlot> timeslots = null;
 
     // later delete
     private transient long repeatEndsTime;
@@ -78,7 +78,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private int status;
 
     @ToMany(referencedJoinProperty = "eventUid")
-    private List<Invitee> invitee = new ArrayList<>();
+    private List<Invitee> invitee = null;
     /** Used for active entity operations. */
     @Generated(hash = 1542254534)
     private transient EventDao myDao;
@@ -87,8 +87,10 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private transient DaoSession daoSession;
 
     public Event() {
+        invitee = new ArrayList<>();
+        timeslots = new ArrayList<>();
+        photoList = new ArrayList<>();
     }
-
 
 
     @Generated(hash = 1170169819)
@@ -505,4 +507,5 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     public void setAlertTime(int alertTime) {
         this.alertTime = alertTime;
     }
+
 }

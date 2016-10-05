@@ -44,7 +44,7 @@ public class RemoteService extends Service{
 //                createDB();
                 try {
                     Thread.sleep(5000);
-                    initDB();
+                    loadDB();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -55,8 +55,9 @@ public class RemoteService extends Service{
 
     }
 
-    private void initDB(){
+    private void loadDB(){
 
+        DBManager.getInstance(getBaseContext()).getAllInvitee();
         long start = System.currentTimeMillis();
         EventManager.getInstance().getEventsMap().clear();
         List<Event> list = DBManager.getInstance(getBaseContext()).getAllEvents();
@@ -87,7 +88,7 @@ public class RemoteService extends Service{
         int[] status = {0,1};
         long interval = 3600 * 1000;
         int alldayCount = 0;
-        for (int i = 1; i < 1000; i++) {
+        for (int i = 1; i < 100; i++) {
 
             long startTime = calendar.getTimeInMillis();
             long endTime = startTime + interval * (i%30);

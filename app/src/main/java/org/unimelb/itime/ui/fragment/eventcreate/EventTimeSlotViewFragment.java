@@ -68,12 +68,11 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden){
-            event = EventManager.getInstance().getCurrentEvent();
-        }
+    public void setEvent(Event event){
+        this.event = event;
     }
+
+
 
     private void initListeners(){
         durationRelativeLayout = (RelativeLayout) getActivity().findViewById(R.id.duration_relative_layout);
@@ -258,8 +257,11 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     public void onClickDone() {
         if (getFrom() instanceof InviteeFragment) {
             EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+            beforeSendingFragment.setEvent(event);
             switchFragment(this, beforeSendingFragment);
         }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
+            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment)getFrom();
+            beforeSendingFragment.setEvent(event);
             switchFragment(this, (EventCreateDetailBeforeSendingFragment)getFrom());
         }
     }

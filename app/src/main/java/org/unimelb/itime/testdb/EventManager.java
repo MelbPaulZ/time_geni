@@ -1,5 +1,7 @@
 package org.unimelb.itime.testdb;
 
+import com.google.gson.Gson;
+
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
@@ -69,6 +71,13 @@ public class EventManager {
             oldEvent.setEndTime(newEndTime);
             this.addEvent(oldEvent);
         }
+    }
+
+    public Event copyCurrentEvent(Event event){
+        Gson gson = new Gson();
+        String eventStr = gson.toJson(event);
+        Event copyEvent = gson.fromJson(eventStr, Event.class);
+        return copyEvent;
     }
 
     public Event getCurrentEvent() {
