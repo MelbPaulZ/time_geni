@@ -75,6 +75,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
 
             @Override
             public void onNext(HttpResult<UserLoginRes> userLoginRes) {
+                userLoginRes.get
 //                        Log.d(TAG, "onNext: " + userLoginRes.getToken());
 //                        AuthUtil.saveJwtToken(context, userLoginRes.getToken());
 //
