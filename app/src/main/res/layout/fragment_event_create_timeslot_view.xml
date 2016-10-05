@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -35,6 +34,7 @@
                         android:layout_toRightOf="@+id/timeslot_weekview_back_arrow"
                         android:layout_marginLeft="@dimen/padding_5"
                         android:textSize="17dp"
+                        android:onClick="@{timeslotVM.onClickBack}"
                         android:text="@string/back" />
 
                     <TextView
@@ -76,29 +76,16 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/padding_10"
                         android:textSize="17dp"
+                        android:onClick="@{timeslotVM.onClickDone}"
                         android:text="@string/done"/>
                 </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/middle_relative_layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/timeslot_weekview_allshow"
-            android:layout_below="@+id/toolbar"
-            android:orientation="vertical">
-            <org.unimelb.itime.vendor.weekview.WeekView
-                android:id="@+id/timeslot_week_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:onWeekViewChange="@{timeslotVM.onWeekViewChange()}">
-            </org.unimelb.itime.vendor.weekview.WeekView>
-
-        </RelativeLayout>
         <RelativeLayout
             android:id="@+id/duration_part"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@+id/middle_relative_layout"
+            android:layout_alignParentBottom="true"
             >
             <android.support.v7.widget.Toolbar
                 android:id="@+id/bottom_bar"
@@ -131,5 +118,15 @@
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </RelativeLayout>
+
+        <org.unimelb.itime.vendor.weekview.WeekView
+            android:id="@+id/timeslot_week_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_above="@+id/duration_part"
+            app:onWeekViewChange="@{timeslotVM.onWeekViewChange()}">
+        </org.unimelb.itime.vendor.weekview.WeekView>
     </RelativeLayout>
+
 </layout>

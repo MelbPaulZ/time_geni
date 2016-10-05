@@ -10,6 +10,8 @@ import org.unimelb.itime.base.C;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.testdb.DBManager;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -70,10 +72,31 @@ public class EventUtil{
 
     public static ArrayList<String> fromInviteeListToArraylist(List<Invitee> inviteeArrayList){
         ArrayList<String> arrayList = new ArrayList<>();
-        for (Invitee invitee: inviteeArrayList) {
-            arrayList.add(invitee.getName());
+        if (inviteeArrayList!=null) {
+            for (Invitee invitee : inviteeArrayList) {
+                arrayList.add(invitee.getName());
+            }
         }
         return arrayList;
+    }
+
+    public static CharSequence[] getAlertTimes(Context context){
+        CharSequence[] alertTimes = new CharSequence[]{
+                context.getString(R.string.none),
+                context.getString(R.string.five_mintues_before),
+                context.getString(R.string.fifteen_minutes_before),
+                context.getString(R.string.thirty_minutes_before),
+                context.getString(R.string.one_hour_before),
+                context.getString(R.string.two_hours_before),
+                context.getString(R.string.one_day_before),
+                context.getString(R.string.two_days_before),
+                context.getString(R.string.one_week_before)
+        };
+                return alertTimes;
+    }
+
+    public static String getAlertTimeFromIndex(Context context,int index){
+        return (String) getAlertTimes(context)[index];
     }
 
 
@@ -112,28 +135,62 @@ public class EventUtil{
         return arrayList;
     }
 
+    public static Event getEventInDB(Context context,String eventUid){
+        Event event = DBManager.getInstance(context).getEvent(eventUid);
+        event.getInvitee();
+        event.getTimeslots();
+        return event;
+    }
+
+    public static CharSequence[] getCalendarTypes(Context context){
+        return new CharSequence[]{"Work", "Private", "Group", "Public"};
+    }
+
+    public static String getCalendarTypeFromIndex(Context context, int index){
+        return (String) getCalendarTypes(context)[index];
+    }
+
+    public static CharSequence[] getRepeats(Context context, Event event){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(event.getStartTime());
+        String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
+        return new CharSequence[]{
+                context.getString(R.string.repeat_never),
+                context.getString(R.string.repeat_everyday),
+                String.format(context.getString(R.string.repeat_everyweek), dayOfWeek),
+                String.format(context.getString(R.string.repeat_every_twoweek)),
+                String.format(context.getString(R.string.repeat_every_month)),
+                String.format(context.getString(R.string.repeat_every_year))};
+    }
+
 
     public static String parseRepeatIdToRepeat(Context context,String repeat, long startTime){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        return "every day( change later )";
-//        switch (repeat){
-//            case 0:
-//                return context.getString(R.string.repeat_never);
-//            case 1:
-//                return context.getString(R.string.repeat_everyday);
-//            case 2:
-//                return String.format(context.getString(R.string.repeat_everyweek), getDayOfWeekFull(context,dayOfWeek));
-//            case 3:
-//                return context.getString(R.string.repeat_every_twoweek);
-//            case 4:
-//                return context.getString(R.string.repeat_every_month);
-//            case 5:
-//                return context.getString(R.string.repeat_every_year);
-//            default:
-//                return context.getString(R.string.repeat_never);
-//        }
+//        return "every day( change later )";
+        if (context==null){
+            return null;
+        }
+        if (repeat==null){
+            return context.getString(R.string.repeat_never);
+        }
+        switch (repeat){
+            case "0":
+                return context.getString(R.string.repeat_never);
+            case "1":
+                return context.getString(R.string.repeat_everyday);
+            case "2":
+                return String.format(context.getString(R.string.repeat_everyweek), getDayOfWeekFull(context,dayOfWeek));
+            case "3":
+                return context.getString(R.string.repeat_every_twoweek);
+            case "4":
+                return context.getString(R.string.repeat_every_month);
+            case "5":
+                return context.getString(R.string.repeat_every_year);
+            default:
+                return context.getString(R.string.repeat_never);
+        }
     }
 
     public static String getDayOfWeekFull(Context context,int dayOfWeek) {
@@ -214,8 +271,9 @@ public class EventUtil{
 
     public static void startEditEventActivity(Context context, Activity activity, ITimeEventInterface iTimeEventInterface) {
         Intent intent = new Intent(activity, EventDetailActivity.class);
-        Event event = (Event) iTimeEventInterface;
-        intent.putExtra(context.getString(R.string.event), event);
+        Event event = (Event)iTimeEventInterface;
+        event.getInvitee();
+        EventManager.getInstance().setCurrentEvent((Event)iTimeEventInterface);
         activity.startActivityForResult(intent, ACTIVITY_EDITEVENT);
     }
 }

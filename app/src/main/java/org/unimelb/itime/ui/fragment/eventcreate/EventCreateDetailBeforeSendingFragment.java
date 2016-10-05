@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.fragment.eventcreate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,14 +17,18 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventCreateBeforeSendingBinding;
-import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
+import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
+import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel;
@@ -35,39 +40,36 @@ import java.util.Calendar;
 /**
  * Created by Paul on 31/08/2016.
  */
-public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCreateDetailBeforeSendingMvpView, EventCreateDetailBeforeSendingPresenter> implements EventCreateDetailBeforeSendingMvpView,FragmentTagListener{
+public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<EventCreateDetailBeforeSendingMvpView, EventCreateDetailBeforeSendingPresenter> implements EventCreateDetailBeforeSendingMvpView{
     private FragmentEventCreateBeforeSendingBinding binding;
     private EventCreateDetailBeforeSendingViewModel eventCreateDetailBeforeSendingViewModel;
     private Event event;
-    private EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment;
-    private String tag;
+    private EventCreateDetailBeforeSendingFragment self;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_create_before_sending, container, false);
-        eventCreateDetailBeforeSendingFragment = this;
+        self = this;
         return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Bundle bundle = getArguments();
-        if (bundle==null){
-            this.event = new Event();
-        }else{
-            if (bundle.containsKey(getString(R.string.new_event))) {
-                this.event = (Event) bundle.getSerializable(getString(R.string.new_event));
-            }
-        }
-        eventCreateDetailBeforeSendingViewModel = new EventCreateDetailBeforeSendingViewModel(getPresenter(),this.event);
+        eventCreateDetailBeforeSendingViewModel = new EventCreateDetailBeforeSendingViewModel(getPresenter());
+        binding.setNewEventDetailVM(eventCreateDetailBeforeSendingViewModel);
+    }
+
+    private void initData(){
+
+        eventCreateDetailBeforeSendingViewModel = new EventCreateDetailBeforeSendingViewModel(getPresenter());
         binding.setNewEventDetailVM(eventCreateDetailBeforeSendingViewModel);
 
         //set timeslot listview
         ArrayList<String> timeslotsArrayList = new ArrayList<>();
         for (TimeSlot timeSlot: event.getTimeslots()){
-            // only display chosed timeslot
+            // only display chosen timeSlot
             if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending)))
                 timeslotsArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()) );
         }
@@ -91,7 +93,7 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
 
     @Subscribe
     public void getLocationChange(MessageLocation messageLocation){
-        if (messageLocation.tag == getString(R.string.tag_create_event_before_sending)){
+        if (messageLocation.tag.equals(getClassName())){
             event.setLocation(messageLocation.locationString);
             eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(event);
         }
@@ -115,13 +117,6 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
         }
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        // hide soft key board
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-    }
 
 
     @Override
@@ -134,31 +129,33 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
         this.event = event;
     }
 
-    @Override
-    public void sendEvent(Event event) {
-        ((EventCreateActivity)getActivity()).sendEvent(event);
-    }
 
 
-    // this is for review timeslot or click back to rechoose timeslot
     @Override
-    public void backToTimeSlotView(String tag) {
-        ((EventCreateActivity)getActivity()).goBackToTimeSlot(eventCreateDetailBeforeSendingFragment,tag);
+    public void onClickSend() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
-    public void changeLocation(String tag) {
-        ((EventCreateActivity)getActivity()).toLocationPicker(this,tag);
+    public void onClickCancel() {
+        EventTimeSlotViewFragment timeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+        switchFragment(this, timeSlotViewFragment);
+        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+        timeSlotViewFragment.setTo(inviteeFragment);
     }
 
     @Override
-    public void changeEndRepeatDate(String tag) {
-        ((EventCreateActivity)getActivity()).toDatePicker(this,tag);
+    public void changeLocation() {
+        EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
+        switchFragment(this, eventLocationPickerFragment);
     }
 
+
     @Override
-    public void pickInvitees(String tag) {
-        ((EventCreateActivity)getActivity()).toInviteePicker(this, tag , event);
+    public void pickInvitees() {
+        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+        switchFragment(this, inviteeFragment);
     }
 
     @Override
@@ -167,8 +164,10 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
     }
 
     @Override
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void onClickProposedTimeslots() {
+        EventTimeSlotViewFragment timeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+        switchFragment(this, timeSlotViewFragment);
+        timeSlotViewFragment.setTo(this);
     }
 
     @Override
@@ -181,5 +180,13 @@ public class EventCreateDetailBeforeSendingFragment extends MvpFragment<EventCre
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden){
+            event = EventManager.getInstance().getCurrentEvent();
+            eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(EventManager.getInstance().getCurrentEvent());
+        }
     }
 }

@@ -7,7 +7,8 @@
             type="org.unimelb.itime.ui.viewmodel.MainCalendarViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -55,40 +56,10 @@
                     />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
-
-        <RelativeLayout
-            android:id="@+id/content_layout"
+        <FrameLayout
+            android:id="@+id/calendar_framelayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar_layout">
-            <FrameLayout
-                android:id="@+id/calendar_framelayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </FrameLayout>
-
-            <!--<org.unimelb.itime.vendor.dayview.MonthDayView-->
-                <!--android:id="@+id/month_day_view"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:visibility="visible"/>-->
-
-            <!--<org.unimelb.itime.vendor.agendaview.MonthAgendaView-->
-                <!--android:id="@+id/month_agenda_view"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:visibility="gone">-->
-            <!--</org.unimelb.itime.vendor.agendaview.MonthAgendaView>-->
-
-            <!--<org.unimelb.itime.vendor.weekview.WeekView-->
-                <!--android:id="@+id/week_view"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:visibility="gone"-->
-                <!--app:onWeekOutterListener="@{calenarVM.onWeekBodyListener()}"-->
-                <!--app:onWeekViewChange="@{calenarVM.onWeekViewChange()}"-->
-                <!--&gt;-->
-            <!--</org.unimelb.itime.vendor.weekview.WeekView>-->
-        </RelativeLayout>
-    </RelativeLayout>
+            android:layout_height="match_parent">
+        </FrameLayout>
+    </LinearLayout>
 </layout>

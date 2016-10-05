@@ -22,16 +22,23 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hannesdorfmann.mosby.mvp.MvpPresenter;
+
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.testdb.DBManager;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
+import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
+import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
+import org.unimelb.itime.ui.presenter.EmptyPresenter;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
 import org.unimelb.itime.vendor.contact.helper.ClearEditText;
@@ -41,14 +48,13 @@ import org.unimelb.itime.vendor.contact.widgets.SortModel;
 import org.unimelb.itime.vendor.helper.LoadImgHelper;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InviteeFragment extends Fragment implements FragmentTagListener{
+public class InviteeFragment extends BaseUiFragment {
     private static final String TAG = "MyAPP";
 
     public Map<ITimeContactInterface, ImageView> contacts_list = new HashMap<>();
@@ -75,14 +81,13 @@ public class InviteeFragment extends Fragment implements FragmentTagListener{
                              Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
         root = inflater.inflate(R.layout.fragment_event_attendee_picker, container, false);
-        // Inflate the layout for this fragment
-        //set load methods
-
         self = this;
-//		initView();
-//		initData();
-//		initListener();
         return root;
+    }
+
+    @Override
+    public MvpPresenter createPresenter() {
+        return new EmptyPresenter();
     }
 
     @Override
@@ -138,7 +143,6 @@ public class InviteeFragment extends Fragment implements FragmentTagListener{
 
     }
 
-    @Override
     public void setTag(String tag) {
         this.tag = tag;
     }
@@ -286,61 +290,113 @@ public class InviteeFragment extends Fragment implements FragmentTagListener{
         adapter.updateListView(filterDateList);
     }
 
+    public void setSelectInvitees(){
+        // get all invitess
+        ArrayList<Invitee> invitees = new ArrayList<>();
+        ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
+        for (ITimeContactInterface iTimeContactInterface : contacts) {
+            Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
+            invitees.add(invitee);
+        }
+        event.setInvitee(invitees);
+        EventManager.getInstance().setCurrentEvent(event);
+    }
+
     public void initListener() {
-        Button nextBtn = (Button) getActivity().findViewById(R.id.attendee_picker_next_btn);
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (tag == getString(R.string.tag_host_event_edit)){
-                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
-                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
-                    for (ITimeContactInterface iTimeContactInterface : contacts) {
-                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
-                        invitees.add(invitee);
-                    }
-                    EventBus.getDefault().post(new MessageInvitees(tag, invitees));
-                    ((EventDetailActivity)getActivity()).fromInviteeToEditEvent();
-                }else if (tag == getString(R.string.tag_create_event)){
-                    Bundle bundle = getArguments();
-                    event = (Event) bundle.getSerializable(getString(R.string.new_event));
-                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
-                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
-                    for (ITimeContactInterface iTimeContactInterface : contacts) {
-                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
-                        invitees.add(invitee);
-                    }
-
-                    event.setInvitee(invitees);
-                    Bundle newBundle = new Bundle();
-                    newBundle.putSerializable(getString(R.string.new_event), event);
-                    ((EventCreateActivity) getActivity()).toTimeSlotView(self, newBundle);
-                }else if (tag == getString(R.string.tag_create_event_before_sending)){
-                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
-                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
-                    for (ITimeContactInterface iTimeContactInterface : contacts) {
-                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
-                        invitees.add(invitee);
-                    }
-                    EventBus.getDefault().post(new MessageInvitees(tag,invitees));
-                    ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(self);
-
-                }
-            }
-        });
-
         Button cancelBtn = (Button) root.findViewById(R.id.attendee_picker_cancel_btn);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tag.equals(getString(R.string.tag_host_event_edit))){
-                    ((EventDetailActivity)getActivity()).fromInviteeToEditEvent();
-                }else{
-                    ((EventCreateActivity)getActivity()).toCreateEventNewFragment(self);
+                if (getFrom() instanceof EventCreateNewFragment || getFrom() instanceof EventTimeSlotViewFragment){
+                    EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
+                    switchFragment(self, eventCreateNewFragment);
+                }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
+                    switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
                 }
             }
         });
 
+        Button nextBtn = (Button) root.findViewById(R.id.attendee_picker_next_btn);
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getFrom() instanceof EventCreateNewFragment){
+                    setSelectInvitees();
+                    EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+                    switchFragment(self, eventTimeSlotViewFragment);
+                }else if (getFrom() instanceof EventTimeSlotViewFragment){
+                    setSelectInvitees();
+                    switchFragment(self, (EventTimeSlotViewFragment)getFrom());
+                }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
+                    setSelectInvitees();
+                    switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
+                }
+            }
+        });
+
+//        Button nextBtn = (Button) getActivity().findViewById(R.id.attendee_picker_next_btn);
+//        nextBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (tag == getString(R.string.tag_host_event_edit)){
+//                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
+//                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
+//                    for (ITimeContactInterface iTimeContactInterface : contacts) {
+//                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
+//                        invitees.add(invitee);
+//                    }
+//                    EventBus.getDefault().post(new MessageInvitees(tag, invitees));
+//                    ((EventDetailActivity)getActivity()).fromInviteeToEditEvent();
+//                }else if (tag == getString(R.string.tag_create_event)){
+//                    Bundle bundle = getArguments();
+//                    event = (Event) bundle.getSerializable(getString(R.string.new_event));
+//                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
+//                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
+//                    for (ITimeContactInterface iTimeContactInterface : contacts) {
+//                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
+//                        invitees.add(invitee);
+//                    }
+//
+//                    event.setInvitee(invitees);
+//                    Bundle newBundle = new Bundle();
+//                    newBundle.putSerializable(getString(R.string.new_event), event);
+//                    ((EventCreateActivity) getActivity()).toTimeSlotView(self, newBundle);
+//                }else if (tag == getString(R.string.tag_create_event_before_sending)){
+//                    ArrayList<Invitee> invitees = new ArrayList<Invitee>();
+//                    ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
+//                    for (ITimeContactInterface iTimeContactInterface : contacts) {
+//                        Invitee invitee = contactToInvitee((Contact) iTimeContactInterface, event); // convert contact to invitee
+//                        invitees.add(invitee);
+//                    }
+//                    EventBus.getDefault().post(new MessageInvitees(tag,invitees));
+//                    ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(self);
+//
+//                }
+//            }
+//        });
+//
+//        Button cancelBtn = (Button) root.findViewById(R.id.attendee_picker_cancel_btn);
+//        cancelBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (tag.equals(getString(R.string.tag_host_event_edit))){
+//                    ((EventDetailActivity)getActivity()).fromInviteeToEditEvent();
+//                }else if (tag.equals(getString(R.string.tag_create_event))){
+//                    ((EventCreateActivity)getActivity()).toCreateEventNewFragment(self);
+//                }else if (tag.equals(getString(R.string.tag_create_event_before_sending))){
+//                    ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(self);
+//                }
+//            }
+//        });
+
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden){
+            event = EventManager.getInstance().getCurrentEvent();
+        }
     }
 
     private Invitee contactToInvitee(Contact contact, Event event) {

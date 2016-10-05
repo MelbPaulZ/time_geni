@@ -6,6 +6,8 @@
 
     <dimen name="page_text_size">16dp</dimen>
     <dimen name="page_blank_row_height">40dp</dimen>
+    <dimen name="text_size_15dp">15dp</dimen>
+    <dimen name="size_7.5dp">7.5dp</dimen>
 
     <dimen name="margin_tiny">4dp</dimen>
     <dimen name="margin_small">8dp</dimen>

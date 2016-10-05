@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="org.unimelb.itime.util.EventUtil"/>
         <variable
             name="timeSlotHostVM"
             type="org.unimelb.itime.ui.viewmodel.EventDetailHostTimeSlotViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -38,6 +38,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/detail_timeslot_back_arrow"
+                        android:onClick="@{timeSlotHostVM.onBack()}"
                         android:text="@string/back" />
 
                     <TextView
@@ -65,6 +66,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/padding_10"
+                        android:onClick="@{timeSlotHostVM.onDone()}"
                         android:text="@string/done" />
                 </RelativeLayout>
 
@@ -84,13 +86,12 @@
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/middle_relative_layout"
+        <org.unimelb.itime.vendor.weekview.WeekView
+            android:id="@+id/edit_timeslot_weekview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
-            android:orientation="vertical">
-
-        </RelativeLayout>
-    </RelativeLayout>
+            app:onWeekViewChange="@{timeSlotHostVM.onWeekViewChange()}"
+            app:onTimeSlotOuterListener="@{timeSlotHostVM.onWeekOuterListener()}">
+        </org.unimelb.itime.vendor.weekview.WeekView>
+    </LinearLayout>
 </layout>

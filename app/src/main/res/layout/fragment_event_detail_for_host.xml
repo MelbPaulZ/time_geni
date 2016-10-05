@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/event_detail_host_title_bar"
-        android:background="#EFEFF4"
+        android:background="@color/white"
         android:scrollbarStyle="insideOverlay">
 
         <!--background-->
@@ -73,9 +73,55 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#EFEFF4">
+            <!--host confirm info-->
+            <RelativeLayout
+                android:id="@+id/detail_host_info_RL"
+                android:layout_width="match_parent"
+                android:layout_height="88dp">
+                <!--inside gray part-->
+                <RelativeLayout
+                    android:id="@+id/detail_host_info_gray"
+                    android:layout_width="355dp"
+                    android:layout_height="44dp"
+                    android:background="@color/color_EFEFEF"
+                    android:layout_centerHorizontal="true">
+                    <TextView
+                        android:id="@+id/detail_host_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_15dp"
+                        android:textStyle="bold"
+                        android:text="@{hostDetailVM.evDtlHostEvent.hostUserUid}"
+                        android:textColor="@color/color_FF9600"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="@dimen/size_7.5dp"
+                        android:layout_marginLeft="@dimen/size_7.5dp"/>
+                    <TextView
+                        android:id="@+id/detail_confirm_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:textColor="@color/color_FF9600"
+                        android:text="has not confirmed this event"
+                        android:layout_marginBottom="@dimen/size_7.5dp"
+                        android:layout_marginLeft="@dimen/size_7.5dp"
+                        />
+                    <ImageView
+                        android:layout_width="@dimen/text_size_15dp"
+                        android:layout_height="@dimen/text_size_15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/size_7.5dp"
+                        />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
             <!--blue rectangle-->
             <LinearLayout
                 android:id="@+id/event_detail_host_first_part"
+                android:layout_below="@+id/detail_host_info_RL"
                 android:layout_width="350dp"
                 android:layout_height="89dp"
                 android:layout_marginLeft="16dp"
@@ -401,7 +447,7 @@
             android:layout_marginRight="@dimen/padding_5"
             android:layout_weight="1"
             android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"
-            android:text="confirm"
+            android:text="@string/accept"
             android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? true: false}"
             android:onClick="@{hostDetailVM.onClickConfirm()}"
             android:textAlignment="center"

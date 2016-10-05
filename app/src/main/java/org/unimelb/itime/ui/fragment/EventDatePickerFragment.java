@@ -10,15 +10,13 @@ import android.widget.DatePicker;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
-import org.unimelb.itime.helper.FragmentTagListener;
 import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
-import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 
 /**
  * Created by Paul on 23/08/2016.
  */
-public class EventDatePickerFragment extends Fragment implements FragmentTagListener{
+public class EventDatePickerFragment extends Fragment {
     private View root;
     private String tag;
 
@@ -42,20 +40,20 @@ public class EventDatePickerFragment extends Fragment implements FragmentTagList
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        root.findViewById(R.id.date_picker_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatePicker datePicker = (DatePicker) root.findViewById(R.id.date_picker);
-                if (tag == getString(R.string.tag_start_time) || tag== getString(R.string.tag_end_time)){
-                    EventBus.getDefault().post(new MessageEventDate(tag, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
-                    gotoTimePicker(tag);
-                }else if (tag == getString(R.string.tag_end_repeat)){
-                    EventBus.getDefault().post(new MessageEventDate(tag, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
-                    gotoCreateNewEvent();
-                }else if (tag == getString(R.string.tag_create_event_before_sending)){
-                    EventBus.getDefault().post(new MessageEventDate(tag, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
-                    gotoCreateEventBeforeSending();
-                }
+//        root.findViewById(R.id.date_picker_button).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                DatePicker datePicker = (DatePicker) root.findViewById(R.id.date_picker);
+//                if (tag == getString(R.string.tag_start_time) || tag== getString(R.string.tag_end_time)){
+//                    EventBus.getDefault().post(new MessageEventDate(tag, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
+//                    gotoTimePicker(tag);
+//                }else if (tag == getString(R.string.tag_end_repeat)){
+//                    EventBus.getDefault().post(new MessageEventDate(tag, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
+//                    gotoCreateNewEvent();
+//                }else if (tag == getString(R.string.tag_create_event_before_sending)){
+//                    EventBus.getDefault().post(new MessageEventDate(tag, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
+//                    gotoCreateEventBeforeSending();
+//                }
 
 //                if(onEventDatePickerListener != null){
 //                    onEventDatePickerListener.onComplete(taskId, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
@@ -65,39 +63,39 @@ public class EventDatePickerFragment extends Fragment implements FragmentTagList
 //                if(onEventDatePickerListener != null){
 //                    onEventDatePickerListener.onCancel(taskId);
 //                }
-            }
-        });
+//            }
+//        });
+//
+//
+//    }
+//
+//    public void show(){
+////        getFragmentManager().beginTransaction().
+//    }
+//
+//    public void hide(){
+//
+//    }
 
 
-    }
 
-    public void show(){
-//        getFragmentManager().beginTransaction().
-    }
-
-    public void hide(){
-
-    }
-
-
-
-
-    public void gotoTimePicker(String tag){
-        ((EventCreateActivity)getActivity()).toTimePicker(this,tag);
-    }
-
-    public void gotoCreateNewEvent(){
-        ((EventCreateActivity)getActivity()).toCreateEventNewFragment(this);
-    }
-
-    public void gotoCreateEventBeforeSending(){
-        ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(this);
-    }
-
-    @Override
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
+//
+//    public void gotoTimePicker(String tag){
+//        ((EventCreateActivity)getActivity()).toTimePicker(this,tag);
+//    }
+//
+//    public void gotoCreateNewEvent(){
+//        ((EventCreateActivity)getActivity()).toCreateEventNewFragment(this);
+//    }
+//
+//    public void gotoCreateEventBeforeSending(){
+//        ((EventCreateActivity)getActivity()).toNewEventDetailBeforeSending(this);
+//    }
+//
+//    @Override
+//    public void setTag(String tag) {
+//        this.tag = tag;
+//    }
 
 
 //    public interface OnEventDatePickerListener{
@@ -117,4 +115,5 @@ public class EventDatePickerFragment extends Fragment implements FragmentTagList
 //        return this.taskId;
 //    }
 
+}
 }

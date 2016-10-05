@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.mvpview.EventDetailHostTimeSlotMvpVIew;
 import org.unimelb.itime.ui.viewmodel.EventDetailHostTimeSlotViewModel;
 
@@ -24,17 +25,17 @@ public class EventDetailHostTimeSlotPresenter extends MvpBasePresenter<EventDeta
         this.context = context;
     }
 
-    public void toHostEventDetail(){
+    public void toHostEventDetail(Event event){
         EventDetailHostTimeSlotMvpVIew view = getView();
         if (view!=null){
-            view.toHostEventDetail();
+            view.toHostEventDetail(event);
         }
     }
 
-    public void toHostEventEdit(){
+    public void toHostEventEdit(Event event){
         EventDetailHostTimeSlotMvpVIew view = getView();
         if (view != null){
-            view.toHostEventEdit();
+            view.toHostEventEdit(event);
         }
     }
 }

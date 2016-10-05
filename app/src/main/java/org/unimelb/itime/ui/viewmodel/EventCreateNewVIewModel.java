@@ -3,19 +3,22 @@ package org.unimelb.itime.ui.viewmodel;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.squareup.picasso.Picasso;
@@ -23,22 +26,25 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.messageevent.MessageUrl;
+import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
+import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Paul on 25/08/2016.
  */
 public class EventCreateNewVIewModel extends BaseObservable {
     private EventCreateNewPresenter presenter;
+    private EventCreateNewMvpView mvpView;
     private Event event;
 
     private String tag;
@@ -49,14 +55,18 @@ public class EventCreateNewVIewModel extends BaseObservable {
     private CharSequence repeats[] = null;
     EventCreateNewVIewModel viewModel;
     private boolean isEndRepeatChanged = false;
+    private ObservableField<Boolean> isAllDay;
 
+    private int tempYear,tempMonth,tempDay,tempHour,tempMin;
+    private static final int CHANGE_STARTTIME = 0;
+    private static final int CHANGE_ENDTIME = 1;
+
+    private final String TAG = "EventCreateNewViewModel";
 
     public EventCreateNewVIewModel(EventCreateNewPresenter presenter) {
         this.presenter = presenter;
-        isEventRepeat = new ObservableField<>(false);
-//        EventBus.getDefault().register(this);
-        tag = presenter.getContext().getString(R.string.tag_create_event);
-        this.viewModel = this;
+        init();
+
     }
 
     public Context getContext() {
@@ -64,29 +74,40 @@ public class EventCreateNewVIewModel extends BaseObservable {
     }
 
     public void init() {
+        isEventRepeat = new ObservableField<>(false);
+        isAllDay = new ObservableField<>(false);
+        tag = presenter.getContext().getString(R.string.tag_create_event);
+        this.viewModel = this;
+
+        mvpView = presenter.getView();
+        if(mvpView== null){
+            Log.i(TAG, "EventCreateNewVIewModel: " + "mvpview is null");
+        }
+
+        // initial default values for new event
+        EventManager.getInstance().setCurrentEvent(new Event());
+        event = EventManager.getInstance().getCurrentEvent();
+        event.setEventUid(EventUtil.generateUid());
+        event.setHostUserUid(UserUtil.getUserUid());
+        long startTime = CalendarUtil.getInstance().getNowCalendar().getTimeInMillis();
+        long endTime = CalendarUtil.getInstance().getNowCalendar().getTimeInMillis() + 3600 * 1000;
+        event.setStartTime(startTime);
+        event.setEndTime(endTime);
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
-        if (!isEndTimeChanged) {
-            event.setEndTime(event.getStartTime() + 3600000);
-        }
         String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(), calendar.get(Calendar.DAY_OF_WEEK));
-        repeats = new CharSequence[]{
-                getContext().getString(R.string.repeat_never),
-                getContext().getString(R.string.repeat_everyday),
-                String.format(getContext().getString(R.string.repeat_everyweek), dayOfWeek),
-                String.format(getContext().getString(R.string.repeat_every_month)),
-                String.format(getContext().getString(R.string.repeat_every_year))};
+        repeats = EventUtil.getRepeats(getContext(), event);
     }
 
 
-    public View.OnClickListener test() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        };
+    public void updateRepeats(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(event.getStartTime());
+        String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(), calendar.get(Calendar.DAY_OF_WEEK));
+        repeats[2] = String.format(getContext().getString(R.string.repeat_everyweek), dayOfWeek);
     }
+
 
     public void setPhotos(ArrayList<String> urls){
         event.setPhoto(EventUtil.fromStringToPhotoUrlList(urls));
@@ -106,47 +127,89 @@ public class EventCreateNewVIewModel extends BaseObservable {
     }
 
 // ****************************************************
-
-    public View.OnClickListener submit() {
+    public View.OnClickListener onClickTime(final int type) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.submit(event);
+                final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
+                final View popupView = inflater.inflate(R.layout.fragment_event_date_picker, null);
+                final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,true);
+                popupWindow.setOutsideTouchable(false);
+                popupView.findViewById(R.id.date_picker_button).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DatePicker datePicker = (DatePicker) popupView.findViewById(R.id.date_picker);
+                        tempYear = datePicker.getYear();
+                        tempMonth = datePicker.getMonth();
+                        tempDay = datePicker.getDayOfMonth();
+
+                        // after click the next button, popup a new time picker window
+                        final View timePickerView = inflater.inflate(R.layout.fragment_event_time_picker, null);
+                        final PopupWindow timePopupWindow = new PopupWindow(timePickerView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                        timePopupWindow.setOutsideTouchable(false);
+                        timePickerView.findViewById(R.id.time_picker_button).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                TimePicker timePicker = (TimePicker) timePickerView.findViewById(R.id.time_picker);
+                                tempMin = timePicker.getCurrentMinute();
+                                tempHour = timePicker.getCurrentHour();
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.set(tempYear,tempMonth,tempDay,tempHour,tempMin, 0);
+
+                                if (type == CHANGE_STARTTIME){
+                                    event.setStartTime(calendar.getTimeInMillis());
+                                    if (!isEndTimeChanged){
+                                        event.setEndTime(calendar.getTimeInMillis() + 3600 * 1000);
+                                    }
+                                }else if (type == CHANGE_ENDTIME){
+                                    event.setEndTime(calendar.getTimeInMillis());
+                                    isEndTimeChanged = true;
+                                }
+                                viewModel.setEvent(event);
+                                updateRepeats();
+                                popupWindow.dismiss();
+                                timePopupWindow.dismiss();
+                            }
+                        });
+                        timePopupWindow.showAtLocation(timePickerView, Gravity.CENTER, 0, 0);
+                        timePopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                // if click outside on time picker, the date picker has to dismiss
+                                popupWindow.dismiss();
+                            }
+                        });
+                    }
+                });
+                popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
             }
         };
     }
 
-    public View.OnClickListener pickStartDate() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tag = presenter.getContext().getString(R.string.tag_start_time);
-                presenter.pickDate(tag);
-            }
-        };
-    }
 
-    public View.OnClickListener chooseRepeat() {
+    public View.OnClickListener onClickRepeat() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(event.getStartTime());
-                String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(),calendar.get(Calendar.DAY_OF_WEEK));
+//                String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(),calendar.get(Calendar.DAY_OF_WEEK));
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle("Choose a repeat type");
                 builder.setItems(repeats, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        event.setRecurrence(i+"");
                         if (!repeats[i].equals(getContext().getString(R.string.repeat_never))) {
                             setIsEventRepeat(true);
                             if (!isEndRepeatChanged) { // if the user didn't change end repeat time before
                                 event.setRepeatEndsTime(calendar.getTimeInMillis() + 24*3600000); // default end in next day
                             }
-//                            event.setRepeatTypeId(i);
-                            viewModel.setEvent(event);
+                        }else{
+                            setIsEventRepeat(false);
                         }
+                        viewModel.setEvent(event);
                     }
                 });
                 builder.show();
@@ -159,12 +222,13 @@ public class EventCreateNewVIewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CharSequence types[] = new CharSequence[]{"Work", "Private", "Group", "Public"};
+                final CharSequence types[] = EventUtil.getCalendarTypes(getContext());
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle("Choose a calendar type");
                 builder.setItems(types, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
+                        event.setCalendarUid((String) types[i]);
                         viewModel.setEvent(event);
                     }
                 });
@@ -185,64 +249,61 @@ public class EventCreateNewVIewModel extends BaseObservable {
     }
 
 
-    public View.OnClickListener pickEndDate() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tag = presenter.getContext().getString(R.string.tag_end_time);
-                isEndTimeChanged = true;
-                presenter.pickDate(tag);
-            }
-        };
-    }
-
-    public View.OnClickListener pickEndRepeatDate() {
+    public View.OnClickListener onClickEndRepeat() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isEndRepeatChanged = true;
-                tag = presenter.getContext().getString(R.string.tag_end_repeat);
-                presenter.pickDate(tag);
             }
         };
     }
 
-    public View.OnClickListener cancelNewEvent() {
+    // click cancel button
+    public View.OnClickListener onClickCancel() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.gotoWeekViewCalendar();
+                if (mvpView!=null){
+                    mvpView.gotoWeekViewCalendar();
+                }
             }
         };
     }
 
-    public View.OnClickListener locationPicker() {
+    public View.OnClickListener onClickLocation() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.pickLocation(tag);
+                if (mvpView != null){
+                    mvpView.pickLocation();
+                }
             }
         };
     }
 
     // click done btn
-    public View.OnClickListener toCreateSoloEvent() {
+    public View.OnClickListener onClickDone() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (event.getTitle()==null) {
                     event.setTitle(presenter.getContext().getString(R.string.new_event));
                 }
-                presenter.toCreateSoloEvent(event);
+                EventManager.getInstance().setCurrentEvent(event);
+                if (mvpView!=null){
+                    mvpView.toCreateSoloEvent();
+                }
             }
         };
     }
 
-    public View.OnClickListener attendeePicker() {
+    public View.OnClickListener onClickInvitee() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.pickAttendee();
+                if (mvpView!=null){
+                    mvpView.pickInvitee();
+                }
             }
         };
     }
@@ -253,7 +314,9 @@ public class EventCreateNewVIewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 tag = getContext().getString(R.string.tag_create_event);
-                presenter.pickPhoto(tag);
+                if (mvpView!=null){
+                    presenter.pickPhoto(tag);
+                }
             }
         };
     }
@@ -265,16 +328,12 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 CharSequence[] alertTimes;
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle(getContext().getString(R.string.choose_alert_time));
-                alertTimes = new CharSequence[]{
-                        getContext().getString(R.string.none),
-                        getContext().getString(R.string.ten_minutes_before),
-                        getContext().getString(R.string.one_hour_before),
-                        getContext().getString(R.string.one_week_before)
-                };
+                alertTimes = EventUtil.getAlertTimes(getContext());
                 builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // need to add later
+                        event.setAlertTime(i);
+                        setEvent(event);
                     }
                 });
                 builder.show();
@@ -294,8 +353,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
     public void setEvent(Event event) {
         this.event = event;
         notifyPropertyChanged(BR.event);
-        init();
-
     }
 
 
@@ -314,5 +371,42 @@ public class EventCreateNewVIewModel extends BaseObservable {
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = (int) height;
         view.setLayoutParams(layoutParams);
+    }
+
+
+    @Bindable
+    public boolean getIsAllDay() {
+        return isAllDay.get();
+    }
+
+    public void setIsAllDay(boolean isAllDay) {
+        this.isAllDay.set(isAllDay);
+        if (this.isAllDay.get()){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(event.getStartTime());
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            event.setStartTime(calendar.getTimeInMillis());
+            event.setEndTime(event.getStartTime() + 3600 * 1000 * 24);
+            setEvent(event);
+        }else{
+            Calendar calendar = Calendar.getInstance();
+            event.setStartTime(calendar.getTimeInMillis());
+            event.setEndTime(calendar.getTimeInMillis() + 3600 * 1000);
+            setEvent(event);
+        }
+        notifyPropertyChanged(BR.isAllDay);
+    }
+
+    @Bindable
+    public static int getChangeStarttime() {
+        return CHANGE_STARTTIME;
+    }
+
+    @Bindable
+    public static int getChangeEndtime() {
+        return CHANGE_ENDTIME;
     }
 }

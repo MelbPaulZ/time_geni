@@ -8,10 +8,10 @@ import org.unimelb.itime.bean.Event;
  * Created by Paul on 31/08/2016.
  */
 public interface EventCreateDetailBeforeSendingMvpView extends MvpView {
-    void sendEvent(Event event);
-    void backToTimeSlotView(String tag);
-    void changeLocation(String tag);
-    void changeEndRepeatDate(String tag);
-    void pickInvitees(String tag);
+    void onClickSend();
+    void onClickCancel();
+    void changeLocation();
+    void pickInvitees();
     void pickPhoto(String tag);
+    void onClickProposedTimeslots();
 }

@@ -94,12 +94,6 @@ public class CalendarMonthDayFragment extends Fragment {
 
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden){
-
-        }
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){

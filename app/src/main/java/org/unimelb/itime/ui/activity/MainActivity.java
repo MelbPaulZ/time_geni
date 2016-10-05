@@ -2,20 +2,15 @@ package org.unimelb.itime.ui.activity;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.databinding.Bindable;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
+import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.ActivityMainBinding;
@@ -26,7 +21,6 @@ import org.unimelb.itime.ui.fragment.MainSettingsFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
-import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.Calendar;
 
@@ -36,7 +30,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    private Fragment[] tagFragments;
+    private MvpFragment[] tagFragments;
 
     private ActivityMainBinding binding;
     private MainTabBarViewModel tabBarViewModel;
@@ -48,26 +42,6 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
         init();
-//        getNewEvent();
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        getNewEvent(intent);
-    }
-
-    public void getNewEvent(Intent intent){
-        if (intent.hasExtra(getString(R.string.new_event))) {
-            Event event = (Event) intent.getSerializableExtra(getString(R.string.new_event));
-            ((MainCalendarFragment)tagFragments[0]).addNewEvent(event);
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        getNewEvent();
     }
 
     @NonNull
@@ -78,11 +52,13 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
 
     private void init(){
-        tagFragments = new Fragment[4];
+        tagFragments = new MvpFragment[4];
         tagFragments[0] = new MainCalendarFragment();
         tagFragments[1] = new MainContactsFragment();
         tagFragments[2] = new MainInboxFragment();
         tagFragments[3] = new MainSettingsFragment();
+
+
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[0]);

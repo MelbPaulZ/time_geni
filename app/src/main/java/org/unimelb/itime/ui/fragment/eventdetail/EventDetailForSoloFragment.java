@@ -24,6 +24,7 @@ import org.unimelb.itime.ui.viewmodel.EventSoloDetailViewModel;
 public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMvpView, EventDetailForSoloPresenter> implements EventDetailForSoloMvpView {
     private FragmentSoloEventDetailBinding binding;
     private Event event;
+    private EventSoloDetailViewModel eventSoloDetailViewModel;
 
     @Nullable
     @Override
@@ -35,7 +36,7 @@ public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMv
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        EventSoloDetailViewModel eventSoloDetailViewModel = new EventSoloDetailViewModel(getPresenter(),this.event);
+        eventSoloDetailViewModel = new EventSoloDetailViewModel(getPresenter(),this.event);
         binding.setSoloDetailVM(eventSoloDetailViewModel);
     }
 
@@ -52,6 +53,10 @@ public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMv
 
     public void setEvent(Event event) {
         this.event = event;
+        if(eventSoloDetailViewModel!=null){
+            eventSoloDetailViewModel.setSoloEvent(event);
+        }
+
     }
 
     @Override
@@ -61,6 +66,6 @@ public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMv
 
     @Override
     public void toEditEvent() {
-        ((EventDetailActivity)getActivity()).toEditEvent(event);
+        ((EventDetailActivity)getActivity()).toEditEvent(this, event);
     }
 }

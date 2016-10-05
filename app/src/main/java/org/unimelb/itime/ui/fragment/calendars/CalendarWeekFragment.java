@@ -52,6 +52,7 @@ public class CalendarWeekFragment extends Fragment {
 //        initDB(); // this is for test paul activity, need to delete for main project
 
         weekView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        int size = EventManager.getInstance().getEventsMap().size();
         weekView.setEventClassName(Event.class);
         weekView.setOnHeaderListener(new WeekView.OnHeaderListener() {
             @Override
@@ -121,6 +122,8 @@ public class CalendarWeekFragment extends Fragment {
             weekView.reloadEvents();
         }
     }
+
+
 
     @Override
     public void onStart() {

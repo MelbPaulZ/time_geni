@@ -31,6 +31,8 @@ public class EventDetailForHostViewModel extends BaseObservable {
     private String tag;
     private Context context;
 
+
+
     public EventDetailForHostViewModel(EventDetailForHostPresenter presenter) {
         this.presenter = presenter;
         this.inflater = presenter.getInflater();
@@ -74,8 +76,10 @@ public class EventDetailForHostViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // need to save data later, implement later
-                presenter.toWeekView();
+                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, EvDtlHostEvent.getTimeslots()).get(0);
+                EvDtlHostEvent.setStartTime(newTimeSlot.getStartTime());
+                EvDtlHostEvent.setEndTime(newTimeSlot.getEndTime());
+                presenter.toWeekView(EvDtlHostEvent);
             }
         };
     }
@@ -156,6 +160,9 @@ public class EventDetailForHostViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, EvDtlHostEvent.getTimeslots()).get(0);
+//                EvDtlHostEvent.setStartTime(newTimeSlot.getStartTime());
+//                EvDtlHostEvent.setEndTime(newTimeSlot.getEndTime());
                 presenter.confirmAndGotoWeekViewCalendar(EvDtlHostEvent);
             }
         };
@@ -225,4 +232,6 @@ public class EventDetailForHostViewModel extends BaseObservable {
             }
         }
     }
+
+
 }

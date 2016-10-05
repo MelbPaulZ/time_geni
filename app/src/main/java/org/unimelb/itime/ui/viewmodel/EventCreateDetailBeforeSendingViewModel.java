@@ -7,9 +7,14 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TimePicker;
 
 import com.android.databinding.library.baseAdapters.BR;
 
@@ -19,6 +24,8 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.messageevent.MessageLocation;
+import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -32,21 +39,21 @@ import java.util.List;
  */
 public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
     private Event newEvDtlEvent;
-    private String tag;
     private CharSequence repeats[] = null;
     private ObservableField<Boolean> evDtlIsEventRepeat ;
     private EventCreateDetailBeforeSendingViewModel viewModel;
     private CharSequence alertTimes[] = null;
-
-
+    private EventCreateDetailBeforeSendingMvpView mvpView;
+    private int tempYear,tempMonth,tempDay,tempHour,tempMin;
     private EventCreateDetailBeforeSendingPresenter presenter;
 
-    public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter,Event event) {
+    public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter) {
         this.presenter = presenter;
-        this.newEvDtlEvent = event;
-        tag = presenter.getContext().getString(R.string.tag_create_event_before_sending);
+        newEvDtlEvent = EventManager.getInstance().getCurrentEvent();
+        repeats = EventUtil.getRepeats(getContext(), newEvDtlEvent);
         evDtlIsEventRepeat = new ObservableField<>(false);
         this.viewModel = this;
+        mvpView = presenter.getView();
     }
 
     public View.OnClickListener chooseRepeat() {
@@ -59,12 +66,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle("Choose a repeat type");
-                repeats = new CharSequence[]{
-                        getContext().getString(R.string.repeat_never),
-                        getContext().getString(R.string.repeat_everyday),
-                        String.format(getContext().getString(R.string.repeat_everyweek), dayOfWeek),
-                        String.format(getContext().getString(R.string.repeat_every_month)),
-                        String.format(getContext().getString(R.string.repeat_every_year))};
+                repeats = EventUtil.getRepeats(getContext(), newEvDtlEvent);
                 builder.setItems(repeats, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -73,9 +75,11 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
                             if (newEvDtlEvent.getRepeatEndsTime()==0){
                                 newEvDtlEvent.setRepeatEndsTime(newEvDtlEvent.getStartTime()+24*3600000);//default another day
                             }
-//                            newEvDtlEvent.setRepeatTypeId(i);
-                            viewModel.setNewEvDtlEvent(newEvDtlEvent);
+                        }else{
+                            setIsEventRepeat(false);
                         }
+                        newEvDtlEvent.setRecurrence(i + "");
+                        viewModel.setNewEvDtlEvent(newEvDtlEvent);
                     }
                 });
                 builder.show();
@@ -90,16 +94,12 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle(getContext().getString(R.string.choose_alert_time));
-                alertTimes = new CharSequence[]{
-                        getContext().getString(R.string.none),
-                        getContext().getString(R.string.ten_minutes_before),
-                        getContext().getString(R.string.one_hour_before),
-                        getContext().getString(R.string.one_week_before)
-                };
+                alertTimes = EventUtil.getAlertTimes(getContext());
                 builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // need to add later
+                        newEvDtlEvent.setAlertTime(i);
+                        setNewEvDtlEvent(newEvDtlEvent);
                     }
                 });
                 builder.show();
@@ -112,27 +112,88 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.pickPhoto(tag);
+                if (mvpView!=null){
+                    mvpView.pickPhoto(getContext().getString(R.string.tag_create_event_before_sending));
+                }
             }
         };
     }
 
 
-    public View.OnClickListener pickEndRepeatDate() {
+    public View.OnClickListener onClickEndRepeat() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tag = presenter.getContext().getString(R.string.tag_create_event_before_sending);
-                presenter.pickEndRepeatDate(tag);
+                final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
+                final View popupView = inflater.inflate(R.layout.fragment_event_date_picker, null);
+                final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,true);
+                popupWindow.setOutsideTouchable(false);
+                popupView.findViewById(R.id.date_picker_button).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DatePicker datePicker = (DatePicker) popupView.findViewById(R.id.date_picker);
+                        tempYear = datePicker.getYear();
+                        tempMonth = datePicker.getMonth();
+                        tempDay = datePicker.getDayOfMonth();
+
+                        // after click the next button, popup a new time picker window
+                        final View timePickerView = inflater.inflate(R.layout.fragment_event_time_picker, null);
+                        final PopupWindow timePopupWindow = new PopupWindow(timePickerView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                        timePopupWindow.setOutsideTouchable(false);
+                        timePickerView.findViewById(R.id.time_picker_button).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                TimePicker timePicker = (TimePicker) timePickerView.findViewById(R.id.time_picker);
+                                tempMin = timePicker.getCurrentMinute();
+                                tempHour = timePicker.getCurrentHour();
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.set(tempYear,tempMonth,tempDay,tempHour,tempMin, 0);
+                                newEvDtlEvent.setRepeatEndsTime(calendar.getTimeInMillis());
+                                viewModel.setNewEvDtlEvent(newEvDtlEvent);
+                                popupWindow.dismiss();
+                                timePopupWindow.dismiss();
+                            }
+                        });
+                        timePopupWindow.showAtLocation(timePickerView, Gravity.CENTER, 0, 0);
+                        timePopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                // if click outside on time picker, the date picker has to dismiss
+                                popupWindow.dismiss();
+                            }
+                        });
+                    }
+                });
+                popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
             }
         };
+    }
+
+    public View.OnClickListener onClickProposedTimeslots(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mvpView!=null){
+                    mvpView.onClickProposedTimeslots();
+                }
+            }
+        };
+    }
+
+    public void updateRepeats(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(newEvDtlEvent.getStartTime());
+        String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(), calendar.get(Calendar.DAY_OF_WEEK));
+        repeats[2] = String.format(getContext().getString(R.string.repeat_everyweek), dayOfWeek);
     }
 
     public View.OnClickListener pickInvitees(){
         return new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                presenter.pickInvitees(tag);
+                if (mvpView!=null){
+                    mvpView.pickInvitees();
+                }
             }
         };
     }
@@ -147,7 +208,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         return presenter.getContext();
     }
 
-    public View.OnClickListener sendEvent(){
+    public View.OnClickListener onClickSend(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,16 +225,41 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
                 }
                 newEvDtlEvent.setTimeslots(pendingTimeslots);
                 newEvDtlEvent.setHostUserUid(UserUtil.getUserUid());
-                presenter.sendEvent(newEvDtlEvent);
+
+                presenter.addEvent(newEvDtlEvent);
+                if (mvpView!=null){
+                    mvpView.onClickSend();
+                }
             }
         };
     }
 
-    public View.OnClickListener backToTimeSlotView(){
+    public View.OnClickListener onClickCalendarType(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.backToTimeSlotView(getContext().getString(R.string.tag_before_sending_back));
+                    final CharSequence types[] = EventUtil.getCalendarTypes(getContext());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                    builder.setTitle("Choose a calendar type");
+                    builder.setItems(types, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            newEvDtlEvent.setCalendarUid((String) types[i]);
+                            viewModel.setNewEvDtlEvent(newEvDtlEvent);
+                        }
+                    });
+                    builder.show();
+                }
+        };
+    }
+
+    public View.OnClickListener onClickCancel(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mvpView!=null){
+                    mvpView.onClickCancel();
+                }
             }
         };
     }
@@ -182,19 +268,13 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.changeLocation(tag);
+                if (mvpView!=null){
+                    mvpView.changeLocation();
+                }
             }
         };
     }
 
-    public View.OnClickListener reviewTimeSlots(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.backToTimeSlotView(getContext().getString(R.string.tag_before_sending_review));
-            }
-        };
-    }
 
 
 

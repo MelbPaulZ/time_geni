@@ -48,6 +48,8 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
         timeSlotAdapter.setAdapterEvent(event);
         // listviewmodel(presenter)
         binding.eventDetailTimeslotListview.setAdapter(timeSlotAdapter);
+
+
     }
 
     public void setEvent(Event event){
@@ -55,7 +57,6 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
         if (eventDetailForHostViewModel!=null) {
             eventDetailForHostViewModel.setEvDtlHostEvent(event);
         }
-        
     }
 
     @Override
@@ -76,12 +77,12 @@ public class EventDetailHostFragment extends MvpFragment<EventDetailForHostMvpVi
 
     @Override
     public void toEditEvent(Event event) {
-        ((EventDetailActivity)getActivity()).toEditEvent(event);
+        ((EventDetailActivity)getActivity()).toEditEvent(this, event);
     }
 
     @Override
     public void viewInCalendar(String tag) {
-//        ((EventDetailActivity)getActivity()).toTimeSlotView(tag, eventDetailForHostViewModel.getEvDtlHostEvent());
+        ((EventDetailActivity)getActivity()).toTimeSlotView(tag, eventDetailForHostViewModel.getEvDtlHostEvent());
     }
 
     @Override

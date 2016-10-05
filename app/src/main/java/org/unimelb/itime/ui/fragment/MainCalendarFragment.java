@@ -76,12 +76,17 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
             }
             EventManager.getInstance().addEvent(ev);
         }
-        EventManager.getInstance().addEvent(event);
+//        EventManager.getInstance().addEvent(event);
 
         monthDayFragment.calendarNotifyDataSetChanged();
         agendaFragment.calendarNotifyDataSetChanged();
         weekFragment.calendarNotifyDataSetChanged();
+    }
 
+    public void updateEvents(){
+        monthDayFragment.calendarNotifyDataSetChanged();
+        agendaFragment.calendarNotifyDataSetChanged();
+        weekFragment.calendarNotifyDataSetChanged();
     }
 
     @Override
@@ -92,9 +97,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_calendar, container, false);
-
         return binding.getRoot();
     }
 
@@ -108,7 +111,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 //        init();
         initCalendars();
     }
-
 
     public void initSpinner(){
         ArrayList<String> viewOptionsArrayList = new ArrayList<>();
@@ -161,7 +163,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         monthDayFragment = new CalendarMonthDayFragment();
         weekFragment = new CalendarWeekFragment();
 
-        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, weekFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, monthDayFragment).commit();
         agendaFragment = new CalendarAgendaFragment();
     }
 

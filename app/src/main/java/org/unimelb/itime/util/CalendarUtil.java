@@ -26,4 +26,9 @@ public class CalendarUtil {
     public void setCalendar(Calendar[] calendars) {
         this.calendars = calendars;
     }
+
+    public java.util.Calendar getNowCalendar(){
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        return calendar;
+    }
 }

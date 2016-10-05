@@ -25,7 +25,7 @@ public class EventSoloDetailViewModel extends BaseObservable {
         return presenter.getContext();
     }
 
-    public View.OnClickListener backToWeekView(){
+    public View.OnClickListener onClickBack(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
