@@ -59,6 +59,9 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         super.onActivityCreated(savedInstanceState);
         eventCreateDetailBeforeSendingViewModel = new EventCreateDetailBeforeSendingViewModel(getPresenter());
         binding.setNewEventDetailVM(eventCreateDetailBeforeSendingViewModel);
+        if (event!=null){
+            eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(event);
+        }
     }
 
     private void initData(){
@@ -134,6 +137,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     @Override
     public void onClickSend() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
+
         startActivity(intent);
     }
 
@@ -182,11 +186,4 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         super.onStop();
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden){
-            event = EventManager.getInstance().getCurrentEvent();
-            eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(EventManager.getInstance().getCurrentEvent());
-        }
-    }
 }
