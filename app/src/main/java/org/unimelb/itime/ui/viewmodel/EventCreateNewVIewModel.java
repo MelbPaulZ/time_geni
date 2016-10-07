@@ -81,7 +81,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
         tag = presenter.getContext().getString(R.string.tag_create_event);
         this.viewModel = this;
 
-        presenter.initNewEvent();
+//        presenter.initNewEvent();
         setEvent(EventManager.getInstance().getCurrentEvent());
         repeats = EventUtil.getRepeats(getContext(), event);
     }

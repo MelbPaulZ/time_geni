@@ -1,16 +1,19 @@
 package org.unimelb.itime.ui.viewmodel;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
-import org.unimelb.itime.bean.User;
-import org.unimelb.itime.ui.mvpview.EventDetailHostTimeSlotMvpVIew;
+import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
@@ -22,8 +25,6 @@ import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.Calendar;
 
-import butterknife.OnClick;
-
 /**
  * Created by Paul on 10/09/2016.
  */
@@ -32,7 +33,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
     private Event eventDetailHostEvent;
     private String tag;
     private String hostToolBarString;
-    private EventDetailHostTimeSlotMvpVIew mvpView;
+    private EventDetailTimeSlotMvpVIew mvpView;
 //
     public EventDetailTimeSlotViewModel(EventDetailHostTimeSlotPresenter presenter) {
         this.presenter = presenter;
@@ -74,42 +75,9 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
 
            @Override
            public void onTimeSlotClick(TimeSlotView timeSlotView) {
-               // change status of view and struct
-               if (UserUtil.getUserUid() == eventDetailHostEvent.getHostUserUid()){
-                   // for host , only one timeslot can be selected
-//                   if (TimeSlotUtil.getSelectedTimeSlots(getContext(),eventDetailHostEvent.getTimeslots()).size()<1){
-//                       boolean newStatus = !timeSlotView.isSelect();
-//                       timeSlotView.setStatus(newStatus);
-//                       ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
-//                   }else{
-//                       for (TimeSlot timeSlot: eventDetailHostEvent.getTimeslots()){
-//                           // pending all timeslots
-//                           timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
-//                       }
-//                       boolean newStatus = !timeSlotView.isSelect();
-//                       timeSlotView.setStatus(newStatus);
-//                       ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
-//                   }
-                   // change later
-               }else {
-                   boolean newStatus = !timeSlotView.isSelect();
-                   timeSlotView.setStatus(newStatus);
-                   ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
-               }
+               // here should popup window
+               popupTimeSlotWindow(timeSlotView);
 
-
-               // change event attributes
-               TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
-               TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
-               if (timeSlot!=null) {
-                   if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))) {
-                       timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
-                   } else if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_accept))) {
-                       timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
-                   }
-               }else{
-                   Log.i("error", "onTimeSlotClick: " + "no timeslot found");
-               }
            }
 
            @Override
@@ -159,6 +127,73 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
                 }
             }
         };
+    }
+
+    public void popupTimeSlotWindow(final TimeSlotView timeSlotView){
+        final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
+        LayoutInflater inflater = LayoutInflater.from(presenter.getContext());
+        View root = inflater.inflate(R.layout.fragment_timeslot_attendee_response, null);
+
+        TextView button_cancel = (TextView) root.findViewById(R.id.invitee_response_cancel_button);
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        TextView button_reject = (TextView) root.findViewById(R.id.invitee_response_select_button);
+        button_reject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CharSequence msg = "select timeslot";
+                Toast.makeText(presenter.getContext(), msg, Toast.LENGTH_SHORT).show();
+                alertDialog.dismiss();
+                // here should add presenter change event status as reject
+                onClickTimeSlotView(timeSlotView);
+            }
+        });
+        alertDialog.setView(root);
+        alertDialog.show();
+    }
+
+    public void onClickTimeSlotView(TimeSlotView timeSlotView){
+        // change status of view and struct
+        if (UserUtil.getUserUid() == eventDetailHostEvent.getHostUserUid()){
+            // for host , only one timeslot can be selected
+//                   if (TimeSlotUtil.getSelectedTimeSlots(getContext(),eventDetailHostEvent.getTimeslots()).size()<1){
+//                       boolean newStatus = !timeSlotView.isSelect();
+//                       timeSlotView.setStatus(newStatus);
+//                       ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
+//                   }else{
+//                       for (TimeSlot timeSlot: eventDetailHostEvent.getTimeslots()){
+//                           // pending all timeslots
+//                           timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+//                       }
+//                       boolean newStatus = !timeSlotView.isSelect();
+//                       timeSlotView.setStatus(newStatus);
+//                       ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
+//                   }
+            // change later
+        }else {
+            boolean newStatus = !timeSlotView.isSelect();
+            timeSlotView.setStatus(newStatus);
+            ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
+        }
+
+
+        // change event attributes
+        TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+        TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
+        if (timeSlot!=null) {
+            if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))) {
+                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
+            } else if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_accept))) {
+                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+            }
+        }else{
+            Log.i("error", "onTimeSlotClick: " + "no timeslot found");
+        }
     }
 
 ////    *****************************************************************************************

@@ -13,7 +13,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.testdb.EventManager;
-import org.unimelb.itime.ui.mvpview.EventDetailHostTimeSlotMvpVIew;
+import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
 import org.unimelb.itime.vendor.weekview.WeekView;
@@ -21,8 +21,8 @@ import org.unimelb.itime.vendor.weekview.WeekView;
 /**
  * Created by Paul on 10/09/2016.
  */
-public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailHostTimeSlotMvpVIew, EventDetailHostTimeSlotPresenter>
-        implements EventDetailHostTimeSlotMvpVIew{
+public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeSlotMvpVIew, EventDetailHostTimeSlotPresenter>
+        implements EventDetailTimeSlotMvpVIew {
     private String tag;
     private FragmentEventDetailTimeslotHostViewBinding binding;
     private EventDetailTimeSlotViewModel viewModel;
@@ -111,4 +111,5 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailHostT
             switchFragment(this, (EventDetailGroupFragment)getFrom());
         }
     }
+
 }

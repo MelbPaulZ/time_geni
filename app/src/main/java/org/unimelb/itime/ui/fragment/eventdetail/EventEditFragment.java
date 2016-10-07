@@ -59,7 +59,10 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
         if (event==null) {
             event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
         }
+        setProposedTimeSlots(event);
+    }
 
+    public void setProposedTimeSlots(Event event){
         if (event.hasTimeslots()){
             ArrayList<String> timeslotArrayList = new ArrayList<>();
             for (TimeSlot timeSlot: event.getTimeslots()){
@@ -75,6 +78,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
         if (eventEditViewModel!=null){
             eventEditViewModel.setEventEditViewEvent(event);
         }
+        setProposedTimeSlots(event);
     }
 
     public void setPhotos(ArrayList<String> photos){

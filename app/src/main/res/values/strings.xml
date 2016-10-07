@@ -236,5 +236,6 @@
     <string name="timeslot_status_delete">timeslot status delete</string>
     <string name="timeslot_status_create">timeslot status create</string>
     <string name="duration">Duration</string>
+    <string name="select">Select</string>
 
 </resources>

@@ -18,14 +18,14 @@ import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
-import org.unimelb.itime.ui.viewmodel.EventDetailHostViewModel;
+import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 
 /**
  * Created by Paul on 4/09/2016.
  */
 public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvpView, EventDetailGroupPresenter> implements EventDetailGroupMvpView {
     private FragmentEventDetailForHostBinding binding;
-    private EventDetailHostViewModel eventDetailForHostViewModel;
+    private EventDetailViewModel eventDetailForHostViewModel;
     private Event event;
     private LayoutInflater inflater;
 
@@ -41,13 +41,16 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        eventDetailForHostViewModel = new EventDetailHostViewModel(getPresenter());
+        eventDetailForHostViewModel = new EventDetailViewModel(getPresenter());
         if(event == null){
             event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
         }
         eventDetailForHostViewModel.setEvDtlHostEvent(event);
         binding.setHostDetailVM(eventDetailForHostViewModel);
+        setProposedTimeSlots(event);
+    }
 
+    public void setProposedTimeSlots(Event event){
         // for timeslots, use list view to show
         EventTimeSlotAdapter timeSlotAdapter = new EventTimeSlotAdapter(getContext(), R.layout.listview_timeslot_pick, event.getTimeslots(), eventDetailForHostViewModel);
         timeSlotAdapter.setAdapterEvent(event);
@@ -59,6 +62,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         if (eventDetailForHostViewModel!=null) {
             eventDetailForHostViewModel.setEvDtlHostEvent(event);
         }
+        setProposedTimeSlots(event);
     }
 
     @Override

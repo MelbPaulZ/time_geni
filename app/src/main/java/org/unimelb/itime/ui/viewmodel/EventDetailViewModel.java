@@ -23,7 +23,7 @@ import org.unimelb.itime.util.UserUtil;
 /**
  * Created by Paul on 4/09/2016.
  */
-public class EventDetailHostViewModel extends BaseObservable {
+public class EventDetailViewModel extends BaseObservable {
     private EventDetailGroupPresenter presenter;
     private Event evDtlHostEvent;
     private LayoutInflater inflater;
@@ -34,7 +34,7 @@ public class EventDetailHostViewModel extends BaseObservable {
 
 
 
-    public EventDetailHostViewModel(EventDetailGroupPresenter presenter) {
+    public EventDetailViewModel(EventDetailGroupPresenter presenter) {
         this.presenter = presenter;
         this.inflater = presenter.getInflater();
         tag = presenter.getContext().getString(R.string.tag_host_event_detail);

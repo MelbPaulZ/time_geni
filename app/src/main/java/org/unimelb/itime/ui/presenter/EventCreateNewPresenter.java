@@ -34,17 +34,17 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
         }
     }
 
-    public void initNewEvent(){
-        // initial default values for new event
-        Event event = new Event();
-        event.setEventUid(EventUtil.generateUid());
-        event.setHostUserUid(UserUtil.getUserUid());
-        long startTime = CalendarUtil.getInstance().getNowCalendar().getTimeInMillis();
-        long endTime = CalendarUtil.getInstance().getNowCalendar().getTimeInMillis() + 3600 * 1000;
-        event.setStartTime(startTime);
-        event.setEndTime(endTime);
-        EventManager.getInstance().setCurrentEvent(event);
-    }
+//    public void initNewEvent(){
+//        // initial default values for new event
+//        Event event = new Event();
+//        event.setEventUid(EventUtil.generateUid());
+//        event.setHostUserUid(UserUtil.getUserUid());
+//        long startTime = CalendarUtil.getInstance().getNowCalendar().getTimeInMillis();
+//        long endTime = CalendarUtil.getInstance().getNowCalendar().getTimeInMillis() + 3600 * 1000;
+//        event.setStartTime(startTime);
+//        event.setEndTime(endTime);
+//        EventManager.getInstance().setCurrentEvent(event);
+//    }
 
     public void addSoloEvent(){
         Event event = EventManager.getInstance().getCurrentEvent();

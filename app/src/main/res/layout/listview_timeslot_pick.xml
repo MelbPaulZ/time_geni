@@ -6,7 +6,7 @@
         <import type="org.unimelb.itime.util.EventUtil"/>
         <variable
             name="viewmodel"
-            type="org.unimelb.itime.ui.viewmodel.EventDetailHostViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.EventDetailViewModel"/>
         <variable
             name="position"
             type="Integer" />

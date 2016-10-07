@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="hostDetailVM"
-            type="org.unimelb.itime.ui.viewmodel.EventDetailHostViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.EventDetailViewModel"/>
     </data>
 
 <RelativeLayout

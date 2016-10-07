@@ -15,15 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
-
-            <Button
-                android:id="@+id/create_event_cancel_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:gravity="center_vertical|left"
-                android:text="@string/cancel" />
-
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -65,7 +56,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/lightgray"
+                    android:background="@color/white"
                     android:tag="accepted">
 
                     <TextView
@@ -99,148 +90,34 @@
                     android:text="Michael Morrision"
                     android:textSize="@dimen/page_text_size" />
             </RelativeLayout>
-
-
-            <LinearLayout
-                android:id="@+id/reject_attendees_blocks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:tag="reject_block">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/lightgray"
-                    android:tag="reject">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/page_blank_row_height"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:paddingBottom="@dimen/margin_small"
-                        android:paddingLeft="@dimen/margin_small"
-                        android:text="Rejected" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="accept_attendee1">
-
-                    <ImageView
-                        android:id="@+id/icon1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/margin_small"
-                        android:background="@drawable/icon_event_selected_right" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/icon1"
-                        android:text="Michael Morrision"
-                        android:textSize="@dimen/sidebar_text_size" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="accept_attendee2">
-
-                    <ImageView
-                        android:id="@+id/icon2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/margin_small"
-                        android:background="@drawable/icon_event_selected_right" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/icon2"
-                        android:text="Michael Jackson"
-                        android:textSize="@dimen/sidebar_text_size" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="accept_attendee2">
-
-                    <ImageView
-                        android:id="@+id/icon3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/margin_small"
-                        android:background="@drawable/icon_event_selected_right" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/icon3"
-                        android:text="Brad Peter"
-                        android:textSize="@dimen/sidebar_text_size" />
-                </RelativeLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/not_respond_attendees_blocks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:tag="not_respond_block">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/lightgray"
-                    android:tag="Not Responded">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/page_blank_row_height"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:paddingBottom="@dimen/margin_small"
-                        android:paddingLeft="@dimen/margin_small"
-                        android:text="Not Responded" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="accept_attendee2">
-
-                    <ImageView
-                        android:id="@+id/icon_reject1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/margin_small"
-                        android:background="@drawable/icon_event_selected_right" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/icon_reject1"
-                        android:text="Michael Jackson"
-                        android:textSize="@dimen/sidebar_text_size" />
-                </RelativeLayout>
-            </LinearLayout>
-
-
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/invitee_response_cancel_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="14dp"
+            android:text="@string/cancel"
+            android:gravity="center"
+            android:textColor="@color/green"
+            />
+        <TextView
+            android:id="@+id/invitee_response_select_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="14dp"
+            android:text="@string/select"
+            android:gravity="center"
+            android:textColor="@color/green"/>
+    </LinearLayout>
+
+
 
 </LinearLayout>

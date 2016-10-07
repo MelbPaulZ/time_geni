@@ -4,12 +4,12 @@ import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unimelb.itime.ui.mvpview.EventDetailHostTimeSlotMvpVIew;
+import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 
 /**
  * Created by Paul on 10/09/2016.
  */
-public class EventDetailHostTimeSlotPresenter extends MvpBasePresenter<EventDetailHostTimeSlotMvpVIew> {
+public class EventDetailHostTimeSlotPresenter extends MvpBasePresenter<EventDetailTimeSlotMvpVIew> {
     private Context context;
     public EventDetailHostTimeSlotPresenter(Context context) {
         this.context = context;
