@@ -29,23 +29,19 @@ import java.util.Calendar;
 public class EventEditViewModel extends BaseObservable {
 
     private Event eventEditViewEvent;
-
     private EventEditPresenter presenter;
-
     private CharSequence repeats[] = null;
-
     private ObservableField<Boolean> editEventIsRepeat ;
-
     private EventEditViewModel viewModel;
-
     private String tag;
+    private EventEditMvpView mvpView;
 
     public EventEditViewModel(EventEditPresenter eventEditPresenter) {
         this.presenter = eventEditPresenter;
         editEventIsRepeat = new ObservableField<>();
         viewModel = this;
         tag = getContext().getString(R.string.tag_host_event_edit);
-
+        mvpView = presenter.getView();
     }
 
     public Context getContext(){
@@ -58,15 +54,12 @@ public class EventEditViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventDao eventDao = GreenDaoUtil.getDaoSession(getContext()).getEventDao();
-                String uid = eventEditViewEvent.getEventUid();
-                Event event = DBManager.getInstance(getContext()).getEvent(eventEditViewEvent.getEventUid());
-                event.getInvitee();
-                event.getTimeslots();
-                if (event.hasAttendee() && event.getInvitee().size()>0) {
-                    presenter.toHostEventDetail(event);
-                }else{
-                    presenter.toSoloEventDetail();
+                if (mvpView!=null){
+                    if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>0) {
+                        mvpView.toHostEventDetail();
+                    }else{
+                        mvpView.toSoloEventDetail();
+                    }
                 }
             }
         };
@@ -77,10 +70,14 @@ public class EventEditViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>0) {
-                    presenter.toHostEventDetail(eventEditViewEvent);
-                }else{
-                    presenter.toSoloEventDetail(eventEditViewEvent);
+                if (mvpView!=null){
+                    if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>0) {
+                        presenter.updateEvent(eventEditViewEvent);
+                        mvpView.toHostEventDetail(eventEditViewEvent);
+                    }else{
+                        presenter.updateEvent(eventEditViewEvent);
+                        mvpView.toSoloEventDetail(eventEditViewEvent);
+                    }
                 }
             }
         };
@@ -91,9 +88,8 @@ public class EventEditViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventEditMvpView mvpView = presenter.getView();
                 if (mvpView!=null){
-                    mvpView.toTimeSlotView(tag, eventEditViewEvent);// tiao zhuan wei zhi
+                    mvpView.toTimeSlotView(eventEditViewEvent);// tiao zhuan wei zhi
                 }
             }
         };
@@ -103,7 +99,9 @@ public class EventEditViewModel extends BaseObservable {
         return new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                presenter.changeLocation();
+                if (mvpView!=null){
+                    mvpView.changeLocation();
+                }
             }
         };
     }
@@ -118,12 +116,7 @@ public class EventEditViewModel extends BaseObservable {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle("Choose a repeat type");
-                repeats = new CharSequence[]{
-                        getContext().getString(R.string.repeat_never),
-                        getContext().getString(R.string.repeat_everyday),
-                        String.format(getContext().getString(R.string.repeat_everyweek), dayOfWeek),
-                        String.format(getContext().getString(R.string.repeat_every_month)),
-                        String.format(getContext().getString(R.string.repeat_every_year))};
+                repeats = EventUtil.getRepeats(getContext(),eventEditViewEvent);
                 builder.setItems(repeats, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -132,9 +125,11 @@ public class EventEditViewModel extends BaseObservable {
                             if (eventEditViewEvent.getRepeatEndsTime()==0){
                                 eventEditViewEvent.setRepeatEndsTime(eventEditViewEvent.getStartTime()+24*3600000);//default another day
                             }
-//                            newEvDtlEvent.setRepeatTypeId(i);
-                            viewModel.setEventEditViewEvent(eventEditViewEvent);
+                        }else{
+                            setEditEventIsRepeat(false);
                         }
+                        eventEditViewEvent.setRecurrence(i+"");
+                        viewModel.setEventEditViewEvent(eventEditViewEvent);
                     }
                 });
                 builder.show();
@@ -166,17 +161,15 @@ public class EventEditViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CharSequence[] calendarType;
+                final CharSequence[] calendarType;
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle(getContext().getString(R.string.choose_alert_time));
-                calendarType = new CharSequence[]{
-                        getContext().getString(R.string.calendar_type_work),
-                        getContext().getString(R.string.calendar_type_private)
-                };
+                calendarType = EventUtil.getCalendarTypes(getContext());
                 builder.setItems(calendarType, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // need to add later
+                        eventEditViewEvent.setCalendarUid((String) calendarType[i]);
+                        setEventEditViewEvent(eventEditViewEvent);
                     }
                 });
                 builder.show();
@@ -188,7 +181,9 @@ public class EventEditViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.toInviteePicker(tag);
+                if (mvpView!=null){
+                    mvpView.toInviteePicker();
+                }
             }
         };
     }
@@ -197,7 +192,9 @@ public class EventEditViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.toPhotoPicker(tag);
+                if (mvpView!=null){
+                    mvpView.toPhotoPicker();
+                }
             }
         };
     }

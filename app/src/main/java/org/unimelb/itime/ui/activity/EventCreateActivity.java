@@ -116,7 +116,8 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
                         EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getSupportFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
                         eventCreateNewFragment.setPhotos(result);
                     }else if (tag== getString(R.string.tag_create_event_before_sending)){
-//                        eventCreateDetailBeforeSendingFragment.setPhotos(result);
+                        EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getSupportFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+                        eventCreateDetailBeforeSendingFragment.setPhotos(result);
                     }
                 }
             }

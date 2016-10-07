@@ -14,6 +14,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.ActivityMainBinding;
+import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainContactsFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
@@ -21,6 +22,7 @@ import org.unimelb.itime.ui.fragment.MainSettingsFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
+import org.unimelb.itime.util.EventUtil;
 
 import java.util.Calendar;
 
@@ -34,6 +36,9 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     private ActivityMainBinding binding;
     private MainTabBarViewModel tabBarViewModel;
+
+    public final static int CREATE_EVENT = 0;
+    public final static int EDIT_EVENT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,15 +94,16 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         Intent intent = new Intent(this,EventCreateActivity.class);
         Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
 
-        startActivity(intent, bundleAnimation);
+        startActivityForResult(intent, EventUtil.ACTIVITY_CREATE_EVENT,bundleAnimation);
     }
     public void startEventCreateActivity(Calendar startTime){
         Intent intent = new Intent(this, EventCreateActivity.class);
         Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
         intent.putExtra(getString(R.string.new_event),startTime.getTimeInMillis());
-        startActivity(intent, bundleAnimation);
-
+        startActivityForResult(intent, EventUtil.ACTIVITY_EDIT_EVENT,bundleAnimation);
     }
+
+
 
 
 //    public void startEventEditActivity(ITimeEventInterface iTimeEventInterface){
@@ -110,5 +116,11 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EventUtil.ACTIVITY_CREATE_EVENT ){
+            ((MainCalendarFragment)tagFragments[0]).reloadEvent();
+        }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
+            ((MainCalendarFragment)tagFragments[0]).reloadEvent();
+        }
     }
+
 }

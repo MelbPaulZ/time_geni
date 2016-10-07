@@ -24,7 +24,8 @@ import java.util.List;
  * Created by Paul on 8/09/2016.
  */
 public class EventUtil{
-    public static final int ACTIVITY_EDITEVENT = 1;
+    public static final int ACTIVITY_EDIT_EVENT = 1;
+    public static final int ACTIVITY_CREATE_EVENT = 2;
 
     public static String parseTimeToString(Context context, long time){
         Calendar calendar = Calendar.getInstance();
@@ -274,6 +275,6 @@ public class EventUtil{
         Event event = (Event)iTimeEventInterface;
         event.getInvitee();
         EventManager.getInstance().setCurrentEvent((Event)iTimeEventInterface);
-        activity.startActivityForResult(intent, ACTIVITY_EDITEVENT);
+        activity.startActivityForResult(intent, ACTIVITY_EDIT_EVENT);
     }
 }

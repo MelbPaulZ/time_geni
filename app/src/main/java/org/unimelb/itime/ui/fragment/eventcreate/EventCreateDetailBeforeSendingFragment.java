@@ -65,27 +65,25 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     }
 
     private void initData(){
-
         eventCreateDetailBeforeSendingViewModel = new EventCreateDetailBeforeSendingViewModel(getPresenter());
         binding.setNewEventDetailVM(eventCreateDetailBeforeSendingViewModel);
 
-        //set timeslot listview
+
+        // hide soft key board
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
+    }
+
+    public void setTimeSlotListView(){
         ArrayList<String> timeslotsArrayList = new ArrayList<>();
         for (TimeSlot timeSlot: event.getTimeslots()){
             // only display chosen timeSlot
             if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending)))
                 timeslotsArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()) );
         }
-
         ArrayAdapter timeslotAdapter = new ArrayAdapter<String>(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotsArrayList);
-
         binding.beforeSendingListview.setAdapter(timeslotAdapter);
-
-        // hide soft key board
-        getActivity().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-        );
-
     }
 
     public void setPhotos(ArrayList<String> photos){
@@ -120,8 +118,6 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         }
     }
 
-
-
     @Override
     public EventCreateDetailBeforeSendingPresenter createPresenter() {
         return new EventCreateDetailBeforeSendingPresenter(getContext());
@@ -130,28 +126,26 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
 
     public void setEvent(Event event) {
         this.event = event;
+        setTimeSlotListView();
+        eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(event);
     }
-
-
 
     @Override
     public void onClickSend() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
-
         startActivity(intent);
     }
 
     @Override
     public void onClickCancel() {
-        EventTimeSlotViewFragment timeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-        switchFragment(this, timeSlotViewFragment);
-        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        timeSlotViewFragment.setTo(inviteeFragment);
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void changeLocation() {
         EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
+        eventLocationPickerFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
         switchFragment(this, eventLocationPickerFragment);
     }
 
@@ -159,6 +153,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     @Override
     public void pickInvitees() {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+        inviteeFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
         switchFragment(this, inviteeFragment);
     }
 

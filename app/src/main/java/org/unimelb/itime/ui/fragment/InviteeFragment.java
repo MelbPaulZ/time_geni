@@ -38,6 +38,7 @@ import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
+import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.presenter.EmptyPresenter;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
@@ -371,6 +372,7 @@ public class InviteeFragment extends BaseUiFragment {
         if (hasPublicEntity(contacts)){
             // means choose the public, 0=solo, 1=group, 2=public
             event.setEventType(2);
+            event.getInvitee().clear();
         }else{
             for (ITimeContactInterface iTimeContactInterface : contacts) {
 
@@ -399,6 +401,8 @@ public class InviteeFragment extends BaseUiFragment {
                     switchFragment(self, eventCreateNewFragment);
                 }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
                     switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
+                }else if (getFrom() instanceof EventEditFragment){
+                    switchFragment(self, (EventEditFragment)getFrom());
                 }
             }
         });
@@ -407,21 +411,22 @@ public class InviteeFragment extends BaseUiFragment {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setSelectInvitees();
                 if(getFrom() instanceof EventCreateNewFragment){
-                    setSelectInvitees();
                     EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
                     eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
                     switchFragment(self, eventTimeSlotViewFragment);
                 }else if (getFrom() instanceof EventTimeSlotViewFragment){
-                    setSelectInvitees();
                     EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment)getFrom();
                     eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
                     switchFragment(self, (EventTimeSlotViewFragment)getFrom());
                 }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
-                    setSelectInvitees();
                     EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment)getFrom();
                     beforeSendingFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
                     switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
+                }else if (getFrom() instanceof EventEditFragment){
+                    ((EventEditFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    switchFragment(self, (EventEditFragment)getFrom());
                 }
             }
         });

@@ -1,26 +1,27 @@
 package org.unimelb.itime.ui.fragment.eventdetail;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
+import org.unimelb.itime.ui.fragment.InviteeFragment;
+import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
@@ -31,12 +32,11 @@ import java.util.ArrayList;
 /**
  * Created by Paul on 28/08/2016.
  */
-public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPresenter> implements EventEditMvpView {
+public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEditPresenter> implements EventEditMvpView {
 
     private FragmentEventEditDetailBinding binding;
     private EventEditViewModel eventEditViewModel;
     private Event event;
-    private String tag;
 
     @Nullable
     @Override
@@ -56,7 +56,9 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
         eventEditViewModel = new EventEditViewModel(getPresenter());
         eventEditViewModel.setEventEditViewEvent(event);
         binding.setEventEditVM(eventEditViewModel);
-        tag = getString(R.string.tag_edit_event);
+        if (event==null) {
+            event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
+        }
 
         if (event.hasTimeslots()){
             ArrayList<String> timeslotArrayList = new ArrayList<>();
@@ -73,7 +75,6 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
         if (eventEditViewModel!=null){
             eventEditViewModel.setEventEditViewEvent(event);
         }
-
     }
 
     public void setPhotos(ArrayList<String> photos){
@@ -82,48 +83,60 @@ public class EventEditFragment extends MvpFragment<EventEditMvpView, EventEditPr
 
     @Override
     public void toHostEventDetail(Event event) {
-        ((EventDetailActivity)getActivity()).toEventDetail(event);
+        EventDetailGroupFragment hostFragment = (EventDetailGroupFragment) getFragmentManager().findFragmentByTag(EventDetailGroupFragment.class.getSimpleName());
+        hostFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        switchFragment(this, hostFragment);
+    }
+
+    @Override
+    public void toHostEventDetail() {
+        EventDetailGroupFragment hostFragment = (EventDetailGroupFragment) getFragmentManager().findFragmentByTag(EventDetailGroupFragment.class.getSimpleName());
+        switchFragment(this, hostFragment);
     }
 
     @Override
     public void changeLocation() {
-        ((EventDetailActivity)getActivity()).toLocationPicker(tag,this);
+        EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
+        eventLocationPickerFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        switchFragment(this,eventLocationPickerFragment);
     }
 
     @Override
-    public void toTimeSlotView(String tag, Event event) {
-        ((EventDetailActivity)getActivity()).fromHostEditToTimeSlotView(tag, event,this);
+    public void toTimeSlotView(Event event) {
+        EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
+        timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        switchFragment(this, timeSlotFragment);
     }
 
     @Override
-    public void toInviteePicker(String tag) {
-        ((EventDetailActivity)getActivity()).toInviteePicker(tag, this);
+    public void toInviteePicker() {
+        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+        inviteeFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        switchFragment(this, inviteeFragment);
     }
 
 
     @Override
-    public void toPhotoPicker(String tag) {
-        ((EventDetailActivity)getActivity()).toPhotoPicker();
+    public void toPhotoPicker() {
+        ((EventDetailActivity)getActivity()).checkPermission();
     }
 
     @Override
     public void toSoloEventDetail() {
-        ((EventDetailActivity)getActivity()).toDetailSoloEvent(event);
+        EventDetailSoloFragment soloFragment = (EventDetailSoloFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+        switchFragment(this, soloFragment);
     }
 
     @Override
     public void toSoloEventDetail(Event event) {
-        ((EventDetailActivity)getActivity()).toDetailSoloEvent(event);
+        EventDetailSoloFragment soloFragment = (EventDetailSoloFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+        soloFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        switchFragment(this, soloFragment);
     }
-
-//    @Override
-//    public void setTag(String tag) {
-//        this.tag = tag;
-//    }
 
     @Subscribe
     public void getLocation(MessageLocation messageLocation){
-        if (messageLocation.tag.equals(tag)){
+        if (messageLocation.tag.equals(EventEditFragment.class.getSimpleName())){
             event.setLocation(messageLocation.locationString);
             eventEditViewModel.setEventEditViewEvent(event);
         }

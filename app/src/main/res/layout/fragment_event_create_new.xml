@@ -153,7 +153,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@{eventVM.isEventRepeat ? @dimen/wrap_content :@dimen/hide,default = @dimen/hide}"
                         android:background="@drawable/table_row_border"
-                        android:onClick="@{eventVM.onClickEndRepeat()}"
+                        android:onClick="@{eventVM.onClickTime(eventVM.changeEndrepeatTime)}"
                         android:layout_marginLeft="@dimen/padding_10"
                         android:orientation="horizontal">
                         <TextView

@@ -274,11 +274,6 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
             }
         };
     }
-
-
-
-
-
 //    *********************************************************************
 
 

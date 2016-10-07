@@ -48,12 +48,14 @@ import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
+import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.presenter.EmptyPresenter;
 
 import java.util.ArrayList;
@@ -78,8 +80,10 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
     private String tag;
     private static final int MY_PERMISSIONS_REQUEST_LOC = 30;
     private String place;
+    private String pickLocation;
     ArrayList<String> locations = new ArrayList<>();
     private EventLocationPickerFragment self;
+    private Event event;
 
 
     @Nullable
@@ -104,6 +108,10 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
         initListeners();
     }
 
+    public void setEvent(Event event){
+        this.event = event;
+    }
+
 
     private void init(){
         LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -125,8 +133,16 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             return;
         }else {
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
+            double longitude,latitude;
+            if (location!=null) {
+                longitude = location.getLongitude();
+                latitude = location.getLatitude();
+            }
+            else{
+                longitude = 0.0;
+                latitude = 0.0;
+                Toast.makeText(getContext(), "Cannot find current location",Toast.LENGTH_SHORT).show();
+            }
 
             // dynamically calculate location and search by this
             LatLngBounds locationNearByBounds = new LatLngBounds( // set the bias area
@@ -172,14 +188,9 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                     switchFragment(self, (EventCreateNewFragment)getFrom());
                 }else if(getFrom() instanceof EventCreateDetailBeforeSendingFragment){
                     switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
+                }if (getFrom() instanceof EventEditFragment){
+                    switchFragment(self, (EventEditFragment)getFrom());
                 }
-//                if (tag == getString(R.string.tag_create_event))
-//                    ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
-//                else if (tag == getString(R.string.tag_create_event_before_sending)){
-//                    ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
-//                }else if (tag.equals(getString(R.string.tag_edit_event))){
-//                    ((EventDetailActivity)getActivity()).toEditEvent(self);
-//                }
             }
         });
 
@@ -200,24 +211,19 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventManager.getInstance().getCurrentEvent().setLocation(mAutocompleteView.getText().toString());
+                event.setLocation(mAutocompleteView.getText().toString());
                 if (getFrom() instanceof EventCreateNewFragment){
                     // no need of set from for event create new fragment
                     EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
+                    eventCreateNewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
                     switchFragment(self, eventCreateNewFragment);
                 }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
+                    ((EventCreateDetailBeforeSendingFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
                     switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
+                }else if (getFrom() instanceof EventEditFragment){
+                    ((EventEditFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    switchFragment(self,((EventEditFragment)getFrom()));
                 }
-//                if (tag == getResources().getString(R.string.tag_create_event)) {
-//                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
-//                    ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
-//                }else if (tag == getString(R.string.tag_create_event_before_sending)){
-//                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
-//                    ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
-//                }else if (tag.equals(getString(R.string.tag_edit_event))){
-//                    EventBus.getDefault().post(new MessageLocation(tag, mAutocompleteView.getText().toString()));
-//                    ((EventDetailActivity)getActivity()).toEditEvent(self);
-//                }
             }
         });
 
@@ -257,6 +263,7 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
         });
     }
 
+
     public String getCurrentLocation() {
         mGoogleApiClient.connect();
         if (mGoogleApiClient.isConnected()) {
@@ -276,6 +283,7 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                         String fullAddress = "";
                         for (PlaceLikelihood placeLikelihood : likelyPlaces) {
                             if (placeLikelihood.getLikelihood()>bestLikelihood){
+                                // can use this to change later
                                 fullAddress = (String) placeLikelihood.getPlace().getAddress(); // here will get a long address
                                 locations.add(fullAddress);
                                 bestLikelihood = placeLikelihood.getLikelihood();
@@ -287,9 +295,10 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                         if(getFrom() instanceof EventCreateNewFragment){
                             EventBus.getDefault().post(new MessageLocation(EventCreateNewFragment.class.getSimpleName(), place));
                         }else if (getFrom() instanceof  EventCreateDetailBeforeSendingFragment){
-                            EventBus.getDefault().post(new MessageLocation(((EventCreateDetailBeforeSendingFragment) getFrom()).getClassName(), place));
+                            EventBus.getDefault().post(new MessageLocation(EventCreateDetailBeforeSendingFragment.class.getSimpleName(), place));
+                        }else if (getFrom() instanceof EventEditFragment){
+                            EventBus.getDefault().post(new MessageLocation(EventEditFragment.class.getSimpleName(), place));
                         }
-
                         mAutocompleteView.setText(place);
                         mAutocompleteView.setAdapter(mAdapter);
                         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener); // change listener
@@ -312,23 +321,20 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             mAutocompleteView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
-//            EventBus.getDefault().post(new MessageLocation(tag, clickStr));
 
-            EventManager.getInstance().getCurrentEvent().setLocation(clickStr);
+            event.setLocation(clickStr);
             // tiao zhuan
             if (getFrom() instanceof EventCreateNewFragment){
                 // no need of set from for event create new fragment
+                ((EventCreateNewFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
                 switchFragment(self, (EventCreateNewFragment)getFrom());
             }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
+                ((EventCreateDetailBeforeSendingFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
                 switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
+            }else if (getFrom() instanceof EventEditFragment){
+                ((EventEditFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                switchFragment(self, ((EventEditFragment)getFrom()));
             }
-//            if (tag == getString(R.string.tag_create_event)) {
-//                ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
-//            }else if (tag == getString(R.string.tag_create_event_before_sending)){
-//                ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
-//            }else if (tag.equals(getString(R.string.tag_edit_event))){
-//                ((EventDetailActivity)getActivity()).toEditEvent(self);
-//            }
         }
     };
 
@@ -349,24 +355,19 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             mAutocompleteView.setAdapter(mAdapter);
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
             strAdapter.notifyDataSetChanged();
-            EventManager.getInstance().getCurrentEvent().setLocation((String)primaryText);
+            event.setLocation((String)primaryText);
 //             find a way fix here later
             if (getFrom() instanceof EventCreateNewFragment){
                 // no need of set from for event create new fragment
+                ((EventCreateNewFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
                 switchFragment(self, (EventCreateNewFragment)getFrom());
             }else if (getFrom() instanceof  EventCreateDetailBeforeSendingFragment){
+                ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
                 switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
+            }else if (getFrom() instanceof EventEditFragment){
+                ((EventEditFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                switchFragment(self,  ((EventEditFragment)getFrom()));
             }
-//            if (tag == getString(R.string.tag_create_event)) {
-//                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
-//                ((EventCreateActivity) getActivity()).toCreateEventNewFragment(self);
-//            }else if (tag == getString(R.string.tag_create_event_before_sending)){
-//                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
-//                ((EventCreateActivity) getActivity()).toNewEventDetailBeforeSending(self);
-//            }else if (tag.equals(getString(R.string.tag_edit_event))){
-//                EventBus.getDefault().post(new MessageLocation(tag, (String) primaryText));
-//                ((EventDetailActivity)getActivity()).toEditEvent(self);
-//            }
         }
     };
 

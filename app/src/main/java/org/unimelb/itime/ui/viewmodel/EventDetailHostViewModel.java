@@ -15,58 +15,64 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.messageevent.MessageUrl;
-import org.unimelb.itime.ui.activity.EventDetailActivity;
-import org.unimelb.itime.ui.presenter.EventDetailForHostPresenter;
+import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
+import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 
 /**
  * Created by Paul on 4/09/2016.
  */
-public class EventDetailForHostViewModel extends BaseObservable {
-    private EventDetailForHostPresenter presenter;
-    private Event EvDtlHostEvent;
+public class EventDetailHostViewModel extends BaseObservable {
+    private EventDetailGroupPresenter presenter;
+    private Event evDtlHostEvent;
     private LayoutInflater inflater;
+    private EventDetailGroupMvpView mvpView;
 
     private String tag;
     private Context context;
 
 
 
-    public EventDetailForHostViewModel(EventDetailForHostPresenter presenter) {
+    public EventDetailHostViewModel(EventDetailGroupPresenter presenter) {
         this.presenter = presenter;
         this.inflater = presenter.getInflater();
         tag = presenter.getContext().getString(R.string.tag_host_event_detail);
         this.context = getContext();
+        mvpView = presenter.getView();
     }
 
     public Context getContext() {
         return presenter.getContext();
     }
 
-    public View.OnClickListener editEvent() {
+    public View.OnClickListener onClickEdit() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.toEditEvent(EvDtlHostEvent);
+                if(mvpView!=null){
+                    mvpView.toEditEvent();
+                }
             }
         };
     }
 
-    public View.OnClickListener viewInCalendar() {
+    public View.OnClickListener onClickViewInCalendar() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.viewInCalendar(tag);
+                if (mvpView!=null){
+                    mvpView.viewInCalendar();
+                }
             }
         };
     }
 
-    public View.OnClickListener gotoUrl() {
+    public View.OnClickListener onClickUrl() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = EvDtlHostEvent.getUrl();
+                String url = evDtlHostEvent.getUrl();
                 EventBus.getDefault().post(new MessageUrl(url));
             }
         };
@@ -76,52 +82,25 @@ public class EventDetailForHostViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, EvDtlHostEvent.getTimeslots()).get(0);
-                EvDtlHostEvent.setStartTime(newTimeSlot.getStartTime());
-                EvDtlHostEvent.setEndTime(newTimeSlot.getEndTime());
-                presenter.toWeekView(EvDtlHostEvent);
+                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslots()).get(0);
+                presenter.confirmEvent(evDtlHostEvent, newTimeSlot);
+                if (mvpView!=null){
+                    mvpView.toCalendar();
+                }
             }
         };
     }
-
-
 
     public View.OnClickListener onClickBack() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                presenter.toEventDetailHost(); // wrong
-                presenter.toWeekView();
+                if(mvpView!=null){
+                    mvpView.toCalendar();
+                }
             }
         };
     }
-//
-//    public View.OnClickListener toAttendeeView1() {
-//        return new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(0).getStartTime());
-//            }
-//        };
-//    }
-//
-//    public View.OnClickListener toAttendeeView2() {
-//        return new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(1).getStartTime());
-//            }
-//        };
-//    }
-//
-//    public View.OnClickListener toAttendeeView3() {
-//        return new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                presenter.toAttendeeView(EvDtlHostEvent.getTimeslots().get(2).getStartTime());
-//            }
-//        };
-//    }
 
     public View.OnClickListener onClickRejectAll() {
         return new View.OnClickListener() {
@@ -147,7 +126,10 @@ public class EventDetailForHostViewModel extends BaseObservable {
                         CharSequence msg = "send reject message";
                         Toast.makeText(presenter.getContext(), msg, Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
-                        presenter.toWeekView();
+                        // here should add presenter change event status as reject
+                        if (mvpView!=null){
+                            mvpView.toCalendar();
+                        }
                     }
                 });
                 alertDialog.setView(root);
@@ -156,14 +138,18 @@ public class EventDetailForHostViewModel extends BaseObservable {
         };
     }
 
-    public View.OnClickListener onClickConfirm() {
+    // this is for invitee click accept
+    public View.OnClickListener onClickAccept() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, EvDtlHostEvent.getTimeslots()).get(0);
-//                EvDtlHostEvent.setStartTime(newTimeSlot.getStartTime());
-//                EvDtlHostEvent.setEndTime(newTimeSlot.getEndTime());
-                presenter.confirmAndGotoWeekViewCalendar(EvDtlHostEvent);
+//                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslots()).get(0);
+//                evDtlHostEvent.setStartTime(newTimeSlot.getStartTime());
+//                evDtlHostEvent.setEndTime(newTimeSlot.getEndTime());
+                if (mvpView!=null){
+                    mvpView.toCalendar();
+                }
+
             }
         };
     }
@@ -173,11 +159,11 @@ public class EventDetailForHostViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimeSlot timeSlot = EvDtlHostEvent.getTimeslots().get(position);
-                if (EvDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
+                TimeSlot timeSlot = evDtlHostEvent.getTimeslots().get(position);
+                if (evDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
                     // host can only confirm one timeslot
                     if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))){
-                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(),EvDtlHostEvent.getTimeslots())){
+                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(), evDtlHostEvent.getTimeslots())){
                             // already has one timeslot
                             unselectRestTimeSlots(position);
                             timeSlot.setStatus(context.getString(R.string.timeslot_status_accept));
@@ -189,14 +175,13 @@ public class EventDetailForHostViewModel extends BaseObservable {
                     }
                 }else {
                     // can choose any number of timeslots
-//                    TimeSlot timeSlot = EvDtlHostEvent.getTimeslots().get(position);
                     if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))) {
                         timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
                     } else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))) {
                         timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
                     }
                 }
-                setEvDtlHostEvent(EvDtlHostEvent);
+                setEvDtlHostEvent(evDtlHostEvent);
                 // here show let the editEventFragment know the event is change
             }
         };
@@ -207,7 +192,9 @@ public class EventDetailForHostViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((EventDetailActivity)context).toAttendeeView(EvDtlHostEvent.getTimeslots().get(position).getStartTime());
+                if (mvpView!=null){
+                    mvpView.viewInviteeResponse(evDtlHostEvent.getTimeslots().get(position));
+                }
             }
         };
     }
@@ -217,18 +204,18 @@ public class EventDetailForHostViewModel extends BaseObservable {
 
     @Bindable
     public Event getEvDtlHostEvent() {
-        return EvDtlHostEvent;
+        return evDtlHostEvent;
     }
 
     public void setEvDtlHostEvent(Event evDtlHostEvent) {
-        EvDtlHostEvent = evDtlHostEvent;
+        this.evDtlHostEvent = evDtlHostEvent;
         notifyPropertyChanged(BR.evDtlHostEvent);
     }
 
     public void unselectRestTimeSlots(int notChangePostion){
-        for (int i = 0 ; i < EvDtlHostEvent.getTimeslots().size() ; i ++){
+        for (int i = 0; i < evDtlHostEvent.getTimeslots().size() ; i ++){
             if (i != notChangePostion){
-                EvDtlHostEvent.getTimeslots().get(i).setStatus(context.getString(R.string.timeslot_status_pending));
+                evDtlHostEvent.getTimeslots().get(i).setStatus(context.getString(R.string.timeslot_status_pending));
             }
         }
     }

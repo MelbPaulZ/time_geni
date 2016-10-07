@@ -60,6 +60,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
     private int tempYear,tempMonth,tempDay,tempHour,tempMin;
     private static final int CHANGE_STARTTIME = 0;
     private static final int CHANGE_ENDTIME = 1;
+    private static final int CHANGE_ENDREPEAT_TIME = 2;
 
     private final String TAG = "EventCreateNewViewModel";
 
@@ -128,42 +129,51 @@ public class EventCreateNewVIewModel extends BaseObservable {
                         tempMonth = datePicker.getMonth();
                         tempDay = datePicker.getDayOfMonth();
 
-                        // after click the next button, popup a new time picker window
-                        final View timePickerView = inflater.inflate(R.layout.fragment_event_time_picker, null);
-                        final PopupWindow timePopupWindow = new PopupWindow(timePickerView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-                        timePopupWindow.setOutsideTouchable(false);
-                        timePickerView.findViewById(R.id.time_picker_button).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                TimePicker timePicker = (TimePicker) timePickerView.findViewById(R.id.time_picker);
-                                tempMin = timePicker.getCurrentMinute();
-                                tempHour = timePicker.getCurrentHour();
-                                Calendar calendar = Calendar.getInstance();
-                                calendar.set(tempYear,tempMonth,tempDay,tempHour,tempMin, 0);
+                        if (type == CHANGE_STARTTIME || type == CHANGE_ENDTIME){
+                            // after click the next button, popup a new time picker window
+                            final View timePickerView = inflater.inflate(R.layout.fragment_event_time_picker, null);
+                            final PopupWindow timePopupWindow = new PopupWindow(timePickerView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                            timePopupWindow.setOutsideTouchable(false);
+                            timePickerView.findViewById(R.id.time_picker_button).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    TimePicker timePicker = (TimePicker) timePickerView.findViewById(R.id.time_picker);
+                                    tempMin = timePicker.getCurrentMinute();
+                                    tempHour = timePicker.getCurrentHour();
+                                    Calendar calendar = Calendar.getInstance();
+                                    calendar.set(tempYear,tempMonth,tempDay,tempHour,tempMin, 0);
 
-                                if (type == CHANGE_STARTTIME){
-                                    event.setStartTime(calendar.getTimeInMillis());
-                                    if (!isEndTimeChanged){
-                                        event.setEndTime(calendar.getTimeInMillis() + 3600 * 1000);
+                                    if (type == CHANGE_STARTTIME){
+                                        event.setStartTime(calendar.getTimeInMillis());
+                                        if (!isEndTimeChanged){
+                                            event.setEndTime(calendar.getTimeInMillis() + 3600 * 1000);
+                                        }
+                                    }else if (type == CHANGE_ENDTIME){
+                                        event.setEndTime(calendar.getTimeInMillis());
+                                        isEndTimeChanged = true;
                                     }
-                                }else if (type == CHANGE_ENDTIME){
-                                    event.setEndTime(calendar.getTimeInMillis());
-                                    isEndTimeChanged = true;
+                                    viewModel.setEvent(event);
+                                    updateRepeats();
+                                    popupWindow.dismiss();
+                                    timePopupWindow.dismiss();
                                 }
-                                viewModel.setEvent(event);
-                                updateRepeats();
-                                popupWindow.dismiss();
-                                timePopupWindow.dismiss();
-                            }
-                        });
-                        timePopupWindow.showAtLocation(timePickerView, Gravity.CENTER, 0, 0);
-                        timePopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                // if click outside on time picker, the date picker has to dismiss
-                                popupWindow.dismiss();
-                            }
-                        });
+                            });
+                            timePopupWindow.showAtLocation(timePickerView, Gravity.CENTER, 0, 0);
+                            timePopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                                @Override
+                                public void onDismiss() {
+                                    // if click outside on time picker, the date picker has to dismiss
+                                    popupWindow.dismiss();
+                                }
+                            });
+                        }else if (type == CHANGE_ENDREPEAT_TIME){
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.set(tempYear,tempMonth,tempDay, 0, 0, 0);
+                            event.setRepeatEndsTime(calendar.getTimeInMillis());
+                            isEndRepeatChanged = true;
+                            viewModel.setEvent(event);
+                            popupWindow.dismiss();
+                        }
                     }
                 });
                 popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
@@ -232,16 +242,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
         };
     }
 
-
-    public View.OnClickListener onClickEndRepeat() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isEndRepeatChanged = true;
-            }
-        };
-    }
-
     // click cancel button
     public View.OnClickListener onClickCancel() {
         return new View.OnClickListener() {
@@ -274,6 +274,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
                     event.setTitle(presenter.getContext().getString(R.string.new_event));
                 }
                 EventManager.getInstance().setCurrentEvent(event);
+                presenter.addSoloEvent();
                 if (mvpView!=null){
                     mvpView.toCreateSoloEvent();
                 }
@@ -324,8 +325,6 @@ public class EventCreateNewVIewModel extends BaseObservable {
             }
         };
     }
-
-
 
 //    ****************************************************************
 
@@ -392,5 +391,10 @@ public class EventCreateNewVIewModel extends BaseObservable {
     @Bindable
     public static int getChangeEndtime() {
         return CHANGE_ENDTIME;
+    }
+
+    @Bindable
+    public static int getChangeEndrepeatTime(){
+        return CHANGE_ENDREPEAT_TIME;
     }
 }

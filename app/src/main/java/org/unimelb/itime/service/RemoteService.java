@@ -52,7 +52,6 @@ public class RemoteService extends Service{
             }
         };
         loadDBThread.start();
-
     }
 
     private void loadDB(){
@@ -88,7 +87,7 @@ public class RemoteService extends Service{
         int[] status = {0,1};
         long interval = 3600 * 1000;
         int alldayCount = 0;
-        for (int i = 1; i < 100; i++) {
+        for (int i = 1; i < 5; i++) {
 
             long startTime = calendar.getTimeInMillis();
             long endTime = startTime + interval * (i%30);
@@ -157,8 +156,8 @@ public class RemoteService extends Service{
 
     private List<Contact> initContact(){
         List<Contact> contacts = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            Contact contact = new Contact("contact:"+i, "http://img.zybus.com/uploads/allimg/131213/1-131213111353.jpg", "name " + i);
+        for (int i = 0; i < 5; i++) {
+            Contact contact = new Contact(""+i, "http://img.zybus.com/uploads/allimg/131213/1-131213111353.jpg", "name " + i);
             contacts.add(contact);
             DBManager.getInstance(getBaseContext()).insertContact(contact);
         }

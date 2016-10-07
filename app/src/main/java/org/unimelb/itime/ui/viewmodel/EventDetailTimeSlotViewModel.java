@@ -10,6 +10,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.ui.mvpview.EventDetailHostTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
@@ -26,16 +27,18 @@ import butterknife.OnClick;
 /**
  * Created by Paul on 10/09/2016.
  */
-public class EventDetailHostTimeSlotViewModel extends BaseObservable {
+public class EventDetailTimeSlotViewModel extends BaseObservable {
     private EventDetailHostTimeSlotPresenter presenter;
     private Event eventDetailHostEvent;
     private String tag;
     private String hostToolBarString;
+    private EventDetailHostTimeSlotMvpVIew mvpView;
 //
-    public EventDetailHostTimeSlotViewModel(EventDetailHostTimeSlotPresenter presenter) {
+    public EventDetailTimeSlotViewModel(EventDetailHostTimeSlotPresenter presenter) {
         this.presenter = presenter;
         Calendar calendar = Calendar.getInstance();
         setHostToolBarString(EventUtil.getMonth(getContext(), calendar.MONTH) + " " + calendar.YEAR);
+        this.mvpView = presenter.getView();
     }
 
     public WeekView.OnHeaderListener onWeekViewChange(){
@@ -58,7 +61,7 @@ public class EventDetailHostTimeSlotViewModel extends BaseObservable {
                             eventDetailHostEvent.getEventUid(),
                             ((WeekView.TimeSlotStruct)timeSlotView.getTag()).startTime,
                             ((WeekView.TimeSlotStruct)timeSlotView.getTag()).endTime,
-                            getContext().getString(R.string.timeslot_status_create),
+                            getContext().getString(R.string.timeslot_status_pending),
                             0,
                             0);
                     eventDetailHostEvent.getTimeslots().add(timeSlot);
@@ -72,9 +75,27 @@ public class EventDetailHostTimeSlotViewModel extends BaseObservable {
            @Override
            public void onTimeSlotClick(TimeSlotView timeSlotView) {
                // change status of view and struct
-               boolean newStatus = !timeSlotView.isSelect();
-               timeSlotView.setStatus(newStatus);
-               ((WeekView.TimeSlotStruct)timeSlotView.getTag()).status = newStatus;
+               if (UserUtil.getUserUid() == eventDetailHostEvent.getHostUserUid()){
+                   // for host , only one timeslot can be selected
+//                   if (TimeSlotUtil.getSelectedTimeSlots(getContext(),eventDetailHostEvent.getTimeslots()).size()<1){
+//                       boolean newStatus = !timeSlotView.isSelect();
+//                       timeSlotView.setStatus(newStatus);
+//                       ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
+//                   }else{
+//                       for (TimeSlot timeSlot: eventDetailHostEvent.getTimeslots()){
+//                           // pending all timeslots
+//                           timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+//                       }
+//                       boolean newStatus = !timeSlotView.isSelect();
+//                       timeSlotView.setStatus(newStatus);
+//                       ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
+//                   }
+                   // change later
+               }else {
+                   boolean newStatus = !timeSlotView.isSelect();
+                   timeSlotView.setStatus(newStatus);
+                   ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
+               }
 
 
                // change event attributes
@@ -122,10 +143,8 @@ public class EventDetailHostTimeSlotViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tag == getContext().getString(R.string.tag_host_event_detail)){
-                    presenter.toHostEventDetail(EventUtil.getEventInDB(getContext(),eventDetailHostEvent.getEventUid()));
-                }else if (tag == getContext().getString(R.string.tag_host_event_edit)){
-                    presenter.toHostEventEdit(EventUtil.getEventInDB(getContext(),eventDetailHostEvent.getEventUid()));
+                if (mvpView!=null){
+                    mvpView.onClickBack();
                 }
             }
         };
@@ -135,58 +154,13 @@ public class EventDetailHostTimeSlotViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tag == getContext().getString(R.string.tag_host_event_detail)){
-                    presenter.toHostEventDetail(eventDetailHostEvent);
-                }else if (tag == getContext().getString(R.string.tag_host_event_edit))
-                    presenter.toHostEventEdit(eventDetailHostEvent);
+                if (mvpView!=null){
+                    mvpView.onClickDone();
+                }
             }
         };
     }
 
-
-////    ********************************************************************************************
-//
-//    public WeekTimeSlotView.OnTimeSlotClickListener onTimeSlotClick(){
-//        return new WeekTimeSlotView.OnTimeSlotClickListener() {
-//            @Override
-//            public void onTimeSlotClick(long l) {
-//                for (TimeSlot timeSlot: eventDetailHostEvent.getTimeslots()){
-//                    if (timeSlot.getStartTime() == l){
-//                        if (timeSlot.getStatus()==getContext().getString(R.string.timeslot_status_pending))
-//                            timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
-//                        else if(timeSlot.getStatus() == getContext().getString(R.string.timeslot_status_accept)){
-//                            timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
-//                        }
-//                    }
-//                }
-//            }
-//        };
-//    }
-//
-//    public WeekTimeSlotView.OnTimeSlotWeekViewChangeListener onTimeSlotWeekViewChange(){
-//        return new WeekTimeSlotView.OnTimeSlotWeekViewChangeListener() {
-//            @Override
-//            public void onWeekChanged(Calendar calendar) {
-//                String tmp = EventUtil.getMonth(presenter.getContext() ,calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
-//                // here should show the month and year
-//            }
-//        };
-//    }
-//
-//
-//    public View.OnClickListener toHostEventDetail(){
-//        return new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (tag.equals(getContext().getString(R.string.tag_host_event_detail))){
-//                    presenter.toHostEventDetail();
-//                }else if (tag.equals(getContext().getString(R.string.tag_host_event_edit))){
-//                    presenter.toHostEventEdit();
-//                }
-//            }
-//        };
-//    }
-//
 ////    *****************************************************************************************
     public String getTag() {
         return tag;

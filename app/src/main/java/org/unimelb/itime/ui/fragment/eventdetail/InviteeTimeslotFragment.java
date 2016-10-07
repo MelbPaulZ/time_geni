@@ -1,27 +1,26 @@
-package org.unimelb.itime.ui.fragment;
+package org.unimelb.itime.ui.fragment.eventdetail;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hannesdorfmann.mosby.mvp.MvpPresenter;
+
 import org.unimelb.itime.R;
-import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.ui.presenter.EmptyPresenter;
 import org.unimelb.itime.widget.NonScrollListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Paul on 4/09/2016.
  */
-public class InviteeTimeslotFragment extends Fragment {
+public class InviteeTimeslotFragment extends BaseUiFragment {
 
     private View root;
     private InviteeTimeslotFragment self;
@@ -32,6 +31,11 @@ public class InviteeTimeslotFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_selected_invitee, container,false);
         self = this;
         return root;
+    }
+
+    @Override
+    public MvpPresenter createPresenter() {
+        return new EmptyPresenter();
     }
 
     @Override
@@ -47,7 +51,7 @@ public class InviteeTimeslotFragment extends Fragment {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((EventDetailActivity)getActivity()).gotoEventDetail(self);
+                switchFragment(self, (EventDetailGroupFragment)getFrom());
             }
         });
     }
@@ -80,6 +84,7 @@ public class InviteeTimeslotFragment extends Fragment {
     public void setTime(long time){
         this.time = time;
     }
+
 
 
 

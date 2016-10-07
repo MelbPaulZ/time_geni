@@ -45,8 +45,6 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     private FragmentEventCreateNewBinding binding;
     private EventCreateNewVIewModel viewModel;
     private Event event;
-//    private String tag;
-    private EventCreateNewPresenter presenter;
     private int year,month,day,hour,minute;
 
     private final int ACTIVITY_PHOTOPICKER = 1;
@@ -76,8 +74,11 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
+    }
 
-        
+    public void setEvent(Event event){
+        this.event = event;
+        viewModel.setEvent(event);
     }
 
     public void setPhotos(ArrayList<String> photos){
@@ -94,6 +95,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     @Override
     public void pickLocation() {
         EventLocationPickerFragment locationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
+        locationPickerFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
         switchFragment(this, locationPickerFragment);
     }
 
@@ -124,12 +126,6 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         }
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (!hidden){
-            viewModel.setEvent(EventManager.getInstance().getCurrentEvent());
-        }
-    }
 
     @Override
     public void onStart() {

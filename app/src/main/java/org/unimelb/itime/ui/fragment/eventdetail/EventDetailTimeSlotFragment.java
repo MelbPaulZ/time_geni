@@ -1,35 +1,31 @@
 package org.unimelb.itime.ui.fragment.eventdetail;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.testdb.EventManager;
-import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailHostTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
-import org.unimelb.itime.ui.viewmodel.EventDetailHostTimeSlotViewModel;
+import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 /**
  * Created by Paul on 10/09/2016.
  */
-public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHostTimeSlotMvpVIew, EventDetailHostTimeSlotPresenter>
+public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailHostTimeSlotMvpVIew, EventDetailHostTimeSlotPresenter>
         implements EventDetailHostTimeSlotMvpVIew{
     private String tag;
     private FragmentEventDetailTimeslotHostViewBinding binding;
-    private EventDetailHostTimeSlotViewModel viewModel;
+    private EventDetailTimeSlotViewModel viewModel;
     private Event event;
     private WeekView weekView;
 
@@ -43,8 +39,11 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = new EventDetailHostTimeSlotViewModel(presenter);
+        viewModel = new EventDetailTimeSlotViewModel(presenter);
         viewModel.setTag(tag);
+        if (event==null) {
+            event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
+        }
         viewModel.setEventDetailHostEvent(event);
         binding.setTimeSlotHostVM(viewModel);
 
@@ -52,29 +51,26 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
         weekView.enableTimeSlot();
         weekView.setEventClassName(Event.class);
         weekView.setDayEventMap(EventManager.getInstance().getEventsMap());
-        initTimeSlots();
     }
 
     public void initTimeSlots(){
+        weekView.resetTimeSlots();
         if (event.hasTimeslots()) {
             for (TimeSlot timeSlot : event.getTimeslots()) {
                 WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
                 struct.startTime = timeSlot.getStartTime();
                 struct.endTime = timeSlot.getEndTime();
                 struct.object = timeSlot;
+                if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending))){
+                    struct.status=false;
+                }else if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_accept))){
+                    struct.status = true;
+                }
                 weekView.addTimeSlot(struct);
             }
         }
+        weekView.reloadTimeSlots(true);
     }
-//
-//    @Override
-//    public void setTag(String tag) {
-//        this.tag = tag;
-//        if (viewModel!=null){
-//            viewModel.setTag(tag);
-//        }
-//    }
-
 
 //
     public Event getEvent() {
@@ -86,7 +82,7 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
         if (viewModel!=null){
             viewModel.setEventDetailHostEvent(event);
         }
-
+        initTimeSlots();
     }
 
 
@@ -95,13 +91,24 @@ public class EventDetailHostTimeSlotFragment extends MvpFragment<EventDetailHost
         return new EventDetailHostTimeSlotPresenter(getContext());
     }
 
+
     @Override
-    public void toHostEventDetail(Event event) {
-        ((EventDetailActivity)getActivity()).toHostEventDetail(event, this);
+    public void onClickBack() {
+        if (getFrom() instanceof EventDetailGroupFragment){
+            switchFragment(this, (EventDetailGroupFragment)getFrom());
+        }else if (getFrom() instanceof EventEditFragment){
+            switchFragment(this,(EventEditFragment)getFrom());
+        }
     }
 
     @Override
-    public void toHostEventEdit(Event event) {
-        ((EventDetailActivity)getActivity()).fromTimeSlotToHostEdit(event,this);
+    public void onClickDone() {
+        if (getFrom() instanceof EventEditFragment){
+            ((EventEditFragment) getFrom()).setEvent(event);
+            switchFragment(this, (EventEditFragment) getFrom());
+        }else if (getFrom() instanceof EventDetailGroupFragment){
+            ((EventDetailGroupFragment) getFrom()).setEvent(event);
+            switchFragment(this, (EventDetailGroupFragment)getFrom());
+        }
     }
 }

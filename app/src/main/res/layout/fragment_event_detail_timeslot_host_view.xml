@@ -6,7 +6,7 @@
         <import type="org.unimelb.itime.util.EventUtil"/>
         <variable
             name="timeSlotHostVM"
-            type="org.unimelb.itime.ui.viewmodel.EventDetailHostTimeSlotViewModel" />
+            type="org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel" />
     </data>
 
     <LinearLayout

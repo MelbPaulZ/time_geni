@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="hostDetailVM"
-            type="org.unimelb.itime.ui.viewmodel.EventDetailForHostViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.EventDetailHostViewModel"/>
     </data>
 
 <RelativeLayout
@@ -55,7 +55,7 @@
                 android:layout_gravity="right"
                 android:background="@null"
                 android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getUserUid())? View.VISIBLE : View.INVISIBLE}"
-                android:onClick="@{hostDetailVM.editEvent()}"
+                android:onClick="@{hostDetailVM.onClickEdit()}"
                 android:textColor="@color/page_title_color"
                 android:text="@string/edit" />
         </android.support.v7.widget.Toolbar>
@@ -204,7 +204,7 @@
                         android:gravity="center"
                         android:text="@string/view_in_calendar"
                         android:textColor="@color/event_detail_repeat"
-                        android:onClick="@{hostDetailVM.viewInCalendar()}"
+                        android:onClick="@{hostDetailVM.onClickViewInCalendar()}"
                         android:textSize="17dp" />
                 </LinearLayout>
 
@@ -286,7 +286,7 @@
                         android:gravity="center_vertical"
                         android:text="@{hostDetailVM.evDtlHostEvent.url}"
                         android:hint="@string/url"
-                        android:onClick="@{hostDetailVM.gotoUrl()}"
+                        android:onClick="@{hostDetailVM.onClickUrl()}"
                         android:textColor="@color/blue"
                         android:textColorHint="@color/gray_b2b2b2"
                         android:textSize="15sp" />
@@ -449,7 +449,7 @@
             android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"
             android:text="@string/accept"
             android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? true: false}"
-            android:onClick="@{hostDetailVM.onClickConfirm()}"
+            android:onClick="@{hostDetailVM.onClickAccept()}"
             android:textAlignment="center"
             android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent.timeslots)? @color/white : @color/gray_b2b2b2}" />
 

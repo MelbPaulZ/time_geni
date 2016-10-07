@@ -5,6 +5,8 @@ import android.content.Context;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.testdb.DBManager;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
 
@@ -18,13 +20,6 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         this.context = context;
     }
 
-    public void toHostEventDetail(Event event){
-        EventEditMvpView view = getView();
-        if (view != null){
-            view.toHostEventDetail(event);
-        }
-    }
-
     public void changeLocation(){
         EventEditMvpView view = getView();
         if (view != null){
@@ -32,40 +27,16 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         }
     }
 
-    public void toTimeSlotView(String tag, Event event){
-        EventEditMvpView view= getView();
-        if (view != null){
-            view.toTimeSlotView(tag, event);
-        }
+    public void updateEvent(Event newEvent){
+        Event oldEvent = EventManager.getInstance().getCurrentEvent();
+        // here update EventManager
+        EventManager.getInstance().updateEvent(oldEvent, newEvent);
+        // update db or eventmanager?
+        // here update DB
+        oldEvent.delete();
+        DBManager.getInstance(context).insertEvent(newEvent);
     }
 
-    public void toInviteePicker(String tag){
-        EventEditMvpView view= getView();
-        if (view != null){
-            view.toInviteePicker(tag);
-        }
-    }
-
-    public void toPhotoPicker(String tag){
-        EventEditMvpView view= getView();
-        if (view != null){
-            view.toPhotoPicker(tag);
-        }
-    }
-
-    public void toSoloEventDetail(){
-        EventEditMvpView view= getView();
-        if (view != null){
-            view.toSoloEventDetail();
-        }
-    }
-
-    public void toSoloEventDetail(Event event){
-        EventEditMvpView view= getView();
-        if (view != null){
-            view.toSoloEventDetail(event);
-        }
-    }
 
     public Context getContext() {
         return context;

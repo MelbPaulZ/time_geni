@@ -1,27 +1,27 @@
 package org.unimelb.itime.ui.fragment.eventdetail;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentSoloEventDetailBinding;
-import org.unimelb.itime.ui.activity.EventDetailActivity;
-import org.unimelb.itime.ui.mvpview.EventDetailForSoloMvpView;
-import org.unimelb.itime.ui.presenter.EventDetailForSoloPresenter;
+import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.mvpview.EventDetailSoloMvpView;
+import org.unimelb.itime.ui.presenter.EventDetailSoloPresenter;
 import org.unimelb.itime.ui.viewmodel.EventSoloDetailViewModel;
 
 /**
  * Created by Paul on 3/09/2016.
  */
-public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMvpView, EventDetailForSoloPresenter> implements EventDetailForSoloMvpView {
+public class EventDetailSoloFragment extends BaseUiFragment<EventDetailSoloMvpView, EventDetailSoloPresenter> implements EventDetailSoloMvpView {
     private FragmentSoloEventDetailBinding binding;
     private Event event;
     private EventSoloDetailViewModel eventSoloDetailViewModel;
@@ -36,14 +36,18 @@ public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMv
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        eventSoloDetailViewModel = new EventSoloDetailViewModel(getPresenter(),this.event);
+        if (event == null) {
+            event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
+        }
+        eventSoloDetailViewModel = new EventSoloDetailViewModel(getPresenter());
+        eventSoloDetailViewModel.setSoloEvent(event);
         binding.setSoloDetailVM(eventSoloDetailViewModel);
     }
 
 
     @Override
-    public EventDetailForSoloPresenter createPresenter() {
-        return new EventDetailForSoloPresenter(getContext());
+    public EventDetailSoloPresenter createPresenter() {
+        return new EventDetailSoloPresenter(getContext());
     }
 
 
@@ -61,11 +65,14 @@ public class EventDetailForSoloFragment extends MvpFragment<EventDetailForSoloMv
 
     @Override
     public void toWeekView() {
-        ((EventDetailActivity)getActivity()).gotoWeekViewCalendar();
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void toEditEvent() {
-        ((EventDetailActivity)getActivity()).toEditEvent(this, event);
+        EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+        eventEditFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        switchFragment(this, eventEditFragment);
     }
 }

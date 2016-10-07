@@ -16,19 +16,6 @@ import java.util.Map;
  * Created by Paul on 10/09/2016.
  */
 public class TimeSlotUtil {
-    public static Map<Long, Boolean> fromTimeSlotsToMap(Context context, List<TimeSlot> timeSlotArrayList){
-        Map<Long, Boolean> timeSlotsMap = new HashMap<>();
-        for (TimeSlot timeSlot:timeSlotArrayList){
-            String test1 = timeSlot.getStatus();
-            String test2 = context.getString(R.string.timeslot_status_pending);
-            if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending)) ){
-                timeSlotsMap.put(timeSlot.getStartTime(), false);
-            }else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
-                timeSlotsMap.put(timeSlot.getStartTime(), true);
-            }
-        }
-        return timeSlotsMap;
-    }
 
     // if this time slot has been selected, return true
     public static boolean isTimeSlotSelected(Context context, TimeSlot timeSlot){
@@ -40,6 +27,7 @@ public class TimeSlotUtil {
             return false;
         }
     }
+
 
     //get all selected timeslots
     public static List<TimeSlot> getSelectedTimeSlots(Context context,List<TimeSlot> timeSlotList){
@@ -70,7 +58,7 @@ public class TimeSlotUtil {
 
     public static TimeSlot getTimeSlot(Event event, TimeSlot timeSlot){
         for (TimeSlot eventTimeSlot : event.getTimeslots()){
-            if (eventTimeSlot.equals(timeSlot)){
+            if(eventTimeSlot.getTimeSlotUid() == timeSlot.getTimeSlotUid()){
                 return eventTimeSlot;
             }
         }

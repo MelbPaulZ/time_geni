@@ -7,18 +7,18 @@ import android.view.View;
 
 import org.unimelb.itime.BR;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.ui.presenter.EventDetailForSoloPresenter;
+import org.unimelb.itime.ui.presenter.EventDetailSoloPresenter;
 
 /**
  * Created by Paul on 3/09/2016.
  */
 public class EventSoloDetailViewModel extends BaseObservable {
-    private EventDetailForSoloPresenter presenter;
+    private EventDetailSoloPresenter presenter;
     private Event soloEvent;
 
-    public EventSoloDetailViewModel(EventDetailForSoloPresenter presenter, Event event) {
-        this.soloEvent = event;
+    public EventSoloDetailViewModel(EventDetailSoloPresenter presenter) {
         this.presenter = presenter;
+
     }
 
     public Context getContext(){

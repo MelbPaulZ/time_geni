@@ -113,9 +113,9 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
                TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
                TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
                if (timeSlot!=null) {
-                   if (timeSlot.getStatus() == getString(R.string.timeslot_status_create)) {
+                   if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_create))) {
                        timeSlot.setStatus(getString(R.string.timeslot_status_pending));
-                   } else if (timeSlot.getStatus() == getString(R.string.timeslot_status_pending)) {
+                   } else if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending))) {
                        timeSlot.setStatus(getString(R.string.timeslot_status_create));
                    }
                }else{

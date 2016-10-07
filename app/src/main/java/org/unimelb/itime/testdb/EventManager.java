@@ -59,19 +59,40 @@ public class EventManager {
         return calendar.getTimeInMillis();
     }
 
+    // this is for event drag
     public void updateEvent(Event oldEvent, long newStartTime, long newEndTime){
-        // problem here
         long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
         if (this.eventMap.containsKey(oldBeginTime)){
-            int sizeBeforeRM = eventMap.get(oldBeginTime).size();
-            Event event = (Event) this.eventMap.get(oldBeginTime).get(0);
-            this.eventMap.get(oldBeginTime).remove(oldEvent);
-            int sizeAfterRM = eventMap.get(oldBeginTime).size();
+            Event updateEvent = null;
+            for (ITimeEventInterface ev : eventMap.get(oldBeginTime)){
+                if (((Event)ev).getEventUid().equals(oldEvent.getEventUid())){
+                    updateEvent = (Event) ev;
+                    break;
+                }
+            }
+            if (updateEvent!=null){
+                this.eventMap.get(oldBeginTime).remove(updateEvent);
+            }
             oldEvent.setStartTime(newStartTime);
             oldEvent.setEndTime(newEndTime);
             this.addEvent(oldEvent);
         }
     }
+
+    public void updateEvent(Event oldEvent, Event newEvent){
+        long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
+
+        if (this.eventMap.containsKey(oldBeginTime)){
+            int id = eventMap.get(oldBeginTime).indexOf(oldEvent);
+
+            Event old = (Event) eventMap.get(oldBeginTime).get(id);
+            eventMap.get(oldBeginTime).remove(old);
+
+            this.addEvent(newEvent);
+            EventManager.getInstance().setCurrentEvent(newEvent);
+        }
+    }
+
 
     public Event copyCurrentEvent(Event event){
         Gson gson = new Gson();

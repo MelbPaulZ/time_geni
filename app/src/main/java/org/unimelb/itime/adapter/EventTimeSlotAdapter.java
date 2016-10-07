@@ -11,7 +11,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.ListviewTimeslotPickBinding;
-import org.unimelb.itime.ui.viewmodel.EventDetailForHostViewModel;
+import org.unimelb.itime.ui.viewmodel.EventDetailHostViewModel;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ public class EventTimeSlotAdapter extends ArrayAdapter<TimeSlot> {
     private ListviewTimeslotPickBinding binding;
     private LayoutInflater inflater;
     private Event adapterEvent;
-    private EventDetailForHostViewModel viewModel;
+    private EventDetailHostViewModel viewModel;
 
-    public EventTimeSlotAdapter(Context context, int resource, List<TimeSlot> objects, EventDetailForHostViewModel viewmodel) {
+    public EventTimeSlotAdapter(Context context, int resource, List<TimeSlot> objects, EventDetailHostViewModel viewmodel) {
         super(context, resource, objects);
         inflater = LayoutInflater.from(context);
         this.viewModel = viewmodel;

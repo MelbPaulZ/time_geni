@@ -9,10 +9,11 @@ import org.unimelb.itime.bean.Event;
  */
 public interface EventEditMvpView extends MvpView {
     void toHostEventDetail(Event event);
+    void toHostEventDetail();
     void changeLocation();
-    void toTimeSlotView(String tag, Event event);
-    void toInviteePicker(String tag);
-    void toPhotoPicker(String tag);
+    void toTimeSlotView(Event event);
+    void toInviteePicker();
+    void toPhotoPicker();
     void toSoloEventDetail();
     void toSoloEventDetail(Event event);
 }

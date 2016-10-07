@@ -6,7 +6,7 @@
         <import type="org.unimelb.itime.util.EventUtil"/>
         <variable
             name="viewmodel"
-            type="org.unimelb.itime.ui.viewmodel.EventDetailForHostViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.EventDetailHostViewModel"/>
         <variable
             name="position"
             type="Integer" />
@@ -14,6 +14,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:onClick="@{viewmodel.onClickTimeSlot(position)}"
         android:orientation="vertical">
 
         <!--this is the icon for select timeslot-->
@@ -23,7 +24,6 @@
             android:layout_height="23dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="14dp"
-            android:onClick="@{viewmodel.onClickTimeSlot(position)}"
             android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent.timeslots.get(position)) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}" />
 
         <!--this is timeslot string-->
@@ -34,7 +34,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="13dp"
             android:layout_toRightOf="@+id/event_detail_host_ic_circle"
-            android:onClick="@{viewmodel.onClickTimeSlot(position)}"
             android:text="@{EventUtil.getSuggestTimeStringFromLong(context, viewmodel.evDtlHostEvent.timeslots.get(position).getStartTime(),viewmodel.evDtlHostEvent.timeslots.get(position).getEndTime() )}"
             android:textColor="@color/text_enable"
             android:textSize="17sp" />

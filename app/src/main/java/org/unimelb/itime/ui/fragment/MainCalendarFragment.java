@@ -45,48 +45,20 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     private CalendarMonthDayFragment monthDayFragment;
     private CalendarAgendaFragment agendaFragment;
     private CalendarWeekFragment weekFragment;
+    private FragmentMainCalendarBinding binding;
+    private MainCalendarViewModel mainCalendarViewModel;
 
 
-    FragmentMainCalendarBinding binding;
-    MainCalendarViewModel mainCalendarViewModel;
-    ArrayList<? extends ITimeEventInterface> eventArrayList = new ArrayList<>();
-    ArrayList<ITimeEventInterface> iTimeEventInterfacesArrayList = (ArrayList<ITimeEventInterface>) eventArrayList;;
-
-    public void addNewEvent(Event event){
-        DBManager.getInstance(getContext()).insertEvent(event);
-        //try
-        if (event.hasAttendee()) {
-            DBManager.getInstance(getContext()).insertInviteeList(event.getInvitee());
+    public void reloadEvent(){
+        if (monthDayFragment!=null && monthDayFragment.isAdded()){
+            monthDayFragment.calendarNotifyDataSetChanged();
         }
-        if (event.hasTimeslots()) {
-            for (int i = 0; i < event.getTimeslots().size(); i++) {
-                // need to be changed for various number of timeslots
-                DBManager.getInstance(getContext()).insertTimeSlot(event.getTimeslots().get(i));
-            }
+        if (agendaFragment!=null && agendaFragment.isAdded()){
+            agendaFragment.calendarNotifyDataSetChanged();
         }
-        // here should insert invitee and timeslots
-
-        List<Event> eventList = DBManager.getInstance(getContext()).getAllEvents();
-        EventManager.getInstance().getEventsMap().clear();
-        for (Event ev: eventList) {
-            ev.getTimeslots();
-            List<Invitee> inviteeList =  ev.getInvitee();
-            for(Invitee iv: inviteeList){
-                iv.getContact();
-            }
-            EventManager.getInstance().addEvent(ev);
+        if (weekFragment!=null && weekFragment.isAdded()){
+            weekFragment.calendarNotifyDataSetChanged();
         }
-//        EventManager.getInstance().addEvent(event);
-
-        monthDayFragment.calendarNotifyDataSetChanged();
-        agendaFragment.calendarNotifyDataSetChanged();
-        weekFragment.calendarNotifyDataSetChanged();
-    }
-
-    public void updateEvents(){
-        monthDayFragment.calendarNotifyDataSetChanged();
-        agendaFragment.calendarNotifyDataSetChanged();
-        weekFragment.calendarNotifyDataSetChanged();
     }
 
     @Override
