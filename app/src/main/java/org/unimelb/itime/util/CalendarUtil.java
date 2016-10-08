@@ -2,12 +2,14 @@ package org.unimelb.itime.util;
 
 import org.unimelb.itime.bean.Calendar;
 
+import java.util.List;
+
 /**
  * Created by Paul on 24/09/2016.
  */
 public class CalendarUtil {
     private static CalendarUtil instance;
-    private Calendar[] calendars;
+    private List<Calendar> calendars;
     private CalendarUtil(){
 
     }
@@ -19,11 +21,11 @@ public class CalendarUtil {
         return instance;
     }
 
-    public Calendar[] getCalendar() {
+    public List<Calendar> getCalendar() {
         return calendars;
     }
 
-    public void setCalendar(Calendar[] calendars) {
+    public void setCalendar(List<Calendar> calendars) {
         this.calendars = calendars;
     }
 
