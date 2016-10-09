@@ -19,6 +19,9 @@ import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Paul on 10/09/2016.
  */
@@ -78,6 +81,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         }
         weekView.reloadTimeSlots(true);
     }
+
 
 //
     public Event getEvent() {
