@@ -73,9 +73,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: ");
                 // for test.... because always on error
-                if (getView() != null) {
-                    getView().onLoginSucceed();
-                }
+//                if (getView() != null) {
+//                    getView().onLoginSucceed();
+//                }
             }
 
             @Override
@@ -121,8 +121,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
     public void fetchEvents() {
         // here to list events
         String calendarUid = CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid();
-        Observable<List<Event>> observable = eventApi.list(calendarUid);
-        Subscriber<List<Event>> subscriber = new Subscriber<List<Event>>() {
+        Observable<HttpResult<List<Event>>> observable = eventApi.list(calendarUid);
+        Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
             public void onCompleted() {
                 Log.i(TAG, "onCompleted: " + "eventApi");
@@ -134,8 +134,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             }
 
             @Override
-            public void onNext(List<Event> events) {
-                Log.i(TAG, "onNext: " + events.size());
+            public void onNext(HttpResult<List<Event>> result) {
+                Log.i(TAG, "onNext: " + result.getData().size());
             }
         };
         HttpUtil.subscribe(observable, subscriber);
