@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.wx.wheelview.adapter.ArrayWheelAdapter;
 import com.wx.wheelview.widget.WheelView;
 import org.unimelb.itime.R;
@@ -73,6 +75,27 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         this.event = event;
     }
 
+    private void changeTimeSlots(TimeSlotView timeSlotView){
+        // change status of view and struct
+        boolean newStatus = !timeSlotView.isSelect();
+        timeSlotView.setStatus(newStatus);
+        ((WeekView.TimeSlotStruct)timeSlotView.getTag()).status = newStatus;
+
+
+        // change event attributes
+        TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+        TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
+        if (timeSlot!=null) {
+            if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_create))) {
+                timeSlot.setStatus(getString(R.string.timeslot_status_pending));
+            } else if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending))) {
+                timeSlot.setStatus(getString(R.string.timeslot_status_create));
+            }
+        }else{
+            Log.i("error", "onTimeSlotClick: " + "no timeslot found");
+        }
+    }
+
 
 
     private void initListeners(){
@@ -104,23 +127,14 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
            @Override
            public void onTimeSlotClick(TimeSlotView timeSlotView) {
-               // change status of view and struct
-               boolean newStatus = !timeSlotView.isSelect();
-               timeSlotView.setStatus(newStatus);
-               ((WeekView.TimeSlotStruct)timeSlotView.getTag()).status = newStatus;
-
-
-               // change event attributes
-               TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
-               TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
-               if (timeSlot!=null) {
-                   if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_create))) {
-                       timeSlot.setStatus(getString(R.string.timeslot_status_pending));
-                   } else if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending))) {
-                       timeSlot.setStatus(getString(R.string.timeslot_status_create));
+               if (TimeSlotUtil.getPendingTimeSlots(getContext(),event.getTimeslots()).size() >=7){
+                   if (timeSlotView.isSelect()){
+                       changeTimeSlots(timeSlotView);
+                   }else{
+                       Toast.makeText(getContext(),"cannot select, maximum 7 timeslots selected", Toast.LENGTH_SHORT).show();
                    }
                }else{
-                   Log.i("error", "onTimeSlotClick: " + "no timeslot found");
+                  changeTimeSlots(timeSlotView);
                }
            }
 
@@ -217,7 +231,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
                     timeSlot.setEndTime(timeSlot.getStartTime() + 1000 * 60 * (pickHour[0] * 60 + pickMinute[0]));
                 }
                 viewModel.setEvent(event);
-                
+
 
             }
         });

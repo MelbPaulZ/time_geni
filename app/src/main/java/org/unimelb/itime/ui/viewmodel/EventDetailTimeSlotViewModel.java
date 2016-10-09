@@ -41,7 +41,8 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
     public EventDetailTimeSlotViewModel(EventDetailHostTimeSlotPresenter presenter) {
         this.presenter = presenter;
         Calendar calendar = Calendar.getInstance();
-        setHostToolBarString(EventUtil.getMonth(getContext(), calendar.MONTH) + " " + calendar.YEAR);
+        calendar.getTime();
+        setHostToolBarString(EventUtil.getMonth(getContext(), calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR));
         this.mvpView = presenter.getView();
     }
 

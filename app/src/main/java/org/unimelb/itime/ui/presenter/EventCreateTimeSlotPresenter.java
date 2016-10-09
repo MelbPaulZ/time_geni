@@ -47,7 +47,7 @@ public class EventCreateTimeSlotPresenter extends MvpBasePresenter<EventCreateNe
             ArrayList<TimeSlot> timeSlots = new ArrayList<>();
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH,5);
+            calendar.set(Calendar.DAY_OF_MONTH,11);
             calendar.set(Calendar.HOUR_OF_DAY,5);
             calendar.set(Calendar.MINUTE,30);
             simulateTimeSlots.put(calendar.getTime().getTime(),false);
@@ -61,7 +61,7 @@ public class EventCreateTimeSlotPresenter extends MvpBasePresenter<EventCreateNe
 
 
             Calendar calendar1 = Calendar.getInstance();
-            calendar1.set(Calendar.DAY_OF_MONTH,6);
+            calendar1.set(Calendar.DAY_OF_MONTH,12);
             calendar1.set(Calendar.HOUR_OF_DAY,7);
             calendar1.set(Calendar.MINUTE,45);
             simulateTimeSlots.put(calendar1.getTime().getTime(),false);
@@ -74,7 +74,7 @@ public class EventCreateTimeSlotPresenter extends MvpBasePresenter<EventCreateNe
             timeSlots.add(timeSlot2);
 
             Calendar calendar2 = Calendar.getInstance();
-            calendar2.set(Calendar.DAY_OF_MONTH, 7);
+            calendar2.set(Calendar.DAY_OF_MONTH, 13);
             calendar2.set(Calendar.HOUR_OF_DAY,9);
             calendar2.set(Calendar.MINUTE,0);
             simulateTimeSlots.put(calendar2.getTimeInMillis(),false);
