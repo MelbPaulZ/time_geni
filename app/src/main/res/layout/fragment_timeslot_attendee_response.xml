@@ -14,23 +14,25 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            android:background="@color/white">
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/timeslot_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
                     android:text="14:00 PM - 15:00 PM"
                     android:textSize="@dimen/page_text_size" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal|bottom"
-                    android:text="WED 20/7"
+                    android:layout_centerHorizontal="true"
+                    android:text="Mon 9/10"
                     android:layout_below="@+id/timeslot_title"
                     android:textSize="10dp" />
             </RelativeLayout>
@@ -65,19 +67,20 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
                         android:paddingBottom="@dimen/margin_small"
-                        android:paddingLeft="@dimen/margin_small"
+                        android:layout_marginLeft="8dp"
                         android:text="Accepted" />
                 </RelativeLayout>
             </LinearLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:tag="accept_attendee1">
 
                 <ImageView
                     android:id="@+id/icon0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/margin_small"
@@ -87,6 +90,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/icon0"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
                     android:text="Michael Morrision"
                     android:textSize="@dimen/page_text_size" />
             </RelativeLayout>
@@ -96,6 +101,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="@color/white"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/invitee_response_cancel_button"

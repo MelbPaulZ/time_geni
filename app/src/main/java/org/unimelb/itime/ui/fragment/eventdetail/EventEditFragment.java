@@ -127,13 +127,13 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
 
     @Override
     public void toSoloEventDetail() {
-        EventDetailSoloFragment soloFragment = (EventDetailSoloFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+        EventDetailSoloFragment soloFragment = (EventDetailSoloFragment) getFragmentManager().findFragmentByTag(EventDetailSoloFragment.class.getSimpleName());
         switchFragment(this, soloFragment);
     }
 
     @Override
     public void toSoloEventDetail(Event event) {
-        EventDetailSoloFragment soloFragment = (EventDetailSoloFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+        EventDetailSoloFragment soloFragment = (EventDetailSoloFragment) getFragmentManager().findFragmentByTag(EventDetailSoloFragment.class.getSimpleName());
         soloFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
         switchFragment(this, soloFragment);
     }

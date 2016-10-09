@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -318,26 +320,42 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             }else{
                 mAutocompleteView.setText(clickStr);
             }
-            mAutocompleteView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
-            mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
 
-            event.setLocation(clickStr);
-            // tiao zhuan
-            if (getFrom() instanceof EventCreateNewFragment){
-                // no need of set from for event create new fragment
-                ((EventCreateNewFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
-                switchFragment(self, (EventCreateNewFragment)getFrom());
-            }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
-                ((EventCreateDetailBeforeSendingFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
-                switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
-            }else if (getFrom() instanceof EventEditFragment){
-                ((EventEditFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
-                switchFragment(self, ((EventEditFragment)getFrom()));
+            if (checkNetwork()){
+                mAutocompleteView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
+                mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
+                event.setLocation(clickStr);
+                // tiao zhuan
+                if (getFrom() instanceof EventCreateNewFragment){
+                    // no need of set from for event create new fragment
+                    ((EventCreateNewFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    switchFragment(self, (EventCreateNewFragment)getFrom());
+                }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
+                    ((EventCreateDetailBeforeSendingFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
+                }else if (getFrom() instanceof EventEditFragment){
+                    ((EventEditFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    switchFragment(self, ((EventEditFragment)getFrom()));
+                }
+            }else{
+                Toast.makeText(getContext(), "network error, cannot find current location", Toast.LENGTH_SHORT).show();
             }
+
         }
     };
 
+    private boolean checkNetwork(){
+        // check network connection
+        ConnectivityManager connectivityManager = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfo = connectivityManager.getAllNetworkInfo();
+        for (int i = 0; i< networkInfo.length;i++ ){
+            if (networkInfo[i].getState() == NetworkInfo.State.CONNECTED){
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     private AdapterView.OnItemClickListener mAutocompleteClickListener
@@ -553,8 +571,8 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                 // Confirm that the query completed successfully, otherwise return null
                 final Status status = autocompletePredictions.getStatus();
                 if (!status.isSuccess()) {
-                    Toast.makeText(getContext(), "Error contacting API: " + status.toString(),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Error contacting API: " + status.toString(),
+//                            Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error getting autocomplete prediction API call" + status.toString());
                     autocompletePredictions.release();
                     return null;

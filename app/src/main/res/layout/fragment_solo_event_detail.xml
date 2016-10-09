@@ -159,7 +159,7 @@
                             android:layout_marginRight="@dimen/padding_5"
                             android:layout_centerVertical="true"
                             android:layout_toLeftOf="@+id/solo_event_calendar_type_arrow"
-                            android:text="Work"/>
+                            android:text="@{soloDetailVM.soloEvent.calendarUid}"/>
                     </RelativeLayout>
                 </LinearLayout>
 

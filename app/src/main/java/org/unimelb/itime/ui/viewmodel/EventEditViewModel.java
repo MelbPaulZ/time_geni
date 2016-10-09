@@ -149,7 +149,8 @@ public class EventEditViewModel extends BaseObservable {
                 builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // need to add later
+                        eventEditViewEvent.setAlertTime(i);
+                        setEventEditViewEvent(eventEditViewEvent);
                     }
                 });
                 builder.show();

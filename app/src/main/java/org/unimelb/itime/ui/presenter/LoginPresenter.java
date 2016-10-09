@@ -73,9 +73,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: ");
                 // for test.... because always on error
-//                if (getView() != null) {
-//                    getView().onLoginSucceed();
-//                }
+                if (getView() != null) {
+                    getView().onLoginSucceed();
+                }
             }
 
             @Override

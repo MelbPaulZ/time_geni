@@ -149,8 +149,6 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         button_reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CharSequence msg = "select timeslot";
-                Toast.makeText(presenter.getContext(), msg, Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
                 // here should add presenter change event status as reject
                 onClickTimeSlotView(timeSlotView);
@@ -166,18 +164,20 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
             // for host , only one timeslot can be selected
             // change here
            if (TimeSlotUtil.getSelectedTimeSlots(getContext(),eventDetailHostEvent.getTimeslots()).size()<1){
-              changeTimeSlotView(timeSlotView);
+               changeTimeSlotView(timeSlotView);
+               changeEventAttributes(timeSlotView);
            }else{
                if (((WeekView.TimeSlotStruct)timeSlotView.getTag()).status==true){
                    changeTimeSlotView(timeSlotView);
+                   changeEventAttributes(timeSlotView);
                }else{
                    Toast.makeText(presenter.getContext(), "already select one timeslot, please unclick and click another one",Toast.LENGTH_SHORT).show();
                }
            }
         }else {
             changeTimeSlotView(timeSlotView);
+            changeEventAttributes(timeSlotView);
         }
-        changeEventAttributes(timeSlotView);
     }
 
 

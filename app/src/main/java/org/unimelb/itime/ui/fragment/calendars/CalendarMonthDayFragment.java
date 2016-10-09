@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.calendars;
 
+import android.databinding.tool.util.L;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
@@ -23,8 +24,11 @@ import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.dayview.MonthDayView;
 import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
+import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Paul on 21/09/2016.
@@ -51,6 +55,7 @@ public class CalendarMonthDayFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
+        Map<Long, List<ITimeEventInterface>> map = EventManager.getInstance().getEventsMap();
         monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
         monthDayView.setEventClassName(Event.class);
         monthDayView.setOnHeaderListener(new MonthDayView.OnHeaderListener() {
@@ -87,7 +92,6 @@ public class CalendarMonthDayFragment extends Fragment {
                 EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
                         dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
                 ((Event)dayDraggableEventView.getEvent()).update();
-
                 monthDayView.reloadEvents();
             }
         });

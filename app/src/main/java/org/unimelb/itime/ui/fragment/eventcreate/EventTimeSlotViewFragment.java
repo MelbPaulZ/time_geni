@@ -48,6 +48,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     private WheelView hourWheelView,minuteWheelView;
     private WeekView timeslotWeekView;
     private EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment;
+    private int hourPosition,minPosition;
 
     @Nullable
     @Override
@@ -167,11 +168,13 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         hourWheelView.setWheelSize(5);
         hourWheelView.setLoop(true);
         hourWheelView.setExtraText("Hours", Color.parseColor("#000000"), 40, 100);
+        hourWheelView.setSelection(hourPosition);
         hourWheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
             @Override
             public void onItemSelected(int position, Object o) {
                 pickHour[0] = Integer.parseInt(createHours().get(position));
                 durationTime.setText(getTimeString(pickHour[0], pickMinute[0]));
+                hourPosition = position;
             }
         });
 
@@ -183,11 +186,13 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         minuteWheelView.setLoop(true);
         minuteWheelView.setWheelSize(5);
         minuteWheelView.setExtraText("Min", Color.parseColor("#000000"), 40, 100);
+        minuteWheelView.setSelection(minPosition);
         minuteWheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
             @Override
             public void onItemSelected(int position, Object o) {
                 pickMinute[0] = Integer.parseInt(createMinutes().get(position));
                 durationTime.setText(getTimeString(pickHour[0], pickMinute[0]));
+                minPosition = position;
             }
         });
 
@@ -211,8 +216,9 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
                 for (TimeSlot timeSlot: event.getTimeslots()){
                     timeSlot.setEndTime(timeSlot.getStartTime() + 1000 * 60 * (pickHour[0] * 60 + pickMinute[0]));
                 }
-
                 viewModel.setEvent(event);
+                
+
             }
         });
 

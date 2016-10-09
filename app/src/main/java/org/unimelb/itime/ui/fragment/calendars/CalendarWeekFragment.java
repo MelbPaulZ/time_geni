@@ -93,28 +93,6 @@ public class CalendarWeekFragment extends Fragment {
         });
     }
 
-    private void initDB(){
-
-        long start = System.currentTimeMillis();
-        EventManager.getInstance().getEventsMap().clear();
-        List<Event> list = DBManager.getInstance(getContext()).getAllEvents();
-        int i = 0;
-        for (Event ev: list) {
-            ev.getTimeslots();
-            List<Invitee> inviteeList =  ev.getInvitee();
-            for(Invitee iv: inviteeList){
-                iv.getContact();
-            }
-
-//            9-595
-            EventManager.getInstance().addEvent(ev);
-            i++;
-            if(i > 100){
-                break;
-            }
-        }
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.INIT_DB) {
