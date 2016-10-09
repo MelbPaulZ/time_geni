@@ -277,4 +277,25 @@ public class EventUtil{
         EventManager.getInstance().setCurrentEvent((Event)iTimeEventInterface);
         activity.startActivityForResult(intent, ACTIVITY_EDIT_EVENT);
     }
+
+    public static String getEventConfirmStatus(Event event){
+        switch (event.getStatus()){
+            case 0:
+                return "has not confirmed this event";
+            case 1:
+                return "has confirmed this event";
+            default:
+                return "has confirmed this event";
+        }
+    }
+
+    public static String getHostName(Event event){
+        // need to change later
+        String hostUid = event.getHostUserUid();
+        return "Captain America";
+    }
+
+    public static String getRepeatString(Event event){
+        return "Not repeat";
+    }
 }

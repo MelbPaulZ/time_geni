@@ -237,5 +237,6 @@
     <string name="timeslot_status_create">timeslot status create</string>
     <string name="duration">Duration</string>
     <string name="select">Select</string>
+    <string name="calendar">Calendar</string>
 
 </resources>
