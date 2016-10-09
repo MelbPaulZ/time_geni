@@ -2,7 +2,6 @@ package org.unimelb.itime.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -41,7 +40,7 @@ public class RemoteService extends Service{
             @Override
             public void run(){
 
-//                createDB();
+                createDB();
                 try {
                     Thread.sleep(5000);
                     loadDB();
