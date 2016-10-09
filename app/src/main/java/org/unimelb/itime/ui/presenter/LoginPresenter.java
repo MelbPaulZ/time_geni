@@ -73,35 +73,29 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: ");
                 // for test.... because always on error
-                if(getView() != null){
+                if (getView() != null) {
                     getView().onLoginSucceed();
                 }
             }
 
             @Override
-            public void onNext(HttpResult<UserLoginRes> userLoginRes) {
-//                HttpResult<UserLoginRes> test = userLoginRes;
-//                        Log.d(TAG, "onNext: " + userLoginRes.getData().getToken());
-//                        AuthUtil.saveJwtToken(context, userLoginRes.getData().getToken());
-//
-//                        UserUtil.getInstance().setUserLoginRes(userLoginRes.getData());
-//                        if(getView() != null){
-//                            getView().onLoginSucceed();
-//                        }
-//                fetchCalendar();
+            public void onNext(HttpResult<UserLoginRes> result) {
+                Log.d(TAG, "onNext: " + result.getData().getToken());
+                AuthUtil.saveJwtToken(context, result.getData().getToken());
 
-                // for test
-                if(getView() != null){
-                            getView().onLoginSucceed();
-                        }
+                UserUtil.getInstance().setUserLoginRes(result.getData());
+                if (getView() != null) {
+                    getView().onLoginSucceed();
+                }
+                fetchCalendar();
             }
         };
         HttpUtil.subscribe(observable, subscriber);
     }
 
     public void fetchCalendar() {
-        // here to fetch calendar;
-        Subscriber<HttpResult<Calendar[]>> subscriber = new Subscriber<HttpResult<Calendar[]>>() {
+        // here to list calendar;
+        Subscriber<HttpResult<List<Calendar>>> subscriber = new Subscriber<HttpResult<List<Calendar>>>() {
             @Override
             public void onCompleted() {
                 Log.i(TAG, "onCompleted: " + "calendarApi");
@@ -113,9 +107,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             }
 
             @Override
-            public void onNext(HttpResult<Calendar[]> httpResult) {
-                Log.i(TAG, "onNext: " + httpResult.getData()[0].toString());
-                Log.i(TAG, "onNext: " + httpResult.getData().length);
+            public void onNext(HttpResult<List<Calendar>> httpResult) {
                 CalendarUtil.getInstance().setCalendar(httpResult.getData());
 
                 fetchEvents();
@@ -123,12 +115,13 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
 
 
         };
-//        HttpUtil.subscribe(calendarApi.fetch(), subscriber);
+        HttpUtil.subscribe(calendarApi.list(), subscriber);
     }
 
     public void fetchEvents() {
-        // here to fetch events
-        Observable<List<Event>> observable = eventApi.fetch(CalendarUtil.getInstance().getCalendar()[0].getCalendarUid());
+        // here to list events
+        String calendarUid = CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid();
+        Observable<List<Event>> observable = eventApi.list(calendarUid);
         Subscriber<List<Event>> subscriber = new Subscriber<List<Event>>() {
             @Override
             public void onCompleted() {

@@ -7,12 +7,13 @@ public class Calendar {
     private String iCalUID;
     private String summary;
     private String color;
-    private int access;
-    private int status;
+    private String access;
+    private String status;
     private String calendarUid;
     private int groupUid;
-    private int groupTitle;
-    private int isShown;
+    private String groupTitle;
+    private int visibility;
+    private int deleteLevel;
     private String createdAt;
     private String updatedAt;
 
@@ -20,8 +21,17 @@ public class Calendar {
         return iCalUID;
     }
 
+    public int getDeleteLevel() {
+        return deleteLevel;
+    }
+
+    public void setDeleteLevel(int deleteLevel) {
+        this.deleteLevel = deleteLevel;
+    }
+
     public void setiCalUID(String iCalUID) {
         this.iCalUID = iCalUID;
+
     }
 
     public String getSummary() {
@@ -40,19 +50,19 @@ public class Calendar {
         this.color = color;
     }
 
-    public int getAccess() {
+    public String getAccess() {
         return access;
     }
 
-    public void setAccess(int access) {
+    public void setAccess(String access) {
         this.access = access;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -72,20 +82,20 @@ public class Calendar {
         this.groupUid = groupUid;
     }
 
-    public int getGroupTitle() {
+    public String getGroupTitle() {
         return groupTitle;
     }
 
-    public void setGroupTitle(int groupTitle) {
+    public void setGroupTitle(String groupTitle) {
         this.groupTitle = groupTitle;
     }
 
-    public int getIsShown() {
-        return isShown;
+    public int getVisibility() {
+        return visibility;
     }
 
-    public void setIsShown(int isShown) {
-        this.isShown = isShown;
+    public void setVisibility(int visibility) {
+        this.visibility = visibility;
     }
 
     public String getCreatedAt() {
@@ -102,22 +112,5 @@ public class Calendar {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public String toString() {
-        return "Calendar{" +
-                "iCalUID='" + iCalUID + '\'' +
-                ", summary='" + summary + '\'' +
-                ", color='" + color + '\'' +
-                ", access=" + access +
-                ", status=" + status +
-                ", calendarUid='" + calendarUid + '\'' +
-                ", groupUid=" + groupUid +
-                ", groupTitle=" + groupTitle +
-                ", isShown=" + isShown +
-                ", createdAt='" + createdAt + '\'' +
-                ", updatedAt='" + updatedAt + '\'' +
-                '}';
     }
 }

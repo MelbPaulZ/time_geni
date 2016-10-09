@@ -17,7 +17,7 @@ import retrofit2.http.GET;
  */
 public interface CalendarApi {
     @GET("calendar/list")
-    Observable<HttpResult<List<Calendar>>> fetch();
+    Observable<HttpResult<List<Calendar>>> list();
 
     @GET("calendar/get/{calendarUid}")
     Observable<HttpResult<Calendar>> get(@Query("calendarUid") String calendarUid);
