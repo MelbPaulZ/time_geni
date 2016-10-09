@@ -159,8 +159,9 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
 
     public void onClickTimeSlotView(TimeSlotView timeSlotView){
         // change status of view and struct
-        if (UserUtil.getUserUid() == eventDetailHostEvent.getHostUserUid()){
+        if (UserUtil.getUserUid().equals(eventDetailHostEvent.getHostUserUid())){
             // for host , only one timeslot can be selected
+            // change here
 //                   if (TimeSlotUtil.getSelectedTimeSlots(getContext(),eventDetailHostEvent.getTimeslots()).size()<1){
 //                       boolean newStatus = !timeSlotView.isSelect();
 //                       timeSlotView.setStatus(newStatus);

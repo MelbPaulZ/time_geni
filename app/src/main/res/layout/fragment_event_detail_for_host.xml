@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:text="@string/event_details" />
 
             <Button
@@ -71,101 +71,124 @@
         <!--background-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#EFEFF4">
-            <!--host confirm info-->
-            <RelativeLayout
-                android:id="@+id/detail_host_info_RL"
-                android:layout_width="match_parent"
-                android:layout_height="88dp">
-                <!--inside gray part-->
-                <RelativeLayout
-                    android:id="@+id/detail_host_info_gray"
-                    android:layout_width="355dp"
-                    android:layout_height="44dp"
-                    android:background="@color/color_EFEFEF"
-                    android:layout_centerHorizontal="true">
-                    <TextView
-                        android:id="@+id/detail_host_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_15dp"
-                        android:textStyle="bold"
-                        android:text="@{hostDetailVM.evDtlHostEvent.hostUserUid}"
-                        android:textColor="@color/color_FF9600"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="@dimen/size_7.5dp"
-                        android:layout_marginLeft="@dimen/size_7.5dp"/>
-                    <TextView
-                        android:id="@+id/detail_confirm_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:textColor="@color/color_FF9600"
-                        android:text="has not confirmed this event"
-                        android:layout_marginBottom="@dimen/size_7.5dp"
-                        android:layout_marginLeft="@dimen/size_7.5dp"
-                        />
-                    <ImageView
-                        android:layout_width="@dimen/text_size_15dp"
-                        android:layout_height="@dimen/text_size_15dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/size_7.5dp"
-                        />
-
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-            <!--blue rectangle-->
+            android:layout_height="match_parent">
             <LinearLayout
                 android:id="@+id/event_detail_host_first_part"
-                android:layout_below="@+id/detail_host_info_RL"
-                android:layout_width="350dp"
-                android:layout_height="89dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="@dimen/padding_10"
                 android:layout_marginTop="23dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="3dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/bg_event_group_a100"/>
+                android:orientation="vertical">
+                <!-- ********************************************** -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_corner_gray"
+                    android:padding="10dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/host_photo"
+                        android:src="@drawable/invitee_selected_default_picture"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        />
+                    <LinearLayout
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:layout_alignRight="@id/host_photo"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/event_name"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_FF9600"
+                            android:text="@{EventUtil.getHostName(hostDetailVM.evDtlHostEvent)}"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/event_status"
+                            android:textColor="@color/color_FF9600"
+                            android:text="@{EventUtil.getEventConfirmStatus(hostDetailVM.evDtlHostEvent)}"/>
+                    </LinearLayout>
+
+
+                </RelativeLayout>
 
                 <LinearLayout
+                    android:id="@+id/event_detail_basic_info"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/bg_event_group_a30"
-                    android:orientation="vertical">
-
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
                     <TextView
+                        android:id="@+id/event_detail_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="11dp"
-                        android:layout_marginTop="5dp"
-                        android:text="@{hostDetailVM.evDtlHostEvent.title}"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:text="@{hostDetailVM.evDtlHostEvent.title}"/>
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/event_detail_repeat_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="14dp"
-                        android:text="@{EventUtil.parseRepeatIdToRepeat(context, hostDetailVM.evDtlHostEvent.recurrence, hostDetailVM.evDtlHostEvent.startTime)}"
-                        android:textColor="@color/event_detail_repeat"
-                        android:textSize="15sp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp">
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/invitee_selected_arrow"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="@{EventUtil.getRepeatString(hostDetailVM.evDtlHostEvent)}"/>
+                    </LinearLayout>
 
-                        />
-
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/event_detail_location_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="14dp"
-                        android:layout_marginTop="3dp"
-                        android:text="@{hostDetailVM.evDtlHostEvent.location}"
-                        android:textSize="15sp" />
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp">
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/invitee_selected_arrow"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="@{hostDetailVM.evDtlHostEvent.location}"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/event_detail_note_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp">
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/invitee_selected_arrow"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="@{hostDetailVM.evDtlHostEvent.note}"/>
+                    </LinearLayout>
+
                 </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -207,21 +230,14 @@
                         android:onClick="@{hostDetailVM.onClickViewInCalendar()}"
                         android:textSize="17dp" />
                 </LinearLayout>
-
-
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/event_detail_host_blank"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_below="@+id/event_detail_host_second_part" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/event_detail_host_blank"
                 android:background="@color/white"
+                android:layout_below="@+id/event_detail_host_second_part"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/padding_10">
 
@@ -266,6 +282,64 @@
                         android:background="@color/gray_b2b2b2" />
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/event_detail_host_photo_RL"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/event_detail_host_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/photo"
+                        android:textSize="17sp"/>
+
+                    <ImageView
+                        android:id="@+id/detail_photo1"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="@dimen/padding_10"
+                        android:layout_centerVertical="true"
+                        android:visibility="@{hostDetailVM.evDtlHostEvent.photoList.size()>0? View.VISIBLE : View.GONE}"
+                        android:src="@{hostDetailVM.evDtlHostEvent.photoList.size()>0? hostDetailVM.evDtlHostEvent.photoList.get(0).getUrl() : @string/none}"
+                        />
+                    <ImageView
+                        android:id="@+id/detail_photo2"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_toLeftOf="@+id/detail_photo1"
+                        android:layout_marginRight="@dimen/padding_5"
+                        android:layout_centerVertical="true"
+                        android:visibility="@{hostDetailVM.evDtlHostEvent.photoList.size() > 1 ? View.VISIBLE : View.GONE}"
+                        android:src="@{hostDetailVM.evDtlHostEvent.photoList.size() > 1 ? hostDetailVM.evDtlHostEvent.photoList.get(1).getUrl() : @string/none}" />
+                    <ImageView
+                        android:id="@+id/detail_photo3"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_toLeftOf="@id/detail_photo2"
+                        android:layout_marginRight="@dimen/padding_5"
+                        android:layout_centerVertical="true"
+                        android:visibility="@{hostDetailVM.evDtlHostEvent.photoList.size() > 2 ? View.VISIBLE : View.GONE}"
+                        android:src="@{hostDetailVM.evDtlHostEvent.photoList.size() > 2 ? hostDetailVM.evDtlHostEvent.photoList.get(2).getUrl() : @string/none}"/>
+
+                    <TextView
+                        android:id="@+id/event_detail_photo_arrow"
+                        android:layout_width="8dp"
+                        android:layout_height="13dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/padding_10"
+                        android:background="@drawable/icon_general_arrow_right" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/gray_b2b2b2" />
+                </RelativeLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -299,102 +373,47 @@
                         android:background="@color/gray_b2b2b2" />
                 </LinearLayout>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="17sp"
+                        android:text="@string/calendar"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"/>
+                    <TextView
+                        android:id="@+id/event_detail_calendar_arrow"
+                        android:layout_width="8dp"
+                        android:layout_height="13dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/padding_10"
+                        android:background="@drawable/icon_general_arrow_right"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/event_detail_calendar_arrow"
+                        android:layout_centerVertical="true"
+                        android:text="@string/work"
+                        android:layout_marginRight="@dimen/padding_5"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="@dimen/padding_5"
+                        android:background="@color/gray_b2b2b2" />
+                </RelativeLayout>
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/note"
-                        android:textSize="17sp" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/event_detail_host_note"
-                            android:layout_width="322dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/padding_10"
-                            android:layout_marginTop="@dimen/padding_5"
-                            android:text="@{hostDetailVM.evDtlHostEvent.note}"
-                            android:textColor="@color/gray_b2b2b2"
-                            android:textSize="17sp" />
-
-                        <TextView
-                            android:id="@+id/event_detail_host_note_arrow"
-                            android:layout_width="8dp"
-                            android:layout_height="13dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/padding_10"
-                            android:background="@drawable/icon_general_arrow_right" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_below="@id/event_detail_host_note"
-                            android:layout_marginTop="@dimen/padding_5"
-                            android:background="@color/gray_b2b2b2" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/event_detail_host_photo_RL"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:gravity="center_vertical">
-                        <TextView
-                            android:id="@+id/event_detail_host_photo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="@string/photo"
-                            android:textSize="17sp"/>
-
-                        <ImageView
-                            android:id="@+id/detail_photo1"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginRight="@dimen/padding_10"
-                            android:layout_centerVertical="true"
-                            android:visibility="@{hostDetailVM.evDtlHostEvent.photoList.size()>0? View.VISIBLE : View.GONE}"
-                            android:src="@{hostDetailVM.evDtlHostEvent.photoList.size()>0? hostDetailVM.evDtlHostEvent.photoList.get(0).getUrl() : @string/none}"
-                            />
-                        <ImageView
-                            android:id="@+id/detail_photo2"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_toLeftOf="@+id/detail_photo1"
-                            android:layout_marginRight="@dimen/padding_5"
-                            android:layout_centerVertical="true"
-                            android:visibility="@{hostDetailVM.evDtlHostEvent.photoList.size() > 1 ? View.VISIBLE : View.GONE}"
-                            android:src="@{hostDetailVM.evDtlHostEvent.photoList.size() > 1 ? hostDetailVM.evDtlHostEvent.photoList.get(1).getUrl() : @string/none}" />
-                        <ImageView
-                            android:id="@+id/detail_photo3"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_toLeftOf="@id/detail_photo2"
-                            android:layout_marginRight="@dimen/padding_5"
-                            android:layout_centerVertical="true"
-                            android:visibility="@{hostDetailVM.evDtlHostEvent.photoList.size() > 2 ? View.VISIBLE : View.GONE}"
-                            android:src="@{hostDetailVM.evDtlHostEvent.photoList.size() > 2 ? hostDetailVM.evDtlHostEvent.photoList.get(2).getUrl() : @string/none}"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_below="@id/event_detail_host_photo"
-                            android:layout_marginTop="@dimen/padding_5"
-                            android:background="@color/gray_b2b2b2" />
-                    </RelativeLayout>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_below="@+id/event_detail_host_photo_RL" />
+                        android:layout_height="50dp" />
                 </LinearLayout>
             </LinearLayout>
 
