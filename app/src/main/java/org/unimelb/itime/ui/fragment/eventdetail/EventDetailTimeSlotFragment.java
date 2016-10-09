@@ -16,6 +16,7 @@ import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 /**
@@ -51,6 +52,12 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         weekView.enableTimeSlot();
         weekView.setEventClassName(Event.class);
         weekView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        if (UserUtil.getUserUid().equals(event.getHostUserUid())){
+            // which means this is host event
+        }else{
+            // which means this is invitee event
+            weekView.removeAllOptListener();
+        }
     }
 
     public void initTimeSlots(){
