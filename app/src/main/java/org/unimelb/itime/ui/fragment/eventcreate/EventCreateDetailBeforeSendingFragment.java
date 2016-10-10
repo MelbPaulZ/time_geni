@@ -1,6 +1,5 @@
 package org.unimelb.itime.ui.fragment.eventcreate;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -9,10 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -77,7 +73,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
 
     public void setTimeSlotListView(){
         ArrayList<String> timeslotsArrayList = new ArrayList<>();
-        for (TimeSlot timeSlot: event.getTimeslots()){
+        for (TimeSlot timeSlot: event.getTimeslot()){
             // only display chosen timeSlot
             if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending)))
                 timeslotsArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()) );

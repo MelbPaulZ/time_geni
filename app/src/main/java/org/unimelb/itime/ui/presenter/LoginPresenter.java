@@ -7,7 +7,10 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.JwtToken;
+import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.dao.UserDao;
 import org.unimelb.itime.restfulapi.CalendarApi;
@@ -15,6 +18,7 @@ import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
+import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.util.CalendarUtil;
@@ -40,17 +44,14 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
 
     private Context context;
     private UserApi userApi;
-    private EventApi eventApi;
-    private CalendarApi calendarApi;
+
 
     private UserDao userDao;
 
     public LoginPresenter(Context context) {
         this.context = context;
         userApi = HttpUtil.createService(context, UserApi.class);
-        eventApi = HttpUtil.createService(context, EventApi.class);
-        calendarApi = HttpUtil.createService(context, CalendarApi.class);
-        userDao = GreenDaoUtil.getDaoSession(context).getUserDao();
+
     }
 
     public void loginByEmail(String email, String password) {
@@ -60,7 +61,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             // call retrofit
             view.onLoginStart();
         }
-
+        DBManager.getInstance(context).clearDB();
         AuthUtil.clearJwtToken(context);
         Observable<HttpResult<UserLoginRes>> observable = userApi.login(email, password);
         Subscriber<HttpResult<UserLoginRes>> subscriber = new Subscriber<HttpResult<UserLoginRes>>() {
@@ -73,9 +74,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: ");
                 // for test.... because always on error
-                if (getView() != null) {
-                    getView().onLoginSucceed();
-                }
+//                if (getView() != null) {
+//                    getView().onLoginSucceed();
+//                }
             }
 
             @Override
@@ -87,55 +88,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
                 if (getView() != null) {
                     getView().onLoginSucceed();
                 }
-                fetchCalendar();
-            }
-        };
-        HttpUtil.subscribe(observable, subscriber);
-    }
-
-    public void fetchCalendar() {
-        // here to list calendar;
-        Subscriber<HttpResult<List<Calendar>>> subscriber = new Subscriber<HttpResult<List<Calendar>>>() {
-            @Override
-            public void onCompleted() {
-                Log.i(TAG, "onCompleted: " + "calendarApi");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.i(TAG, "onError: " + "calendarApi");
-            }
-
-            @Override
-            public void onNext(HttpResult<List<Calendar>> httpResult) {
-                CalendarUtil.getInstance().setCalendar(httpResult.getData());
-
-                fetchEvents();
-            }
-
-
-        };
-        HttpUtil.subscribe(calendarApi.list(), subscriber);
-    }
-
-    public void fetchEvents() {
-        // here to list events
-        String calendarUid = CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid();
-        Observable<HttpResult<List<Event>>> observable = eventApi.list(calendarUid);
-        Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
-            @Override
-            public void onCompleted() {
-                Log.i(TAG, "onCompleted: " + "eventApi");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.i(TAG, "onError: " + "eventApi");
-            }
-
-            @Override
-            public void onNext(HttpResult<List<Event>> result) {
-                Log.i(TAG, "onNext: " + result.getData().size());
+//                fetchCalendar();
             }
         };
         HttpUtil.subscribe(observable, subscriber);

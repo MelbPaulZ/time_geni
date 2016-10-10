@@ -19,9 +19,6 @@ import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Paul on 10/09/2016.
  */
@@ -66,7 +63,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     public void initTimeSlots(){
         weekView.resetTimeSlots();
         if (event.hasTimeslots()) {
-            for (TimeSlot timeSlot : event.getTimeslots()) {
+            for (TimeSlot timeSlot : event.getTimeslot()) {
                 WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
                 struct.startTime = timeSlot.getStartTime();
                 struct.endTime = timeSlot.getEndTime();

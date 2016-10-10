@@ -52,6 +52,11 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         init();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+    }
+
     @NonNull
     @Override
     public MainTabBarPresenter createPresenter() {

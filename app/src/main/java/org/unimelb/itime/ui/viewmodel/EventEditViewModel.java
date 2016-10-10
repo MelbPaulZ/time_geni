@@ -10,15 +10,11 @@ import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
 
-import org.greenrobot.greendao.query.QueryBuilder;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.dao.EventDao;
-import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.GreenDaoUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -149,7 +145,7 @@ public class EventEditViewModel extends BaseObservable {
                 builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        eventEditViewEvent.setAlertTime(i);
+                        eventEditViewEvent.setReminder(i);
                         setEventEditViewEvent(eventEditViewEvent);
                     }
                 });

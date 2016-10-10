@@ -308,7 +308,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{EventUtil.getAlertTimes(eventVM.context)[eventVM.event.alertTime]}"
+                            android:text="@{EventUtil.getAlertTimes(eventVM.context)[eventVM.event.reminder]}"
                             android:onClick="@{eventVM.pickAlertTime()}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
@@ -413,14 +413,14 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/note"
+                                android:text="@string/description"
                                 android:textSize="16dp"/>
 
                             <EditText
                                 android:id="@+id/create_event_note_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@={eventVM.event.note}"
+                                android:text="@={eventVM.event.description}"
                                 android:background="@android:color/transparent"
                                 android:textColor="@color/text_enable"
                                 android:textSize="@dimen/page_text_size" />
@@ -444,8 +444,6 @@
                                 android:layout_height="50dp"
                                 android:layout_centerVertical="true"
                                 android:layout_toLeftOf="@+id/create_event_photo_arrow"
-                                android:visibility="@{eventVM.event.photoList.size()>0? View.VISIBLE : View.GONE}"
-                                android:src="@{eventVM.event.photoList.size()>0 ?eventVM.event.photoList.get(0).getUrl() : @string/none}"
                                 />
 
                             <ImageView
@@ -454,9 +452,7 @@
                                 android:layout_height="50dp"
                                 android:layout_centerVertical="true"
                                 android:layout_toLeftOf="@+id/photo1"
-                                android:layout_marginRight="@dimen/padding_5"
-                                android:visibility="@{eventVM.event.photoList.size()>1 ? View.VISIBLE : View.GONE}"
-                                android:src="@{eventVM.event.photoList.size()>1? eventVM.event.photoList.get(1).getUrl() : @string/none}"/>
+                                android:layout_marginRight="@dimen/padding_5" />
 
                             <ImageView
                                 android:id="@+id/photo3"
@@ -464,9 +460,7 @@
                                 android:layout_height="50dp"
                                 android:layout_centerVertical="true"
                                 android:layout_toLeftOf="@+id/photo2"
-                                android:layout_marginRight="@dimen/padding_5"
-                                android:visibility="@{eventVM.event.photoList.size()>2? View.VISIBLE : View.GONE}"
-                                android:src="@{eventVM.event.photoList.size()>2? eventVM.event.photoList.get(2).getUrl : @string/none}"/>
+                                android:layout_marginRight="@dimen/padding_5" />
                             <!--this is for expanding the onclick area-->
                             <TextView
                                 android:layout_width="50dp"

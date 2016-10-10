@@ -301,7 +301,7 @@
                             android:textColor="@color/text_disable"
                             android:layout_toLeftOf="@+id/before_sending_alert_arrow"
                             android:layout_marginLeft="@dimen/padding_5"
-                            android:text="@{EventUtil.getAlertTimeFromIndex(context, newEventDetailVM.newEvDtlEvent.alertTime)}"
+                            android:text="@{EventUtil.getAlertTimeFromIndex(context, newEventDetailVM.newEvDtlEvent.reminder)}"
                             />
                     </RelativeLayout>
 
@@ -376,14 +376,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/page_text_size"
-                            android:text="@string/note"
+                            android:text="@string/description"
                             android:textColor="@color/text_disable"/>
 
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Note"
-                            android:text="@={newEventDetailVM.newEvDtlEvent.note}"
+                            android:text="@={newEventDetailVM.newEvDtlEvent.description}"
                             android:background="@android:color/transparent"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
@@ -408,24 +408,8 @@
                             android:layout_height="50dp"
                             android:layout_toLeftOf="@+id/before_sending_photo_arrow"
                             android:layout_marginRight="@dimen/padding_5"
-                            android:visibility="@{newEventDetailVM.newEvDtlEvent.photoList.size()>0? View.VISIBLE : View.INVISIBLE}"
-                            android:src="@{newEventDetailVM.newEvDtlEvent.photoList.size()>0? newEventDetailVM.newEvDtlEvent.photoList.get(0).getUrl(): @string/none }"/>
-                        <ImageView
-                            android:id="@+id/before_sending_photo2"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_toLeftOf="@+id/before_sending_photo1"
-                            android:layout_marginRight="@dimen/padding_5"
-                            android:visibility="@{newEventDetailVM.newEvDtlEvent.photoList.size()>1? View.VISIBLE : View.INVISIBLE}"
-                            android:src="@{newEventDetailVM.newEvDtlEvent.photoList.size()>1 ? newEventDetailVM.newEvDtlEvent.photoList.get(1).getUrl(): @string/none}"/>
-                        <ImageView
-                            android:id="@+id/before_sending_photo3"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_toLeftOf="@+id/before_sending_photo2"
-                            android:layout_marginRight="@dimen/padding_5"
-                            android:visibility="@{newEventDetailVM.newEvDtlEvent.photoList.size()>2? View.VISIBLE : View.INVISIBLE}"
-                            android:src="@{newEventDetailVM.newEvDtlEvent.photoList.size()>2 ? newEventDetailVM.newEvDtlEvent.photoList.get(2).getUrl(): @string/none}"/>
+                            android:src="@drawable/itime_day_rectangle"/>
+
                         <ImageView
                             android:id="@+id/before_sending_photo_arrow"
                             android:layout_width="20dp"

@@ -1,31 +1,23 @@
 package org.unimelb.itime.bean;
 
-import android.databinding.tool.util.L;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
-import org.greenrobot.greendao.annotation.Property;
+import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.annotation.ToMany;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.InviteeDao;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import org.unimelb.itime.dao.TimeSlotDao;
+import org.unimelb.itime.dao.PhotoUrlDao;
 
 /**
  * Created by yinchuandong on 22/08/2016.
@@ -35,47 +27,42 @@ import org.unimelb.itime.dao.TimeSlotDao;
 public class Event implements ITimeEventInterface<Event>, Serializable {
     @Id
     private String eventUid;
-    // for other calendars
     private String eventId;
-    private String recurringEventUid;
-    // for other calendars
-    private String recurringEventId;
+    private String hostUserUid; // add by paul
+    private String userUid;
     private String calendarUid;
     private String iCalUID;
-    private String hostUserUid; // add by paul
+    private String recurringEventUid;
+    private String recurringEventId;
     private String recurrence;
+    private String status;
     private String summary;
-    private String url;
+    private long startTime;
+    private long endTime;
+    private String description;
     private String location = "";
     private String locationNote;
-    private double locationLatitude;
-    private double locationLongitude;
-    private String note;
-    private int alertTime;
+    private String locationLatitude;
+    private String locationLongitude;
+    private String eventType;
+    private int reminder;
+    private int freebusyAccess;
+    private String source;
+    private int deleteLevel;
+    private int icsSequence;
 
 
-    private transient List<PhotoUrl> photoList = null;
-    private String photo = "[]";
+    private String url;
 
     @ToMany(referencedJoinProperty = "eventUid")
-    private List<TimeSlot> timeslots = null;
+    private List<PhotoUrl> photo = null;
+
+    @ToMany(referencedJoinProperty = "eventUid")
+    private List<TimeSlot> timeslot = null;
 
     // later delete
     private transient long repeatEndsTime;
-    private transient boolean isHost;
 
-    @Property
-    @NotNull
-    private long startTime;
-    @Property
-    @NotNull
-    private long endTime;
-    @Property
-    @NotNull
-    private int eventType;
-    @Property
-    @NotNull
-    private int status;
 
     @ToMany(referencedJoinProperty = "eventUid")
     private List<Invitee> invitee = null;
@@ -88,40 +75,45 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
 
     public Event() {
         invitee = new ArrayList<>();
-        timeslots = new ArrayList<>();
-        photoList = new ArrayList<>();
+        timeslot = new ArrayList<>();
     }
 
 
-    @Generated(hash = 1170169819)
-    public Event(String eventUid, String eventId, String recurringEventUid, String recurringEventId,
-            String calendarUid, String iCalUID, String hostUserUid, String recurrence, String summary,
-            String url, String location, String locationNote, double locationLatitude,
-            double locationLongitude, String note, int alertTime, String photo, long startTime,
-            long endTime, int eventType, int status) {
+
+    @Generated(hash = 1747981908)
+    public Event(String eventUid, String eventId, String hostUserUid, String userUid,
+            String calendarUid, String iCalUID, String recurringEventUid, String recurringEventId,
+            String recurrence, String status, String summary, long startTime, long endTime,
+            String description, String location, String locationNote, String locationLatitude,
+            String locationLongitude, String eventType, int reminder, int freebusyAccess,
+            String source, int deleteLevel, int icsSequence, String url) {
         this.eventUid = eventUid;
         this.eventId = eventId;
-        this.recurringEventUid = recurringEventUid;
-        this.recurringEventId = recurringEventId;
+        this.hostUserUid = hostUserUid;
+        this.userUid = userUid;
         this.calendarUid = calendarUid;
         this.iCalUID = iCalUID;
-        this.hostUserUid = hostUserUid;
+        this.recurringEventUid = recurringEventUid;
+        this.recurringEventId = recurringEventId;
         this.recurrence = recurrence;
+        this.status = status;
         this.summary = summary;
-        this.url = url;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.description = description;
         this.location = location;
         this.locationNote = locationNote;
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
-        this.note = note;
-        this.alertTime = alertTime;
-        this.photo = photo;
-        this.startTime = startTime;
-        this.endTime = endTime;
         this.eventType = eventType;
-        this.status = status;
+        this.reminder = reminder;
+        this.freebusyAccess = freebusyAccess;
+        this.source = source;
+        this.deleteLevel = deleteLevel;
+        this.icsSequence = icsSequence;
+        this.url = url;
     }
-
+    
 
 
     @Override
@@ -154,20 +146,34 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
 
     public long getEndTime(){return endTime;}
 
-    public void setEventType(int eventType) {
+
+    @Override
+    public int getDisplayEventType() {
+        return EventUtil.parseEventType(this.eventType);
+    }
+
+
+    @Override
+    public int getDisplayStatus() {
+        return EventUtil.parseEventStatus(this.status);
+    }
+
+    public String getEventType(){
+        return this.eventType;
+    }
+
+
+    public void setEventType(String eventType) {
         this.eventType = eventType;
     }
 
-    public int getEventType() {
-        return eventType;
-    }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public int getDuration(){
@@ -376,21 +382,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.locationNote = locationNote;
     }
 
-    public double getLocationLatitude() {
-        return locationLatitude;
-    }
-
-    public void setLocationLatitude(double locationLatitude) {
-        this.locationLatitude = locationLatitude;
-    }
-
-    public double getLocationLongitude() {
-        return locationLongitude;
-    }
-
-    public void setLocationLongitude(double locationLongitude) {
-        this.locationLongitude = locationLongitude;
-    }
 
 
     public long getRepeatEndsTime() {
@@ -405,30 +396,30 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Generated(hash = 1734061039)
-    public List<TimeSlot> getTimeslots() {
-        if (timeslots == null) {
+    @Keep
+    public List<TimeSlot> getTimeslot() {
+        if (timeslot == null) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
             TimeSlotDao targetDao = daoSession.getTimeSlotDao();
-            List<TimeSlot> timeslotsNew = targetDao._queryEvent_Timeslots(eventUid);
+            List<TimeSlot> timeslotsNew = targetDao._queryEvent_Timeslot(eventUid);
             synchronized (this) {
-                if(timeslots == null) {
-                    timeslots = timeslotsNew;
+                if(timeslot == null) {
+                    timeslot = timeslotsNew;
                 }
             }
         }
-        return timeslots;
+        return timeslot;
     }
 
 
 
 
 
-    public void setTimeslots(List<TimeSlot> timeslots) {
-        this.timeslots = timeslots;
+    public void setTimeslot(List<TimeSlot> timeslot) {
+        this.timeslot = timeslot;
     }
 
 
@@ -436,17 +427,16 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
 
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    @Generated(hash = 481094641)
     public synchronized void resetTimeslots() {
-        timeslots = null;
+        timeslot = null;
     }
 
-    public String getNote() {
-        return note;
+    public String getDescription() {
+        return description;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public boolean hasAttendee(){
@@ -454,16 +444,9 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     }
 
     public boolean hasTimeslots(){
-        return timeslots!=null;
+        return timeslot !=null;
     }
 
-    public boolean isHost() {
-        return isHost;
-    }
-
-    public void setHost(boolean host) {
-        isHost = host;
-    }
 
     public String getHostUserUid() {
         return hostUserUid;
@@ -474,38 +457,132 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     }
 
 
-    public List<PhotoUrl> getPhotoList() {
-            Gson gson = new Gson();
-            Type collectionType = new TypeToken<Collection<PhotoUrl>>(){}.getType();
 
 
-        return gson.fromJson(photo, collectionType);
+
+    public int getReminder() {
+        return reminder;
     }
 
-    public void setPhoto(List<PhotoUrl> photoUrls) {
-        Gson gson = new Gson();
-        this.photo = gson.toJson(photoUrls);
-        this.photoList = photoUrls;
+    public void setReminder(int reminder) {
+        this.reminder = reminder;
+    }
+
+    public String getLocationLatitude() {
+        return locationLatitude;
+    }
+
+    public void setLocationLatitude(String locationLatitude) {
+        this.locationLatitude = locationLatitude;
+    }
+
+    public String getLocationLongitude() {
+        return locationLongitude;
+    }
+
+    public void setLocationLongitude(String locationLongitude) {
+        this.locationLongitude = locationLongitude;
+    }
+
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
+    }
+
+    public int getFreebusyAccess() {
+        return freebusyAccess;
+    }
+
+    public void setFreebusyAccess(int freebusyAccess) {
+        this.freebusyAccess = freebusyAccess;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public int getDeleteLevel() {
+        return deleteLevel;
+    }
+
+    public void setDeleteLevel(int deleteLevel) {
+        this.deleteLevel = deleteLevel;
+    }
+
+    public int getIcsSequence() {
+        return icsSequence;
+    }
+
+    public void setIcsSequence(int icsSequence) {
+        this.icsSequence = icsSequence;
     }
 
 
 
-    public String getPhoto() {
-        return this.photo;
+
+
+
+
+
+
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1064579105)
+    public synchronized void resetPhoto() {
+        photo = null;
     }
 
 
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+
+
+
+
+
+
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 1838651466)
+    public List<PhotoUrl> getPhoto() {
+        if (photo == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            PhotoUrlDao targetDao = daoSession.getPhotoUrlDao();
+            List<PhotoUrl> photoNew = targetDao._queryEvent_Photo(eventUid);
+            synchronized (this) {
+                if(photo == null) {
+                    photo = photoNew;
+                }
+            }
+        }
+        return photo;
     }
 
-    public int getAlertTime() {
-        return alertTime;
+    public void setPhoto(List<PhotoUrl> photoUrls){
+        this.photo = photoUrls;
     }
 
-    public void setAlertTime(int alertTime) {
-        this.alertTime = alertTime;
+    public boolean hasPhoto(){
+        return photo!=null && photo.size()>0;
     }
 
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1454601787)
+    public synchronized void resetTimeslot() {
+        timeslot = null;
+    }
 }

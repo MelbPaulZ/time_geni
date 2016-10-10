@@ -40,6 +40,7 @@ import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.presenter.EmptyPresenter;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
 import org.unimelb.itime.vendor.contact.helper.ClearEditText;
@@ -156,7 +157,7 @@ public class InviteeFragment extends BaseUiFragment {
         protected Integer doInBackground(Integer... arg0) {
             int result = -1;
             //load contacts info
-            List<ITimeContactInterface> contact_models = loadContacts();
+            List<? extends ITimeContactInterface> contact_models = loadContacts();
 
             for (ITimeContactInterface contact_model :contact_models
                     ) {
@@ -370,8 +371,7 @@ public class InviteeFragment extends BaseUiFragment {
         ArrayList<ITimeContactInterface> contacts = getAllSelectedContacts();
 
         if (hasPublicEntity(contacts)){
-            // means choose the public, 0=solo, 1=group, 2=public
-            event.setEventType(2);
+            event.setEventType("public");
             event.getInvitee().clear();
         }else{
             for (ITimeContactInterface iTimeContactInterface : contacts) {
@@ -437,8 +437,9 @@ public class InviteeFragment extends BaseUiFragment {
         Invitee invitee = new Invitee();
         invitee.setEventUid(event.getEventUid());
         invitee.setInviteeUid(contact.getContactUid());
-        invitee.setContact(contact);
-
+        invitee.setStatus("needsAction");
+        invitee.setAliasPhoto(contact.getPhoto());
+        invitee.setAliasName(contact.getName());
         return invitee;
     }
 
@@ -452,18 +453,11 @@ public class InviteeFragment extends BaseUiFragment {
      * load contacts
      ***********************************************/
     /*********************************** load contacts ***********************************************/
-    public List<ITimeContactInterface> loadContacts() {
-        return simulateContacts();
+    public List<? extends ITimeContactInterface> loadContacts() {
+        return DBManager.getInstance(getContext()).getAllContact();
     }
 
-    private List<ITimeContactInterface> simulateContacts(){
-        List<ITimeContactInterface> contacts = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
-            contacts.add(new Contact("" + i ,"http://esczx.baixing.com/uploadfile/2016/0427/20160427112336847.jpg","周二珂 " + i));
-        }
-        return contacts;
-    }
 
 
 }

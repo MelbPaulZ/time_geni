@@ -7,18 +7,15 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.squareup.picasso.Picasso;
@@ -30,9 +27,7 @@ import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
-import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
@@ -317,7 +312,7 @@ public class EventCreateNewVIewModel extends BaseObservable {
                 builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        event.setAlertTime(i);
+                        event.setReminder(i);
                         setEvent(event);
                     }
                 });

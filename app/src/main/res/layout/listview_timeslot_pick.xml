@@ -24,7 +24,7 @@
             android:layout_height="23dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="14dp"
-            android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent.timeslots.get(position)) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}" />
+            android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent.timeslot.get(position)) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}" />
 
         <!--this is timeslot string-->
         <TextView
@@ -34,7 +34,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="13dp"
             android:layout_toRightOf="@+id/event_detail_host_ic_circle"
-            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, viewmodel.evDtlHostEvent.timeslots.get(position).getStartTime(),viewmodel.evDtlHostEvent.timeslots.get(position).getEndTime() )}"
+            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, viewmodel.evDtlHostEvent.timeslot.get(position).getStartTime(),viewmodel.evDtlHostEvent.timeslot.get(position).getEndTime() )}"
             android:textColor="@color/text_enable"
             android:textSize="17sp" />
 

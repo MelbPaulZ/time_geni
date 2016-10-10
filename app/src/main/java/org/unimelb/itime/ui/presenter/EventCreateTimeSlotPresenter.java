@@ -8,7 +8,6 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
-import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.util.EventUtil;
 
@@ -86,7 +85,7 @@ public class EventCreateTimeSlotPresenter extends MvpBasePresenter<EventCreateNe
             timeSlot3.setEndTime(calendar2.getTimeInMillis()+3600000);
             timeSlots.add(timeSlot3);
 
-            event.setTimeslots(timeSlots);
+            event.setTimeslot(timeSlots);
     }
 
 }

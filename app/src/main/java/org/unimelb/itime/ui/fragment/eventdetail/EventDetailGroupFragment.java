@@ -52,7 +52,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
 
     public void setProposedTimeSlots(Event event){
         // for timeslots, use list view to show
-        EventTimeSlotAdapter timeSlotAdapter = new EventTimeSlotAdapter(getContext(), R.layout.listview_timeslot_pick, event.getTimeslots(), eventDetailForHostViewModel);
+        EventTimeSlotAdapter timeSlotAdapter = new EventTimeSlotAdapter(getContext(), R.layout.listview_timeslot_pick, event.getTimeslot(), eventDetailForHostViewModel);
         timeSlotAdapter.setAdapterEvent(event);
         binding.eventDetailTimeslotListview.setAdapter(timeSlotAdapter);
     }

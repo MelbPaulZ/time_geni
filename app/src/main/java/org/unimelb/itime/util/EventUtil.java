@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.C;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
@@ -18,7 +17,9 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Paul on 8/09/2016.
@@ -139,7 +140,7 @@ public class EventUtil{
     public static Event getEventInDB(Context context,String eventUid){
         Event event = DBManager.getInstance(context).getEvent(eventUid);
         event.getInvitee();
-        event.getTimeslots();
+        event.getTimeslot();
         return event;
     }
 
@@ -279,11 +280,15 @@ public class EventUtil{
     }
 
     public static String getEventConfirmStatus(Event event){
-        switch (event.getStatus()){
+        switch (event.getDisplayStatus()){
             case 0:
                 return "has not confirmed this event";
             case 1:
+                return "has updating this event";
+            case 2:
                 return "has confirmed this event";
+            case 3:
+                return "has cancelled this event";
             default:
                 return "has confirmed this event";
         }
@@ -297,5 +302,30 @@ public class EventUtil{
 
     public static String getRepeatString(Event event){
         return "Not repeat";
+    }
+
+
+    public static int parseEventType(String type){
+        Map<String, Integer> map = new HashMap<>();
+        map.put("solo", 0);
+        map.put("group",1);
+        map.put("public",2);
+        if (!map.containsKey(type)){
+            return 0;
+        }
+        return map.get(type);
+    }
+
+    public static int parseEventStatus(String Status){
+        Map<String, Integer> map = new HashMap<>();
+        map.put("pending", 0);
+        map.put("updating",1);
+        map.put("confirmed",2);
+        map.put("cancelled",3);
+
+        if (!map.containsKey(Status)){
+            return 0;
+        }
+        return map.get(Status);
     }
 }

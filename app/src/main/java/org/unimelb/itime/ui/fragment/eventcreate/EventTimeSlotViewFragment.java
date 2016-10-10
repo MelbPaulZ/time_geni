@@ -19,11 +19,9 @@ import com.wx.wheelview.widget.WheelView;
 import org.unimelb.itime.R;
 
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
-import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
@@ -119,7 +117,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
                        getString(R.string.timeslot_status_create),
                        0,
                        0);
-               event.getTimeslots().add(timeSlot);
+               event.getTimeslot().add(timeSlot);
                WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct)timeSlotView.getTag();
                struct.object =timeSlot;
 
@@ -127,7 +125,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
            @Override
            public void onTimeSlotClick(TimeSlotView timeSlotView) {
-               if (TimeSlotUtil.getPendingTimeSlots(getContext(),event.getTimeslots()).size() >=7){
+               if (TimeSlotUtil.getPendingTimeSlots(getContext(),event.getTimeslot()).size() >=7){
                    if (timeSlotView.isSelect()){
                        changeTimeSlots(timeSlotView);
                    }else{
@@ -225,9 +223,9 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
                 // avoid of no timeslot error
                 if (!event.hasTimeslots()){
-                    event.setTimeslots(new ArrayList<TimeSlot>());
+                    event.setTimeslot(new ArrayList<TimeSlot>());
                 }
-                for (TimeSlot timeSlot: event.getTimeslots()){
+                for (TimeSlot timeSlot: event.getTimeslot()){
                     timeSlot.setEndTime(timeSlot.getStartTime() + 1000 * 60 * (pickHour[0] * 60 + pickMinute[0]));
                 }
                 viewModel.setEvent(event);
@@ -301,7 +299,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     @Override
     public void initTimeSlots(Event event) {
         if (event.hasTimeslots()) {
-            for (TimeSlot timeSlot : event.getTimeslots()) {
+            for (TimeSlot timeSlot : event.getTimeslot()) {
                 WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
                 struct.startTime = timeSlot.getStartTime();
                 struct.endTime = timeSlot.getEndTime();

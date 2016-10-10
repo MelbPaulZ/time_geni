@@ -21,7 +21,6 @@ import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
-import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
@@ -65,7 +64,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     public void setProposedTimeSlots(Event event){
         if (event.hasTimeslots()){
             ArrayList<String> timeslotArrayList = new ArrayList<>();
-            for (TimeSlot timeSlot: event.getTimeslots()){
+            for (TimeSlot timeSlot: event.getTimeslot()){
                 timeslotArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()));
             }
             ArrayAdapter stringAdapter = new ArrayAdapter(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotArrayList);

@@ -23,9 +23,7 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by Paul on 10/09/2016.
@@ -69,7 +67,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
                             getContext().getString(R.string.timeslot_status_pending),
                             0,
                             0);
-                    eventDetailHostEvent.getTimeslots().add(timeSlot);
+                    eventDetailHostEvent.getTimeslot().add(timeSlot);
                     WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct)timeSlotView.getTag();
                     struct.object =timeSlot;
                 }else{
@@ -164,7 +162,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         if (UserUtil.getUserUid().equals(eventDetailHostEvent.getHostUserUid())){
             // for host , only one timeslot can be selected
             // change here
-           if (TimeSlotUtil.getSelectedTimeSlots(getContext(),eventDetailHostEvent.getTimeslots()).size()<1){
+           if (TimeSlotUtil.getSelectedTimeSlots(getContext(),eventDetailHostEvent.getTimeslot()).size()<1){
                changeTimeSlotView(timeSlotView);
                changeEventAttributes(timeSlotView);
            }else{

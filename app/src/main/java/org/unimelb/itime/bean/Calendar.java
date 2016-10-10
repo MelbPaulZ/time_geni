@@ -10,28 +10,20 @@ public class Calendar {
     private String access;
     private String status;
     private String calendarUid;
-    private int groupUid;
+    private String groupUid;
     private String groupTitle;
     private int visibility;
     private int deleteLevel;
     private String createdAt;
     private String updatedAt;
+    private String userUid;
 
     public String getiCalUID() {
         return iCalUID;
     }
 
-    public int getDeleteLevel() {
-        return deleteLevel;
-    }
-
-    public void setDeleteLevel(int deleteLevel) {
-        this.deleteLevel = deleteLevel;
-    }
-
     public void setiCalUID(String iCalUID) {
         this.iCalUID = iCalUID;
-
     }
 
     public String getSummary() {
@@ -74,11 +66,11 @@ public class Calendar {
         this.calendarUid = calendarUid;
     }
 
-    public int getGroupUid() {
+    public String getGroupUid() {
         return groupUid;
     }
 
-    public void setGroupUid(int groupUid) {
+    public void setGroupUid(String groupUid) {
         this.groupUid = groupUid;
     }
 
@@ -98,6 +90,14 @@ public class Calendar {
         this.visibility = visibility;
     }
 
+    public int getDeleteLevel() {
+        return deleteLevel;
+    }
+
+    public void setDeleteLevel(int deleteLevel) {
+        this.deleteLevel = deleteLevel;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -112,5 +112,13 @@ public class Calendar {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 }

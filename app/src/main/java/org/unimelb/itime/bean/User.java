@@ -3,6 +3,7 @@ package org.unimelb.itime.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Keep;
 
 import java.io.Serializable;
 
@@ -15,43 +16,44 @@ import java.io.Serializable;
 )
 public class User implements Serializable{
 
-    private String id;
+    private String userUid;
     private String userId;
     private String personalAlias;
-    private String bindingEmail;
-    private String bindingFacebookId;
-    private String bindingPhone;
-    private String profilePhotoUrl;
-    private long defaultEventAlertTimeId;
+    private String email;
+    private String phone;
+    private String photo;
+    private String source;
     private String deviceToken;
     private String deviceId;
-    private String defaultRatingVisibilityTypeId;
-    private String defaultEventVisibilityTypeId;
-    private String ifAcceptPublicEventPush;
     private String averageRatingValue;
+    private String timezone;
+    private String lastSigninTime;
+    private int signinCount;
     private String createdAt;
     private String updatedAt;
-    @Generated(hash = 205950960)
-    public User(String id, String userId, String personalAlias, String bindingEmail,
-            String bindingFacebookId, String bindingPhone, String profilePhotoUrl,
-            long defaultEventAlertTimeId, String deviceToken, String deviceId,
-            String defaultRatingVisibilityTypeId, String defaultEventVisibilityTypeId,
-            String ifAcceptPublicEventPush, String averageRatingValue, String createdAt,
+
+
+
+
+    @Generated(hash = 6482242)
+    public User(String userUid, String userId, String personalAlias, String email,
+            String phone, String photo, String source, String deviceToken,
+            String deviceId, String averageRatingValue, String timezone,
+            String lastSigninTime, int signinCount, String createdAt,
             String updatedAt) {
-        this.id = id;
+        this.userUid = userUid;
         this.userId = userId;
         this.personalAlias = personalAlias;
-        this.bindingEmail = bindingEmail;
-        this.bindingFacebookId = bindingFacebookId;
-        this.bindingPhone = bindingPhone;
-        this.profilePhotoUrl = profilePhotoUrl;
-        this.defaultEventAlertTimeId = defaultEventAlertTimeId;
+        this.email = email;
+        this.phone = phone;
+        this.photo = photo;
+        this.source = source;
         this.deviceToken = deviceToken;
         this.deviceId = deviceId;
-        this.defaultRatingVisibilityTypeId = defaultRatingVisibilityTypeId;
-        this.defaultEventVisibilityTypeId = defaultEventVisibilityTypeId;
-        this.ifAcceptPublicEventPush = ifAcceptPublicEventPush;
         this.averageRatingValue = averageRatingValue;
+        this.timezone = timezone;
+        this.lastSigninTime = lastSigninTime;
+        this.signinCount = signinCount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -60,12 +62,15 @@ public class User implements Serializable{
     public User() {
     }
 
-    public String getId() {
-        return id;
+
+
+    
+    public String getUserUid() {
+        return userUid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 
     public String getUserId() {
@@ -84,44 +89,36 @@ public class User implements Serializable{
         this.personalAlias = personalAlias;
     }
 
-    public String getBindingEmail() {
-        return bindingEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setBindingEmail(String bindingEmail) {
-        this.bindingEmail = bindingEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getBindingFacebookId() {
-        return bindingFacebookId;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setBindingFacebookId(String bindingFacebookId) {
-        this.bindingFacebookId = bindingFacebookId;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getBindingPhone() {
-        return bindingPhone;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setBindingPhone(String bindingPhone) {
-        this.bindingPhone = bindingPhone;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
-    public String getProfilePhotoUrl() {
-        return profilePhotoUrl;
+    public String getSource() {
+        return source;
     }
 
-    public void setProfilePhotoUrl(String profilePhotoUrl) {
-        this.profilePhotoUrl = profilePhotoUrl;
-    }
-
-    public long getDefaultEventAlertTimeId() {
-        return defaultEventAlertTimeId;
-    }
-
-    public void setDefaultEventAlertTimeId(long defaultEventAlertTimeId) {
-        this.defaultEventAlertTimeId = defaultEventAlertTimeId;
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getDeviceToken() {
@@ -140,30 +137,6 @@ public class User implements Serializable{
         this.deviceId = deviceId;
     }
 
-    public String getDefaultRatingVisibilityTypeId() {
-        return defaultRatingVisibilityTypeId;
-    }
-
-    public void setDefaultRatingVisibilityTypeId(String defaultRatingVisibilityTypeId) {
-        this.defaultRatingVisibilityTypeId = defaultRatingVisibilityTypeId;
-    }
-
-    public String getDefaultEventVisibilityTypeId() {
-        return defaultEventVisibilityTypeId;
-    }
-
-    public void setDefaultEventVisibilityTypeId(String defaultEventVisibilityTypeId) {
-        this.defaultEventVisibilityTypeId = defaultEventVisibilityTypeId;
-    }
-
-    public String getIfAcceptPublicEventPush() {
-        return ifAcceptPublicEventPush;
-    }
-
-    public void setIfAcceptPublicEventPush(String ifAcceptPublicEventPush) {
-        this.ifAcceptPublicEventPush = ifAcceptPublicEventPush;
-    }
-
     public String getAverageRatingValue() {
         return averageRatingValue;
     }
@@ -171,6 +144,23 @@ public class User implements Serializable{
     public void setAverageRatingValue(String averageRatingValue) {
         this.averageRatingValue = averageRatingValue;
     }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+
+    public String getLastSigninTime() {
+        return lastSigninTime;
+    }
+
+    public void setLastSigninTime(String lastSigninTime) {
+        this.lastSigninTime = lastSigninTime;
+    }
+
 
     public String getCreatedAt() {
         return createdAt;
@@ -186,6 +176,14 @@ public class User implements Serializable{
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public int getSigninCount() {
+        return signinCount;
+    }
+
+    public void setSigninCount(int signinCount) {
+        this.signinCount = signinCount;
     }
 }
 

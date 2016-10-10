@@ -7,12 +7,14 @@ import org.greenrobot.greendao.query.QueryBuilder;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.InviteeDao;
+import org.unimelb.itime.dao.PhotoUrlDao;
 import org.unimelb.itime.dao.TimeSlotDao;
 
 import java.util.List;
@@ -51,6 +53,13 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDaoDao = daoSession.getEventDao();
         eventDaoDao.insert(event);
+    }
+
+    public void insertPhoto(PhotoUrl photoUrl){
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        PhotoUrlDao photoUrlDao = daoSession.getPhotoUrlDao();
+        photoUrlDao.insert(photoUrl);
     }
 
     public void insertInvitee(Invitee invitee) {

@@ -103,6 +103,8 @@ public class CalendarMonthDayFragment extends Fragment {
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.INIT_DB) {
             monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
+            Calendar calendar = Calendar.getInstance();
+            long time = calendar.getTimeInMillis();
             monthDayView.reloadEvents();
             monthDayView.requestLayout();
         }

@@ -82,7 +82,7 @@ public class EventDetailViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslots()).get(0);
+                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
                 presenter.confirmEvent(evDtlHostEvent, newTimeSlot);
                 if (mvpView!=null){
                     mvpView.toCalendar();
@@ -143,7 +143,7 @@ public class EventDetailViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslots()).get(0);
+//                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
 //                evDtlHostEvent.setStartTime(newTimeSlot.getStartTime());
 //                evDtlHostEvent.setEndTime(newTimeSlot.getEndTime());
                 if (mvpView!=null){
@@ -159,11 +159,11 @@ public class EventDetailViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimeSlot timeSlot = evDtlHostEvent.getTimeslots().get(position);
+                TimeSlot timeSlot = evDtlHostEvent.getTimeslot().get(position);
                 if (evDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
                     // host can only confirm one timeslot
                     if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))){
-                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(), evDtlHostEvent.getTimeslots())){
+                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(), evDtlHostEvent.getTimeslot())){
                             // already has one timeslot
                             unselectRestTimeSlots(position);
                             timeSlot.setStatus(context.getString(R.string.timeslot_status_accept));
@@ -193,7 +193,7 @@ public class EventDetailViewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    mvpView.viewInviteeResponse(evDtlHostEvent.getTimeslots().get(position));
+                    mvpView.viewInviteeResponse(evDtlHostEvent.getTimeslot().get(position));
                 }
             }
         };
@@ -213,9 +213,9 @@ public class EventDetailViewModel extends BaseObservable {
     }
 
     public void unselectRestTimeSlots(int notChangePostion){
-        for (int i = 0; i < evDtlHostEvent.getTimeslots().size() ; i ++){
+        for (int i = 0; i < evDtlHostEvent.getTimeslot().size() ; i ++){
             if (i != notChangePostion){
-                evDtlHostEvent.getTimeslots().get(i).setStatus(context.getString(R.string.timeslot_status_pending));
+                evDtlHostEvent.getTimeslot().get(i).setStatus(context.getString(R.string.timeslot_status_pending));
             }
         }
     }

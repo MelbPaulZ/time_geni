@@ -18,12 +18,9 @@ import android.widget.TimePicker;
 
 import com.android.databinding.library.baseAdapters.BR;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
-import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
@@ -98,7 +95,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
                 builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        newEvDtlEvent.setAlertTime(i);
+                        newEvDtlEvent.setReminder(i);
                         setNewEvDtlEvent(newEvDtlEvent);
                     }
                 });
@@ -218,12 +215,12 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
 
                 // pending Timeslots filtered out timeslots which not is not chosed by host
                 List<TimeSlot> pendingTimeslots = new ArrayList<>();
-                for (TimeSlot timeSlot : newEvDtlEvent.getTimeslots()){
+                for (TimeSlot timeSlot : newEvDtlEvent.getTimeslot()){
                     if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
                         pendingTimeslots.add(timeSlot);
                     }
                 }
-                newEvDtlEvent.setTimeslots(pendingTimeslots);
+                newEvDtlEvent.setTimeslot(pendingTimeslots);
                 newEvDtlEvent.setHostUserUid(UserUtil.getUserUid());
 
                 presenter.addEvent(newEvDtlEvent);

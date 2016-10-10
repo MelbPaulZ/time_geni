@@ -6,11 +6,8 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.TimeSlot;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Paul on 10/09/2016.
@@ -68,7 +65,7 @@ public class TimeSlotUtil {
     }
 
     public static TimeSlot getTimeSlot(Event event, TimeSlot timeSlot){
-        for (TimeSlot eventTimeSlot : event.getTimeslots()){
+        for (TimeSlot eventTimeSlot : event.getTimeslot()){
             if(eventTimeSlot.getTimeSlotUid() == timeSlot.getTimeSlotUid()){
                 return eventTimeSlot;
             }

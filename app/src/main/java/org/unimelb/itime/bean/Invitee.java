@@ -1,5 +1,7 @@
 package org.unimelb.itime.bean;
 
+import android.support.annotation.Nullable;
+
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -11,65 +13,31 @@ import org.unimelb.itime.dao.InviteeDao;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by yuhaoliu on 10/09/2016.
  */
 @Entity
 public class Invitee implements ITimeInviteeInterface, Serializable {
-    @ToOne(joinProperty = "inviteeUid")
-    private Contact contact;
-
     private String eventUid;
     private String inviteeUid;
+    private String aliasName;
+    private String aliasPhoto;
+    private String status;
 
-    @Generated(hash = 178378225)
-    private transient String contact__resolvedKey;
-
-    /** Used for active entity operations. */
-    @Generated(hash = 1821175217)
-    private transient InviteeDao myDao;
-
-    /** Used to resolve relations */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-
-    @Keep
-    public Invitee(String inviteeUid, String eventUid, Contact contact) {
-        this.inviteeUid = inviteeUid;
-        this.eventUid = eventUid;
-        this.contact = contact;
-    }
-
-    @Generated(hash = 1942268371)
-    public Invitee(String eventUid, String inviteeUid) {
+    @Generated(hash = 1566734362)
+    public Invitee(String eventUid, String inviteeUid, String aliasName,
+            String aliasPhoto, String status) {
         this.eventUid = eventUid;
         this.inviteeUid = inviteeUid;
+        this.aliasName = aliasName;
+        this.aliasPhoto = aliasPhoto;
+        this.status = status;
     }
 
     @Generated(hash = 15121660)
     public Invitee() {
-    }
-
-    @Override
-    public String getName() {
-        if(this.contact == null){
-            this.contact = this.getContact();
-        }
-        return this.contact.getName();
-    }
-
-    @Override
-    public String getInviteeUid() {
-        return this.inviteeUid;
-    }
-
-    @Override
-    public String getPhoto() {
-        if(this.contact == null){
-            this.contact = this.getContact();
-        }
-        return this.contact.getPhoto();
     }
 
     public String getEventUid() {
@@ -80,79 +48,47 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
         this.eventUid = eventUid;
     }
 
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 1942392019)
-    public void refresh() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.refresh(this);
+    @Nullable
+    @Override
+    public String getPhoto() {
+        return this.getAliasPhoto();
     }
 
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 713229351)
-    public void update() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.update(this);
+    @Override
+    public String getName() {
+        return getAliasName();
     }
 
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 128553479)
-    public void delete() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.delete(this);
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 2090218591)
-    public void setContact(Contact contact) {
-        synchronized (this) {
-            this.contact = contact;
-            inviteeUid = contact == null ? null : contact.getContactUid();
-            contact__resolvedKey = inviteeUid;
-        }
-    }
-
-    /** To-one relationship, resolved on first access. */
-    @Generated(hash = 110314383)
-    public Contact getContact() {
-        String __key = this.inviteeUid;
-        if (contact__resolvedKey == null || contact__resolvedKey != __key) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            ContactDao targetDao = daoSession.getContactDao();
-            Contact contactNew = targetDao.load(__key);
-            synchronized (this) {
-                contact = contactNew;
-                contact__resolvedKey = __key;
-            }
-        }
-        return contact;
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1688020831)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getInviteeDao() : null;
+    @Override
+    public String getInviteeUid() {
+        return inviteeUid;
     }
 
     public void setInviteeUid(String inviteeUid) {
         this.inviteeUid = inviteeUid;
+    }
+
+    public String getAliasName() {
+        return aliasName;
+    }
+
+    public void setAliasName(String aliasName) {
+        this.aliasName = aliasName;
+    }
+
+    public String getAliasPhoto() {
+        return aliasPhoto;
+    }
+
+    public void setAliasPhoto(String aliasPhoto) {
+        this.aliasPhoto = aliasPhoto;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
