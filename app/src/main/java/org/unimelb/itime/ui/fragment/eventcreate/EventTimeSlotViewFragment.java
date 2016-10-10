@@ -32,6 +32,7 @@ import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -71,6 +72,8 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
     public void setEvent(Event event){
         this.event = event;
+        getPresenter().setEvent(event);
+        viewModel.setEvent(event);
     }
 
     private void changeTimeSlots(TimeSlotView timeSlotView){
@@ -94,7 +97,14 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         }
     }
 
+    @Override
+    public void onEnter() {
+        super.onEnter();
+        // need to change later
+        Calendar calendar = Calendar.getInstance();
+        presenter.getTimeSlots(calendar.getTimeInMillis());
 
+    }
 
     private void initListeners(){
         durationRelativeLayout = (RelativeLayout) getActivity().findViewById(R.id.duration_relative_layout);

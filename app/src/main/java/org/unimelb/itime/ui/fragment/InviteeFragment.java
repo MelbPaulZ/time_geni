@@ -40,6 +40,7 @@ import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.presenter.EmptyPresenter;
+import org.unimelb.itime.ui.presenter.InviteePresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
@@ -91,7 +92,7 @@ public class InviteeFragment extends BaseUiFragment {
 
     @Override
     public MvpPresenter createPresenter() {
-        return new EmptyPresenter();
+        return new InviteePresenter(context);
     }
 
     @Override

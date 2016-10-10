@@ -57,7 +57,7 @@ public class RemoteService extends Service{
     }
 
     private void initDBFromRemote(){
-//        fetchCalendar();
+        fetchCalendar();
         fetchContact();
     }
 

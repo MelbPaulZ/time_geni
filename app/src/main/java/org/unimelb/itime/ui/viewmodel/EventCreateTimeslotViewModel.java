@@ -42,10 +42,9 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
         titleString = initToolBarTitle();
         event= EventManager.getInstance().getCurrentEvent();
         mvpView = presenter.getView();
-        presenter.initData(event);
+//        presenter.initData(event);
         initTimeSlots();
     }
-
     public void initTimeSlots(){
         if (mvpView!=null){
             mvpView.initTimeSlots(event);
@@ -79,6 +78,10 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
            @Override
            public void onMonthChanged(MyCalendar myCalendar) {
                setTitleString((EventUtil.getMonth(presenter.getContext(), myCalendar.getMonth()) + " "  + myCalendar.getYear()));
+               Calendar calendar = Calendar.getInstance();
+               calendar.set(myCalendar.getYear(), myCalendar.getMonth(), myCalendar.getDay(), 0, 0,0 );
+               long weekStartTime = calendar.getTimeInMillis();
+               presenter.getTimeSlots(weekStartTime);
            }
        };
     }

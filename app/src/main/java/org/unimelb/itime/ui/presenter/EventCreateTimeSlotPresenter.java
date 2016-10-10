@@ -1,31 +1,49 @@
 package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.restfulapi.EventApi;
+import org.unimelb.itime.restfulresponse.HttpResult;
+import org.unimelb.itime.restfulresponse.UserLoginRes;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.HttpUtil;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by Paul on 27/08/2016.
  */
 public class EventCreateTimeSlotPresenter extends MvpBasePresenter<EventCreateNewTimeSlotMvpView> {
-    private final String TAG = "EventCreateTimeSlotPresenter";
+    private final String TAG = "CreateTimeSlotPresenter";
     private Context context;
     private LayoutInflater inflater;
+    private EventApi eventApi;
+    private Event event;
     public EventCreateTimeSlotPresenter(Context context) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
+        eventApi = HttpUtil.createService(context, EventApi.class);
+    }
+
+    public void setEvent(Event event){
+        this.event = event;
     }
 
     public Context getContext() {
@@ -35,6 +53,31 @@ public class EventCreateTimeSlotPresenter extends MvpBasePresenter<EventCreateNe
 
     public LayoutInflater getInflater() {
         return inflater;
+    }
+
+    public void getTimeSlots(long startTime) {
+        List<Invitee> invitees = event.getInvitee();
+
+        Observable<HttpResult<List<TimeSlot>>> observable = eventApi.recommend(invitees, startTime);
+        Subscriber<HttpResult<List<TimeSlot>>> subscriber = new Subscriber<HttpResult<List<TimeSlot>>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(HttpResult<List<TimeSlot>> listHttpResult) {
+//                List<TimeSlot>
+                Log.i(TAG, "onNext: ");
+            }
+        };
+
+        HttpUtil.subscribe(observable, subscriber);
     }
 
 

@@ -1,11 +1,15 @@
 package org.unimelb.itime.restfulapi;
 
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.restfulresponse.HttpResult;
 
 import java.util.List;
 
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -44,6 +48,10 @@ public interface EventApi {
 
     @POST("event/timeslot/reject/{eventUid}")
     Observable<HttpResult<List<Event>>> rejectTimeslot();
+
+    @FormUrlEncoded
+    @POST("event/timeslot/recommend")
+    Observable<HttpResult<List<TimeSlot>>> recommend(@Field("invitee") List<Invitee> inviteeList, @Field("startTime") long startTime);
 
 
 }

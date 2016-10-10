@@ -45,6 +45,8 @@ public abstract class BaseUiFragment<V extends MvpView, P extends MvpPresenter<V
 
     public void switchFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to){
         to.setFrom(from);
+        from.onLeave();
+        to.onEnter();
         // switch
         getFragmentManager().beginTransaction().hide(from).show(to).commit();
     }
@@ -62,10 +64,20 @@ public abstract class BaseUiFragment<V extends MvpView, P extends MvpPresenter<V
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         // hide soft key board
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (getView()!=null) {
-            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+        if (!hidden) {
+            final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (getView() != null) {
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
         }
+    }
+
+    public void onEnter(){
+
+    }
+
+    public void onLeave(){
+
     }
 
 
