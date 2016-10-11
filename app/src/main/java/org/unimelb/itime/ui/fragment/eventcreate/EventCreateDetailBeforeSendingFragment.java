@@ -15,7 +15,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventCreateBeforeSendingBinding;
 import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.messageevent.MessageInvitees;
@@ -73,7 +73,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
 
     public void setTimeSlotListView(){
         ArrayList<String> timeslotsArrayList = new ArrayList<>();
-        for (TimeSlot timeSlot: event.getTimeslot()){
+        for (Timeslot timeSlot: event.getTimeslot()){
             // only display chosen timeSlot
             if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending)))
                 timeslotsArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()) );

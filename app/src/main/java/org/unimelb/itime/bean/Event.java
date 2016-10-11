@@ -9,6 +9,8 @@ import org.greenrobot.greendao.annotation.ToMany;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.InviteeDao;
+import org.unimelb.itime.dao.PhotoUrlDao;
+import org.unimelb.itime.dao.TimeslotDao;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
@@ -16,8 +18,6 @@ import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.unimelb.itime.dao.TimeSlotDao;
-import org.unimelb.itime.dao.PhotoUrlDao;
 
 /**
  * Created by yinchuandong on 22/08/2016.
@@ -58,7 +58,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private List<PhotoUrl> photo = null;
 
     @ToMany(referencedJoinProperty = "eventUid")
-    private List<TimeSlot> timeslot = null;
+    private List<Timeslot> timeslot = null;
 
     // later delete
     private transient long repeatEndsTime;
@@ -397,14 +397,14 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
     @Keep
-    public List<TimeSlot> getTimeslot() {
+    public List<Timeslot> getTimeslot() {
         if (timeslot == null) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            TimeSlotDao targetDao = daoSession.getTimeSlotDao();
-            List<TimeSlot> timeslotsNew = targetDao._queryEvent_Timeslot(eventUid);
+            TimeslotDao targetDao = daoSession.getTimeslotDao();
+            List<Timeslot> timeslotsNew = targetDao._queryEvent_Timeslot(eventUid);
             synchronized (this) {
                 if(timeslot == null) {
                     timeslot = timeslotsNew;
@@ -418,7 +418,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
 
 
 
-    public void setTimeslot(List<TimeSlot> timeslot) {
+    public void setTimeslot(List<Timeslot> timeslot) {
         this.timeslot = timeslot;
     }
 

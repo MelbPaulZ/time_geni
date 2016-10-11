@@ -8,14 +8,14 @@ import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.InviteeDao;
 import org.unimelb.itime.dao.PhotoUrlDao;
-import org.unimelb.itime.dao.TimeSlotDao;
+import org.unimelb.itime.dao.TimeslotDao;
 
 import java.util.List;
 
@@ -76,10 +76,10 @@ public class DBManager {
         contactDao.insert(contact);
     }
 
-    public void insertTimeSlot(TimeSlot timeSlot){
+    public void insertTimeSlot(Timeslot timeSlot){
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
-        TimeSlotDao timeSlotDao = daoSession.getTimeSlotDao();
+        TimeslotDao timeSlotDao = daoSession.getTimeslotDao();
         timeSlotDao.insert(timeSlot);
     }
 
@@ -155,7 +155,7 @@ public class DBManager {
         EventDao eventDao = daoSession.getEventDao();
         ContactDao contactDao = daoSession.getContactDao();
         InviteeDao inviteeDao = daoSession.getInviteeDao();
-        TimeSlotDao timeSlotDao = daoSession.getTimeSlotDao();
+        TimeslotDao timeSlotDao = daoSession.getTimeslotDao();
         eventDao.deleteAll();
         contactDao.deleteAll();
         inviteeDao.deleteAll();

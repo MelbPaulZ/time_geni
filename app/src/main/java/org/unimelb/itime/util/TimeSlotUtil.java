@@ -4,7 +4,7 @@ import android.content.Context;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 public class TimeSlotUtil {
 
     // if this time slot has been selected, return true
-    public static boolean isTimeSlotSelected(Context context, TimeSlot timeSlot){
+    public static boolean isTimeSlotSelected(Context context, Timeslot timeSlot){
         if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))){
             return false;
         }else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
@@ -27,9 +27,9 @@ public class TimeSlotUtil {
 
 
     //get all selected timeslots
-    public static List<TimeSlot> getSelectedTimeSlots(Context context,List<TimeSlot> timeSlotList){
-        List<TimeSlot> selectedTimeSlots = new ArrayList<>();
-        for (TimeSlot timeSlot:timeSlotList){
+    public static List<Timeslot> getSelectedTimeSlots(Context context, List<Timeslot> timeSlotList){
+        List<Timeslot> selectedTimeSlots = new ArrayList<>();
+        for (Timeslot timeSlot:timeSlotList){
             if (timeslotStatusEquals(timeSlot, context.getString(R.string.timeslot_status_accept))){
                 selectedTimeSlots.add(timeSlot);
             }
@@ -38,9 +38,9 @@ public class TimeSlotUtil {
     }
 
     // get all selected timeslot in create timeslot view
-    public static List<TimeSlot> getPendingTimeSlots(Context context,List<TimeSlot> timeSlotList){
-        List<TimeSlot> selectedTimeSlots = new ArrayList<>();
-        for (TimeSlot timeSlot:timeSlotList){
+    public static List<Timeslot> getPendingTimeSlots(Context context, List<Timeslot> timeSlotList){
+        List<Timeslot> selectedTimeSlots = new ArrayList<>();
+        for (Timeslot timeSlot:timeSlotList){
             if (timeslotStatusEquals(timeSlot, context.getString(R.string.timeslot_status_pending))){
                 selectedTimeSlots.add(timeSlot);
             }
@@ -48,15 +48,15 @@ public class TimeSlotUtil {
         return selectedTimeSlots;
     }
 
-    public static boolean timeslotStatusEquals(TimeSlot timeSlot, String status){
+    public static boolean timeslotStatusEquals(Timeslot timeSlot, String status){
         if (timeSlot.getStatus().equals(status) || timeSlot.getStatus() == status){
             return true;
         }
         return false;
     }
 
-    public static boolean chooseAtLeastOnTimeSlot(Context context, List<TimeSlot> timeSlots){
-        for (TimeSlot timeSlot: timeSlots){
+    public static boolean chooseAtLeastOnTimeSlot(Context context, List<Timeslot> timeSlots){
+        for (Timeslot timeSlot: timeSlots){
             if (isTimeSlotSelected(context, timeSlot)){
                 return true;
             }
@@ -64,9 +64,9 @@ public class TimeSlotUtil {
         return false;
     }
 
-    public static TimeSlot getTimeSlot(Event event, TimeSlot timeSlot){
-        for (TimeSlot eventTimeSlot : event.getTimeslot()){
-            if(eventTimeSlot.getTimeSlotUid() == timeSlot.getTimeSlotUid()){
+    public static Timeslot getTimeSlot(Event event, Timeslot timeSlot){
+        for (Timeslot eventTimeSlot : event.getTimeslot()){
+            if(eventTimeSlot.getTimeslotUid() == timeSlot.getTimeslotUid()){
                 return eventTimeSlot;
             }
         }

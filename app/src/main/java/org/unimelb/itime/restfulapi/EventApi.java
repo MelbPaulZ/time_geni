@@ -2,7 +2,7 @@ package org.unimelb.itime.restfulapi;
 
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.restfulresponse.HttpResult;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public interface EventApi {
 
     @FormUrlEncoded
     @POST("event/timeslot/recommend")
-    Observable<HttpResult<List<TimeSlot>>> recommend(@Field("invitee") List<Invitee> inviteeList, @Field("startTime") long startTime);
+    Observable<HttpResult<List<Timeslot>>> recommend(@Field("invitee") List<Invitee> inviteeList, @Field("startRecommendTime") long startRecommendTime);
 
 
 }

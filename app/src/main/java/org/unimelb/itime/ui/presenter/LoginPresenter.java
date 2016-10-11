@@ -5,24 +5,15 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unimelb.itime.bean.Calendar;
-import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.JwtToken;
-import org.unimelb.itime.bean.PhotoUrl;
-import org.unimelb.itime.bean.TimeSlot;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.dao.UserDao;
-import org.unimelb.itime.restfulapi.CalendarApi;
-import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.util.AuthUtil;
-import org.unimelb.itime.util.CalendarUtil;
-import org.unimelb.itime.util.GreenDaoUtil;
 import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.UserUtil;
 
@@ -88,7 +79,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
                 if (getView() != null) {
                     getView().onLoginSucceed();
                 }
-//                fetchCalendar();
             }
         };
         HttpUtil.subscribe(observable, subscriber);
@@ -151,7 +141,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
     }
 
     public void testList() {
-        String name = HttpUtil.class.getSimpleName();
         Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
             @Override
             public void onCompleted() {

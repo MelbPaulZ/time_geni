@@ -12,9 +12,10 @@ import android.widget.Toast;
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -60,13 +61,12 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
            public void onTimeSlotCreate(TimeSlotView timeSlotView) {
                 if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
                     // I am host
-                    TimeSlot timeSlot = new TimeSlot(EventUtil.generateTimeSlotUid(),
-                            eventDetailHostEvent.getEventUid(),
-                            ((WeekView.TimeSlotStruct)timeSlotView.getTag()).startTime,
-                            ((WeekView.TimeSlotStruct)timeSlotView.getTag()).endTime,
-                            getContext().getString(R.string.timeslot_status_pending),
-                            0,
-                            0);
+                    Timeslot timeSlot = new Timeslot();
+                    timeSlot.setTimeslotUid(AppUtil.generateUuid());
+                    timeSlot.setEventUid(eventDetailHostEvent.getEventUid());
+                    timeSlot.setStartTime(((WeekView.TimeSlotStruct)timeSlotView.getTag()).startTime);
+                    timeSlot.setEndTime(((WeekView.TimeSlotStruct)timeSlotView.getTag()).endTime);
+                    timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
                     eventDetailHostEvent.getTimeslot().add(timeSlot);
                     WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct)timeSlotView.getTag();
                     struct.object =timeSlot;
@@ -96,8 +96,8 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
            public void onTimeSlotDragDrop(TimeSlotView timeSlotView) {
                 if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
                     // host:
-                    TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
-                    TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
+                    Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+                    Timeslot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
                     if (timeSlot!=null) {
                         timeSlot.setStartTime(timeSlotView.getStartTimeM());
                         timeSlot.setEndTime(timeSlotView.getEndTimeM());
@@ -181,8 +181,8 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
 
 
     private void changeEventAttributes(TimeSlotView timeSlotView){
-        TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
-        TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
+        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
         if (timeSlot!=null) {
             if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))) {
                 timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));

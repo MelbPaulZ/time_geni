@@ -6,7 +6,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
@@ -32,7 +32,7 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
     public void addEvent(Event event){
         EventManager.getInstance().addEvent(event);
         DBManager.getInstance(getContext()).insertEvent(event);
-        for (TimeSlot timeSlot:event.getTimeslot()){
+        for (Timeslot timeSlot:event.getTimeslot()){
             DBManager.getInstance(getContext()).insertTimeSlot(timeSlot);
         }
         for (Invitee invitee:event.getInvitee()){

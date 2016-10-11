@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
@@ -63,7 +63,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     public void initTimeSlots(){
         weekView.resetTimeSlots();
         if (event.hasTimeslots()) {
-            for (TimeSlot timeSlot : event.getTimeslot()) {
+            for (Timeslot timeSlot : event.getTimeslot()) {
                 WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
                 struct.startTime = timeSlot.getStartTime();
                 struct.endTime = timeSlot.getEndTime();

@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
@@ -35,7 +35,7 @@ public class EventDetailGroupPresenter extends MvpBasePresenter<EventDetailGroup
 
     }
 
-    public void confirmEvent(Event newEvent, TimeSlot newTimeSlot){
+    public void confirmEvent(Event newEvent, Timeslot newTimeSlot){
 //        long startTime = newEvent.
         newEvent.setStartTime(newTimeSlot.getStartTime());
         newEvent.setEndTime(newTimeSlot.getEndTime());
