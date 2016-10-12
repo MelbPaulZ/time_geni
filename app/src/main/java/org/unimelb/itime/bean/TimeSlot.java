@@ -16,23 +16,24 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     private long startTime;
     private long endTime;
     private String status = "";
-    private int accetpedNum;
+    private int acceptedNum;
     private int totalNum;
     private int peopleCount;
     private int isConfirmed;
     private int isSystemSuggested;
 
 
-    @Generated(hash = 455340819)
+
+    @Generated(hash = 51562862)
     public Timeslot(String timeslotUid, String eventUid, long startTime,
-            long endTime, String status, int accetpedNum, int totalNum,
+            long endTime, String status, int acceptedNum, int totalNum,
             int peopleCount, int isConfirmed, int isSystemSuggested) {
         this.timeslotUid = timeslotUid;
         this.eventUid = eventUid;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
-        this.accetpedNum = accetpedNum;
+        this.acceptedNum = acceptedNum;
         this.totalNum = totalNum;
         this.peopleCount = peopleCount;
         this.isConfirmed = isConfirmed;
@@ -42,6 +43,7 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     @Generated(hash = 1204592951)
     public Timeslot() {
     }
+
 
 
     @Override
@@ -76,12 +78,12 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
 
     @Override
     public int getAcceptedNum() {
-        return accetpedNum;
+        return acceptedNum;
     }
 
     @Override
     public void setAcceptedNum(int i) {
-        this.accetpedNum = i;
+        this.acceptedNum = i;
     }
 
     @Override
@@ -102,13 +104,7 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
         this.timeslotUid = timeslotUid;
     }
 
-    public int getAccetpedNum() {
-        return this.accetpedNum;
-    }
 
-    public void setAccetpedNum(int accetpedNum) {
-        this.accetpedNum = accetpedNum;
-    }
 
 
     public String getEventUid() {

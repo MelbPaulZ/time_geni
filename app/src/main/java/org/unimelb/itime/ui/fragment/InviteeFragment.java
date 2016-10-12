@@ -431,7 +431,7 @@ public class InviteeFragment extends BaseUiFragment {
         Invitee invitee = new Invitee();
         invitee.setEventUid(event.getEventUid());
         invitee.setInviteeUid(AppUtil.generateUuid());
-        invitee.setUserUid(contact.getUserUid());
+        invitee.setUserUid(contact.getContactUid());
         invitee.setUserId(contact.getAliasName());
         invitee.setStatus("needsAction");
         invitee.setAliasPhoto(contact.getPhoto());

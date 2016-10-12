@@ -2,6 +2,7 @@ package org.unimelb.itime.util;
 
 import android.content.Context;
 
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
 
 /**
@@ -32,14 +33,22 @@ public class UserUtil {
 
 
     public static String getUserUid(){
-        return "1";
+        return UserUtil.getInstance().getUser().getUserUid();
     }
 
     public UserLoginRes getUserLoginRes() {
         return userLoginRes;
     }
 
+    /**
+     * todo: save it to db
+     * @param userLoginRes
+     */
     public void setUserLoginRes(UserLoginRes userLoginRes) {
         this.userLoginRes = userLoginRes;
+    }
+
+    public User getUser(){
+        return this.userLoginRes.getUser();
     }
 }
