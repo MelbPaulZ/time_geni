@@ -2,18 +2,11 @@ package org.unimelb.itime.bean;
 
 import android.support.annotation.Nullable;
 
-import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Keep;
-import org.greenrobot.greendao.annotation.ToOne;
-import org.unimelb.itime.dao.ContactDao;
-import org.unimelb.itime.dao.DaoSession;
-import org.unimelb.itime.dao.InviteeDao;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
 import java.io.Serializable;
-import java.util.List;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by yuhaoliu on 10/09/2016.
@@ -22,15 +15,19 @@ import java.util.List;
 public class Invitee implements ITimeInviteeInterface, Serializable {
     private String eventUid;
     private String inviteeUid;
+    private String userUid;
+    private String userId;
     private String aliasName;
     private String aliasPhoto;
     private String status;
 
-    @Generated(hash = 1566734362)
-    public Invitee(String eventUid, String inviteeUid, String aliasName,
-            String aliasPhoto, String status) {
+    @Generated(hash = 1415596982)
+    public Invitee(String eventUid, String inviteeUid, String userUid,
+            String userId, String aliasName, String aliasPhoto, String status) {
         this.eventUid = eventUid;
         this.inviteeUid = inviteeUid;
+        this.userUid = userUid;
+        this.userId = userId;
         this.aliasName = aliasName;
         this.aliasPhoto = aliasPhoto;
         this.status = status;
@@ -46,6 +43,22 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
 
     public void setEventUid(String eventUid) {
         this.eventUid = eventUid;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Nullable

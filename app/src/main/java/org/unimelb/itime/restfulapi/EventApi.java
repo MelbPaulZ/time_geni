@@ -23,31 +23,31 @@ public interface EventApi {
     Observable<HttpResult<List<Event>>> list(@Path("calendarUid") String calendarUid);
 
     @GET("event/get/{calendarUid}/{eventUid}")
-    Observable<HttpResult<List<Event>>> get(@Path("calendarUid") String calendarUid);
+    Observable<HttpResult<Event>> get(@Path("calendarUid") String calendarUid);
 
     @POST("event/insert")
-    Observable<HttpResult<List<Event>>> insert(@Body Event event);
+    Observable<HttpResult<Event>> insert(@Body Event event);
 
     @POST("event/update/{calendarUid}/{eventUid}")
-    Observable<HttpResult<List<Event>>> update(@Body Event event);
+    Observable<HttpResult<Event>> update(@Body Event event);
 
     @POST("event/delete/{calendarUid}/{eventUid}")
-    Observable<HttpResult<List<Event>>> delete();
+    Observable<HttpResult<Event>> delete();
 
     @POST("event/confirm/{calendarUid}/{eventUid}")
-    Observable<HttpResult<List<Event>>> confirm();
+    Observable<HttpResult<Event>> confirm();
 
     @POST("event/invitee/accept/{eventUid}")
-    Observable<HttpResult<List<Event>>> acceptEvent();
+    Observable<HttpResult<Event>> acceptEvent();
 
     @POST("event/invitee/quit/{eventUid}")
-    Observable<HttpResult<List<Event>>> quitEvent();
+    Observable<HttpResult<Event>> quitEvent();
 
     @POST("event/timeslot/accept/{eventUid}")
-    Observable<HttpResult<List<Event>>> acceptTimeslot();
+    Observable<HttpResult<Event>> acceptTimeslot();
 
     @POST("event/timeslot/reject/{eventUid}")
-    Observable<HttpResult<List<Event>>> rejectTimeslot();
+    Observable<HttpResult<Event>> rejectTimeslot();
 
     @FormUrlEncoded
     @POST("event/timeslot/recommend")
