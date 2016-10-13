@@ -20,10 +20,14 @@ import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 
@@ -222,6 +226,28 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
                 }
                 newEvDtlEvent.setTimeslot(pendingTimeslots);
                 newEvDtlEvent.setHostUserUid(UserUtil.getUserUid());
+                if(!newEvDtlEvent.hasPhoto()){
+                    newEvDtlEvent.setPhoto(new ArrayList<PhotoUrl>());
+                }
+
+                // todo: need to check whether host is in invitees
+                if(newEvDtlEvent.hasAttendee()){
+                    Invitee host = new Invitee();
+                    User user = UserUtil.getInstance().getUser();
+                    host.setEventUid(newEvDtlEvent.getEventUid());
+                    host.setInviteeUid(AppUtil.generateUuid());
+                    host.setUserUid(user.getUserUid());
+                    host.setUserId(user.getUserId());
+                    host.setStatus("accepted");
+                    host.setAliasPhoto(user.getPhoto());
+                    host.setAliasName(user.getPersonalAlias());
+                    newEvDtlEvent.getInvitee().add(host);
+                }
+
+                // todo: delete it after finishing calendar
+                newEvDtlEvent.setCalendarUid(UserUtil.getUserUid());
+                newEvDtlEvent.setRecurringEventUid(newEvDtlEvent.getEventUid());
+                newEvDtlEvent.setRecurringEventId(newEvDtlEvent.getEventUid());
 
                 presenter.addEvent(newEvDtlEvent);
                 if (mvpView!=null){
