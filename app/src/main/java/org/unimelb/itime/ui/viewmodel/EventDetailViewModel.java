@@ -13,7 +13,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
@@ -82,7 +82,7 @@ public class EventDetailViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
+                Timeslot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
                 presenter.confirmEvent(evDtlHostEvent, newTimeSlot);
                 if (mvpView!=null){
                     mvpView.toCalendar();
@@ -143,7 +143,7 @@ public class EventDetailViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                TimeSlot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
+//                Timeslot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
 //                evDtlHostEvent.setStartTime(newTimeSlot.getStartTime());
 //                evDtlHostEvent.setEndTime(newTimeSlot.getEndTime());
                 if (mvpView!=null){
@@ -159,7 +159,7 @@ public class EventDetailViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimeSlot timeSlot = evDtlHostEvent.getTimeslot().get(position);
+                Timeslot timeSlot = evDtlHostEvent.getTimeslot().get(position);
                 if (evDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
                     // host can only confirm one timeslot
                     if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))){

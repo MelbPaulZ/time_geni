@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,24 +22,19 @@ import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
-import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
-import org.unimelb.itime.ui.activity.EventCreateActivity;
-import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
-import org.unimelb.itime.ui.presenter.EmptyPresenter;
 import org.unimelb.itime.ui.presenter.InviteePresenter;
-import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
 import org.unimelb.itime.vendor.contact.helper.ClearEditText;
@@ -437,7 +430,9 @@ public class InviteeFragment extends BaseUiFragment {
     private Invitee contactToInvitee(Contact contact, Event event) {
         Invitee invitee = new Invitee();
         invitee.setEventUid(event.getEventUid());
-        invitee.setInviteeUid(contact.getContactUid());
+        invitee.setInviteeUid(AppUtil.generateUuid());
+        invitee.setUserUid(contact.getUserUid());
+        invitee.setUserId(contact.getAliasName());
         invitee.setStatus("needsAction");
         invitee.setAliasPhoto(contact.getPhoto());
         invitee.setAliasName(contact.getName());

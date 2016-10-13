@@ -13,7 +13,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
@@ -64,7 +64,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     public void setProposedTimeSlots(Event event){
         if (event.hasTimeslots()){
             ArrayList<String> timeslotArrayList = new ArrayList<>();
-            for (TimeSlot timeSlot: event.getTimeslot()){
+            for (Timeslot timeSlot: event.getTimeslot()){
                 timeslotArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()));
             }
             ArrayAdapter stringAdapter = new ArrayAdapter(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotArrayList);

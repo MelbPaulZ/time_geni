@@ -7,12 +7,11 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulapi.CalendarApi;
 import org.unimelb.itime.restfulapi.ContactApi;
@@ -23,8 +22,6 @@ import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import rx.Observable;
@@ -102,7 +99,6 @@ public class RemoteService extends Service{
             public void onNext(HttpResult<List<Event>> result) {
                 List<Event> eventList = result.getData();
                 DBManager db = DBManager.getInstance(getBaseContext());
-                db.clearDB();
                 for (Event event: eventList){
                     db.insertEvent(event);
                     if (event.hasAttendee()){
@@ -111,7 +107,7 @@ public class RemoteService extends Service{
                         }
                     }
                     if (event.hasTimeslots()){
-                        for (TimeSlot timeSlot: event.getTimeslot()){
+                        for (Timeslot timeSlot: event.getTimeslot()){
                             db.insertTimeSlot(timeSlot);
                         }
                     }

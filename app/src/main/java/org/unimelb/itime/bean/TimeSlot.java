@@ -1,39 +1,49 @@
 package org.unimelb.itime.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
-import org.greenrobot.greendao.annotation.Generated;
 
 import java.io.Serializable;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by Paul on 10/09/2016.
  */
 @Entity
-public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
-    private long timeSlotUid;
+public class Timeslot implements ITimeTimeSlotInterface,Serializable {
+    private String timeslotUid;
     private String eventUid;
     private long startTime;
     private long endTime;
-    private String status;
+    private String status = "";
     private int accetpedNum;
     private int totalNum;
+    private int peopleCount;
+    private int isConfirmed;
+    private int isSystemSuggested;
 
-    @Generated(hash = 1337764006)
-    public TimeSlot() {
-    }
-    @Generated(hash = 2063048340)
-    public TimeSlot(long timeSlotUid, String eventUid, long startTime,
-            long endTime, String status, int accetpedNum, int totalNum) {
-        this.timeSlotUid = timeSlotUid;
+
+    @Generated(hash = 455340819)
+    public Timeslot(String timeslotUid, String eventUid, long startTime,
+            long endTime, String status, int accetpedNum, int totalNum,
+            int peopleCount, int isConfirmed, int isSystemSuggested) {
+        this.timeslotUid = timeslotUid;
         this.eventUid = eventUid;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
         this.accetpedNum = accetpedNum;
         this.totalNum = totalNum;
+        this.peopleCount = peopleCount;
+        this.isConfirmed = isConfirmed;
+        this.isSystemSuggested = isSystemSuggested;
     }
+
+    @Generated(hash = 1204592951)
+    public Timeslot() {
+    }
+
+
     @Override
     public void setStartTime(long l) {
         this.startTime = l;
@@ -84,12 +94,12 @@ public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
         this.totalNum = i;
     }
 
-    public long getTimeSlotUid() {
-        return timeSlotUid;
+    public String getTimeslotUid() {
+        return timeslotUid;
     }
 
-    public void setTimeSlotUid(long timeSlotUid) {
-        this.timeSlotUid = timeSlotUid;
+    public void setTimeslotUid(String timeslotUid) {
+        this.timeslotUid = timeslotUid;
     }
 
     public int getAccetpedNum() {
@@ -107,5 +117,29 @@ public class TimeSlot implements ITimeTimeSlotInterface,Serializable {
 
     public void setEventUid(String eventUid) {
         this.eventUid = eventUid;
+    }
+
+    public int getPeopleCount() {
+        return peopleCount;
+    }
+
+    public void setPeopleCount(int peopleCount) {
+        this.peopleCount = peopleCount;
+    }
+
+    public int getIsConfirmed() {
+        return isConfirmed;
+    }
+
+    public void setIsConfirmed(int isConfirmed) {
+        this.isConfirmed = isConfirmed;
+    }
+
+    public int getIsSystemSuggested() {
+        return isSystemSuggested;
+    }
+
+    public void setIsSystemSuggested(int isSystemSuggested) {
+        this.isSystemSuggested = isSystemSuggested;
     }
 }

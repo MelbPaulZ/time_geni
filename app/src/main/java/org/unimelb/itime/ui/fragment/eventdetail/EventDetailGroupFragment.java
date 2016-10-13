@@ -12,7 +12,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.EventTimeSlotAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailForHostBinding;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
@@ -92,7 +92,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     }
 
     @Override
-    public void viewInviteeResponse(TimeSlot timeSlot) {
+    public void viewInviteeResponse(Timeslot timeSlot) {
         InviteeTimeslotFragment inviteeTimeslotFragment = (InviteeTimeslotFragment) getFragmentManager().findFragmentByTag(InviteeTimeslotFragment.class.getSimpleName());
         switchFragment(this, inviteeTimeslotFragment);
     }

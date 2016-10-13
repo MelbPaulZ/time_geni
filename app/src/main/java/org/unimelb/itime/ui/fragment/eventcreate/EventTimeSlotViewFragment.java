@@ -16,23 +16,25 @@ import android.widget.Toast;
 
 import com.wx.wheelview.adapter.ArrayWheelAdapter;
 import com.wx.wheelview.widget.WheelView;
-import org.unimelb.itime.R;
 
+import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.TimeSlot;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
-import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 /**
@@ -84,8 +86,8 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
 
         // change event attributes
-        TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
-        TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
+        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot!=null) {
             if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_create))) {
                 timeSlot.setStatus(getString(R.string.timeslot_status_pending));
@@ -101,8 +103,10 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     public void onEnter() {
         super.onEnter();
         // need to change later
-        Calendar calendar = Calendar.getInstance();
-        presenter.getTimeSlots(calendar.getTimeInMillis());
+        if(event != null || event.getTimeslot() == null || event.getTimeslot().size() == 0){
+            Calendar calendar = Calendar.getInstance();
+            presenter.getTimeSlots(calendar.getTimeInMillis());
+        }
 
     }
 
@@ -120,13 +124,13 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         timeslotWeekView.setOnTimeSlotOuterListener(new FlexibleLenViewBody.OnTimeSlotListener() {
            @Override
            public void onTimeSlotCreate(TimeSlotView timeSlotView) {
-               TimeSlot timeSlot = new TimeSlot(EventUtil.generateTimeSlotUid(),
-                       event.getEventUid(),
-                       ((WeekView.TimeSlotStruct)timeSlotView.getTag()).startTime,
-                       ((WeekView.TimeSlotStruct)timeSlotView.getTag()).endTime,
-                       getString(R.string.timeslot_status_create),
-                       0,
-                       0);
+               Timeslot timeSlot = new Timeslot();
+               timeSlot.setTimeslotUid(AppUtil.generateUuid());
+               timeSlot.setEventUid(event.getEventUid());
+               timeSlot.setStartTime(((WeekView.TimeSlotStruct)timeSlotView.getTag()).startTime);
+               timeSlot.setEndTime(((WeekView.TimeSlotStruct)timeSlotView.getTag()).endTime);
+               timeSlot.setStatus(getString(R.string.timeslot_status_create));
+               
                event.getTimeslot().add(timeSlot);
                WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct)timeSlotView.getTag();
                struct.object =timeSlot;
@@ -158,8 +162,8 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
            @Override
            public void onTimeSlotDragDrop(TimeSlotView timeSlotView) {
-               TimeSlot calendarTimeSlot = (TimeSlot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
-               TimeSlot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
+               Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+               Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
                if (timeSlot!=null) {
                    timeSlot.setStartTime(timeSlotView.getStartTimeM());
                    timeSlot.setEndTime(timeSlotView.getEndTimeM());
@@ -233,9 +237,9 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
                 // avoid of no timeslot error
                 if (!event.hasTimeslots()){
-                    event.setTimeslot(new ArrayList<TimeSlot>());
+                    event.setTimeslot(new ArrayList<Timeslot>());
                 }
-                for (TimeSlot timeSlot: event.getTimeslot()){
+                for (Timeslot timeSlot: event.getTimeslot()){
                     timeSlot.setEndTime(timeSlot.getStartTime() + 1000 * 60 * (pickHour[0] * 60 + pickMinute[0]));
                 }
                 viewModel.setEvent(event);
@@ -309,7 +313,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     @Override
     public void initTimeSlots(Event event) {
         if (event.hasTimeslots()) {
-            for (TimeSlot timeSlot : event.getTimeslot()) {
+            for (Timeslot timeSlot : event.getTimeslot()) {
                 WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
                 struct.startTime = timeSlot.getStartTime();
                 struct.endTime = timeSlot.getEndTime();
@@ -319,6 +323,32 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         }
     }
 
+
+    /**
+     * need to check if fragment is doing creating task or editing task,
+     * if doing editing task, do we still recommend?
+     * @param list
+     */
+    @Override
+    public void onRecommend(List<Timeslot> list) {
+        if(!event.hasTimeslots()){
+            event.setTimeslot(new ArrayList<Timeslot>());
+        }
+        for (Timeslot timeSlot: list){
+            // have to do this
+            timeSlot.setEventUid(event.getEventUid());
+            timeSlot.setStatus(getString(R.string.timeslot_status_create));
+            // todo: need to check if this timeslot already exists in a map
+            WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
+            struct.startTime = timeSlot.getStartTime();
+            struct.endTime = timeSlot.getEndTime();
+            struct.object = timeSlot;
+            struct.status = false;
+            event.getTimeslot().add(timeSlot);
+            timeslotWeekView.addTimeSlot(struct);
+        }
+        timeslotWeekView.reloadTimeSlots(true);
+    }
 
     @Override
     public EventCreateTimeSlotPresenter createPresenter() {
