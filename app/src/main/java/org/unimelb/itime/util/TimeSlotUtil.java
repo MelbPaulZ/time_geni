@@ -16,12 +16,20 @@ public class TimeSlotUtil {
 
     // if this time slot has been selected, return true
     public static boolean isTimeSlotSelected(Context context, Timeslot timeSlot){
-        if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))){
-            return false;
-        }else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
-            return true;
-        }else{ // this might change later
-            return false;
+        if(timeSlot.getUserUid().equals(UserUtil.getUserUid())){
+            if (timeSlot.getIsConfirmed()==0){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))){
+                return false;
+            }else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
+                return true;
+            }else{ // this might change later
+                return false;
+            }
         }
     }
 

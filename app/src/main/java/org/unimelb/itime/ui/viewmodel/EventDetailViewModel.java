@@ -161,17 +161,14 @@ public class EventDetailViewModel extends BaseObservable {
             public void onClick(View view) {
                 Timeslot timeSlot = evDtlHostEvent.getTimeslot().get(position);
                 if (evDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
-                    // host can only confirm one timeslot
-                    if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))){
-                        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(getContext(), evDtlHostEvent.getTimeslot())){
-                            // already has one timeslot
-                            unselectRestTimeSlots(position);
-                            timeSlot.setStatus(context.getString(R.string.timeslot_status_accept));
-                        }else{
-                            timeSlot.setStatus(context.getString(R.string.timeslot_status_accept));
-                        }
-                    }else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
-                        timeSlot.setStatus(context.getString(R.string.timeslot_status_pending));
+                        Timeslot timeslot = evDtlHostEvent.getTimeslot().get(position);
+                    for (Timeslot ts: evDtlHostEvent.getTimeslot()){
+                        ts.setIsConfirmed(0);
+                    }
+                    if (timeslot.getIsConfirmed()==0){
+                        timeslot.setIsConfirmed(1);
+                    }else{
+                        timeslot.setIsConfirmed(0);
                     }
                 }else {
                     // can choose any number of timeslots

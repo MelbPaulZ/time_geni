@@ -13,6 +13,7 @@ import org.greenrobot.greendao.annotation.Generated;
 public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     private String timeslotUid;
     private String eventUid;
+    private String userUid;
     private long startTime;
     private long endTime;
     private String status = "";
@@ -24,12 +25,13 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
 
 
 
-    @Generated(hash = 51562862)
-    public Timeslot(String timeslotUid, String eventUid, long startTime,
-            long endTime, String status, int acceptedNum, int totalNum,
-            int peopleCount, int isConfirmed, int isSystemSuggested) {
+    @Generated(hash = 1313590331)
+    public Timeslot(String timeslotUid, String eventUid, String userUid,
+            long startTime, long endTime, String status, int acceptedNum,
+            int totalNum, int peopleCount, int isConfirmed, int isSystemSuggested) {
         this.timeslotUid = timeslotUid;
         this.eventUid = eventUid;
+        this.userUid = userUid;
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
@@ -137,5 +139,13 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
 
     public void setIsSystemSuggested(int isSystemSuggested) {
         this.isSystemSuggested = isSystemSuggested;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 }
