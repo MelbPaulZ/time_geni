@@ -230,9 +230,9 @@
     <string name="photos_num">%1$d CHOOSE</string>
 
 
-    <string name="timeslot_status_pending">timeslot status pending</string>
-    <string name="timeslot_status_accept">timeslot status accept</string>
-    <string name="timeslot_status_reject">timeslot status reject</string>
+    <string name="timeslot_status_pending">needsAction</string>
+    <string name="timeslot_status_accept">accepted</string>
+    <string name="timeslot_status_reject">rejected</string>
     <string name="timeslot_status_delete">timeslot status delete</string>
     <string name="timeslot_status_create">timeslot status create</string>
     <string name="duration">Duration</string>

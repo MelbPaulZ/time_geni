@@ -143,7 +143,7 @@
                             android:layout_width="10dp"
                             android:layout_height="10dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/invitee_selected_arrow"/>
+                            android:src="@drawable/icon_event_repeated"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                             android:layout_width="10dp"
                             android:layout_height="10dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/invitee_selected_arrow"/>
+                            android:src="@drawable/icon_event_location"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -179,7 +179,7 @@
                             android:layout_width="10dp"
                             android:layout_height="10dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/invitee_selected_arrow"/>
+                            android:src="@drawable/icon_event_note"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
