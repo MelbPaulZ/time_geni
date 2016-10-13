@@ -138,10 +138,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="5dp">
+                        android:layout_marginTop="10dp">
                         <ImageView
-                            android:layout_width="10dp"
-                            android:layout_height="10dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/icon_event_repeated"/>
                         <TextView
@@ -156,10 +156,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="5dp">
+                        android:layout_marginTop="10dp">
                         <ImageView
-                            android:layout_width="10dp"
-                            android:layout_height="10dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/icon_event_location"/>
                         <TextView
@@ -176,8 +176,8 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="5dp">
                         <ImageView
-                            android:layout_width="10dp"
-                            android:layout_height="10dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/icon_event_note"/>
                         <TextView
