@@ -16,6 +16,7 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
+import org.unimelb.itime.adapter.PhotoAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateNewBinding;
@@ -72,11 +73,13 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         }
         binding.setEventVM(viewModel);
         event = EventManager.getInstance().getCurrentEvent();
+
         // hide soft key board
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
     }
+
 
     public void setEvent(Event event){
         this.event = event;

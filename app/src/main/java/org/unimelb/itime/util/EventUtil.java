@@ -301,7 +301,7 @@ public class EventUtil{
     }
 
     public static String getRepeatString(Event event){
-        return "Not repeat";
+        return "Never";
     }
 
 

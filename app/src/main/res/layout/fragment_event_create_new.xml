@@ -3,8 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="org.unimelb.itime.util.EventUtil" />
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="eventVM"
             type="org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel" />
@@ -33,28 +36,28 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:background="@null"
-                    android:onClick="@{eventVM.onClickCancel()}"
                     android:gravity="center_vertical|left"
-                    android:textColor="@color/page_title_color"
-                    android:text="@string/cancel" />
+                    android:onClick="@{eventVM.onClickCancel()}"
+                    android:text="@string/cancel"
+                    android:textColor="@color/page_title_color" />
 
                 <TextView
                     android:id="@+id/toolbar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/page_title_color"
-                    android:text="@string/new_event" />
+                    android:text="@string/new_event"
+                    android:textColor="@color/page_title_color" />
 
                 <Button
                     android:id="@+id/create_event_done_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/page_title_color"
                     android:layout_gravity="right"
-                    android:onClick="@{eventVM.onClickDone()}"
                     android:background="@null"
-                    android:text="@string/done" />
+                    android:onClick="@{eventVM.onClickDone()}"
+                    android:text="@string/done"
+                    android:textColor="@color/page_title_color" />
             </android.support.v7.widget.Toolbar>
         </LinearLayout>
 
@@ -85,10 +88,10 @@
                         android:id="@+id/create_event_title_edittext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border"
                         android:hint="Title"
                         android:text="@={eventVM.event.title}"
-                        android:layout_marginLeft="@dimen/padding_10"
                         android:textColor="@color/text_enable"
                         android:textSize="@dimen/page_text_size" />
 
@@ -96,8 +99,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border"
                         android:layout_marginLeft="@dimen/padding_10"
+                        android:background="@drawable/table_row_border"
                         android:orientation="horizontal">
 
                         <TextView
@@ -112,19 +115,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|center_vertical"
+                            android:layout_marginRight="@dimen/padding_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:layout_marginRight="@dimen/padding_10"
                             android:onClick="@{eventVM.onClickLocation()}"
                             android:text="@{eventVM.event.location}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border"
                         android:layout_marginLeft="@dimen/padding_10"
+                        android:background="@drawable/table_row_border"
                         android:orientation="horizontal">
 
                         <TextView
@@ -140,8 +144,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|center_vertical"
-                            android:layout_weight="1"
                             android:layout_marginRight="@dimen/padding_10"
+                            android:layout_weight="1"
                             android:gravity="right"
                             android:onClick="@{eventVM.onClickRepeat()}"
                             android:text="@{EventUtil.parseRepeatIdToRepeat(eventVM.context, eventVM.event.recurrence,eventVM.event.startTime)}"
@@ -152,17 +156,19 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@{eventVM.isEventRepeat ? @dimen/wrap_content :@dimen/hide,default = @dimen/hide}"
+                        android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border"
                         android:onClick="@{eventVM.onClickTime(eventVM.changeEndrepeatTime)}"
-                        android:layout_marginLeft="@dimen/padding_10"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/end_repeat"
                             android:textColor="@color/text_enable"
-                            android:textSize="16dp"/>
+                            android:textSize="16dp" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -172,15 +178,15 @@
                             android:paddingRight="@dimen/padding_10"
                             android:text="@{EventUtil.parseDateToString(context, eventVM.event.repeatEndsTime)}"
                             android:textColor="@color/text_disable"
-                            android:textSize="16dp"/>
+                            android:textSize="16dp" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border"
                         android:layout_marginLeft="@dimen/padding_10"
+                        android:background="@drawable/table_row_border"
                         android:onClick="@{eventVM.onClickInvitee()}"
                         android:orientation="horizontal">
 
@@ -222,26 +228,26 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/page_text_size"
-                            android:textColor="@color/text_enable"
-                            android:text="@string/all_day"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            />
+                            android:text="@string/all_day"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+
                         <Switch
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@={eventVM.isAllDay}"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"/>
+                            android:layout_centerVertical="true"
+                            android:checked="@={eventVM.isAllDay}" />
                     </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/padding_10"
-                        android:onClick="@{eventVM.onClickTime(eventVM.changeStarttime)}"
-                        android:background="@drawable/table_row_border">
+                        android:background="@drawable/table_row_border"
+                        android:onClick="@{eventVM.onClickTime(eventVM.changeStarttime)}">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -254,9 +260,9 @@
                             android:id="@+id/create_event_start_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/padding_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:layout_marginRight="@dimen/padding_10"
                             android:text="@{EventUtil.parseTimeToString(context, eventVM.event.startTime)}"
                             android:textColor="@color/text_enable"
                             android:textSize="16dp" />
@@ -266,9 +272,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/padding_10"
+                        android:background="@drawable/table_row_border"
                         android:onClick="@{eventVM.onClickTime(eventVM.changeEndtime)}"
-                        android:visibility="@{eventVM.isAllDay ? View.GONE : View.VISIBLE}"
-                        android:background="@drawable/table_row_border">
+                        android:visibility="@{eventVM.isAllDay ? View.GONE : View.VISIBLE}">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -281,9 +287,9 @@
                             android:id="@+id/create_event_end_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/padding_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:layout_marginRight="@dimen/padding_10"
                             android:text="@{EventUtil.parseTimeToString(context, eventVM.event.endTime)}"
                             android:textColor="@color/text_enable"
                             android:textSize="16dp" />
@@ -308,8 +314,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{EventUtil.getAlertTimes(eventVM.context)[eventVM.event.reminder]}"
                             android:onClick="@{eventVM.pickAlertTime()}"
+                            android:text="@{EventUtil.getAlertTimes(eventVM.context)[eventVM.event.reminder]}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
 
@@ -341,9 +347,9 @@
                             android:id="@+id/create_event_calendar_type_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/padding_10"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:layout_marginRight="@dimen/padding_10"
                             android:onClick="@{eventVM.chooseCalendarType()}"
                             android:text="@{eventVM.event.calendarUid}"
                             android:textColor="@color/text_disable"
@@ -358,50 +364,52 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
-                        android:background="@color/bg_new_event_edit"/>
+                        android:background="@color/bg_new_event_edit" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
+                        android:orientation="vertical"
                         android:paddingLeft="@dimen/padding_10"
-                        android:paddingRight="@dimen/padding_10"
-                        android:orientation="vertical">
+                        android:paddingRight="@dimen/padding_10">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/table_row_border">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="@dimen/page_text_size"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
                                 android:text="@string/allow_invitee_to_see_each_other"
                                 android:textColor="@color/text_enable"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"/>
+                                android:textSize="@dimen/page_text_size" />
+
                             <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"/>
+                                android:layout_centerVertical="true" />
                         </RelativeLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            >
+                            android:layout_height="wrap_content">
 
                             <EditText
                                 android:id="@+id/create_event_url_tv"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoLink="web"
+                                android:background="@drawable/table_row_border"
                                 android:hint="URL"
                                 android:inputType="textUri"
-                                android:textColor="@color/blue"
-                                android:background="@drawable/table_row_border"
                                 android:onClick="@{eventVM.gotoUrl()}"
                                 android:text="@={eventVM.event.url}"
+                                android:textColor="@color/blue"
                                 android:textSize="@dimen/page_text_size" />
                         </LinearLayout>
 
@@ -410,18 +418,14 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/table_row_border"
                             android:orientation="vertical">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/description"
-                                android:textSize="16dp"/>
 
                             <EditText
                                 android:id="@+id/create_event_note_edittext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@={eventVM.event.description}"
                                 android:background="@android:color/transparent"
+                                android:hint="@string/note"
+                                android:text="@={eventVM.event.description}"
                                 android:textColor="@color/text_enable"
                                 android:textSize="@dimen/page_text_size" />
                         </LinearLayout>
@@ -430,51 +434,67 @@
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:background="@drawable/table_row_border">
+
                             <TextView
+                                android:id="@+id/create_photo_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
                                 android:text="@string/photo"
                                 android:textColor="@color/text_enable"
-                                android:textSize="@dimen/page_text_size"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"/>
-                            <ImageView
-                                android:id="@+id/photo1"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_centerVertical="true"
+                                android:textSize="@dimen/page_text_size" />
+
+                            <HorizontalScrollView
+                                android:id="@+id/event_create_photoList"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_toLeftOf="@+id/create_event_photo_arrow"
-                                />
+                                android:layout_marginLeft="@dimen/padding_10"
+                                >
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <ImageView
+                                        android:id="@+id/photo1"
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:layout_marginRight="@dimen/padding_10"
+                                        imageResource="@{eventVM.event}"
+                                        position = "@{2}"/>
 
-                            <ImageView
-                                android:id="@+id/photo2"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_centerVertical="true"
-                                android:layout_toLeftOf="@+id/photo1"
-                                android:layout_marginRight="@dimen/padding_5" />
+                                    <ImageView
+                                        android:id="@+id/photo2"
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:layout_marginRight="@dimen/padding_10"
+                                        imageResource="@{eventVM.event}"
+                                        position="@{1}"/>
 
-                            <ImageView
-                                android:id="@+id/photo3"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_centerVertical="true"
-                                android:layout_toLeftOf="@+id/photo2"
-                                android:layout_marginRight="@dimen/padding_5" />
-                            <!--this is for expanding the onclick area-->
+                                    <ImageView
+                                        android:id="@+id/photo3"
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        imageResource="@{eventVM.event}"
+                                        position="@{0}"/>
+                                </LinearLayout>
+                            </HorizontalScrollView>
+
                             <TextView
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
-                                android:onClick="@{eventVM.pickPhoto()}"/>
+                                android:onClick="@{eventVM.pickPhoto()}" />
+
                             <ImageView
                                 android:id="@+id/create_event_photo_arrow"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:layout_gravity="center_vertical|right"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
+                                android:layout_gravity="center_vertical|right"
                                 android:src="@drawable/arrow" />
                         </RelativeLayout>
 

@@ -79,8 +79,12 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
            @Override
            public void onTimeSlotClick(TimeSlotView timeSlotView) {
                // here should popup window
-               popupTimeSlotWindow(timeSlotView);
-
+               if(timeSlotView.isSelect()){
+                   // silence unselect
+                   onClickTimeSlotView(timeSlotView);
+               }else{
+                   popupTimeSlotWindow(timeSlotView);
+               }
            }
 
            @Override
