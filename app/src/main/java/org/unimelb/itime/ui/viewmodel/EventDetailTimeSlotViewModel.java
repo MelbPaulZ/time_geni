@@ -67,6 +67,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
                     timeSlot.setStartTime(((WeekView.TimeSlotStruct)timeSlotView.getTag()).startTime);
                     timeSlot.setEndTime(((WeekView.TimeSlotStruct)timeSlotView.getTag()).endTime);
                     timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    timeSlot.setUserUid(UserUtil.getUserUid());
                     eventDetailHostEvent.getTimeslot().add(timeSlot);
                     WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct)timeSlotView.getTag();
                     struct.object =timeSlot;
@@ -164,11 +165,11 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
             // change here
            if (TimeSlotUtil.getSelectedTimeSlots(getContext(),eventDetailHostEvent.getTimeslot()).size()<1){
                changeTimeSlotView(timeSlotView);
-               changeEventAttributes(timeSlotView);
+               hostClickTimeSlot(timeSlotView);
            }else{
                if (((WeekView.TimeSlotStruct)timeSlotView.getTag()).status==true){
                    changeTimeSlotView(timeSlotView);
-                   changeEventAttributes(timeSlotView);
+                   hostClickTimeSlot(timeSlotView);
                }else{
                    Toast.makeText(presenter.getContext(), "already select one timeslot, please unclick and click another one",Toast.LENGTH_SHORT).show();
                }
@@ -176,6 +177,18 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         }else {
             changeTimeSlotView(timeSlotView);
             changeEventAttributes(timeSlotView);
+        }
+    }
+
+    private void hostClickTimeSlot(TimeSlotView timeSlotView){
+        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
+        if (timeSlot!=null){
+            if (timeSlot.getIsConfirmed()==1){
+                timeSlot.setIsConfirmed(0);
+            }else{
+                timeSlot.setIsConfirmed(1);
+            }
         }
     }
 

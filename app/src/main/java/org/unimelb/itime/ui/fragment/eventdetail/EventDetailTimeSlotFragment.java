@@ -68,10 +68,18 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                 struct.startTime = timeSlot.getStartTime();
                 struct.endTime = timeSlot.getEndTime();
                 struct.object = timeSlot;
-                if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending))){
-                    struct.status=false;
-                }else if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_accept))){
-                    struct.status = true;
+                if (event.getHostUserUid().equals(UserUtil.getUserUid())){
+                    if (timeSlot.getIsConfirmed()==1){
+                        struct.status = true;
+                    }else{
+                        struct.status=false;
+                    }
+                }else{
+                    if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending))){
+                        struct.status=false;
+                    }else if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_accept))){
+                        struct.status = true;
+                    }
                 }
                 weekView.addTimeSlot(struct);
             }

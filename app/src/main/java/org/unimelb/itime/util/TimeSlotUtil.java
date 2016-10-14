@@ -13,10 +13,9 @@ import java.util.List;
  * Created by Paul on 10/09/2016.
  */
 public class TimeSlotUtil {
-
-    // if this time slot has been selected, return true
-    public static boolean isTimeSlotSelected(Context context, Timeslot timeSlot){
-        if(timeSlot.getUserUid().equals(UserUtil.getUserUid())){
+    public static boolean isTimeSlotSelected(Context context, Event event , int position){
+        Timeslot timeSlot = event.getTimeslot().get(position);
+        if(event.getHostUserUid().equals(UserUtil.getUserUid())){
             if (timeSlot.getIsConfirmed()==0){
                 return false;
             }else{
@@ -38,12 +37,13 @@ public class TimeSlotUtil {
     public static List<Timeslot> getSelectedTimeSlots(Context context, List<Timeslot> timeSlotList){
         List<Timeslot> selectedTimeSlots = new ArrayList<>();
         for (Timeslot timeSlot:timeSlotList){
-            if (timeslotStatusEquals(timeSlot, context.getString(R.string.timeslot_status_accept))){
+            if (timeSlot.getIsConfirmed()==1){
                 selectedTimeSlots.add(timeSlot);
             }
         }
         return selectedTimeSlots;
     }
+
 
     // get all selected timeslot in create timeslot view
     public static List<Timeslot> getPendingTimeSlots(Context context, List<Timeslot> timeSlotList){
@@ -63,9 +63,10 @@ public class TimeSlotUtil {
         return false;
     }
 
-    public static boolean chooseAtLeastOnTimeSlot(Context context, List<Timeslot> timeSlots){
+    public static boolean chooseAtLeastOnTimeSlot(Context context, Event event){
+        List<Timeslot> timeSlots = event.getTimeslot();
         for (Timeslot timeSlot: timeSlots){
-            if (isTimeSlotSelected(context, timeSlot)){
+            if (isTimeSlotSelected(context, event, timeSlots.indexOf(timeSlot))){
                 return true;
             }
         }

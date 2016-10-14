@@ -49,8 +49,17 @@ public class RemoteService extends Service{
         eventApi = HttpUtil.createService(getBaseContext(), EventApi.class);
         calendarApi = HttpUtil.createService(getBaseContext(), CalendarApi.class);
         contactApi = HttpUtil.createService(getBaseContext(), ContactApi.class);
-        initDBFromRemote();
+    }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        initDBFromRemote();
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     private void initDBFromRemote(){
@@ -120,7 +129,7 @@ public class RemoteService extends Service{
 
                 // successfully get event from server
                 loadDB();
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.INIT_DB));
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                 Log.i(TAG, "onNext: " + result.getData().size());
             }
         };
@@ -170,13 +179,4 @@ public class RemoteService extends Service{
         }
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

@@ -1,6 +1,5 @@
 package org.unimelb.itime.ui.fragment.calendars;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,11 +10,9 @@ import android.view.ViewGroup;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.testdb.EventManager;
-import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.agendaview.AgendaViewBody;
 import org.unimelb.itime.vendor.agendaview.MonthAgendaView;
@@ -59,7 +56,7 @@ public class CalendarAgendaFragment extends Fragment {
 
     @Subscribe
     public void loadData(MessageEvent messageEvent){
-        if (messageEvent.task == MessageEvent.INIT_DB) {
+        if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
             monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsMap());
         }
     }

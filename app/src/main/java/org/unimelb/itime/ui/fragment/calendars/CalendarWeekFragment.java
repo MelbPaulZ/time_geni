@@ -12,10 +12,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
-import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.util.EventUtil;
@@ -25,7 +23,6 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by Paul on 21/09/2016.
@@ -95,7 +92,7 @@ public class CalendarWeekFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
-        if (messageEvent.task == MessageEvent.INIT_DB) {
+        if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
             weekView.setDayEventMap(EventManager.getInstance().getEventsMap());
             weekView.reloadEvents();
         }

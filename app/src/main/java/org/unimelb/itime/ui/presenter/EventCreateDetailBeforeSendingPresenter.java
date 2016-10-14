@@ -5,9 +5,15 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
+import org.unimelb.itime.testdb.DBManager;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.util.HttpUtil;
 
@@ -51,18 +57,21 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
                 Log.d(TAG, "onNext: ");
+                Event event = eventHttpResult.getData();
+                EventManager.getInstance().addEvent(event);
+                DBManager.getInstance(getContext()).insertEvent(event);
+                for (Timeslot timeSlot:event.getTimeslot()){
+                    DBManager.getInstance(getContext()).insertTimeSlot(timeSlot);
+                }
+                for (Invitee invitee:event.getInvitee()){
+                    DBManager.getInstance(getContext()).insertInvitee(invitee);
+                }
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
             }
         };
         HttpUtil.subscribe(observable, subscriber);
 
-//        EventManager.getInstance().addEvent(event);
-//        DBManager.getInstance(getContext()).insertEvent(event);
-//        for (Timeslot timeSlot:event.getTimeslot()){
-//            DBManager.getInstance(getContext()).insertTimeSlot(timeSlot);
-//        }
-//        for (Invitee invitee:event.getInvitee()){
-//            DBManager.getInstance(getContext()).insertInvitee(invitee);
-//        }
+
 
     }
 

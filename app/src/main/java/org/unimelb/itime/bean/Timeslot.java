@@ -19,16 +19,19 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     private String status = "";
     private int acceptedNum;
     private int totalNum;
-    private int peopleCount;
+    private int declinedNum;
+    private int needsActionNum;
     private int isConfirmed;
     private int isSystemSuggested;
 
 
 
-    @Generated(hash = 1313590331)
+
+    @Generated(hash = 111103980)
     public Timeslot(String timeslotUid, String eventUid, String userUid,
             long startTime, long endTime, String status, int acceptedNum,
-            int totalNum, int peopleCount, int isConfirmed, int isSystemSuggested) {
+            int totalNum, int declinedNum, int needsActionNum, int isConfirmed,
+            int isSystemSuggested) {
         this.timeslotUid = timeslotUid;
         this.eventUid = eventUid;
         this.userUid = userUid;
@@ -37,7 +40,8 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
         this.status = status;
         this.acceptedNum = acceptedNum;
         this.totalNum = totalNum;
-        this.peopleCount = peopleCount;
+        this.declinedNum = declinedNum;
+        this.needsActionNum = needsActionNum;
         this.isConfirmed = isConfirmed;
         this.isSystemSuggested = isSystemSuggested;
     }
@@ -45,6 +49,7 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     @Generated(hash = 1204592951)
     public Timeslot() {
     }
+
 
 
 
@@ -117,12 +122,12 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
         this.eventUid = eventUid;
     }
 
-    public int getPeopleCount() {
-        return peopleCount;
+    public int getDeclinedNum() {
+        return declinedNum;
     }
 
-    public void setPeopleCount(int peopleCount) {
-        this.peopleCount = peopleCount;
+    public void setDeclinedNum(int declinedNum) {
+        this.declinedNum = declinedNum;
     }
 
     public int getIsConfirmed() {
@@ -147,5 +152,13 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
 
     public void setUserUid(String userUid) {
         this.userUid = userUid;
+    }
+
+    public int getNeedsActionNum() {
+        return needsActionNum;
+    }
+
+    public void setNeedsActionNum(int needsActionNum) {
+        this.needsActionNum = needsActionNum;
     }
 }

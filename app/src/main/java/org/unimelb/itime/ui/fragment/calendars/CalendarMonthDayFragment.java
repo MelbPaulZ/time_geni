@@ -1,11 +1,8 @@
 package org.unimelb.itime.ui.fragment.calendars;
 
-import android.databinding.tool.util.L;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +98,7 @@ public class CalendarMonthDayFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
-        if (messageEvent.task == MessageEvent.INIT_DB) {
+        if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
             monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
             Calendar calendar = Calendar.getInstance();
             long time = calendar.getTimeInMillis();

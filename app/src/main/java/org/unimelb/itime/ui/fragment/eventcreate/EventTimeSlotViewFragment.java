@@ -28,6 +28,7 @@ import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
@@ -130,7 +131,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
                timeSlot.setStartTime(((WeekView.TimeSlotStruct)timeSlotView.getTag()).startTime);
                timeSlot.setEndTime(((WeekView.TimeSlotStruct)timeSlotView.getTag()).endTime);
                timeSlot.setStatus(getString(R.string.timeslot_status_create));
-               
+               timeSlot.setUserUid(UserUtil.getUserUid());
                event.getTimeslot().add(timeSlot);
                WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct)timeSlotView.getTag();
                struct.object =timeSlot;

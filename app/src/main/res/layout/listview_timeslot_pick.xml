@@ -24,7 +24,7 @@
             android:layout_height="23dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="14dp"
-            android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent.timeslot.get(position)) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}" />
+            android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent, position) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}" />
 
         <!--this is timeslot string-->
         <TextView

@@ -407,8 +407,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_toLeftOf="@+id/before_sending_photo_arrow"
-                            android:layout_marginRight="@dimen/padding_5"
-                            android:src="@drawable/itime_day_rectangle"/>
+                            android:layout_marginRight="@dimen/padding_5" />
 
                         <ImageView
                             android:id="@+id/before_sending_photo_arrow"

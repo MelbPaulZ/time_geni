@@ -242,6 +242,7 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
                     host.setAliasPhoto(user.getPhoto());
                     host.setAliasName(user.getPersonalAlias());
                     newEvDtlEvent.getInvitee().add(host);
+                    newEvDtlEvent.setEventType("group");
                 }
 
                 // todo: delete it after finishing calendar
