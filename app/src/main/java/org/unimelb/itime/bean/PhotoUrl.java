@@ -1,7 +1,6 @@
 package org.unimelb.itime.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
@@ -14,22 +13,35 @@ public class PhotoUrl {
     private String photoUid;
     private String eventUid;
     private String filename;
+    private String localPath;
+    private int success;
+
+
 
     public PhotoUrl(String url){
         this.url = url;
     }
 
-    @Generated(hash = 161510692)
-    public PhotoUrl(String url, String photoUid, String eventUid, String filename) {
+
+
+    @Generated(hash = 545921804)
+    public PhotoUrl(String url, String photoUid, String eventUid, String filename,
+            String localPath, int success) {
         this.url = url;
         this.photoUid = photoUid;
         this.eventUid = eventUid;
         this.filename = filename;
+        this.localPath = localPath;
+        this.success = success;
     }
+
+
 
     @Generated(hash = 1214604864)
     public PhotoUrl() {
     }
+
+
 
     public String getUrl() {
         return url;
@@ -61,5 +73,31 @@ public class PhotoUrl {
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+
+
+
+
+    public String getLocalPath() {
+        return this.localPath;
+    }
+
+
+
+    public void setLocalPath(String localPath) {
+        this.localPath = localPath;
+    }
+
+
+
+    public int getSuccess() {
+        return this.success;
+    }
+
+
+
+    public void setSuccess(int success) {
+        this.success = success;
     }
 }
