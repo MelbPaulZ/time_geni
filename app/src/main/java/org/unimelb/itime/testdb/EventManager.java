@@ -3,6 +3,7 @@ package org.unimelb.itime.testdb;
 import com.google.gson.Gson;
 
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
@@ -107,5 +108,21 @@ public class EventManager {
 
     public void setCurrentEvent(Event currentEvent) {
         this.currentEvent = currentEvent;
+    }
+
+    public boolean isTimeslotExistInEvent(Event event, Timeslot timeslot){
+        if (event.hasTimeslots()) {
+            List<Timeslot> timeslotList = event.getTimeslot();
+            for (Timeslot ts : timeslotList){
+                long tsSecond= ts.getStartTime()/(1000*60*15);
+                long recSecond = timeslot.getStartTime()/(1000*60*15);
+                if(tsSecond == recSecond){
+                    return true;
+                }
+            }
+            return false;
+        }else{
+            return false;
+        }
     }
 }

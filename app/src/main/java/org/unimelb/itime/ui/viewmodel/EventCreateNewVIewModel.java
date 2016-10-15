@@ -7,6 +7,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -376,6 +377,22 @@ public class EventCreateNewVIewModel extends BaseObservable {
             setEvent(event);
         }
         notifyPropertyChanged(BR.isAllDay);
+    }
+
+    @BindingAdapter({"imageResource","position"})
+    public static void setImageResource(ImageView imageView, Event event, int position){
+        if (event.hasPhoto() && event.getPhoto().size()>= position+1){
+            imageView.setVisibility(View.VISIBLE);
+            File f = new File(event.getPhoto().get(position).getUrl());
+            int size = DensityUtil.dip2px(imageView.getContext(), 40);
+            Picasso.with(imageView.getContext())
+                    .load(f)
+                    .resize(size ,size)
+                    .centerCrop()
+                    .into(imageView);
+        }else{
+            imageView.setVisibility(View.GONE);
+        }
     }
 
     @Bindable

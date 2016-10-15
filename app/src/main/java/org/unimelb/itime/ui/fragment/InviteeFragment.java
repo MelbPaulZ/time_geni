@@ -413,6 +413,7 @@ public class InviteeFragment extends BaseUiFragment {
                 }else if (getFrom() instanceof EventTimeSlotViewFragment){
                     EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment)getFrom();
                     eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    eventTimeSlotViewFragment.resetCalendar(event);
                     switchFragment(self, (EventTimeSlotViewFragment)getFrom());
                 }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
                     EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment)getFrom();

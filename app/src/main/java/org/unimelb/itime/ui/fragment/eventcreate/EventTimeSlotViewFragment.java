@@ -22,6 +22,7 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
+import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
@@ -51,7 +52,6 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     private LayoutInflater inflater;
     private WheelView hourWheelView,minuteWheelView;
     private WeekView timeslotWeekView;
-    private EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment;
     private int hourPosition,minPosition;
 
     @Nullable
@@ -69,8 +69,6 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         binding.setTimeslotVM(viewModel);
 
         inflater=LayoutInflater.from(getContext());
-        initListeners();
-
     }
 
     public void setEvent(Event event){
@@ -79,13 +77,16 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         viewModel.setEvent(event);
     }
 
+    public void resetCalendar(Event event){
+        timeslotWeekView.resetTimeSlots();
+        initTimeSlots(event);
+    }
+
     private void changeTimeSlots(TimeSlotView timeSlotView){
         // change status of view and struct
         boolean newStatus = !timeSlotView.isSelect();
         timeSlotView.setStatus(newStatus);
         ((WeekView.TimeSlotStruct)timeSlotView.getTag()).status = newStatus;
-
-
         // change event attributes
         Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
@@ -104,11 +105,13 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     public void onEnter() {
         super.onEnter();
         // need to change later
+
+        initListeners();
+
         if(event != null || event.getTimeslot() == null || event.getTimeslot().size() == 0){
             Calendar calendar = Calendar.getInstance();
             presenter.getTimeSlots(calendar.getTimeInMillis());
         }
-
     }
 
     private void initListeners(){
@@ -336,17 +339,21 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
             event.setTimeslot(new ArrayList<Timeslot>());
         }
         for (Timeslot timeSlot: list){
-            // have to do this
-            timeSlot.setEventUid(event.getEventUid());
-            timeSlot.setStatus(getString(R.string.timeslot_status_create));
-            // todo: need to check if this timeslot already exists in a map
-            WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
-            struct.startTime = timeSlot.getStartTime();
-            struct.endTime = timeSlot.getEndTime();
-            struct.object = timeSlot;
-            struct.status = false;
-            event.getTimeslot().add(timeSlot);
-            timeslotWeekView.addTimeSlot(struct);
+            if (EventManager.getInstance().isTimeslotExistInEvent(event, timeSlot)){
+                // already exist, then do nothing
+            }else {
+                // have to do this
+                timeSlot.setEventUid(event.getEventUid());
+                timeSlot.setStatus(getString(R.string.timeslot_status_create));
+                // todo: need to check if this timeslot already exists in a map
+                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
+                struct.startTime = timeSlot.getStartTime();
+                struct.endTime = timeSlot.getEndTime();
+                struct.object = timeSlot;
+                struct.status = false;
+                event.getTimeslot().add(timeSlot);
+                timeslotWeekView.addTimeSlot(struct);
+            }
         }
         timeslotWeekView.reloadTimeSlots(true);
     }

@@ -372,13 +372,6 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
                         android:orientation="vertical">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/page_text_size"
-                            android:text="@string/description"
-                            android:textColor="@color/text_disable"/>
-
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
