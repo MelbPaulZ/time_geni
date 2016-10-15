@@ -4,10 +4,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.BindingAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.BR;
@@ -19,6 +24,9 @@ import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
+import org.unimelb.itime.vendor.helper.DensityUtil;
+
+import java.io.File;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -194,6 +202,24 @@ public class EventDetailViewModel extends BaseObservable {
                 }
             }
         };
+    }
+
+    @BindingAdapter("imageResource")
+    public static void setImageResource(ImageView imageView, Event event){
+        LinearLayout parent = (LinearLayout) imageView.getParent();
+        int position = parent.indexOfChild(imageView); // get the position
+        if (event.hasPhoto() && event.getPhoto().size()>= position+1){
+            imageView.setVisibility(View.VISIBLE);
+            File f = new File(event.getPhoto().get(position).getUrl());
+            int size = DensityUtil.dip2px(imageView.getContext(), 40);
+            Picasso.with(imageView.getContext())
+                    .load(f)
+                    .resize(size ,size)
+                    .centerCrop()
+                    .into(imageView);
+        }else{
+            imageView.setVisibility(View.GONE);
+        }
     }
 
 

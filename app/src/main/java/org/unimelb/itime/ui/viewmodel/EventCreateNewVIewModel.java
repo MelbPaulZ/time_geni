@@ -379,8 +379,10 @@ public class EventCreateNewVIewModel extends BaseObservable {
         notifyPropertyChanged(BR.isAllDay);
     }
 
-    @BindingAdapter({"imageResource","position"})
-    public static void setImageResource(ImageView imageView, Event event, int position){
+    @BindingAdapter("imageResource")
+    public static void setImageResource(ImageView imageView, Event event){
+        LinearLayout parent = (LinearLayout) imageView.getParent();
+        int position = parent.indexOfChild(imageView); // get the position
         if (event.hasPhoto() && event.getPhoto().size()>= position+1){
             imageView.setVisibility(View.VISIBLE);
             File f = new File(event.getPhoto().get(position).getUrl());

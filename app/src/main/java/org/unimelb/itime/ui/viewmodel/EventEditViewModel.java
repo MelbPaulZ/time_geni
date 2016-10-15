@@ -5,17 +5,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.vendor.helper.DensityUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -201,8 +207,27 @@ public class EventEditViewModel extends BaseObservable {
         setEventEditViewEvent(eventEditViewEvent);
     }
 
-
-
+    @BindingAdapter("imageResource")
+    public static void setImageResource(ImageView imageView, Event event){
+        LinearLayout parent = (LinearLayout) imageView.getParent();
+        int position = parent.indexOfChild(imageView); // get the position
+        if (event==null){
+            // it seems has some problem here, called twice???? ask Chuandong.
+        }else{
+            if (event.hasPhoto() && event.getPhoto().size()>= position+1){
+                imageView.setVisibility(View.VISIBLE);
+                File f = new File(event.getPhoto().get(position).getUrl());
+                int size = DensityUtil.dip2px(imageView.getContext(), 40);
+                Picasso.with(imageView.getContext())
+                        .load(f)
+                        .resize(size ,size)
+                        .centerCrop()
+                        .into(imageView);
+            }else{
+                imageView.setVisibility(View.GONE);
+            }
+        }
+    }
 
     @Bindable
     public Event getEventEditViewEvent() {

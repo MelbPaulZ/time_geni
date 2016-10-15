@@ -12,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TimePicker;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
@@ -30,7 +32,9 @@ import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
+import org.unimelb.itime.vendor.helper.DensityUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -297,6 +301,24 @@ public class EventCreateDetailBeforeSendingViewModel extends BaseObservable {
                 }
             }
         };
+    }
+
+    @BindingAdapter("imageResource")
+    public static void setImageResource(ImageView imageView, Event event){
+        LinearLayout parent = (LinearLayout) imageView.getParent();
+        int position = parent.indexOfChild(imageView); // get the position
+        if (event.hasPhoto() && event.getPhoto().size()>= position+1){
+            imageView.setVisibility(View.VISIBLE);
+            File f = new File(event.getPhoto().get(position).getUrl());
+            int size = DensityUtil.dip2px(imageView.getContext(), 40);
+            Picasso.with(imageView.getContext())
+                    .load(f)
+                    .resize(size ,size)
+                    .centerCrop()
+                    .into(imageView);
+        }else{
+            imageView.setVisibility(View.GONE);
+        }
     }
 //    *********************************************************************
 

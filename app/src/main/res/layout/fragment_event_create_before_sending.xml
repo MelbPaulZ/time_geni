@@ -395,12 +395,38 @@
                             android:textSize="@dimen/page_text_size"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"/>
-                        <ImageView
-                            android:id="@+id/before_sending_photo1"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                        <HorizontalScrollView
+                            android:id="@+id/before_sending_photoList"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_toLeftOf="@+id/before_sending_photo_arrow"
-                            android:layout_marginRight="@dimen/padding_5" />
+                            android:layout_marginLeft="@dimen/padding_10"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+                                <ImageView
+                                    android:id="@+id/before_sending_photo1"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_marginRight="@dimen/padding_10"
+                                    imageResource="@{newEventDetailVM.newEvDtlEvent}" />
+
+                                <ImageView
+                                    android:id="@+id/before_sending_photo2"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_marginRight="@dimen/padding_10"
+                                    imageResource="@{newEventDetailVM.newEvDtlEvent}" />
+
+                                <ImageView
+                                    android:id="@+id/before_sending_photo3"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    imageResource="@{newEventDetailVM.newEvDtlEvent}" />
+                            </LinearLayout>
+                        </HorizontalScrollView>
 
                         <ImageView
                             android:id="@+id/before_sending_photo_arrow"
