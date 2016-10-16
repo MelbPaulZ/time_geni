@@ -216,7 +216,7 @@ public class EventEditViewModel extends BaseObservable {
         }else{
             if (event.hasPhoto() && event.getPhoto().size()>= position+1){
                 imageView.setVisibility(View.VISIBLE);
-                File f = new File(event.getPhoto().get(position).getUrl());
+                File f = new File(event.getPhoto().get(position).getLocalPath());
                 int size = DensityUtil.dip2px(imageView.getContext(), 40);
                 Picasso.with(imageView.getContext())
                         .load(f)

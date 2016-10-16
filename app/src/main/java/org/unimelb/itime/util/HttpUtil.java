@@ -7,6 +7,7 @@ import org.unimelb.itime.bean.JwtToken;
 import org.unimelb.itime.restfulapi.UserApi;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Authenticator;
 import okhttp3.Interceptor;
@@ -33,7 +34,8 @@ public class HttpUtil {
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(C.api.BASE)
                 .addConverterFactory(GsonConverterFactory.create());
-        OkHttpClient client = httpClientBuilder.build();
+        OkHttpClient client = httpClientBuilder.connectTimeout(60, TimeUnit.SECONDS).build();
+
         Retrofit retrofit = retrofitBuilder.client(client).build();
         return retrofit.create(serviceClass);
     }
@@ -87,7 +89,7 @@ public class HttpUtil {
             }
         });
 
-        OkHttpClient client = httpClientBuilder.build();
+        OkHttpClient client = httpClientBuilder.connectTimeout(60, TimeUnit.SECONDS).build();
         Retrofit retrofit = retrofitBuilder.client(client).build();
         return retrofit.create(serviceClass);
     }

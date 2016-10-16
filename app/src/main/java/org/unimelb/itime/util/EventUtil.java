@@ -4,6 +4,8 @@ package org.unimelb.itime.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
@@ -15,11 +17,14 @@ import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Paul on 8/09/2016.
@@ -132,9 +137,22 @@ public class EventUtil{
     public static ArrayList<PhotoUrl> fromStringToPhotoUrlList(ArrayList<String> urls){
         ArrayList<PhotoUrl> arrayList = new ArrayList<>();
         for (String url: urls){
-            arrayList.add(new PhotoUrl(url));
+            // here should update photoUrl, as Chuandong Request
+            PhotoUrl photoUrl = new PhotoUrl();
+            photoUrl.setLocalPath(url);
+            photoUrl.setFilename(getPhotoFileName(url));
+            photoUrl.setSuccess(0);
+            photoUrl.setPhotoUid(AppUtil.generateUuid());
+            photoUrl.setEventUid(EventManager.getInstance().getCurrentEvent().getEventUid());
+            arrayList.add(photoUrl);
         }
         return arrayList;
+    }
+
+    public static String getPhotoFileName(String url){
+        File f = new File(url);
+        String name = f.getName();
+        return name;
     }
 
     public static Event getEventInDB(Context context,String eventUid){

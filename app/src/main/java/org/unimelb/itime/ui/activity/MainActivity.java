@@ -23,6 +23,7 @@ import org.unimelb.itime.ui.fragment.MainSettingsFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -116,7 +117,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     public void initNewEvent(Calendar startTimeCalendar){
         // initial default values for new event
         Event event = new Event();
-        event.setEventUid(EventUtil.generateUid());
+        event.setEventUid(AppUtil.generateUuid());
         event.setHostUserUid(UserUtil.getUserUid());
         long endTime = startTimeCalendar.getTimeInMillis() + 3600 * 1000;
         event.setStartTime(startTimeCalendar.getTimeInMillis());
