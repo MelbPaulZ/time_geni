@@ -1,5 +1,7 @@
 package org.unimelb.itime.ui.fragment.eventcreate;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
 import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
@@ -37,6 +40,7 @@ import org.unimelb.itime.vendor.weekview.WeekView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.zip.Inflater;
 
 
 /**
@@ -164,16 +168,58 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
            }
 
-           @Override
-           public void onTimeSlotDragDrop(TimeSlotView timeSlotView) {
-               Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
-               Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
-               if (timeSlot!=null) {
-                   timeSlot.setStartTime(timeSlotView.getStartTimeM());
-                   timeSlot.setEndTime(timeSlotView.getEndTimeM());
-               }
-           }
+            @Override
+            public void onTimeSlotDragDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
+                confirmTimePopup(timeSlotView, startTime, endTime);
+            }
+
        });
+    }
+
+    private void timeslotDrop(TimeSlotView timeSlotView, long startTime, long endTime){
+        // update timeslot struct
+        WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct)timeSlotView.getTag();
+        struct.startTime = startTime;
+        struct.endTime = endTime;
+        timeslotWeekView.reloadTimeSlots(false);
+
+        // update timeslot info
+        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
+        if (timeSlot!=null) {
+            timeSlot.setStartTime(timeSlotView.getStartTimeM());
+            timeSlot.setEndTime(timeSlotView.getEndTimeM());
+        }
+    }
+
+    private void confirmTimePopup(final TimeSlotView timeSlotView, final long startTime, final long endTime){
+        final AlertDialog dialog = new AlertDialog.Builder(presenter.getContext()).create();
+        dialog.setTitle("Confirm Timeslot");
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View root = inflater.inflate(R.layout.timeslot_move_confirm, null);
+        TextView cancel = (TextView) root.findViewById(R.id.timeslot_move_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        TextView done = (TextView) root.findViewById(R.id.timeslot_move_done);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timeslotDrop(timeSlotView, startTime, endTime);
+                dialog.dismiss();
+            }
+        });
+        TextView display = (TextView) root.findViewById(R.id.timeslot_move_tv);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeSlotView.getStartTimeM());
+        display.setText(EventUtil.getMonth(getContext(), calendar.get(Calendar.MONTH)) + "/" +
+                calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":"+
+                calendar.get(Calendar.MINUTE));
+        dialog.setView(root);
+        dialog.show();
     }
 //
 //

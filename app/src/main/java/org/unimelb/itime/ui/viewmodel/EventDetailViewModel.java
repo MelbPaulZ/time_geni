@@ -170,10 +170,10 @@ public class EventDetailViewModel extends BaseObservable {
                 Timeslot timeSlot = evDtlHostEvent.getTimeslot().get(position);
                 if (evDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
                         Timeslot timeslot = evDtlHostEvent.getTimeslot().get(position);
-                    for (Timeslot ts: evDtlHostEvent.getTimeslot()){
-                        ts.setIsConfirmed(0);
-                    }
                     if (timeslot.getIsConfirmed()==0){
+                        for (Timeslot ts: evDtlHostEvent.getTimeslot()){
+                            ts.setIsConfirmed(0);
+                        }
                         timeslot.setIsConfirmed(1);
                     }else{
                         timeslot.setIsConfirmed(0);

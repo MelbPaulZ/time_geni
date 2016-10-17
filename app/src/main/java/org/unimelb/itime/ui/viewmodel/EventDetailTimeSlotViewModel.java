@@ -98,18 +98,25 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
            }
 
            @Override
-           public void onTimeSlotDragDrop(TimeSlotView timeSlotView) {
-                if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
-                    // host:
-                    Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
-                    Timeslot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
-                    if (timeSlot!=null) {
-                        timeSlot.setStartTime(timeSlotView.getStartTimeM());
-                        timeSlot.setEndTime(timeSlotView.getEndTimeM());
-                    }
-                }else{
-                    // do nothing
-                }
+           public void onTimeSlotDragDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
+               if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
+                   // host:
+                   WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
+                   struct.startTime = startTime;
+                   struct.endTime = endTime;
+                   if (presenter.getView()!=null) {
+                       presenter.getView().reloadTimeslot();
+                   }
+
+                   Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
+                   Timeslot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
+                   if (timeSlot!=null) {
+                       timeSlot.setStartTime(timeSlotView.getStartTimeM());
+                       timeSlot.setEndTime(timeSlotView.getEndTimeM());
+                   }
+               }else{
+                   // do nothing
+               }
            }
        };
    }

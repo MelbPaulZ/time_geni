@@ -23,4 +23,5 @@ public class EventDetailHostTimeSlotPresenter extends MvpBasePresenter<EventDeta
         this.context = context;
     }
 
+
 }

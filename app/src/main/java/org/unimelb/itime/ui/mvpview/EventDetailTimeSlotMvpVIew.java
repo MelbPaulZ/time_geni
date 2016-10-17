@@ -10,4 +10,5 @@ import org.unimelb.itime.bean.Event;
 public interface EventDetailTimeSlotMvpVIew extends MvpView {
     void onClickBack();
     void onClickDone();
+    void reloadTimeslot();
 }

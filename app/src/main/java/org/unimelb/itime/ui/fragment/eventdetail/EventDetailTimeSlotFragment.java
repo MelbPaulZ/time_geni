@@ -128,4 +128,9 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         }
     }
 
+    @Override
+    public void reloadTimeslot() {
+        weekView.reloadTimeSlots(false);
+    }
+
 }
