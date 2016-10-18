@@ -38,7 +38,7 @@ import java.util.Calendar;
 /**
  * Created by Paul on 25/08/2016.
  */
-public class EventCreateNewVIewModel extends BaseObservable {
+public class EventCreateNewVIewModel extends CommonViewModel {
     private EventCreateNewPresenter presenter;
     private EventCreateNewMvpView mvpView;
     private Event event;
@@ -379,23 +379,23 @@ public class EventCreateNewVIewModel extends BaseObservable {
         notifyPropertyChanged(BR.isAllDay);
     }
 
-    @BindingAdapter("imageResource")
-    public static void setImageResource(ImageView imageView, Event event){
-        LinearLayout parent = (LinearLayout) imageView.getParent();
-        int position = parent.indexOfChild(imageView); // get the position
-        if (event.hasPhoto() && event.getPhoto().size()>= position+1){
-            imageView.setVisibility(View.VISIBLE);
-            File f = new File(event.getPhoto().get(position).getUrl());
-            int size = DensityUtil.dip2px(imageView.getContext(), 40);
-            Picasso.with(imageView.getContext())
-                    .load(f)
-                    .resize(size ,size)
-                    .centerCrop()
-                    .into(imageView);
-        }else{
-            imageView.setVisibility(View.GONE);
-        }
-    }
+//    @BindingAdapter("bind:imageResource")
+//    public static void setImageResource(ImageView imageView, Event event){
+//        LinearLayout parent = (LinearLayout) imageView.getParent();
+//        int position = parent.indexOfChild(imageView); // get the position
+//        if (event.hasPhoto() && event.getPhoto().size()>= position+1){
+//            imageView.setVisibility(View.VISIBLE);
+//            File f = new File(event.getPhoto().get(position).getLocalPath());
+//            int size = DensityUtil.dip2px(imageView.getContext(), 40);
+//            Picasso.with(imageView.getContext())
+//                    .load(f)
+//                    .resize(size ,size)
+//                    .centerCrop()
+//                    .into(imageView);
+//        }else{
+//            imageView.setVisibility(View.GONE);
+//        }
+//    }
 
     @Bindable
     public static int getChangeStarttime() {

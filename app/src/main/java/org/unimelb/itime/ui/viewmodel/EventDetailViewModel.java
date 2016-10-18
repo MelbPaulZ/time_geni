@@ -31,7 +31,7 @@ import java.io.File;
 /**
  * Created by Paul on 4/09/2016.
  */
-public class EventDetailViewModel extends BaseObservable {
+public class EventDetailViewModel extends CommonViewModel {
     private EventDetailGroupPresenter presenter;
     private Event evDtlHostEvent;
     private LayoutInflater inflater;
@@ -204,23 +204,23 @@ public class EventDetailViewModel extends BaseObservable {
         };
     }
 
-    @BindingAdapter("imageResource")
-    public static void setImageResource(ImageView imageView, Event event){
-        LinearLayout parent = (LinearLayout) imageView.getParent();
-        int position = parent.indexOfChild(imageView); // get the position
-        if (event.hasPhoto() && event.getPhoto().size()>= position+1){
-            imageView.setVisibility(View.VISIBLE);
-            File f = new File(event.getPhoto().get(position).getUrl());
-            int size = DensityUtil.dip2px(imageView.getContext(), 40);
-            Picasso.with(imageView.getContext())
-                    .load(f)
-                    .resize(size ,size)
-                    .centerCrop()
-                    .into(imageView);
-        }else{
-            imageView.setVisibility(View.GONE);
-        }
-    }
+//    @BindingAdapter("imageResource")
+//    public static void setImageResource(ImageView imageView, Event event){
+//        LinearLayout parent = (LinearLayout) imageView.getParent();
+//        int position = parent.indexOfChild(imageView); // get the position
+//        if (event.hasPhoto() && event.getPhoto().size()>= position+1){
+//            imageView.setVisibility(View.VISIBLE);
+////            File f = new File(event.getPhoto().get(position).getUrl());
+//            int size = DensityUtil.dip2px(imageView.getContext(), 40);
+//            Picasso.with(imageView.getContext())
+//                    .load(event.getPhoto().get(position).getUrl())
+//                    .resize(size ,size)
+//                    .centerCrop()
+//                    .into(imageView);
+//        }else{
+//            imageView.setVisibility(View.GONE);
+//        }
+//    }
 
 
 //    ***************************************************************

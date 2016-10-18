@@ -461,20 +461,20 @@
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
                                         android:layout_marginRight="@dimen/padding_10"
-                                        imageResource="@{eventVM.event}" />
+                                        app:imageResource="@{eventVM.event}" />
 
                                     <ImageView
                                         android:id="@+id/photo2"
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
                                         android:layout_marginRight="@dimen/padding_10"
-                                        imageResource="@{eventVM.event}" />
+                                        app:imageResource="@{eventVM.event}" />
 
                                     <ImageView
                                         android:id="@+id/photo3"
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
-                                        imageResource="@{eventVM.event}" />
+                                        app:imageResource="@{eventVM.event}" />
                                 </LinearLayout>
                             </HorizontalScrollView>
 

@@ -28,7 +28,7 @@ import java.util.Calendar;
 /**
  * Created by Paul on 28/08/2016.
  */
-public class EventEditViewModel extends BaseObservable {
+public class EventEditViewModel extends CommonViewModel {
 
     private Event eventEditViewEvent;
     private EventEditPresenter presenter;
@@ -207,27 +207,27 @@ public class EventEditViewModel extends BaseObservable {
         setEventEditViewEvent(eventEditViewEvent);
     }
 
-    @BindingAdapter("imageResource")
-    public static void setImageResource(ImageView imageView, Event event){
-        LinearLayout parent = (LinearLayout) imageView.getParent();
-        int position = parent.indexOfChild(imageView); // get the position
-        if (event==null){
-            // it seems has some problem here, called twice???? ask Chuandong.
-        }else{
-            if (event.hasPhoto() && event.getPhoto().size()>= position+1){
-                imageView.setVisibility(View.VISIBLE);
-                File f = new File(event.getPhoto().get(position).getLocalPath());
-                int size = DensityUtil.dip2px(imageView.getContext(), 40);
-                Picasso.with(imageView.getContext())
-                        .load(f)
-                        .resize(size ,size)
-                        .centerCrop()
-                        .into(imageView);
-            }else{
-                imageView.setVisibility(View.GONE);
-            }
-        }
-    }
+//    @BindingAdapter("imageResource")
+//    public static void setImageResource(ImageView imageView, Event event){
+//        LinearLayout parent = (LinearLayout) imageView.getParent();
+//        int position = parent.indexOfChild(imageView); // get the position
+//        if (event==null){
+//            // it seems has some problem here, called twice???? ask Chuandong.
+//        }else{
+//            if (event.hasPhoto() && event.getPhoto().size()>= position+1){
+//                imageView.setVisibility(View.VISIBLE);
+////                File f = new File(event.getPhoto().get(position).getLocalPath());
+//                int size = DensityUtil.dip2px(imageView.getContext(), 40);
+//                Picasso.with(imageView.getContext())
+//                        .load(event.getPhoto().get(position).getUrl())
+//                        .resize(size ,size)
+//                        .centerCrop()
+//                        .into(imageView);
+//            }else{
+//                imageView.setVisibility(View.GONE);
+//            }
+//        }
+//    }
 
     @Bindable
     public Event getEventEditViewEvent() {
