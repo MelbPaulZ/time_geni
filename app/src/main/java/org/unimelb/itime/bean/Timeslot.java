@@ -1,10 +1,10 @@
 package org.unimelb.itime.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 
 import java.io.Serializable;
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by Paul on 10/09/2016.
@@ -19,18 +19,21 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     private String status = "";
     private int acceptedNum;
     private int totalNum;
-    private int declinedNum;
-    private int needsActionNum;
+    private int rejectedNum;
+    private int pendingNum;
     private int isConfirmed;
     private int isSystemSuggested;
 
 
 
 
-    @Generated(hash = 111103980)
+
+
+
+    @Generated(hash = 439616673)
     public Timeslot(String timeslotUid, String eventUid, String userUid,
             long startTime, long endTime, String status, int acceptedNum,
-            int totalNum, int declinedNum, int needsActionNum, int isConfirmed,
+            int totalNum, int rejectedNum, int pendingNum, int isConfirmed,
             int isSystemSuggested) {
         this.timeslotUid = timeslotUid;
         this.eventUid = eventUid;
@@ -40,8 +43,8 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
         this.status = status;
         this.acceptedNum = acceptedNum;
         this.totalNum = totalNum;
-        this.declinedNum = declinedNum;
-        this.needsActionNum = needsActionNum;
+        this.rejectedNum = rejectedNum;
+        this.pendingNum = pendingNum;
         this.isConfirmed = isConfirmed;
         this.isSystemSuggested = isSystemSuggested;
     }
@@ -49,6 +52,9 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     @Generated(hash = 1204592951)
     public Timeslot() {
     }
+
+
+
 
 
 
@@ -122,12 +128,12 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
         this.eventUid = eventUid;
     }
 
-    public int getDeclinedNum() {
-        return declinedNum;
+    public int getRejectedNum() {
+        return rejectedNum;
     }
 
-    public void setDeclinedNum(int declinedNum) {
-        this.declinedNum = declinedNum;
+    public void setRejectedNum(int rejectedNum) {
+        this.rejectedNum = rejectedNum;
     }
 
     public int getIsConfirmed() {
@@ -154,11 +160,11 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
         this.userUid = userUid;
     }
 
-    public int getNeedsActionNum() {
-        return needsActionNum;
+    public int getPendingNum() {
+        return pendingNum;
     }
 
-    public void setNeedsActionNum(int needsActionNum) {
-        this.needsActionNum = needsActionNum;
+    public void setPendingNum(int pendingNum) {
+        this.pendingNum = pendingNum;
     }
 }

@@ -20,10 +20,13 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
     private String aliasName;
     private String aliasPhoto;
     private String status;
+    private String reason;
 
-    @Generated(hash = 1415596982)
+
+    @Generated(hash = 1547693615)
     public Invitee(String eventUid, String inviteeUid, String userUid,
-            String userId, String aliasName, String aliasPhoto, String status) {
+            String userId, String aliasName, String aliasPhoto, String status,
+            String reason) {
         this.eventUid = eventUid;
         this.inviteeUid = inviteeUid;
         this.userUid = userUid;
@@ -31,10 +34,20 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
         this.aliasName = aliasName;
         this.aliasPhoto = aliasPhoto;
         this.status = status;
+        this.reason = reason;
     }
 
     @Generated(hash = 15121660)
     public Invitee() {
+    }
+
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public String getEventUid() {
