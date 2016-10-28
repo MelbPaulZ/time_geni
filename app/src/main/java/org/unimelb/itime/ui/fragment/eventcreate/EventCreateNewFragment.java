@@ -1,16 +1,20 @@
 package org.unimelb.itime.ui.fragment.eventcreate;
 
+import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TimePicker;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
@@ -43,7 +47,7 @@ import java.util.Calendar;
 /**
  * Created by Paul on 23/08/2016.
  */
-public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView, EventCreateNewPresenter> implements EventCreateNewMvpView{
+public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView, EventCreateNewPresenter> implements EventCreateNewMvpView, TimePickerDialog.OnTimeSetListener{
 
     private final static String TAG = "EventCreateNewFragment";
     private FragmentEventCreateNewBinding binding;
@@ -52,6 +56,8 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     private int year,month,day,hour,minute;
 
     private final int ACTIVITY_PHOTOPICKER = 1;
+
+    private TimePickerDialog timePickerDialog;
 
     @Override
     public EventCreateNewPresenter createPresenter() {
@@ -80,7 +86,26 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
+
+        // for time picker , spinner theme
+//         timePickerDialog = new TimePickerDialog(getActivity(),
+//                TimePickerDialog.THEME_HOLO_LIGHT, null, 11,11,false);
     }
+
+    public void showTimePicker(){
+        this.timePickerDialog.show();
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int minutes) {
+
+    }
+
+    public void showDatePicker(){
+
+    }
+
+
 
 
     public void setEvent(Event event){
@@ -146,5 +171,6 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
 
 }

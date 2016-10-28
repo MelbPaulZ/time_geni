@@ -167,8 +167,12 @@ public class EventUtil{
         return new CharSequence[]{"Work", "Private", "Group", "Public"};
     }
 
-    public static String getCalendarTypeFromIndex(Context context, int index){
-        return (String) getCalendarTypes(context)[index];
+    public static String getCalendarTypeFromIndex(Context context, String index){
+        if (index==null){
+            return null;
+        }
+        int num = Integer.parseInt(index);
+        return (String) getCalendarTypes(context)[num];
     }
 
     public static CharSequence[] getRepeats(Context context, Event event){
