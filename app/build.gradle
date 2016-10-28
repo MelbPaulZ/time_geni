@@ -5,7 +5,7 @@ apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '24'
 
     defaultConfig {
         applicationId "org.unimelb.itime"
@@ -78,6 +78,12 @@ dependencies {
 
     compile 'org.unimelb.itime.vendor:vendor:1.0.0'
     compile 'com.lling.photopicker:photopicker:1.0.0'
+
+    //leancloud
+    compile 'cn.leancloud.android:avoscloud-sdk:v3.7.1'
+    compile 'cn.leancloud.android:avoscloud-push:v3.7.1@aar'
+    compile 'cn.leancloud.android:Java-WebSocket:1.2.0-leancloud'
+    compile 'cn.leancloud.android:avoscloud-statistics:v3.7.1@aar'
 
 
     // Unit test dependency

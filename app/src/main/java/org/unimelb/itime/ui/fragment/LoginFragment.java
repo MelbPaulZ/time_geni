@@ -10,21 +10,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVInstallation;
+import com.avos.avoscloud.PushService;
+import com.avos.avoscloud.SaveCallback;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentLoginBinding;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
+import org.unimelb.itime.util.UserUtil;
+
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> implements LoginMvpView{
+    private final static String TAG = "LoginFragment";
 
     private FragmentLoginBinding binding;
     private LoginViewModel loginVM;
@@ -57,6 +63,19 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
 
     @Override
     public void onLoginSucceed() {
+
+        PushService.setDefaultPushCallback(getActivity().getApplication(), MainActivity.class);
+        AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
+            public void done(AVException e) {
+                if (e == null) {
+                    String installationId = AVInstallation.getCurrentInstallation().getInstallationId();
+                    Log.d(TAG, "done: " + installationId);
+                    AVInstallation.getCurrentInstallation().put("user_uid", UserUtil.getUserUid());
+                } else {
+
+                }
+            }
+        });
         // start service and go to main activity
         Intent intent = new Intent(getActivity(), RemoteService.class);
         getActivity().startService(intent);
