@@ -194,7 +194,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                         if (!repeats[i].equals(getContext().getString(R.string.repeat_never))) {
                             setIsEventRepeat(true);
                             if (!isEndRepeatChanged) { // if the user didn't change end repeat time before
-                                event.setRepeatEndsTime(calendar.getTimeInMillis() + 24*3600000); // default end in next day
+                                event.setRepeatEndsTime(0); // default end in next day
                             }
                         }else{
                             setIsEventRepeat(false);

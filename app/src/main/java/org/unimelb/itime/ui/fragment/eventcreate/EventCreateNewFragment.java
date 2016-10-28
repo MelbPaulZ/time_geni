@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ import java.util.Calendar;
  */
 public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView, EventCreateNewPresenter> implements EventCreateNewMvpView{
 
+    private final static String TAG = "EventCreateNewFragment";
     private FragmentEventCreateNewBinding binding;
     private EventCreateNewVIewModel viewModel;
     private Event event;
@@ -135,6 +137,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     @Override
     public void onStart() {
         super.onStart();
+        Log.i(TAG, "onStart: " + System.currentTimeMillis());
         EventBus.getDefault().register(this);
     }
 

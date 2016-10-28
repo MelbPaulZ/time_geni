@@ -51,12 +51,14 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private EventCreateDetailBeforeSendingMvpView mvpView;
     private int tempYear,tempMonth,tempDay,tempHour,tempMin;
     private EventCreateDetailBeforeSendingPresenter presenter;
+    private ObservableField<Boolean> isEndRepeatChange;
 
     public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter) {
         this.presenter = presenter;
         newEvDtlEvent = EventManager.getInstance().getCurrentEvent();
         repeats = EventUtil.getRepeats(getContext(), newEvDtlEvent);
         evDtlIsEventRepeat = new ObservableField<>(false);
+        isEndRepeatChange = new ObservableField<>(false);
         this.viewModel = this;
         mvpView = presenter.getView();
     }
@@ -77,9 +79,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (!repeats[i].equals(getContext().getString(R.string.repeat_never))) {
                             setIsEventRepeat(true);
-                            if (newEvDtlEvent.getRepeatEndsTime()==0){
-                                newEvDtlEvent.setRepeatEndsTime(newEvDtlEvent.getStartTime()+24*3600000);//default another day
-                            }
+                            setEndRepeatChange(true);
                         }else{
                             setIsEventRepeat(false);
                         }
@@ -183,13 +183,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 }
             }
         };
-    }
-
-    public void updateRepeats(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(newEvDtlEvent.getStartTime());
-        String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(), calendar.get(Calendar.DAY_OF_WEEK));
-        repeats[2] = String.format(getContext().getString(R.string.repeat_everyweek), dayOfWeek);
     }
 
     public View.OnClickListener pickInvitees(){
@@ -302,24 +295,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
             }
         };
     }
-//
-//    @BindingAdapter("imageResource")
-//    public static void setImageResource(ImageView imageView, Event event){
-//        LinearLayout parent = (LinearLayout) imageView.getParent();
-//        int position = parent.indexOfChild(imageView); // get the position
-//        if (event.hasPhoto() && event.getPhoto().size()>= position+1){
-//            imageView.setVisibility(View.VISIBLE);
-//            File f = new File(event.getPhoto().get(position).getUrl());
-//            int size = DensityUtil.dip2px(imageView.getContext(), 40);
-//            Picasso.with(imageView.getContext())
-//                    .load(f)
-//                    .resize(size ,size)
-//                    .centerCrop()
-//                    .into(imageView);
-//        }else{
-//            imageView.setVisibility(View.GONE);
-//        }
-//    }
+
 //    *********************************************************************
 
 
@@ -348,6 +324,16 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = (int) height;
         view.setLayoutParams(layoutParams);
+    }
+
+    @Bindable
+    public boolean isEndRepeatChange() {
+        return isEndRepeatChange.get();
+    }
+
+    public void setEndRepeatChange(boolean endRepeatChange) {
+        isEndRepeatChange.set(endRepeatChange);
+        notifyPropertyChanged(BR.endRepeatChange);
     }
 
 //    *******************************************************************************************************

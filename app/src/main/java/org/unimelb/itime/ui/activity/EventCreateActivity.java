@@ -8,6 +8,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -54,22 +57,54 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_create);
         initFragments();
+        Log.i(TAG, "onCreate: "+ System.currentTimeMillis());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: " + System.currentTimeMillis());
     }
 
     public void initFragments(){
         fragmentList.add(new EventCreateNewFragment());
-        fragmentList.add(new InviteeFragment());
-        fragmentList.add(new EventTimeSlotViewFragment());
-        fragmentList.add(new EventCreateDetailBeforeSendingFragment());
-        fragmentList.add(new EventLocationPickerFragment());
+//        fragmentList.add(new InviteeFragment());
+//        fragmentList.add(new EventTimeSlotViewFragment());
+//        fragmentList.add(new EventCreateDetailBeforeSendingFragment());
+//        fragmentList.add(new EventLocationPickerFragment());
 
         hideAllFragments();
         getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
+        test();
     }
+
+    private void test(){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                fragmentList.add(new InviteeFragment());
+                fragmentList.add(new EventTimeSlotViewFragment());
+                fragmentList.add(new EventCreateDetailBeforeSendingFragment());
+                fragmentList.add(new EventLocationPickerFragment());
+                handler.sendEmptyMessage(0);
+            }
+        }.start();
+    }
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            hideAllFragments();
+        }
+    };
 
     public void hideAllFragments(){
         for (BaseUiFragment fragment: fragmentList){
-            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, fragment, fragment.getClassName()).hide(fragment).commit();
+            if (!fragment.isAdded()) {
+                getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, fragment, fragment.getClassName()).hide(fragment).commit();
+            }
         }
 
     }

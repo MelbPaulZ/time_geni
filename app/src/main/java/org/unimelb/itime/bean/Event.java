@@ -585,4 +585,8 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     public synchronized void resetTimeslot() {
         timeslot = null;
     }
+
+    public boolean hasRecurrence(){
+        return this.recurrence!=null;
+    }
 }

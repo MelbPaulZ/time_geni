@@ -45,22 +45,16 @@
                     android:textSize="20dp" />
 
 
-                <TextView
+                <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginRight="@dimen/padding_10"
+                    android:padding="15dp"
+                    android:src="@drawable/icon_plus"
                     android:onClick="@{calenarVM.gotoEventCreateActivity}"
-                    />
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="@dimen/padding_10"
-                    android:background="@drawable/icon_plus"
-                    />
+
+                />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
         <FrameLayout

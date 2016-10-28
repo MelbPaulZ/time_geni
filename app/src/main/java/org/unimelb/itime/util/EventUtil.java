@@ -4,8 +4,6 @@ package org.unimelb.itime.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
@@ -23,8 +21,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Paul on 8/09/2016.
@@ -45,12 +41,17 @@ public class EventUtil{
     }
 
     public static String parseDateToString(Context context, long time){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time);
-        String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
-        String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-        String month = getMonth(context, calendar.get(Calendar.MONTH));
-        return dayOfWeek + " ," + month + " " + day;
+        if (time == 0) {
+            return context.getString(R.string.repeat_never);
+        }
+        else {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(time);
+            String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
+            String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+            String month = getMonth(context, calendar.get(Calendar.MONTH));
+            return dayOfWeek + " ," + month + " " + day;
+        }
     }
 
     public static String getAttendeeString(Context context,ArrayList<String> attendeesArrayList) {
@@ -346,4 +347,18 @@ public class EventUtil{
         }
         return map.get(Status);
     }
+
+    public static boolean isEventRepeat(Event event){
+        if (event.hasRecurrence() && event.getRecurrence().equals("0")){
+            return false;
+        }else if(!event.hasRecurrence()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
+
+
 }

@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.fragment.calendars;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class CalendarMonthDayFragment extends Fragment {
         monthDayView.setOnBodyOuterListener(new FlexibleLenViewBody.OnBodyListener() {
             @Override
             public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
+                Log.i("onclick time", "onEventCreate: "+System.currentTimeMillis());
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
                 ((MainActivity)getActivity()).startEventCreateActivity(calendar);

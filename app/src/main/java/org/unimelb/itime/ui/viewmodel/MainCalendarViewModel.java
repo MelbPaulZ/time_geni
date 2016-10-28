@@ -62,6 +62,7 @@ public class MainCalendarViewModel extends BaseObservable{
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "onClick: " + System.currentTimeMillis());
                 if (mvpView!=null){
                     mvpView.startCreateEventActivity();
                 }

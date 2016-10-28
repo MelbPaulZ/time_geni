@@ -12,7 +12,6 @@
             name="eventVM"
             type="org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel" />
     </data>
-
     <LinearLayout
 
         android:layout_width="match_parent"
