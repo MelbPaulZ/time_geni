@@ -50,7 +50,16 @@ public class CalendarAgendaFragment extends Fragment {
             public void onMonthChanged(MyCalendar myCalendar) {
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
+
+            @Override
+            public void backToToday() {
+
+            }
         });
+    }
+
+    public void backToday(){
+        monthAgendaView.backToToday();
     }
 
 

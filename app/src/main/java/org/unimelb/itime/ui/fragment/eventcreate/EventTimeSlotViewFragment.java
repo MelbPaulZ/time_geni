@@ -1,7 +1,6 @@
 package org.unimelb.itime.ui.fragment.eventcreate;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,7 +39,6 @@ import org.unimelb.itime.vendor.weekview.WeekView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.zip.Inflater;
 
 
 /**
@@ -54,9 +52,9 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     private Event event;
     private RelativeLayout durationRelativeLayout;
     private LayoutInflater inflater;
-    private WheelView hourWheelView,minuteWheelView;
+    private WheelView timeWheelView;
     private WeekView timeslotWeekView;
-    private int hourPosition,minPosition;
+    private int timePosition;
 
     @Nullable
     @Override
@@ -71,7 +69,6 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         timeslotWeekView = (WeekView) binding.getRoot().findViewById(R.id.timeslot_week_view);
         viewModel = new EventCreateTimeslotViewModel(getPresenter());
         binding.setTimeslotVM(viewModel);
-
         inflater=LayoutInflater.from(getContext());
     }
 
@@ -171,7 +168,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
             @Override
             public void onTimeSlotDragDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
-                confirmTimePopup(timeSlotView, startTime, endTime);
+                timeslotDrop(timeSlotView, startTime, endTime);
             }
 
        });
@@ -228,51 +225,27 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     public void initWheelPickers(){
         View root = inflater.inflate(R.layout.timeslot_duration_picker, null);
         final TextView durationTime = (TextView) root.findViewById(R.id.popup_duration);
-        final int[] pickHour = {0};
-        final int[] pickMinute = {0};
-
-        hourWheelView = (WheelView) root.findViewById(R.id.hour_wheelview);
-        hourWheelView.setWheelAdapter(new ArrayWheelAdapter(getContext()));
-        hourWheelView.setSkin(WheelView.Skin.Holo);
-        hourWheelView.setWheelData(createHours());
+        timeWheelView = (WheelView) root.findViewById(R.id.time_wheelview);
+        timeWheelView.setWheelAdapter(new ArrayWheelAdapter(getContext()));
+        timeWheelView.setSkin(WheelView.Skin.Holo);
+        timeWheelView.setWheelData(EventUtil.getDurationTimes());
         WheelView.WheelViewStyle style = new WheelView.WheelViewStyle();
         style.selectedTextColor = Color.parseColor("#000000");
         style.holoBorderColor=Color.LTGRAY;
         style.backgroundColor =Color.WHITE;
         style.textColor = Color.GRAY;
         style.selectedTextSize = 15;
-        hourWheelView.setStyle(style);
-        hourWheelView.setWheelSize(5);
-        hourWheelView.setLoop(true);
-        hourWheelView.setExtraText("Hours", Color.parseColor("#000000"), 40, 100);
-        hourWheelView.setSelection(hourPosition);
-        hourWheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
+        timeWheelView.setStyle(style);
+        timeWheelView.setWheelSize(5);
+        timeWheelView.setLoop(true);
+        timeWheelView.setSelection(timePosition);
+        timeWheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
             @Override
             public void onItemSelected(int position, Object o) {
-                pickHour[0] = Integer.parseInt(createHours().get(position));
-                durationTime.setText(getTimeString(pickHour[0], pickMinute[0]));
-                hourPosition = position;
+                durationTime.setText(EventUtil.getDurationTimes().get(position));
+                timePosition = position;
             }
         });
-
-        minuteWheelView = (WheelView) root.findViewById(R.id.minute_wheelview);
-        minuteWheelView.setWheelAdapter(new ArrayWheelAdapter(getContext()));
-        minuteWheelView.setSkin(WheelView.Skin.Holo);
-        minuteWheelView.setWheelData(createMinutes());
-        minuteWheelView.setStyle(style);
-        minuteWheelView.setLoop(true);
-        minuteWheelView.setWheelSize(5);
-        minuteWheelView.setExtraText("Min", Color.parseColor("#000000"), 40, 100);
-        minuteWheelView.setSelection(minPosition);
-        minuteWheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
-            @Override
-            public void onItemSelected(int position, Object o) {
-                pickMinute[0] = Integer.parseInt(createMinutes().get(position));
-                durationTime.setText(getTimeString(pickHour[0], pickMinute[0]));
-                minPosition = position;
-            }
-        });
-
 
         final PopupWindow popupWindow = new PopupWindow(root,ViewGroup.LayoutParams.MATCH_PARENT,850);
         popupWindow.setOutsideTouchable(true);
@@ -282,16 +255,16 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
             @Override
             public void onDismiss() {
 
-                viewModel.setDurationTimeString(getTimeString(pickHour[0],pickMinute[0]));
+                viewModel.setDurationTimeString(EventUtil.getDurationTimes().get(timePosition));
                 viewModel.setIsChangeDuration(true);
-                timeslotWeekView.updateTimeSlotsDuration((pickHour[0] * 60 + pickMinute[0])*60*1000, true); // ? animate?
+                timeslotWeekView.updateTimeSlotsDuration(EventUtil.getDurationInMintues(timePosition) * 60 * 1000, false); // ? animate?
 
                 // avoid of no timeslot error
                 if (!event.hasTimeslots()){
                     event.setTimeslot(new ArrayList<Timeslot>());
                 }
                 for (Timeslot timeSlot: event.getTimeslot()){
-                    timeSlot.setEndTime(timeSlot.getStartTime() + 1000 * 60 * (pickHour[0] * 60 + pickMinute[0]));
+                    timeSlot.setEndTime(timeSlot.getStartTime() + EventUtil.getDurationInMintues(timePosition) * 60 * 1000);
                 }
                 viewModel.setEvent(event);
 
@@ -308,33 +281,6 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         });
     }
 
-    public String getTimeString(int hour, int minute){
-        String hourStr = hour==0? "": hour>1? hour + " hours" : hour + " hour";
-        String minStr = minute + " min";
-        return hourStr +" "+ minStr;
-    }
-
-
-    private ArrayList<String> createHours() {
-        ArrayList<String> list = new ArrayList<String>();
-        for (int i = 1; i < 24; i++) {
-            if (i < 10) {
-                list.add(String.valueOf(i));
-            } else {
-                list.add("" + i);
-            }
-        }
-        list.add("0");
-        return list;
-    }
-
-    private ArrayList<String> createMinutes() {
-        ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < 4; i++) {
-            list.add("" + i*15);
-        }
-        return list;
-    }
 
     @Override
     public void onClickDone() {
@@ -402,7 +348,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
                 timeslotWeekView.addTimeSlot(struct);
             }
         }
-        timeslotWeekView.reloadTimeSlots(true);
+        timeslotWeekView.reloadTimeSlots(false);
     }
 
     @Override

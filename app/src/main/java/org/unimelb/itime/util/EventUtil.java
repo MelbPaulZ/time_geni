@@ -28,6 +28,8 @@ import java.util.Map;
 public class EventUtil{
     public static final int ACTIVITY_EDIT_EVENT = 1;
     public static final int ACTIVITY_CREATE_EVENT = 2;
+    public static double latitude = 0.0;
+    public static double longitude = 0.0;
 
     public static String parseTimeToString(Context context, long time){
         Calendar calendar = Calendar.getInstance();
@@ -288,6 +290,48 @@ public class EventUtil{
             default:
                 return "error";
         }
+    }
+
+    public static ArrayList<String> getDurationTimes(){
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("15 mins");
+        list.add("30 mins");
+        list.add("45 mins");
+        list.add("1 hour");
+        list.add("2 hours");
+        list.add("3 hours");
+        list.add("4 hours");
+        list.add("5 hours");
+        list.add("6 hours");
+        list.add("12 hours");
+        list.add("24 hours");
+        return list;
+    }
+
+    public static int getDurationInMintues(int position){
+        switch (position){
+            case 0:
+                return 15;
+            case 1:
+                return 30;
+            case 2:
+                return 45;
+            case 3:
+                return 60;
+            case 4:
+                return 120;
+            case 5:
+                return 180;
+            case 6:
+                return 240;
+            case 7:
+                return 300;
+            case 8:
+                return 360;
+            case 9: return 720;
+            case 10: return 1440;
+        }
+        return 0;
     }
 
     public static String generateUid(){

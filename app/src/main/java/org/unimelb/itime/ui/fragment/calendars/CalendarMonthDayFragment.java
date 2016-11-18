@@ -94,7 +94,10 @@ public class CalendarMonthDayFragment extends Fragment {
                 monthDayView.reloadEvents();
             }
         });
+    }
 
+    public void backToday(){
+        monthDayView.backToToday();
     }
 
 

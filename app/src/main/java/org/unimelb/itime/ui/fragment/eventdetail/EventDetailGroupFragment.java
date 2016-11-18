@@ -13,7 +13,6 @@ import org.unimelb.itime.adapter.EventTimeSlotAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
-import org.unimelb.itime.databinding.FragmentEventDetailForHostBinding;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
@@ -24,7 +23,7 @@ import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
  * Created by Paul on 4/09/2016.
  */
 public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvpView, EventDetailGroupPresenter> implements EventDetailGroupMvpView {
-    private FragmentEventDetailForHostBinding binding;
+    private org.unimelb.itime.databinding.FragmentEventDetailBinding binding;
     private EventDetailViewModel eventDetailForHostViewModel;
     private Event event;
     private LayoutInflater inflater;
@@ -33,7 +32,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_detail_for_host, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_detail, container, false);
         this.inflater = inflater;
         return binding.getRoot();
     }

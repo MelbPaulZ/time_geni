@@ -59,6 +59,7 @@ import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingF
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.presenter.EmptyPresenter;
+import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -72,7 +73,6 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
     protected GoogleApiClient mGoogleApiClient;
 
     private PlaceAutoCompleteAdapter mAdapter;
-//    private ArrayAdapter<String> strAdapter;
 
     private ITimeLocationAdapter strAdapter;
 
@@ -85,6 +85,7 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
     private String pickLocation;
     ArrayList<String> locations = new ArrayList<>();
     private EventLocationPickerFragment self;
+    double longitude,latitude;
     private Event event;
 
 
@@ -135,15 +136,14 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             return;
         }else {
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double longitude,latitude;
             if (location!=null) {
                 longitude = location.getLongitude();
                 latitude = location.getLatitude();
             }
             else{
-                longitude = 0.0;
-                latitude = 0.0;
-                Toast.makeText(getContext(), "Cannot find current location",Toast.LENGTH_SHORT).show();
+                longitude = EventUtil.longitude;
+                latitude = EventUtil.latitude;
+                Toast.makeText(getContext(), "Application cannot find current location",Toast.LENGTH_SHORT).show();
             }
 
             // dynamically calculate location and search by this
@@ -288,6 +288,8 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                                 // can use this to change later
                                 fullAddress = (String) placeLikelihood.getPlace().getAddress(); // here will get a long address
                                 locations.add(fullAddress);
+                                EventUtil.latitude = placeLikelihood.getPlace().getLatLng().latitude;
+                                EventUtil.longitude = placeLikelihood.getPlace().getLatLng().longitude;
                                 bestLikelihood = placeLikelihood.getLikelihood();
                             }
                         }

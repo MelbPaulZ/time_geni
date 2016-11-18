@@ -90,6 +90,10 @@ public class CalendarWeekFragment extends Fragment {
         });
     }
 
+    public void backToday(){
+        weekView.backToToday();
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {

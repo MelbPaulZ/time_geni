@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -82,6 +84,23 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         initSpinner();
 //        init();
         initCalendars();
+        initBackToday();
+    }
+
+    public void initBackToday(){
+        ImageView backToday = (ImageView) binding.getRoot().findViewById(R.id.back_to_today);
+        backToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (monthDayFragment.isAdded()){
+                    monthDayFragment.backToday();
+                }else if (weekFragment.isAdded()){
+                    weekFragment.backToday();
+                }else if (agendaFragment.isAdded()){
+                    agendaFragment.backToday();
+                }
+            }
+        });
     }
 
     public void initSpinner(){

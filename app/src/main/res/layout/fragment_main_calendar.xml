@@ -44,8 +44,20 @@
                     android:layout_centerInParent="true"
                     android:textSize="20dp" />
 
+                <ImageView
+                    android:id="@+id/back_to_today"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toLeftOf="@+id/plus_button"
+                    android:layout_centerVertical="true"
+                    android:textSize="20sp"
+                    android:src="@drawable/icon_general_today"
+                    android:paddingRight="25dp"
+                    />
+
 
                 <ImageView
+                    android:id="@+id/plus_button"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerVertical="true"

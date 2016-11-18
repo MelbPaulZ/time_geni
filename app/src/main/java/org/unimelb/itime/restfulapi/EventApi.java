@@ -52,6 +52,4 @@ public interface EventApi {
     @FormUrlEncoded
     @POST("event/timeslot/recommend")
     Observable<HttpResult<List<Timeslot>>> recommend(@Field("invitee") List<Invitee> inviteeList, @Field("startRecommendTime") long startRecommendTime);
-
-
 }

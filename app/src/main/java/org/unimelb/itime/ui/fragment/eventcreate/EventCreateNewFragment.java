@@ -162,7 +162,6 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     @Override
     public void onStart() {
         super.onStart();
-        Log.i(TAG, "onStart: " + System.currentTimeMillis());
         EventBus.getDefault().register(this);
     }
 

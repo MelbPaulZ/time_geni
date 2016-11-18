@@ -36,15 +36,10 @@
         android:layout_height="match_parent"
         android:background="@color/page_bg">
         <com.wx.wheelview.widget.WheelView
-            android:id="@+id/hour_wheelview"
+            android:id="@+id/time_wheelview"
             android:layout_width="match_parent"
             android:layout_height="500dp"
             android:layout_weight="1" />
 
-        <com.wx.wheelview.widget.WheelView
-            android:id="@+id/minute_wheelview"
-            android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>
