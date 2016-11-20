@@ -35,6 +35,7 @@ import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.EventDatePickerFragment;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.EventTimePickerFragment;
+import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotCreateFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
 
 import java.util.ArrayList;
@@ -87,6 +88,7 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
                 fragmentList.add(new EventTimeSlotViewFragment());
                 fragmentList.add(new EventCreateDetailBeforeSendingFragment());
                 fragmentList.add(new EventLocationPickerFragment());
+                fragmentList.add(new EventTimeSlotCreateFragment());
                 handler.sendEmptyMessage(0);
             }
         }.start();

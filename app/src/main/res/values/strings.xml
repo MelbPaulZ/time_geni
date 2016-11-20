@@ -239,5 +239,8 @@
     <string name="select">Select</string>
     <string name="calendar">Calendar</string>
     <string name="note">note</string>
+    <string name="starts">Starts</string>
+    <string name="end">Ends</string>
+    <string name="new_timeslot">New Timeslot</string>
 
 </resources>

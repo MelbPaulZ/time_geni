@@ -51,6 +51,10 @@ public abstract class BaseUiFragment<V extends MvpView, P extends MvpPresenter<V
         getFragmentManager().beginTransaction().hide(from).show(to).commit();
     }
 
+    public <T> void switchFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to, T t){
+
+    }
+
     // to is only use for forcing page go to which fragment, use when only necessary, i.e. before sending page has two entrance on timeslot view
     public void setTo(BaseUiFragment to){
         this.to = to;
