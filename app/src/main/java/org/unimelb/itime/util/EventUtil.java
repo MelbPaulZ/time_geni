@@ -406,6 +406,49 @@ public class EventUtil{
         }
     }
 
+    public static List<String> getYears(){
+        List<String> years = new ArrayList<>();
+        for (int i = 2010 ; i<2030 ; i++){
+            years.add(i+"");
+        }
+        return years;
+    }
+
+    public static List<String> getMonths(){
+        List<String> months = new ArrayList<>();
+        for(int i = 1 ; i <= 12 ; i ++){
+            months.add(i + "");
+        }
+        return months;
+    }
+
+    public static List<String> getDays(int month){
+        List<String> days = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, month);
+        int numOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        for (int i = 1 ; i<= numOfDays ; i++){
+            days.add(i + "");
+        }
+        return days;
+    }
+
+    public static List<String> getHours(){
+        List<String> hours = new ArrayList<>();
+        for( int i = 0 ; i<24; i ++){
+            hours.add( i + "");
+        }
+        return hours;
+    }
+
+    public static List<String> getMinutes(){
+        List<String> minutes = new ArrayList<>();
+        for (int i = 0 ; i < 4 ; i ++){
+            minutes.add( i*15 + "");
+        }
+        return minutes;
+    }
+
 
 
 

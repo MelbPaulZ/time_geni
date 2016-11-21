@@ -55,7 +55,7 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
             public void onCompleted() {
-
+                Log.d(TAG, "onCompleted: ");
             }
 
             @Override

@@ -8,4 +8,6 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 public interface TimeslotCreateMvpView extends MvpView {
     void onClickCancel();
     void onClickDone();
+    void onChooseTime(int type, long time);
+    void onClickPickerDone();
 }

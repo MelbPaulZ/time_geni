@@ -121,6 +121,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         Timeslot timeSlot = new Timeslot();
         timeSlot.setTimeslotUid(AppUtil.generateUuid());
         timeSlot.setEventUid(event.getEventUid());
+        // what is the difference between getTag().startTime and startTimeM .... discuss with David
         timeSlot.setStartTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).startTime);
         timeSlot.setEndTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).endTime);
         timeSlot.setStatus(getString(R.string.timeslot_status_create));
@@ -201,39 +202,6 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         }
     }
 
-    private void confirmTimePopup(final TimeSlotView timeSlotView, final long startTime, final long endTime) {
-        final AlertDialog dialog = new AlertDialog.Builder(presenter.getContext()).create();
-        dialog.setTitle("Confirm Timeslot");
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View root = inflater.inflate(R.layout.timeslot_move_confirm, null);
-        TextView cancel = (TextView) root.findViewById(R.id.timeslot_move_cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        TextView done = (TextView) root.findViewById(R.id.timeslot_move_done);
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                timeslotDrop(timeSlotView, startTime, endTime);
-                dialog.dismiss();
-            }
-        });
-        TextView display = (TextView) root.findViewById(R.id.timeslot_move_tv);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(timeSlotView.getStartTimeM());
-        display.setText(EventUtil.getMonth(getContext(), calendar.get(Calendar.MONTH)) + "/" +
-                calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" +
-                calendar.get(Calendar.MINUTE));
-        dialog.setView(root);
-        dialog.show();
-    }
-
-    //
-//
-//
     public void initWheelPickers() {
         View root = inflater.inflate(R.layout.timeslot_duration_picker, null);
         final TextView durationTime = (TextView) root.findViewById(R.id.popup_duration);
@@ -309,13 +277,15 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
     @Override
     public void onClickBack() {
-        if (getFrom() instanceof InviteeFragment || getFrom() instanceof EventTimeSlotCreateFragment) {
+        if (getFrom() instanceof InviteeFragment) {
             switchFragment(this, (InviteeFragment) getFrom());
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof InviteeFragment) {
             InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
             switchFragment(this, inviteeFragment);
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof EventCreateDetailBeforeSendingFragment) {
             switchFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
+        }else if (getFrom() instanceof EventTimeSlotCreateFragment){
+            switchFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
         }
     }
 
