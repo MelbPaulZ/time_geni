@@ -1,21 +1,25 @@
 package org.unimelb.itime.bean;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.annotation.ToMany;
+import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
-import org.unimelb.itime.dao.InviteeDao;
-import org.unimelb.itime.dao.PhotoUrlDao;
-import org.unimelb.itime.dao.TimeslotDao;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +27,7 @@ import java.util.List;
  * Created by yinchuandong on 22/08/2016.
  */
 
-@Entity
+@Entity(active =  true)
 public class Event implements ITimeEventInterface<Event>, Serializable {
     @Id
     private String eventUid;
@@ -34,7 +38,8 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private String iCalUID;
     private String recurringEventUid;
     private String recurringEventId;
-    private String recurrence;
+    @Convert(converter = Event.ArrayOfStringConverter.class, columnType = String.class)
+    private String[] recurrence = {};
     private String status;
     private String summary;
     private long startTime;
@@ -50,21 +55,21 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private String source;
     private int deleteLevel;
     private int icsSequence;
+    private int inviteeVisibility;
 
 
     private String url;
 
-    @ToMany(referencedJoinProperty = "eventUid")
+    @Convert(converter = Event.PhotoUrlConverter.class , columnType = String.class)
     private List<PhotoUrl> photo = null;
 
-    @ToMany(referencedJoinProperty = "eventUid")
+    @Convert(converter = Event.TimeslotConverter.class , columnType = String.class)
     private List<Timeslot> timeslot = null;
 
     // later delete
     private transient long repeatEndsTime;
 
-
-    @ToMany(referencedJoinProperty = "eventUid")
+    @Convert(converter = Event.InviteeConverter.class, columnType = String.class)
     private List<Invitee> invitee = null;
     /** Used for active entity operations. */
     @Generated(hash = 1542254534)
@@ -72,21 +77,20 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
-
     public Event() {
         invitee = new ArrayList<>();
         timeslot = new ArrayList<>();
     }
 
 
-
-    @Generated(hash = 1747981908)
+    @Generated(hash = 295629456)
     public Event(String eventUid, String eventId, String hostUserUid, String userUid,
             String calendarUid, String iCalUID, String recurringEventUid, String recurringEventId,
-            String recurrence, String status, String summary, long startTime, long endTime,
+            String[] recurrence, String status, String summary, long startTime, long endTime,
             String description, String location, String locationNote, String locationLatitude,
             String locationLongitude, String eventType, int reminder, int freebusyAccess,
-            String source, int deleteLevel, int icsSequence, String url) {
+            String source, int deleteLevel, int icsSequence, int inviteeVisibility, String url,
+            List<PhotoUrl> photo, List<Timeslot> timeslot, List<Invitee> invitee) {
         this.eventUid = eventUid;
         this.eventId = eventId;
         this.hostUserUid = hostUserUid;
@@ -111,9 +115,12 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.source = source;
         this.deleteLevel = deleteLevel;
         this.icsSequence = icsSequence;
+        this.inviteeVisibility = inviteeVisibility;
         this.url = url;
+        this.photo = photo;
+        this.timeslot = timeslot;
+        this.invitee = invitee;
     }
-    
 
 
     @Override
@@ -213,82 +220,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.invitee = invitee;
     }
 
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 1942392019)
-    public void refresh() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.refresh(this);
-    }
-
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 713229351)
-    public void update() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.update(this);
-    }
-
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 128553479)
-    public void delete() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.delete(this);
-    }
-
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    @Generated(hash = 777091542)
-    public synchronized void resetInvitee() {
-        invitee = null;
-    }
-
-
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 1368951675)
-    public List<Invitee> getInvitee() {
-        if (invitee == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            InviteeDao targetDao = daoSession.getInviteeDao();
-            List<Invitee> inviteeNew = targetDao._queryEvent_Invitee(eventUid);
-            synchronized (this) {
-                if(invitee == null) {
-                    invitee = inviteeNew;
-                }
-            }
-        }
-        return invitee;
-    }
-
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1459865304)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getEventDao() : null;
-    }
-
 
     public String getUrl() {
         return this.url;
@@ -310,12 +241,12 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     }
 
 
-    public String getRecurrence() {
+    public String[] getRecurrence() {
         return this.recurrence;
     }
 
 
-    public void setRecurrence(String recurrence) {
+    public void setRecurrence(String[] recurrence) {
         this.recurrence = recurrence;
     }
 
@@ -396,21 +327,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Keep
     public List<Timeslot> getTimeslot() {
-        if (timeslot == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            TimeslotDao targetDao = daoSession.getTimeslotDao();
-            List<Timeslot> timeslotsNew = targetDao._queryEvent_Timeslot(eventUid);
-            synchronized (this) {
-                if(timeslot == null) {
-                    timeslot = timeslotsNew;
-                }
-            }
-        }
         return timeslot;
     }
 
@@ -531,45 +448,10 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
 
 
 
-
-
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    @Generated(hash = 1064579105)
-    public synchronized void resetPhoto() {
-        photo = null;
+    public List<PhotoUrl> getPhoto(){
+        return this.photo;
     }
 
-
-
-
-
-
-
-
-
-
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 1838651466)
-    public List<PhotoUrl> getPhoto() {
-        if (photo == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            PhotoUrlDao targetDao = daoSession.getPhotoUrlDao();
-            List<PhotoUrl> photoNew = targetDao._queryEvent_Photo(eventUid);
-            synchronized (this) {
-                if(photo == null) {
-                    photo = photoNew;
-                }
-            }
-        }
-        return photo;
-    }
 
     public void setPhoto(List<PhotoUrl> photoUrls){
         this.photo = photoUrls;
@@ -580,13 +462,128 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     }
 
 
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    @Generated(hash = 1454601787)
-    public synchronized void resetTimeslot() {
-        timeslot = null;
-    }
-
     public boolean hasRecurrence(){
         return this.recurrence!=null;
+    }
+
+
+
+
+
+
+
+    public List<Invitee> getInvitee() {
+        return invitee;
+    }
+
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1459865304)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getEventDao() : null;
+    }
+
+    public int getInviteeVisibility() {
+        return inviteeVisibility;
+    }
+
+    public void setInviteeVisibility(int inviteeVisibility) {
+        this.inviteeVisibility = inviteeVisibility;
+    }
+
+
+    public static class ArrayOfStringConverter implements PropertyConverter<String[], String>{
+        Gson gson = new Gson();
+        @Override
+        public String[] convertToEntityProperty(String databaseValue) {
+            return  gson.fromJson(databaseValue, String[].class);
+        }
+
+        @Override
+        public String convertToDatabaseValue(String[] entityProperty) {
+            return  gson.toJson(entityProperty);
+        }
+    }
+
+    public static class TimeslotConverter implements PropertyConverter<List<Timeslot> , String>{
+        Gson gson = new Gson();
+        @Override
+        public List<Timeslot> convertToEntityProperty(String databaseValue) {
+            Type listType = new TypeToken<List<Timeslot>>() {}.getType();
+            return gson.fromJson(databaseValue, listType);
+        }
+
+        @Override
+        public String convertToDatabaseValue(List<Timeslot> entityProperty) {
+            return gson.toJson(entityProperty);
+        }
+    }
+
+    public static class PhotoUrlConverter implements PropertyConverter<List<PhotoUrl> , String>{
+        Gson gson = new Gson();
+        @Override
+        public List<PhotoUrl> convertToEntityProperty(String databaseValue) {
+            Type listType = new TypeToken<List<Timeslot>>() {}.getType();
+            return gson.fromJson(databaseValue, listType);
+        }
+
+        @Override
+        public String convertToDatabaseValue(List<PhotoUrl> entityProperty) {
+            return gson.toJson(entityProperty);
+        }
+    }
+
+    public static class InviteeConverter implements PropertyConverter<List<Invitee> , String>{
+        Gson gson = new Gson();
+        @Override
+        public List<Invitee> convertToEntityProperty(String databaseValue) {
+            Type listType = new TypeToken<List<Invitee>>() {}.getType();
+            return gson.fromJson(databaseValue, listType);
+        }
+
+        @Override
+        public String convertToDatabaseValue(List<Invitee> entityProperty) {
+            return gson.toJson(entityProperty);
+        }
     }
 }

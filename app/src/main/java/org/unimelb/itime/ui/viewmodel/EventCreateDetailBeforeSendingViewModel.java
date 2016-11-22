@@ -56,7 +56,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter) {
         this.presenter = presenter;
         newEvDtlEvent = EventManager.getInstance().getCurrentEvent();
-        repeats = EventUtil.getRepeats(getContext(), newEvDtlEvent);
         evDtlIsEventRepeat = new ObservableField<>(false);
         isEndRepeatChange = new ObservableField<>(false);
         this.viewModel = this;
@@ -67,27 +66,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(newEvDtlEvent.getStartTime());
-                String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(), calendar.get(Calendar.DAY_OF_WEEK));
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
-                builder.setTitle("Choose a repeat type");
-                repeats = EventUtil.getRepeats(getContext(), newEvDtlEvent);
-                builder.setItems(repeats, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (!repeats[i].equals(getContext().getString(R.string.repeat_never))) {
-                            setIsEventRepeat(true);
-                            setEndRepeatChange(true);
-                        }else{
-                            setIsEventRepeat(false);
-                        }
-                        newEvDtlEvent.setRecurrence(i + "");
-                        viewModel.setNewEvDtlEvent(newEvDtlEvent);
-                    }
-                });
-                builder.show();
             }
 
         };

@@ -12,6 +12,7 @@ import org.unimelb.itime.ui.presenter.TimeslotCreatePresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
+import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.Calendar;
 
@@ -74,7 +75,9 @@ public class TimeslotCreateViewModel extends CommonViewModel {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
         newTimeSlotView.setCalendar(new MyCalendar(calendar));
-        newTimeSlotView.getStartTimeM();
+        WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) newTimeSlotView.getTag();
+        struct.startTime = time;
+        struct.endTime = struct.startTime + newTimeSlotView.getDuration();
         setNewTimeSlotView(newTimeSlotView);
     }
 

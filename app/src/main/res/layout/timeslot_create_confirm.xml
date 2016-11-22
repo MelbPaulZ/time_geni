@@ -86,7 +86,6 @@
             android:paddingRight="10dp"
             android:layout_alignParentRight="true"
             android:gravity="center_vertical"
-            android:onClick="@{vm.onChooseTime(vm.ENDTIME)}"
             android:text="@{vm.getTimeString(vm.newTimeSlotView.endTimeM)}"/>
     </RelativeLayout>
 

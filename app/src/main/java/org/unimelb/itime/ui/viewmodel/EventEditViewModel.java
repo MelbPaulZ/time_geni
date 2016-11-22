@@ -112,29 +112,7 @@ public class EventEditViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(eventEditViewEvent.getStartTime());
-                String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(), calendar.get(Calendar.DAY_OF_WEEK));
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
-                builder.setTitle("Choose a repeat type");
-                repeats = EventUtil.getRepeats(getContext(),eventEditViewEvent);
-                builder.setItems(repeats, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (!repeats[i].equals(getContext().getString(R.string.repeat_never))) {
-                            setEditEventIsRepeat(true);
-                            if (eventEditViewEvent.getRepeatEndsTime()==0){
-                                eventEditViewEvent.setRepeatEndsTime(eventEditViewEvent.getStartTime()+24*3600000);//default another day
-                            }
-                        }else{
-                            setEditEventIsRepeat(false);
-                        }
-                        eventEditViewEvent.setRecurrence(i+"");
-                        viewModel.setEventEditViewEvent(eventEditViewEvent);
-                    }
-                });
-                builder.show();
             }
 
         };

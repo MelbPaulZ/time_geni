@@ -6,7 +6,6 @@ import org.greenrobot.greendao.annotation.Generated;
 /**
  * Created by Paul on 16/09/2016.
  */
-@Entity
 public class PhotoUrl {
 
     private String url;
@@ -16,31 +15,13 @@ public class PhotoUrl {
     private String localPath;
     private int success;
 
-
-
     public PhotoUrl(String url){
         this.url = url;
     }
 
+    public PhotoUrl(){
 
-
-    @Generated(hash = 545921804)
-    public PhotoUrl(String url, String photoUid, String eventUid, String filename,
-            String localPath, int success) {
-        this.url = url;
-        this.photoUid = photoUid;
-        this.eventUid = eventUid;
-        this.filename = filename;
-        this.localPath = localPath;
-        this.success = success;
     }
-
-
-
-    @Generated(hash = 1214604864)
-    public PhotoUrl() {
-    }
-
 
 
     public String getUrl() {

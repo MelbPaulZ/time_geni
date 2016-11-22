@@ -9,7 +9,6 @@ import java.io.Serializable;
 /**
  * Created by Paul on 10/09/2016.
  */
-@Entity
 public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     private String timeslotUid;
     private String eventUid;
@@ -23,42 +22,7 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     private int pendingNum;
     private int isConfirmed;
     private int isSystemSuggested;
-
-
-
-
-
-
-
-    @Generated(hash = 439616673)
-    public Timeslot(String timeslotUid, String eventUid, String userUid,
-            long startTime, long endTime, String status, int acceptedNum,
-            int totalNum, int rejectedNum, int pendingNum, int isConfirmed,
-            int isSystemSuggested) {
-        this.timeslotUid = timeslotUid;
-        this.eventUid = eventUid;
-        this.userUid = userUid;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.status = status;
-        this.acceptedNum = acceptedNum;
-        this.totalNum = totalNum;
-        this.rejectedNum = rejectedNum;
-        this.pendingNum = pendingNum;
-        this.isConfirmed = isConfirmed;
-        this.isSystemSuggested = isSystemSuggested;
-    }
-
-    @Generated(hash = 1204592951)
-    public Timeslot() {
-    }
-
-
-
-
-
-
-
+    
     @Override
     public void setStartTime(long l) {
         this.startTime = l;
