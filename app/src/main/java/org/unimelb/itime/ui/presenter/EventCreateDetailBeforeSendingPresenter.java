@@ -55,7 +55,7 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
             public void onCompleted() {
-
+                Log.d(TAG, "onCompleted: ");
             }
 
             @Override
@@ -71,15 +71,15 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
                 Event event = eventHttpResult.getData();
                 EventManager.getInstance().addEvent(event);
                 DBManager.getInstance(getContext()).insertEvent(event);
-                for (Timeslot timeSlot:event.getTimeslot()){
-                    DBManager.getInstance(getContext()).insertTimeSlot(timeSlot);
-                }
-                for (Invitee invitee:event.getInvitee()){
-                    DBManager.getInstance(getContext()).insertInvitee(invitee);
-                }
-                for (PhotoUrl photoUrl: event.getPhoto()){
-                    DBManager.getInstance(getContext()).insertPhoto(photoUrl);
-                }
+//                for (Timeslot timeSlot:event.getTimeslot()){
+//                    DBManager.getInstance(getContext()).insertTimeSlot(timeSlot);
+//                }
+//                for (Invitee invitee:event.getInvitee()){
+//                    DBManager.getInstance(getContext()).insertInvitee(invitee);
+//                }
+//                for (PhotoUrl photoUrl: event.getPhoto()){
+//                    DBManager.getInstance(getContext()).insertPhoto(photoUrl);
+//                }
                 uploadImage(event);
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
             }

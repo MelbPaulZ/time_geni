@@ -177,48 +177,48 @@ public class EventUtil{
         return (String) getCalendarTypes(context)[num];
     }
 
-    public static CharSequence[] getRepeats(Context context, Event event){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(event.getStartTime());
-        String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
-        return new CharSequence[]{
-                context.getString(R.string.repeat_never),
-                context.getString(R.string.repeat_everyday),
-                String.format(context.getString(R.string.repeat_everyweek), dayOfWeek),
-                String.format(context.getString(R.string.repeat_every_twoweek)),
-                String.format(context.getString(R.string.repeat_every_month)),
-                String.format(context.getString(R.string.repeat_every_year))};
-    }
+//    public static CharSequence[] getRepeats(Context context, Event event){
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(event.getStartTime());
+//        String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
+//        return new CharSequence[]{
+//                context.getString(R.string.repeat_never),
+//                context.getString(R.string.repeat_everyday),
+//                String.format(context.getString(R.string.repeat_everyweek), dayOfWeek),
+//                String.format(context.getString(R.string.repeat_every_twoweek)),
+//                String.format(context.getString(R.string.repeat_every_month)),
+//                String.format(context.getString(R.string.repeat_every_year))};
+//    }
 
 
-    public static String parseRepeatIdToRepeat(Context context,String repeat, long startTime){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(startTime);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-//        return "every day( change later )";
-        if (context==null){
-            return null;
-        }
-        if (repeat==null){
-            return context.getString(R.string.repeat_never);
-        }
-        switch (repeat){
-            case "0":
-                return context.getString(R.string.repeat_never);
-            case "1":
-                return context.getString(R.string.repeat_everyday);
-            case "2":
-                return String.format(context.getString(R.string.repeat_everyweek), getDayOfWeekFull(context,dayOfWeek));
-            case "3":
-                return context.getString(R.string.repeat_every_twoweek);
-            case "4":
-                return context.getString(R.string.repeat_every_month);
-            case "5":
-                return context.getString(R.string.repeat_every_year);
-            default:
-                return context.getString(R.string.repeat_never);
-        }
-    }
+//    public static String parseRepeatIdToRepeat(Context context,String repeat, long startTime){
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(startTime);
+//        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+////        return "every day( change later )";
+//        if (context==null){
+//            return null;
+//        }
+//        if (repeat==null){
+//            return context.getString(R.string.repeat_never);
+//        }
+//        switch (repeat){
+//            case "0":
+//                return context.getString(R.string.repeat_never);
+//            case "1":
+//                return context.getString(R.string.repeat_everyday);
+//            case "2":
+//                return String.format(context.getString(R.string.repeat_everyweek), getDayOfWeekFull(context,dayOfWeek));
+//            case "3":
+//                return context.getString(R.string.repeat_every_twoweek);
+//            case "4":
+//                return context.getString(R.string.repeat_every_month);
+//            case "5":
+//                return context.getString(R.string.repeat_every_year);
+//            default:
+//                return context.getString(R.string.repeat_never);
+//        }
+//    }
 
     public static String getDayOfWeekFull(Context context,int dayOfWeek) {
         switch (dayOfWeek) {
@@ -404,6 +404,49 @@ public class EventUtil{
         }else{
             return true;
         }
+    }
+
+    public static List<String> getYears(){
+        List<String> years = new ArrayList<>();
+        for (int i = 2010 ; i<2030 ; i++){
+            years.add(i+"");
+        }
+        return years;
+    }
+
+    public static List<String> getMonths(){
+        List<String> months = new ArrayList<>();
+        for(int i = 1 ; i <= 12 ; i ++){
+            months.add(i + "");
+        }
+        return months;
+    }
+
+    public static List<String> getDays(int month){
+        List<String> days = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, month);
+        int numOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        for (int i = 1 ; i<= numOfDays ; i++){
+            days.add(i + "");
+        }
+        return days;
+    }
+
+    public static List<String> getHours(){
+        List<String> hours = new ArrayList<>();
+        for( int i = 0 ; i<24; i ++){
+            hours.add( i + "");
+        }
+        return hours;
+    }
+
+    public static List<String> getMinutes(){
+        List<String> minutes = new ArrayList<>();
+        for (int i = 0 ; i < 4 ; i ++){
+            minutes.add( i*15 + "");
+        }
+        return minutes;
     }
 
 

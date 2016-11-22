@@ -79,7 +79,6 @@ public class EventCreateNewVIewModel extends CommonViewModel {
 
 //        presenter.initNewEvent();
         setEvent(EventManager.getInstance().getCurrentEvent());
-        repeats = EventUtil.getRepeats(getContext(), event);
     }
 
 
@@ -181,28 +180,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(event.getStartTime());
-//                String dayOfWeek = EventUtil.getDayOfWeekFull(getContext(),calendar.get(Calendar.DAY_OF_WEEK));
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
-                builder.setTitle("Choose a repeat type");
-                builder.setItems(repeats, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        event.setRecurrence(i+"");
-                        if (!repeats[i].equals(getContext().getString(R.string.repeat_never))) {
-                            setIsEventRepeat(true);
-                            if (!isEndRepeatChanged) { // if the user didn't change end repeat time before
-                                event.setRepeatEndsTime(0); // default end in next day
-                            }
-                        }else{
-                            setIsEventRepeat(false);
-                        }
-                        viewModel.setEvent(event);
-                    }
-                });
-                builder.show();
             }
 
         };

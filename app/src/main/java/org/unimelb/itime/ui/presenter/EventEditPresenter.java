@@ -1,23 +1,36 @@
 package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.restfulapi.EventApi;
+import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
+import org.unimelb.itime.util.CalendarUtil;
+import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.HttpUtil;
+
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by Paul on 28/08/2016.
  */
 public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
     private Context context;
+    private EventApi eventApi;
+    private String TAG = "EventEditPresenter";
 
     public EventEditPresenter(Context context) {
         this.context = context;
+        eventApi = HttpUtil.createService(context, EventApi.class);
     }
 
     public void changeLocation(){
@@ -27,7 +40,29 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         }
     }
 
-    public void updateEvent(Event newEvent){
+    private void updateServer(Event event){
+        Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(),event.getEventUid(),event);
+        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: ");
+            }
+
+            @Override
+            public void onNext(HttpResult<Event> eventHttpResult) {
+                Log.i(TAG, "onNext: ");
+            }
+        };
+        HttpUtil.subscribe(observable,subscriber);
+    }
+
+    private void updateLocalDB(Event newEvent){
+        // update local db
         Event oldEvent = EventManager.getInstance().getCurrentEvent();
         // here update EventManager
         EventManager.getInstance().updateEvent(oldEvent, newEvent);
@@ -35,6 +70,13 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         // here update DB
         oldEvent.delete();
         DBManager.getInstance(context).insertEvent(newEvent);
+    }
+
+    public void updateEvent(Event newEvent){
+        updateServer(newEvent);
+//        updateLocalDB(newEvent);
+
+
     }
 
 

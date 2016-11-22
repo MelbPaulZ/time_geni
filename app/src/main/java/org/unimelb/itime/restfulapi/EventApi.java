@@ -29,7 +29,7 @@ public interface EventApi {
     Observable<HttpResult<Event>> insert(@Body Event event);
 
     @POST("event/update/{calendarUid}/{eventUid}")
-    Observable<HttpResult<Event>> update(@Body Event event);
+    Observable<HttpResult<Event>> update(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body Event event);
 
     @POST("event/delete/{calendarUid}/{eventUid}")
     Observable<HttpResult<Event>> delete();

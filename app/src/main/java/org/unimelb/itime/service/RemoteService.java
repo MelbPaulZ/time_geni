@@ -110,21 +110,21 @@ public class RemoteService extends Service{
                 DBManager db = DBManager.getInstance(getBaseContext());
                 for (Event event: eventList){
                     db.insertEvent(event);
-                    if (event.hasAttendee()){
-                        for (Invitee invitee:event.getInvitee()) {
-                            db.insertInvitee(invitee);
-                        }
-                    }
-                    if (event.hasTimeslots()){
-                        for (Timeslot timeSlot: event.getTimeslot()){
-                            db.insertTimeSlot(timeSlot);
-                        }
-                    }
-                    if (event.hasPhoto()){
-                        for (PhotoUrl photoUrl : event.getPhoto()){
-                            db.insertPhoto(photoUrl);
-                        }
-                    }
+//                    if (event.hasAttendee()){
+//                        for (Invitee invitee:event.getInvitee()) {
+//                            db.insertInvitee(invitee);
+//                        }
+//                    }
+//                    if (event.hasTimeslots()){
+//                        for (Timeslot timeSlot: event.getTimeslot()){
+//                            db.insertTimeSlot(timeSlot);
+//                        }
+//                    }
+//                    if (event.hasPhoto()){
+//                        for (PhotoUrl photoUrl : event.getPhoto()){
+//                            db.insertPhoto(photoUrl);
+//                        }
+//                    }
                 }
 
                 // successfully get event from server
@@ -162,20 +162,12 @@ public class RemoteService extends Service{
     }
 
     private void loadDB(){
-        DBManager.getInstance(getBaseContext()).getAllInvitee();
+//        DBManager.getInstance(getBaseContext()).getAllInvitee();
         long start = System.currentTimeMillis();
         EventManager.getInstance().getEventsMap().clear();
         List<Event> list = DBManager.getInstance(getBaseContext()).getAllEvents();
-        int i = 0;
         for (Event ev: list) {
-            ev.getTimeslot();
-            ev.getPhoto();
-            ev.getInvitee();
             EventManager.getInstance().addEvent(ev);
-            i++;
-            if(i > 100){
-                break;
-            }
         }
     }
 

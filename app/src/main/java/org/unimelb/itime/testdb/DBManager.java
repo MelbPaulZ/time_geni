@@ -13,9 +13,7 @@ import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
-import org.unimelb.itime.dao.InviteeDao;
-import org.unimelb.itime.dao.PhotoUrlDao;
-import org.unimelb.itime.dao.TimeslotDao;
+
 
 import java.util.List;
 
@@ -55,19 +53,19 @@ public class DBManager {
         eventDaoDao.insert(event);
     }
 
-    public void insertPhoto(PhotoUrl photoUrl){
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        PhotoUrlDao photoUrlDao = daoSession.getPhotoUrlDao();
-        photoUrlDao.insert(photoUrl);
-    }
-
-    public void insertInvitee(Invitee invitee) {
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        InviteeDao inviteeDao = daoSession.getInviteeDao();
-        inviteeDao.insert(invitee);
-    }
+//    public void insertPhoto(PhotoUrl photoUrl){
+//        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+//        DaoSession daoSession = daoMaster.newSession();
+//        PhotoUrlDao photoUrlDao = daoSession.getPhotoUrlDao();
+//        photoUrlDao.insert(photoUrl);
+//    }
+//
+//    public void insertInvitee(Invitee invitee) {
+//        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+//        DaoSession daoSession = daoMaster.newSession();
+//        InviteeDao inviteeDao = daoSession.getInviteeDao();
+//        inviteeDao.insert(invitee);
+//    }
 
     public void insertContact(Contact contact) {
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
@@ -76,12 +74,12 @@ public class DBManager {
         contactDao.insert(contact);
     }
 
-    public void insertTimeSlot(Timeslot timeSlot){
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        TimeslotDao timeSlotDao = daoSession.getTimeslotDao();
-        timeSlotDao.insert(timeSlot);
-    }
+//    public void insertTimeSlot(Timeslot timeSlot){
+//        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+//        DaoSession daoSession = daoMaster.newSession();
+//        TimeslotDao timeSlotDao = daoSession.getTimeslotDao();
+//        timeSlotDao.insert(timeSlot);
+//    }
 
     public void insertEventList(List<Event> events) {
         if (events == null || events.isEmpty()) {
@@ -93,15 +91,15 @@ public class DBManager {
         eventDaoDao.insertInTx(events);
     }
 
-    public void insertInviteeList(List<Invitee> invitees) {
-        if (invitees == null || invitees.isEmpty()) {
-            return;
-        }
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        InviteeDao inviteeDao = daoSession.getInviteeDao();
-        inviteeDao.insertInTx(invitees);
-    }
+//    public void insertInviteeList(List<Invitee> invitees) {
+//        if (invitees == null || invitees.isEmpty()) {
+//            return;
+//        }
+//        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+//        DaoSession daoSession = daoMaster.newSession();
+//        InviteeDao inviteeDao = daoSession.getInviteeDao();
+//        inviteeDao.insertInTx(invitees);
+//    }
 
     public List<Event> queryEventList(long startTime, long endTime) {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -122,14 +120,14 @@ public class DBManager {
         return list;
     }
 
-    public List<Invitee> getAllInvitee(){
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        InviteeDao inviteeDao = daoSession.getInviteeDao();
-        QueryBuilder<Invitee> qb = inviteeDao.queryBuilder();
-        List<Invitee> list = qb.list();
-        return list;
-    }
+//    public List<Invitee> getAllInvitee(){
+//        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+//        DaoSession daoSession = daoMaster.newSession();
+//        InviteeDao inviteeDao = daoSession.getInviteeDao();
+//        QueryBuilder<Invitee> qb = inviteeDao.queryBuilder();
+//        List<Invitee> list = qb.list();
+//        return list;
+//    }
 
     public List<Contact> getAllContact(){
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -154,13 +152,8 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDao = daoSession.getEventDao();
         ContactDao contactDao = daoSession.getContactDao();
-        InviteeDao inviteeDao = daoSession.getInviteeDao();
-        TimeslotDao timeSlotDao = daoSession.getTimeslotDao();
         eventDao.deleteAll();
         contactDao.deleteAll();
-        inviteeDao.deleteAll();
-        timeSlotDao.deleteAll();
-
     }
 
     private SQLiteDatabase getReadableDatabase() {
