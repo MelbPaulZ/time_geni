@@ -1,31 +1,42 @@
 package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.apache.http.protocol.HttpService;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.restfulapi.EventApi;
+import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.UserUtil;
 
 import java.util.Calendar;
+
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by Paul on 25/08/2016.
  */
 public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpView>{
 
+    private String TAG = "EventCreateNewPresenter";
     private Context context;
     public EventCreateNewPresenter(Context context){
         this.context = context;
+        eventApi = HttpUtil.createService(context, EventApi.class);
     }
     public Context getContext() {
         return context;
     }
+    private EventApi eventApi;
 
     public void pickPhoto(String tag){
         EventCreateNewMvpView view = getView();
@@ -34,23 +45,38 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
         }
     }
 
-//    public void initNewEvent(){
-//        // initial default values for new event
-//        Event event = new Event();
-//        event.setEventUid(EventUtil.generateUid());
-//        event.setHostUserUid(UserUtil.getUserUid());
-//        long startTime = CalendarUtil.getInstance().getNowCalendar().getTimeInMillis();
-//        long endTime = CalendarUtil.getInstance().getNowCalendar().getTimeInMillis() + 3600 * 1000;
-//        event.setStartTime(startTime);
-//        event.setEndTime(endTime);
-//        EventManager.getInstance().setCurrentEvent(event);
-//    }
-
     public void addSoloEvent(){
+        updateServer();
+
         Event event = EventManager.getInstance().getCurrentEvent();
         EventManager.getInstance().addEvent(event);
         DBManager.getInstance(getContext()).insertEvent(event);
         event.update();
+    }
+
+    /**
+     *  this is for insert new solo event to server
+     */
+    public void updateServer(){
+        Event event = EventManager.getInstance().getCurrentEvent();
+        Observable<HttpResult<Event>> observable = eventApi.insert(event);
+        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: ");
+            }
+
+            @Override
+            public void onNext(HttpResult<Event> eventHttpResult) {
+                Log.i(TAG, "onNext: ");
+            }
+        };
+        HttpUtil.subscribe(observable,subscriber);
     }
 
 

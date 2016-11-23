@@ -105,32 +105,33 @@ public class RemoteService extends Service{
             }
 
             @Override
-            public void onNext(HttpResult<List<Event>> result) {
-                List<Event> eventList = result.getData();
-                DBManager db = DBManager.getInstance(getBaseContext());
-                for (Event event: eventList){
-                    db.insertEvent(event);
-//                    if (event.hasAttendee()){
-//                        for (Invitee invitee:event.getInvitee()) {
-//                            db.insertInvitee(invitee);
-//                        }
-//                    }
-//                    if (event.hasTimeslots()){
-//                        for (Timeslot timeSlot: event.getTimeslot()){
-//                            db.insertTimeSlot(timeSlot);
-//                        }
-//                    }
-//                    if (event.hasPhoto()){
-//                        for (PhotoUrl photoUrl : event.getPhoto()){
-//                            db.insertPhoto(photoUrl);
-//                        }
-//                    }
-                }
+            public void onNext(final HttpResult<List<Event>> result) {
+                final List<Event> eventList = result.getData();
+                final DBManager db = DBManager.getInstance(getBaseContext());
 
-                // successfully get event from server
-                loadDB();
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-                Log.i(TAG, "onNext: " + result.getData().size());
+                new Thread(){
+                    @Override
+                    public void run() {
+                        for (Event event: eventList){
+                            db.insertEvent(event);
+                        }
+                        // successfully get event from server
+                        loadDB();
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                        Log.i(TAG, "onNext: " + result.getData().size());
+                    }
+                }.start();
+
+
+//                for (Event event: eventList){
+//                    db.insertEvent(event);
+//                }
+//
+//                // successfully get event from server
+//                loadDB();
+//
+//                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+//                Log.i(TAG, "onNext: " + result.getData().size());
             }
         };
         HttpUtil.subscribe(observable, subscriber);
@@ -162,8 +163,6 @@ public class RemoteService extends Service{
     }
 
     private void loadDB(){
-//        DBManager.getInstance(getBaseContext()).getAllInvitee();
-        long start = System.currentTimeMillis();
         EventManager.getInstance().getEventsPackage().clearPackage();
         List<Event> list = DBManager.getInstance(getBaseContext()).getAllEvents();
         for (Event ev: list) {

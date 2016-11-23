@@ -55,7 +55,7 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
 
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
-                Log.i(TAG, "onNext: ");
+                updateLocalDB(eventHttpResult.getData());
             }
         };
         HttpUtil.subscribe(observable,subscriber);

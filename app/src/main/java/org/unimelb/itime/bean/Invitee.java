@@ -20,6 +20,7 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
     private String aliasPhoto;
     private String status;
     private String reason;
+    private int isHost;
     
 
     public String getReason() {
@@ -96,5 +97,13 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getIsHost() {
+        return isHost;
+    }
+
+    public void setIsHost(int isHost) {
+        this.isHost = isHost;
     }
 }

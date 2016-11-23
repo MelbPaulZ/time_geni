@@ -82,4 +82,17 @@ public class TimeSlotUtil {
         return null;
     }
 
+    public static Timeslot getLatestTimeSlot(List<Timeslot> timeslotList){
+        if (timeslotList!=null && timeslotList.size()>0){
+            Timeslot latestTimeSlot = timeslotList.get(0);
+            for (Timeslot timeslot : timeslotList){
+                if (timeslot.getStartTime() < latestTimeSlot.getStartTime()){
+                    latestTimeSlot = timeslot;
+                }
+            }
+            return latestTimeSlot;
+        }
+        return null;
+    }
+
 }
