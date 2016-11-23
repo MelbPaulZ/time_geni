@@ -164,7 +164,7 @@ public class RemoteService extends Service{
     private void loadDB(){
 //        DBManager.getInstance(getBaseContext()).getAllInvitee();
         long start = System.currentTimeMillis();
-        EventManager.getInstance().getEventsMap().clear();
+        EventManager.getInstance().getEventsPackage().clearPackage();
         List<Event> list = DBManager.getInstance(getBaseContext()).getAllEvents();
         for (Event ev: list) {
             EventManager.getInstance().addEvent(ev);

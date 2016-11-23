@@ -144,7 +144,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         });
         timeslotWeekView.setEventClassName(Event.class);
         timeslotWeekView.enableTimeSlot();
-        timeslotWeekView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        timeslotWeekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
         timeslotWeekView.setOnTimeSlotOuterListener(new FlexibleLenViewBody.OnTimeSlotListener() {
             @Override
             public void onTimeSlotCreate(TimeSlotView timeSlotView) {

@@ -14,6 +14,7 @@ import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
@@ -28,7 +29,7 @@ import java.util.List;
  */
 
 @Entity(active =  true)
-public class Event implements ITimeEventInterface<Event>, Serializable {
+public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable{
     @Id
     private String eventUid;
     private String eventId;
@@ -57,8 +58,17 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private int icsSequence;
     private int inviteeVisibility;
 
-
     private String url;
+
+    public RuleModel getRule() {
+        return rule;
+    }
+
+    public void setRule(RuleModel rule) {
+        this.rule = rule;
+    }
+
+    private transient RuleModel rule;
 
     @Convert(converter = Event.PhotoUrlConverter.class , columnType = String.class)
     private List<PhotoUrl> photo = null;
@@ -185,6 +195,10 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
 
     public int getDuration(){
         return (int)((endTime - startTime) /(1000*60));
+    }
+
+    public long getDurationMilliseconds(){
+        return (endTime - startTime);
     }
 
     @Override
@@ -442,11 +456,17 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.icsSequence = icsSequence;
     }
 
-
-
-
-
-
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Event event = null;
+        try
+        {
+            event = (Event) super.clone();
+        } catch (CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return event;
+    }
 
     public List<PhotoUrl> getPhoto(){
         return this.photo;

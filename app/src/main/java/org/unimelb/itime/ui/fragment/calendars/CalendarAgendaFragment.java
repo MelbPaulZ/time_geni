@@ -19,6 +19,8 @@ import org.unimelb.itime.vendor.agendaview.MonthAgendaView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
+import java.util.List;
+
 /**
  * Created by Paul on 21/09/2016.
  */
@@ -38,7 +40,7 @@ public class CalendarAgendaFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         monthAgendaView = (MonthAgendaView) root.findViewById(R.id.month_agenda_view);
-        monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
         monthAgendaView.setOnEventClickListener(new AgendaViewBody.OnEventClickListener() {
             @Override
             public void onEventClick(ITimeEventInterface iTimeEventInterface) {
@@ -66,7 +68,7 @@ public class CalendarAgendaFragment extends Fragment {
     @Subscribe
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
-            monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsMap());
+            monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
         }
     }
 
@@ -84,7 +86,7 @@ public class CalendarAgendaFragment extends Fragment {
 
     public void calendarNotifyDataSetChanged(){
         if (monthAgendaView!=null) {
-            monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsMap());
+            monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
         }
     }
 

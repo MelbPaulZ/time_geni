@@ -172,6 +172,8 @@ public class RuleFactory {
                     case "WKST":
                         rule.setWKST(value);
                         break;
+                    case "COUNT":
+                        rule.setCount(Integer.parseInt(value));
                     default:
                         Log.i(TAG, "rRULEAnalyzer: " + "Attribute CANNOT be analyzed -- " + attr);
                         break;

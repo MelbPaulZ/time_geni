@@ -200,6 +200,7 @@ public class RuleModel {
         this.RDates.remove(date);
     }
 
+
     public boolean isInclude(long dateM){
         Date compareDate = new Date(dateM);
 
@@ -267,15 +268,23 @@ public class RuleModel {
     }
 
     private boolean dailyCheck(long dateM){
+        int dayDiffer = getDayDiffer(dateM);
+        int nowCount = dayDiffer/interval;
+
         if (this.interval == 1){
-            return true;
-        }else{
-            //interval && count
-            int dayDiffer = getDayDiffer(dateM);
             if (count != 0){
-                return dayDiffer%interval == 1 && dayDiffer/interval < count;
+                return nowCount < count;
             }else{
-                return dayDiffer%interval == 1;
+                return true;
+            }
+        }else{
+            int remains = dayDiffer%interval;
+
+            //interval && count
+            if (count != 0){
+                return remains == 1 && nowCount < count;
+            }else{
+                return remains == 1;
             }
         }
     }
@@ -391,6 +400,115 @@ public class RuleModel {
 
         return sameDay;
     }
+
+    //range: [startRange, endRange)
+    public ArrayList<Long> getOccurenceDates(long startRange, long endRange){
+        ArrayList<Long> availableDates = new ArrayList<>();
+        if (startTime > endRange){
+            return  availableDates;
+        }else if (until != null && (startRange > until.getTime())){
+            return  availableDates;
+        }else{
+            int dayDiffer = getDayDiffer(startRange);
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(startRange);
+
+            switch (frequencyEnum){
+                case DAILY: {
+                    //compute first available date
+                    int remains = dayDiffer % interval;
+                    cal.add(Calendar.DATE, remains);
+
+                    long currentAvailableDate = cal.getTimeInMillis();
+                    while(currentAvailableDate < endRange){
+                        currentAvailableDate = cal.getTimeInMillis();
+                        if (currentAvailableDate >= startRange){
+                            availableDates.add(currentAvailableDate);
+                        }
+                        cal.add(Calendar.DATE, interval);
+                    }
+                    break;
+                }
+                case WEEKLY:{
+                    //compute first available date
+                    int remains = dayDiffer % (interval * 7);
+                    cal.add(Calendar.DATE, remains);
+
+                    long currentAvailableDate = cal.getTimeInMillis();
+                    while(currentAvailableDate < endRange){
+                        currentAvailableDate = cal.getTimeInMillis();
+                        if (currentAvailableDate >= startRange){
+                            availableDates.add(currentAvailableDate);
+                        }
+                        cal.add(Calendar.DATE, interval * 7);
+                    }
+                }
+                case MONTHLY:{
+                    //compute first available date
+                    Calendar orCal = Calendar.getInstance();
+                    orCal.setTimeInMillis(startTime);
+
+                    int orgDayOfMonth = orCal.get(Calendar.DAY_OF_MONTH);
+                    int compareDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+
+                    int diffYear = cal.get(Calendar.YEAR) - orCal.get(Calendar.YEAR);
+                    int diffMonth = diffYear * 12 + cal.get(Calendar.MONTH) - orCal.get(Calendar.MONTH);
+
+                    int remainsDay = orgDayOfMonth - compareDayOfMonth;
+                    int remainsMonth = diffMonth % interval;
+
+                    cal.add(Calendar.MONTH, remainsMonth);
+                    cal.add(Calendar.DATE, remainsDay);
+
+                    long currentAvailableDate = cal.getTimeInMillis();
+                    while(currentAvailableDate < endRange){
+                        currentAvailableDate = cal.getTimeInMillis();
+                        if (currentAvailableDate >= startRange){
+                            availableDates.add(currentAvailableDate);
+                        }
+                        cal.add(Calendar.MONTH, interval);
+                    }
+                }
+                case YEARLY:{
+                    //compute first available date
+                    Calendar orCal = Calendar.getInstance();
+                    orCal.setTimeInMillis(startTime);
+
+                    int orgDayOfMonth = orCal.get(Calendar.DAY_OF_MONTH);
+                    int compareDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+
+                    int orgMonthOfYear = orCal.get(Calendar.MONTH);
+                    int compareMonthOfYear = cal.get(Calendar.MONTH);
+
+                    int diffYear = cal.get(Calendar.YEAR) - orCal.get(Calendar.YEAR);
+
+                    int remainsYear = diffYear%interval;
+                    int remainsMonth = orgMonthOfYear - compareMonthOfYear;
+                    int remainsDay = orgDayOfMonth - compareDayOfMonth;
+
+                    cal.add(Calendar.YEAR, remainsYear);
+                    cal.add(Calendar.MONTH, remainsMonth);
+                    cal.add(Calendar.DATE, remainsDay);
+
+                    long currentAvailableDate = cal.getTimeInMillis();
+                    while(currentAvailableDate < endRange){
+                        currentAvailableDate = cal.getTimeInMillis();
+                        if (currentAvailableDate >= startRange){
+                            availableDates.add(currentAvailableDate);
+                        }
+                        cal.add(Calendar.YEAR, interval);
+                    }
+                }
+
+                default:
+                    Log.i(TAG, "isInclude: " + frequencyEnum);
+                    break;
+            }
+        }
+
+        return availableDates;
+    }
+
 
     public List<String> getRecurrence(){
 

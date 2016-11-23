@@ -53,8 +53,7 @@ public class CalendarMonthDayFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
-        Map<Long, List<ITimeEventInterface>> map = EventManager.getInstance().getEventsMap();
-        monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
         monthDayView.setEventClassName(Event.class);
         monthDayView.setOnHeaderListener(new MonthDayView.OnHeaderListener() {
             @Override
@@ -104,7 +103,7 @@ public class CalendarMonthDayFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
-            monthDayView.setDayEventMap(EventManager.getInstance().getEventsMap());
+            monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
             Calendar calendar = Calendar.getInstance();
             long time = calendar.getTimeInMillis();
             monthDayView.reloadEvents();
