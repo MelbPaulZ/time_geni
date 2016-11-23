@@ -31,10 +31,12 @@ import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -200,6 +202,13 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                         pendingTimeslots.add(timeSlot);
                     }
                 }
+
+                // set event start time and end time, using the latest timeslot
+                Timeslot displayTimeslot = TimeSlotUtil.getLatestTimeSlot(pendingTimeslots);
+                newEvDtlEvent.setStartTime(displayTimeslot.getStartTime());
+                newEvDtlEvent.setEndTime(displayTimeslot.getEndTime());
+
+
                 newEvDtlEvent.setTimeslot(pendingTimeslots);
                 newEvDtlEvent.setHostUserUid(UserUtil.getUserUid());
                 if(!newEvDtlEvent.hasPhoto()){
@@ -225,6 +234,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 newEvDtlEvent.setCalendarUid(UserUtil.getUserUid());
                 newEvDtlEvent.setRecurringEventUid(newEvDtlEvent.getEventUid());
                 newEvDtlEvent.setRecurringEventId(newEvDtlEvent.getEventUid());
+                newEvDtlEvent.setStatus("pending");
 
                 presenter.addEvent(newEvDtlEvent);
                 if (mvpView!=null){

@@ -247,6 +247,8 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 if (event.getTitle()==null) {
                     event.setTitle(presenter.getContext().getString(R.string.new_event));
                 }
+                EventUtil.addSelfInInvitee(getContext(), event);
+                EventUtil.addSoloEventBasicInfo(getContext(), event);
                 EventManager.getInstance().setCurrentEvent(event);
                 presenter.addSoloEvent();
                 if (mvpView!=null){
@@ -357,23 +359,6 @@ public class EventCreateNewVIewModel extends CommonViewModel {
         notifyPropertyChanged(BR.isAllDay);
     }
 
-//    @BindingAdapter("bind:imageResource")
-//    public static void setImageResource(ImageView imageView, Event event){
-//        LinearLayout parent = (LinearLayout) imageView.getParent();
-//        int position = parent.indexOfChild(imageView); // get the position
-//        if (event.hasPhoto() && event.getPhoto().size()>= position+1){
-//            imageView.setVisibility(View.VISIBLE);
-//            File f = new File(event.getPhoto().get(position).getLocalPath());
-//            int size = DensityUtil.dip2px(imageView.getContext(), 40);
-//            Picasso.with(imageView.getContext())
-//                    .load(f)
-//                    .resize(size ,size)
-//                    .centerCrop()
-//                    .into(imageView);
-//        }else{
-//            imageView.setVisibility(View.GONE);
-//        }
-//    }
 
     @Bindable
     public static int getChangeStarttime() {

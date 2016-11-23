@@ -80,6 +80,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     public void toEditEvent() {
         EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
         eventEditFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        EventManager.getInstance().setCurrentEvent(event);
         switchFragment(this, eventEditFragment);
     }
 

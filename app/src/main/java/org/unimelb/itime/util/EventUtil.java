@@ -9,6 +9,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.testdb.DBManager;
 import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
@@ -334,9 +335,6 @@ public class EventUtil{
         return 0;
     }
 
-    public static String generateUid(){
-        return (int)(Math.random() * 100000) + "";
-    }
 
     public static void startEditEventActivity(Context context, Activity activity, ITimeEventInterface iTimeEventInterface) {
         Intent intent = new Intent(activity, EventDetailActivity.class);
@@ -447,6 +445,41 @@ public class EventUtil{
             minutes.add( i*15 + "");
         }
         return minutes;
+    }
+
+    public static String getEventType(Event event, String userUid){
+        if (event.getInvitee().size()>1){
+            return "group";
+        }else{
+            if (event.getInvitee().get(0).getInviteeUid().equals(userUid)){
+                return "solo";
+            }else{
+                return "group";
+            }
+        }
+    }
+
+    public static void addSelfInInvitee(Context context,Event event){
+        Invitee self = new Invitee();
+        self.setStatus(context.getString(R.string.accept));
+        self.setInviteeUid(AppUtil.generateUuid());
+        self.setUserUid(UserUtil.getUserUid());
+        self.setEventUid(event.getEventUid());
+        self.setUserId(UserUtil.getInstance().getUser().getUserId());
+        self.setIsHost(1); // 1 refers to host
+        self.setAliasName(UserUtil.getInstance().getUser().getPersonalAlias());
+        event.addInvitee(self);
+    }
+
+    public static void addSoloEventBasicInfo(Context context,Event event){
+        event.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid());
+        event.setStatus(context.getString(R.string.confirmed));
+        event.setEventUid(AppUtil.generateUuid());
+        event.setEventId(""); // might need change later, ask chuandong what is eventId
+        event.setUserUid(UserUtil.getUserUid());
+        event.setEventType(context.getString(R.string.solo));
+        event.setInviteeVisibility(1);
+        event.setFreebusyAccess(1); // ask chuandong
     }
 
 

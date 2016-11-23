@@ -16,9 +16,11 @@ import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
@@ -73,11 +75,14 @@ public class EventEditViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>0) {
-                        presenter.updateEvent(eventEditViewEvent);
+                    // set event type
+                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
+                    EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
+                    presenter.updateEvent(eventEditViewEvent);
+                    // this if might change later, because the host can be kicked??????
+                    if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>1) {
                         mvpView.toHostEventDetail(eventEditViewEvent);
                     }else{
-                        presenter.updateEvent(eventEditViewEvent);
                         mvpView.toSoloEventDetail(eventEditViewEvent);
                     }
                 }

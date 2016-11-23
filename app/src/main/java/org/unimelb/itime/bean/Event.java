@@ -61,16 +61,16 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private String url;
 
     @Convert(converter = Event.PhotoUrlConverter.class , columnType = String.class)
-    private List<PhotoUrl> photo = null;
+    private List<PhotoUrl> photo = new ArrayList<>();
 
     @Convert(converter = Event.TimeslotConverter.class , columnType = String.class)
-    private List<Timeslot> timeslot = null;
+    private List<Timeslot> timeslot = new ArrayList<>();
 
     // later delete
     private transient long repeatEndsTime;
 
     @Convert(converter = Event.InviteeConverter.class, columnType = String.class)
-    private List<Invitee> invitee = null;
+    private List<Invitee> invitee = new ArrayList<>();
     /** Used for active entity operations. */
     @Generated(hash = 1542254534)
     private transient EventDao myDao;
@@ -78,8 +78,8 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
     public Event() {
-        invitee = new ArrayList<>();
-        timeslot = new ArrayList<>();
+//        invitee = new ArrayList<>();
+//        timeslot = new ArrayList<>();
     }
 
 
@@ -141,7 +141,11 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         return this.invitee;
     }
 
-    public void setEventId(String id){ this.eventUid = id;}
+    public void addInvitee(Invitee invitee){
+        this.invitee.add(invitee);
+    }
+
+    public void setEventId(String id){ this.eventId = id;}
 
     public void setStartTime(long startTime){ this.startTime = startTime; }
 
@@ -563,7 +567,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         Gson gson = new Gson();
         @Override
         public List<PhotoUrl> convertToEntityProperty(String databaseValue) {
-            Type listType = new TypeToken<List<Timeslot>>() {}.getType();
+            Type listType = new TypeToken<List<PhotoUrl>>() {}.getType();
             return gson.fromJson(databaseValue, listType);
         }
 

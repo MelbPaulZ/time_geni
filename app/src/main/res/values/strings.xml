@@ -242,5 +242,8 @@
     <string name="starts">Starts</string>
     <string name="end">Ends</string>
     <string name="new_timeslot">New Timeslot</string>
+    <string name="needs_action">needsAction</string>
+    <string name="confirmed">confirmed</string>
+    <string name="solo">solo</string>
 
 </resources>

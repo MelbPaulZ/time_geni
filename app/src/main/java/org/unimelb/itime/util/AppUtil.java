@@ -28,7 +28,7 @@ public class AppUtil {
 
 
     /**
-     * to generate a uuid
+     * to generate a uuid (random uuid of any)
      * @return
      */
     public static String generateUuid(){
