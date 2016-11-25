@@ -95,7 +95,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 //        timeslot = new ArrayList<>();
     }
 
-
     @Generated(hash = 295629456)
     public Event(String eventUid, String eventId, String hostUserUid, String userUid,
             String calendarUid, String iCalUID, String recurringEventUid, String recurringEventId,

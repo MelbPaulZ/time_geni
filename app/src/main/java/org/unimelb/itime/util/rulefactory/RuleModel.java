@@ -505,7 +505,7 @@ public class RuleModel {
     }
 
 
-    public List<String> getRecurrence(){
+    public String[] getRecurrence(){
 
         String exDate = "EXDATE;VALUE=DATE:";
         for (int i = 0; i < EXDates.size(); i++) {
@@ -533,7 +533,9 @@ public class RuleModel {
             result.add(rRule);
         }
 
-        return result;
+        String[] rst=  result.toArray(new String[result.size()]);
+
+        return rst;
     }
 
 
