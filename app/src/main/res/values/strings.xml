@@ -246,4 +246,6 @@
     <string name="confirmed">confirmed</string>
     <string name="solo">solo</string>
 
+    <string name="choose_repeat">Choose Repeat</string>
+
 </resources>

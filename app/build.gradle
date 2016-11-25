@@ -19,7 +19,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     dexOptions{
-        javaMaxHeapSize "4g"
+        javaMaxHeapSize "8g"
     }
 
     signingConfigs {

@@ -2,16 +2,20 @@ package org.unimelb.itime.util;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.util.rulefactory.FrequencyEnum;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
@@ -30,6 +34,13 @@ public class EventUtil{
     public static final int ACTIVITY_CREATE_EVENT = 2;
     public static double latitude = 0.0;
     public static double longitude = 0.0;
+
+    public final static int REPEAT_NEVER = 0;
+    public final static int REPEAT_EVERYDAY = 1;
+    public final static int REPEAT_EVERYWEEK = 2;
+    public final static int REPEAT_EVERY_TWOWEEKS = 3;
+    public final static int REPEAT_EVERY_MONTH = 4;
+    public final static int REPEAT_EVERY_YEAR = 5;
 
     public static String parseTimeToString(Context context, long time){
         Calendar calendar = Calendar.getInstance();
@@ -177,18 +188,36 @@ public class EventUtil{
         return (String) getCalendarTypes(context)[num];
     }
 
-//    public static CharSequence[] getRepeats(Context context, Event event){
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(event.getStartTime());
-//        String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
-//        return new CharSequence[]{
-//                context.getString(R.string.repeat_never),
-//                context.getString(R.string.repeat_everyday),
-//                String.format(context.getString(R.string.repeat_everyweek), dayOfWeek),
-//                String.format(context.getString(R.string.repeat_every_twoweek)),
-//                String.format(context.getString(R.string.repeat_every_month)),
-//                String.format(context.getString(R.string.repeat_every_year))};
-//    }
+    public static CharSequence[] getRepeats(Context context, Event event){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(event.getStartTime());
+        String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
+        return new CharSequence[]{
+                context.getString(R.string.repeat_never),
+                context.getString(R.string.repeat_everyday),
+                String.format(context.getString(R.string.repeat_everyweek), dayOfWeek),
+                String.format(context.getString(R.string.repeat_every_twoweek)),
+                String.format(context.getString(R.string.repeat_every_month)),
+                String.format(context.getString(R.string.repeat_every_year))};
+    }
+
+    public static void changeEventFrequency(Event event, int repeatIndex){
+        if (repeatIndex == REPEAT_NEVER){
+            event.getRule().setFrequencyEnum(null);
+        }else if (repeatIndex == REPEAT_EVERYDAY){
+            event.getRule().setFrequencyEnum(FrequencyEnum.DAILY);
+        }else if (repeatIndex == REPEAT_EVERYWEEK){
+            event.getRule().setFrequencyEnum(FrequencyEnum.WEEKLY);
+        }else if (repeatIndex == REPEAT_EVERY_TWOWEEKS){
+            event.getRule().setFrequencyEnum(FrequencyEnum.WEEKLY);
+            event.getRule().setInterval(2);
+        }else if (repeatIndex == REPEAT_EVERY_MONTH){
+            event.getRule().setFrequencyEnum(FrequencyEnum.MONTHLY);
+        }else if (repeatIndex == REPEAT_EVERY_YEAR){
+            event.getRule().setFrequencyEnum(FrequencyEnum.YEARLY);
+        }
+    }
+
 
 
 //    public static String parseRepeatIdToRepeat(Context context,String repeat, long startTime){
@@ -364,8 +393,30 @@ public class EventUtil{
         return "Captain America";
     }
 
-    public static String getRepeatString(Event event){
-        return "Never";
+    /** This get Repeat String methods return the message that should be displayed on screen
+     * */
+    public static String getRepeatString(Context context, Event event){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(event.getStartTime());
+        String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
+        FrequencyEnum frequencyEnum = event.getRule().getFrequencyEnum();
+        if (frequencyEnum == null){
+            return String.format(context.getString(R.string.repeat_never));
+        }else if (frequencyEnum == FrequencyEnum.DAILY){
+            return String.format(context.getString(R.string.repeat_everyday));
+        }else if (frequencyEnum == FrequencyEnum.WEEKLY){
+            if (event.getRule().getInterval() == 1){
+                return String.format(context.getString(R.string.repeat_everyweek), dayOfWeek);
+            }else if (event.getRule().getInterval() ==2){
+                return String.format(context.getString(R.string.repeat_every_twoweek));
+            }
+        }else if (frequencyEnum == FrequencyEnum.MONTHLY){
+            return String.format(context.getString(R.string.repeat_every_month));
+        }else if (frequencyEnum == FrequencyEnum.YEARLY){
+            return String.format(context.getString(R.string.repeat_every_year));
+        }
+        // if not all of this above (impossible)
+        return "";
     }
 
 

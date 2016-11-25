@@ -91,6 +91,8 @@ public class RemoteService extends Service{
         String calendarUid = CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid();
         Observable<HttpResult<List<Event>>> observable = eventApi.list(calendarUid);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
+
+
             @Override
             public void onCompleted() {
                 Log.i(TAG, "onCompleted: " + "eventApi");

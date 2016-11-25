@@ -16,6 +16,7 @@ import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
@@ -70,7 +71,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         this.rule = rule;
     }
 
-    private transient RuleModel rule;
+    private transient RuleModel rule = new RuleModel();
 
     @Convert(converter = Event.PhotoUrlConverter.class , columnType = String.class)
     private List<PhotoUrl> photo = new ArrayList<>();
@@ -90,10 +91,8 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
     public Event() {
-//        invitee = new ArrayList<>();
-//        timeslot = new ArrayList<>();
-    }
 
+    }
 
     @Generated(hash = 295629456)
     public Event(String eventUid, String eventId, String hostUserUid, String userUid,
@@ -159,9 +158,17 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     public void setEventId(String id){ this.eventId = id;}
 
-    public void setStartTime(long startTime){ this.startTime = startTime; }
+    public void setStartTime(long startTime){
+        this.startTime = startTime;
+        // the rule is for frequency
+        this.rule.setStartTime(startTime);
+    }
 
-    public void setEndTime(long endTime){ this.endTime = endTime; }
+    public void setEndTime(long endTime){
+        this.endTime = endTime;
+        // the rule is for frequency
+        this.rule.setEndTime(endTime);
+    }
 
     public String getEventUid(){ return eventUid; }
 
