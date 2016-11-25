@@ -199,6 +199,10 @@ public class EventManager {
         Gson gson = new Gson();
         String eventStr = gson.toJson(event);
         Event copyEvent = gson.fromJson(eventStr, Event.class);
+        // here the event rule needs to be manually copied to the copyEvent, because the rule is not a json
+        
+
+        copyEvent.setRule();
         return copyEvent;
     }
 

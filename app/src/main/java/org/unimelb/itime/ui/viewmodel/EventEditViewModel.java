@@ -114,6 +114,10 @@ public class EventEditViewModel extends CommonViewModel {
         };
     }
 
+    public String getRepeatString(Event event){
+        return EventUtil.getRepeatString(getContext(), event);
+    }
+
     public View.OnClickListener chooseRepeat() {
         return new View.OnClickListener() {
             @Override

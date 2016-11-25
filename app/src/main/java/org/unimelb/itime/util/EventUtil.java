@@ -415,6 +415,7 @@ public class EventUtil{
         }else if (frequencyEnum == FrequencyEnum.YEARLY){
             return String.format(context.getString(R.string.repeat_every_year));
         }
+
         // if not all of this above (impossible)
         return "";
     }
