@@ -1,5 +1,7 @@
 package org.unimelb.itime.bean;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -14,6 +16,7 @@ import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
@@ -28,7 +31,7 @@ import java.util.List;
  */
 
 @Entity(active =  true)
-public class Event implements ITimeEventInterface<Event>, Serializable {
+public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable{
     @Id
     private String eventUid;
     private String eventId;
@@ -39,7 +42,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private String recurringEventUid;
     private String recurringEventId;
     @Convert(converter = Event.ArrayOfStringConverter.class, columnType = String.class)
-    private String[] recurrence = {};
+    private String[] recurrence={};
     private String status;
     private String summary;
     private long startTime;
@@ -57,8 +60,17 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
     private int icsSequence;
     private int inviteeVisibility;
 
-
     private String url;
+
+    public RuleModel getRule() {
+        return rule;
+    }
+
+    public void setRule(RuleModel rule) {
+        this.rule = rule;
+    }
+
+    private transient RuleModel rule;
 
     @Convert(converter = Event.PhotoUrlConverter.class , columnType = String.class)
     private List<PhotoUrl> photo = new ArrayList<>();
@@ -189,6 +201,10 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
 
     public int getDuration(){
         return (int)((endTime - startTime) /(1000*60));
+    }
+
+    public long getDurationMilliseconds(){
+        return (endTime - startTime);
     }
 
     @Override
@@ -446,11 +462,17 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         this.icsSequence = icsSequence;
     }
 
-
-
-
-
-
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Event event = null;
+        try
+        {
+            event = (Event) super.clone();
+        } catch (CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return event;
+    }
 
     public List<PhotoUrl> getPhoto(){
         return this.photo;
@@ -540,7 +562,8 @@ public class Event implements ITimeEventInterface<Event>, Serializable {
         Gson gson = new Gson();
         @Override
         public String[] convertToEntityProperty(String databaseValue) {
-            return  gson.fromJson(databaseValue, String[].class);
+            Type listType = new TypeToken<String[]>() {}.getType();
+            return gson.fromJson(databaseValue, listType);
         }
 
         @Override

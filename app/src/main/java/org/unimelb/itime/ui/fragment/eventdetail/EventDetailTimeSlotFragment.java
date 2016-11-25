@@ -51,7 +51,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         weekView = (WeekView) binding.getRoot().findViewById(R.id.edit_timeslot_weekview);
         weekView.enableTimeSlot();
         weekView.setEventClassName(Event.class);
-        weekView.setDayEventMap(EventManager.getInstance().getEventsMap());
+        weekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
         if (UserUtil.getUserUid().equals(event.getHostUserUid())){
             // which means this is host event
         }else{
