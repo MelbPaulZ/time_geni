@@ -16,6 +16,7 @@ import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.rulefactory.RuleInterface;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 
 @Entity(active =  true)
-public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable{
+public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable, RuleInterface{
     @Id
     private String eventUid;
     private String eventId;
