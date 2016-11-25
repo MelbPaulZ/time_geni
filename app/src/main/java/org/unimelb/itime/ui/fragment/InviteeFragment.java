@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,14 +28,15 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.testdb.DBManager;
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.presenter.InviteePresenter;
 import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
 import org.unimelb.itime.vendor.contact.helper.ClearEditText;
@@ -457,13 +459,27 @@ public class InviteeFragment extends BaseUiFragment {
     private Invitee contactToInvitee(Contact contact, Event event) {
         Invitee invitee = new Invitee();
         invitee.setEventUid(event.getEventUid());
-        invitee.setInviteeUid(AppUtil.generateUuid());
+        // need to check if the contact in the invitee list
+        invitee.setInviteeUid(getInviteeUid(contact,event));
         invitee.setUserUid(contact.getContactUid());
         invitee.setUserId(contact.getAliasName());
         invitee.setStatus("needsAction");
         invitee.setAliasPhoto(contact.getPhoto());
         invitee.setAliasName(contact.getName());
         return invitee;
+    }
+
+    /** if the contact is already in the event's invitees, then no need of setting up a new InviteeUid,
+     * otherwise use its previous inviteeUid
+     * */
+    private String getInviteeUid(Contact contact,Event event){
+        Log.i(TAG, "getInviteeUid: ");
+        for (Invitee invitee : event.getInvitee()){
+            if(invitee.getUserUid().equals(contact.getContactUid())){
+                return invitee.getInviteeUid();
+            }
+        }
+        return AppUtil.generateUuid();
     }
 
     public void resetAll(){

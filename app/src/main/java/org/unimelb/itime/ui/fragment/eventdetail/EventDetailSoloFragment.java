@@ -12,7 +12,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentSoloEventDetailBinding;
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailSoloMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailSoloPresenter;

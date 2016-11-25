@@ -1,48 +1,33 @@
 package org.unimelb.itime.ui.fragment.eventcreate;
 
-import android.app.AlertDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TimePicker;
-
-import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.adapter.PhotoAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateNewBinding;
-import org.unimelb.itime.messageevent.MessageEventDate;
-import org.unimelb.itime.messageevent.MessageEventTime;
 import org.unimelb.itime.messageevent.MessageLocation;
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
-import org.unimelb.itime.ui.presenter.EmptyPresenter;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
-import org.unimelb.itime.util.CalendarUtil;
-import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by Paul on 23/08/2016.

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
 import org.unimelb.itime.vendor.BR;
 import org.unimelb.itime.bean.Event;

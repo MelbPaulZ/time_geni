@@ -7,8 +7,8 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
-import org.unimelb.itime.testdb.DBManager;
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 
 /**

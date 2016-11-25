@@ -1,4 +1,4 @@
-package org.unimelb.itime.testdb;
+package org.unimelb.itime.managers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.PhotoUrl;
-import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
 import org.unimelb.itime.dao.DaoSession;

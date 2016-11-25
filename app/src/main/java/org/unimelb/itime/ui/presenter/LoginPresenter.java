@@ -11,7 +11,7 @@ import org.unimelb.itime.dao.UserDao;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
-import org.unimelb.itime.testdb.DBManager;
+import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.util.HttpUtil;

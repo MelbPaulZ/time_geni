@@ -12,19 +12,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
 import org.unimelb.itime.messageevent.MessageMonthYear;
-import org.unimelb.itime.testdb.DBManager;
-import org.unimelb.itime.testdb.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarAgendaFragment;
 import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
@@ -36,7 +31,6 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * required login, need to extend BaseUiAuthFragment

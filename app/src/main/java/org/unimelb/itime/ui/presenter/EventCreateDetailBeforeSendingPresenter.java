@@ -7,15 +7,13 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
-import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.PhotoApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.testdb.DBManager;
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.util.HttpUtil;
 

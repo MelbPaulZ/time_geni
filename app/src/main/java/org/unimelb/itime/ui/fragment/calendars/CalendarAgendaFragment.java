@@ -12,7 +12,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.agendaview.AgendaViewBody;
 import org.unimelb.itime.vendor.agendaview.MonthAgendaView;

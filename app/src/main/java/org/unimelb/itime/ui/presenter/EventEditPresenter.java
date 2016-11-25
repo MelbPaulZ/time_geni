@@ -5,16 +5,13 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.testdb.DBManager;
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
-import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
 import org.unimelb.itime.util.CalendarUtil;
-import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.HttpUtil;
 
 import rx.Observable;
@@ -64,11 +61,12 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
     private void updateLocalDB(Event newEvent){
         // update local db
         Event oldEvent = EventManager.getInstance().getCurrentEvent();
+        // here update DB
+        Event dbOldEvent = DBManager.getInstance(context).getEvent(oldEvent.getEventUid());
+        dbOldEvent.delete();
         // here update EventManager
         EventManager.getInstance().updateEvent(oldEvent, newEvent);
         // update db or eventmanager?
-        // here update DB
-        oldEvent.delete();
         DBManager.getInstance(context).insertEvent(newEvent);
     }
 

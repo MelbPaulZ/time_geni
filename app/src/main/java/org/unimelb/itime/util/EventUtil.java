@@ -9,9 +9,8 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
-import org.unimelb.itime.bean.User;
-import org.unimelb.itime.testdb.DBManager;
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -451,7 +450,7 @@ public class EventUtil{
         if (event.getInvitee().size()>1){
             return "group";
         }else{
-            if (event.getInvitee().get(0).getInviteeUid().equals(userUid)){
+            if (event.getInvitee().size()==0){
                 return "solo";
             }else{
                 return "group";
@@ -459,10 +458,16 @@ public class EventUtil{
         }
     }
 
+    /** use when event has no invitees before, add self as host with a new generated inviteeUid
+     * */
     public static void addSelfInInvitee(Context context,Event event){
         Invitee self = new Invitee();
         self.setStatus(context.getString(R.string.accept));
-        self.setInviteeUid(AppUtil.generateUuid());
+        if (EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent())!=null){
+            self.setInviteeUid(EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent()));
+        }else{
+            self.setInviteeUid(AppUtil.generateUuid());
+        }
         self.setUserUid(UserUtil.getUserUid());
         self.setEventUid(event.getEventUid());
         self.setUserId(UserUtil.getInstance().getUser().getUserId());
@@ -470,6 +475,7 @@ public class EventUtil{
         self.setAliasName(UserUtil.getInstance().getUser().getPersonalAlias());
         event.addInvitee(self);
     }
+
 
     public static void addSoloEventBasicInfo(Context context,Event event){
         event.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid());

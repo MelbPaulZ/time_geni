@@ -20,7 +20,7 @@ import org.unimelb.itime.databinding.FragmentEventCreateBeforeSendingBinding;
 import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;

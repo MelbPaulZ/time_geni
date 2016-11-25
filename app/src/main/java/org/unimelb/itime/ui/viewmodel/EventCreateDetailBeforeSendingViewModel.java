@@ -3,7 +3,6 @@ package org.unimelb.itime.ui.viewmodel;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
@@ -12,13 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TimePicker;
 
 import com.android.databinding.library.baseAdapters.BR;
-import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
@@ -26,17 +23,14 @@ import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.bean.User;
-import org.unimelb.itime.testdb.EventManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
-import org.unimelb.itime.vendor.helper.DensityUtil;
 
-import java.io.File;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -211,22 +205,26 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
 
                 newEvDtlEvent.setTimeslot(pendingTimeslots);
                 newEvDtlEvent.setHostUserUid(UserUtil.getUserUid());
+                EventUtil.addSelfInInvitee(getContext(), newEvDtlEvent);
                 if(!newEvDtlEvent.hasPhoto()){
                     newEvDtlEvent.setPhoto(new ArrayList<PhotoUrl>());
                 }
 
                 // todo: need to check whether host is in invitees
-                if(newEvDtlEvent.hasAttendee()){
-                    Invitee host = new Invitee();
-                    User user = UserUtil.getInstance().getUser();
-                    host.setEventUid(newEvDtlEvent.getEventUid());
-                    host.setInviteeUid(AppUtil.generateUuid());
-                    host.setUserUid(user.getUserUid());
-                    host.setUserId(user.getUserId());
-                    host.setStatus("accepted");
-                    host.setAliasPhoto(user.getPhoto());
-                    host.setAliasName(user.getPersonalAlias());
-                    newEvDtlEvent.getInvitee().add(host);
+//                if(newEvDtlEvent.hasAttendee()){
+//                    Invitee host = new Invitee();
+//                    User user = UserUtil.getInstance().getUser();
+//                    host.setEventUid(newEvDtlEvent.getEventUid());
+//                    host.setInviteeUid(AppUtil.generateUuid());
+//                    host.setUserUid(user.getUserUid());
+//                    host.setUserId(user.getUserId());
+//                    host.setStatus("accepted");
+//                    host.setAliasPhoto(user.getPhoto());
+//                    host.setAliasName(user.getPersonalAlias());
+//                    newEvDtlEvent.getInvitee().add(host);
+//                    newEvDtlEvent.setEventType("group");
+//                }
+                if (newEvDtlEvent.getInvitee().size()>1){
                     newEvDtlEvent.setEventType("group");
                 }
 

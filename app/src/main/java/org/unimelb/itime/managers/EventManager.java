@@ -1,8 +1,9 @@
-package org.unimelb.itime.testdb;
+package org.unimelb.itime.managers;
 
 import com.google.gson.Gson;
 
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
@@ -82,14 +83,27 @@ public class EventManager {
 
     public void updateEvent(Event oldEvent, Event newEvent){
         long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
-
+        List<ITimeEventInterface> newList = new ArrayList<>();
         if (this.eventMap.containsKey(oldBeginTime)){
-            int id = eventMap.get(oldBeginTime).indexOf(oldEvent);
-
-            Event old = (Event) eventMap.get(oldBeginTime).get(id);
-            eventMap.get(oldBeginTime).remove(old);
-
+            List<ITimeEventInterface> eventList = eventMap.get(oldBeginTime);
+            for (ITimeEventInterface iTimeEventInterface: eventList){
+                if ( !((Event)iTimeEventInterface).getEventUid().equals(oldEvent.getEventUid())){
+                    newList.add(iTimeEventInterface);
+                }
+            }
+            eventMap.get(oldBeginTime).clear();
+            eventMap.put(oldBeginTime, newList);
+            // so far remove the old event, next to add new event
             this.addEvent(newEvent);
+
+
+
+//            int id = eventMap.get(oldBeginTime).indexOf(oldEvent);
+//
+//            Event old = (Event) eventMap.get(oldBeginTime).get(id);
+//            eventMap.get(oldBeginTime).remove(old);
+//
+//            this.addEvent(newEvent);
             EventManager.getInstance().setCurrentEvent(newEvent);
         }
     }
@@ -124,5 +138,15 @@ public class EventManager {
         }else{
             return false;
         }
+    }
+
+    public String getHostInviteeUid(Event event){
+        for (Invitee invitee: event.getInvitee()){
+            if (invitee.getIsHost() == 1){
+                // 1 means is host
+                return invitee.getInviteeUid();
+            }
+        }
+        return null;
     }
 }
