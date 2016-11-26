@@ -546,7 +546,6 @@ public class EventUtil{
     public static void addSoloEventBasicInfo(Context context,Event event){
         event.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid());
         event.setStatus(context.getString(R.string.confirmed));
-        event.setEventUid(AppUtil.generateUuid());
         event.setEventId(""); // might need change later, ask chuandong what is eventId
         event.setUserUid(UserUtil.getUserUid());
         event.setEventType(context.getString(R.string.solo));

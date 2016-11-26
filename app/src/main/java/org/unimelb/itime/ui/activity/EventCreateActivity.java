@@ -69,10 +69,6 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
 
     public void initFragments(){
         fragmentList.add(new EventCreateNewFragment());
-//        fragmentList.add(new InviteeFragment());
-//        fragmentList.add(new EventTimeSlotViewFragment());
-//        fragmentList.add(new EventCreateDetailBeforeSendingFragment());
-//        fragmentList.add(new EventLocationPickerFragment());
 
         hideAllFragments();
         getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
