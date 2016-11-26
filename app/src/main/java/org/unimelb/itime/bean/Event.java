@@ -3,6 +3,7 @@ package org.unimelb.itime.bean;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.greendao.DaoException;
@@ -16,6 +17,7 @@ import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.util.EventUtil;
+
 import org.unimelb.itime.util.rulefactory.RuleInterface;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -26,6 +28,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.http.HEAD;
 
 /**
  * Created by yinchuandong on 22/08/2016.
@@ -71,7 +75,8 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         this.rule = rule;
     }
 
-    private transient RuleModel rule;
+    @Expose(serialize = true, deserialize = true)
+    private transient RuleModel rule = new RuleModel(this);
 
     @Convert(converter = Event.PhotoUrlConverter.class , columnType = String.class)
     private List<PhotoUrl> photo = new ArrayList<>();
@@ -91,9 +96,9 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
     public Event() {
-//        invitee = new ArrayList<>();
-//        timeslot = new ArrayList<>();
+
     }
+
 
     @Generated(hash = 295629456)
     public Event(String eventUid, String eventId, String hostUserUid, String userUid,
@@ -159,9 +164,13 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     public void setEventId(String id){ this.eventId = id;}
 
-    public void setStartTime(long startTime){ this.startTime = startTime; }
+    public void setStartTime(long startTime){
+        this.startTime = startTime;
+    }
 
-    public void setEndTime(long endTime){ this.endTime = endTime; }
+    public void setEndTime(long endTime){
+        this.endTime = endTime;
+    }
 
     public String getEventUid(){ return eventUid; }
 

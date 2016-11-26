@@ -147,7 +147,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:onClick="@{eventVM.onClickRepeat()}"
-                            android:text="+++"
+                            android:text="@{eventVM.getRepeatString(eventVM.event)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>

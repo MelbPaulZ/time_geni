@@ -1,7 +1,9 @@
 package org.unimelb.itime.managers;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.antlr.v4.tool.Rule;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
@@ -10,7 +12,7 @@ import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventPackageInterface;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -201,8 +203,16 @@ public class EventManager {
 
     public Event copyCurrentEvent(Event event){
         Gson gson = new Gson();
+//        MyModelClass myModelClass = response.getData();
+
         String eventStr = gson.toJson(event);
         Event copyEvent = gson.fromJson(eventStr, Event.class);
+
+        Type dataType = new TypeToken <RuleModel<Event>>() {}.getType();
+        RuleModel response = gson.fromJson(gson.toJson(event.getRule(), dataType), dataType);
+        copyEvent.setRule(response);
+
+
         return copyEvent;
     }
 

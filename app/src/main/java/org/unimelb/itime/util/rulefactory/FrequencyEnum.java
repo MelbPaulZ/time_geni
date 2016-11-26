@@ -11,7 +11,8 @@ public enum FrequencyEnum {
 
     private String value;
 
-    FrequencyEnum(){};
+    FrequencyEnum() {
+    }
 
     FrequencyEnum(String value){
         this.value = value;

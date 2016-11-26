@@ -77,6 +77,7 @@ public class EventEditViewModel extends CommonViewModel {
                 if (mvpView!=null){
                     // set event type
                     eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
+                    eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence()); // set the repeat string
                     EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
                     presenter.updateEvent(eventEditViewEvent);
                     // this if might change later, because the host can be kicked??????
@@ -113,11 +114,27 @@ public class EventEditViewModel extends CommonViewModel {
         };
     }
 
+    public String getRepeatString(Event event){
+        return EventUtil.getRepeatString(getContext(), event);
+    }
+
     public View.OnClickListener chooseRepeat() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                CharSequence[] repeats;
+                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                builder.setTitle(getContext().getString(R.string.choose_repeat));
+                repeats = EventUtil.getRepeats(getContext(), eventEditViewEvent);
+                builder.setItems(repeats, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // set event recurrence
+                        EventUtil.changeEventFrequency(eventEditViewEvent, i);
+                        setEventEditViewEvent(eventEditViewEvent);
+                    }
+                });
+                builder.show();
             }
 
         };

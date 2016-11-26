@@ -27,6 +27,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.rulefactory.FrequencyEnum;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
@@ -174,13 +175,29 @@ public class EventCreateNewVIewModel extends CommonViewModel {
         };
     }
 
+
+    public String getRepeatString(Event event){
+        return EventUtil.getRepeatString(getContext(), event);
+    }
+
     public View.OnClickListener onClickRepeat() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                CharSequence[] repeats;
+                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                builder.setTitle(getContext().getString(R.string.choose_repeat));
+                repeats = EventUtil.getRepeats(getContext(), event);
+                builder.setItems(repeats, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // set event recurrence
+                        EventUtil.changeEventFrequency(event, i);
+                        setEvent(event);
+                    }
+                });
+                builder.show();
             }
-
         };
     }
 
@@ -245,6 +262,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 if (event.getTitle()==null) {
                     event.setTitle(presenter.getContext().getString(R.string.new_event));
                 }
+                event.setRecurrence(event.getRule().getRecurrence());
                 EventUtil.addSelfInInvitee(getContext(), event);
                 EventUtil.addSoloEventBasicInfo(getContext(), event);
                 EventManager.getInstance().setCurrentEvent(event);

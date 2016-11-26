@@ -62,7 +62,19 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                CharSequence[] repeats;
+                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                builder.setTitle(getContext().getString(R.string.choose_repeat));
+                repeats = EventUtil.getRepeats(getContext(), newEvDtlEvent);
+                builder.setItems(repeats, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // set event recurrence
+                        EventUtil.changeEventFrequency(newEvDtlEvent, i);
+                        setNewEvDtlEvent(newEvDtlEvent);
+                    }
+                });
+                builder.show();
             }
 
         };
@@ -202,7 +214,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 newEvDtlEvent.setStartTime(displayTimeslot.getStartTime());
                 newEvDtlEvent.setEndTime(displayTimeslot.getEndTime());
 
-
+                newEvDtlEvent.setRecurrence(newEvDtlEvent.getRule().getRecurrence());
                 newEvDtlEvent.setTimeslot(pendingTimeslots);
                 newEvDtlEvent.setHostUserUid(UserUtil.getUserUid());
                 EventUtil.addSelfInInvitee(getContext(), newEvDtlEvent);

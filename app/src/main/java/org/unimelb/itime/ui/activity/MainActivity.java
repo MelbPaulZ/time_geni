@@ -114,7 +114,8 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     public void initNewEvent(Calendar startTimeCalendar){
         // initial default values for new event
-        Event event = new Event();
+//        Event event = new Event();
+        Event event = EventManager.getInstance().getCurrentEvent();
         event.setEventUid(AppUtil.generateUuid());
         event.setHostUserUid(UserUtil.getUserUid());
         long endTime = startTimeCalendar.getTimeInMillis() + 3600 * 1000;
