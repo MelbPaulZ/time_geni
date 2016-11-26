@@ -198,8 +198,9 @@ public class EventManager {
             this.removeRepeatedEvent(oldEvent);
             this.addEvent(newEvent);
         }
-
-        oldEvent.delete();
+        // here update DB
+        Event dbOldEvent = DBManager.getInstance().getEvent(oldEvent.getEventUid());
+        dbOldEvent.delete();
         DBManager.getInstance().insertEvent(newEvent);
     }
 

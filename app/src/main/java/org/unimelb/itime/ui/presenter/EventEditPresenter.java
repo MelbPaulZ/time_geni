@@ -61,8 +61,7 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
     private void updateLocalDB(Event newEvent){
         // update local db
         Event oldEvent = EventManager.getInstance().getCurrentEvent();
-        // here update DB
-        Event dbOldEvent = DBManager.getInstance(context).getEvent(oldEvent.getEventUid());
+
 //        dbOldEvent.delete();
         // here update EventManager
         EventManager.getInstance().updateEvent(oldEvent, newEvent);
