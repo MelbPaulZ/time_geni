@@ -63,11 +63,11 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         Event oldEvent = EventManager.getInstance().getCurrentEvent();
         // here update DB
         Event dbOldEvent = DBManager.getInstance(context).getEvent(oldEvent.getEventUid());
-        dbOldEvent.delete();
+//        dbOldEvent.delete();
         // here update EventManager
         EventManager.getInstance().updateEvent(oldEvent, newEvent);
         // update db or eventmanager?
-        DBManager.getInstance(context).insertEvent(newEvent);
+//        DBManager.getInstance(context).insertEvent(newEvent);
     }
 
     public void updateEvent(Event newEvent){

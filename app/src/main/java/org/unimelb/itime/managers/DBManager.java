@@ -28,6 +28,18 @@ public class DBManager {
         openHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
     }
 
+    public static DBManager getInstance() {
+        if (mInstance == null) {
+            synchronized (DBManager.class)
+            {
+                if (mInstance == null)
+                {
+                    throw new RuntimeException("DBManager is null");
+                }
+            }
+        }
+        return mInstance;
+    }
 
     public static DBManager getInstance(Context context) {
         if (mInstance == null) {

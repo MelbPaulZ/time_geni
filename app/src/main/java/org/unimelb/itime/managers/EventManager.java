@@ -191,15 +191,6 @@ public class EventManager {
 
                 Event old = (Event) regularEventMap.get(oldBeginTime).get(id);
                 regularEventMap.get(oldBeginTime).remove(old);
-
-                //if new not repeated
-//                if (newEvent.getRecurrence().length == 0){
-//                    this.addEvent(newEvent);
-//                    EventManager.getInstance().setCurrentEvent(newEvent);
-//                }else {
-//                    //if new is repeated
-//                    this.addRepeatedEvent(newEvent, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
-//                }
                 this.addEvent(newEvent);
             }
         }else{
@@ -207,11 +198,13 @@ public class EventManager {
             this.removeRepeatedEvent(oldEvent);
             this.addEvent(newEvent);
         }
+
+        oldEvent.delete();
+        DBManager.getInstance().insertEvent(newEvent);
     }
 
     public Event copyCurrentEvent(Event event){
         Gson gson = new Gson();
-//        MyModelClass myModelClass = response.getData();
 
         String eventStr = gson.toJson(event);
         Event copyEvent = gson.fromJson(eventStr, Event.class);
@@ -219,7 +212,6 @@ public class EventManager {
         Type dataType = new TypeToken <RuleModel<Event>>() {}.getType();
         RuleModel response = gson.fromJson(gson.toJson(event.getRule(), dataType), dataType);
         copyEvent.setRule(response);
-
 
         return copyEvent;
     }
@@ -304,5 +296,15 @@ public class EventManager {
         public void removeSelfFromRepeatedEventMap(){
             repeatedEventMap.get(belongToDayOfBegin).remove(event);
         }
+    }
+
+    public Event findOrgByUUID(String UUID){
+        for (Event orgE:orgRepeatedEventList
+             ) {
+            if (orgE.getEventUid().equals(UUID)){
+                return orgE;
+            }
+        }
+        throw new RuntimeException("findOrgByUUID: cannot find org event by UUID: " + UUID);
     }
 }
