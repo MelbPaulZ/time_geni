@@ -556,7 +556,7 @@ public class EventUtil{
 
     public static void regenerateRelatedUid(Event event){
         // change eventUid
-        String newEventUid =AppUtil.generateUuid();
+        String newEventUid = AppUtil.generateUuid();
         event.setEventUid(newEventUid);
         // change inviteeEventUid
         for (Invitee invitee : event.getInvitee()){

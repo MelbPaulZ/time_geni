@@ -170,6 +170,7 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
     }
 
     public void addEXDate(Date date){
+        Date a = date;
         this.EXDates.add(date);
     }
 
@@ -509,7 +510,7 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
 
 
     public String[] getRecurrence(){
-        SimpleDateFormat format = new SimpleDateFormat("yyyymmdd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 
         String exDate = "EXDATE;VALUE=DATE:";
         for (int i = 0; i < EXDates.size(); i++) {
