@@ -1,7 +1,9 @@
 package org.unimelb.itime.managers;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.antlr.v4.tool.Rule;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
@@ -10,7 +12,7 @@ import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventPackageInterface;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -157,21 +159,25 @@ public class EventManager {
 
     // this is for event drag
     public void updateEvent(Event oldEvent, long newStartTime, long newEndTime){
-        long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
-        if (this.regularEventMap.containsKey(oldBeginTime)){
-            Event updateEvent = null;
-            for (ITimeEventInterface ev : regularEventMap.get(oldBeginTime)){
-                if (((Event)ev).getEventUid().equals(oldEvent.getEventUid())){
-                    updateEvent = (Event) ev;
-                    break;
+        if (oldEvent.getRecurrence().length == 0){
+            long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
+            if (this.regularEventMap.containsKey(oldBeginTime)){
+                Event updateEvent = null;
+                for (ITimeEventInterface ev : regularEventMap.get(oldBeginTime)){
+                    if (((Event)ev).getEventUid().equals(oldEvent.getEventUid())){
+                        updateEvent = (Event) ev;
+                        break;
+                    }
                 }
+                if (updateEvent!=null){
+                    this.regularEventMap.get(oldBeginTime).remove(updateEvent);
+                }
+                oldEvent.setStartTime(newStartTime);
+                oldEvent.setEndTime(newEndTime);
+                this.addEvent(oldEvent);
             }
-            if (updateEvent!=null){
-                this.regularEventMap.get(oldBeginTime).remove(updateEvent);
-            }
-            oldEvent.setStartTime(newStartTime);
-            oldEvent.setEndTime(newEndTime);
-            this.addEvent(oldEvent);
+        }else {
+
         }
     }
 
@@ -197,11 +203,14 @@ public class EventManager {
 
     public Event copyCurrentEvent(Event event){
         Gson gson = new Gson();
+//        MyModelClass myModelClass = response.getData();
+
         String eventStr = gson.toJson(event);
-        String rule = gson.toJson(event.getRule());
         Event copyEvent = gson.fromJson(eventStr, Event.class);
-        copyEvent.setRule(gson.fromJson(rule, RuleModel.class));
-        // here the event rule needs to be manually copied to the copyEvent, because the rule is not a json
+
+        Type dataType = new TypeToken <RuleModel<Event>>() {}.getType();
+        RuleModel response = gson.fromJson(gson.toJson(event.getRule(), dataType), dataType);
+        copyEvent.setRule(response);
 
 
         return copyEvent;

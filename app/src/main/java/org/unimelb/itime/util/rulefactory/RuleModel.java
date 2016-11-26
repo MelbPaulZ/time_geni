@@ -2,6 +2,8 @@ package org.unimelb.itime.util.rulefactory;
 
 import android.util.Log;
 
+import org.antlr.v4.tool.Rule;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,10 +14,9 @@ import java.util.List;
 /**
  * Created by yuhaoliu on 20/11/16.
  */
-public class RuleModel implements Serializable{
-    private static final String TAG = "Rule";
+public class RuleModel<T extends RuleInterface> implements Serializable{
+    private static String TAG = "Rule";
 
-    private SimpleDateFormat format = new SimpleDateFormat("yyyymmdd");
     private long dayLongM = 86400000;
 
     //Recurrence Rule
@@ -43,15 +44,14 @@ public class RuleModel implements Serializable{
         return by_BYMONTH;
     }
 
-    private RuleInterface ruleInterface;
+    private T ruleInterface;
 
     public RuleModel() {
     }
 
-    public RuleModel(RuleInterface ruleInterface){
+    public RuleModel(T ruleInterface){
         this.ruleInterface = ruleInterface;
     }
-
 
     public void setBy_BYMONTH(List<Integer> by_BYMONTH) {
         this.by_BYMONTH = by_BYMONTH;
@@ -192,7 +192,6 @@ public class RuleModel implements Serializable{
     public void removerDate(Date date){
         this.RDates.remove(date);
     }
-
 
     public boolean isInclude(long dateM){
         Date compareDate = new Date(dateM);
@@ -510,6 +509,7 @@ public class RuleModel implements Serializable{
 
 
     public String[] getRecurrence(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyymmdd");
 
         String exDate = "EXDATE;VALUE=DATE:";
         for (int i = 0; i < EXDates.size(); i++) {

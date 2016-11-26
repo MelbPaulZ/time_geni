@@ -14,10 +14,9 @@ public enum WeekDayEnum {
 
     private int index;
 
-    WeekDayEnum() {
-    }
+    WeekDayEnum(){};
 
-    private WeekDayEnum(int index){
+    WeekDayEnum(int index){
         this.index = index;
     }
 
