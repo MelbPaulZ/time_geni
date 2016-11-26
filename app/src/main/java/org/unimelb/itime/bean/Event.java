@@ -38,34 +38,34 @@ import retrofit2.http.HEAD;
 @Entity(active =  true)
 public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable, RuleInterface{
     @Id
-    private String eventUid;
-    private String eventId;
-    private String hostUserUid; // add by paul
-    private String userUid;
-    private String calendarUid;
-    private String iCalUID;
-    private String recurringEventUid;
-    private String recurringEventId;
+    private String eventUid = "";
+    private String eventId = "";
+    private String hostUserUid = ""; // add by paul
+    private String userUid = "";
+    private String calendarUid = "";
+    private String iCalUID = "";
+    private String recurringEventUid = "";
+    private String recurringEventId = "";
     @Convert(converter = Event.ArrayOfStringConverter.class, columnType = String.class)
     private String[] recurrence={};
-    private String status;
-    private String summary;
+    private String status = "";
+    private String summary = "";
     private long startTime;
     private long endTime;
-    private String description;
+    private String description = "";
     private String location = "";
-    private String locationNote;
-    private String locationLatitude;
-    private String locationLongitude;
-    private String eventType;
+    private String locationNote = "";
+    private String locationLatitude = "";
+    private String locationLongitude = "";
+    private String eventType = "";
     private int reminder;
     private int freebusyAccess;
-    private String source;
+    private String source = "";
     private int deleteLevel;
     private int icsSequence;
     private int inviteeVisibility;
 
-    private String url;
+    private String url = "";
 
     public RuleModel getRule() {
         return rule;

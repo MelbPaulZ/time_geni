@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
@@ -167,6 +168,10 @@ public class EventEditViewModel extends CommonViewModel {
             orgEvent.setRecurrence(orgEvent.getRule().getRecurrence());
             // here change the event as a new event
             EventUtil.regenerateRelatedUid(event);
+            // ************ test gson
+            Gson gson = new Gson();
+            String temp = gson.toJson(orgEvent, Event.class);
+
             presenter.updateOnlyThisEvent(orgEvent,event);
             // this if might change later, because the host can be kicked??????
             if (event.hasAttendee() && event.getInvitee().size()>1) {
