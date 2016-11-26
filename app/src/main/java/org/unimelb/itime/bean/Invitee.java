@@ -21,7 +21,7 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
     private String status;
     private String reason;
     private int isHost;
-    
+
 
     public String getReason() {
         return reason;
