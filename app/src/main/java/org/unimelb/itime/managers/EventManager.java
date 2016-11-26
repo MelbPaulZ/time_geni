@@ -157,21 +157,25 @@ public class EventManager {
 
     // this is for event drag
     public void updateEvent(Event oldEvent, long newStartTime, long newEndTime){
-        long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
-        if (this.regularEventMap.containsKey(oldBeginTime)){
-            Event updateEvent = null;
-            for (ITimeEventInterface ev : regularEventMap.get(oldBeginTime)){
-                if (((Event)ev).getEventUid().equals(oldEvent.getEventUid())){
-                    updateEvent = (Event) ev;
-                    break;
+        if (oldEvent.getRecurrence().length == 0){
+            long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
+            if (this.regularEventMap.containsKey(oldBeginTime)){
+                Event updateEvent = null;
+                for (ITimeEventInterface ev : regularEventMap.get(oldBeginTime)){
+                    if (((Event)ev).getEventUid().equals(oldEvent.getEventUid())){
+                        updateEvent = (Event) ev;
+                        break;
+                    }
                 }
+                if (updateEvent!=null){
+                    this.regularEventMap.get(oldBeginTime).remove(updateEvent);
+                }
+                oldEvent.setStartTime(newStartTime);
+                oldEvent.setEndTime(newEndTime);
+                this.addEvent(oldEvent);
             }
-            if (updateEvent!=null){
-                this.regularEventMap.get(oldBeginTime).remove(updateEvent);
-            }
-            oldEvent.setStartTime(newStartTime);
-            oldEvent.setEndTime(newEndTime);
-            this.addEvent(oldEvent);
+        }else {
+
         }
     }
 

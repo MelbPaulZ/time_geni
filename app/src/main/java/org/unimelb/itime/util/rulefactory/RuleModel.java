@@ -48,7 +48,6 @@ public class RuleModel {
         this.ruleInterface = ruleInterface;
     }
 
-
     public void setBy_BYMONTH(List<Integer> by_BYMONTH) {
         this.by_BYMONTH = by_BYMONTH;
     }
@@ -188,7 +187,6 @@ public class RuleModel {
     public void removerDate(Date date){
         this.RDates.remove(date);
     }
-
 
     public boolean isInclude(long dateM){
         Date compareDate = new Date(dateM);
