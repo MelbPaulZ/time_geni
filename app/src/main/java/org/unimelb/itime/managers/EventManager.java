@@ -198,11 +198,12 @@ public class EventManager {
     public Event copyCurrentEvent(Event event){
         Gson gson = new Gson();
         String eventStr = gson.toJson(event);
+        String rule = gson.toJson(event.getRule());
         Event copyEvent = gson.fromJson(eventStr, Event.class);
+        copyEvent.setRule(gson.fromJson(rule, RuleModel.class));
         // here the event rule needs to be manually copied to the copyEvent, because the rule is not a json
-        
 
-        copyEvent.setRule();
+
         return copyEvent;
     }
 

@@ -2,6 +2,7 @@ package org.unimelb.itime.util.rulefactory;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * Created by yuhaoliu on 20/11/16.
  */
-public class RuleModel {
+public class RuleModel implements Serializable{
     private static final String TAG = "Rule";
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyymmdd");
@@ -43,6 +44,9 @@ public class RuleModel {
     }
 
     private RuleInterface ruleInterface;
+
+    public RuleModel() {
+    }
 
     public RuleModel(RuleInterface ruleInterface){
         this.ruleInterface = ruleInterface;

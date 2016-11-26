@@ -3,6 +3,7 @@ package org.unimelb.itime.bean;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.greendao.DaoException;
@@ -74,6 +75,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         this.rule = rule;
     }
 
+    @Expose(serialize = true, deserialize = true)
     private transient RuleModel rule = new RuleModel(this);
 
     @Convert(converter = Event.PhotoUrlConverter.class , columnType = String.class)
