@@ -247,5 +247,8 @@
     <string name="solo">solo</string>
 
     <string name="choose_repeat">Choose Repeat</string>
+    <string name="change_all_repeat_or_just_this_event">Change all repeat events or just this event</string>
+    <string name="change_all">Change all</string>
+    <string name="only_this_event">Only this event</string>
 
 </resources>

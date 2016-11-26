@@ -185,13 +185,32 @@ public class EventManager {
     public void updateEvent(Event oldEvent, Event newEvent){
         long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
 
-        if (this.regularEventMap.containsKey(oldBeginTime)){
-            int id = regularEventMap.get(oldBeginTime).indexOf(oldEvent);
+        EventManager.getInstance().setCurrentEvent(newEvent);
+        //if old not repeated
+        if (oldEvent.getRecurrence().length == 0){
+            if (this.regularEventMap.containsKey(oldBeginTime)){
+                int id = regularEventMap.get(oldBeginTime).indexOf(oldEvent);
 
-            Event old = (Event) regularEventMap.get(oldBeginTime).get(id);
-            regularEventMap.get(oldBeginTime).remove(old);
-            EventManager.getInstance().setCurrentEvent(newEvent);
+                Event old = (Event) regularEventMap.get(oldBeginTime).get(id);
+                regularEventMap.get(oldBeginTime).remove(old);
+
+                //if new not repeated
+//                if (newEvent.getRecurrence().length == 0){
+//                    this.addEvent(newEvent);
+//                    EventManager.getInstance().setCurrentEvent(newEvent);
+//                }else {
+//                    //if new is repeated
+//                    this.addRepeatedEvent(newEvent, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
+//                }
+                this.addEvent(newEvent);
+            }
+        }else{
+            //if old is repeated
+            this.removeRepeatedEvent(oldEvent);
+            this.addEvent(newEvent);
         }
+
+
     }
 
     public Event copyCurrentEvent(Event event){

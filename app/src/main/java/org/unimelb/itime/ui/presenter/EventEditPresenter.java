@@ -68,13 +68,38 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         EventManager.getInstance().updateEvent(oldEvent, newEvent);
         // update db or eventmanager?
         DBManager.getInstance(context).insertEvent(newEvent);
-        DBManager.getInstance(context).getAllEvents();
     }
 
     public void updateEvent(Event newEvent){
         updateServer(newEvent);
-//        updateLocalDB(newEvent);
+    }
 
+    /** This method is update one of the repeat event, not all of them
+     * */
+    public void updateOnlyThisEvent(Event event){
+        updateOnlyThisEventToServer(event);
+
+    }
+
+    private void updateOnlyThisEventToServer(Event event){
+        Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(),event.getEventUid(),event);
+        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: ");
+            }
+
+            @Override
+            public void onNext(HttpResult<Event> eventHttpResult) {
+                updateLocalDB(eventHttpResult.getData());
+            }
+        };
+        HttpUtil.subscribe(observable,subscriber);
 
     }
 

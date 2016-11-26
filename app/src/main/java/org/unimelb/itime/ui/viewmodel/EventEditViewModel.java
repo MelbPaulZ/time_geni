@@ -7,9 +7,13 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.squareup.picasso.Picasso;
@@ -17,6 +21,7 @@ import com.squareup.picasso.Picasso;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.util.EventUtil;
@@ -74,21 +79,88 @@ public class EventEditViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mvpView!=null){
-                    // set event type
-                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
-                    eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence()); // set the repeat string
-                    EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
-                    presenter.updateEvent(eventEditViewEvent);
-                    // this if might change later, because the host can be kicked??????
-                    if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>1) {
-                        mvpView.toHostEventDetail(eventEditViewEvent);
-                    }else{
-                        mvpView.toSoloEventDetail(eventEditViewEvent);
-                    }
+                // popup alertDialog to choose whether change all or just one
+                if (EventManager.getInstance().getCurrentEvent().getRecurrence().length>0){
+                    // the event is repeat event
+                    final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
+
+                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    View root = inflater.inflate(R.layout.repeat_event_change_alert_view, null);
+                    alertDialog.setView(root);
+                    alertDialog.setTitle(getContext().getString(R.string.change_all_repeat_or_just_this_event));
+                    alertDialog.show();
+
+                    TextView button_change_all = (TextView) root.findViewById(R.id.alert_message_change_all_button);
+                    button_change_all.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            changeAllEvent(eventEditViewEvent);
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    TextView button_only_this = (TextView) root.findViewById(R.id.alert_message_only_this_event_button);
+                    button_only_this.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            changeOnlyThisEvent(eventEditViewEvent);
+                            alertDialog.dismiss();
+
+                        }
+                    });
+
                 }
+
+//                if (mvpView!=null){
+//                    // set event type
+//                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
+//                    eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence()); // set the repeat string
+//                    EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
+//                    presenter.updateEvent(eventEditViewEvent);
+//                    // this if might change later, because the host can be kicked??????
+//                    if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>1) {
+//                        mvpView.toHostEventDetail(eventEditViewEvent);
+//                    }else{
+//                        mvpView.toSoloEventDetail(eventEditViewEvent);
+//                    }
+//                }
             }
         };
+    }
+
+    private void changeAllEvent(Event event){
+        if (mvpView!=null){
+            // set event type
+            event.setEventType(EventUtil.getEventType(event, UserUtil.getUserUid()));
+            event.setRecurrence(event.getRule().getRecurrence()); // set the repeat string
+            EventUtil.addSelfInInvitee(getContext(), event);
+            presenter.updateEvent(event);
+            // this if might change later, because the host can be kicked??????
+            if (event.hasAttendee() && event.getInvitee().size()>1) {
+                mvpView.toHostEventDetail(event);
+            }else{
+                mvpView.toSoloEventDetail(event);
+            }
+        }
+    }
+
+    private void changeOnlyThisEvent(Event event){
+        if (mvpView!=null){
+            // set event type
+            event.setEventType(EventUtil.getEventType(event, UserUtil.getUserUid()));
+            event.setRecurrence(event.getRule().getRecurrence()); // set the repeat string
+            EventUtil.addSelfInInvitee(getContext(), event);
+
+            // next find original event(the first event of repeat event)
+
+            presenter.updateOnlyThisEvent(event);
+            // this if might change later, because the host can be kicked??????
+            if (event.hasAttendee() && event.getInvitee().size()>1) {
+                mvpView.toHostEventDetail(event);
+            }else{
+                mvpView.toSoloEventDetail(event);
+            }
+        }
     }
 
     public View.OnClickListener editTimeSlot(){

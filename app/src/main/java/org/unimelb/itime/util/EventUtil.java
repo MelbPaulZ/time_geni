@@ -507,11 +507,7 @@ public class EventUtil{
         if (event.getInvitee().size()>1){
             return "group";
         }else{
-            if (event.getInvitee().size()==0){
-                return "solo";
-            }else{
-                return "group";
-            }
+            return "solo";
         }
     }
 
