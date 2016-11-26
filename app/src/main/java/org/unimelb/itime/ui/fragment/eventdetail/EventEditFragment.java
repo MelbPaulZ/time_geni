@@ -53,11 +53,11 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         eventEditViewModel = new EventEditViewModel(getPresenter());
-        eventEditViewModel.setEventEditViewEvent(event);
-        binding.setEventEditVM(eventEditViewModel);
         if (event==null) {
             event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
         }
+        eventEditViewModel.setEventEditViewEvent(event);
+        binding.setEventEditVM(eventEditViewModel);
         setProposedTimeSlots(event);
     }
 

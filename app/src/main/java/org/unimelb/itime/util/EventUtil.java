@@ -204,17 +204,22 @@ public class EventUtil{
     public static void changeEventFrequency(Event event, int repeatIndex){
         if (repeatIndex == REPEAT_NEVER){
             event.getRule().setFrequencyEnum(null);
+            event.getRule().setInterval(1);
         }else if (repeatIndex == REPEAT_EVERYDAY){
             event.getRule().setFrequencyEnum(FrequencyEnum.DAILY);
+            event.getRule().setInterval(1);
         }else if (repeatIndex == REPEAT_EVERYWEEK){
             event.getRule().setFrequencyEnum(FrequencyEnum.WEEKLY);
+            event.getRule().setInterval(1);
         }else if (repeatIndex == REPEAT_EVERY_TWOWEEKS){
             event.getRule().setFrequencyEnum(FrequencyEnum.WEEKLY);
             event.getRule().setInterval(2);
         }else if (repeatIndex == REPEAT_EVERY_MONTH){
             event.getRule().setFrequencyEnum(FrequencyEnum.MONTHLY);
+            event.getRule().setInterval(1);
         }else if (repeatIndex == REPEAT_EVERY_YEAR){
             event.getRule().setFrequencyEnum(FrequencyEnum.YEARLY);
+            event.getRule().setInterval(1);
         }
     }
 

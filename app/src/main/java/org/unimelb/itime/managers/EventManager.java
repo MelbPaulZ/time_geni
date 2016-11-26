@@ -181,6 +181,7 @@ public class EventManager {
         }
     }
 
+    // repeat event update need to change
     public void updateEvent(Event oldEvent, Event newEvent){
         long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
 
@@ -189,14 +190,6 @@ public class EventManager {
 
             Event old = (Event) regularEventMap.get(oldBeginTime).get(id);
             regularEventMap.get(oldBeginTime).remove(old);
-
-
-//            int id = eventMap.get(oldBeginTime).indexOf(oldEvent);
-//
-//            Event old = (Event) eventMap.get(oldBeginTime).get(id);
-//            eventMap.get(oldBeginTime).remove(old);
-//
-//            this.addEvent(newEvent);
             EventManager.getInstance().setCurrentEvent(newEvent);
         }
     }
