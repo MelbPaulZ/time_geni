@@ -16,7 +16,7 @@ public class RuleFactory {
     private static final String TAG = "Rule";
     private static RuleFactory ourInstance = new RuleFactory();
 
-    private SimpleDateFormat format = new SimpleDateFormat("yyyymmdd");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 
     public static RuleFactory getInstance() {
         return ourInstance;
