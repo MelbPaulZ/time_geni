@@ -24,6 +24,7 @@ import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
@@ -31,6 +32,7 @@ import org.unimelb.itime.vendor.helper.DensityUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -109,21 +111,22 @@ public class EventEditViewModel extends CommonViewModel {
                         }
                     });
 
+                }else {
+                    if (mvpView!=null){
+                        // set event type
+                        eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
+                        eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence()); // set the repeat string
+                        EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
+                        presenter.updateEvent(eventEditViewEvent);
+                        // this if might change later, because the host can be kicked??????
+                        if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>1) {
+                            mvpView.toHostEventDetail(eventEditViewEvent);
+                        }else{
+                            mvpView.toSoloEventDetail(eventEditViewEvent);
+                        }
+                    }
                 }
 
-//                if (mvpView!=null){
-//                    // set event type
-//                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
-//                    eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence()); // set the repeat string
-//                    EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
-//                    presenter.updateEvent(eventEditViewEvent);
-//                    // this if might change later, because the host can be kicked??????
-//                    if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>1) {
-//                        mvpView.toHostEventDetail(eventEditViewEvent);
-//                    }else{
-//                        mvpView.toSoloEventDetail(eventEditViewEvent);
-//                    }
-//                }
             }
         };
     }
@@ -134,7 +137,14 @@ public class EventEditViewModel extends CommonViewModel {
             event.setEventType(EventUtil.getEventType(event, UserUtil.getUserUid()));
             event.setRecurrence(event.getRule().getRecurrence()); // set the repeat string
             EventUtil.addSelfInInvitee(getContext(), event);
-            presenter.updateEvent(event);
+
+            // next find original event(the first event of repeat event)
+            Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
+            Event copyEventSendToServer = EventManager.getInstance().copyCurrentEvent(event);
+            copyEventSendToServer.setStartTime(orgEvent.getStartTime()); // set the starttime and endtime as origin event
+            copyEventSendToServer.setEndTime(orgEvent.getEndTime());
+
+            presenter.updateEvent(copyEventSendToServer);
             // this if might change later, because the host can be kicked??????
             if (event.hasAttendee() && event.getInvitee().size()>1) {
                 mvpView.toHostEventDetail(event);
@@ -152,8 +162,12 @@ public class EventEditViewModel extends CommonViewModel {
             EventUtil.addSelfInInvitee(getContext(), event);
 
             // next find original event(the first event of repeat event)
-
-            presenter.updateOnlyThisEvent(event);
+            Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
+            orgEvent.getRule().addEXDate(new Date(event.getStartTime()));
+            orgEvent.setRecurrence(orgEvent.getRule().getRecurrence());
+            // here change the event as a new event
+            EventUtil.regenerateRelatedUid(event);
+            presenter.updateOnlyThisEvent(orgEvent,event);
             // this if might change later, because the host can be kicked??????
             if (event.hasAttendee() && event.getInvitee().size()>1) {
                 mvpView.toHostEventDetail(event);

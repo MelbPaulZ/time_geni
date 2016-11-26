@@ -189,11 +189,20 @@ public class EventManager {
         //if old not repeated
         if (oldEvent.getRecurrence().length == 0){
             if (this.regularEventMap.containsKey(oldBeginTime)){
-                int id = regularEventMap.get(oldBeginTime).indexOf(oldEvent);
+                Event old = null;
 
-                Event old = (Event) regularEventMap.get(oldBeginTime).get(id);
-                regularEventMap.get(oldBeginTime).remove(old);
-                this.addEvent(newEvent);
+                for (ITimeEventInterface iTimeEventInterface : regularEventMap.get(oldBeginTime)){
+                    if ( ((Event)iTimeEventInterface).getEventUid().equals(oldEvent.getEventUid())){
+                        old = (Event) iTimeEventInterface;
+                    }
+                }
+                if (old != null){
+                    regularEventMap.get(oldBeginTime).remove(old);
+                    this.addEvent(newEvent);
+
+                }else {
+                    throw new RuntimeException("old event cannot be find in regularEventMap");
+                }
             }
         }else{
             //if old is repeated

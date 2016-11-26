@@ -12,6 +12,7 @@ import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
@@ -514,19 +515,31 @@ public class EventUtil{
     /** use when event has no invitees before, add self as host with a new generated inviteeUid
      * */
     public static void addSelfInInvitee(Context context,Event event){
-        Invitee self = new Invitee();
-        self.setStatus(context.getString(R.string.accept));
-        if (EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent())!=null){
-            self.setInviteeUid(EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent()));
-        }else{
-            self.setInviteeUid(AppUtil.generateUuid());
+        if(!isSelfInEvent(event)){
+            Invitee self = new Invitee();
+            self.setStatus(context.getString(R.string.accept));
+            if (EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent())!=null){
+                self.setInviteeUid(EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent()));
+            }else{
+                self.setInviteeUid(AppUtil.generateUuid());
+            }
+            self.setUserUid(UserUtil.getUserUid());
+            self.setEventUid(event.getEventUid());
+            self.setUserId(UserUtil.getInstance().getUser().getUserId());
+            self.setIsHost(1); // 1 refers to host
+            self.setAliasName(UserUtil.getInstance().getUser().getPersonalAlias());
+            event.addInvitee(self);
         }
-        self.setUserUid(UserUtil.getUserUid());
-        self.setEventUid(event.getEventUid());
-        self.setUserId(UserUtil.getInstance().getUser().getUserId());
-        self.setIsHost(1); // 1 refers to host
-        self.setAliasName(UserUtil.getInstance().getUser().getPersonalAlias());
-        event.addInvitee(self);
+    }
+
+    private static boolean isSelfInEvent(Event event){
+        String selfUserUid = UserUtil.getUserUid();
+        for (Invitee invitee : event.getInvitee()){
+            if (invitee.getUserUid().equals(selfUserUid)){
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -539,6 +552,29 @@ public class EventUtil{
         event.setEventType(context.getString(R.string.solo));
         event.setInviteeVisibility(1);
         event.setFreebusyAccess(1); // ask chuandong
+    }
+
+    public static void regenerateRelatedUid(Event event){
+        // change eventUid
+        String newEventUid =AppUtil.generateUuid();
+        event.setEventUid(newEventUid);
+        // change inviteeEventUid
+        for (Invitee invitee : event.getInvitee()){
+            invitee.setEventUid(newEventUid);
+            invitee.setInviteeUid(AppUtil.generateUuid());
+        }
+
+        // change timeslotEventUid
+        for (Timeslot timeslot: event.getTimeslot()){
+            timeslot.setEventUid(newEventUid);
+            timeslot.setTimeslotUid(AppUtil.generateUuid());
+        }
+
+        // change PhotoEventUid
+        for (PhotoUrl photoUrl : event.getPhoto()){
+            photoUrl.setEventUid(newEventUid);
+            photoUrl.setPhotoUid(AppUtil.generateUuid());
+        }
     }
 
 

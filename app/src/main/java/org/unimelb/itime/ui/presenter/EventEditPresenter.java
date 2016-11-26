@@ -6,9 +6,9 @@ import android.util.Log;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.util.CalendarUtil;
@@ -47,26 +47,21 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
 
             @Override
             public void onError(Throwable e) {
-                Log.i(TAG, "onError: ");
+                Log.i(TAG, "onError: " + e.getMessage());
             }
 
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
-                updateLocalDB(eventHttpResult.getData());
+                synchronizeLocal(eventHttpResult.getData());
+                Log.i(TAG, "onNext: " +"done");
             }
         };
         HttpUtil.subscribe(observable,subscriber);
     }
 
-    private void updateLocalDB(Event newEvent){
-        // update local db
+    private void synchronizeLocal(Event newEvent){
         Event oldEvent = EventManager.getInstance().getCurrentEvent();
-
-//        dbOldEvent.delete();
-        // here update EventManager
         EventManager.getInstance().updateEvent(oldEvent, newEvent);
-        // update db or eventmanager?
-//        DBManager.getInstance(context).insertEvent(newEvent);
     }
 
     public void updateEvent(Event newEvent){
@@ -75,13 +70,35 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
 
     /** This method is update one of the repeat event, not all of them
      * */
-    public void updateOnlyThisEvent(Event event){
-        updateOnlyThisEventToServer(event);
-
+    public void updateOnlyThisEvent(Event orgEvent,Event event){
+        updateOrgEventToServer(orgEvent);
+        insertNewEventToServer(event);
     }
 
-    private void updateOnlyThisEventToServer(Event event){
-        Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(),event.getEventUid(),event);
+    private void updateOrgEventToServer(Event orgEvent){
+        Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(), orgEvent.getEventUid(), orgEvent);
+        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: " + e.getMessage());
+            }
+
+            @Override
+            public void onNext(HttpResult<Event> eventHttpResult) {
+                synchronizeLocal(eventHttpResult.getData());
+                Log.i(TAG, "onNext: " + "done");
+            }
+        };
+        HttpUtil.subscribe( observable ,  subscriber);
+    }
+
+    private void insertNewEventToServer(Event event){
+        Observable<HttpResult<Event>> observable = eventApi.insert(event);
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
             public void onCompleted() {
@@ -90,16 +107,21 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
 
             @Override
             public void onError(Throwable e) {
-                Log.i(TAG, "onError: ");
+                Log.i(TAG, "onError: " + e.getMessage());
             }
 
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
-                updateLocalDB(eventHttpResult.getData());
+                insertEventLocal(eventHttpResult.getData());
+                Log.i(TAG, "onNext: " + "done");
             }
         };
         HttpUtil.subscribe(observable,subscriber);
+    }
 
+    private void insertEventLocal(Event event){
+        EventManager.getInstance().addEvent(event);
+        DBManager.getInstance().insertEvent(event);
     }
 
 
