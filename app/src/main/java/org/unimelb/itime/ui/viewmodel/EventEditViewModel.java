@@ -120,9 +120,9 @@ public class EventEditViewModel extends CommonViewModel {
                         presenter.updateEvent(eventEditViewEvent);
                         // this if might change later, because the host can be kicked??????
                         if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>1) {
-                            mvpView.toHostEventDetail(eventEditViewEvent);
+//                            mvpView.toHostEventDetail(eventEditViewEvent);
                         }else{
-                            mvpView.toSoloEventDetail(eventEditViewEvent);
+//                            mvpView.toSoloEventDetail(eventEditViewEvent);
                         }
                     }
                 }
