@@ -60,12 +60,9 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if (viewModel ==null) {
-            viewModel = new EventCreateNewVIewModel(getPresenter());
-        }
-        binding.setEventVM(viewModel);
         event = EventManager.getInstance().getCurrentEvent();
+        viewModel = new EventCreateNewVIewModel(getPresenter());
+        binding.setEventVM(viewModel);
 
         // hide soft key board
         getActivity().getWindow().setSoftInputMode(

@@ -197,7 +197,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (newEvDtlEvent.getTitle()==null){
+                if (newEvDtlEvent.getTitle().equals("")){
                     newEvDtlEvent.setTitle(getContext().getString(R.string.new_event));
                 }
 
@@ -205,6 +205,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 List<Timeslot> pendingTimeslots = new ArrayList<>();
                 for (Timeslot timeSlot : newEvDtlEvent.getTimeslot()){
                     if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
+                        timeSlot.setStatus(getContext().getString(R.string.accepted));
                         pendingTimeslots.add(timeSlot);
                     }
                 }
@@ -223,19 +224,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 }
 
                 // todo: need to check whether host is in invitees
-//                if(newEvDtlEvent.hasAttendee()){
-//                    Invitee host = new Invitee();
-//                    User user = UserUtil.getInstance().getUser();
-//                    host.setEventUid(newEvDtlEvent.getEventUid());
-//                    host.setInviteeUid(AppUtil.generateUuid());
-//                    host.setUserUid(user.getUserUid());
-//                    host.setUserId(user.getUserId());
-//                    host.setStatus("accepted");
-//                    host.setAliasPhoto(user.getPhoto());
-//                    host.setAliasName(user.getPersonalAlias());
-//                    newEvDtlEvent.getInvitee().add(host);
-//                    newEvDtlEvent.setEventType("group");
-//                }
                 if (newEvDtlEvent.getInvitee().size()>1){
                     newEvDtlEvent.setEventType("group");
                 }

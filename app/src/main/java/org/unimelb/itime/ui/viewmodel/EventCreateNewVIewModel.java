@@ -259,7 +259,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (event.getTitle()==null) {
+                if (event.getTitle().equals("")) {
                     event.setTitle(presenter.getContext().getString(R.string.new_event));
                 }
                 event.setRecurrence(event.getRule().getRecurrence());

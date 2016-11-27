@@ -228,6 +228,10 @@ public class EventManager {
         return copyEvent;
     }
 
+    public Event getNewEvent(){
+        return new Event();
+    }
+
     public Event getCurrentEvent() {
         return currentEvent;
     }

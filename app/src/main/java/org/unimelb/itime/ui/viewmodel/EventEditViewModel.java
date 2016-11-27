@@ -168,10 +168,8 @@ public class EventEditViewModel extends CommonViewModel {
             orgEvent.setRecurrence(orgEvent.getRule().getRecurrence());
             // here change the event as a new event
             EventUtil.regenerateRelatedUid(event);
-            // ************ test gson
-            Gson gson = new Gson();
-            String temp = gson.toJson(orgEvent, Event.class);
-
+            event.setRecurringEventUid(orgEvent.getEventUid());
+            event.setRecurringEventId(orgEvent.getEventId());
             presenter.updateOnlyThisEvent(orgEvent,event);
             // this if might change later, because the host can be kicked??????
             if (event.hasAttendee() && event.getInvitee().size()>1) {
