@@ -18,6 +18,7 @@ import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.dayview.MonthDayView;
 import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
@@ -62,6 +63,19 @@ public class CalendarMonthDayFragment extends Fragment {
             }
         });
         monthDayView.setOnBodyOuterListener(new FlexibleLenViewBody.OnBodyListener() {
+            @Override
+            public boolean isDraggable(DayDraggableEventView dayDraggableEventView) {
+                Event event = (Event) dayDraggableEventView.getEvent();
+                if (event.getEventType().equals("solo")){
+                    return true;
+                }else if (event.getHostUserUid().equals(UserUtil.getUserUid()) && !event.getStatus().equals(getContext().getString(R.string.confirmed))){
+                    // this is a host event and not confirmed yet
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+
             @Override
             public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
                 Log.i("onclick time", "onEventCreate: "+System.currentTimeMillis());

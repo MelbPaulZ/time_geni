@@ -71,6 +71,9 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
                     eventDetailHostEvent.getTimeslot().add(timeSlot);
                     WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct)timeSlotView.getTag();
                     struct.object =timeSlot;
+                    // after add, needs reload to display it
+                    mvpView.addTimeslot(struct);
+                    mvpView.reloadTimeslot();
                 }else{
                     // do nothing
                 }

@@ -8,11 +8,11 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 public class PhotoUrl {
 
-    private String url;
-    private String photoUid;
-    private String eventUid;
-    private String filename;
-    private String localPath;
+    private String url = "";
+    private String photoUid = "";
+    private String eventUid = "";
+    private String filename = "";
+    private String localPath = "";
     private int success;
 
     public PhotoUrl(String url){

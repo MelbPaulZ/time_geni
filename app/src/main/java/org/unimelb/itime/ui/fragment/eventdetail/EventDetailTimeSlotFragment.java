@@ -134,4 +134,10 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         weekView.reloadTimeSlots(false);
     }
 
+    @Override
+    public void addTimeslot(WeekView.TimeSlotStruct timeSlotStruct) {
+        weekView.addTimeSlot(timeSlotStruct);
+    }
+
+
 }
