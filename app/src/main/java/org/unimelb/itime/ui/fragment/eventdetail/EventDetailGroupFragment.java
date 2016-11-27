@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.EventTimeSlotAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
@@ -95,6 +97,11 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     public void viewInviteeResponse(Timeslot timeSlot) {
         InviteeTimeslotFragment inviteeTimeslotFragment = (InviteeTimeslotFragment) getFragmentManager().findFragmentByTag(InviteeTimeslotFragment.class.getSimpleName());
         switchFragment(this, inviteeTimeslotFragment);
+    }
+
+    @Override
+    public void refreshCalendars() {
+        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
 
 

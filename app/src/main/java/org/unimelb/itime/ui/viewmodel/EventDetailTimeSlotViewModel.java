@@ -254,6 +254,41 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         notifyPropertyChanged(BR.eventDetailHostEvent);
     }
 
+    public void initTimeSlots(WeekView weekView){
+        weekView.resetTimeSlots();
+        if (eventDetailHostEvent.hasTimeslots()) {
+            for (Timeslot timeSlot : eventDetailHostEvent.getTimeslot()) {
+                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
+                struct.startTime = timeSlot.getStartTime();
+                struct.endTime = timeSlot.getEndTime();
+                struct.object = timeSlot;
+                if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
+                    // this is host event
+                    if (timeSlot.getIsConfirmed()==1){
+                        struct.status = true;
+                    }else{
+                        struct.status=false;
+                    }
+                }else{
+                    if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
+                        struct.status=false;
+                    }else if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_accept))){
+                        struct.status = true;
+                    }
+                }
+                weekView.addTimeSlot(struct);
+            }
+        }
+//        weekView.reloadTimeSlots(false);
+        final WeekView  wv = weekView;
+        weekView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                wv.reloadTimeSlots(false);
+            }
+        },100);
+    }
+
     @Bindable
     public String getHostToolBarString() {
         return hostToolBarString;

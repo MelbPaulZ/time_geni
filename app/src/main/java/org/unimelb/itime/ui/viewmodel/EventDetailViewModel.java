@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -19,6 +20,7 @@ import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
@@ -90,8 +92,11 @@ public class EventDetailViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Timeslot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
-                presenter.confirmEvent(evDtlHostEvent, newTimeSlot);
+                Timeslot selectedTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
+                selectedTimeSlot.setIsConfirmed(1);
+                evDtlHostEvent.setStatus(getContext().getString(R.string.confirmed));
+                EventManager.getInstance().getWaitingEditEventList().add(evDtlHostEvent); // add event to waiting list, for server response
+                presenter.confirmEvent(evDtlHostEvent, selectedTimeSlot.getTimeslotUid());
                 if (mvpView!=null){
                     mvpView.toCalendar();
                 }

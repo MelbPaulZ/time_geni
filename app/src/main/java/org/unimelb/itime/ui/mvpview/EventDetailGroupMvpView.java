@@ -12,4 +12,5 @@ public interface EventDetailGroupMvpView extends MvpView {
     void toEditEvent();
     void viewInCalendar();
     void viewInviteeResponse(Timeslot timeSlot);
+    void refreshCalendars();
 }
