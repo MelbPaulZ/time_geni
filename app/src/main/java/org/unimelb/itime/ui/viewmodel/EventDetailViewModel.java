@@ -169,6 +169,7 @@ public class EventDetailViewModel extends CommonViewModel {
             public void onClick(View view) {
                 Timeslot timeSlot = evDtlHostEvent.getTimeslot().get(position);
                 if (evDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
+                    // this is a host event
                         Timeslot timeslot = evDtlHostEvent.getTimeslot().get(position);
                     if (timeslot.getIsConfirmed()==0){
                         for (Timeslot ts: evDtlHostEvent.getTimeslot()){

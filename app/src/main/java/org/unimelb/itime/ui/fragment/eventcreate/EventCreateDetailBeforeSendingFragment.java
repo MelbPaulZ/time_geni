@@ -60,17 +60,6 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         }
     }
 
-    private void initData(){
-        eventCreateDetailBeforeSendingViewModel = new EventCreateDetailBeforeSendingViewModel(getPresenter());
-        binding.setNewEventDetailVM(eventCreateDetailBeforeSendingViewModel);
-
-
-        // hide soft key board
-        getActivity().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-        );
-    }
-
     public void setTimeSlotListView(){
         ArrayList<String> timeslotsArrayList = new ArrayList<>();
         for (Timeslot timeSlot: event.getTimeslot()){

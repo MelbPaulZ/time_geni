@@ -66,7 +66,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
                     timeSlot.setEventUid(eventDetailHostEvent.getEventUid());
                     timeSlot.setStartTime(((WeekView.TimeSlotStruct)timeSlotView.getTag()).startTime);
                     timeSlot.setEndTime(((WeekView.TimeSlotStruct)timeSlotView.getTag()).endTime);
-                    timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    timeSlot.setStatus(getContext().getString(R.string.accepted)); // host create timeslot should be accepted
                     timeSlot.setUserUid(UserUtil.getUserUid());
                     eventDetailHostEvent.getTimeslot().add(timeSlot);
                     WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct)timeSlotView.getTag();
@@ -175,9 +175,11 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
             // for host , only one timeslot can be selected
             // change here
            if (TimeSlotUtil.getSelectedTimeSlots(getContext(),eventDetailHostEvent.getTimeslot()).size()<1){
+               // if no timeslot has been selected
                changeTimeSlotView(timeSlotView);
                hostClickTimeSlot(timeSlotView);
            }else{
+               // if other timeslot has been selected
                if (((WeekView.TimeSlotStruct)timeSlotView.getTag()).status==true){
                    changeTimeSlotView(timeSlotView);
                    hostClickTimeSlot(timeSlotView);
@@ -186,6 +188,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
                }
            }
         }else {
+            // for invitees, can choose multi timeslots
             changeTimeSlotView(timeSlotView);
             changeEventAttributes(timeSlotView);
         }
@@ -219,6 +222,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
     }
 
     private void changeTimeSlotView(TimeSlotView timeSlotView){
+        // if clicked -> unclicked; if unclicked -> clicked
         boolean newStatus = !timeSlotView.isSelect();
         timeSlotView.setStatus(newStatus);
         ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;

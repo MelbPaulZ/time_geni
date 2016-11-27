@@ -69,6 +69,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                 struct.endTime = timeSlot.getEndTime();
                 struct.object = timeSlot;
                 if (event.getHostUserUid().equals(UserUtil.getUserUid())){
+                    // this is host event
                     if (timeSlot.getIsConfirmed()==1){
                         struct.status = true;
                     }else{
@@ -84,7 +85,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                 weekView.addTimeSlot(struct);
             }
         }
-        weekView.reloadTimeSlots(true);
+        weekView.reloadTimeSlots(false);
     }
 
 
