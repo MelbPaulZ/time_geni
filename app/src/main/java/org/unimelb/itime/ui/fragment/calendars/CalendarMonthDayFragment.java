@@ -63,6 +63,11 @@ public class CalendarMonthDayFragment extends Fragment {
         });
         monthDayView.setOnBodyOuterListener(new FlexibleLenViewBody.OnBodyListener() {
             @Override
+            public boolean isDraggable(DayDraggableEventView dayDraggableEventView) {
+                return false;
+            }
+
+            @Override
             public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
                 Log.i("onclick time", "onEventCreate: "+System.currentTimeMillis());
                 Calendar calendar = Calendar.getInstance();

@@ -58,6 +58,11 @@ public class CalendarWeekFragment extends Fragment {
         });
         weekView.setOnBodyOuterListener(new FlexibleLenViewBody.OnBodyListener() {
             @Override
+            public boolean isDraggable(DayDraggableEventView dayDraggableEventView) {
+                return false;
+            }
+
+            @Override
             public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
