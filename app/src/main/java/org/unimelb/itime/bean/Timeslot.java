@@ -10,18 +10,35 @@ import java.io.Serializable;
  * Created by Paul on 10/09/2016.
  */
 public class Timeslot implements ITimeTimeSlotInterface,Serializable {
-    private String timeslotUid;
-    private String eventUid;
-    private String userUid;
-    private long startTime;
-    private long endTime;
-    private String status = "";
-    private int acceptedNum;
-    private int totalNum;
-    private int rejectedNum;
-    private int pendingNum;
-    private int isConfirmed;
-    private int isSystemSuggested;
+    private String timeslotUid = ""; //
+    private String eventUid = ""; //
+    private String userUid = "";
+    private long startTime; //
+    private long endTime; //
+    private String status = ""; //
+    private int acceptedNum; //
+    private int totalNum; //
+    private int rejectedNum; //
+    private int pendingNum; //
+    private int isConfirmed; //
+    private int isSystemSuggested; //
+    private String inviteeUid = "";
+
+    /*"status": "pending",
+          "rate": 1,
+          "timeslotUid": "1",
+          "eventUid": "1",
+          "startTime": 1480225682797,
+          "endTime": 1480229282797,
+          "acceptedNum": 1,
+          "rejectedNum": 0,
+          "pendingNum": 2,
+          "totalNum": 3,
+          "isConfirmed": 0,
+          "isSystemSuggested": 0,
+          "inviteeUid": "2",
+          "userUid": 2
+    * */
     
     @Override
     public void setStartTime(long l) {
@@ -130,5 +147,13 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
 
     public void setPendingNum(int pendingNum) {
         this.pendingNum = pendingNum;
+    }
+
+    public String getInviteeUid() {
+        return inviteeUid;
+    }
+
+    public void setInviteeUid(String inviteeUid) {
+        this.inviteeUid = inviteeUid;
     }
 }

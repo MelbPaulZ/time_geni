@@ -16,6 +16,7 @@ import android.widget.PopupWindow;
 import android.widget.TimePicker;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.google.gson.Gson;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
@@ -205,7 +206,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 List<Timeslot> pendingTimeslots = new ArrayList<>();
                 for (Timeslot timeSlot : newEvDtlEvent.getTimeslot()){
                     if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
-                        timeSlot.setStatus(getContext().getString(R.string.accepted));
                         pendingTimeslots.add(timeSlot);
                     }
                 }

@@ -60,35 +60,6 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         }
     }
 
-    public void initTimeSlots(){
-        weekView.resetTimeSlots();
-        if (event.hasTimeslots()) {
-            for (Timeslot timeSlot : event.getTimeslot()) {
-                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
-                struct.startTime = timeSlot.getStartTime();
-                struct.endTime = timeSlot.getEndTime();
-                struct.object = timeSlot;
-                if (event.getHostUserUid().equals(UserUtil.getUserUid())){
-                    // this is host event
-                    if (timeSlot.getIsConfirmed()==1){
-                        struct.status = true;
-                    }else{
-                        struct.status=false;
-                    }
-                }else{
-                    if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending))){
-                        struct.status=false;
-                    }else if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_accept))){
-                        struct.status = true;
-                    }
-                }
-                weekView.addTimeSlot(struct);
-            }
-        }
-        weekView.reloadTimeSlots(false);
-    }
-
-
 //
     public Event getEvent() {
         return event;
@@ -99,7 +70,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         if (viewModel!=null){
             viewModel.setEventDetailHostEvent(event);
         }
-        initTimeSlots();
+        viewModel.initTimeSlots(weekView);
     }
 
 
@@ -133,5 +104,11 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     public void reloadTimeslot() {
         weekView.reloadTimeSlots(false);
     }
+
+    @Override
+    public void addTimeslot(WeekView.TimeSlotStruct timeSlotStruct) {
+        weekView.addTimeSlot(timeSlotStruct);
+    }
+
 
 }

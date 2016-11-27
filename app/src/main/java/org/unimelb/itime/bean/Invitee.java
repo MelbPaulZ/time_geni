@@ -12,14 +12,14 @@ import org.greenrobot.greendao.annotation.Generated;
  * Created by yuhaoliu on 10/09/2016.
  */
 public class Invitee implements ITimeInviteeInterface, Serializable {
-    private String eventUid;
-    private String inviteeUid;
-    private String userUid;
-    private String userId;
-    private String aliasName;
-    private String aliasPhoto;
-    private String status;
-    private String reason;
+    private String eventUid = "";
+    private String inviteeUid = "";
+    private String userUid = "";
+    private String userId = "";
+    private String aliasName = "";
+    private String aliasPhoto = "";
+    private String status = "";
+    private String reason = "";
     private int isHost;
 
 

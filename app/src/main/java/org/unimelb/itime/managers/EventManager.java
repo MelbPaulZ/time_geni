@@ -49,6 +49,8 @@ public class EventManager {
         return ourInstance;
     }
 
+    private List<Event> waitingEditEventList= new ArrayList<>(); // this list contains all events that waits for update
+
     private EventManager() {
         nowRepeatedStartAt.add(Calendar.DATE, -defaultRepeatedRange);
         nowRepeatedEndAt.add(Calendar.DATE, defaultRepeatedRange);
@@ -266,6 +268,10 @@ public class EventManager {
         return null;
     }
 
+    public List<Event> getWaitingEditEventList() {
+        return waitingEditEventList;
+    }
+
 
     public class EventsPackage implements ITimeEventPackageInterface {
 
@@ -323,4 +329,18 @@ public class EventManager {
         }
         throw new RuntimeException("findOrgByUUID: cannot find org event by UUID: " + UUID);
     }
+
+    /** priority search in waiting list, if not find, then go through all events
+     * */
+    public Event findEventByUUID(String UUID){
+        for (Event event : waitingEditEventList){
+            if (event.getEventUid().equals(UUID)){
+                return event;
+            }
+        }
+
+        // if event is not in waiting list, should never happens
+        throw new RuntimeException("cannot find event in waiting list");
+    }
+
 }
