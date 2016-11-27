@@ -8,15 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hannesdorfmann.mosby.mvp.MvpPresenter;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
@@ -32,9 +36,10 @@ import java.util.Map;
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarMonthDayFragment extends Fragment {
+public class CalendarMonthDayFragment extends BaseUiFragment {
     private View root;
     private MonthDayView monthDayView;
+    private CommonPresenter presenter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,6 +47,12 @@ public class CalendarMonthDayFragment extends Fragment {
             root = inflater.inflate(R.layout.fragment_calendar_monthday, container, false);
         }
         return root;
+    }
+
+    @Override
+    public MvpPresenter createPresenter() {
+        this.presenter = new CommonPresenter(getContext());
+        return presenter;
     }
 
     @Override
@@ -101,10 +112,28 @@ public class CalendarMonthDayFragment extends Fragment {
 
             @Override
             public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
-                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
-                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
-                ((Event)dayDraggableEventView.getEvent()).update();
-                monthDayView.reloadEvents();
+                Event newEvent = (Event) dayDraggableEventView.getEvent();
+                EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
+                Event copyEvent = EventManager.getInstance().copyCurrentEvent(newEvent);
+                copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
+                copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
+                presenter.updateEventToServer(copyEvent);
+
+
+//                newEvent.setStartTime(dayDraggableEventView.getStartTimeM());
+//                newEvent.setEndTime(dayDraggableEventView.getEndTimeM());
+//                Calendar c = Calendar.getInstance();
+//                c.setTimeInMillis(dayDraggableEventView.getStartTimeM());
+//                Log.i("test", "onEventDragDrop: s" + c.getTime());
+//                c.setTimeInMillis(dayDraggableEventView.getEndTimeM());
+//                Log.i("test", "onEventDragDrop: e" + c.getTime());
+//                long duration = dayDraggableEventView.getEndTimeM() - dayDraggableEventView.getStartTimeM();
+//                float hour = duration/(3600*1000);
+//                presenter.updateEventToServer((Event) dayDraggableEventView.getEvent());
+//                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
+//                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
+//                ((Event)dayDraggableEventView.getEvent()).update();
+//                monthDayView.reloadEvents();
             }
         });
     }
@@ -118,8 +147,6 @@ public class CalendarMonthDayFragment extends Fragment {
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
             monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
-            Calendar calendar = Calendar.getInstance();
-            long time = calendar.getTimeInMillis();
             monthDayView.reloadEvents();
             monthDayView.requestLayout();
         }

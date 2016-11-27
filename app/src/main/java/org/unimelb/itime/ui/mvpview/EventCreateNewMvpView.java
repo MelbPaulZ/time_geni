@@ -14,5 +14,5 @@ public interface EventCreateNewMvpView extends MvpView {
     void pickInvitee();
     void toCreateSoloEvent();
     void pickPhoto(String tag);
-    void showTimePicker();
+    void refreshCalendars();
 }

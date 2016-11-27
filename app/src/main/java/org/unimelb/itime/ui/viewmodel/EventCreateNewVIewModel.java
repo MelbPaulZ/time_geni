@@ -269,6 +269,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 presenter.addSoloEvent();
                 if (mvpView!=null){
                     mvpView.toCreateSoloEvent();
+                    mvpView.refreshCalendars();
                 }
             }
         };
