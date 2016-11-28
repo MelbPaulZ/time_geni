@@ -100,13 +100,11 @@ public class CalendarWeekFragment extends BaseUiFragment {
             @Override
             public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
                 Event newEvent = (Event) dayDraggableEventView.getEvent();
-                newEvent.setStartTime(dayDraggableEventView.getStartTimeM());
-                newEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-                long duration = dayDraggableEventView.getEndTimeM() - dayDraggableEventView.getStartTimeM();
-                float hour = duration/(3600*1000);
-
                 EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
-                presenter.updateEventToServer((Event) dayDraggableEventView.getEvent());
+                Event copyEvent = EventManager.getInstance().copyCurrentEvent(newEvent);
+                copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
+                copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
+                presenter.updateEventToServer(copyEvent);
 
 //                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
 //                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
