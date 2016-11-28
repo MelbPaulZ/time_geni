@@ -56,7 +56,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
-import org.unimelb.itime.ui.presenter.EmptyPresenter;
+import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
@@ -99,7 +99,7 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
 
     @Override
     public MvpPresenter createPresenter() {
-        return new EmptyPresenter();
+        return new CommonPresenter();
     }
 
     @Override

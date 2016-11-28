@@ -17,6 +17,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateNewBinding;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
@@ -128,6 +129,11 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
 
     public void pickPhoto(String tag){
         ((EventCreateActivity)getActivity()).checkPermission(tag);
+    }
+
+    @Override
+    public void refreshCalendars() {
+        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
 
 

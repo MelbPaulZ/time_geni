@@ -2,20 +2,23 @@ package org.unimelb.itime.ui.fragment.calendars;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
@@ -28,10 +31,11 @@ import java.util.Calendar;
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarWeekFragment extends Fragment {
+public class CalendarWeekFragment extends BaseUiFragment {
 
     private View root;
     private WeekView weekView;
+    private CommonPresenter presenter;
 
     @Nullable
     @Override
@@ -95,10 +99,19 @@ public class CalendarWeekFragment extends Fragment {
 
             @Override
             public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
-                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
-                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
-                ((Event)dayDraggableEventView.getEvent()).update();
-                weekView.reloadEvents();
+                Event newEvent = (Event) dayDraggableEventView.getEvent();
+                newEvent.setStartTime(dayDraggableEventView.getStartTimeM());
+                newEvent.setEndTime(dayDraggableEventView.getEndTimeM());
+                long duration = dayDraggableEventView.getEndTimeM() - dayDraggableEventView.getStartTimeM();
+                float hour = duration/(3600*1000);
+
+                EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
+                presenter.updateEventToServer((Event) dayDraggableEventView.getEvent());
+
+//                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
+//                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
+//                ((Event)dayDraggableEventView.getEvent()).update();
+//                weekView.reloadEvents();
             }
         });
     }
@@ -116,6 +129,11 @@ public class CalendarWeekFragment extends Fragment {
     }
 
 
+    @Override
+    public MvpPresenter createPresenter() {
+        presenter = new CommonPresenter(getContext());
+        return presenter;
+    }
 
     @Override
     public void onStart() {

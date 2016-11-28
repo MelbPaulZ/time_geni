@@ -12,7 +12,7 @@ import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.ui.presenter.EmptyPresenter;
+import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.widget.NonScrollListView;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class InviteeTimeslotFragment extends BaseUiFragment {
 
     @Override
     public MvpPresenter createPresenter() {
-        return new EmptyPresenter();
+        return new CommonPresenter();
     }
 
     @Override
