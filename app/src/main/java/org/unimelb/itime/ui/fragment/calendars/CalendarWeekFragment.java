@@ -50,9 +50,6 @@ public class CalendarWeekFragment extends BaseUiFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         weekView = (WeekView) root.findViewById(R.id.week_view);
-
-//        initDB(); // this is for test paul activity, need to delete for main project
-
         weekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
         weekView.setEventClassName(Event.class);
         weekView.setOnHeaderListener(new WeekView.OnHeaderListener() {
@@ -66,9 +63,6 @@ public class CalendarWeekFragment extends BaseUiFragment {
             public boolean isDraggable(DayDraggableEventView dayDraggableEventView) {
                 Event event = (Event) dayDraggableEventView.getEvent();
                 if (event.getEventType().equals("solo")){
-                    return true;
-                }else if (event.getHostUserUid().equals(UserUtil.getUserUid()) && !event.getStatus().equals(getContext().getString(R.string.confirmed))){
-                    // this is a host event and not confirmed yet
                     return true;
                 }else{
                     return false;
@@ -105,11 +99,6 @@ public class CalendarWeekFragment extends BaseUiFragment {
                 copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                 copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
                 presenter.updateEventToServer(copyEvent);
-
-//                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
-//                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
-//                ((Event)dayDraggableEventView.getEvent()).update();
-//                weekView.reloadEvents();
             }
         });
     }

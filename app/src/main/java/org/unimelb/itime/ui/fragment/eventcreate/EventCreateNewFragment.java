@@ -131,10 +131,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         ((EventCreateActivity)getActivity()).checkPermission(tag);
     }
 
-    @Override
-    public void refreshCalendars() {
-        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-    }
+
 
 
     @Subscribe
