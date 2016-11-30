@@ -26,6 +26,7 @@ import org.unimelb.itime.vendor.agendaview.MonthAgendaView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -67,6 +68,10 @@ public class CalendarAgendaFragment extends BaseUiFragment {
 
             }
         });
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 11);
+        scrollTo(calendar);
     }
 
 
@@ -106,21 +111,11 @@ public class CalendarAgendaFragment extends BaseUiFragment {
         super.onDestroy();
     }
 
-//    @Override
-//    public void onStop() {
-//        EventBus.getDefault().unregister(this);
-//        super.onStop();
-//    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                calendarNotifyDataSetChanged();
-            }
-        },500);
+    public void scrollTo(Calendar calendar){
+        monthAgendaView.scrollTo(calendar);
     }
+
+
 
     public void calendarNotifyDataSetChanged(){
         if (monthAgendaView!=null) {

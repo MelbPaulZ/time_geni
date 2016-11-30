@@ -41,6 +41,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
     private View root;
     private MonthDayView monthDayView;
     private CommonPresenter presenter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
