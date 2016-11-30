@@ -29,6 +29,8 @@ import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -156,9 +158,13 @@ public class EventDetailViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Timeslot newTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
-//                evDtlHostEvent.setStartTime(newTimeSlot.getStartTime());
-//                evDtlHostEvent.setEndTime(newTimeSlot.getEndTime());
+                // here, invitee responses
+                List<Timeslot> acceptedTimeslots = new ArrayList<>();
+                for (Timeslot timeslot: evDtlHostEvent.getTimeslot()){
+                    if (timeslot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
+                        acceptedTimeslots.add(timeslot);
+                    }
+                }
                 if (mvpView!=null){
                     mvpView.toCalendar();
                 }

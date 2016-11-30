@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarAgendaFragment;
@@ -31,6 +32,7 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * required login, need to extend BaseUiAuthFragment
@@ -76,7 +78,6 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
         binding.setCalenarVM(mainCalendarViewModel);
         initSpinner();
-//        init();
         initCalendars();
         initBackToday();
     }
@@ -147,9 +148,8 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     public void initCalendars(){
         monthDayFragment = new CalendarMonthDayFragment();
         weekFragment = new CalendarWeekFragment();
-
-        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, monthDayFragment).commit();
         agendaFragment = new CalendarAgendaFragment();
+        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, monthDayFragment).commit();
     }
 
 
@@ -182,6 +182,13 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     public void startEditEventActivity(ITimeEventInterface iTimeEventInterface) {
         EventUtil.startEditEventActivity(getContext(), getActivity(), iTimeEventInterface);
     }
+//
+//    @Subscribe
+//    public void refreshCalendar(MessageEvent msg){
+//        if (msg.task == MessageEvent.RELOAD_EVENT){
+//            reloadEvent();
+//        }
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

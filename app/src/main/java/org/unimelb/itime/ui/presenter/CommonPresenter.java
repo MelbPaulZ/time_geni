@@ -60,6 +60,7 @@ public class CommonPresenter extends MvpBasePresenter<MvpView> {
     private void synchronizeLocal(Event newEvent){
         Event oldEvent = EventManager.getInstance().findEventByUUID(newEvent.getEventUid());
         EventManager.getInstance().updateEvent(oldEvent, newEvent);
+        EventManager.getInstance().getWaitingEditEventList().remove(oldEvent);
         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
 

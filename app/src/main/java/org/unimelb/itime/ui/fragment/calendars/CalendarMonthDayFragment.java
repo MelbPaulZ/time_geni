@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.fragment.calendars;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
     private View root;
     private MonthDayView monthDayView;
     private CommonPresenter presenter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,9 +80,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
             public boolean isDraggable(DayDraggableEventView dayDraggableEventView) {
                 Event event = (Event) dayDraggableEventView.getEvent();
                 if (event.getEventType().equals("solo")){
-                    return true;
-                }else if (event.getHostUserUid().equals(UserUtil.getUserUid()) && !event.getStatus().equals(getContext().getString(R.string.confirmed))){
-                    // this is a host event and not confirmed yet
                     return true;
                 }else{
                     return false;
@@ -152,6 +151,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
         }
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -167,6 +167,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
     public void calendarNotifyDataSetChanged(){
         if(monthDayView!=null) {
             monthDayView.reloadEvents();
+            monthDayView.requestLayout(); // need?
         }
     }
 }

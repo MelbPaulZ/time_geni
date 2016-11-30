@@ -5,7 +5,9 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.managers.DBManager;
@@ -46,6 +48,7 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
         EventManager.getInstance().addEvent(event);
         DBManager.getInstance(getContext()).insertEvent(event);
         event.update();
+        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
 
     /**

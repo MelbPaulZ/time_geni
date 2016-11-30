@@ -75,9 +75,8 @@ public class EventCreateNewVIewModel extends CommonViewModel {
         isAllDay = new ObservableField<>(false);
         tag = presenter.getContext().getString(R.string.tag_create_event);
         this.viewModel = this;
-
-//        presenter.initNewEvent();
         setEvent(EventManager.getInstance().getCurrentEvent());
+        repeats = EventUtil.getRepeats(getContext(), event);
     }
 
 
@@ -269,7 +268,6 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 presenter.addSoloEvent();
                 if (mvpView!=null){
                     mvpView.toCreateSoloEvent();
-                    mvpView.refreshCalendars();
                 }
             }
         };
