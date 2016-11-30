@@ -76,11 +76,10 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     }
 
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
             monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
-            monthAgendaView.requestLayout();
         }
     }
 
@@ -126,7 +125,6 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     public void calendarNotifyDataSetChanged(){
         if (monthAgendaView!=null) {
             monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
-            monthAgendaView.requestLayout();
         }
     }
 
