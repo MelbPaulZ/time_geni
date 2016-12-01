@@ -39,7 +39,7 @@ import rx.Subscriber;
 public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView{
 
     private FragmentMainInboxBinding binding;
-    private InboxViewModel viewModel;
+    private InboxViewModel inboxViewModel;
     private MainInboxPresenter presenter;
     private MessageApi msgApi;
 
@@ -63,8 +63,9 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = new InboxViewModel(presenter);
-        binding.setVm(viewModel);
+        inboxViewModel = new InboxViewModel(presenter);
+        binding.setVm(inboxViewModel);
+
 
         SwipeMenuListView listView = (SwipeMenuListView) binding.getRoot().findViewById(R.id.inbox_listView);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
