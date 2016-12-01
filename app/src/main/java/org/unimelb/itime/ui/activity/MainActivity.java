@@ -1,12 +1,18 @@
 package org.unimelb.itime.ui.activity;
 
+import android.Manifest;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -44,18 +50,48 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     public final static int CREATE_EVENT = 0;
     public final static int EDIT_EVENT = 1;
 
+    private final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_AND_CAMERA = 1001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
-        init();
+        checkPermission();
+//        init();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
+    }
+
+    public void checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA , Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_AND_CAMERA);
+        } else {
+            init();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_AND_CAMERA:{
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                    init();
+                }else {
+                    Toast.makeText(getApplicationContext(), "needs permissions to continue", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     @NonNull
@@ -72,7 +108,6 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         tagFragments[2] = new MainInboxFragment();
         tagFragments[3] = new MainSettingsFragment();
 
-
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[0]);
@@ -81,8 +116,6 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3]);
         fragmentTransaction.commit();
         showFragmentById(0);
-
-
     }
 
 
