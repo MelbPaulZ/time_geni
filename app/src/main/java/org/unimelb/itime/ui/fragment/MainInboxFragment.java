@@ -33,6 +33,8 @@ import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.Text2Drawable;
 
+import java.util.List;
+
 import rx.Observable;
 import rx.Subscriber;
 
@@ -115,7 +117,6 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
 // set creator
         listView.setMenuCreator(creator);
         listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
-
     }
 
     public void postMessageUpdate(Message msg){
@@ -142,5 +143,9 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
         };
 
         HttpUtil.subscribe(observable, subscriber);
+    }
+
+    public void setData(List<Message> messages){
+        inboxViewModel.setData(messages);
     }
 }

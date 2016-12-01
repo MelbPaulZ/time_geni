@@ -13,6 +13,7 @@ import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.messageevent.MessageEvent;
+import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.restfulapi.CalendarApi;
 import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.EventApi;
@@ -117,6 +118,9 @@ public class RemoteService extends Service{
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, listHttpResult.getSyncToken());
                 editor.apply();
+
+                //set data to inbox;
+                EventBus.getDefault().post(new MessageInboxMessage(listHttpResult.getData()));
             }
         };
 

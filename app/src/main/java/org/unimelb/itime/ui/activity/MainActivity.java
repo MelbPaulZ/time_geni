@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -17,10 +19,14 @@ import android.widget.Toast;
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.ActivityMainBinding;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.ui.fragment.EventSearchFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainContactsFragment;
@@ -101,6 +107,10 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     }
 
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getInboxMessage(MessageInboxMessage messageInboxMessage){
+        ((MainInboxFragment)tagFragments[2]).setData(messageInboxMessage.messages);
+    }
     private void init(){
         tagFragments = new MvpFragment[4];
         tagFragments[0] = new MainCalendarFragment();
@@ -172,4 +182,15 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         }
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }
