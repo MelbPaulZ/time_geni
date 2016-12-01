@@ -22,6 +22,7 @@ import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentMainInboxBinding;
 import org.unimelb.itime.databinding.InboxHostBinding;
+import org.unimelb.itime.databinding.InboxInviteeBinding;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.ui.viewmodel.InboxViewModel;
@@ -36,8 +37,9 @@ import org.unimelb.itime.vendor.helper.Text2Drawable;
 public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView{
 
     private FragmentMainInboxBinding binding;
-    private InboxViewModel inboxViewModel;
     private InboxHostBinding inboxHostBinding;
+    private InboxInviteeBinding inboxInviteeBinding;
+    private InboxViewModel inboxViewModel;
     private MainInboxPresenter presenter;
 
     @Override
