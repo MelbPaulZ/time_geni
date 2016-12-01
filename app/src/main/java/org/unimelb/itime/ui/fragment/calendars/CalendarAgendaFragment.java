@@ -93,11 +93,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
         return new CommonPresenter(getContext());
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        EventBus.getDefault().register(this);
-//    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -3,7 +3,6 @@ package org.unimelb.itime.managers;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.antlr.v4.tool.Rule;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
@@ -15,6 +14,7 @@ import org.unimelb.itime.vendor.listener.ITimeEventPackageInterface;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -215,6 +215,15 @@ public class EventManager {
         Event dbOldEvent = DBManager.getInstance().getEvent(oldEvent.getEventUid());
         dbOldEvent.delete();
         DBManager.getInstance().insertEvent(newEvent);
+    }
+
+    public ArrayList<ITimeEventInterface> getAllEvents(){
+        ArrayList<ITimeEventInterface> allEvents = new ArrayList<>();
+        for (Map.Entry<Long, List<ITimeEventInterface>> entry: regularEventMap.entrySet()){
+            allEvents.addAll(entry.getValue());
+        }
+        allEvents.addAll(orgRepeatedEventList);
+        return allEvents;
     }
 
     public Event copyCurrentEvent(Event event){

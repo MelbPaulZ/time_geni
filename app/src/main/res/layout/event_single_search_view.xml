@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="67dp">
+    <ImageView
+        android:id="@+id/color_bar"
+        android:layout_width="3dp"
+        android:layout_height="67dp"
+        android:background="@color/color_06457F"
+        android:layout_marginLeft="72dp"/>
+    <TextView
+        android:id="@+id/event_summary"
+        android:text="title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:paddingLeft="13dp"
+        android:paddingTop="13dp"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/color_bar"/>
+
+    <TextView
+        android:id="@+id/event_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_summary"
+        android:textSize="12sp"
+        android:textColor="@color/gray_9b9b9b"
+        android:paddingTop="11dp"
+        android:text="location"
+        android:layout_toRightOf="@id/color_bar"
+        android:paddingLeft="13dp"
+        />
+
+    <TextView
+        android:id="@+id/gap_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="in 3 hour"
+        android:layout_alignBottom="@+id/event_location"
+        android:textSize="12sp"
+        android:textColor="@color/gray_9b9b9b"
+        android:layout_alignParentRight="true"
+        android:paddingRight="30dp"
+        />
+    <RelativeLayout
+        android:layout_width="72dp"
+        android:layout_height="67dp">
+        <TextView
+            android:id="@+id/event_starttime"
+            android:layout_width="72dp"
+            android:layout_height="33dp"
+            android:gravity="center_horizontal"
+            android:paddingTop="20dp"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:text="12:00 PM"
+            />
+        <TextView
+            android:id="@+id/event_duration"
+            android:layout_width="72dp"
+            android:layout_height="34dp"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="2dp"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/event_starttime"
+            android:textColor="@color/gray_9b9b9b"
+            android:textSize="12sp"
+            android:text="30min"
+            />
+    </RelativeLayout>
+    
+    <TextView
+        android:id="@+id/split_line"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:textColor="@color/gray_9b9b9b"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="1dp"
+        />
+
+
+</RelativeLayout>

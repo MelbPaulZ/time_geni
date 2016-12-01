@@ -2,18 +2,14 @@ package org.unimelb.itime.ui.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,19 +23,15 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
-import org.unimelb.itime.ui.fragment.EventDatePickerFragment;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.EventTimePickerFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotCreateFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -72,10 +64,10 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
 
         hideAllFragments();
         getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
-        test();
+        initRestFragments();
     }
 
-    private void test(){
+    private void initRestFragments(){
         new Thread(){
             @Override
             public void run() {

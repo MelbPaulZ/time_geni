@@ -32,6 +32,14 @@
                     android:layout_marginLeft="@dimen/padding_5"
                     android:background="@drawable/icon_three_lines"
                     />
+                <ImageView
+                    android:id="@+id/event_search_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_toRightOf="@+id/three_lines"
+                    android:layout_marginLeft="@dimen/padding_5"
+                    android:background="@drawable/icon_search"
+                    android:layout_centerVertical="true"/>
 
                 <TextView
                     android:id="@+id/toolbar_title"
