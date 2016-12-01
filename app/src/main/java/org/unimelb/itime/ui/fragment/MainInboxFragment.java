@@ -16,6 +16,7 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
+import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.FragmentMainInboxBinding;
@@ -57,8 +58,8 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_inbox, container, false);
-        inboxHostBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_host, container, false);
-        inboxInviteeBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_invitee, container, false);
+//        inboxHostBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_host, container, false);
+//        inboxInviteeBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_invitee, container, false);
         return binding.getRoot();
     }
 
