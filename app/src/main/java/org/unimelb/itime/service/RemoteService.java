@@ -11,10 +11,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.base.C;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulapi.CalendarApi;
 import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.EventApi;
+import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
@@ -34,6 +36,7 @@ import rx.Subscriber;
 public class RemoteService extends Service{
     private final static String TAG = "RemoteService";
     private EventApi eventApi;
+    private MessageApi msgApi;
     private CalendarApi calendarApi;
     private ContactApi contactApi;
 
@@ -48,6 +51,7 @@ public class RemoteService extends Service{
         super.onCreate();
         Log.i(TAG, "onStartCommand: " + "start remoteservice");
         eventApi = HttpUtil.createService(getBaseContext(), EventApi.class);
+        msgApi = HttpUtil.createService(getBaseContext(), MessageApi.class);
         calendarApi = HttpUtil.createService(getBaseContext(), CalendarApi.class);
         contactApi = HttpUtil.createService(getBaseContext(), ContactApi.class);
     }
@@ -85,9 +89,38 @@ public class RemoteService extends Service{
             public void onNext(HttpResult<List<org.unimelb.itime.bean.Calendar>> httpResult) {
                 CalendarUtil.getInstance().setCalendar(httpResult.getData());
                 fetchEvents();
+                fetchMessages();
             }
         };
         HttpUtil.subscribe(calendarApi.list(), subscriber);
+    }
+
+    public void fetchMessages(){
+        Observable<HttpResult<List<Message>>> observable = msgApi.get();
+        Subscriber<HttpResult<List<Message>>> subscriber = new Subscriber<HttpResult<List<Message>>>() {
+
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: " + "messageApi");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: " + "messageApi");
+            }
+
+            @Override
+            public void onNext(HttpResult<List<Message>> listHttpResult) {
+                Log.i(TAG, "listHttpResult: " + listHttpResult);
+                //update syncToken
+                SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, listHttpResult.getSyncToken());
+                editor.apply();
+            }
+        };
+
+        HttpUtil.subscribe(observable, subscriber);
     }
 
     public void fetchEvents() {
@@ -113,7 +146,6 @@ public class RemoteService extends Service{
             @Override
             public void onNext(final HttpResult<List<Event>> result) {
                 final List<Event> eventList = result.getData();
-                final DBManager db = DBManager.getInstance(getBaseContext());
 
                 //update syncToken
                 SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
@@ -125,14 +157,12 @@ public class RemoteService extends Service{
                     @Override
                     public void run() {
                         // successfully get event from server
-                        loadDB();
-                        updateDB(eventList);
+                        EventManager.getInstance().loadDB();
+                        EventManager.getInstance().updateDB(eventList);
                         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                         Log.i(TAG, "onNext: " + result.getData().size());
                     }
                 }.start();
-
-
             }
         };
         HttpUtil.subscribe(observable, subscriber);
@@ -161,37 +191,6 @@ public class RemoteService extends Service{
             }
         };
         HttpUtil.subscribe(observable,subscriber);
-    }
-
-    private void loadDB(){
-        List<Event> list = DBManager.getInstance(getBaseContext()).getAllEvents();
-        for (Event ev: list) {
-            EventManager.getInstance().addEvent(ev);
-        }
-    }
-
-    private void updateDB(List<Event> events){
-        List<? extends ITimeEventInterface> orgITimeInterfaces = EventManager.getInstance().getAllEvents();
-        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
-
-        for (Event event:events
-             ) {
-            Event orgOld = null;
-
-            for (Event orgEvent:orgEvents
-                 ) {
-                if (orgEvent.getEventUid().equals(event.getEventUid())){
-                    orgOld = orgEvent;
-                    EventManager.getInstance().updateEvent(orgOld,event);
-                    break;
-                }
-            }
-
-            if (orgOld == null){
-                DBManager.getInstance().insertEvent(event);
-                EventManager.getInstance().addEvent(event);
-            }
-        }
     }
 
 }
