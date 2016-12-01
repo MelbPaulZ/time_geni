@@ -57,6 +57,8 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_inbox, container, false);
+        inboxHostBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_host, container, false);
+        inboxInviteeBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_invitee, container, false);
         return binding.getRoot();
     }
 
