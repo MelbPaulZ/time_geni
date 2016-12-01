@@ -226,6 +226,17 @@ public class EventManager {
         return allEvents;
     }
 
+    public Event findEventInEventList(String eventUid){
+        List<? extends ITimeEventInterface> interfaceList = getAllEvents();
+        List<Event> eventList = (List<Event>) interfaceList;
+        for (Event ev : eventList){
+            if (eventUid.equals(ev.getEventUid())){
+                return ev;
+            }
+        }
+        throw new RuntimeException("cannot find the event in Eventmanager");
+    }
+
     public Event copyCurrentEvent(Event event){
         Gson gson = new Gson();
 

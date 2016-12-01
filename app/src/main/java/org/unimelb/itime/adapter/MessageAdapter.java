@@ -1,10 +1,18 @@
 package org.unimelb.itime.adapter;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
+import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
+import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.util.EventUtil;
 
 import java.util.List;
 
@@ -13,8 +21,9 @@ import java.util.List;
  */
 public class MessageAdapter extends BaseAdapter {
     private List<Message> messageList;
+    private Context context;
 
-    public MessageAdapter(List<Message> messageList) {
+    public MessageAdapter(Context context, List<Message> messageList) {
         this.messageList = messageList;
     }
 
@@ -29,7 +38,7 @@ public class MessageAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return messageList.get(i);
     }
 
     @Override
@@ -39,6 +48,12 @@ public class MessageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        Message message = messageList.get(i);
+        String eventUid = message.getEventUid();
+        Event event = EventManager.getInstance().findEventInEventList(eventUid);
+        View v;
         return null;
     }
+
+
 }
