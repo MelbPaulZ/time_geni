@@ -21,6 +21,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
+import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.List;
 
@@ -93,7 +94,7 @@ public class RemoteService extends Service{
         // here to list events
         String calendarUid = CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid();
         String synToken = AppUtil.getSharedPreferences(getApplicationContext()).getString(C.spkey.EVENT_LIST_SYNC_TOKEN,"");
-        Log.i(TAG, "fetchEvents: " + synToken);
+
         Observable<HttpResult<List<Event>>> observable = eventApi.list(
                 calendarUid
                 , synToken);
@@ -123,15 +124,15 @@ public class RemoteService extends Service{
                 new Thread(){
                     @Override
                     public void run() {
-                        for (Event event: eventList){
-                            db.insertEvent(event);
-                        }
                         // successfully get event from server
                         loadDB();
+                        updateDB(eventList);
                         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                         Log.i(TAG, "onNext: " + result.getData().size());
                     }
                 }.start();
+
+
             }
         };
         HttpUtil.subscribe(observable, subscriber);
@@ -163,10 +164,33 @@ public class RemoteService extends Service{
     }
 
     private void loadDB(){
-        EventManager.getInstance().getEventsPackage().clearPackage();
         List<Event> list = DBManager.getInstance(getBaseContext()).getAllEvents();
         for (Event ev: list) {
             EventManager.getInstance().addEvent(ev);
+        }
+    }
+
+    private void updateDB(List<Event> events){
+        List<? extends ITimeEventInterface> orgITimeInterfaces = EventManager.getInstance().getAllEvents();
+        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
+
+        for (Event event:events
+             ) {
+            Event orgOld = null;
+
+            for (Event orgEvent:orgEvents
+                 ) {
+                if (orgEvent.getEventUid().equals(event.getEventUid())){
+                    orgOld = orgEvent;
+                    EventManager.getInstance().updateEvent(orgOld,event);
+                    break;
+                }
+            }
+
+            if (orgOld == null){
+                DBManager.getInstance().insertEvent(event);
+                EventManager.getInstance().addEvent(event);
+            }
         }
     }
 
