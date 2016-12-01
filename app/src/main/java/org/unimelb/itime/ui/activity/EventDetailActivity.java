@@ -58,7 +58,23 @@ public class EventDetailActivity extends AppCompatActivity {
             // here... cannot use findFragmentByTag directly..
             getSupportFragmentManager().beginTransaction().show(fragmentList.get(1)).commit();
         }
+    }
 
+    private void initAll(){
+        event = EventManager.getInstance().getCurrentEvent();
+        initFragments();
+        List<Fragment> lists = getSupportFragmentManager().getFragments();
+
+        if (event.getInvitee().size() > 0) {
+            // group event
+            // here... cannot use findFragmentByTag directly..
+            getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
+
+        } else {
+            // solo event
+            // here... cannot use findFragmentByTag directly..
+            getSupportFragmentManager().beginTransaction().show(fragmentList.get(1)).commit();
+        }
     }
 
     public void initFragments() {

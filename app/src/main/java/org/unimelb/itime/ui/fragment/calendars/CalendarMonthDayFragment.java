@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
@@ -72,6 +73,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
         monthDayView.setOnHeaderListener(new MonthDayView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
+                CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });
@@ -117,28 +119,8 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
                 copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                 copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
                 presenter.updateEventToServer(copyEvent);
-
-
-//                newEvent.setStartTime(dayDraggableEventView.getStartTimeM());
-//                newEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-//                Calendar c = Calendar.getInstance();
-//                c.setTimeInMillis(dayDraggableEventView.getStartTimeM());
-//                Log.i("test", "onEventDragDrop: s" + c.getTime());
-//                c.setTimeInMillis(dayDraggableEventView.getEndTimeM());
-//                Log.i("test", "onEventDragDrop: e" + c.getTime());
-//                long duration = dayDraggableEventView.getEndTimeM() - dayDraggableEventView.getStartTimeM();
-//                float hour = duration/(3600*1000);
-//                presenter.updateEventToServer((Event) dayDraggableEventView.getEvent());
-//                EventManager.getInstance().updateEvent((Event) dayDraggableEventView.getEvent(),
-//                        dayDraggableEventView.getStartTimeM(), dayDraggableEventView.getEndTimeM());
-//                ((Event)dayDraggableEventView.getEvent()).update();
-//                monthDayView.reloadEvents();
             }
         });
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH,11);
-        monthDayView.scrollTo(cal);
     }
 
     public void backToday(){
@@ -173,6 +155,18 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
             monthDayView.reloadEvents();
             monthDayView.requestLayout(); // need?
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        scrollTo(CalendarManager.getInstance().getCurrentShowCalendar());
+
+    }
+
+
+    public void scrollTo(Calendar calendar){
+        monthDayView.scrollTo(calendar);
     }
 }
 

@@ -36,6 +36,8 @@ public class EventAdapter extends ArrayAdapter<Event> implements Filterable {
         getFilter();
     }
 
+
+
     public void setEventList(List<Event> eventList){
         this.eventList = eventList;
     }
