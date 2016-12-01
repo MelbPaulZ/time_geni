@@ -2,6 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="vm"
+            type="org.unimelb.itime.ui.viewmodel.InboxViewModel"/>
     </data>
 
     <RelativeLayout
@@ -46,13 +49,13 @@
             android:id="@+id/content_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/green"
             android:layout_below="@+id/toolbar_layout">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="inbox"/>
+            <com.baoyz.swipemenulistview.SwipeMenuListView
+                android:id="@+id/inbox_listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
 
         </RelativeLayout>
     </RelativeLayout>
