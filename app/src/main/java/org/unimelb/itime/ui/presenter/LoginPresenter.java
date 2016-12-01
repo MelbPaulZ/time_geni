@@ -52,7 +52,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             // call retrofit
             view.onLoginStart();
         }
-        DBManager.getInstance(context).clearDB();
         AuthUtil.clearJwtToken(context);
         Observable<HttpResult<UserLoginRes>> observable = userApi.login(email, password);
         Subscriber<HttpResult<UserLoginRes>> subscriber = new Subscriber<HttpResult<UserLoginRes>>() {

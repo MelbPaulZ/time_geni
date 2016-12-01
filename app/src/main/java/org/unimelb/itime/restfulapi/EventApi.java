@@ -13,14 +13,15 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
  * Created by Paul on 23/09/2016.
  */
 public interface EventApi {
-    @GET("event/list/{calendarUid}/{syncToken}")
-    Observable<HttpResult<List<Event>>> list(@Path("calendarUid") String calendarUid, @Path("syncToken") String syncToken);
+    @GET("event/list/{calendarUid}")
+    Observable<HttpResult<List<Event>>> list(@Path("calendarUid") String calendarUid, @Query("syncToken") String syncToken);
 
     @GET("event/get/{calendarUid}/{eventUid}")
     Observable<HttpResult<Event>> get(@Path("calendarUid") String calendarUid);
