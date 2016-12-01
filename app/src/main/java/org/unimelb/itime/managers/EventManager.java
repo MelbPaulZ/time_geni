@@ -282,6 +282,37 @@ public class EventManager {
     }
 
 
+    public void loadDB(){
+        List<Event> list = DBManager.getInstance().getAllEvents();
+        for (Event ev: list) {
+            EventManager.getInstance().addEvent(ev);
+        }
+    }
+
+    public void updateDB(List<Event> events){
+        List<? extends ITimeEventInterface> orgITimeInterfaces = EventManager.getInstance().getAllEvents();
+        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
+
+        for (Event event:events
+                ) {
+            Event orgOld = null;
+
+            for (Event orgEvent:orgEvents
+                    ) {
+                if (orgEvent.getEventUid().equals(event.getEventUid())){
+                    orgOld = orgEvent;
+                    EventManager.getInstance().updateEvent(orgOld,event);
+                    break;
+                }
+            }
+
+            if (orgOld == null){
+                DBManager.getInstance().insertEvent(event);
+                EventManager.getInstance().addEvent(event);
+            }
+        }
+    }
+
     public class EventsPackage implements ITimeEventPackageInterface {
 
         private Map<Long, List<ITimeEventInterface>> regularEventMap;

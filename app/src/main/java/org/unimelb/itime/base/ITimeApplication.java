@@ -3,7 +3,10 @@ package org.unimelb.itime.base;
 import android.support.multidex.MultiDexApplication;
 
 import com.avos.avoscloud.AVAnalytics;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.SaveCallback;
 
 import org.unimelb.itime.util.GreenDaoUtil;
 
@@ -22,9 +25,9 @@ public class ITimeApplication extends MultiDexApplication{
     }
 
     private void registerLeanCloud(){
-        // 初始化应用信息
         AVOSCloud.initialize(this, "Sk9FQYePVwHdXtXQKQuNfdpr-gzGzoHsz",
                 "1PsfeF7pA1S5xI7EmEoQviwT");
+
         // 启用崩溃错误统计
         AVAnalytics.enableCrashReport(this.getApplicationContext(), true);
         AVOSCloud.setLastModifyEnabled(true);
