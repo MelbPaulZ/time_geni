@@ -18,6 +18,8 @@ public class HttpResult <T> {
      */
     private int status;
 
+    private String syncToken;
+
     public T getData() {
         return data;
     }
@@ -40,5 +42,13 @@ public class HttpResult <T> {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getSyncToken() {
+        return syncToken;
+    }
+
+    public void setSyncToken(String syncToken) {
+        this.syncToken = syncToken;
     }
 }

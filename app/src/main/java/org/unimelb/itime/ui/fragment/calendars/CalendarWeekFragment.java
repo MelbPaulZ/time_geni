@@ -101,6 +101,11 @@ public class CalendarWeekFragment extends BaseUiFragment {
                 presenter.updateEventToServer(copyEvent);
             }
         });
+
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH,30);
+        weekView.scrollTo(cal);
     }
 
     public void backToday(){

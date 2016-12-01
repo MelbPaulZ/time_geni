@@ -19,8 +19,8 @@ import rx.Observable;
  * Created by Paul on 23/09/2016.
  */
 public interface EventApi {
-    @GET("event/list/{calendarUid}")
-    Observable<HttpResult<List<Event>>> list(@Path("calendarUid") String calendarUid);
+    @GET("event/list/{calendarUid}/{syncToken}")
+    Observable<HttpResult<List<Event>>> list(@Path("calendarUid") String calendarUid, @Path("syncToken") String syncToken);
 
     @GET("event/get/{calendarUid}/{eventUid}")
     Observable<HttpResult<Event>> get(@Path("calendarUid") String calendarUid);

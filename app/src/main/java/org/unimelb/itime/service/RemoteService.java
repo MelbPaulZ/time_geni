@@ -2,11 +2,13 @@ package org.unimelb.itime.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
+import org.unimelb.itime.base.C;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageEvent;
@@ -16,6 +18,7 @@ import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
 
@@ -89,9 +92,12 @@ public class RemoteService extends Service{
     public void fetchEvents() {
         // here to list events
         String calendarUid = CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid();
-        Observable<HttpResult<List<Event>>> observable = eventApi.list(calendarUid);
+        String synToken = AppUtil.getSharedPreferences(getApplicationContext()).getString(C.spkey.EVENT_LIST_SYNC_TOKEN,"");
+        Log.i(TAG, "fetchEvents: " + synToken);
+        Observable<HttpResult<List<Event>>> observable = eventApi.list(
+                calendarUid
+                , synToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
-
 
             @Override
             public void onCompleted() {
@@ -107,6 +113,12 @@ public class RemoteService extends Service{
             public void onNext(final HttpResult<List<Event>> result) {
                 final List<Event> eventList = result.getData();
                 final DBManager db = DBManager.getInstance(getBaseContext());
+
+                //update syncToken
+                SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, result.getSyncToken());
+                editor.apply();
 
                 new Thread(){
                     @Override

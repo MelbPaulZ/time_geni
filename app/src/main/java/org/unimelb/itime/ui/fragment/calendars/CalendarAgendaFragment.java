@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
@@ -68,10 +69,9 @@ public class CalendarAgendaFragment extends BaseUiFragment {
 
             }
         });
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, 11);
-        scrollTo(calendar);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH,11);
+        scrollTo(cal);
     }
 
 
@@ -96,7 +96,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
 //    @Override
 //    public void onStart() {
 //        super.onStart();
-//        EventBus.getDefault().register(this);
+////        EventBus.getDefault().register(this);
 //    }
 
     @Override

@@ -75,8 +75,6 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         eventCreateDetailBeforeSendingViewModel.setPhotos(photos);
     }
 
-
-
     @Subscribe
     public void getLocationChange(MessageLocation messageLocation){
         if (messageLocation.tag.equals(getClassName())){

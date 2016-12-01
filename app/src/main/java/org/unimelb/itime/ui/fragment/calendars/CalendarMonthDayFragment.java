@@ -135,6 +135,10 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
 //                monthDayView.reloadEvents();
             }
         });
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH,11);
+        monthDayView.scrollTo(cal);
     }
 
     public void backToday(){

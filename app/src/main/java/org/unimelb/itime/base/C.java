@@ -1,5 +1,7 @@
 package org.unimelb.itime.base;
 
+import java.util.List;
+
 /**
  * Created by yinchuandong on 20/06/2016.
  * define some constants here
@@ -20,6 +22,9 @@ public class C {
 
     public static class spkey{
         public final static String ITIME_JWT_TOKEN = "itime_jwt_token";
+        public final static String EVENT_LIST_SYNC_TOKEN = "event_list_sync_token";
+        public final static String MESSAGE_LIST_SYNC_TOKEN = "message_list_sync_token";
+
     }
 
     public static class dao{
