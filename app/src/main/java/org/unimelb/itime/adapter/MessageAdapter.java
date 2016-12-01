@@ -4,14 +4,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import org.unimelb.itime.bean.Message;
+
+import java.util.List;
+
 /**
  * Created by Paul on 1/12/16.
  */
 public class MessageAdapter extends BaseAdapter {
+    private List<Message> messageList;
+
+    public MessageAdapter(List<Message> messageList) {
+        this.messageList = messageList;
+    }
+
 
     @Override
     public int getCount() {
-        return 0;
+        if (messageList== null)
+             return 0;
+        else
+            return messageList.size();
     }
 
     @Override

@@ -20,6 +20,8 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.FragmentMainInboxBinding;
+import org.unimelb.itime.databinding.InboxHostBinding;
+import org.unimelb.itime.databinding.InboxInviteeBinding;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
@@ -41,6 +43,8 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
 
     private FragmentMainInboxBinding binding;
     private InboxViewModel inboxViewModel;
+    private InboxHostBinding inboxHostBinding;
+    private InboxInviteeBinding inboxInviteeBinding;
     private MainInboxPresenter presenter;
     private MessageApi msgApi;
 
@@ -58,8 +62,8 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_inbox, container, false);
-//        inboxHostBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_host, container, false);
-//        inboxInviteeBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_invitee, container, false);
+        inboxHostBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_host, container, false);
+        inboxInviteeBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_invitee, container, false);
         return binding.getRoot();
     }
 
