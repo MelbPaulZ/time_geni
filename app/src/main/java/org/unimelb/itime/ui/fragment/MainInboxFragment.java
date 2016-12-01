@@ -64,7 +64,8 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
         super.onActivityCreated(savedInstanceState);
         inboxViewModel = new InboxViewModel(presenter);
         binding.setVm(inboxViewModel);
-
+        inboxInviteeBinding.setVm(inboxViewModel);
+        inboxHostBinding.setVm(inboxViewModel);
 
         SwipeMenuListView listView = (SwipeMenuListView) binding.getRoot().findViewById(R.id.inbox_listView);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
