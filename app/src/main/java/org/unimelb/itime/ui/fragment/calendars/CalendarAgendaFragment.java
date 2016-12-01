@@ -93,12 +93,6 @@ public class CalendarAgendaFragment extends BaseUiFragment {
         return new CommonPresenter(getContext());
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-////        EventBus.getDefault().register(this);
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,8 +108,6 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     public void scrollTo(Calendar calendar){
         monthAgendaView.scrollTo(calendar);
     }
-
-
 
     public void calendarNotifyDataSetChanged(){
         if (monthAgendaView!=null) {

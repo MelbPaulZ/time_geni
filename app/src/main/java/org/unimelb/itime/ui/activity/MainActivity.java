@@ -15,6 +15,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.ActivityMainBinding;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.fragment.EventSearchFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainContactsFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
@@ -38,6 +39,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     private ActivityMainBinding binding;
     private MainTabBarViewModel tabBarViewModel;
+    private EventSearchFragment eventSearchFragment;
 
     public final static int CREATE_EVENT = 0;
     public final static int EDIT_EVENT = 1;
@@ -79,6 +81,8 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3]);
         fragmentTransaction.commit();
         showFragmentById(0);
+
+
     }
 
 

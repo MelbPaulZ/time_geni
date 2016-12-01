@@ -1,11 +1,14 @@
 package org.unimelb.itime.ui.fragment;
 
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +20,9 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
@@ -37,7 +42,7 @@ import java.util.Calendar;
 /**
  * required login, need to extend BaseUiAuthFragment
  */
-public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainCalendarPresenter> implements MainCalendarMvpView {
+public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, MainCalendarPresenter> implements MainCalendarMvpView {
 
     private final static String TAG = "MainCalendarFragment";
     private CalendarMonthDayFragment monthDayFragment;
@@ -45,6 +50,8 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     private CalendarWeekFragment weekFragment;
     private FragmentMainCalendarBinding binding;
     private MainCalendarViewModel mainCalendarViewModel;
+    private MainCalendarFragment self;
+    private EventSearchFragment eventSearchFragment;
 
 
     public void reloadEvent(){
@@ -77,9 +84,25 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
         super.onActivityCreated(savedInstanceState);
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
         binding.setCalenarVM(mainCalendarViewModel);
+        self = this;
         initSpinner();
         initCalendars();
         initBackToday();
+        initSearch();
+    }
+
+    private void initSearch(){
+        ImageView searchIcon = (ImageView) binding.getRoot().findViewById(R.id.event_search_icon);
+        searchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (eventSearchFragment==null){
+                    eventSearchFragment = new EventSearchFragment();
+                    getFragmentManager().beginTransaction().add(R.id.main_fragment_container, eventSearchFragment, eventSearchFragment.getClassName()).hide(eventSearchFragment).commit();
+                }
+                self.switchFragment(self, eventSearchFragment);
+            }
+        });
     }
 
     public void initBackToday(){
@@ -154,6 +177,7 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
 
 
 
+
     @Subscribe
     public void setYearMonthHeader(MessageMonthYear messageMonthYear){
         String month = EventUtil.getMonth(getContext(),messageMonthYear.month);
@@ -182,16 +206,19 @@ public class MainCalendarFragment extends MvpFragment<MainCalendarMvpView, MainC
     public void startEditEventActivity(ITimeEventInterface iTimeEventInterface) {
         EventUtil.startEditEventActivity(getContext(), getActivity(), iTimeEventInterface);
     }
-//
-//    @Subscribe
-//    public void refreshCalendar(MessageEvent msg){
-//        if (msg.task == MessageEvent.RELOAD_EVENT){
-//            reloadEvent();
-//        }
-//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshSearchAdapter(MessageEvent messageEvent){
+        if (messageEvent.task == MessageEvent.RELOAD_EVENT){
+            EventSearchFragment eventSearchFragment = (EventSearchFragment) getFragmentManager().findFragmentByTag(EventSearchFragment.class.getSimpleName());
+            if (eventSearchFragment!=null){
+                eventSearchFragment.refreshAdapter();
+            }
+        }
     }
 }

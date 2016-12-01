@@ -132,17 +132,6 @@ public class RemoteService extends Service{
                         Log.i(TAG, "onNext: " + result.getData().size());
                     }
                 }.start();
-
-
-//                for (Event event: eventList){
-//                    db.insertEvent(event);
-//                }
-//
-//                // successfully get event from server
-//                loadDB();
-//
-//                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-//                Log.i(TAG, "onNext: " + result.getData().size());
             }
         };
         HttpUtil.subscribe(observable, subscriber);
