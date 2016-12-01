@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
@@ -61,6 +62,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
         monthAgendaView.setOnHeaderListener(new MonthAgendaView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
+                CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
 
@@ -69,11 +71,14 @@ public class CalendarAgendaFragment extends BaseUiFragment {
 
             }
         });
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH,11);
-        scrollTo(cal);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        scrollTo(CalendarManager.getInstance().getCurrentShowCalendar());
+
+    }
 
 
     public void backToday(){

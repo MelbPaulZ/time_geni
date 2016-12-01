@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
@@ -55,6 +56,7 @@ public class CalendarWeekFragment extends BaseUiFragment {
         weekView.setOnHeaderListener(new WeekView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
+                CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });
@@ -101,11 +103,6 @@ public class CalendarWeekFragment extends BaseUiFragment {
                 presenter.updateEventToServer(copyEvent);
             }
         });
-
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH,30);
-        weekView.scrollTo(cal);
     }
 
     public void backToday(){
@@ -118,6 +115,10 @@ public class CalendarWeekFragment extends BaseUiFragment {
             weekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
             weekView.reloadEvents();
         }
+    }
+
+    public void scrollTo(Calendar calendar){
+        weekView.scrollTo(calendar);
     }
 
 
@@ -144,4 +145,13 @@ public class CalendarWeekFragment extends BaseUiFragment {
             weekView.reloadEvents();
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        scrollTo(CalendarManager.getInstance().getCurrentShowCalendar());
+
+    }
+
+
 }
