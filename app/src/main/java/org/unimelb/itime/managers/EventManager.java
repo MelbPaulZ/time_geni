@@ -1,5 +1,7 @@
 package org.unimelb.itime.managers;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -15,6 +17,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +26,7 @@ import java.util.Map;
  * Created by yuhaoliu on 29/08/16.
  */
 public class EventManager {
-    private final String TAG = "MyAPP";
+    private final String TAG = "EventManager";
     private static EventManager ourInstance = new EventManager();
 
     private Event currentEvent = new Event();
@@ -38,7 +41,8 @@ public class EventManager {
 
     private EventsPackage eventsPackage = new EventsPackage();
 
-    private final int defaultRepeatedRange = 500;
+    private final int defaultRepeatedRange = 100;
+    private final float refreshFlag = 0.8f;
 
     private Calendar nowRepeatedEndAt = Calendar.getInstance();
     private Calendar nowRepeatedStartAt = Calendar.getInstance();
@@ -52,11 +56,29 @@ public class EventManager {
     private List<Event> waitingEditEventList= new ArrayList<>(); // this list contains all events that waits for update
 
     private EventManager() {
+//        Calendar cal = Calendar.getInstance();
+//        cal.add(Calendar.DATE,15);
+//        Calendar cal2 = Calendar.getInstance();
+//        cal2.add(Calendar.DATE,20);
+//        Log.i(TAG, "EventManager:CAL1 " + cal.getTime());
+//        Log.i(TAG, "EventManager:CAL2 " + cal2.getTime());
+        setToBeginOfDay(nowRepeatedStartAt);
+        setToBeginOfDay(nowRepeatedEndAt);
+
         nowRepeatedStartAt.add(Calendar.DATE, -defaultRepeatedRange);
         nowRepeatedEndAt.add(Calendar.DATE, defaultRepeatedRange);
 
         eventsPackage.setRepeatedEventMap(repeatedEventMap);
         eventsPackage.setRegularEventMap(regularEventMap);
+    }
+
+    private Calendar setToBeginOfDay(Calendar cal){
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        return cal;
     }
 
     public EventsPackage getEventsPackage(){
@@ -77,16 +99,19 @@ public class EventManager {
             }
         }else{
             orgRepeatedEventList.add(event);
+//            Calendar ca = Calendar.getInstance();
+//            ca.setTimeInMillis(event.getStartTime());
+//            Log.i(TAG, "addEvent: org info: " + ca.getTime());
             this.addRepeatedEvent(event,nowRepeatedStartAt.getTimeInMillis(),nowRepeatedEndAt.getTimeInMillis());
         }
     }
 
-    private void addRepeatedEvent(Event event, long rangeStart, long rangeEnd){
+    private synchronized void addRepeatedEvent(Event event, long rangeStart, long rangeEnd){
         RuleModel rule = RuleFactory.getInstance().getRuleModel(event);
         event.setRule(rule);
 
         ArrayList<Long> repeatedEventsTimes = rule.getOccurenceDates(rangeStart,rangeEnd);
-
+//        Log.i(TAG, "id: " + event.getEventUid() +  "dup-size: " + repeatedEventsTimes.size() + " -- start: " + rangeStart + " end: " + rangeEnd);
         for (Long time: repeatedEventsTimes
                 ) {
             Event dup_event = null;
@@ -98,6 +123,9 @@ public class EventManager {
             if (dup_event == null){
                 throw new RuntimeException("Clone error");
             }
+
+          //dup time is right
+
             long duration = dup_event.getDurationMilliseconds();
             dup_event.setStartTime(time);
             dup_event.setEndTime(time + duration);
@@ -125,28 +153,75 @@ public class EventManager {
         }
     }
 
-    public void loadRepeatedEvent(long rangeStart, long rangeEnd){
-        this.nowRepeatedStartAt.setTimeInMillis(rangeStart);
-        this.nowRepeatedEndAt.setTimeInMillis(rangeEnd);
-        for (Event event:orgRepeatedEventList
-                ) {
-            this.addRepeatedEvent(event, rangeStart, rangeEnd);
+    public void refreshRepeatedEvent(long currentDate){
+        boolean reachPreFlg = currentDate < this.getLoadPreFlag();
+        boolean reachFurFlg = currentDate > this.getLoadFurFlag();
+        if (reachPreFlg || reachFurFlg){
+            //load more pre
+            if (reachPreFlg){
+                Calendar tempStart = Calendar.getInstance();
+                tempStart.setTimeInMillis(nowRepeatedStartAt.getTimeInMillis());
+                tempStart.add(Calendar.DATE,-defaultRepeatedRange);
+                for (Event event:orgRepeatedEventList
+                        ) {
+                    this.addRepeatedEvent(event, tempStart.getTimeInMillis(), nowRepeatedStartAt.getTimeInMillis());
+                }
+                nowRepeatedStartAt.setTimeInMillis(tempStart.getTimeInMillis());
+            }
+            //load more future
+            if (reachFurFlg){
+                Calendar tempEnd = Calendar.getInstance();
+                tempEnd.setTimeInMillis(nowRepeatedEndAt.getTimeInMillis());
+                tempEnd.add(Calendar.DATE,defaultRepeatedRange);
+                for (Event event:orgRepeatedEventList
+                        ) {
+                    this.addRepeatedEvent(event, nowRepeatedEndAt.getTimeInMillis(), tempEnd.getTimeInMillis());
+                }
+                nowRepeatedEndAt.setTimeInMillis(tempEnd.getTimeInMillis());
+            }
+
         }
     }
+
+    private long getLoadPreFlag(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(this.nowRepeatedStartAt.getTimeInMillis());
+        cal.add(Calendar.DATE, (int) (defaultRepeatedRange * (1 - refreshFlag)));
+        return cal.getTimeInMillis();
+    }
+
+    private long getLoadFurFlag(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(this.nowRepeatedStartAt.getTimeInMillis());
+        cal.add(Calendar.DATE, (int) (defaultRepeatedRange *  refreshFlag));
+        return cal.getTimeInMillis();
+    }
+
+//    public void loadRepeatedEvent(long rangeStart, long rangeEnd){
+//        this.nowRepeatedStartAt.setTimeInMillis(rangeStart);
+//        this.nowRepeatedEndAt.setTimeInMillis(rangeEnd);
+//        for (Event event:orgRepeatedEventList
+//                ) {
+//            this.removeRepeatedEvent(event);
+//            this.addRepeatedEvent(event, rangeStart, rangeEnd);
+//        }
+//    }
 
     public void removeRepeatedEvent(Event event){
         List<EventTracer> tracers = uidTracerMap.get(event.getEventUid());
-        for (EventTracer tracer:tracers
-                ) {
-            tracer.removeSelfFromRepeatedEventMap();
+        if (tracers != null){
+            for (EventTracer tracer:tracers
+                    ) {
+                tracer.removeSelfFromRepeatedEventMap();
+            }
+            uidTracerMap.remove(event.getEventUid());
         }
-        uidTracerMap.remove(event.getEventUid());
     }
 
-    public void updateRepeatedEvent(Event event){
-        removeRepeatedEvent(event);
-        addRepeatedEvent(event,nowRepeatedStartAt.getTimeInMillis(),nowRepeatedEndAt.getTimeInMillis());
-    }
+//    public void updateRepeatedEvent(Event event){
+//        removeRepeatedEvent(event);
+//        addRepeatedEvent(event,nowRepeatedStartAt.getTimeInMillis(),nowRepeatedEndAt.getTimeInMillis());
+//    }
 
     private long getDayBeginMilliseconds(long startTime){
         calendar.setTimeInMillis(startTime);

@@ -1,5 +1,7 @@
 package org.unimelb.itime.bean;
 
+import java.util.Date;
+
 /**
  * Created by yuhaoliu on 1/12/16.
  */
@@ -20,6 +22,9 @@ public class Message {
 
     boolean isRead;
     boolean hasBadge;
+
+    String createdAt = "";
+    String updatedAt = "";
 
     public int getNum1() {
         return num1;

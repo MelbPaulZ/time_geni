@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,9 @@ public class CalendarAgendaFragment extends BaseUiFragment {
         monthAgendaView.setOnHeaderListener(new MonthAgendaView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
+                Log.i("Header", "monthAgendaView: ");
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
+                EventManager.getInstance().refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
 

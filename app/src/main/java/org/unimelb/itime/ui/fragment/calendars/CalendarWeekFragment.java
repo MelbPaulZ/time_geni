@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.fragment.calendars;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class CalendarWeekFragment extends BaseUiFragment {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
+                EventManager.getInstance().refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });

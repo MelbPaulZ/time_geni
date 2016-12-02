@@ -3,6 +3,7 @@ package org.unimelb.itime.util.rulefactory;
 import android.util.Log;
 
 import org.antlr.v4.tool.Rule;
+import org.unimelb.itime.base.C;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -397,7 +398,10 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
     //range: [startRange, endRange)
     public ArrayList<Long> getOccurenceDates(long startRange, long endRange){
         ArrayList<Long> availableDates = new ArrayList<>();
-        long startTime = this.ruleInterface.getStartTime();
+        long startTime = this.ruleInterface.getStartTime();//right
+
+//        Calendar ca = Calendar.getInstance();
+//        ca.setTimeInMillis(startTime);
 
         if (startTime > endRange){
             return  availableDates;
@@ -407,10 +411,18 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
             if (startRange < startTime){
                 startRange = startTime;
             }
+
             int dayDiffer = getDayDiffer(startRange);
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(startRange);
             Date dt = new Date();
+
+            Calendar helper = Calendar.getInstance();
+            helper.setTimeInMillis(startTime);
+            int orgHour = helper.get(Calendar.HOUR);
+            int orgMinute = helper.get(Calendar.MINUTE);
+            cal.set(Calendar.HOUR,orgHour);
+            cal.set(Calendar.MINUTE,orgMinute);
 
             switch (frequencyEnum){
                 case DAILY: {
@@ -420,12 +432,12 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
 
                     long currentAvailableDate = cal.getTimeInMillis();
                     while(currentAvailableDate < endRange){
-                        currentAvailableDate = cal.getTimeInMillis();
                         dt.setTime(currentAvailableDate);
                         if (isInRDate(dt) || (currentAvailableDate >= startRange && !isInEXDate(dt))){
                             availableDates.add(currentAvailableDate);
                         }
                         cal.add(Calendar.DATE, interval);
+                        currentAvailableDate = cal.getTimeInMillis();
                     }
                     break;
                 }
@@ -436,12 +448,12 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
 
                     long currentAvailableDate = cal.getTimeInMillis();
                     while(currentAvailableDate < endRange){
-                        currentAvailableDate = cal.getTimeInMillis();
                         dt.setTime(currentAvailableDate);
                         if (isInRDate(dt) || (currentAvailableDate >= startRange && !isInEXDate(dt))){
                             availableDates.add(currentAvailableDate);
                         }
                         cal.add(Calendar.DATE, interval * 7);
+                        currentAvailableDate = cal.getTimeInMillis();
                     }
                 }
                 case MONTHLY:{
@@ -463,13 +475,13 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
 
                     long currentAvailableDate = cal.getTimeInMillis();
                     while(currentAvailableDate < endRange){
-                        currentAvailableDate = cal.getTimeInMillis();
                         dt.setTime(currentAvailableDate);
 
                         if (isInRDate(dt) || (currentAvailableDate >= startRange && !isInEXDate(dt))){
                             availableDates.add(currentAvailableDate);
                         }
                         cal.add(Calendar.MONTH, interval);
+                        currentAvailableDate = cal.getTimeInMillis();
                     }
                 }
                 case YEARLY:{
@@ -495,13 +507,13 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
 
                     long currentAvailableDate = cal.getTimeInMillis();
                     while(currentAvailableDate < endRange){
-                        currentAvailableDate = cal.getTimeInMillis();
                         dt.setTime(currentAvailableDate);
 
                         if (isInRDate(dt) || (currentAvailableDate >= startRange && !isInEXDate(dt))){
                             availableDates.add(currentAvailableDate);
                         }
                         cal.add(Calendar.YEAR, interval);
+                        currentAvailableDate = cal.getTimeInMillis();
                     }
                 }
 
