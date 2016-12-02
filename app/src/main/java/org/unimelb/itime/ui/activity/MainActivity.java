@@ -61,6 +61,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
@@ -182,11 +183,8 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         }
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        EventBus.getDefault().register(this);
-    }
+
+
 
     @Override
     protected void onDestroy() {

@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Toast;
+
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -17,11 +20,15 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.adapter.EventAdapter;
+import org.unimelb.itime.adapter.MessageAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.FragmentMainInboxBinding;
-import org.unimelb.itime.databinding.InboxHostBinding;
-import org.unimelb.itime.databinding.InboxInviteeBinding;
+import org.unimelb.itime.databinding.ListviewInboxHostBinding;
+import org.unimelb.itime.databinding.ListviewInboxInviteeBinding;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
@@ -45,17 +52,17 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
 
     private FragmentMainInboxBinding binding;
     private InboxViewModel inboxViewModel;
-    private InboxHostBinding inboxHostBinding;
-    private InboxInviteeBinding inboxInviteeBinding;
     private MainInboxPresenter presenter;
     private MessageApi msgApi;
+    private MessageAdapter messageAdapter;
+    private MainInboxFragment self;
 
     @Override
     public MainInboxPresenter createPresenter() {
         msgApi = HttpUtil.createService(getContext(), MessageApi.class);
 
         if (presenter == null) {
-            presenter = new MainInboxPresenter();
+            presenter = new MainInboxPresenter(getContext());
         }
         return presenter;
     }
@@ -64,8 +71,6 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_inbox, container, false);
-        inboxHostBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_host, container, false);
-        inboxInviteeBinding = DataBindingUtil.inflate(inflater, R.layout.inbox_invitee, container, false);
         return binding.getRoot();
     }
 
@@ -74,49 +79,52 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
         super.onActivityCreated(savedInstanceState);
         inboxViewModel = new InboxViewModel(presenter);
         binding.setVm(inboxViewModel);
-        inboxInviteeBinding.setVm(inboxViewModel);
-        inboxHostBinding.setVm(inboxViewModel);
-
-        SwipeMenuListView listView = (SwipeMenuListView) binding.getRoot().findViewById(R.id.inbox_listView);
+        self = this;
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
             public void create(SwipeMenu menu) {
-                // create "open" item
-                SwipeMenuItem openItem = new SwipeMenuItem(
-                        getContext());
-                // set item background
-                openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                        0xCE)));
-                // set item width
-                openItem.setWidth(90);
-                // set item title
-                openItem.setTitle("Open");
-                // set item title fontsize
-                openItem.setTitleSize(18);
-                // set item title font color
-                openItem.setTitleColor(Color.WHITE);
-                // add to menu
-                menu.addMenuItem(openItem);
-
                 // create "delete" item
                 SwipeMenuItem deleteItem = new SwipeMenuItem(
                         getContext());
                 // set item background
-                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-                        0x3F, 0x25)));
+//                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9, 0x3F, 0x25)));
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF4,0x5B,0x69)));
                 // set item width
-                deleteItem.setWidth(90);
+                deleteItem.setWidth(167);
+
                 // set a icon
-                deleteItem.setIcon(R.drawable.icon_event_location);
+                deleteItem.setIcon(R.drawable.icon_event_trash);
                 // add to menu
                 menu.addMenuItem(deleteItem);
             }
         };
 
-// set creator
-        listView.setMenuCreator(creator);
-        listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
+        // set creator
+        binding.inboxListview.setMenuCreator(creator);
+        binding.inboxListview.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
+
+        messageAdapter = new MessageAdapter(getContext(), null, inboxViewModel);
+        binding.inboxListview.setAdapter(messageAdapter);
+
+        binding.inboxListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Message message = inboxViewModel.getMessages().get(i);
+                message.setRead(true);
+                messageAdapter.setMessageList(inboxViewModel.getMessages());
+                Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
+                EventUtil.startEditEventActivity(getContext(), self.getActivity(), event);
+            }
+        });
+
+        binding.inboxListview.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                Toast.makeText(getContext(), "OnCLick Delete",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
     }
 
     public void postMessageUpdate(Message msg){
@@ -146,6 +154,9 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     }
 
     public void setData(List<Message> messages){
+        if (messageAdapter!=null){
+            messageAdapter.setMessageList(messages);
+        }
         inboxViewModel.setData(messages);
     }
 }
