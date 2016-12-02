@@ -3,8 +3,11 @@ package org.unimelb.itime.bean;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.annotation.Id;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.MessageDao;
+
+import static android.R.attr.id;
 
 /**
  * Created by yuhaoliu on 1/12/16.
@@ -14,6 +17,7 @@ public class Message {
     String title = "";
     String subtitle1 = "";
     String subtitle2 = "";
+    @Id
     String messageUid = "";
     String userUid = "";
     String eventUid = "";

@@ -118,6 +118,7 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Message message = inboxViewModel.getMessages().get(i);
                 message.setRead(true);
+                message.update();
                 // try copy message list and reset
                 inboxViewModel.setMessages(inboxViewModel.getMessages());
                 messageAdapter.setMessageList(inboxViewModel.getMessages());
@@ -163,15 +164,16 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getInboxMessage(MessageInboxMessage messageInboxMessage){
-        messageAdapter.setMessageList(messageInboxMessage.messages);
-        inboxViewModel.setData(messageInboxMessage.messages);
+        List<Message> messageList = DBManager.getInstance().getAllMessages();
+        messageAdapter.setMessageList(messageList);
+        inboxViewModel.setData(messageList);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        List<Message> messageList = DBManager.getInstance().getAllMessages();
+        List<Message> messageList = DBManager.getInstance(getContext()).getAllMessages();
         messageAdapter.setMessageList(messageList);
         inboxViewModel.setData(messageList);
     }
