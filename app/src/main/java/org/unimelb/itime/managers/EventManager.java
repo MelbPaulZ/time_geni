@@ -56,12 +56,6 @@ public class EventManager {
     private List<Event> waitingEditEventList= new ArrayList<>(); // this list contains all events that waits for update
 
     private EventManager() {
-//        Calendar cal = Calendar.getInstance();
-//        cal.add(Calendar.DATE,15);
-//        Calendar cal2 = Calendar.getInstance();
-//        cal2.add(Calendar.DATE,20);
-//        Log.i(TAG, "EventManager:CAL1 " + cal.getTime());
-//        Log.i(TAG, "EventManager:CAL2 " + cal2.getTime());
         setToBeginOfDay(nowRepeatedStartAt);
         setToBeginOfDay(nowRepeatedEndAt);
 
@@ -99,9 +93,6 @@ public class EventManager {
             }
         }else{
             orgRepeatedEventList.add(event);
-//            Calendar ca = Calendar.getInstance();
-//            ca.setTimeInMillis(event.getStartTime());
-//            Log.i(TAG, "addEvent: org info: " + ca.getTime());
             this.addRepeatedEvent(event,nowRepeatedStartAt.getTimeInMillis(),nowRepeatedEndAt.getTimeInMillis());
         }
     }
@@ -111,7 +102,6 @@ public class EventManager {
         event.setRule(rule);
 
         ArrayList<Long> repeatedEventsTimes = rule.getOccurenceDates(rangeStart,rangeEnd);
-//        Log.i(TAG, "id: " + event.getEventUid() +  "dup-size: " + repeatedEventsTimes.size() + " -- start: " + rangeStart + " end: " + rangeEnd);
         for (Long time: repeatedEventsTimes
                 ) {
             Event dup_event = null;
