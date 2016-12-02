@@ -19,6 +19,9 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.EventAdapter;
 import org.unimelb.itime.adapter.MessageAdapter;
@@ -28,7 +31,9 @@ import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.FragmentMainInboxBinding;
 import org.unimelb.itime.databinding.ListviewInboxHostBinding;
 import org.unimelb.itime.databinding.ListviewInboxInviteeBinding;
+import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
@@ -40,6 +45,7 @@ import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.Text2Drawable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -112,6 +118,9 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Message message = inboxViewModel.getMessages().get(i);
                 message.setRead(true);
+                message.update();
+                // try copy message list and reset
+                inboxViewModel.setMessages(inboxViewModel.getMessages());
                 messageAdapter.setMessageList(inboxViewModel.getMessages());
                 Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
                 EventUtil.startEditEventActivity(getContext(), self.getActivity(), event);
@@ -153,10 +162,26 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void setData(List<Message> messages){
-        if (messageAdapter!=null){
-            messageAdapter.setMessageList(messages);
-        }
-        inboxViewModel.setData(messages);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getInboxMessage(MessageInboxMessage messageInboxMessage){
+        List<Message> messageList = DBManager.getInstance().getAllMessages();
+        messageAdapter.setMessageList(messageList);
+        inboxViewModel.setData(messageList);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+        List<Message> messageList = DBManager.getInstance(getContext()).getAllMessages();
+        messageAdapter.setMessageList(messageList);
+        inboxViewModel.setData(messageList);
+    }
+
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }

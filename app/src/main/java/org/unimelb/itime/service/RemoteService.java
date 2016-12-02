@@ -119,6 +119,8 @@ public class RemoteService extends Service{
                 editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, listHttpResult.getSyncToken());
                 editor.apply();
 
+                DBManager.getInstance().insertMessageList(listHttpResult.getData());
+
                 //set data to inbox;
                 EventBus.getDefault().post(new MessageInboxMessage(listHttpResult.getData()));
             }
