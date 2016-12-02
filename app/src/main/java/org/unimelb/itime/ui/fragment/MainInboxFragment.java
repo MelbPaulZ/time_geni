@@ -113,7 +113,6 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
                 Message message = inboxViewModel.getMessages().get(i);
                 message.setRead(true);
                 messageAdapter.setMessageList(inboxViewModel.getMessages());
-                inboxViewModel.setData(inboxViewModel.getMessages());
                 Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
                 EventUtil.startEditEventActivity(getContext(), self.getActivity(), event);
             }

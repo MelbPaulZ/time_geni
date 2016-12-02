@@ -16,6 +16,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.viewmodel.InboxViewModel;
 import org.unimelb.itime.util.EventUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,6 @@ public class MessageAdapter extends BaseAdapter {
     private InboxViewModel viewModel;
     private final static int TYPE_INVITEE = 0;
     private final static int TYPE_HOST = 1;
-//    private int ASD;
 
     public MessageAdapter(Context context, List<Message> messageList, InboxViewModel inboxViewModel) {
         this.context = context;
@@ -38,7 +38,12 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     public void setMessageList(List<Message> messageList){
-        this.messageList = messageList;
+        if (this.messageList!=null){
+            this.messageList.clear();
+            this.messageList.addAll(messageList);
+        }else{
+            this.messageList = messageList;
+        }
         notifyDataSetChanged();
     }
 
