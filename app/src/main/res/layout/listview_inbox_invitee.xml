@@ -1,4 +1,4 @@
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="vm"
@@ -9,7 +9,7 @@
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="74dp">
+    android:layout_height="76dp">
     <ImageView
         android:id="@+id/inbox_avatar"
         android:layout_width="46dp"
@@ -22,22 +22,21 @@
         android:id="@+id/inbox_event_title"
         android:layout_width="236dp"
         android:layout_height="wrap_content"
-        android:text="Group meeting with Ical time"
+        android:text="@{vm.getTitle(position, vm.messages)}"
         android:textColor="@color/color_000000"
         android:textSize="17sp"
         android:layout_toRightOf="@+id/inbox_avatar"
         android:paddingLeft="7dp"
-        android:paddingTop="11dp"
+        android:paddingTop="10dp"
         />
     <TextView
         android:id="@+id/inbox_event_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/inbox_event_title"
         android:layout_toRightOf="@+id/inbox_avatar"
         android:paddingLeft="7dp"
-        android:paddingTop="2dp"
-        android:text="Alex invites you to this event"
+        android:layout_marginTop="33dp"
+        android:text="@{vm.getSubtitle1(position, vm.messages)}"
         android:textColor="@color/gray_9b9b9b"
         android:textSize="12sp"
         />
@@ -48,9 +47,9 @@
         android:layout_below="@+id/inbox_event_status"
         android:layout_toRightOf="@+id/inbox_avatar"
         android:paddingLeft="7dp"
-        android:paddingTop="2dp"
+        android:layout_marginBottom="10dp"
         android:textColor="@color/color_FF9600"
-        android:text="Waiting for your approval"
+        android:text="@{vm.getSubtitle2(position, vm.messages)}"
         android:textSize="12sp"
         />
     
@@ -60,6 +59,7 @@
         android:layout_height="10dp"
         android:layout_marginLeft="17dp"
         android:layout_marginTop="18dp"
+        app:dotVisible="@{vm.messages.get(position)}"
         android:background="@drawable/notification_red_dot"
         />
     <TextView
@@ -69,7 +69,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="12dp"
         android:textSize="10sp"
-        android:text="yesterday"
+        android:text="@{vm.getTime(position, vm.messages)}"
         android:textColor="@color/gray_9b9b9b"
         android:layout_alignParentEnd="true"
         />

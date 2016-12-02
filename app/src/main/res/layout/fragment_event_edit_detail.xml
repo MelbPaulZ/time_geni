@@ -308,7 +308,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toLeftOf="@+id/event_edit_calendarType_arrow"
                             android:layout_marginRight="@dimen/padding_10"
-                            android:text="@{EventUtil.getCalendarTypeFromIndex(context,eventEditVM.eventEditViewEvent.calendarUid)}"/>
+                            android:text=""/>
                         <TextView
                             android:layout_width="80dp"
                             android:layout_height="50dp"

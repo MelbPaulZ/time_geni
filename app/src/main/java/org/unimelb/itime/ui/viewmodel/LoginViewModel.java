@@ -17,7 +17,7 @@ public class LoginViewModel extends BaseObservable{
     LoginPresenter presenter;
 
 //    private String email = "johncdyin@gmail.com";
-    private String email = "liuyuhao@gmail.com";
+    private String email = "johncdyin@gmail.com";
     private String password = "123456";
 
     public LoginViewModel(LoginPresenter presenter){

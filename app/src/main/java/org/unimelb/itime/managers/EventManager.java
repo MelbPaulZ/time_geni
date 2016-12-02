@@ -234,7 +234,7 @@ public class EventManager {
                 return ev;
             }
         }
-        throw new RuntimeException("cannot find the event in Eventmanager");
+        throw new RuntimeException("cannot find the event in Eventmanager, eventUid:" + eventUid);
     }
 
     public Event copyCurrentEvent(Event event){

@@ -10,6 +10,8 @@ public class Message {
     String messageUid = "";
     String userUid = "";
     String eventUid = "";
+    String createdAt = "";
+    String updatedAt = "";
 
     int num1;
     int num2;
@@ -123,5 +125,21 @@ public class Message {
 
     public void setHasBadge(boolean hasBadge) {
         this.hasBadge = hasBadge;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
