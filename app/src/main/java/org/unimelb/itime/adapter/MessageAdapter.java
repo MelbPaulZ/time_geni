@@ -33,36 +33,31 @@ public class MessageAdapter extends BaseAdapter {
 
     public MessageAdapter(Context context, List<Message> messageList, InboxViewModel inboxViewModel) {
         this.context = context;
-        this.messageList = messageList;
-        this.viewModel = inboxViewModel;
-    }
-
-    public void setMessageList(List<Message> messageList){
-        if (this.messageList!=null){
-            this.messageList.clear();
-            this.messageList.addAll(messageList);
-        }else{
+        if (this.messageList == null) {
+            this.messageList = new ArrayList<>();
+        } else {
             this.messageList = messageList;
         }
+        this.viewModel = inboxViewModel;
+//        this.viewModel = new InboxViewModel();
+    }
+
+    public void setMessageList(List<Message> messageList) {
+        this.messageList = messageList;
         notifyDataSetChanged();
+        viewModel.setMessages(messageList);
     }
 
 
     @Override
     public int getCount() {
-        if (messageList== null)
-             return 0;
-        else
-            return messageList.size();
+        return messageList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        if (messageList!=null) {
-            return messageList.get(i);
-        }else{
-            return null;
-        }
+        return messageList.get(i);
+
     }
 
     @Override
@@ -79,30 +74,27 @@ public class MessageAdapter extends BaseAdapter {
     public int getItemViewType(int position) {
         Message message = messageList.get(position);
         Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
-        if (EventUtil.isUserHostOfEvent(event)){
+        if (EventUtil.isUserHostOfEvent(event)) {
             return TYPE_HOST;
-        }else{
+        } else {
             return TYPE_INVITEE;
         }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-        if (messageList != null) {
-            if (getItemViewType(position) == TYPE_HOST){
-                    inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
-                    inboxHostBinding.setVm(viewModel);
-                    inboxHostBinding.setPosition(position);
-                return inboxHostBinding.getRoot();
-            } else {
-                    inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
-                    inboxInviteeBinding.setVm(viewModel);
-                    inboxInviteeBinding.setPosition(position);
-                return inboxInviteeBinding.getRoot();
-            }
-        }else{
-            return null;
+        if (getItemViewType(position) == TYPE_HOST) {
+            inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
+            inboxHostBinding.setVm(viewModel);
+            inboxHostBinding.setPosition(position);
+            return inboxHostBinding.getRoot();
+        } else {
+            inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
+            inboxInviteeBinding.setVm(viewModel);
+            inboxInviteeBinding.setPosition(position);
+            return inboxInviteeBinding.getRoot();
         }
+
     }
 
 

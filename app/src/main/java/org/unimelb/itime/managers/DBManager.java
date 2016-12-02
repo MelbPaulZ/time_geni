@@ -6,10 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
+import org.unimelb.itime.dao.MessageDao;
 
 
 import java.util.List;
@@ -60,6 +62,19 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDaoDao = daoSession.getEventDao();
         eventDaoDao.insert(event);
+    }
+
+    public void insertMessage(Message message){
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        MessageDao messageDao = daoSession.getMessageDao();
+        messageDao.insert(message);
+    }
+
+    public void insertMessageList(List<Message> messageList){
+        for (Message message : messageList){
+            insertMessage(message);
+        }
     }
 
 //    public void insertPhoto(PhotoUrl photoUrl){
@@ -126,6 +141,15 @@ public class DBManager {
         EventDao eventDao = daoSession.getEventDao();
         QueryBuilder<Event> qb = eventDao.queryBuilder();
         List<Event> list = qb.list();
+        return list;
+    }
+
+    public List<Message> getAllMessages(){
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        MessageDao messageDao = daoSession.getMessageDao();
+        QueryBuilder<Message> qb = messageDao.queryBuilder();
+        List<Message> list = qb.list();
         return list;
     }
 

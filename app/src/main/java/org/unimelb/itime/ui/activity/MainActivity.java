@@ -61,7 +61,6 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
@@ -107,11 +106,6 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         return new MainTabBarPresenter(this);
     }
 
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getInboxMessage(MessageInboxMessage messageInboxMessage){
-        ((MainInboxFragment)tagFragments[2]).setData(messageInboxMessage.messages);
-    }
     private void init(){
         tagFragments = new MvpFragment[4];
         tagFragments[0] = new MainCalendarFragment();
@@ -181,14 +175,5 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
             ((MainCalendarFragment)tagFragments[0]).reloadEvent();
         }
-    }
-
-
-
-
-    @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
     }
 }

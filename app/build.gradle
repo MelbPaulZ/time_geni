@@ -49,7 +49,7 @@ android {
 }
 
 greendao {
-    schemaVersion 40
+    schemaVersion 41
     daoPackage "org.unimelb.itime.dao"
 }
 
