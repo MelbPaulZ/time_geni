@@ -1,175 +1,90 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+    <data>
+        <variable
+            name="vm"
+            type="org.unimelb.itime.ui.viewmodel.TimeslotInviteeResponseViewModel"/>
+    </data>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/invitee_view_back_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/invitee_view_back_arrow"
-                    android:text="@string/back" />
-
-                <TextView
-                    android:id="@+id/invitee_view_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:text="14:00 PM - 15:00 PM"
-                    android:textColor="@color/black"
-                    android:textSize="17dp" />
-
-                <ImageView
-                    android:id="@+id/invitee_view_back_arrow"
-                    android:layout_width="12dp"
-                    android:layout_height="21dp"
-                    android:layout_marginLeft="@dimen/padding_5"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/icon_general_back" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2">
-
-                <TextView
-                    android:id="@+id/invitee_view_subtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:text="WED 20/7"
-                    android:textAlignment="center"
-                    android:textSize="12dp" />
-            </RelativeLayout>
-        </LinearLayout>
-    </android.support.v7.widget.Toolbar>
-    <!--<ScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content">-->
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/bg_new_event_edit">
-        <!--first blank-->
-        <TextView
-            android:id="@+id/invitee_first_blank"
-            android:layout_width="match_parent"
-            android:layout_height="25dp" />
-        <!--accept line-->
-        <TextView
-            android:id="@+id/invitee_accept_title"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_below="@+id/invitee_first_blank"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/padding_10"
-            android:text="@string/accept"
-            android:textColor="@color/gray_b2b2b2"
-            android:textSize="@dimen/subtitle_14dp" />
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/invitee_list1_bg"
+        <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/invitee_accept_title"
-            android:paddingLeft="@dimen/padding_10"
-            android:background="@color/white">
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-            <org.unimelb.itime.widget.NonScrollListView
-                android:id="@+id/invitee_accept_listview"
-                android:fastScrollEnabled="false"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"/>
-        </LinearLayout>
-        <!--blank2-->
-        <TextView
-            android:id="@+id/invitee_second_blank"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_below="@+id/invitee_list1_bg" />
-
-        <TextView
-            android:id="@+id/invitee_reject_subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_below="@id/invitee_second_blank"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="@string/rejected"
-            android:textColor="@color/gray_b2b2b2"
-            android:textSize="@dimen/subtitle_14dp" />
-        <LinearLayout
-            android:id="@+id/invitee_list2_bg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/padding_10"
-            android:background="@color/white"
-            android:layout_below="@+id/invitee_reject_subtitle">
-            <org.unimelb.itime.widget.NonScrollListView
-                android:id="@+id/invitee_reject_listview"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
-        </LinearLayout>
+                android:orientation="vertical">
 
-        <!--blank3-->
-        <TextView
-            android:id="@+id/invitee_third_blank"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_below="@id/invitee_list2_bg" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/not_respond_subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_below="@+id/invitee_third_blank"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="@string/not_responded"
-            android:textColor="@color/gray_b2b2b2"
-            android:textSize="@dimen/subtitle_14dp" />
+                    <TextView
+                        android:id="@+id/invitee_view_back_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/invitee_view_back_arrow"
+                        android:text="@string/back" />
 
-        <LinearLayout
+                    <TextView
+                        android:id="@+id/invitee_view_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="@{vm.getTimeTitle(vm.responseTimeslot)}"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
+
+                    <ImageView
+                        android:id="@+id/invitee_view_back_arrow"
+                        android:layout_width="12dp"
+                        android:layout_height="21dp"
+                        android:layout_marginLeft="@dimen/padding_5"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/icon_general_back" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:id="@+id/invitee_view_subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:text="@{vm.getSubTimeTitle(vm.responseTimeslot)}"
+                        android:textAlignment="center"
+                        android:textSize="12dp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+        <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<ScrollView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+        <ListView
+            android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingLeft="@dimen/padding_10"
-            android:layout_below="@+id/not_respond_subtitle">
-            <org.unimelb.itime.widget.NonScrollListView
-                android:id="@+id/not_respond_listview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                ></org.unimelb.itime.widget.NonScrollListView>
-        </LinearLayout>
+            android:layout_height="match_parent">
+        </ListView>
+        <!--</ScrollView>-->
+
     </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+</layout>

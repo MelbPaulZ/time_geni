@@ -143,6 +143,16 @@ public class EventUtil{
 
     }
 
+    public static String getDayOfWeekString(Context context, Long startTime){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(startTime);
+        String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
+        String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+
+        return dayOfWeek + " " + day + "/" + month;
+    }
+
 
     public static int generateTimeSlotUid(){
         int uid = (int)(Math.random() * 1000000);

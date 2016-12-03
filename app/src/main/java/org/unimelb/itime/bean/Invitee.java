@@ -1,11 +1,21 @@
 package org.unimelb.itime.bean;
 
 import android.support.annotation.Nullable;
+import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
@@ -22,6 +32,31 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
     private String reason = "";
     private int isHost;
 
+    @Convert(converter = Invitee.SlotResponseConverter.class , columnType = String.class)
+    private List<SlotResponse> inviteeTimeslot = new ArrayList<>();
+
+    public static class SlotResponseConverter implements PropertyConverter<List<SlotResponse>,String> {
+        Gson gson = new Gson();
+
+        @Override
+        public List<SlotResponse> convertToEntityProperty(String databaseValue) {
+            Type listType = new TypeToken<List<SlotResponse>>() {}.getType();
+            return gson.fromJson(databaseValue, listType);
+        }
+
+        @Override
+        public String convertToDatabaseValue(List<SlotResponse> entityProperty) {
+            return gson.toJson(entityProperty);
+        }
+    }
+
+    public List<SlotResponse> getSlotResponses() {
+        return inviteeTimeslot;
+    }
+
+    public void setSlotResponses(ArrayList<SlotResponse> slotResponses) {
+        this.inviteeTimeslot = slotResponses;
+    }
 
     public String getReason() {
         return reason;
@@ -106,4 +141,6 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
     public void setIsHost(int isHost) {
         this.isHost = isHost;
     }
+
+
 }

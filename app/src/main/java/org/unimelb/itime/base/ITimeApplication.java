@@ -8,6 +8,8 @@ import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.SaveCallback;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import org.unimelb.itime.util.GreenDaoUtil;
 
 /**
@@ -20,6 +22,7 @@ public class ITimeApplication extends MultiDexApplication{
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         GreenDaoUtil.init(this);
         registerLeanCloud();
     }
