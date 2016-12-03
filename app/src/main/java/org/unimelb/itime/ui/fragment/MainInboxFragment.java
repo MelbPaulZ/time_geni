@@ -1,16 +1,21 @@
 package org.unimelb.itime.ui.fragment;
 
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -44,6 +49,7 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.Text2Drawable;
+import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +60,7 @@ import rx.Subscriber;
 /**
  * required login, need to extend BaseUiAuthFragment
  */
-public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView{
+public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView, SearchView.OnQueryTextListener{
 
     private FragmentMainInboxBinding binding;
     private InboxViewModel inboxViewModel;
@@ -83,8 +89,6 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        inboxViewModel = new InboxViewModel(presenter);
-        binding.setVm(inboxViewModel);
         self = this;
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
@@ -110,18 +114,17 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
         binding.inboxListview.setMenuCreator(creator);
         binding.inboxListview.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
 
-        messageAdapter = new MessageAdapter(getContext(), null, inboxViewModel);
+        messageAdapter = new MessageAdapter(getContext(),presenter);
         binding.inboxListview.setAdapter(messageAdapter);
 
         binding.inboxListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Message message = inboxViewModel.getMessages().get(i);
+                Message message = (Message) messageAdapter.getItem(i);
                 message.setRead(true);
                 message.update();
                 // try copy message list and reset
-                inboxViewModel.setMessages(inboxViewModel.getMessages());
-                messageAdapter.setMessageList(inboxViewModel.getMessages());
+                messageAdapter.notifyDataSetChanged();
                 Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
                 EventUtil.startEditEventActivity(getContext(), self.getActivity(), event);
             }
@@ -134,7 +137,24 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
                 return false;
             }
         });
+        initSearch();
     }
+
+    private void initSearch(){
+        SearchManager searchManager = (SearchManager)
+                getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) binding.getRoot().findViewById(R.id.message_searchview);
+        searchView.setSearchableInfo(searchManager.
+                getSearchableInfo(getActivity().getComponentName()));
+//        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.setIconifiedByDefault(false);
+
+    }
+
+
 
     public void postMessageUpdate(Message msg){
         Observable<HttpResult<String>> observable = msgApi.read(msg.getEventUid(),msg.isRead() ? 1 : 0);
@@ -166,7 +186,6 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     public void getInboxMessage(MessageInboxMessage messageInboxMessage){
         List<Message> messageList = DBManager.getInstance().getAllMessages();
         messageAdapter.setMessageList(messageList);
-        inboxViewModel.setData(messageList);
     }
 
     @Override
@@ -175,7 +194,6 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
         EventBus.getDefault().register(this);
         List<Message> messageList = DBManager.getInstance(getContext()).getAllMessages();
         messageAdapter.setMessageList(messageList);
-        inboxViewModel.setData(messageList);
     }
 
 
@@ -183,5 +201,16 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String constrains) {
+        messageAdapter.getFilter().filter(constrains);
+        return false;
     }
 }

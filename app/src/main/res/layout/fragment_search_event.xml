@@ -6,10 +6,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <android.support.v7.widget.SearchView
-            android:id="@+id/event_search_view"
+        <LinearLayout
             android:layout_width="295dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/event_search_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/search_gray_round_background"/>
+            </LinearLayout>
         <TextView
             android:id="@+id/event_search_cancel_btn"
             android:text="@string/cancel"
@@ -18,7 +27,7 @@
             android:textSize="15sp"
             android:layout_gravity="center"
             android:paddingRight="8dp"
-            android:textColor="@color/gray_b2b2b2"/>
+            android:textColor="@color/color_a2a2a2"/>
     </LinearLayout>
     <ListView
         android:id="@+id/event_search_result_listview"

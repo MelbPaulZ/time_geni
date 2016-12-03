@@ -36,8 +36,7 @@
                     android:id="@+id/event_search_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_toRightOf="@+id/three_lines"
-                    android:layout_marginLeft="@dimen/padding_5"
+                    android:layout_marginLeft="58dp"
                     android:background="@drawable/icon_search"
                     android:layout_centerVertical="true"/>
 

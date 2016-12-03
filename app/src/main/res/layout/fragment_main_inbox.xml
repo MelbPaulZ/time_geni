@@ -1,11 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable
-            name="vm"
-            type="org.unimelb.itime.ui.viewmodel.InboxViewModel"/>
-    </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -52,6 +47,7 @@
             android:layout_below="@id/toolbar_layout"
             >
             <android.support.v7.widget.SearchView
+                android:id="@+id/message_searchview"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"

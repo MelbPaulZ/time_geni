@@ -23,70 +23,60 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static android.R.id.message;
+
 /**
  * Created by Paul on 1/12/16.
  */
 public class InboxViewModel extends CommonViewModel {
     private MainInboxPresenter presenter;
-    private List<Message> messages;
+    private Message message;
 
     public InboxViewModel(MainInboxPresenter presenter) {
         this.presenter = presenter;
     }
 
-
-    public void setData(List<Message> messages){
-        this.messages = messages;
-    }
-
-    public String getTag1(int position, List<Message> messages){
-        Message message = messages.get(position);
+    public String getTag1(Context context){
         Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
         if (EventUtil.isUserHostOfEvent(event)){
             if (event.getStatus().equals("confirmed")){
                 int goingNum = message.getNum1();
-                return goingNum + " " + presenter.getContext().getString(R.string.going);
+                return goingNum + " " + context.getString(R.string.going);
             }else{
                 int acceptNum = message.getNum1();
-                return acceptNum + " " + presenter.getContext().getString(R.string.accept);
+                return acceptNum + " " + context.getString(R.string.accept);
             }
         }
         return "this is invitee";
     }
 
-    public String getTag2(int position, List<Message> messages){
-        Message message = messages.get(position);
+    public String getTag2(Context context){
         Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
         if (EventUtil.isUserHostOfEvent(event)){
             if (event.getStatus().equals("confirmed")){
                 int noReplyNum = message.getNum3();
-                return noReplyNum + " " + presenter.getContext().getString(R.string.no_reply);
+                return noReplyNum + " " + context.getString(R.string.no_reply);
             }else{
                 int rejectNum = message.getNum2();
-                return rejectNum + " " + presenter.getContext().getString(R.string.reject);
+                return rejectNum + " " + context.getString(R.string.reject);
             }
         }
         return "this is invitee";
     }
 
-    public String getTag3(int position, List<Message> messages){
-        Message message = messages.get(position);
+    public String getTag3(Context context){
         Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
         if (EventUtil.isUserHostOfEvent(event)){
             if (event.getStatus().equals("confirmed")){
                 return null;
             }else{
                 int noReplyNum = message.getNum3();
-                return noReplyNum + " " + presenter.getContext().getString(R.string.no_reply);
+                return noReplyNum + " " + context.getString(R.string.no_reply);
             }
         }
         return "this is invitee";
     }
 
-    public String getTitle(int position, List<Message> messages){
-        Message message = messages.get(position);
-        return message.getTitle();
-    }
 
     @BindingAdapter({"bind:dotVisible"})
     public static void setDotVisible(ImageView view, Message message){
@@ -128,44 +118,19 @@ public class InboxViewModel extends CommonViewModel {
     public static void setVisible(TextView view, Message message){
         Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
         if (event.getStatus().equals("confirmed")){
-            view.setVisibility(View.INVISIBLE);
+            view.setVisibility(View.GONE);
         }else{
             view.setVisibility(View.VISIBLE);
         }
     }
 
-    public String getTime(int position, List<Message> messages){
-        // need to change later
-        Message message = messages.get(position);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try{
-            Date date = sdf.parse(message.getUpdatedAt());
-            Calendar calendar = Calendar.getInstance();
-
-        }catch (Exception e){
-            throw new RuntimeException("format updated time error");
-        }
-
-        return message.getUpdatedAt();
-    }
-
-    public String getSubtitle1(int position, List<Message> messages){
-        Message message = messages.get(position);
-        return message.getSubtitle1();
-    }
-
-    public String getSubtitle2(int position, List<Message> messages){
-        Message message = messages.get(position);
-        return message.getSubtitle2();
-    }
-
     @Bindable
-    public List<Message> getMessages() {
-        return messages;
+    public Message getMessage() {
+        return message;
     }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-        notifyPropertyChanged(BR.messages);
+    public void setMessage(Message message) {
+        this.message = message;
+        notifyPropertyChanged(BR.message);
     }
 }
