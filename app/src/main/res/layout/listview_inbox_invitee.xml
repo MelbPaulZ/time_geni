@@ -4,8 +4,8 @@
             name="vm"
             type="org.unimelb.itime.ui.viewmodel.InboxViewModel"/>
         <variable
-            name="position"
-            type="Integer"/>
+            name="message"
+            type="org.unimelb.itime.bean.Message"/>
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         android:id="@+id/inbox_event_title"
         android:layout_width="236dp"
         android:layout_height="wrap_content"
-        android:text="@{vm.getTitle(position, vm.messages)}"
+        android:text="@{vm.message.title}"
         android:textColor="@color/color_000000"
         android:textSize="17sp"
         android:layout_toRightOf="@+id/inbox_avatar"
@@ -36,7 +36,7 @@
         android:layout_toRightOf="@+id/inbox_avatar"
         android:paddingLeft="7dp"
         android:layout_marginTop="33dp"
-        android:text="@{vm.getSubtitle1(position, vm.messages)}"
+        android:text="@{vm.message.subtitle1}"
         android:textColor="@color/gray_9b9b9b"
         android:textSize="12sp"
         />
@@ -49,7 +49,7 @@
         android:paddingLeft="7dp"
         android:layout_marginBottom="10dp"
         android:textColor="@color/color_FF9600"
-        android:text="@{vm.getSubtitle2(position, vm.messages)}"
+        android:text="@{vm.message.subtitle2}"
         android:textSize="12sp"
         />
     
@@ -59,7 +59,7 @@
         android:layout_height="10dp"
         android:layout_marginLeft="17dp"
         android:layout_marginTop="18dp"
-        app:dotVisible="@{vm.messages.get(position)}"
+        app:dotVisible="@{vm.message}"
         android:background="@drawable/notification_red_dot"
         />
     <TextView
@@ -69,7 +69,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="12dp"
         android:textSize="10sp"
-        android:text="@{vm.getTime(position, vm.messages)}"
+        android:text="@{vm.message.updatedAt}"
         android:textColor="@color/gray_9b9b9b"
         android:layout_alignParentEnd="true"
         />

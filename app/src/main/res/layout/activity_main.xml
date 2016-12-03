@@ -24,44 +24,106 @@
         <LinearLayout
             android:id="@+id/main_tab_ll"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true">
-
-            <TextView
-                android:id="@+id/main_tab_calendar_tv"
-                style="@style/main_tab"
+            
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/tab_calendar"
+                android:layout_height="50dp"
+                android:layout_weight="1"
                 android:onClick="@{tabBarVM.onTabBarClick(0)}"
-                />
-
-            <TextView
-                android:id="@+id/main_tab_contact_tv"
-                style="@style/main_tab"
+                >
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/ic_calendar_tab"/>
+                <TextView
+                    android:id="@+id/main_tab_calendar_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/tab_calendar"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="10sp"
+                    />
+            </RelativeLayout>
+            
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/tab_contact"
+                android:layout_height="50dp"
+                android:layout_weight="1"
                 android:onClick="@{tabBarVM.onTabBarClick(1)}"
-                />
-
-            <TextView
-                android:id="@+id/main_tab_inbox_tv"
-                style="@style/main_tab"
+                >
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/ic_contact"/>
+                <TextView
+                    android:id="@+id/main_tab_contact_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_contact"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="10sp"
+                    />
+            </RelativeLayout>
+            
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/tab_inbox"
+                android:layout_height="50dp"
+                android:layout_weight="1"
                 android:onClick="@{tabBarVM.onTabBarClick(2)}"
-                />
+                >
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/ic_mail"/>
+                <TextView
+                    android:id="@+id/main_tab_inbox_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_inbox"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="10sp"
+                    />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/main_tab_setting_tv"
-                style="@style/main_tab"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/tab_setting"
+                android:layout_height="50dp"
+                android:layout_weight="1"
                 android:onClick="@{tabBarVM.onTabBarClick(3)}"
-                />
+                >
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/ic_setting"
+                    />
+                <TextView
+                    android:id="@+id/main_tab_setting_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_setting"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="10sp"
+                    />
+            </RelativeLayout>
+
         </LinearLayout>
     </RelativeLayout>
 </layout>

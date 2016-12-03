@@ -153,14 +153,12 @@ public class DBManager {
         return list;
     }
 
-//    public List<Invitee> getAllInvitee(){
-//        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
-//        DaoSession daoSession = daoMaster.newSession();
-//        InviteeDao inviteeDao = daoSession.getInviteeDao();
-//        QueryBuilder<Invitee> qb = inviteeDao.queryBuilder();
-//        List<Invitee> list = qb.list();
-//        return list;
-//    }
+    public void deleteAllMessages(){
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        MessageDao messageDao = daoSession.getMessageDao();
+        messageDao.deleteAll();
+    }
 
     public List<Contact> getAllContact(){
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());

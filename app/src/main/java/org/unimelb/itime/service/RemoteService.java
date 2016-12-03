@@ -107,7 +107,7 @@ public class RemoteService extends Service{
 
             @Override
             public void onError(Throwable e) {
-                Log.i(TAG, "onError: " + "messageApi");
+                Log.i(TAG, "onError: " + "messageApi" + e.getMessage());
             }
 
             @Override
@@ -119,6 +119,7 @@ public class RemoteService extends Service{
                 editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, listHttpResult.getSyncToken());
                 editor.apply();
 
+                DBManager.getInstance().deleteAllMessages();
                 DBManager.getInstance().insertMessageList(listHttpResult.getData());
 
                 //set data to inbox;
