@@ -135,7 +135,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
             monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
             monthDayView.reloadEvents();
-            monthDayView.requestLayout();
+//            monthDayView.requestLayout();
         }
     }
 

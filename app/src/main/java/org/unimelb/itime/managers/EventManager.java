@@ -41,7 +41,7 @@ public class EventManager {
 
     private EventsPackage eventsPackage = new EventsPackage();
 
-    private final int defaultRepeatedRange = 100;
+    private final int defaultRepeatedRange = 1000;
     private final float refreshFlag = 0.8f;
 
     private Calendar nowRepeatedEndAt = Calendar.getInstance();
@@ -182,7 +182,7 @@ public class EventManager {
 
     private long getLoadFurFlag(){
         Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(this.nowRepeatedStartAt.getTimeInMillis());
+        cal.setTimeInMillis(this.nowRepeatedEndAt.getTimeInMillis());
         cal.add(Calendar.DATE, (int) (defaultRepeatedRange *  refreshFlag));
         return cal.getTimeInMillis();
     }
