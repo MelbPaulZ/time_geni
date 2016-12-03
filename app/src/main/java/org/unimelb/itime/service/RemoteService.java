@@ -90,7 +90,7 @@ public class RemoteService extends Service{
             public void onNext(HttpResult<List<org.unimelb.itime.bean.Calendar>> httpResult) {
                 CalendarUtil.getInstance().setCalendar(httpResult.getData());
                 fetchEvents();
-                fetchMessages();
+//                fetchMessages();
             }
         };
         HttpUtil.subscribe(calendarApi.list(), subscriber);
@@ -153,7 +153,6 @@ public class RemoteService extends Service{
             @Override
             public void onNext(final HttpResult<List<Event>> result) {
                 final List<Event> eventList = result.getData();
-
                 //update syncToken
                 SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = sp.edit();
@@ -166,6 +165,7 @@ public class RemoteService extends Service{
                         // successfully get event from server
                         EventManager.getInstance().loadDB();
                         EventManager.getInstance().updateDB(eventList);
+                        fetchMessages(); // after insert event in db, then fetch events, and will never cannot find eventUid
                         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                         Log.i(TAG, "onNext: " + result.getData().size());
                     }
