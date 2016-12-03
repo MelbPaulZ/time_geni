@@ -133,7 +133,12 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
         binding.inboxListview.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Toast.makeText(getContext(), "OnCLick Delete",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Delete Message",Toast.LENGTH_SHORT).show();
+                Log.i("db size before", "onMenuItemClick: " + DBManager.getInstance().getAllMessages().size());
+                Message msg = DBManager.getInstance().getAllMessages().get(position);
+                msg.delete();
+                Log.i("db size after", "onMenuItemClick: " + DBManager.getInstance().getAllMessages().size());
+                messageAdapter.setMessageList(DBManager.getInstance().getAllMessages());
                 return false;
             }
         });
