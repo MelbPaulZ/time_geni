@@ -17,74 +17,70 @@
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/invitee_view_back_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/invitee_view_back_arrow"
-                        android:text="@string/back" />
-
-                    <TextView
-                        android:id="@+id/invitee_view_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="@{vm.getTimeTitle(vm.responseTimeslot)}"
-                        android:textColor="@color/black"
-                        android:textSize="14dp" />
+                    android:orientation="horizontal"
+                    android:layout_alignParentLeft="true">
 
                     <ImageView
                         android:id="@+id/invitee_view_back_arrow"
-                        android:layout_width="12dp"
-                        android:layout_height="21dp"
+                        android:layout_width="15dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/padding_5"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
                         android:background="@drawable/icon_general_back" />
-                </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/invitee_view_back_btn"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:textSize="15sp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/back" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="2">
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/invitee_view_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:textAlignment="center"
+                        android:text="@{vm.getTimeTitle(vm.responseTimeslot)}"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/invitee_view_subtitle"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="@{vm.getSubTimeTitle(vm.responseTimeslot)}"
                         android:textAlignment="center"
-                        android:textSize="12dp" />
-                </RelativeLayout>
-            </LinearLayout>
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </RelativeLayout>
         </android.support.v7.widget.Toolbar>
-        <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
 
-        <!--<ScrollView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </ListView>
-        <!--</ScrollView>-->
 
     </LinearLayout>
 </layout>

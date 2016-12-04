@@ -105,7 +105,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     @Override
     public void viewInviteeResponse(Timeslot timeSlot) {
         InviteeTimeslotFragment inviteeTimeslotFragment = (InviteeTimeslotFragment) getFragmentManager().findFragmentByTag(InviteeTimeslotFragment.class.getSimpleName());
-        inviteeTimeslotFragment.setData(adapterData.get(timeSlot.getTimeslotUid()),timeSlot);
+        inviteeTimeslotFragment.setData(this.event, adapterData.get(timeSlot.getTimeslotUid()),timeSlot);
         switchFragment(this, inviteeTimeslotFragment);
     }
 

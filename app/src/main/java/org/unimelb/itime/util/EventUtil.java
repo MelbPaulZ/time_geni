@@ -143,6 +143,24 @@ public class EventUtil{
 
     }
 
+    public static String getSlotStringFromLong(Context context, Long startTime,Long endtime){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(startTime);
+        String startTimeHour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+        String startMinute = calendar.get(Calendar.MINUTE)<10? "0" + String.valueOf(calendar.get(Calendar.MINUTE)) : String.valueOf(calendar.get(Calendar.MINUTE));
+        String startAmOrPm = calendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
+
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTimeInMillis(endtime);
+        String endTimeHour = String.valueOf(endCalendar.get(Calendar.HOUR_OF_DAY));
+        String endTimeMinute = endCalendar.get(Calendar.MINUTE)<10? "0" + String.valueOf(endCalendar.get(Calendar.MINUTE)) : String.valueOf(endCalendar.get(Calendar.MINUTE));
+        String endAmOrPm = endCalendar.get(Calendar.HOUR_OF_DAY) >=12? "PM": "AM";
+
+        return startTimeHour + ":" + startMinute +
+                " " + startAmOrPm + " - " + endTimeHour + ":" + endTimeMinute + endAmOrPm;
+
+    }
+
     public static String getDayOfWeekString(Context context, Long startTime){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime);

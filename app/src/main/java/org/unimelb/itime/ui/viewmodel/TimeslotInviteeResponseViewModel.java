@@ -40,7 +40,7 @@ public class TimeslotInviteeResponseViewModel extends CommonViewModel {
             return  "";
         }
 
-        return EventUtil.getSuggestTimeStringFromLong(presenter.getContext()
+        return EventUtil.getSlotStringFromLong(presenter.getContext()
                 ,timeslot.getStartTime()
                 ,timeslot.getEndTime());
     }

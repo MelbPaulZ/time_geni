@@ -5,9 +5,12 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.messageevent.MessageEventRefresh;
+import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -41,7 +44,8 @@ public class EventManager {
 
     private EventsPackage eventsPackage = new EventsPackage();
 
-    private final int defaultRepeatedRange = 1000;
+    private final int defaultRepeatedRange = 500;
+    // [0 - 1] percentage of frag for load more fur/pre event
     private final float refreshFlag = 0.8f;
 
     private Calendar nowRepeatedEndAt = Calendar.getInstance();
@@ -64,6 +68,8 @@ public class EventManager {
 
         eventsPackage.setRepeatedEventMap(repeatedEventMap);
         eventsPackage.setRegularEventMap(regularEventMap);
+
+//        EventBus.getDefault().register(this);
     }
 
     private Calendar setToBeginOfDay(Calendar cal){
@@ -146,6 +152,7 @@ public class EventManager {
     public void refreshRepeatedEvent(long currentDate){
         boolean reachPreFlg = currentDate < this.getLoadPreFlag();
         boolean reachFurFlg = currentDate > this.getLoadFurFlag();
+        Log.i(TAG, "refreshRepeatedEvent: ");
         if (reachPreFlg || reachFurFlg){
             //load more pre
             if (reachPreFlg){
@@ -169,7 +176,7 @@ public class EventManager {
                 }
                 nowRepeatedEndAt.setTimeInMillis(tempEnd.getTimeInMillis());
             }
-
+            EventBus.getDefault().post(new MessageEventRefresh());
         }
     }
 
@@ -183,7 +190,7 @@ public class EventManager {
     private long getLoadFurFlag(){
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(this.nowRepeatedEndAt.getTimeInMillis());
-        cal.add(Calendar.DATE, (int) (defaultRepeatedRange *  refreshFlag));
+        cal.add(Calendar.DATE, (int) (- defaultRepeatedRange * (1-refreshFlag)));
         return cal.getTimeInMillis();
     }
 

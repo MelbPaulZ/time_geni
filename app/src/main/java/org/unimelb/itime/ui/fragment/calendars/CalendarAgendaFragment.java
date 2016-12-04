@@ -20,6 +20,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.messageevent.MessageEvent;
+import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.presenter.CommonPresenter;
@@ -74,6 +75,11 @@ public class CalendarAgendaFragment extends BaseUiFragment {
 
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(MessageEventRefresh messageEvent){
+        monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
     }
 
     @Override
