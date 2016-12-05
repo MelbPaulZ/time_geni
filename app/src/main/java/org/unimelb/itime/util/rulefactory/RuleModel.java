@@ -400,8 +400,9 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
         ArrayList<Long> availableDates = new ArrayList<>();
         long startTime = this.ruleInterface.getStartTime();//right
 
-//        Calendar ca = Calendar.getInstance();
-//        ca.setTimeInMillis(startTime);
+        Calendar ca = Calendar.getInstance();
+        ca.setTimeInMillis(startTime);
+        int orgorgHour = ca.get(Calendar.HOUR);
 
         if (startTime > endRange){
             return  availableDates;

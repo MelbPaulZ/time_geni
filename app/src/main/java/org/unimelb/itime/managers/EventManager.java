@@ -47,9 +47,9 @@ public class EventManager {
 
     private EventsPackage eventsPackage = new EventsPackage();
 
-    private final int defaultRepeatedRange = 500;
+    private final int defaultRepeatedRange = 1000;
     // [0 - 1] percentage of frag for load more fur/pre event
-    private final float refreshFlag = 0.8f;
+    private final float refreshFlag = 0.9f;
 
     private Calendar nowRepeatedEndAt = Calendar.getInstance();
     private Calendar nowRepeatedStartAt = Calendar.getInstance();

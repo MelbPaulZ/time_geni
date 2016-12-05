@@ -3,7 +3,6 @@ package org.unimelb.itime.ui.viewmodel;
 import android.databinding.BaseObservable;
 import android.view.View;
 
-import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.presenter.MainSettingsPresenter;
 
 /**
