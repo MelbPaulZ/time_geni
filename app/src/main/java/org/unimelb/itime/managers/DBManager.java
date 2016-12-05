@@ -33,10 +33,8 @@ public class DBManager {
 
     public static DBManager getInstance() {
         if (mInstance == null) {
-            synchronized (DBManager.class)
-            {
-                if (mInstance == null)
-                {
+            synchronized (DBManager.class) {
+                if (mInstance == null) {
                     throw new RuntimeException("DBManager is null");
                 }
             }
@@ -46,15 +44,13 @@ public class DBManager {
 
     public static DBManager getInstance(Context context) {
         if (mInstance == null) {
-            synchronized (DBManager.class)
-        {
-            if (mInstance == null)
-                {
+            synchronized (DBManager.class) {
+                if (mInstance == null) {
                     mInstance = new DBManager(context);
                 }
+            }
         }
-        }
-            return mInstance;
+        return mInstance;
     }
 
 
@@ -65,15 +61,15 @@ public class DBManager {
         eventDaoDao.insert(event);
     }
 
-    public void insertMessage(Message message){
+    public void insertMessage(Message message) {
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
         messageDao.insert(message);
     }
 
-    public void insertMessageList(List<Message> messageList){
-        for (Message message : messageList){
+    public void insertMessageList(List<Message> messageList) {
+        for (Message message : messageList) {
             insertMessage(message);
         }
     }
@@ -145,7 +141,7 @@ public class DBManager {
         return list;
     }
 
-    public List<Message> getAllMessages(){
+    public List<Message> getAllMessages() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
@@ -154,14 +150,14 @@ public class DBManager {
         return list;
     }
 
-    public void deleteAllMessages(){
+    public void deleteAllMessages() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
         messageDao.deleteAll();
     }
 
-    public List<Contact> getAllContact(){
+    public List<Contact> getAllContact() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
@@ -170,13 +166,13 @@ public class DBManager {
         return list;
     }
 
-    public Event getEvent(String uid){
+    public Event getEvent(String uid) {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDao = daoSession.getEventDao();
         QueryBuilder<Event> qb = eventDao.queryBuilder();
         qb.where(EventDao.Properties.EventUid.eq(uid));
-        return  qb.list().get(0);
+        return qb.list().get(0);
     }
 
     public void clearDB(){

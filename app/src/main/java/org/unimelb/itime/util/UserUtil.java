@@ -62,7 +62,7 @@ public class UserUtil {
 
 
     public static String getUserUid(){
-            return UserUtil.getInstance().getUser().getUserUid();
+        return UserUtil.getInstance().getUser().getUserUid();
     }
 
     public static UserLoginRes getUserLoginRes() {

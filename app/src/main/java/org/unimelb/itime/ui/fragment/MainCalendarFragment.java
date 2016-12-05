@@ -24,6 +24,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.MainActivity;
@@ -50,7 +51,6 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
     private CalendarWeekFragment weekFragment;
     private FragmentMainCalendarBinding binding;
     private MainCalendarViewModel mainCalendarViewModel;
-    private MainCalendarFragment self;
     private EventSearchFragment eventSearchFragment;
 
 
@@ -84,11 +84,22 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
         super.onActivityCreated(savedInstanceState);
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
         binding.setCalenarVM(mainCalendarViewModel);
-        self = this;
+        loadData();
         initSpinner();
         initCalendars();
         initBackToday();
         initSearch();
+    }
+
+    private void loadData(){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                EventManager.getInstance().loadDB(getContext());
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+            }
+        }.start();
     }
 
     private void initSearch(){
@@ -100,7 +111,7 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
                     eventSearchFragment = new EventSearchFragment();
                     getFragmentManager().beginTransaction().add(R.id.main_fragment_container, eventSearchFragment, eventSearchFragment.getClassName()).hide(eventSearchFragment).commit();
                 }
-                self.switchFragment(self, eventSearchFragment);
+                switchFragment(MainCalendarFragment.this, eventSearchFragment);
             }
         });
     }

@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.presenter;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -37,12 +38,7 @@ public class MainSettingsPresenter extends MvpBasePresenter<MainSettingsMvpView>
         Intent i = new Intent(context.getApplicationContext(), LoginActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
-
-//        Intent launchIntent = new Intent(context, LoginActivity.class);
-//        PendingIntent intent = PendingIntent.getActivity(context, 0, launchIntent , 0);
-//        AlarmManager manager = (AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-//        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 500, intent);
-//        System.exit(0);
+        ((Activity) context).finish();
     }
 
     private void clearAccount(){
