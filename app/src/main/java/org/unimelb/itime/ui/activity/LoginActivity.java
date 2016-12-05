@@ -29,5 +29,15 @@ public class LoginActivity extends AppCompatActivity{
         getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, loginFragment).commit();
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
 

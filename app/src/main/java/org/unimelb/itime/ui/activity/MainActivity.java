@@ -176,4 +176,15 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
             ((MainCalendarFragment)tagFragments[0]).reloadEvent();
         }
     }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

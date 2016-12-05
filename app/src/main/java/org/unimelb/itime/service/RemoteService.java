@@ -40,6 +40,8 @@ public class RemoteService extends Service{
     private MessageApi msgApi;
     private CalendarApi calendarApi;
     private ContactApi contactApi;
+    private Boolean isStart = true;
+    private PollingThread pollingThread;
 
     @Nullable
     @Override
@@ -55,20 +57,24 @@ public class RemoteService extends Service{
         msgApi = HttpUtil.createService(getBaseContext(), MessageApi.class);
         calendarApi = HttpUtil.createService(getBaseContext(), CalendarApi.class);
         contactApi = HttpUtil.createService(getBaseContext(), ContactApi.class);
+
+        //create the polling thread
+        pollingThread = new PollingThread();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        initDBFromRemote();
+        pullDataFromRemote();
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
+        isStart = false;
         super.onDestroy();
     }
 
-    private void initDBFromRemote(){
+    private void pullDataFromRemote(){
         fetchCalendar();
         fetchContact();
     }
@@ -89,8 +95,17 @@ public class RemoteService extends Service{
             @Override
             public void onNext(HttpResult<List<org.unimelb.itime.bean.Calendar>> httpResult) {
                 CalendarUtil.getInstance().setCalendar(httpResult.getData());
-                fetchEvents();
-//                fetchMessages();
+
+                //start to load local db than start polling thread
+                new Thread(){
+                    @Override
+                    public void run() {
+                        //load local DB to manager
+                        EventManager.getInstance().loadDB();
+                        //start to polling
+                        pollingThread.start();
+                    }
+                }.start();
             }
         };
         HttpUtil.subscribe(calendarApi.list(), subscriber);
@@ -163,7 +178,6 @@ public class RemoteService extends Service{
                     @Override
                     public void run() {
                         // successfully get event from server
-                        EventManager.getInstance().loadDB();
                         EventManager.getInstance().updateDB(eventList);
                         fetchMessages(); // after insert event in db, then fetch events, and will never cannot find eventUid
                         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
@@ -199,5 +213,27 @@ public class RemoteService extends Service{
         };
         HttpUtil.subscribe(observable,subscriber);
     }
+
+
+    private class PollingThread extends Thread {
+        @Override
+        public void run() {
+
+            while (isStart) {
+
+                try {
+                    // 每个5秒向服务器发送一次请求
+                    Thread.sleep(5000);
+                    fetchEvents();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // do something
+
+            }
+        }
+    }
+
 
 }
