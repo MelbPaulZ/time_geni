@@ -51,10 +51,6 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     private ActivityMainBinding binding;
     private MainTabBarViewModel tabBarViewModel;
-    private EventSearchFragment eventSearchFragment;
-
-    public final static int CREATE_EVENT = 0;
-    public final static int EDIT_EVENT = 1;
 
     private final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_AND_CAMERA = 1001;
 
@@ -175,5 +171,10 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
             ((MainCalendarFragment)tagFragments[0]).reloadEvent();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
