@@ -222,10 +222,8 @@ public class RemoteService extends Service{
             while (isStart) {
 
                 try {
-                    // 每个5秒向服务器发送一次请求
                     Thread.sleep(5000);
                     fetchEvents();
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -234,6 +232,7 @@ public class RemoteService extends Service{
             }
         }
     }
+
 
 
 }
