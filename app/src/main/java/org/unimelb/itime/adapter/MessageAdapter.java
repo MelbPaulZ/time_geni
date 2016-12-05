@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 
 import com.google.android.gms.nearby.messages.MessageFilter;
+import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
@@ -21,6 +23,7 @@ import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.ui.viewmodel.InboxViewModel;
+import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
@@ -96,12 +99,17 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
                 inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
                 inboxHostBinding.setVm(viewModel);
                 inboxHostBinding.setMessage(filteredMessageList.get(position));
+
                 convertView = inboxHostBinding.getRoot();
             } else {
                 inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
                 inboxInviteeBinding.setVm(viewModel);
                 inboxInviteeBinding.setMessage(filteredMessageList.get(position));
                 convertView = inboxInviteeBinding.getRoot();
+
+                //david added
+                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)));
+
             }
             convertView.setTag(viewModel);
         }else{
@@ -111,6 +119,10 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
         return convertView;
     }
 
+    //david added
+    public void setImage(ImageView view){
+        Picasso.with(presenter.getContext()).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
+    }
 
     @Override
     public Filter getFilter() {

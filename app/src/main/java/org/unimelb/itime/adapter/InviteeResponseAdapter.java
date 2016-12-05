@@ -137,7 +137,7 @@ public class InviteeResponseAdapter extends BaseAdapter{
         if (url != null && !url.equals("")){
             Picasso.with(context).load(url).transform(new CircleTransform()).into(view);
         }else {
-            Picasso.with(context).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
+            Picasso.with(context).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(transformer).into(view);
         }
     }
 

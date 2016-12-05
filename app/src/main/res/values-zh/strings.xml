@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_app_id">your app id</string>
     <string name="app_name">itime</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -122,9 +123,137 @@
     <string name="event_third_proposed_time">EventThirdProposedTime</string>
     <string name="event_calendar_type">EventCalendarType</string>
     <string name="next">next</string>
-    <string name="back">back</string>
+    <string name="back">Back</string>
     <string name="delete_event">Delete Event</string>
-    <string name="no_repeat">No Repeat</string>
 
+    <string name="select_one_or_more_timeslot">Select One Or More Timeslot</string>
+    <string name="select_one_timeslot">Select One Timeslot</string>
+    <string name="no_repeat">No Repeat</string>
+    <string name="no_location">No Location</string>
+    <string name="reject_all">Reject All</string>
+    <string name="no_title">No Title</string>
+    <string name="none">None</string>
+    <string name="view_in_calendar">View in Calendar</string>
+    <string name="invitee">Invitee</string>
+    <string name="url">URL</string>
+    <string name="description">Note</string>
+    <string name="photo">Photo</string>
+    <string name="event_details">Event Details</string>
+    <string name="reason">Reason...</string>
+    <string name="please_enter_the_reason_of_rejecting_this_event">Please enter the reason of rejecting this event</string>
+    <string name="reject_this_event">Reject This Event</string>
+    <string name="reject">Reject</string>
+    <string name="time_slots_confirm_array">time slots confirm array</string>
+    <string name="event">event</string>
+    <string name="timeslot_next_btn">next</string>
+    <string name="calendar_type">Calendar Type</string>
+    <string name="alert_time">Alert Time</string>
+    <string name="calendar_type_work">Work</string>
+    <string name="calendar_type_private">Private</string>
+    <string name="publish_to_public">Publish to Public</string>
+    <string name="allow_invitee_to_see_each_other">Allow Invitee to See Each Other</string>
+    <string name="all_day">All Day</string>
+    <string name="accept">Accept</string>
+    <string name="rejected">Rejected</string>
+    <string name="not_responded">Not Responded</string>
+    <string name="confirm">confirm</string>
+    <string name="repeat">Repeat</string>
+    <string name="work">Work</string>
+    <string name="private_calendar">Private</string>
+    <string name="more_invitees"> %1$s and %2$d more</string>
+    <string name="choose_alert_time">Choose Alert Time</string>
+    <string name="five_mintues_before">5 minutes before</string>
+    <string name="fifteen_minutes_before">15 minutes before</string>
+    <string name="thirty_minutes_before">30 minutes before</string>
+    <string name="one_hour_before">1 hour before</string>
+    <string name="two_hours_before">2 hours before</string>
+    <string name="one_day_before">1 day before</string>
+    <string name="two_days_before">2 days before</string>
+    <string name="one_week_before">1 week before, as email</string>
+
+    <!--tags are for fragment tag listener-->
+    <string name="tag_create_event">tag create new event</string>
+    <string name="tag_edit_event">tag edit event</string>
+    <string name="tag_start_time">tag start time</string>
+    <string name="tag_end_time">tag end time</string>
+    <string name="tag_end_repeat">tag end repeat</string>
+    <string name="tag_create_event_before_sending">tag create event before sending</string>
+    <string name="tag_host_event_detail">tag host event detail</string>
+    <string name="tag_host_event_edit">tag host event edit</string>
+    <string name="tag_before_sending_review">tag before sending review</string>
+    <string name="tag_before_sending_back">tag before sending back</string>
+
+    <string name="day_of_week_1_full">Sunday</string>
+    <string name="day_of_week_2_full">Monday</string>
+    <string name="day_of_week_3_full">Tuesday</string>
+    <string name="day_of_week_4_full">Wednesday</string>
+    <string name="day_of_week_5_full">Thursday</string>
+    <string name="day_of_week_6_full">Friday</string>
+    <string name="day_of_week_7_full">Saturday</string>
+
+    <string name="day_of_week_1_abbr">Sun</string>
+    <string name="day_of_week_2_abbr">Mon</string>
+    <string name="day_of_week_3_abbr">Tue</string>
+    <string name="day_of_week_4_abbr">Wed</string>
+    <string name="day_of_week_5_abbr">Thu</string>
+    <string name="day_of_week_6_abbr">Fri</string>
+    <string name="day_of_week_7_abbr">Sat</string>
+
+    <string name="month_1st_Abbr">Jan</string>
+    <string name="month_2nd_Abbr">Feb</string>
+    <string name="month_3rd_Abbr">Mar</string>
+    <string name="month_4th_Abbr">Apr</string>
+    <string name="month_5th_Abbr">May</string>
+    <string name="month_6th_Abbr">Jun</string>
+    <string name="month_7th_Abbr">July</string>
+    <string name="month_8th_Abbr">Aug</string>
+    <string name="month_9th_Abbr">Sep</string>
+    <string name="month_10th_Abbr">Oct</string>
+    <string name="month_11th_Abbr">Nov</string>
+    <string name="month_12th_Abbr">Dec</string>
+
+    <string name="current_location">Current Location</string>
+
+    <string name="month_day_view">Day View</string>
+    <string name="week_view">Week View</string>
+    <string name="agenda_view">Agenda View</string>
+
+    <string name="repeat_never">Never</string>
+    <string name="repeat_everyday">Everyday</string>
+    <string name="repeat_everyweek">Every Week ( Every %1$s )</string>
+    <string name="repeat_every_twoweek">Every Two Weeks</string>
+    <string name="repeat_every_month">Every Month</string>
+    <string name="repeat_every_year">Every Year</string>
+    <string name="end_repeat">End Repeat</string>
+
+    <string name="camera_done_num">DONE (%1$d/%2$d)</string>
+    <string name="camera_done">DONE</string>
+    <string name="photos_num">%1$d CHOOSE</string>
+
+
+    <string name="timeslot_status_pending">pending</string>
+    <string name="timeslot_status_accept">accepted</string>
+    <string name="timeslot_status_reject">rejected</string>
+    <string name="timeslot_status_delete">timeslot status delete</string>
+    <string name="timeslot_status_create">timeslot status create</string>
+    <string name="duration">Duration</string>
+    <string name="select">Select</string>
+    <string name="calendar">Calendar</string>
+    <string name="note">note</string>
+    <string name="starts">Starts</string>
+    <string name="end">Ends</string>
+    <string name="new_timeslot">New Timeslot</string>
+    <string name="needs_action">needsAction</string>
+    <string name="confirmed">confirmed</string>
+    <string name="solo">solo</string>
+
+    <string name="choose_repeat">Choose Repeat</string>
+    <string name="change_all_repeat_or_just_this_event">Change all repeat events or just this event</string>
+    <string name="change_all">Change all</string>
+    <string name="only_this_event">Only this event</string>
+    <string name="accepted">accepted</string>
+    <string name="going">Going</string>
+    <string name="no_reply">No Reply</string>
+    <string name="inbox">Inbox</string>
 
 </resources>

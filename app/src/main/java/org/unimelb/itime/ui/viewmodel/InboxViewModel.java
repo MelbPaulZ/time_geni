@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.databinding.library.baseAdapters.BR;
+import com.squareup.picasso.Picasso;
 
 
 import org.unimelb.itime.R;
@@ -16,6 +17,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
+import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 
 import java.text.SimpleDateFormat;
@@ -133,4 +135,7 @@ public class InboxViewModel extends CommonViewModel {
         this.message = message;
         notifyPropertyChanged(BR.message);
     }
+
+
+
 }
