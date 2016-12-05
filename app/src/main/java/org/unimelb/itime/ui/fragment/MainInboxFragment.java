@@ -103,8 +103,12 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
                 presenter.updateMessage(message);
                 // try copy message list and reset
                 messageAdapter.notifyDataSetChanged();
-                Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
-                EventUtil.startEditEventActivity(getContext(), getActivity(), event);
+                Event event = EventManager.getInstance().findEventByUid(getContext(), message.getEventUid());
+                if (event==null){
+                    Toast.makeText(getContext(), "cannot find event, please try later", Toast.LENGTH_SHORT).show();
+                }else {
+                    EventUtil.startEditEventActivity(getContext(), getActivity(), event);
+                }
             }
         });
 

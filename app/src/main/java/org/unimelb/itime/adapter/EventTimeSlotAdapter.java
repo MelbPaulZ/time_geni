@@ -29,9 +29,7 @@ public class EventTimeSlotAdapter extends ArrayAdapter<Timeslot> {
         super(context, resource, objects);
         inflater = LayoutInflater.from(context);
         this.viewModel = viewmodel;
-
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

@@ -37,7 +37,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
     private Context context;
     private UserApi userApi;
 
-
     private UserDao userDao;
 
     public LoginPresenter(Context context) {
