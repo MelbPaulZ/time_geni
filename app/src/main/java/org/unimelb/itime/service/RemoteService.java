@@ -64,8 +64,6 @@ public class RemoteService extends Service{
         pullDataFromRemote();
     }
 
-
-
     @Override
     public void onDestroy() {
         isStart = false;

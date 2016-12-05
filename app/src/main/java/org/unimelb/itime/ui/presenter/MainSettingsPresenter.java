@@ -34,16 +34,13 @@ public class MainSettingsPresenter extends MvpBasePresenter<MainSettingsMvpView>
 
     public void logOut(){
         this.clearAccount();
-
-        Intent i = new Intent(context.getApplicationContext(), LoginActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(i);
-        ((Activity) context).finish();
+        if(getView() != null){
+            getView().logOut();
+        }
     }
 
     private void clearAccount(){
         AuthUtil.clearJwtToken(context);
-
         SharedPreferences sp = AppUtil.getSharedPreferences(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, "");

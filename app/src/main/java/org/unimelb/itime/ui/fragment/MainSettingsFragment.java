@@ -1,6 +1,8 @@
 package org.unimelb.itime.ui.fragment;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,8 @@ import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.databinding.FragmentMainSettingsBinding;
+import org.unimelb.itime.service.RemoteService;
+import org.unimelb.itime.ui.activity.LoginActivity;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.mvpview.MainSettingsMvpView;
 import org.unimelb.itime.ui.presenter.MainSettingsPresenter;
@@ -53,5 +57,13 @@ public class MainSettingsFragment extends MvpFragment<MainSettingsMvpView, MainS
     @Override
     public void logOut() {
         Toast.makeText(getContext(), "Log Out", Toast.LENGTH_SHORT).show();
+
+        Intent serviceI = new Intent(getContext(), RemoteService.class);
+        getActivity().stopService(serviceI);
+
+        Intent i = new Intent(getContext(), LoginActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+        getActivity().finish();
     }
 }
