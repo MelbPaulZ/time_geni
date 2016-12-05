@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
@@ -35,7 +34,6 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
-import org.unimelb.itime.ui.viewmodel.InboxViewModel;
 import org.unimelb.itime.util.EventUtil;
 
 import java.util.List;
@@ -46,10 +44,8 @@ import java.util.List;
 public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView, SearchView.OnQueryTextListener{
 
     private FragmentMainInboxBinding binding;
-    private InboxViewModel inboxViewModel;
     private MainInboxPresenter presenter;
     private MessageAdapter messageAdapter;
-    private MainInboxFragment self;
 
     @Override
     public MainInboxPresenter createPresenter() {
@@ -71,7 +67,6 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        self = this;
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
@@ -109,7 +104,7 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
                 // try copy message list and reset
                 messageAdapter.notifyDataSetChanged();
                 Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
-                EventUtil.startEditEventActivity(getContext(), self.getActivity(), event);
+                EventUtil.startEditEventActivity(getContext(), getActivity(), event);
             }
         });
 

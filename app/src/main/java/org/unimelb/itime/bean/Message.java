@@ -15,8 +15,9 @@ import org.unimelb.itime.dao.MessageDao;
 @Entity(active = true)
 public class Message {
     public final static String TPL_INVITEE = "invitee";
-    public final static String TPL_HOST = "host";
+    public final static String TPL_HOST_UNCONFIRMED = "host_unconfirmed";
     public final static String TPL_DELETED = "deleted";
+    public final static String TPL_HOST_CONFIRMED = "host_confirmed";
 
     String title = "";
     String subtitle1 = "";

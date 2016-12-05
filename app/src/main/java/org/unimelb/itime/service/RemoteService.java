@@ -9,9 +9,12 @@ import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.base.C;
+import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
+import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.restfulapi.CalendarApi;
@@ -19,17 +22,16 @@ import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.managers.DBManager;
-import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
-import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
+
+import static com.google.common.collect.ComparisonChain.start;
 
 /**
  * Created by yinchuandong on 20/06/2016.
@@ -124,8 +126,8 @@ public class RemoteService extends Service{
                 editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, listHttpResult.getSyncToken());
                 editor.apply();
 
-                DBManager.getInstance().deleteAllMessages();
-                DBManager.getInstance().insertMessageList(listHttpResult.getData());
+                DBManager.getInstance(getBaseContext()).deleteAllMessages();
+                DBManager.getInstance(getBaseContext()).insertMessageList(listHttpResult.getData());
 
                 //set data to inbox;
                 EventBus.getDefault().post(new MessageInboxMessage(listHttpResult.getData()));
@@ -135,9 +137,7 @@ public class RemoteService extends Service{
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void fetchEvents() {
-        // here to list events
-        String calendarUid = CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid();
+    public void fetchEvents(String calendarUid) {
         String synToken = AppUtil.getSharedPreferences(getApplicationContext()).getString(C.spkey.EVENT_LIST_SYNC_TOKEN,"");
 
         Observable<HttpResult<List<Event>>> observable = eventApi.list(
@@ -169,7 +169,6 @@ public class RemoteService extends Service{
                     public void run() {
                         // successfully get event from server
                         EventManager.getInstance().updateDB(eventList);
-                        fetchMessages(); // after insert event in db, then fetch events, and will never cannot find eventUid
                         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                         Log.i(TAG, "onNext: " + result.getData().size());
                     }
@@ -212,8 +211,13 @@ public class RemoteService extends Service{
             while (isStart) {
 
                 try {
-                    fetchEvents();
-                    Thread.sleep(5000);
+
+                    // todo: here to list events
+                    for(Calendar calendar : CalendarUtil.getInstance().getCalendar()){
+                        fetchEvents(calendar.getCalendarUid());
+                        Thread.sleep(5000);
+                    }
+                    fetchMessages();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

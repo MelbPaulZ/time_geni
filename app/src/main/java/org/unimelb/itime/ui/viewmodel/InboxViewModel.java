@@ -29,44 +29,33 @@ public class InboxViewModel extends CommonViewModel {
     }
 
     public String getTag1(Context context){
-        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
-        if (EventUtil.isUserHostOfEvent(event)){
-            if (event.getStatus().equals("confirmed")){
+        if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)){
                 int goingNum = message.getNum1();
                 return goingNum + " " + context.getString(R.string.going);
             }else{
                 int acceptNum = message.getNum1();
                 return acceptNum + " " + context.getString(R.string.accept);
             }
-        }
-        return "this is invitee";
+
     }
 
     public String getTag2(Context context){
-        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
-        if (EventUtil.isUserHostOfEvent(event)){
-            if (event.getStatus().equals("confirmed")){
+        if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)){
                 int noReplyNum = message.getNum3();
                 return noReplyNum + " " + context.getString(R.string.no_reply);
             }else{
                 int rejectNum = message.getNum2();
                 return rejectNum + " " + context.getString(R.string.reject);
             }
-        }
-        return "this is invitee";
     }
 
     public String getTag3(Context context){
-        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
-        if (EventUtil.isUserHostOfEvent(event)){
-            if (event.getStatus().equals("confirmed")){
+        if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)){
                 return null;
             }else{
                 int noReplyNum = message.getNum3();
                 return noReplyNum + " " + context.getString(R.string.no_reply);
             }
-        }
-        return "this is invitee";
     }
 
 
@@ -79,13 +68,11 @@ public class InboxViewModel extends CommonViewModel {
             Log.i("reddot", "setDotVisible: + visible");
             view.setVisibility(View.VISIBLE);
         }
-//        view.requestLayout();
     }
 
     @BindingAdapter({"bind:message"," bind:tagNum"})
     public static void setTagBackground(TextView view, Message message, int tagNum){
-        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
-        if (event.getStatus().equals("confirmed")){
+        if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)){
             if (tagNum == 1){
                 view.setBackgroundResource(R.drawable.inbox_host_tag_green);
             }else if (tagNum == 2){
@@ -108,8 +95,7 @@ public class InboxViewModel extends CommonViewModel {
 
     @BindingAdapter({"bind:visible"})
     public static void setVisible(TextView view, Message message){
-        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
-        if (event.getStatus().equals("confirmed")){
+        if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)){
             view.setVisibility(View.GONE);
         }else{
             view.setVisibility(View.VISIBLE);
@@ -125,7 +111,5 @@ public class InboxViewModel extends CommonViewModel {
         this.message = message;
         notifyPropertyChanged(BR.message);
     }
-
-
 
 }
