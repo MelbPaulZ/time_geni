@@ -70,7 +70,8 @@ public class RemoteService extends Service{
     public void onDestroy() {
         isStart = false;
         pollingThread.interrupt();
-        EventManager.getInstance().clearManager();
+        Log.i(TAG, "onDestroy: " + "is destroyed");
+//        EventManager.getInstance().clearManager();
         super.onDestroy();
     }
 

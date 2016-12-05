@@ -46,9 +46,8 @@ public class EventDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_detail);
         event = EventManager.getInstance().getCurrentEvent();
         initFragments();
-        List<Fragment> lists = getSupportFragmentManager().getFragments();
 
-        if (event.getInvitee().size() > 0) {
+        if (event.getInvitee().size() > 1) {
             // group event
             // here... cannot use findFragmentByTag directly..
             getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
