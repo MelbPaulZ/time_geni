@@ -57,6 +57,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
             this.adapterData = getAdapterData(event);
         }
         eventDetailForHostViewModel.setEvDtlHostEvent(event);
+        eventDetailForHostViewModel.setEvAdapterEvent(adapterData);
         binding.setHostDetailVM(eventDetailForHostViewModel);
         setProposedTimeSlots(event);
     }

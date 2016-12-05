@@ -3,6 +3,7 @@ package org.unimelb.itime.managers;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
@@ -179,12 +180,17 @@ public class DBManager {
     }
 
     public void clearDB(){
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        EventDao eventDao = daoSession.getEventDao();
-        ContactDao contactDao = daoSession.getContactDao();
-        eventDao.deleteAll();
-        contactDao.deleteAll();
+//        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+//        DaoSession daoSession = daoMaster.newSession();
+//        EventDao eventDao = daoSession.getEventDao();
+//        ContactDao contactDao = daoSession.getContactDao();
+//        eventDao.deleteAll();
+//        contactDao.deleteAll();
+//        daoSession.clear();
+        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(
+                context.getApplicationContext(), dbName, null);
+        SQLiteDatabase db = devOpenHelper.getWritableDatabase();
+        devOpenHelper.onUpgrade(db,0,0);
     }
 
     private SQLiteDatabase getReadableDatabase() {

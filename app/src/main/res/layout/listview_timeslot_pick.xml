@@ -64,7 +64,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/padding_10"
             android:layout_toLeftOf="@+id/host_timeslot_right_arrow"
-            android:text="10"
+            android:text="@{viewmodel.getPeopleNum(viewmodel.evDtlHostEvent.timeslot.get(position),viewmodel.evAdapterEvent)}"
             android:textColor="@color/gray_b2b2b2"
             android:textSize="17dp" />
 

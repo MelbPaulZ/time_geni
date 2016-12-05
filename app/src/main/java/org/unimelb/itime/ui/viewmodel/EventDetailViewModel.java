@@ -19,9 +19,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
+import org.unimelb.itime.ui.fragment.eventdetail.EventDetailGroupFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
 import org.unimelb.itime.util.TimeSlotUtil;
@@ -29,8 +31,10 @@ import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -40,11 +44,18 @@ public class EventDetailViewModel extends CommonViewModel {
     private Event evDtlHostEvent;
     private LayoutInflater inflater;
     private EventDetailGroupMvpView mvpView;
-
+    private Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> adapterData;
     private String tag;
     private Context context;
 
+    public void setEvAdapterEvent(Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> adapterData){
+        this.adapterData = adapterData;
+    }
 
+    @Bindable
+    public Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> getEvAdapterEvent(){
+        return this.adapterData;
+    }
 
     public EventDetailViewModel(EventDetailGroupPresenter presenter) {
         this.presenter = presenter;
@@ -238,5 +249,19 @@ public class EventDetailViewModel extends CommonViewModel {
         }
     }
 
+
+    public String getPeopleNum(Timeslot timeslot, Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> adapterData){
+        List<EventDetailGroupFragment.StatusKeyStruct> structs = adapterData.get(timeslot.getTimeslotUid());
+        int count = 0;
+        for (EventDetailGroupFragment.StatusKeyStruct struct: structs
+             ) {
+            if (struct.getStatus().equals("accepted")){
+                count = struct.getInviteeList().size();
+                break;
+            }
+        }
+
+        return count + "";
+    }
 
 }
