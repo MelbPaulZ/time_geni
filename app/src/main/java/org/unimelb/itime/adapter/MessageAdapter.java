@@ -2,7 +2,6 @@ package org.unimelb.itime.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 
-import com.google.android.gms.nearby.messages.MessageFilter;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
@@ -82,7 +80,7 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
     @Override
     public int getItemViewType(int position) {
         Message message = filteredMessageList.get(position);
-        Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
+        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
         if (EventUtil.isUserHostOfEvent(event)) {
             return TYPE_HOST;
         } else {
@@ -93,7 +91,7 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         InboxViewModel viewModel = new InboxViewModel(presenter);
-        Event event = EventManager.getInstance().findEventInEventList(filteredMessageList.get(position).getEventUid());
+        Event event = EventManager.getInstance().findEventByUid(filteredMessageList.get(position).getEventUid());
         if (convertView==null) {
             if (EventUtil.isUserHostOfEvent(event)) {
                 inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);

@@ -36,8 +36,8 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
 
     public void updateMessage(Message message){
         int isRead = message.getIsRead() == true? 1 : 0;
-        ArrayList<Integer> messageList = new ArrayList<>();
-        messageList.add(Integer.parseInt(message.getMessageUid()));
+        ArrayList<String> messageList = new ArrayList<>();
+        messageList.add(message.getMessageUid());
         Observable<HttpResult<Void>> observable = messageApi.read(messageList, isRead);
         Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
             @Override

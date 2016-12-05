@@ -1,7 +1,6 @@
 package org.unimelb.itime.ui.viewmodel;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.databinding.library.baseAdapters.BR;
-import com.squareup.picasso.Picasso;
 
 
 import org.unimelb.itime.R;
@@ -17,15 +15,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
-import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import static android.R.id.message;
 
 /**
  * Created by Paul on 1/12/16.
@@ -39,7 +29,7 @@ public class InboxViewModel extends CommonViewModel {
     }
 
     public String getTag1(Context context){
-        Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
+        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
         if (EventUtil.isUserHostOfEvent(event)){
             if (event.getStatus().equals("confirmed")){
                 int goingNum = message.getNum1();
@@ -53,7 +43,7 @@ public class InboxViewModel extends CommonViewModel {
     }
 
     public String getTag2(Context context){
-        Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
+        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
         if (EventUtil.isUserHostOfEvent(event)){
             if (event.getStatus().equals("confirmed")){
                 int noReplyNum = message.getNum3();
@@ -67,7 +57,7 @@ public class InboxViewModel extends CommonViewModel {
     }
 
     public String getTag3(Context context){
-        Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
+        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
         if (EventUtil.isUserHostOfEvent(event)){
             if (event.getStatus().equals("confirmed")){
                 return null;
@@ -94,7 +84,7 @@ public class InboxViewModel extends CommonViewModel {
 
     @BindingAdapter({"bind:message"," bind:tagNum"})
     public static void setTagBackground(TextView view, Message message, int tagNum){
-        Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
+        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
         if (event.getStatus().equals("confirmed")){
             if (tagNum == 1){
                 view.setBackgroundResource(R.drawable.inbox_host_tag_green);
@@ -118,7 +108,7 @@ public class InboxViewModel extends CommonViewModel {
 
     @BindingAdapter({"bind:visible"})
     public static void setVisible(TextView view, Message message){
-        Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
+        Event event = EventManager.getInstance().findEventByUid(message.getEventUid());
         if (event.getStatus().equals("confirmed")){
             view.setVisibility(View.GONE);
         }else{

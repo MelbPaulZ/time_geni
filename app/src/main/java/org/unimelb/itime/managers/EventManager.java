@@ -47,6 +47,8 @@ public class EventManager {
 
     private EventsPackage eventsPackage = new EventsPackage();
 
+    private List<Event> allEventList;
+
     private final int defaultRepeatedRange = 500;
     // [0 - 1] percentage of frag for load more fur/pre event
     private final float refreshFlag = 0.8f;
@@ -300,7 +302,8 @@ public class EventManager {
         DBManager.getInstance().insertEvent(newEvent);
     }
 
-    public ArrayList<ITimeEventInterface> getAllEvents(){
+    public List<ITimeEventInterface> getAllEvents(){
+        List<Event> eventList = DBManager.getInstance().getAllEvents();
         ArrayList<ITimeEventInterface> allEvents = new ArrayList<>();
         for (Map.Entry<Long, List<ITimeEventInterface>> entry: regularEventMap.entrySet()){
             allEvents.addAll(entry.getValue());
@@ -309,15 +312,26 @@ public class EventManager {
         return allEvents;
     }
 
-    public Event findEventInEventList(String eventUid){
-        List<? extends ITimeEventInterface> interfaceList = getAllEvents();
-        List<Event> eventList = (List<Event>) interfaceList;
-        for (Event ev : eventList){
-            if (eventUid.equals(ev.getEventUid())){
-                return ev;
+    public Event findEventByUid(String eventUid){
+
+        Event event = DBManager.getInstance().getEvent(eventUid);
+        Long key = EventManager.getInstance().getDayBeginMilliseconds(event.getStartTime());
+        if (event.getRecurrence().length!=0){
+            // repeat event
+            for (Event ev : orgRepeatedEventList){
+                if (ev.getEventUid().equals(eventUid)){
+                    return ev;
+                }
+            }
+        }else{
+            // non-repeat event
+            for (ITimeEventInterface iTimeEventInterface: regularEventMap.get(key)){
+                if (((Event)iTimeEventInterface).getEventUid().equals(eventUid)){
+                    return (Event)iTimeEventInterface;
+                }
             }
         }
-        throw new RuntimeException("cannot find the event in Eventmanager, eventUid:" + eventUid);
+        throw new RuntimeException("cannot find the event in Eventmanager, eventUid:" + eventUid + " " + "size of all events:" + getAllEvents().size());
     }
 
     public Event copyCurrentEvent(Event event){
