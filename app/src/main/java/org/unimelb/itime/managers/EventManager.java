@@ -1,5 +1,6 @@
 package org.unimelb.itime.managers;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -375,8 +376,8 @@ public class EventManager {
     }
 
 
-    public void loadDB(){
-        List<Event> list = DBManager.getInstance().getAllEvents();
+    public void loadDB(Context context){
+        List<Event> list = DBManager.getInstance(context).getAllEvents();
         for (Event ev: list) {
             EventManager.getInstance().addEvent(ev);
         }

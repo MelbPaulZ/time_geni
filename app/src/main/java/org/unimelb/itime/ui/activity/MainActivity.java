@@ -177,7 +177,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     @Override
     protected void onDestroy() {
-        stopService(new Intent(this, RemoteService.class));
+//        stopService(new Intent(this, RemoteService.class));
         super.onDestroy();
     }
 }
