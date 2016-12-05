@@ -7,12 +7,15 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.EventTimeSlotAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
@@ -20,6 +23,11 @@ import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -30,6 +38,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     private Event event;
     private LayoutInflater inflater;
 
+    private Map<String, List<StatusKeyStruct>> adapterData;
 
     @Nullable
     @Override
@@ -45,6 +54,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         eventDetailForHostViewModel = new EventDetailViewModel(getPresenter());
         if(event == null){
             event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
+            this.adapterData = getAdapterData(event);
         }
         eventDetailForHostViewModel.setEvDtlHostEvent(event);
         binding.setHostDetailVM(eventDetailForHostViewModel);
@@ -71,7 +81,6 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         return new EventDetailGroupPresenter(getContext(),inflater);
     }
 
-
     @Override
     public void toCalendar() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -96,6 +105,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     @Override
     public void viewInviteeResponse(Timeslot timeSlot) {
         InviteeTimeslotFragment inviteeTimeslotFragment = (InviteeTimeslotFragment) getFragmentManager().findFragmentByTag(InviteeTimeslotFragment.class.getSimpleName());
+        inviteeTimeslotFragment.setData(this.event, adapterData.get(timeSlot.getTimeslotUid()),timeSlot);
         switchFragment(this, inviteeTimeslotFragment);
     }
 
@@ -104,5 +114,66 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
 
+    private Map<String, List<StatusKeyStruct>> getAdapterData(Event event){
+        List<Invitee> invitees = event.getInvitee();
+        List<Timeslot> timeSlots = event.getTimeslot();
+        //slo Uid -- List (status - List invitee)
+        Map<String,List<StatusKeyStruct>> results = new HashMap<>();
 
+        for (Timeslot slot: timeSlots
+             ) {
+            List<StatusKeyStruct> structs = new ArrayList<>();
+            StatusKeyStruct acp_st = new StatusKeyStruct("accepted");
+            structs.add(acp_st);
+
+            StatusKeyStruct rejected_st = new StatusKeyStruct("rejected");
+            structs.add(rejected_st);
+
+            StatusKeyStruct pending_st = new StatusKeyStruct("pending");
+            structs.add(pending_st);
+
+            results.put(slot.getTimeslotUid(),structs);
+        }
+
+        for (Invitee invitee:invitees
+             ) {
+            List<SlotResponse> responses = invitee.getSlotResponses();
+
+            for (SlotResponse response: responses
+                 ) {
+                List<StatusKeyStruct> stucts = results.get(response.getTimeslotUid());
+                for (int i = 0; i < stucts.size(); i++) {
+                    if (stucts.get(i).getStatus().equals(response.getStatus())){
+                        stucts.get(i).addInvitee(invitee);
+                        break;
+                    }
+                }
+
+            }
+        }
+
+        return results;
+    }
+
+    public class StatusKeyStruct{
+        String status;
+        //status is key
+        List<Invitee> response = new ArrayList<>();
+
+        public StatusKeyStruct(String status) {
+            this.status = status;
+        }
+
+        public String getStatus(){
+            return this.status;
+        }
+
+        public void addInvitee(Invitee invitee){
+            response.add(invitee);
+        }
+
+        public List<Invitee> getInviteeList(){
+            return this.response;
+        }
+    }
 }

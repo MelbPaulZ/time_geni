@@ -1,7 +1,5 @@
 package org.unimelb.itime.bean;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
@@ -11,11 +9,8 @@ import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Keep;
-import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
-import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.util.EventUtil;
 
 import org.unimelb.itime.util.rulefactory.RuleInterface;
@@ -24,12 +19,10 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.http.HEAD;
+import org.unimelb.itime.dao.EventDao;
 
 /**
  * Created by yinchuandong on 22/08/2016.
@@ -67,13 +60,11 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     private String url = "";
 
-    public RuleModel getRule() {
-        return rule;
-    }
+    // later delete
+    private transient long repeatEndsTime;
 
-    public void setRule(RuleModel rule) {
-        this.rule = rule;
-    }
+    @Convert(converter = Event.InviteeConverter.class, columnType = String.class)
+    private List<Invitee> invitee = new ArrayList<>();
 
     @Expose(serialize = true, deserialize = true)
     private transient RuleModel rule = new RuleModel(this);
@@ -84,11 +75,14 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     @Convert(converter = Event.TimeslotConverter.class , columnType = String.class)
     private List<Timeslot> timeslot = new ArrayList<>();
 
-    // later delete
-    private transient long repeatEndsTime;
+    public RuleModel getRule() {
+        return rule;
+    }
 
-    @Convert(converter = Event.InviteeConverter.class, columnType = String.class)
-    private List<Invitee> invitee = new ArrayList<>();
+    public void setRule(RuleModel rule) {
+        this.rule = rule;
+    }
+
     /** Used for active entity operations. */
     @Generated(hash = 1542254534)
     private transient EventDao myDao;
@@ -99,15 +93,14 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     }
 
-
-    @Generated(hash = 295629456)
+    @Generated(hash = 1204061877)
     public Event(String eventUid, String eventId, String hostUserUid, String userUid,
             String calendarUid, String iCalUID, String recurringEventUid, String recurringEventId,
             String[] recurrence, String status, String summary, long startTime, long endTime,
             String description, String location, String locationNote, String locationLatitude,
             String locationLongitude, String eventType, int reminder, int freebusyAccess,
             String source, int deleteLevel, int icsSequence, int inviteeVisibility, String url,
-            List<PhotoUrl> photo, List<Timeslot> timeslot, List<Invitee> invitee) {
+            List<Invitee> invitee, List<PhotoUrl> photo, List<Timeslot> timeslot) {
         this.eventUid = eventUid;
         this.eventId = eventId;
         this.hostUserUid = hostUserUid;
@@ -134,11 +127,10 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         this.icsSequence = icsSequence;
         this.inviteeVisibility = inviteeVisibility;
         this.url = url;
+        this.invitee = invitee;
         this.photo = photo;
         this.timeslot = timeslot;
-        this.invitee = invitee;
     }
-
 
     @Override
     public void setTitle(String summary) {
@@ -238,8 +230,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         return location;
     }
 
-
-
     @Override
     public void setLocation(String location) {
         this.location = location;
@@ -249,66 +239,53 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         this.invitee = invitee;
     }
 
-
     public String getUrl() {
         return this.url;
     }
-
 
     public void setUrl(String url) {
         this.url = url;
     }
 
-
     public String getSummary() {
         return this.summary;
     }
-
 
     public void setSummary(String summary) {
         this.summary = summary;
     }
 
-
     public String[] getRecurrence() {
         return this.recurrence;
     }
-
 
     public void setRecurrence(String[] recurrence) {
         this.recurrence = recurrence;
     }
 
-
     public String getICalUID() {
         return this.iCalUID;
     }
-
 
     public void setICalUID(String iCalUID) {
         this.iCalUID = iCalUID;
     }
 
-
     public String getCalendarUid() {
         return this.calendarUid;
     }
-
 
     public void setCalendarUid(String calendarUid) {
         this.calendarUid = calendarUid;
     }
 
-
     public String getRecurringEventId() {
         return this.recurringEventId;
     }
 
-
     public void setRecurringEventId(String recurringEventId) {
         this.recurringEventId = recurringEventId;
     }
-
 
     public String getRecurringEventUid() {
         return this.recurringEventUid;
@@ -318,7 +295,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     public void setRecurringEventUid(String recurringEventUid) {
         this.recurringEventUid = recurringEventUid;
     }
-
 
     public String getEventId() {
         return this.eventId;
@@ -332,8 +308,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         this.iCalUID = iCalUID;
     }
 
-
-
     public String getLocationNote() {
         return locationNote;
     }
@@ -341,8 +315,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     public void setLocationNote(String locationNote) {
         this.locationNote = locationNote;
     }
-
-
 
     public long getRepeatEndsTime() {
         return repeatEndsTime;
@@ -360,17 +332,9 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         return timeslot;
     }
 
-
-
-
-
     public void setTimeslot(List<Timeslot> timeslot) {
         this.timeslot = timeslot;
     }
-
-
-
-
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetTimeslots() {
@@ -401,10 +365,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     public void setHostUserUid(String hostUserUid) {
         this.hostUserUid = hostUserUid;
     }
-
-
-
-
 
     public int getReminder() {
         return reminder;
@@ -500,12 +460,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     public boolean hasRecurrence(){
         return this.recurrence!=null;
     }
-
-
-
-
-
-
 
     public List<Invitee> getInvitee() {
         return invitee;

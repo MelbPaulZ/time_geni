@@ -19,6 +19,7 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.messageevent.MessageEvent;
+import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
@@ -34,6 +35,8 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
+import static com.google.android.gms.wearable.DataMap.TAG;
 
 /**
  * Created by Paul on 21/09/2016.
@@ -73,7 +76,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
         monthDayView.setOnHeaderListener(new MonthDayView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
-                Log.i("Header", "monthDayView: ");
+                Log.i("Header", "monthDayView: " + myCalendar.getCalendar().getTime());
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
                 EventManager.getInstance().refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
@@ -135,8 +138,13 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
             monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
             monthDayView.reloadEvents();
-//            monthDayView.requestLayout();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(MessageEventRefresh messageEvent){
+        monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthDayView.reloadEvents();
     }
 
 

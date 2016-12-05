@@ -27,6 +27,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.ActivityMainBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
+import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.fragment.EventSearchFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainContactsFragment;
@@ -173,8 +174,10 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         }
     }
 
+
     @Override
     protected void onDestroy() {
+        stopService(new Intent(this, RemoteService.class));
         super.onDestroy();
     }
 }
