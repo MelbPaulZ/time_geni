@@ -9,16 +9,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -29,34 +24,19 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
-import org.unimelb.itime.adapter.EventAdapter;
 import org.unimelb.itime.adapter.MessageAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.FragmentMainInboxBinding;
-import org.unimelb.itime.databinding.ListviewInboxHostBinding;
-import org.unimelb.itime.databinding.ListviewInboxInviteeBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
-import org.unimelb.itime.restfulapi.MessageApi;
-import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
-import org.unimelb.itime.ui.viewmodel.InboxViewModel;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.HttpUtil;
-import org.unimelb.itime.util.UserUtil;
-import org.unimelb.itime.vendor.helper.Text2Drawable;
-import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  * required login, need to extend BaseUiAuthFragment
@@ -64,7 +44,6 @@ import rx.Subscriber;
 public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView, SearchView.OnQueryTextListener{
 
     private FragmentMainInboxBinding binding;
-    private InboxViewModel inboxViewModel;
     private MainInboxPresenter presenter;
     private MessageAdapter messageAdapter;
     private MainInboxFragment self;
