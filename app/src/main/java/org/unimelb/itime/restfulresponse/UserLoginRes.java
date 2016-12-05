@@ -2,10 +2,12 @@ package org.unimelb.itime.restfulresponse;
 
 import org.unimelb.itime.bean.User;
 
+import java.io.Serializable;
+
 /**
  * Created by Paul on 23/09/2016.
  */
-public class UserLoginRes {
+public class UserLoginRes implements Serializable{
 
     User user;
     String token;

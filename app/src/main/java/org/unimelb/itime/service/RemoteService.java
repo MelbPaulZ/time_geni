@@ -60,11 +60,13 @@ public class RemoteService extends Service{
 
         //create the polling thread
         pollingThread = new PollingThread();
+
+        pullDataFromRemote();
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        pullDataFromRemote();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -103,7 +105,7 @@ public class RemoteService extends Service{
                     @Override
                     public void run() {
                         //load local DB to manager
-                        EventManager.getInstance().loadDB();
+                        EventManager.getInstance().loadDB(getApplicationContext());
                         //start to polling
                         pollingThread.start();
                     }
@@ -230,8 +232,8 @@ public class RemoteService extends Service{
                     e.printStackTrace();
                 }
                 // do something
-
             }
+
         }
 
     }

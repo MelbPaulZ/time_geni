@@ -2,6 +2,7 @@ package org.unimelb.itime.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -31,11 +32,11 @@ public class UserUtil {
 
     /** save the user info into shared preference, which can be used to fast login
      * **/
-    public static void login(Context ctx, User user){
+    public static void login(Context ctx, UserLoginRes userLoginRes){
         SharedPreferences sp = AppUtil.getSharedPreferences(ctx);
         SharedPreferences.Editor editor = sp.edit();
         Gson gson = new Gson();
-        editor.putString(C.spkey.USER_SHARED_PREFERENCES, gson.toJson(user));
+        editor.putString(C.spkey.USER_SHARED_PREFERENCES, gson.toJson(userLoginRes));
         editor.apply();
     }
 
@@ -43,17 +44,25 @@ public class UserUtil {
 
     }
 
+    /** read user info from preference and also set info into userUtil for later usage
+     * */
     public static String getUserIdFromPreference(Context context){
         SharedPreferences sp = AppUtil.getSharedPreferences(context);
         String userStr = sp.getString(C.spkey.USER_SHARED_PREFERENCES,"");
         Gson gson = new Gson();
-        User user = gson.fromJson(userStr, User.class);
-        return user.getUserUid();
+        UserLoginRes loginRes = gson.fromJson(userStr, UserLoginRes.class);
+        userLoginRes = loginRes;
+        if (loginRes.getUser()==null){
+            Log.i("UserUtil", "getUserIdFromPreference: " + "is null");
+        }else{
+            Log.i("UserUtil", "getUserIdFromPreference: " + loginRes.getUser().getUserUid());
+        }
+        return loginRes.getUser().getUserUid();
     }
 
 
     public static String getUserUid(){
-        return UserUtil.getInstance().getUser().getUserUid();
+            return UserUtil.getInstance().getUser().getUserUid();
     }
 
     public static UserLoginRes getUserLoginRes() {
@@ -62,11 +71,11 @@ public class UserUtil {
 
     /**
      * todo: save it to db
-     * @param userLoginRes
+     * @param loginRes
      */
-    public void setUserLoginRes(Context context, UserLoginRes userLoginRes) {
-        login(context, userLoginRes.getUser());
-        this.userLoginRes = userLoginRes;
+    public static void setUserLoginRes(Context context, UserLoginRes loginRes) {
+        login(context, loginRes);
+        userLoginRes = loginRes;
     }
 
 

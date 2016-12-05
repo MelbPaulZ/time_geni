@@ -18,6 +18,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginBinding;
+import org.unimelb.itime.restfulresponse.UserLoginRes;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
@@ -79,7 +80,12 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
                 if (e == null) {
                     String installationId = AVInstallation.getCurrentInstallation().getInstallationId();
                     Log.d(TAG, "done: " + installationId);
-                    String userUid = UserUtil.getUserLoginRes()==null? UserUtil.getUserIdFromPreference(getContext()) : UserUtil.getUserUid();
+                    String userUid;
+                    if (UserUtil.getUserLoginRes()==null){
+                        userUid = UserUtil.getUserIdFromPreference(getContext());
+                    }else{
+                        userUid = UserUtil.getUserUid();
+                    }
                     AVInstallation.getCurrentInstallation().put("user_uid", userUid);
                 } else {
 
