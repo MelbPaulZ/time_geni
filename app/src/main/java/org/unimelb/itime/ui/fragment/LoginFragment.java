@@ -23,7 +23,10 @@ import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
+import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.util.UserUtil;
+
+import static org.unimelb.itime.util.UserUtil.getUserUid;
 
 
 /**
@@ -51,8 +54,14 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loginVM = new LoginViewModel(getPresenter());
-        binding.setLoginVM(loginVM);
+
+        String synToken = AuthUtil.getJwtToken(getContext());
+        if (!synToken.equals("")){
+            onLoginSucceed();
+        }else {
+            loginVM = new LoginViewModel(getPresenter());
+            binding.setLoginVM(loginVM);
+        }
     }
 
     @Override
@@ -70,7 +79,8 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
                 if (e == null) {
                     String installationId = AVInstallation.getCurrentInstallation().getInstallationId();
                     Log.d(TAG, "done: " + installationId);
-                    AVInstallation.getCurrentInstallation().put("user_uid", UserUtil.getUserUid());
+                    String userUid = UserUtil.getUserLoginRes()==null? UserUtil.getUserIdFromPreference(getContext()) : UserUtil.getUserUid();
+                    AVInstallation.getCurrentInstallation().put("user_uid", userUid);
                 } else {
 
                 }
@@ -79,7 +89,7 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
         // start service and go to main activity
         Intent intent = new Intent(getActivity(), RemoteService.class);
         getActivity().startService(intent);
-        Toast.makeText(getContext(), "signin success", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "signin success", Toast.LENGTH_SHORT).show();
         Intent mainIntent = new Intent(getActivity(), MainActivity.class);
         startActivity(mainIntent);
         getActivity().finish();

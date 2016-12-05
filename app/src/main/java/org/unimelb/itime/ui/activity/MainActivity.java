@@ -27,6 +27,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.ActivityMainBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
+import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.fragment.EventSearchFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainContactsFragment;
@@ -51,10 +52,6 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     private ActivityMainBinding binding;
     private MainTabBarViewModel tabBarViewModel;
-    private EventSearchFragment eventSearchFragment;
-
-    public final static int CREATE_EVENT = 0;
-    public final static int EDIT_EVENT = 1;
 
     private final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_AND_CAMERA = 1001;
 
@@ -179,12 +176,8 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
+        stopService(new Intent(this, RemoteService.class));
         super.onDestroy();
     }
 }

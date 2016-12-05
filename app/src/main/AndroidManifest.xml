@@ -64,7 +64,7 @@
         </activity>
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:label="Itime" >
+            android:label="Itime">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

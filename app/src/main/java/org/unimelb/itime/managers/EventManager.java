@@ -25,12 +25,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.R.attr.id;
+
 /**
  * Created by yuhaoliu on 29/08/16.
  */
 public class EventManager {
     private final String TAG = "EventManager";
-    private static EventManager ourInstance = new EventManager();
+    private static EventManager ourInstance;
 
     private Event currentEvent = new Event();
 
@@ -54,7 +56,15 @@ public class EventManager {
     private Calendar calendar = Calendar.getInstance();
 
     public static EventManager getInstance() {
+        if (ourInstance == null){
+            ourInstance = new EventManager();
+        }
+
         return ourInstance;
+    }
+
+    public void clearManager(){
+        this.ourInstance = null;
     }
 
     private List<Event> waitingEditEventList= new ArrayList<>(); // this list contains all events that waits for update

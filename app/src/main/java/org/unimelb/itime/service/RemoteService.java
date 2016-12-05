@@ -71,6 +71,8 @@ public class RemoteService extends Service{
     @Override
     public void onDestroy() {
         isStart = false;
+        pollingThread.interrupt();
+        EventManager.getInstance().clearManager();
         super.onDestroy();
     }
 
@@ -222,8 +224,8 @@ public class RemoteService extends Service{
             while (isStart) {
 
                 try {
-                    Thread.sleep(5000);
                     fetchEvents();
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -231,8 +233,6 @@ public class RemoteService extends Service{
 
             }
         }
+
     }
-
-
-
 }

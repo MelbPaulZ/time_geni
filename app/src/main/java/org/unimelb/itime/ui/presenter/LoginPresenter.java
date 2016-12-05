@@ -74,7 +74,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
                 Log.d(TAG, "onNext: " + result.getData().getToken());
                 AuthUtil.saveJwtToken(context, result.getData().getToken());
 
-                UserUtil.getInstance().setUserLoginRes(result.getData());
+                UserUtil.getInstance().setUserLoginRes(context, result.getData());
                 if (getView() != null) {
                     getView().onLoginSucceed();
                 }
