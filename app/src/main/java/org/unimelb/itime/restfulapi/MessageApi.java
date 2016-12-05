@@ -25,5 +25,5 @@ public interface MessageApi {
 
     @FormUrlEncoded
     @POST("message/read")
-    Observable<HttpResult<Void>> read(@Field("messageUids") List<Integer> uids, @Field("isRead") int isRead);
+    Observable<HttpResult<Void>> read(@Field("messageUids") String uids, @Field("isRead") int isRead);
 }

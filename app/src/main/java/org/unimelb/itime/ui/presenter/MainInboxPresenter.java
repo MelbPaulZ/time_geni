@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.presenter;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
@@ -36,9 +37,10 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
 
     public void updateMessage(Message message){
         int isRead = message.getIsRead() == true? 1 : 0;
-        ArrayList<Integer> messageList = new ArrayList<>();
-        messageList.add(Integer.parseInt(message.getMessageUid()));
-        Observable<HttpResult<Void>> observable = messageApi.read(messageList, isRead);
+        ArrayList<String> messageList = new ArrayList<>();
+        messageList.add(message.getMessageUid());
+        Gson gson = new Gson();
+        Observable<HttpResult<Void>> observable = messageApi.read(gson.toJson(messageList), isRead);
         Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
             @Override
             public void onCompleted() {

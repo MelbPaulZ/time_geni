@@ -84,23 +84,12 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
         super.onActivityCreated(savedInstanceState);
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
         binding.setCalenarVM(mainCalendarViewModel);
-        loadData();
         initSpinner();
         initCalendars();
         initBackToday();
         initSearch();
     }
 
-    private void loadData(){
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                EventManager.getInstance().loadDB(getContext());
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-            }
-        }.start();
-    }
 
     private void initSearch(){
         ImageView searchIcon = (ImageView) binding.getRoot().findViewById(R.id.event_search_icon);

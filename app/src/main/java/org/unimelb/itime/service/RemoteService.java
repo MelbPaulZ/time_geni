@@ -31,6 +31,8 @@ import java.util.List;
 import rx.Observable;
 import rx.Subscriber;
 
+import static com.google.common.collect.ComparisonChain.start;
+
 /**
  * Created by yinchuandong on 20/06/2016.
  */
@@ -74,7 +76,6 @@ public class RemoteService extends Service{
 
     private void pullDataFromRemote(){
         fetchCalendar();
-        fetchMessages();
         fetchContact();
     }
 
@@ -214,6 +215,7 @@ public class RemoteService extends Service{
                         fetchEvents(calendar.getCalendarUid());
                         Thread.sleep(5000);
                     }
+                    fetchMessages();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

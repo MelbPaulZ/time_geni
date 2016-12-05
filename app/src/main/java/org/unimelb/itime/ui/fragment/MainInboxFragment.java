@@ -46,7 +46,6 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     private FragmentMainInboxBinding binding;
     private MainInboxPresenter presenter;
     private MessageAdapter messageAdapter;
-    private MainInboxFragment self;
 
     @Override
     public MainInboxPresenter createPresenter() {
@@ -68,7 +67,6 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        self = this;
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
@@ -105,8 +103,12 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
                 presenter.updateMessage(message);
                 // try copy message list and reset
                 messageAdapter.notifyDataSetChanged();
-                Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
-                EventUtil.startEditEventActivity(getContext(), self.getActivity(), event);
+                Event event = EventManager.getInstance().findEventByUid(getContext(), message.getEventUid());
+                if (event==null){
+                    Toast.makeText(getContext(), "cannot find event, please try later", Toast.LENGTH_SHORT).show();
+                }else {
+                    EventUtil.startEditEventActivity(getContext(), getActivity(), event);
+                }
             }
         });
 

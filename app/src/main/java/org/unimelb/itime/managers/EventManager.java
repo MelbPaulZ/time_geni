@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.R.attr.id;
+import static android.R.attr.key;
 
 /**
  * Created by yuhaoliu on 29/08/16.
@@ -300,7 +301,8 @@ public class EventManager {
         DBManager.getInstance().insertEvent(newEvent);
     }
 
-    public ArrayList<ITimeEventInterface> getAllEvents(){
+    public List<ITimeEventInterface> getAllEvents(){
+        List<Event> eventList = DBManager.getInstance().getAllEvents();
         ArrayList<ITimeEventInterface> allEvents = new ArrayList<>();
         for (Map.Entry<Long, List<ITimeEventInterface>> entry: regularEventMap.entrySet()){
             allEvents.addAll(entry.getValue());
@@ -309,15 +311,31 @@ public class EventManager {
         return allEvents;
     }
 
-    public Event findEventInEventList(String eventUid){
-        List<? extends ITimeEventInterface> interfaceList = getAllEvents();
-        List<Event> eventList = (List<Event>) interfaceList;
-        for (Event ev : eventList){
-            if (eventUid.equals(ev.getEventUid())){
-                return ev;
+    public Event findEventByUid(Context context, String eventUid){
+
+        Event event = DBManager.getInstance(context).getEvent(eventUid);
+        if (event==null){
+            return null;
+        }
+        Long key = EventManager.getInstance().getDayBeginMilliseconds(event.getStartTime());
+        if (event.getRecurrence().length!=0){
+            // repeat event
+            for (Event ev : orgRepeatedEventList){
+                if (ev.getEventUid().equals(eventUid)){
+                    return ev;
+                }
+            }
+        }else {
+            // non-repeat event
+            if (regularEventMap.containsKey(key)) {
+                for (ITimeEventInterface iTimeEventInterface : regularEventMap.get(key)) {
+                    if (((Event) iTimeEventInterface).getEventUid().equals(eventUid)) {
+                        return (Event) iTimeEventInterface;
+                    }
+                }
             }
         }
-        throw new RuntimeException("cannot find the event in Eventmanager, eventUid:" + eventUid);
+        return null;
     }
 
     public Event copyCurrentEvent(Event event){

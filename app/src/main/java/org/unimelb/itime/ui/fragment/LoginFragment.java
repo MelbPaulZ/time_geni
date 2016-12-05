@@ -16,8 +16,11 @@ import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.SaveCallback;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginBinding;
+import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.MainActivity;
@@ -62,6 +65,7 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
         }else {
             loginVM = new LoginViewModel(getPresenter());
             binding.setLoginVM(loginVM);
+            loadData();
         }
     }
 
@@ -71,9 +75,19 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
 
     }
 
+    private void loadData(){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                EventManager.getInstance().loadDB(getContext());
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+            }
+        }.start();
+    }
+
     @Override
     public void onLoginSucceed() {
-
         PushService.setDefaultPushCallback(getActivity().getApplication(), MainActivity.class);
         AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
             public void done(AVException e) {

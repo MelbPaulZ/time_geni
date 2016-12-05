@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -71,11 +72,15 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             @Override
             public void onNext(HttpResult<UserLoginRes> result) {
                 Log.d(TAG, "onNext: " + result.getData().getToken());
-                AuthUtil.saveJwtToken(context, result.getData().getToken());
+                if (result.getStatus()!=1){
+                    Toast.makeText(context, "username or password error",Toast.LENGTH_SHORT);
+                }else {
+                    AuthUtil.saveJwtToken(context, result.getData().getToken());
 
-                UserUtil.getInstance().setUserLoginRes(context, result.getData());
-                if (getView() != null) {
-                    getView().onLoginSucceed();
+                    UserUtil.getInstance().setUserLoginRes(context, result.getData());
+                    if (getView() != null) {
+                        getView().onLoginSucceed();
+                    }
                 }
             }
         };

@@ -2,7 +2,6 @@ package org.unimelb.itime.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 
-import com.google.android.gms.nearby.messages.MessageFilter;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
@@ -73,7 +71,7 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public int getViewTypeCount() {
-        return 2;
+        return 3;
     }
 
     /**
@@ -82,31 +80,38 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
     @Override
     public int getItemViewType(int position) {
         Message message = filteredMessageList.get(position);
-        Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
-        if (EventUtil.isUserHostOfEvent(event)) {
-            return TYPE_HOST;
-        } else {
-            return TYPE_INVITEE;
+        switch (message.getTemplate()){
+            case Message.TPL_HOST_CONFIRMED:
+                return 0;
+            case Message.TPL_HOST_UNCONFIRMED:
+                return 1;
+            case Message.TPL_INVITEE:
+                return 2;
+            default:
+                return 0;
         }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         InboxViewModel viewModel = new InboxViewModel(presenter);
-        Event event = EventManager.getInstance().findEventInEventList(filteredMessageList.get(position).getEventUid());
+        Message message = filteredMessageList.get(position);
         if (convertView==null) {
-            if (EventUtil.isUserHostOfEvent(event)) {
+            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)) {
                 inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
                 inboxHostBinding.setVm(viewModel);
                 inboxHostBinding.setMessage(filteredMessageList.get(position));
-
                 convertView = inboxHostBinding.getRoot();
-            } else {
+            }else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED)){
+                inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
+                inboxHostBinding.setVm(viewModel);
+                inboxHostBinding.setMessage(filteredMessageList.get(position));
+            }
+            else {
                 inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
                 inboxInviteeBinding.setVm(viewModel);
                 inboxInviteeBinding.setMessage(filteredMessageList.get(position));
                 convertView = inboxInviteeBinding.getRoot();
-
                 //david added
                 setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)));
 

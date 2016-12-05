@@ -14,6 +14,11 @@ import org.unimelb.itime.dao.MessageDao;
  */
 @Entity(active = true)
 public class Message {
+    public final static String TPL_INVITEE = "invitee";
+    public final static String TPL_HOST_UNCONFIRMED = "host_unconfirmed";
+    public final static String TPL_DELETED = "deleted";
+    public final static String TPL_HOST_CONFIRMED = "host_confirmed";
+
     String title = "";
     String subtitle1 = "";
     String subtitle2 = "";
@@ -23,6 +28,25 @@ public class Message {
     String eventUid = "";
     String createdAt = "";
     String updatedAt = "";
+
+    String template = "";
+    String photo = "";
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     int num1;
     int num2;
@@ -40,10 +64,10 @@ public class Message {
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    @Generated(hash = 1851012146)
-    public Message(String title, String subtitle1, String subtitle2,
-            String messageUid, String userUid, String eventUid, String createdAt,
-            String updatedAt, int num1, int num2, int num3, int type,
+    @Generated(hash = 1952421031)
+    public Message(String title, String subtitle1, String subtitle2, String messageUid,
+            String userUid, String eventUid, String createdAt, String updatedAt,
+            String template, String photo, int num1, int num2, int num3, int type,
             int deleteLevel, boolean isRead, boolean hasBadge) {
         this.title = title;
         this.subtitle1 = subtitle1;
@@ -53,6 +77,8 @@ public class Message {
         this.eventUid = eventUid;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.template = template;
+        this.photo = photo;
         this.num1 = num1;
         this.num2 = num2;
         this.num3 = num3;
