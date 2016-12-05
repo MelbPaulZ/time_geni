@@ -80,16 +80,16 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
                 if (e == null) {
                     String installationId = AVInstallation.getCurrentInstallation().getInstallationId();
                     Log.d(TAG, "done: " + installationId);
-                    String userUid;
-                    if (UserUtil.getUserLoginRes()==null){
-                        userUid = UserUtil.getUserIdFromPreference(getContext());
-                    }else{
-                        userUid = UserUtil.getUserUid();
-                    }
-                    AVInstallation.getCurrentInstallation().put("user_uid", userUid);
                 } else {
 
                 }
+                String userUid;
+                if (UserUtil.getUserLoginRes()==null){
+                    userUid = UserUtil.getUserIdFromPreference(getContext());
+                }else{
+                    userUid = UserUtil.getUserUid();
+                }
+                AVInstallation.getCurrentInstallation().put("user_uid", userUid);
             }
         });
         // start service and go to main activity

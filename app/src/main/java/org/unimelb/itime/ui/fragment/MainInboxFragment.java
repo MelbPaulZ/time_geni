@@ -66,14 +66,11 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     private FragmentMainInboxBinding binding;
     private InboxViewModel inboxViewModel;
     private MainInboxPresenter presenter;
-    private MessageApi msgApi;
     private MessageAdapter messageAdapter;
     private MainInboxFragment self;
 
     @Override
     public MainInboxPresenter createPresenter() {
-        msgApi = HttpUtil.createService(getContext(), MessageApi.class);
-
         if (presenter == null) {
             presenter = new MainInboxPresenter(getContext());
         }
@@ -126,6 +123,7 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
                 Message message = (Message) messageAdapter.getItem(i);
                 message.setRead(true);
                 message.update();
+                presenter.updateMessage(message);
                 // try copy message list and reset
                 messageAdapter.notifyDataSetChanged();
                 Event event = EventManager.getInstance().findEventInEventList(message.getEventUid());
@@ -137,10 +135,8 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 Toast.makeText(getContext(), "Delete Message",Toast.LENGTH_SHORT).show();
-                Log.i("db size before", "onMenuItemClick: " + DBManager.getInstance().getAllMessages().size());
                 Message msg = DBManager.getInstance().getAllMessages().get(position);
                 msg.delete();
-                Log.i("db size after", "onMenuItemClick: " + DBManager.getInstance().getAllMessages().size());
                 messageAdapter.setMessageList(DBManager.getInstance().getAllMessages());
                 return false;
             }
@@ -163,32 +159,6 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     }
 
 
-
-    public void postMessageUpdate(Message msg){
-        Observable<HttpResult<String>> observable = msgApi.read(msg.getEventUid(),msg.isRead() ? 1 : 0);
-        Subscriber<HttpResult<String>> subscriber = new Subscriber<HttpResult<String>>(){
-
-            public static final String TAG = "postMessageUpdate";
-
-            @Override
-            public void onCompleted() {
-                Log.i(TAG, "onCompleted: ");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.i(TAG, "onError: ");
-            }
-
-            @Override
-            public void onNext(HttpResult<String> stringHttpResult) {
-                Log.i(TAG, "onNext: ");
-
-            }
-        };
-
-        HttpUtil.subscribe(observable, subscriber);
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getInboxMessage(MessageInboxMessage messageInboxMessage){

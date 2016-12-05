@@ -65,10 +65,6 @@ public class RemoteService extends Service{
     }
 
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
-    }
 
     @Override
     public void onDestroy() {
@@ -99,17 +95,7 @@ public class RemoteService extends Service{
             @Override
             public void onNext(HttpResult<List<org.unimelb.itime.bean.Calendar>> httpResult) {
                 CalendarUtil.getInstance().setCalendar(httpResult.getData());
-
-                //start to load local db than start polling thread
-                new Thread(){
-                    @Override
-                    public void run() {
-                        //load local DB to manager
-                        EventManager.getInstance().loadDB(getApplicationContext());
-                        //start to polling
-                        pollingThread.start();
-                    }
-                }.start();
+                pollingThread.start();
             }
         };
         HttpUtil.subscribe(calendarApi.list(), subscriber);
