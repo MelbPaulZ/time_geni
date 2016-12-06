@@ -251,6 +251,7 @@ public class EventDetailViewModel extends CommonViewModel {
 
 
     public String getPeopleNum(Timeslot timeslot, Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> adapterData){
+
         List<EventDetailGroupFragment.StatusKeyStruct> structs = adapterData.get(timeslot.getTimeslotUid());
         int count = 0;
         for (EventDetailGroupFragment.StatusKeyStruct struct: structs

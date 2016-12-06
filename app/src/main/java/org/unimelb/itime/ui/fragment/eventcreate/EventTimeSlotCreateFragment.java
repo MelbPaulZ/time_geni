@@ -131,7 +131,7 @@ public class EventTimeSlotCreateFragment extends BaseUiFragment<TimeslotCreateMv
         popupWindow = new PopupWindow(pickerBinding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT, 850);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.AnimationPopup);
-        popupWindow.showAtLocation(binding.getRoot(), Gravity.BOTTOM, 0, -600);
+        popupWindow.showAtLocation(binding.getRoot(), Gravity.BOTTOM, 0, 0);
     }
 
     @Override

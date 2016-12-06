@@ -67,7 +67,7 @@ public class EventEditViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    if (eventEditViewEvent.getInvitee().size()>1) {
+                    if (eventEditViewEvent.getEventType().equals(getContext().getString(R.string.group))) {
                         mvpView.toHostEventDetail();
                     }else{
                         mvpView.toSoloEventDetail();
@@ -120,14 +120,13 @@ public class EventEditViewModel extends CommonViewModel {
                         EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
                         presenter.updateEvent(eventEditViewEvent);
                         // this if might change later, because the host can be kicked??????
-                        if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>1) {
-//                            mvpView.toHostEventDetail(eventEditViewEvent);
+                        if (eventEditViewEvent.getEventType().equals(getContext().getString(R.string.group))) {
+                            mvpView.toHostEventDetail(eventEditViewEvent);
                         }else{
-//                            mvpView.toSoloEventDetail(eventEditViewEvent);
+                            mvpView.toSoloEventDetail(eventEditViewEvent);
                         }
                     }
                 }
-
             }
         };
     }

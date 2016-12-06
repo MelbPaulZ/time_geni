@@ -255,5 +255,6 @@
     <string name="going">Going</string>
     <string name="no_reply">No Reply</string>
     <string name="inbox">Inbox</string>
+    <string name="group">group</string>
 
 </resources>
