@@ -128,7 +128,7 @@ public class EventTimeSlotCreateFragment extends BaseUiFragment<TimeslotCreateMv
         setupWheels(minutePicker, EventUtil.getMinutes());
         minutePicker.setSelectedItemPosition(EventUtil.getMinutes().indexOf(minute+""));
 
-        popupWindow = new PopupWindow(pickerBinding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT, 850);
+        popupWindow = new PopupWindow(pickerBinding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT, 500);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.AnimationPopup);
         popupWindow.showAtLocation(binding.getRoot(), Gravity.BOTTOM, 0, 0);
