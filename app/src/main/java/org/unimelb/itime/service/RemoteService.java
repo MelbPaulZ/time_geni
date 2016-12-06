@@ -44,6 +44,7 @@ public class RemoteService extends Service{
     private ContactApi contactApi;
     private Boolean isStart = true;
     private PollingThread pollingThread;
+    private Thread updateThread;
 
     @Nullable
     @Override
@@ -54,7 +55,6 @@ public class RemoteService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "onStartCommand: " + "start remoteservice");
         eventApi = HttpUtil.createService(getBaseContext(), EventApi.class);
         msgApi = HttpUtil.createService(getBaseContext(), MessageApi.class);
         calendarApi = HttpUtil.createService(getBaseContext(), CalendarApi.class);
@@ -62,8 +62,9 @@ public class RemoteService extends Service{
 
         //create the polling thread
         pollingThread = new PollingThread();
-
+        Log.i(TAG, "onCreate: " + "service onCreate");
         pullDataFromRemote();
+
     }
 
     @Override
@@ -71,6 +72,7 @@ public class RemoteService extends Service{
         isStart = false;
         pollingThread.interrupt();
         Log.i(TAG, "onDestroy: " + "is destroyed");
+        updateThread.interrupt();
         super.onDestroy();
     }
 
@@ -164,9 +166,16 @@ public class RemoteService extends Service{
 
 
                 // successfully get event from server
-                EventManager.getInstance().updateDB(eventList);
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-                Log.i(TAG, "onNext: " + result.getData().size());
+                updateThread = new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        EventManager.getInstance().updateDB(eventList);
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                        Log.i(TAG, "onNext: " + result.getData().size());
+                    }
+                };
+                updateThread.start();
 
             }
         };

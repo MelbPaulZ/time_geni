@@ -1,12 +1,16 @@
 package org.unimelb.itime.ui.fragment.eventdetail;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -59,6 +63,21 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
         eventEditViewModel.setEventEditViewEvent(event);
         binding.setEventEditVM(eventEditViewModel);
         setProposedTimeSlots(event);
+
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            // pupup keyboard for title
+            if (getFrom() instanceof EventDetailSoloFragment || getFrom() instanceof EventDetailGroupFragment){
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+                EditText editText = (EditText) binding.getRoot().findViewById(R.id.edit_event_title);
+                editText.requestFocus();
+            }
+        }
     }
 
     public void setProposedTimeSlots(Event event){

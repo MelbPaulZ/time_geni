@@ -9,6 +9,8 @@ import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -118,9 +120,9 @@ public class EventEditViewModel extends CommonViewModel {
                 }else {
                     if (mvpView!=null){
                         // set event type
+                        EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
                         eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
                         eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence()); // set the repeat string
-                        EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
 
                         presenter.updateEvent(eventEditViewEvent);
                         // this if might change later, because the host can be kicked??????
@@ -138,9 +140,9 @@ public class EventEditViewModel extends CommonViewModel {
     private void changeAllEvent(Event event){
         if (mvpView!=null){
             // set event type
-            event.setEventType(EventUtil.getEventType(event, UserUtil.getUserUid()));
             event.setRecurrence(event.getRule().getRecurrence()); // set the repeat string
             EventUtil.addSelfInInvitee(getContext(), event);
+            event.setEventType(EventUtil.getEventType(event, UserUtil.getUserUid()));
 
             // next find original event(the first event of repeat event)
             Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
@@ -161,9 +163,9 @@ public class EventEditViewModel extends CommonViewModel {
     private void changeOnlyThisEvent(Event event){
         if (mvpView!=null){
             // set event type
-            event.setEventType(EventUtil.getEventType(event, UserUtil.getUserUid()));
             event.setRecurrence(event.getRule().getRecurrence()); // set the repeat string
             EventUtil.addSelfInInvitee(getContext(), event);
+            event.setEventType(EventUtil.getEventType(event, UserUtil.getUserUid()));
 
             // next find original event(the first event of repeat event)
             Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
@@ -182,6 +184,18 @@ public class EventEditViewModel extends CommonViewModel {
 //            }
         }
     }
+
+//    @BindingAdapter({"bind:keyboard"})
+//    public static void setKeyBoard(EditText view, int isShow){
+//        if (isShow!=0){
+//            view.setFocusable(true);
+//            if (view.requestFocus()){
+//                view.
+//            }
+//        }else{
+//            view.setFocusable(false);
+//        }
+//    }
 
     public View.OnClickListener editTimeSlot(){
         // chuan can shu next to do

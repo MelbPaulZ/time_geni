@@ -216,8 +216,10 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
 
                 // set event start time and end time, using the latest timeslot
                 Timeslot displayTimeslot = TimeSlotUtil.getLatestTimeSlot(pendingTimeslots);
-                newEvDtlEvent.setStartTime(displayTimeslot.getStartTime());
-                newEvDtlEvent.setEndTime(displayTimeslot.getEndTime());
+                if (displayTimeslot!=null) {
+                    newEvDtlEvent.setStartTime(displayTimeslot.getStartTime());
+                    newEvDtlEvent.setEndTime(displayTimeslot.getEndTime());
+                }
 
                 newEvDtlEvent.setRecurrence(newEvDtlEvent.getRule().getRecurrence());
                 newEvDtlEvent.setTimeslot(pendingTimeslots);
