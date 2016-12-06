@@ -74,6 +74,10 @@ public class EventManager {
         return ourInstance;
     }
 
+    public List<Event> getOrgRepeatedEventList(){
+        return this.orgRepeatedEventList;
+    }
+
 
     public void clearManager(){
         this.ourInstance = null;

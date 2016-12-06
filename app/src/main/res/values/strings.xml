@@ -257,4 +257,7 @@
     <string name="inbox">Inbox</string>
     <string name="group">group</string>
 
+    <string name="Save_for_this_event_only">Save for this event only</string>
+    <string name="Save_for_future_events">Save for future events</string>
+
 </resources>

@@ -579,6 +579,14 @@ public class EventUtil{
         return event.getHostUserUid().equals(UserUtil.getUserUid());
     }
 
+    public static CharSequence[] getRepeatEventChangeOptions(Context context){
+        CharSequence[] sequences = new CharSequence[3];
+        sequences[0] = context.getString(R.string.Save_for_this_event_only);
+        sequences[1] = context.getString(R.string.Save_for_future_events);
+        sequences[2] = context.getString(R.string.cancel);
+        return sequences;
+    }
+
 
 
 
