@@ -33,7 +33,7 @@ public interface EventApi {
     Observable<HttpResult<Event>> update(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body Event event);
 
     @POST("event/delete/{calendarUid}/{eventUid}")
-    Observable<HttpResult<Event>> delete();
+    Observable<HttpResult<Event>> delete(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid);
 
     @POST("event/confirm/{calendarUid}/{eventUid}/{timeslotUid}")
     Observable<HttpResult<Event>> confirm(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Path("timeslotUid") String timeslotUid,@Body Event event);

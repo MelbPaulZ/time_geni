@@ -438,6 +438,7 @@
             android:textAlignment="center"
             android:layout_marginLeft="@dimen/padding_10"
             android:layout_marginRight="@dimen/padding_10"
+            android:onClick="@{eventEditVM.onClickDelete()}"
             android:textColor="@color/white" />
     </LinearLayout>
 </layout>

@@ -71,7 +71,6 @@ public class RemoteService extends Service{
         isStart = false;
         pollingThread.interrupt();
         Log.i(TAG, "onDestroy: " + "is destroyed");
-//        EventManager.getInstance().clearManager();
         super.onDestroy();
     }
 
@@ -163,15 +162,12 @@ public class RemoteService extends Service{
                 editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, result.getSyncToken());
                 editor.apply();
 
-                new Thread(){
-                    @Override
-                    public void run() {
-                        // successfully get event from server
-                        EventManager.getInstance().updateDB(eventList);
-                        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-                        Log.i(TAG, "onNext: " + result.getData().size());
-                    }
-                }.start();
+
+                // successfully get event from server
+                EventManager.getInstance().updateDB(eventList);
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                Log.i(TAG, "onNext: " + result.getData().size());
+
             }
         };
         HttpUtil.subscribe(observable, subscriber);
