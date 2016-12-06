@@ -313,7 +313,6 @@ public class EventManager {
     }
 
     public List<ITimeEventInterface> getAllEvents(){
-        List<Event> eventList = DBManager.getInstance().getAllEvents();
         ArrayList<ITimeEventInterface> allEvents = new ArrayList<>();
         for (Map.Entry<Long, List<ITimeEventInterface>> entry: regularEventMap.entrySet()){
             allEvents.addAll(entry.getValue());
@@ -419,24 +418,24 @@ public class EventManager {
         }
     }
 
-    public void updateDB(List<Event> events){
+    public synchronized void updateDB(List<Event> events){
         List<? extends ITimeEventInterface> orgITimeInterfaces = EventManager.getInstance().getAllEvents();
         List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
 
-        for (Event event:events
-                ) {
+        for (Event event:events) {
             Event orgOld = null;
 
-            for (Event orgEvent:orgEvents
-                    ) {
+            for (Event orgEvent:orgEvents) {
                 if (orgEvent.getEventUid().equals(event.getEventUid())){
                     orgOld = orgEvent;
+                    // find event in event manager, and then update
                     EventManager.getInstance().updateEvent(orgOld,event);
                     break;
                 }
             }
 
             if (orgOld == null){
+                // if cannot find event, then insert it in DB and eventmanager
                 DBManager.getInstance().insertEvent(event);
                 EventManager.getInstance().addEvent(event);
             }

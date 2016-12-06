@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.util.UserUtil;
 
+import static android.os.SystemClock.currentThreadTimeMillis;
 import static org.unimelb.itime.util.UserUtil.getUserUid;
 
 
@@ -111,12 +113,14 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
             }
         });
         // start service and go to main activity
+        long start = System.currentTimeMillis();
         Intent intent = new Intent(getActivity(), RemoteService.class);
         getActivity().startService(intent);
 //        Toast.makeText(getContext(), "signin success", Toast.LENGTH_SHORT).show();
         Intent mainIntent = new Intent(getActivity(), MainActivity.class);
         startActivity(mainIntent);
         getActivity().finish();
+        Log.i(TAG, "onLoginSucceed: " + (System.currentTimeMillis() - start));
     }
 
     @Override

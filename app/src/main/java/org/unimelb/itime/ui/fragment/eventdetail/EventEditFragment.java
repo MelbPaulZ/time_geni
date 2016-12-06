@@ -1,12 +1,17 @@
 package org.unimelb.itime.ui.fragment.eventdetail;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -59,6 +64,46 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
         eventEditViewModel.setEventEditViewEvent(event);
         binding.setEventEditVM(eventEditViewModel);
         setProposedTimeSlots(event);
+    }
+
+    // todo try databinding to bind the edit text
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//        if (!hidden){
+//            // pupup keyboard for title
+//            if (getFrom() instanceof EventDetailSoloFragment || getFrom() instanceof EventDetailGroupFragment){
+//                Log.i("show edit text", "onHiddenChanged: " + "show keyboard");
+//                EditText editText = (EditText) binding.getRoot().findViewById(R.id.edit_event_title);
+//                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+//            }
+//        }
+//    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+    }
+
+    @Override
+    public void onEnter() {
+        super.onEnter();
+        if (getFrom() instanceof EventDetailSoloFragment || getFrom() instanceof EventDetailGroupFragment){
+            EditText editText = (EditText) binding.getRoot().findViewById(R.id.edit_event_title);
+            editText.setFocusable(true);
+            editText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
+
+    @Override
+    public void onLeave() {
+        super.onLeave();
+        EditText editText = (EditText) binding.getRoot().findViewById(R.id.edit_event_title);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
     public void setProposedTimeSlots(Event event){

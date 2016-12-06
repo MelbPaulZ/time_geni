@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.eventdetail;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -79,10 +82,12 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         setProposedTimeSlots(event);
     }
 
+
     @Override
     public EventDetailGroupPresenter createPresenter() {
         return new EventDetailGroupPresenter(getContext(),inflater);
     }
+    
 
     @Override
     public void toCalendar() {

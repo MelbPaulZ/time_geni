@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -44,6 +45,8 @@ public class RemoteService extends Service{
     private ContactApi contactApi;
     private Boolean isStart = true;
     private PollingThread pollingThread;
+    private Thread updateThread;
+    private boolean isUpdateThreadRuning, isPollingThreadRunning = false;
 
     @Nullable
     @Override
@@ -54,7 +57,6 @@ public class RemoteService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "onStartCommand: " + "start remoteservice");
         eventApi = HttpUtil.createService(getBaseContext(), EventApi.class);
         msgApi = HttpUtil.createService(getBaseContext(), MessageApi.class);
         calendarApi = HttpUtil.createService(getBaseContext(), CalendarApi.class);
@@ -62,15 +64,33 @@ public class RemoteService extends Service{
 
         //create the polling thread
         pollingThread = new PollingThread();
-
+        Log.i(TAG, "onCreate: " + "service onCreate");
         pullDataFromRemote();
+
     }
 
     @Override
     public void onDestroy() {
         isStart = false;
+        while (isPollingThreadRunning){
+            if (!isPollingThreadRunning){
+                break;
+            }
+            Log.i(TAG, "onDestroy: " + "polling thread running");
+            SystemClock.sleep(50);
+        }
         pollingThread.interrupt();
-        Log.i(TAG, "onDestroy: " + "is destroyed");
+
+        while (isUpdateThreadRuning){
+            if (!isUpdateThreadRuning){
+                break;
+            }
+            Log.i(TAG, "onDestroy: " + "isUpdateThread running");
+            SystemClock.sleep(50);
+        }
+        Log.i(TAG, "onDestroy: " + "updateThread interrupts");
+        updateThread.interrupt();
+        EventBus.getDefault().post(new MessageEvent(MessageEvent.LOGOUT));
         super.onDestroy();
     }
 
@@ -150,7 +170,7 @@ public class RemoteService extends Service{
 
             @Override
             public void onError(Throwable e) {
-                Log.i(TAG, "onError: " + "eventApi");
+                Log.i(TAG, "onError: " + "eventApi" + e.getMessage());
             }
 
             @Override
@@ -164,10 +184,23 @@ public class RemoteService extends Service{
 
 
                 // successfully get event from server
-                EventManager.getInstance().updateDB(eventList);
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-                Log.i(TAG, "onNext: " + result.getData().size());
-
+                if (updateThread == null) {
+                    updateThread = new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            Log.i(TAG, "run: " + "create new updateThread");
+                            isUpdateThreadRuning = true;
+                            Log.i(TAG, "run: " + "updateThread start runs");
+                            EventManager.getInstance().updateDB(eventList);
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                            Log.i(TAG, "run: " + "updateThread stop runs");
+                            Log.i(TAG, "onNext: " + result.getData().size());
+                            isUpdateThreadRuning = false;
+                        }
+                    };
+                    updateThread.start();
+                }
             }
         };
         HttpUtil.subscribe(observable, subscriber);
@@ -202,22 +235,18 @@ public class RemoteService extends Service{
     private class PollingThread extends Thread {
         @Override
         public void run() {
-
+            isPollingThreadRunning = true;
             while (isStart) {
-
-                try {
-
                     // todo: here to list events
                     for(Calendar calendar : CalendarUtil.getInstance().getCalendar()){
                         fetchEvents(calendar.getCalendarUid());
-                        Thread.sleep(5000);
+                        SystemClock.sleep(5000); // cannot use thread sleep because of interrupt exception when sleep
                     }
                     fetchMessages();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
                 // do something
             }
+            isPollingThreadRunning = false;
 
         }
 

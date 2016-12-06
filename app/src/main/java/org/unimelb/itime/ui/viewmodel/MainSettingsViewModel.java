@@ -3,8 +3,11 @@ package org.unimelb.itime.ui.viewmodel;
 import android.databinding.BaseObservable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.unimelb.itime.ui.presenter.MainSettingsPresenter;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by yuhaoliu on 5/12/2016.
@@ -24,6 +27,7 @@ public class MainSettingsViewModel extends BaseObservable{
             @Override
             public void onClick(View v) {
                 v.setClickable(false);
+                Toast.makeText(presenter.getContext(), "Logging Out", Toast.LENGTH_SHORT).show();
                 presenter.logOut();
             }
         };

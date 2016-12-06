@@ -27,6 +27,7 @@ import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
+import org.unimelb.itime.ui.activity.EventSearchActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarAgendaFragment;
 import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
@@ -51,7 +52,6 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
     private CalendarWeekFragment weekFragment;
     private FragmentMainCalendarBinding binding;
     private MainCalendarViewModel mainCalendarViewModel;
-    private EventSearchFragment eventSearchFragment;
 
 
     public void reloadEvent(){
@@ -96,11 +96,8 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
         searchIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (eventSearchFragment==null){
-                    eventSearchFragment = new EventSearchFragment();
-                    getFragmentManager().beginTransaction().add(R.id.main_fragment_container, eventSearchFragment, eventSearchFragment.getClassName()).hide(eventSearchFragment).commit();
-                }
-                switchFragment(MainCalendarFragment.this, eventSearchFragment);
+                Intent intent = new Intent(getActivity(), EventSearchActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -210,15 +207,5 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshSearchAdapter(MessageEvent messageEvent){
-        if (messageEvent.task == MessageEvent.RELOAD_EVENT){
-            EventSearchFragment eventSearchFragment = (EventSearchFragment) getFragmentManager().findFragmentByTag(EventSearchFragment.class.getSimpleName());
-            if (eventSearchFragment!=null){
-                eventSearchFragment.refreshAdapter();
-            }
-        }
     }
 }
