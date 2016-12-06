@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.TextSwitcher;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
