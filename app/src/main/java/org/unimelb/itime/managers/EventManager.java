@@ -121,6 +121,7 @@ public class EventManager {
             }
         }else{
             orgRepeatedEventList.add(event);
+            Log.i(TAG, "addEvent: addRepeatedEvent");
             this.addRepeatedEvent(event,nowRepeatedStartAt.getTimeInMillis(),nowRepeatedEndAt.getTimeInMillis());
         }
     }
@@ -142,7 +143,7 @@ public class EventManager {
                 throw new RuntimeException("Clone error");
             }
 
-          //dup time is right
+            //dup time is right
 
             long duration = dup_event.getDurationMilliseconds();
             dup_event.setStartTime(time);
@@ -174,7 +175,6 @@ public class EventManager {
     public void refreshRepeatedEvent(long currentDate){
         boolean reachPreFlg = currentDate < this.getLoadPreFlag();
         boolean reachFurFlg = currentDate > this.getLoadFurFlag();
-        Log.i(TAG, "refreshRepeatedEvent: ");
         if (reachPreFlg || reachFurFlg){
             //load more pre
             if (reachPreFlg){
@@ -254,28 +254,28 @@ public class EventManager {
     }
 
     // this is for event drag
-    public void updateEvent(Event oldEvent, long newStartTime, long newEndTime){
-        if (oldEvent.getRecurrence().length == 0){
-            long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
-            if (this.regularEventMap.containsKey(oldBeginTime)){
-                Event updateEvent = null;
-                for (ITimeEventInterface ev : regularEventMap.get(oldBeginTime)){
-                    if (((Event)ev).getEventUid().equals(oldEvent.getEventUid())){
-                        updateEvent = (Event) ev;
-                        break;
-                    }
-                }
-                if (updateEvent!=null){
-                    this.regularEventMap.get(oldBeginTime).remove(updateEvent);
-                }
-                oldEvent.setStartTime(newStartTime);
-                oldEvent.setEndTime(newEndTime);
-                this.addEvent(oldEvent);
-            }
-        }else {
-
-        }
-    }
+//    public void updateEvent(Event oldEvent, long newStartTime, long newEndTime){
+//        if (oldEvent.getRecurrence().length == 0){
+//            long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
+//            if (this.regularEventMap.containsKey(oldBeginTime)){
+//                Event updateEvent = null;
+//                for (ITimeEventInterface ev : regularEventMap.get(oldBeginTime)){
+//                    if (((Event)ev).getEventUid().equals(oldEvent.getEventUid())){
+//                        updateEvent = (Event) ev;
+//                        break;
+//                    }
+//                }
+//                if (updateEvent!=null){
+//                    this.regularEventMap.get(oldBeginTime).remove(updateEvent);
+//                }
+//                oldEvent.setStartTime(newStartTime);
+//                oldEvent.setEndTime(newEndTime);
+//                this.addEvent(oldEvent);
+//            }
+//        }else {
+//
+//        }
+//    }
 
     // repeat event update need to change
     public void updateEvent(Event oldEvent, Event newEvent){
@@ -303,6 +303,7 @@ public class EventManager {
         }else{
             //if old is repeated
             this.removeRepeatedEvent(oldEvent);
+            this.orgRepeatedEventList.remove(oldEvent);
             this.addEvent(newEvent);
         }
         // here update DB

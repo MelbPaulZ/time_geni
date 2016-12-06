@@ -91,6 +91,7 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
 
     private void synchronizeLocal(Event newEvent){
         Event oldEvent = EventManager.getInstance().getCurrentEvent();
+        Log.i(TAG, "APPP: synchronizeLocal: EventeditPresenter");
         EventManager.getInstance().updateEvent(oldEvent, newEvent);
     }
 

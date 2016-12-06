@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.view.View;
+import android.widget.Button;
 
 import org.unimelb.itime.ui.presenter.MainSettingsPresenter;
 
@@ -22,7 +23,8 @@ public class MainSettingsViewModel extends BaseObservable{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                  presenter.logOut();
+                v.setClickable(false);
+                presenter.logOut();
             }
         };
     }
