@@ -417,12 +417,14 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
 
             Calendar helper = Calendar.getInstance();
             helper.setTimeInMillis(startTime);
-            int orgHour = helper.get(Calendar.HOUR);
+            int orgHour = helper.get(Calendar.HOUR_OF_DAY);
             int orgMinute = helper.get(Calendar.MINUTE);
 
             cal.setTimeZone(TimeZone.getDefault());
-            cal.set(Calendar.HOUR,orgHour);
+            cal.set(Calendar.HOUR_OF_DAY,orgHour);
             cal.set(Calendar.MINUTE,orgMinute);
+
+            boolean hasUntil = until != null;
 
             switch (frequencyEnum){
                 case DAILY: {
@@ -431,13 +433,13 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
                     cal.add(Calendar.DATE, remains);
 
                     long currentAvailableDate = cal.getTimeInMillis();
-                    while(currentAvailableDate < endRange){
+
+                    while((hasUntil ? currentAvailableDate < until.getTime() : true)
+                            && currentAvailableDate < endRange ){
                         dt.setTime(currentAvailableDate);
                         if (isInRDate(dt) || (currentAvailableDate >= startRange && !isInEXDate(dt))){
                             availableDates.add(currentAvailableDate);
                         }
-
-                        Log.i(TAG, "getOccurenceDates: " + cal.getTime());
 
                         cal.add(Calendar.DATE, interval);
                         currentAvailableDate = cal.getTimeInMillis();
@@ -450,7 +452,8 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
                     cal.add(Calendar.DATE, remains);
 
                     long currentAvailableDate = cal.getTimeInMillis();
-                    while(currentAvailableDate < endRange){
+                    while((hasUntil ? currentAvailableDate < until.getTime() : true)
+                        && currentAvailableDate < endRange){
                         dt.setTime(currentAvailableDate);
                         if (isInRDate(dt) || (currentAvailableDate >= startRange && !isInEXDate(dt))){
                             availableDates.add(currentAvailableDate);
@@ -477,7 +480,8 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
                     cal.add(Calendar.DATE, remainsDay);
 
                     long currentAvailableDate = cal.getTimeInMillis();
-                    while(currentAvailableDate < endRange){
+                    while((hasUntil ? currentAvailableDate < until.getTime() : true)
+                            && currentAvailableDate < endRange){
                         dt.setTime(currentAvailableDate);
 
                         if (isInRDate(dt) || (currentAvailableDate >= startRange && !isInEXDate(dt))){
@@ -509,7 +513,8 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
                     cal.add(Calendar.DATE, remainsDay);
 
                     long currentAvailableDate = cal.getTimeInMillis();
-                    while(currentAvailableDate < endRange){
+                    while((hasUntil ? currentAvailableDate < until.getTime() : true)
+                            && currentAvailableDate < endRange){
                         dt.setTime(currentAvailableDate);
 
                         if (isInRDate(dt) || (currentAvailableDate >= startRange && !isInEXDate(dt))){

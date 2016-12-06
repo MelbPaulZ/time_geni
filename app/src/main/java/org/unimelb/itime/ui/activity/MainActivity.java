@@ -5,12 +5,20 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
@@ -32,6 +40,7 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
 
@@ -123,7 +132,30 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
             }
         }
         fragmentTransaction.commit();
+    }
 
+    @Override
+    public void refreshTabStatus(int pageId){
+        LinearLayout main_tab_ll = (LinearLayout) this.findViewById(R.id.main_tab_ll);
+        int count = main_tab_ll.getChildCount();
+        for (int i = 0; i < count; i++) {
+            boolean isActive = pageId == i;
+            int color = getResources().getColor(isActive ? R.color.blue : R.color.gray);
+            View child = main_tab_ll.getChildAt(i);
+            if (child instanceof ViewGroup){
+                int innerCount = ((ViewGroup) child).getChildCount();
+                for (int j = 0; j < innerCount; j++) {
+                    View innerChild = ((ViewGroup) child).getChildAt(j);
+                    Object tag = innerChild.getTag();
+                    if (tag != null){
+                        if (innerChild.getTag().equals("tab_icon")){
+                        }else if(innerChild.getTag().equals("tab_text")){
+                            ((TextView) innerChild).setTextColor(color);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
