@@ -29,8 +29,4 @@ public class CalendarUtil {
         this.calendars = calendars;
     }
 
-    public java.util.Calendar getNowCalendar(){
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
-        return calendar;
-    }
 }

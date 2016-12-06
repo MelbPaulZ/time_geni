@@ -21,6 +21,8 @@ import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
@@ -34,6 +36,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -118,13 +121,14 @@ public class EventEditViewModel extends CommonViewModel {
                         eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
                         eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence()); // set the repeat string
                         EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
+
                         presenter.updateEvent(eventEditViewEvent);
                         // this if might change later, because the host can be kicked??????
-                        if (eventEditViewEvent.getEventType().equals(getContext().getString(R.string.group))) {
-                            mvpView.toHostEventDetail(eventEditViewEvent);
-                        }else{
-                            mvpView.toSoloEventDetail(eventEditViewEvent);
-                        }
+//                        if (eventEditViewEvent.getEventType().equals(getContext().getString(R.string.group))) {
+//                            mvpView.toHostEventDetail(eventEditViewEvent);
+//                        }else{
+//                            mvpView.toSoloEventDetail(eventEditViewEvent);
+//                        }
                     }
                 }
             }
@@ -146,11 +150,11 @@ public class EventEditViewModel extends CommonViewModel {
 
             presenter.updateEvent(copyEventSendToServer);
             // this if might change later, because the host can be kicked??????
-            if (event.hasAttendee() && event.getInvitee().size()>1) {
-                mvpView.toHostEventDetail(event);
-            }else{
-                mvpView.toSoloEventDetail(event);
-            }
+//            if (event.getEventType().equals(getContext().getString(R.string.group))) {
+//                mvpView.toHostEventDetail(event);
+//            }else{
+//                mvpView.toSoloEventDetail(event);
+//            }
         }
     }
 
@@ -171,11 +175,11 @@ public class EventEditViewModel extends CommonViewModel {
             event.setRecurringEventId(orgEvent.getEventId());
             presenter.updateOnlyThisEvent(orgEvent,event);
             // this if might change later, because the host can be kicked??????
-            if (event.hasAttendee() && event.getInvitee().size()>1) {
-                mvpView.toHostEventDetail(event);
-            }else{
-                mvpView.toSoloEventDetail(event);
-            }
+//            if (event.getEventType().equals(getContext().getString(R.string.group))) {
+//                mvpView.toHostEventDetail(event);
+//            }else{
+//                mvpView.toSoloEventDetail(event);
+//            }
         }
     }
 
@@ -275,6 +279,15 @@ public class EventEditViewModel extends CommonViewModel {
                 if (mvpView!=null){
                     mvpView.toInviteePicker();
                 }
+            }
+        };
+    }
+
+    public View.OnClickListener onClickDelete(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.deleteEvent(eventEditViewEvent);
             }
         };
     }

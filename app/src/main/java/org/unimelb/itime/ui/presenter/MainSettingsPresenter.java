@@ -33,10 +33,10 @@ public class MainSettingsPresenter extends MvpBasePresenter<MainSettingsMvpView>
     }
 
     public void logOut(){
-        this.clearAccount();
         if(getView() != null){
             getView().logOut();
         }
+        this.clearAccount();
     }
 
     private void clearAccount(){
