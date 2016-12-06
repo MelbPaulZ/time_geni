@@ -57,6 +57,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     private int deleteLevel;
     private int icsSequence;
     private int inviteeVisibility;
+    private String display = "";
 
     private String url = "";
 
@@ -93,14 +94,14 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     }
 
-    @Generated(hash = 1204061877)
+    @Generated(hash = 1003166659)
     public Event(String eventUid, String eventId, String hostUserUid, String userUid,
             String calendarUid, String iCalUID, String recurringEventUid, String recurringEventId,
             String[] recurrence, String status, String summary, long startTime, long endTime,
             String description, String location, String locationNote, String locationLatitude,
             String locationLongitude, String eventType, int reminder, int freebusyAccess,
-            String source, int deleteLevel, int icsSequence, int inviteeVisibility, String url,
-            List<Invitee> invitee, List<PhotoUrl> photo, List<Timeslot> timeslot) {
+            String source, int deleteLevel, int icsSequence, int inviteeVisibility, String display,
+            String url, List<Invitee> invitee, List<PhotoUrl> photo, List<Timeslot> timeslot) {
         this.eventUid = eventUid;
         this.eventId = eventId;
         this.hostUserUid = hostUserUid;
@@ -126,6 +127,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         this.deleteLevel = deleteLevel;
         this.icsSequence = icsSequence;
         this.inviteeVisibility = inviteeVisibility;
+        this.display = display;
         this.url = url;
         this.invitee = invitee;
         this.photo = photo;
@@ -178,7 +180,12 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
 
     @Override
-    public int getDisplayStatus() {
+    public String getDisplayStatus() {
+//        return EventUtil.parseEventStatus(this.status);
+        return this.display;
+    }
+
+    public int getParsedStatus(){
         return EventUtil.parseEventStatus(this.status);
     }
 
@@ -190,7 +197,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     public void setEventType(String eventType) {
         this.eventType = eventType;
     }
-
 
     public void setStatus(String status) {
         this.status = status;
@@ -518,6 +524,14 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     public void setInviteeVisibility(int inviteeVisibility) {
         this.inviteeVisibility = inviteeVisibility;
+    }
+
+    public String getDisplay() {
+        return this.display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display;
     }
 
 

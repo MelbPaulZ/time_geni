@@ -378,7 +378,7 @@ public class EventUtil{
     }
 
     public static String getEventConfirmStatus(Event event){
-        switch (event.getDisplayStatus()){
+        switch (event.getParsedStatus()){
             case 0:
                 return "has not confirmed this event";
             case 1:
