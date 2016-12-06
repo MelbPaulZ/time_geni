@@ -67,7 +67,7 @@ public class EventEditViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    if (eventEditViewEvent.hasAttendee() && eventEditViewEvent.getInvitee().size()>0) {
+                    if (eventEditViewEvent.getInvitee().size()>1) {
                         mvpView.toHostEventDetail();
                     }else{
                         mvpView.toSoloEventDetail();

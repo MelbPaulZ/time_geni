@@ -19,6 +19,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginBinding;
+import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
@@ -60,6 +61,9 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
         super.onActivityCreated(savedInstanceState);
 
         String synToken = AuthUtil.getJwtToken(getContext());
+        // this use to create DB manager...
+        DBManager.getInstance(getContext());
+        EventManager.getInstance(getContext());
         if (!synToken.equals("")){
             onLoginSucceed();
         }else {

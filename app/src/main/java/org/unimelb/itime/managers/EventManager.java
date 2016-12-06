@@ -48,7 +48,7 @@ public class EventManager {
 
     private EventsPackage eventsPackage = new EventsPackage();
 
-    private final int defaultRepeatedRange = 1000;
+    private final int defaultRepeatedRange = 50;
     // [0 - 1] percentage of frag for load more fur/pre event
     private final float refreshFlag = 0.9f;
 
@@ -60,10 +60,20 @@ public class EventManager {
     public static EventManager getInstance() {
         if (ourInstance == null){
             ourInstance = new EventManager();
+            loadDB();
         }
 
         return ourInstance;
     }
+
+    public static EventManager getInstance(Context context){
+        if (ourInstance == null){
+            ourInstance = new EventManager();
+            loadDB(context);
+        }
+        return ourInstance;
+    }
+
 
     public void clearManager(){
         this.ourInstance = null;
@@ -394,8 +404,15 @@ public class EventManager {
     }
 
 
-    public void loadDB(Context context){
+    public static void loadDB(Context context){
         List<Event> list = DBManager.getInstance(context).getAllEvents();
+        for (Event ev: list) {
+            EventManager.getInstance().addEvent(ev);
+        }
+    }
+
+    public static void loadDB(){
+        List<Event> list = DBManager.getInstance().getAllEvents();
         for (Event ev: list) {
             EventManager.getInstance().addEvent(ev);
         }
