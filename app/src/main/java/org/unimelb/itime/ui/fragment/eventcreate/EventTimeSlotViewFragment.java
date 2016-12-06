@@ -226,7 +226,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
             }
         });
 
-        final PopupWindow popupWindow = new PopupWindow(root, ViewGroup.LayoutParams.MATCH_PARENT, 850);
+        final PopupWindow popupWindow = new PopupWindow(root, ViewGroup.LayoutParams.MATCH_PARENT, 1200);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.AnimationPopup);
         popupWindow.showAtLocation(binding.getRoot().findViewById(R.id.bottom_bar), Gravity.BOTTOM, 0, -600);
@@ -246,6 +246,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
                     timeSlot.setEndTime(timeSlot.getStartTime() + EventUtil.getDurationInMintues(timePosition) * 60 * 1000);
                 }
                 viewModel.setEvent(event);
+                timeslotWeekView.reloadTimeSlots(false); // for page refresh
 
 
             }

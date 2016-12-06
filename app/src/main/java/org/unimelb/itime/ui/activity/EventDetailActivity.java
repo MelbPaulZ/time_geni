@@ -64,7 +64,7 @@ public class EventDetailActivity extends AppCompatActivity {
         initFragments();
         List<Fragment> lists = getSupportFragmentManager().getFragments();
 
-        if (event.getInvitee().size() > 0) {
+        if (event.getEventType().equals(getApplicationContext().getString(R.string.group))) {
             // group event
             // here... cannot use findFragmentByTag directly..
             getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
