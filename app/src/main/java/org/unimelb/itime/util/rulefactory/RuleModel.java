@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by yuhaoliu on 20/11/16.
@@ -397,12 +398,8 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
 
     //range: [startRange, endRange)
     public ArrayList<Long> getOccurenceDates(long startRange, long endRange){
-        ArrayList<Long> availableDates = new ArrayList<>();
+                ArrayList<Long> availableDates = new ArrayList<>();
         long startTime = this.ruleInterface.getStartTime();//right
-
-        Calendar ca = Calendar.getInstance();
-        ca.setTimeInMillis(startTime);
-        int orgorgHour = ca.get(Calendar.HOUR);
 
         if (startTime > endRange){
             return  availableDates;
@@ -422,6 +419,8 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
             helper.setTimeInMillis(startTime);
             int orgHour = helper.get(Calendar.HOUR);
             int orgMinute = helper.get(Calendar.MINUTE);
+
+            cal.setTimeZone(TimeZone.getDefault());
             cal.set(Calendar.HOUR,orgHour);
             cal.set(Calendar.MINUTE,orgMinute);
 
@@ -437,6 +436,9 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
                         if (isInRDate(dt) || (currentAvailableDate >= startRange && !isInEXDate(dt))){
                             availableDates.add(currentAvailableDate);
                         }
+
+                        Log.i(TAG, "getOccurenceDates: " + cal.getTime());
+
                         cal.add(Calendar.DATE, interval);
                         currentAvailableDate = cal.getTimeInMillis();
                     }

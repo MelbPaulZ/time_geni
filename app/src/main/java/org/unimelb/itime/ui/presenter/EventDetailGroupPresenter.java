@@ -25,7 +25,7 @@ public class EventDetailGroupPresenter extends MvpBasePresenter<EventDetailGroup
     private Context context;
     private LayoutInflater inflater;
     private EventApi eventApi;
-    private String TAG = "EventDetailGroupPresenter";
+    private String TAG = "EventDetailPresenter";
 
     public EventDetailGroupPresenter(Context context, LayoutInflater inflater) {
         this.context = context;
@@ -69,6 +69,8 @@ public class EventDetailGroupPresenter extends MvpBasePresenter<EventDetailGroup
 
     private void synchronizeLocal(Event newEvent){
         Event oldEvent = EventManager.getInstance().findEventByUUID(newEvent.getEventUid());
+        Log.i(TAG, "APPP: synchronizeLocal: + EventDetail"+"call");
+
         EventManager.getInstance().updateEvent(oldEvent,newEvent);
         getView().refreshCalendars();
     }
