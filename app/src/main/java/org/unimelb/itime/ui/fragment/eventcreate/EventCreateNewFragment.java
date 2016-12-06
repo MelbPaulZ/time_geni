@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.fragment.eventcreate;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TimePicker;
 
 import org.greenrobot.eventbus.EventBus;
@@ -65,10 +68,10 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         viewModel = new EventCreateNewVIewModel(getPresenter());
         binding.setEventVM(viewModel);
 
-        // hide soft key board
-        getActivity().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-        );
+//        // hide soft key board
+//        getActivity().getWindow().setSoftInputMode(
+//                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+//        );
 
         // for time picker , spinner theme
 //         timePickerDialog = new TimePickerDialog(getActivity(),
@@ -88,8 +91,28 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
 
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
 
+    }
 
+    @Override
+    public void onEnter() {
+        super.onEnter();
+        EditText editText = (EditText) binding.getRoot().findViewById(R.id.create_event_title_edittext);
+        editText.setFocusable(true);
+        editText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    @Override
+    public void onLeave() {
+        super.onLeave();
+        EditText editText = (EditText) binding.getRoot().findViewById(R.id.create_event_title_edittext);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
 
     public void setEvent(Event event){
         this.event = event;

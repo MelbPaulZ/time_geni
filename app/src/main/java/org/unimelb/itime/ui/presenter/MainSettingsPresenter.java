@@ -26,28 +26,21 @@ import static android.R.attr.delay;
  * Created by Paul on 3/10/16.
  */
 public class MainSettingsPresenter extends MvpBasePresenter<MainSettingsMvpView> {
+    private String TAG = "MainSettingPresenter";
     Context context;
 
     public MainSettingsPresenter(Context context) {
         this.context = context;
     }
 
+    public Context getContext(){
+        return context;
+    }
+
     public void logOut(){
         if(getView() != null){
             getView().logOut();
         }
-        this.clearAccount();
     }
 
-    private void clearAccount(){
-        AuthUtil.clearJwtToken(context);
-        SharedPreferences sp = AppUtil.getSharedPreferences(context);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, "");
-        editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, "");
-        editor.apply();
-
-        DBManager.getInstance().clearDB();
-        EventManager.getInstance().clearManager();
-    }
 }

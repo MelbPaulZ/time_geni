@@ -54,14 +54,14 @@ public class DBManager {
     }
 
 
-    public void insertEvent(Event event) {
+    public synchronized void insertEvent(Event event) {
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDaoDao = daoSession.getEventDao();
         eventDaoDao.insert(event);
     }
 
-    public void insertMessage(Message message) {
+    public synchronized void insertMessage(Message message) {
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
@@ -150,7 +150,7 @@ public class DBManager {
         return list;
     }
 
-    public void deleteAllMessages() {
+    public synchronized void deleteAllMessages() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
@@ -175,14 +175,7 @@ public class DBManager {
         return qb.list().get(0);
     }
 
-    public void clearDB(){
-//        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
-//        DaoSession daoSession = daoMaster.newSession();
-//        EventDao eventDao = daoSession.getEventDao();
-//        ContactDao contactDao = daoSession.getContactDao();
-//        eventDao.deleteAll();
-//        contactDao.deleteAll();
-//        daoSession.clear();
+    public synchronized void clearDB(){
         DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(
                 context.getApplicationContext(), dbName, null);
         SQLiteDatabase db = devOpenHelper.getWritableDatabase();

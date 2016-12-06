@@ -7,6 +7,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -186,14 +187,16 @@ public class EventEditViewModel extends CommonViewModel {
     }
 
 //    @BindingAdapter({"bind:keyboard"})
-//    public static void setKeyBoard(EditText view, int isShow){
-//        if (isShow!=0){
-//            view.setFocusable(true);
-//            if (view.requestFocus()){
-//                view.
-//            }
+//    public static void setKeyBoard(EditText view, Context context){
+//        Log.i("setKeyBoard", "setKeyBoard: " + "run");
+//        if (view.isFocused()){
+//            Log.i("setKeyBoard", "setKeyBoard: " + "isFocused true");
+//            InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
 //        }else{
-//            view.setFocusable(false);
+//            Log.i("setKeyBoard", "setKeyBoard: " + "isFocused false");
+//            InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 //        }
 //    }
 
@@ -219,6 +222,8 @@ public class EventEditViewModel extends CommonViewModel {
             }
         };
     }
+
+
 
     public String getRepeatString(Event event){
         return EventUtil.getRepeatString(getContext(), event);
