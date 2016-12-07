@@ -20,6 +20,7 @@ public class MainTabBarViewModel extends BaseObservable{
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                presenter.refreshTabStatus(pageId);
                 presenter.showFragmentById(pageId);
             }
         };

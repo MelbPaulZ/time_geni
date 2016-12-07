@@ -26,4 +26,13 @@ public class MainTabBarPresenter extends MvpBasePresenter<MainTabBarView>{
         tabBarView.showFragmentById(pageId);
     }
 
+    public void refreshTabStatus(int pageId) {
+        MainTabBarView tabBarView = getView();
+        if (tabBarView == null){
+            return;
+        }
+        // call back ui
+        tabBarView.refreshTabStatus(pageId);
+    }
+
 }

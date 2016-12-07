@@ -48,7 +48,7 @@ public class EventManager {
 
     private EventsPackage eventsPackage = new EventsPackage();
 
-    private final int defaultRepeatedRange = 50;
+    private final int defaultRepeatedRange = 500;
     // [0 - 1] percentage of frag for load more fur/pre event
     private final float refreshFlag = 0.9f;
 
