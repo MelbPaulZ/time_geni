@@ -34,7 +34,6 @@ import org.unimelb.itime.vendor.weekview.WeekView;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.google.android.gms.wearable.DataMap.TAG;
 
 /**
  * Created by Paul on 21/09/2016.
@@ -44,6 +43,7 @@ public class CalendarWeekFragment extends BaseUiFragment {
     private View root;
     private WeekView weekView;
     private CommonPresenter presenter;
+    private String TAG = "CalendarWeekFragment";
 
     @Nullable
     @Override

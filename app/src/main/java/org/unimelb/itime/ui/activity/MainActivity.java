@@ -24,10 +24,16 @@ import android.widget.Toast;
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.ActivityMainBinding;
+import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainContactsFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
@@ -40,6 +46,7 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
@@ -58,6 +65,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
@@ -118,6 +126,18 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3]);
         fragmentTransaction.commit();
         showFragmentById(0);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getInboxMessage(MessageInboxMessage messageInboxMessage){
+        List<Message> messageList = DBManager.getInstance().getAllMessages();
+        int unReadNum = 0;
+        for (Message message : messageList){
+            if (!message.isRead()){
+                unReadNum+=1;
+            }
+        }
+        tabBarViewModel.setUnReadNum(unReadNum+"");
     }
 
 
@@ -201,6 +221,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     @Override
     protected void onDestroy() {
 //        stopService(new Intent(this, RemoteService.class));
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

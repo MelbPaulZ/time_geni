@@ -6,6 +6,7 @@
         <variable
             name="tabBarVM"
             type="org.unimelb.itime.ui.viewmodel.MainTabBarViewModel"/>
+        <import type="android.view.View"/>
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -134,7 +135,8 @@
                     android:layout_centerHorizontal="true"
                     android:textSize="10sp"
                     android:textColor="@color/white"
-                    android:text="8"
+                    android:text="@{tabBarVM.unReadNum}"
+                    android:visibility="@{tabBarVM.visible}"
                     android:layout_toRightOf="@id/anchor"
                     android:layout_alignParentTop="true"
                     android:gravity="center"

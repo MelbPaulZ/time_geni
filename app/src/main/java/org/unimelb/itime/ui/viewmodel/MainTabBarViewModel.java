@@ -1,9 +1,14 @@
 package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.view.View;
 
+import com.android.databinding.library.baseAdapters.BR;
+
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
+
+import static android.view.View.GONE;
 
 /**
  * Created by yinchuandong on 16/08/2016.
@@ -11,6 +16,8 @@ import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 public class MainTabBarViewModel extends BaseObservable{
 
     private MainTabBarPresenter presenter;
+    private String unReadNum;
+    private int visible;
 
     public MainTabBarViewModel(MainTabBarPresenter presenter){
         this.presenter = presenter;
@@ -26,5 +33,26 @@ public class MainTabBarViewModel extends BaseObservable{
         };
     }
 
+    @Bindable
+    public int getVisible(){
+        return visible;
+    }
 
+
+    @Bindable
+    public String getUnReadNum() {
+        return unReadNum;
+    }
+
+    public void setUnReadNum(String unReadNum) {
+        this.unReadNum = unReadNum;
+        if (unReadNum.equals("0")){
+            visible =  View.GONE;
+        }else{
+            visible = View.VISIBLE;
+        }
+        notifyPropertyChanged(BR.unReadNum);
+        notifyPropertyChanged(BR.visible);
+
+    }
 }

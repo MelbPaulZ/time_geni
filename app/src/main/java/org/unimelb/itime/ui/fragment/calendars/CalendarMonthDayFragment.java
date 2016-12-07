@@ -40,11 +40,8 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
-import static com.google.android.gms.wearable.DataMap.TAG;
-import static org.unimelb.itime.vendor.contact.widgets.SideBar.b;
+
 
 /**
  * Created by Paul on 21/09/2016.
@@ -53,6 +50,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
     private View root;
     private MonthDayView monthDayView;
     private CommonPresenter presenter;
+    private String TAG = "CalendarMonthDayFragment";
 
     @Nullable
     @Override
