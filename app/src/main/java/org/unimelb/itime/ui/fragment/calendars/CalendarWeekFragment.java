@@ -1,11 +1,14 @@
 package org.unimelb.itime.ui.fragment.calendars;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
@@ -29,6 +32,9 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.Calendar;
+import java.util.Date;
+
+import static com.google.android.gms.wearable.DataMap.TAG;
 
 /**
  * Created by Paul on 21/09/2016.
@@ -96,13 +102,99 @@ public class CalendarWeekFragment extends BaseUiFragment {
             }
 
             @Override
-            public void onEventDragDrop(DayDraggableEventView dayDraggableEventView) {
-                Event newEvent = (Event) dayDraggableEventView.getEvent();
-                EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
-                Event copyEvent = EventManager.getInstance().copyCurrentEvent(newEvent);
-                copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
-                copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-                presenter.updateEventToServer(copyEvent);
+            public void onEventDragDrop(final DayDraggableEventView dayDraggableEventView) {
+                final Event orgEvent = (Event) dayDraggableEventView.getEvent();
+                if (orgEvent.getRecurrence().length>0){
+                    // this is repeat event
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("this is a repeat event")
+                            .setItems(EventUtil.getRepeatEventChangeOptions(getContext()), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which){
+                                        case 0: {
+                                            // update only this event
+                                            // next find original event(the first event of repeat event)
+                                            Toast.makeText(getContext(), "change only this event", Toast.LENGTH_SHORT).show();
+                                            Calendar d = Calendar.getInstance();
+                                            d.setTimeInMillis(orgEvent.getStartTime());
+                                            Log.i(TAG, "orgEvent startTime: " + d.getTime());
+
+                                            // here change the event as a new event
+                                            Event newEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
+                                            EventUtil.regenerateRelatedUid(newEvent);
+                                            newEvent.setStartTime(dayDraggableEventView.getStartTimeM());
+                                            newEvent.setEndTime(dayDraggableEventView.getEndTimeM());
+                                            newEvent.setRecurringEventUid(orgEvent.getEventUid());
+                                            newEvent.setRecurringEventId(orgEvent.getEventId());
+                                            String[] newRecurrence = new String[0];
+                                            newEvent.setRecurrence(newRecurrence);
+
+                                            // find the first event of repeat events, and update it to server
+                                            Event firstOrg = null;
+                                            for (Event event : EventManager.getInstance().getOrgRepeatedEventList()){
+                                                if (event.getEventUid().equals(orgEvent.getEventUid())){
+                                                    firstOrg = event;
+                                                }
+                                            }
+                                            firstOrg.getRule().addEXDate(new Date(dayDraggableEventView.getStartTimeM()));
+                                            firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
+                                            EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
+
+                                            presenter.updateOnlyThisEvent(firstOrg, newEvent);
+                                            break;
+                                        }
+                                        case 1:{
+                                            // update all future events
+                                            Toast.makeText(getContext(), "change for all future events", Toast.LENGTH_SHORT).show();
+                                            // first prepare a copy event for new events...
+                                            Event copyEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
+                                            EventUtil.regenerateRelatedUid(copyEvent);
+                                            copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
+                                            copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
+                                            copyEvent.setRecurrence(copyEvent.getRule().getRecurrence());
+
+                                            Event firstOrg = null;
+                                            for (Event event : EventManager.getInstance().getOrgRepeatedEventList()){
+                                                if (event.getEventUid().equals(orgEvent.getEventUid())){
+                                                    firstOrg = event;
+                                                }
+                                            }
+                                            Date day = new Date(dayDraggableEventView.getStartTimeM());
+                                            firstOrg.getRule().setUntil(day);
+                                            firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
+                                            EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
+                                            presenter.updateOnlyThisEvent(firstOrg, copyEvent);
+                                            break;
+                                        }
+                                        case 2:{
+                                            // on click cancel
+                                            break;
+                                        }
+
+                                    }
+                                }
+                            });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }else{
+                    // this is not repeat event
+                    EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
+                    Event copyEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
+                    copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
+                    copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
+                    presenter.updateEventToServer(copyEvent);
+                }
+
+
+
+
+//                Event newEvent = (Event) dayDraggableEventView.getEvent();
+//                EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
+//                Event copyEvent = EventManager.getInstance().copyCurrentEvent(newEvent);
+//                copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
+//                copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
+//                presenter.updateEventToServer(copyEvent);
             }
         });
     }

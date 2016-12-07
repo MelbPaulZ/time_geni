@@ -189,12 +189,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
                                             firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
                                             EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
                                             presenter.updateOnlyThisEvent(firstOrg, copyEvent);
-//
-//                                            EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
-//                                            Event copyEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
-//                                            copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
-//                                            copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-//                                            presenter.updateEventToServer(copyEvent);
                                             break;
                                         }
                                         case 2:{

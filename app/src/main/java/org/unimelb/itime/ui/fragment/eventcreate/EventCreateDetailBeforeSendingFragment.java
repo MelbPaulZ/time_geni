@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.eventcreate;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -8,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -74,6 +77,30 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     public void setPhotos(ArrayList<String> photos){
         eventCreateDetailBeforeSendingViewModel.setPhotos(photos);
     }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+
+    }
+
+    @Override
+    public void onEnter() {
+        super.onEnter();
+        EditText editText = (EditText) binding.getRoot().findViewById(R.id.before_sending_title);
+        editText.setFocusable(true);
+        editText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    @Override
+    public void onLeave() {
+        super.onLeave();
+        EditText editText = (EditText) binding.getRoot().findViewById(R.id.before_sending_title);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
+
 
     @Subscribe
     public void getLocationChange(MessageLocation messageLocation){

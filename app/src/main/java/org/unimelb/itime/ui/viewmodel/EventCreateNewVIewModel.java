@@ -6,14 +6,17 @@ import android.content.DialogInterface;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Switch;
 import android.widget.TimePicker;
 
 import com.android.databinding.library.baseAdapters.BR;
@@ -229,6 +232,33 @@ public class EventCreateNewVIewModel extends CommonViewModel {
             }
         };
     }
+
+
+//    public boolean inviteeVisibility(Switch view, Event event){
+//        if (view.isChecked()){
+//            event.setInviteeVisibility(1);
+//            return true;
+//        }else{
+//            event.setInviteeVisibility(0);
+//            return false;
+//        }
+//    }
+    @BindingAdapter({"bind:check"})
+    public static void inviteeVisibilityCheck(final Switch view, final Event event){
+        view.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    event.setInviteeVisibility(1);
+                    Log.i("see each other", "inviteeVisibilityCheck: " + event.getInviteeVisibility());
+                }else{
+                    event.setInviteeVisibility(0);
+                    Log.i("see each other", "inviteeVisibilityCheck: " + event.getInviteeVisibility());
+                }
+            }
+        });
+    }
+
 
     // click cancel button
     public View.OnClickListener onClickCancel() {

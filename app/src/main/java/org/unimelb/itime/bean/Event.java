@@ -56,7 +56,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     private String source = "";
     private int deleteLevel;
     private int icsSequence;
-    private int inviteeVisibility;
+    private int inviteeVisibility = 1;
     private String display = "";
 
     private String url = "";
