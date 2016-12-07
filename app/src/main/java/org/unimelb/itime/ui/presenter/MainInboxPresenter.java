@@ -14,6 +14,8 @@ import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
 import org.unimelb.itime.util.HttpUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -39,8 +41,10 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
         int isRead = message.getIsRead() == true? 1 : 0;
         ArrayList<String> messageList = new ArrayList<>();
         messageList.add(message.getMessageUid());
-        Gson gson = new Gson();
-        Observable<HttpResult<Void>> observable = messageApi.read(gson.toJson(messageList), isRead);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("messageUids", messageList);
+        map.put("isRead", isRead);
+        Observable<HttpResult<Void>> observable = messageApi.read(map);
         Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
             @Override
             public void onCompleted() {

@@ -69,6 +69,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
+        tabBarViewModel.setUnReadNum(0+""); // give a default value
         checkPermission();
 //        init();
     }

@@ -330,5 +330,10 @@
     <color name="color_a2a2a2">#A2A2A2</color>
     <color name="color_f7f7f7">#f7f7f7</color>
     <color name="color_454545">#454545</color>
+    <color name="color_4A90E2">#4A90E2</color>
+    <color name="color_FE9E18">#FE9E18</color>
+    <color name="color_f9f9f9">#f9f9f9</color>
+    <color name="color_63ADF2">#63ADF2</color>
+    <color name="color_64AFF2">#64AFF2</color>
 
 </resources>

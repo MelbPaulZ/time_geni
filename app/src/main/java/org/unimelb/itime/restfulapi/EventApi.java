@@ -5,6 +5,8 @@ import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.restfulresponse.HttpResult;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.http.Body;
@@ -44,8 +46,8 @@ public interface EventApi {
     @POST("event/invitee/quit/{eventUid}")
     Observable<HttpResult<Event>> quitEvent();
 
-    @POST("event/timeslot/accept/{eventUid}")
-    Observable<HttpResult<Event>> acceptTimeslot();
+    @POST("event/timeslot/accept/{calendarUid}/{eventUid}")
+    Observable<HttpResult<Event>> acceptTimeslot(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body HashMap<String, Object> parameters);
 
     @POST("event/timeslot/reject/{eventUid}")
     Observable<HttpResult<Event>> rejectTimeslot();

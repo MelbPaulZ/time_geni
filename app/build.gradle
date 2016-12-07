@@ -99,11 +99,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 
-    compile 'com.jakewharton:butterknife:8.2.1'
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
-    //badge view
-    compile 'com.github.chaossss:BadgedView:1.1.1'
-
     compile 'org.unimelb.itime.vendor:vendor:1.0.0'
     compile 'com.lling.photopicker:photopicker:1.0.0'
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,12 +21,14 @@ import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.fragment.eventdetail.EventDetailGroupFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
@@ -35,6 +38,8 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static org.dmfs.rfc5545.calendarmetrics.IslamicCalendarMetrics.LeapYearPattern.I;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -170,18 +175,90 @@ public class EventDetailViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 // here, invitee responses
-                List<Timeslot> acceptedTimeslots = new ArrayList<>();
-                for (Timeslot timeslot: evDtlHostEvent.getTimeslot()){
-                    if (timeslot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
-                        acceptedTimeslots.add(timeslot);
-                    }
-                }
+//                List<Timeslot> acceptedTimeslots = new ArrayList<>();
+//                for (Timeslot timeslot: evDtlHostEvent.getTimeslot()){
+//                    if (timeslot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
+//                        acceptedTimeslots.add(timeslot);
+//                    }
+//                }
+
                 if (mvpView!=null){
+                    presenter.acceptTimeslots(evDtlHostEvent);
                     mvpView.toCalendar();
                 }
 
             }
         };
+    }
+
+    // left buttons
+
+    public String getInviteeLeftBtnStr(Context context, Event event){
+        Invitee me = EventUtil.getSelfInInvitees(event);
+        if (me.getStatus().equals(context.getString(R.string.accepted))){
+            return context.getString(R.string.accepted);
+        }else{
+            return context.getString(R.string.accept);
+        }
+    }
+
+    public boolean getLeftBtnClickable(Event event){
+        if (event.getStatus().equals(context.getString(R.string.pending)) && TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public int getLeftBtnTextColor(Event event){
+        if (event.getStatus().equals(context.getString(R.string.pending))){
+            return context.getResources().getColor(R.color.color_63ADF2);
+        }else if(event.getStatus().equals(context.getString(R.string.accepted))){
+            return context.getResources().getColor(R.color.white);
+        }else
+            return context.getResources().getColor(R.color.white);
+    }
+
+    public Drawable getLeftBtnBg(Event event){
+        Invitee me = EventUtil.getSelfInInvitees(event);
+        if (me.getStatus().equals(context.getString(R.string.accepted))){
+            return context.getResources().getDrawable(R.drawable.background_round_radius_able_blue);
+        }else {
+            return null;
+        }
+    }
+
+
+    // right buttons
+    public String getInviteeRightBtnStr(Event event){
+        if (event.getStatus().equals(context.getString(R.string.accepted))){
+            return context.getString(R.string.quit);
+        }else{
+            return context.getString(R.string.reject_all);
+        }
+    }
+
+
+    public boolean getRightBtnClickable(Event event){
+        Invitee invitee = EventUtil.getSelfInInvitees(event);
+        if (invitee.getStatus().equals(context.getString(R.string.needs_action))){
+            if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
+                return false;
+            }else{
+                return true;
+            }
+        }else if (invitee.getStatus().equals(context.getString(R.string.accepted))){
+            return true;
+        }
+        return false; // never reach here
+    }
+
+    public int confirmVisibility(Event event){
+        if (event.getStatus().equals(getContext().getString(R.string.confirmed))){
+            return View.GONE;
+        }else{
+            return View.VISIBLE;
+        }
     }
 
 

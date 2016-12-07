@@ -4,8 +4,10 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 
+import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.DBManager;
@@ -13,8 +15,16 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
+import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
+import org.unimelb.itime.util.UserUtil;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.RequestBody;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -33,17 +43,36 @@ public class EventDetailGroupPresenter extends MvpBasePresenter<EventDetailGroup
         eventApi = HttpUtil.createService(getContext(),EventApi.class);
     }
 
+    public void acceptTimeslots(Event event){
+        EventManager.getInstance().getWaitingEditEventList().add(event);
+        ArrayList<String> timeslotUids = new ArrayList<>();
+        for (Timeslot timeslot: event.getTimeslot()){
+            if (timeslot.getStatus().equals(context.getString(R.string.accepted))){
+                timeslotUids.add(timeslot.getTimeslotUid());
+            }
+        }
 
-//    public void updateEvent(Event event){
-//        Event oldEvent = EventManager.getInstance().getCurrentEvent();
-//        // here update EventManager
-//        EventManager.getInstance().updateEvent(oldEvent, event);
-//        // update db or eventmanager?
-//        // here update DB
-//        oldEvent.delete();
-//        DBManager.getInstance(context).insertEvent(event);
-//
-//    }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("timeslots", timeslotUids);
+        Observable<HttpResult<Event>> observable = eventApi.acceptTimeslot(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(), event.getEventUid(), parameters);
+        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: " + e.getMessage());
+            }
+
+            @Override
+            public void onNext(HttpResult<Event> eventHttpResult) {
+                synchronizeLocal(eventHttpResult.getData());
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
 
     public void confirmEvent(Event newEvent, String timeslotUid){
 //        long startTime = newEvent.
