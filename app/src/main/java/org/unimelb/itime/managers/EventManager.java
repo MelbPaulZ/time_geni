@@ -511,7 +511,6 @@ public class EventManager {
                 return event;
             }
         }
-
         // if event is not in waiting list, should never happens
         throw new RuntimeException("cannot find event in waiting list");
     }

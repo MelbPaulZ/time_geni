@@ -138,8 +138,8 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
             for (Invitee invitee:goings
                  ) {
                 RelativeLayout frame = new RelativeLayout(getContext());
-                RelativeLayout.LayoutParams frameParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
+                LinearLayout.LayoutParams frameParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                frameParams.rightMargin = 20;
                 ImageView img = new ImageView(getContext());
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,width);
                 EventUtil.bindUrlHelper(getContext(),invitee.getAliasPhoto(),img, new CircleTransform());
