@@ -117,6 +117,8 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 Toast.makeText(getContext(), "Delete Message",Toast.LENGTH_SHORT).show();
                 Message msg = DBManager.getInstance().getAllMessages().get(position);
+                // TODO: 8/12/2016 message delete ask chuandong about server
+                presenter.deleteMessage(msg);
                 msg.delete();
                 messageAdapter.setMessageList(DBManager.getInstance().getAllMessages());
                 return false;

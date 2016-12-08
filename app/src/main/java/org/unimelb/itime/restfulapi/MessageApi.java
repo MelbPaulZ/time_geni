@@ -27,4 +27,7 @@ public interface MessageApi {
 
     @POST("message/read")
     Observable<HttpResult<Void>> read(@Body HashMap<String, Object> uidHashMap);
+
+    @POST("message/delete")
+    Observable<HttpResult<Void>> delete(@Body HashMap<String, Object> uidHashMap);
 }

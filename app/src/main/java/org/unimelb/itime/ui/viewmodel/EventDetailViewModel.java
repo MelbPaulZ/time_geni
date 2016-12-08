@@ -196,7 +196,7 @@ public class EventDetailViewModel extends CommonViewModel {
     public String getInviteeLeftBtnStr(Context context, Event event){
         Invitee me = EventUtil.getSelfInInvitees(event);
         if (me.getStatus().equals(context.getString(R.string.accepted))){
-            return context.getString(R.string.accepted);
+            return context.getString(R.string.Accepted);
         }else{
             return context.getString(R.string.accept);
         }
@@ -356,6 +356,35 @@ public class EventDetailViewModel extends CommonViewModel {
         }else{
             return View.VISIBLE;
         }
+    }
+
+    public int hostConfirmBtnVisibility(Event event){
+        if (EventUtil.isUserHostOfEvent(event) && event.getStatus().equals(context.getString(R.string.confirmed))){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+    }
+
+    public int getMessageStatusColor(Event event){
+        if (event.getStatus().equals(context.getString(R.string.confirmed))){
+            return context.getResources().getColor(R.color.color_63ADF2);
+        }else{
+            return context.getResources().getColor(R.color.color_FF9600);
+        }
+    }
+
+    public View.OnClickListener onClickHostQuit(Event event){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mvpView!=null) {
+                    // TODO: 8/12/2016 quit event update server and local
+                    Toast.makeText(context, "Quit This Event, To do", Toast.LENGTH_SHORT).show();
+                    mvpView.toCalendar();
+                }
+            }
+        };
     }
 
 }
