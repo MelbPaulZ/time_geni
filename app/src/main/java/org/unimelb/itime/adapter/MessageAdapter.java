@@ -106,6 +106,7 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
                 inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
                 inboxHostBinding.setVm(viewModel);
                 inboxHostBinding.setMessage(filteredMessageList.get(position));
+                convertView = inboxHostBinding.getRoot();
             }
             else {
                 inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);

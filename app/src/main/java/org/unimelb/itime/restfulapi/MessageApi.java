@@ -7,6 +7,8 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.restfulresponse.HttpResult;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.http.Body;
@@ -23,7 +25,6 @@ public interface MessageApi {
     @GET("message/list_group")
     Observable<HttpResult<List<Message>>> get();
 
-    @FormUrlEncoded
     @POST("message/read")
-    Observable<HttpResult<Void>> read(@Field("messageUids") String uids, @Field("isRead") int isRead);
+    Observable<HttpResult<Void>> read(@Body HashMap<String, Object> uidHashMap);
 }

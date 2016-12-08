@@ -82,14 +82,9 @@ public class RemoteService extends Service{
         pollingThread.interrupt();
 
         while (isUpdateThreadRuning){
-            if (!isUpdateThreadRuning){
-                break;
-            }
             Log.i(TAG, "onDestroy: " + "isUpdateThread running");
             SystemClock.sleep(50);
         }
-        Log.i(TAG, "onDestroy: " + "updateThread interrupts");
-        updateThread.interrupt();
         EventBus.getDefault().post(new MessageEvent(MessageEvent.LOGOUT));
         super.onDestroy();
     }
@@ -157,7 +152,7 @@ public class RemoteService extends Service{
 
     public void fetchEvents(String calendarUid) {
         String synToken = AppUtil.getSharedPreferences(getApplicationContext()).getString(C.spkey.EVENT_LIST_SYNC_TOKEN,"");
-
+        Log.i(TAG, "fetchEvents: " + synToken);
         Observable<HttpResult<List<Event>>> observable = eventApi.list(
                 calendarUid
                 , synToken);
@@ -176,15 +171,14 @@ public class RemoteService extends Service{
             @Override
             public void onNext(final HttpResult<List<Event>> result) {
                 final List<Event> eventList = result.getData();
+                Log.i(TAG, "__onNext: " + result.getData().size());
                 //update syncToken
                 SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, result.getSyncToken());
                 editor.apply();
-
-
                 // successfully get event from server
-                if (updateThread == null) {
+                if(eventList.size() > 0){
                     updateThread = new Thread() {
                         @Override
                         public void run() {

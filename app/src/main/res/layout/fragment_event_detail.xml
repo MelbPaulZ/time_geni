@@ -134,6 +134,28 @@
                         android:textColor="@color/black"
                         android:text="@{hostDetailVM.evDtlHostEvent.title}"/>
 
+                    <!--todo  change view-->
+                    <LinearLayout
+                        android:id="@+id/event_detail_confirm_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="@{hostDetailVM.confirmTimeVisibility(hostDetailVM.evDtlHostEvent)}"
+                        android:layout_marginTop="10dp">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/icon_event_clock"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="15sp"
+                            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, hostDetailVM.evDtlHostEvent.startTime, hostDetailVM.evDtlHostEvent.endTime)}"/>
+                    </LinearLayout>
+
+
                     <LinearLayout
                         android:id="@+id/event_detail_repeat_info"
                         android:layout_width="match_parent"
@@ -149,6 +171,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
+                            android:textSize="15sp"
                             android:text="@{EventUtil.getRepeatString(context,hostDetailVM.evDtlHostEvent)}"/>
                     </LinearLayout>
 
@@ -167,6 +190,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
+                            android:textSize="15sp"
                             android:text="@{hostDetailVM.evDtlHostEvent.location}"/>
                     </LinearLayout>
 
@@ -185,6 +209,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
+                            android:textSize="15sp"
                             android:text="@{hostDetailVM.evDtlHostEvent.description}"/>
                     </LinearLayout>
 
@@ -197,6 +222,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/event_detail_host_first_part"
+                android:visibility="@{hostDetailVM.timeslotListVisibility(hostDetailVM.evDtlHostEvent)}"
                 android:orientation="vertical">
 
                 <TextView
@@ -426,70 +452,120 @@
 
     </ScrollView>
 
-    <!-- if it is host event, this show-->
+    <!-- Host event Unconfirmed show-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:paddingBottom="@dimen/padding_10"
         android:paddingLeft="@dimen/padding_10"
+        android:background="@color/color_f9f9f9"
         android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance.getUserUid())? View.VISIBLE : View.GONE }"
         android:paddingRight="@dimen/padding_10">
 
-        <Button
+        <TextView
             android:id="@+id/event_detail_host_confirm_btn"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginRight="@dimen/padding_5"
-            android:layout_marginLeft="@dimen/padding_5"
-            android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"
-            android:text="@string/confirm"
-            android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? true: false}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/confirm_event"
+            android:textSize="17sp"
+            android:visibility="@{hostDetailVM.confirmVisibility(hostDetailVM.evDtlHostEvent)}"
             android:onClick="@{hostDetailVM.onClickHostConfirm()}"
             android:textAlignment="center"
-            android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? @color/white : @color/gray_b2b2b2}" />
-    </LinearLayout>
-
-
-    <!--if this is invite event, this show-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance.getUserUid)?  View.GONE:View.VISIBLE }"
-        android:paddingBottom="@dimen/padding_10"
-        android:paddingLeft="@dimen/padding_10"
-        android:paddingRight="@dimen/padding_10">
-
-        <Button
-            android:id="@+id/confirm_btn"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginRight="@dimen/padding_5"
-            android:layout_weight="1"
-            android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"
-            android:text="@string/accept"
             android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? true: false}"
-            android:onClick="@{hostDetailVM.onClickAccept()}"
-            android:textAlignment="center"
-            android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? @color/white : @color/gray_b2b2b2}" />
+            android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? @color/color_FE9E18 : @color/gray_b2b2b2}"
+            />
 
-        <Button
-            android:id="@+id/reject_all_btn"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/padding_5"
-            android:layout_weight="1"
-            android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)?  @drawable/background_round_radius_unable_red : @drawable/background_round_radius_able_red}"
-            android:text="@string/reject_all"
-            android:textAlignment="center"
-            android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? false:true}"
-            android:onClick="@{hostDetailVM.onClickRejectAll()}"
-            android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)?  @color/gray_b2b2b2 : @color/white}" />
+        <!--todo delete this button-->
+        <!--<Button-->
+            <!--android:id="@+id/event_detail_host_confirm_btn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_marginRight="@dimen/padding_5"-->
+            <!--android:layout_marginLeft="@dimen/padding_5"-->
+            <!--android:visibility="@{hostDetailVM.confirmVisibility(hostDetailVM.evDtlHostEvent)}"-->
+            <!--android:text="@string/confirm"-->
+            <!--android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? true: false}"-->
+            <!--android:onClick="@{hostDetailVM.onClickHostConfirm()}"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? @color/color_FE9E18 : @color/gray_b2b2b2}" />-->
     </LinearLayout>
+
+
+    <!--Invitee Unconfirmed-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance.getUserUid)?  View.GONE:View.VISIBLE }"
+        android:background="@color/color_f9f9f9">
+
+        <!--  left button-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@{hostDetailVM.getLeftBtnBg(hostDetailVM.evDtlHostEvent)}"
+            android:text="@{hostDetailVM.getInviteeLeftBtnStr(context, hostDetailVM.evDtlHostEvent)}"
+            android:textAlignment="center"
+            android:textSize="17sp"
+            android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
+            android:onClick="@{hostDetailVM.onClickAccept()}"
+            android:textColor="@{hostDetailVM.getLeftBtnTextColor(hostDetailVM.evDtlHostEvent)}"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_centerVertical="true"
+            />
+        <!--right button-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{hostDetailVM.getInviteeRightBtnStr(hostDetailVM.evDtlHostEvent)}"
+            android:textAlignment="center"
+            android:textSize="17sp"
+            android:clickable="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
+            android:onClick="@{hostDetailVM.onClickRejectAll()}"
+            android:textColor="@color/color_F45B69"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_centerVertical="true"
+            />
+
+        <!--Todo delete two buttons-->
+        <!--<Button-->
+            <!--android:id="@+id/confirm_btn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_marginRight="@dimen/padding_5"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? @drawable/background_round_radius_able_blue : @drawable/background_round_radius_unable_blue}"-->
+            <!--android:text="@string/accept"-->
+            <!--android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? true: false}"-->
+            <!--android:onClick="@{hostDetailVM.onClickAccept()}"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? @color/white : @color/color_4A90E2}" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/reject_all_btn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginLeft="@dimen/padding_5"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)?  @drawable/background_round_radius_unable_red : @drawable/background_round_radius_able_red}"-->
+            <!--android:text="@string/reject_all"-->
+            <!--android:textAlignment="center"-->
+            <!--android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? false:true}"-->
+            <!--android:onClick="@{hostDetailVM.onClickRejectAll()}"-->
+            <!--android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)?  @color/gray_b2b2b2 : @color/white}" />-->
+    </RelativeLayout>
 
 </RelativeLayout>
 </layout>

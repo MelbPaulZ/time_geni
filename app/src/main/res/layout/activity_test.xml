@@ -1,86 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ui.activity.TestActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-    </android.support.design.widget.AppBarLayout>
-
-    <!-- bottom tab -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <com.github.chaossss.widget.view.CircleBadgedView
-            android:id="@+id/main_badge_calendar"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_above="@+id/main_tab_ll"
-            app:badgeWidthRatio="1"
-            app:badgeHeightRatio="1"
-            app:badgeColor="@color/red"
-            app:badgeText="@string/tab_inbox"
-            app:badgeTextColor="@color/white"
-            app:badgeTextSize="4sp"
-            >
-            <TextView
-                android:id="@+id/main_hello_tv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:background="@color/blue"
-                android:text="@string/hello_world"
-                android:textSize="20sp" />
-        </com.github.chaossss.widget.view.CircleBadgedView>
-        <LinearLayout
-            android:id="@+id/main_tab_ll"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true">
-
-            <TextView
-                android:id="@+id/main_tab_calendar_tv"
-                style="@style/main_tab"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/tab_calendar" />
-
-            <TextView
-                android:id="@+id/main_tab_contact_tv"
-                style="@style/main_tab"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/tab_contact" />
-
-            <TextView
-                android:id="@+id/main_tab_inbox_tv"
-                style="@style/main_tab"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/tab_inbox" />
-
-            <TextView
-                android:id="@+id/main_tab_setting_tv"
-                style="@style/main_tab"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/tab_setting" />
-        </LinearLayout>
-    </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

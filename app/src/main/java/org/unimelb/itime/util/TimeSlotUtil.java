@@ -73,6 +73,7 @@ public class TimeSlotUtil {
         return false;
     }
 
+
     public static Timeslot getTimeSlot(Event event, Timeslot timeSlot){
         for (Timeslot eventTimeSlot : event.getTimeslot()){
             if(eventTimeSlot.getTimeslotUid() == timeSlot.getTimeslotUid()){

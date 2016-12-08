@@ -587,6 +587,15 @@ public class EventUtil{
         return sequences;
     }
 
+    public static Invitee getSelfInInvitees(Event event){
+        for (Invitee invitee: event.getInvitee()){
+            if (invitee.getUserUid().equals(UserUtil.getUserUid())){
+                return invitee;
+            }
+        }
+        return null;
+    }
+
 
 
 

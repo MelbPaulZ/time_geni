@@ -259,6 +259,9 @@
 
     <string name="Save_for_this_event_only">Save for this event only</string>
     <string name="Save_for_future_events">Save for future events</string>
+    <string name="confirm_event">Confirm Event</string>
+    <string name="pending">pending</string>
+    <string name="quit">Quit</string>
 
     <string-array name="users">
         <item>johncdyin@gmail.com</item>
