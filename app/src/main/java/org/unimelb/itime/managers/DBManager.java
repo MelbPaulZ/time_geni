@@ -172,7 +172,9 @@ public class DBManager {
         EventDao eventDao = daoSession.getEventDao();
         QueryBuilder<Event> qb = eventDao.queryBuilder();
         qb.where(EventDao.Properties.EventUid.eq(uid));
-        return qb.list().get(0);
+        List<Event> list = qb.list();
+
+        return list.size() > 0 ? list.get(0) : null;
     }
 
     public synchronized void clearDB(){

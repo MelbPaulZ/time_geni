@@ -309,7 +309,7 @@
     <color name="bg_event_group_a50">#8063ADF2</color>
     <color name="bg_event_group_a30">#4D63ADF2</color>
     <color name="event_detail_repeat">#06457F</color>
-    <color name="gray_b2b2b2">#B2B2B2</color>
+    <color name="gray_b2b2b2">#e6e6e6</color>
     <color name="button_event_confirm_unable_blue">#804A4A4A</color>
     <color name="button_event_reject_unable_red">#804A4A4A</color>
     <color name="button_event_reject_able_red">#F45B69</color>

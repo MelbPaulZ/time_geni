@@ -3,16 +3,25 @@ package org.unimelb.itime.ui.fragment.eventdetail;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.stringtemplate.v4.debug.EvalExprEvent;
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.EventTimeSlotAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
@@ -26,6 +35,10 @@ import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
+import org.unimelb.itime.util.CircleTransform;
+import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.vendor.helper.DensityUtil;
+import org.unimelb.itime.vendor.helper.LoadImgHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +76,9 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         eventDetailForHostViewModel.setEvAdapterEvent(adapterData);
         binding.setHostDetailVM(eventDetailForHostViewModel);
         setProposedTimeSlots(event);
+
+        //doing
+        refreshInviteeStatus();
     }
 
     public void setProposedTimeSlots(Event event){
@@ -80,6 +96,65 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
             eventDetailForHostViewModel.setEvAdapterEvent(this.adapterData);
         }
         setProposedTimeSlots(event);
+        //doing
+        refreshInviteeStatus();
+    }
+
+    private void refreshInviteeStatus(){
+        if (this.adapterData != null){
+            LinearLayout status_text = (LinearLayout) binding.getRoot().findViewById(R.id.invitees_status_text);
+            LinearLayout status_img = (LinearLayout) binding.getRoot().findViewById(R.id.invitees_status_img);
+            status_text.removeAllViews();
+            status_img.removeAllViews();
+
+            List<Invitee> invitees = event.getInvitee();
+
+            int replyNum = 0;
+            int inviteesNum = invitees.size();
+
+            List<Invitee> goings = new ArrayList<>();
+
+            for (Invitee invitee:invitees
+                 ) {
+                if (invitee.getStatus().equals("accepted")){
+                    replyNum += 1;
+                    goings.add(invitee);
+                }
+            }
+
+            TextView repliedTextview = new TextView(getContext());
+            repliedTextview.setText(replyNum + (event.getStatus().equals("confirmed") ? " Going" : " Replied"));
+            repliedTextview.setTextColor(Color.parseColor("#7bb6ee"));
+            status_text.addView(repliedTextview);
+
+            TextView inviteesTextview = new TextView(getContext());
+            LinearLayout.LayoutParams inviteesTextviewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            inviteesTextview.setText(inviteesNum + " Invited");
+            inviteesTextview.setTextColor(Color.parseColor("#f99e2b"));
+            inviteesTextviewParams.leftMargin = 20;
+            status_text.addView(inviteesTextview,inviteesTextviewParams);
+
+            int width = DensityUtil.dip2px(getContext(),50);
+            for (Invitee invitee:goings
+                 ) {
+                RelativeLayout frame = new RelativeLayout(getContext());
+                RelativeLayout.LayoutParams frameParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+                ImageView img = new ImageView(getContext());
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,width);
+                EventUtil.bindUrlHelper(getContext(),invitee.getAliasPhoto(),img, new CircleTransform());
+                frame.addView(img,params);
+
+                ImageView status = new ImageView(getContext());
+                RelativeLayout.LayoutParams status_params = new RelativeLayout.LayoutParams(width/4,width/4);
+                status_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                status_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                status.setImageDrawable(getContext().getResources().getDrawable(R.drawable.icon_event_attendee_selected));
+                frame.addView(status,status_params);
+
+                status_img.addView(frame,frameParams);
+            }
+        }
     }
 
 

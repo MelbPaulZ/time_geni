@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.base.C;
@@ -133,17 +134,21 @@ public class RemoteService extends Service{
             @Override
             public void onNext(HttpResult<List<Message>> listHttpResult) {
                 Log.i(TAG, "listHttpResult: " + listHttpResult);
-                //update syncToken
-                SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, listHttpResult.getSyncToken());
-                editor.apply();
+                if (checkMessageValidation(listHttpResult.getData())){
+                    //update syncToken
+                    SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, listHttpResult.getSyncToken());
+                    editor.apply();
 
-                DBManager.getInstance(getBaseContext()).deleteAllMessages();
-                DBManager.getInstance(getBaseContext()).insertMessageList(listHttpResult.getData());
+                    DBManager.getInstance(getBaseContext()).deleteAllMessages();
+                    DBManager.getInstance(getBaseContext()).insertMessageList(listHttpResult.getData());
 
-                //set data to inbox;
-                EventBus.getDefault().post(new MessageInboxMessage(listHttpResult.getData()));
+                    //set data to inbox;
+                    EventBus.getDefault().post(new MessageInboxMessage(listHttpResult.getData()));
+                }else{
+                    Toast.makeText(getApplicationContext(), "Message cannot find correspond event, dropped." ,Toast.LENGTH_LONG).show();
+                }
             }
         };
 
@@ -225,23 +230,33 @@ public class RemoteService extends Service{
         HttpUtil.subscribe(observable,subscriber);
     }
 
+    private boolean checkMessageValidation(List<Message> msgs){
+        for (Message msg:msgs
+             ) {
+            Event correspond = DBManager.getInstance().getEvent(msg.getEventUid());
+            if (correspond == null){
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     private class PollingThread extends Thread {
         @Override
         public void run() {
             isPollingThreadRunning = true;
             while (isStart) {
-                    // todo: here to list events
-                    for(Calendar calendar : CalendarUtil.getInstance().getCalendar()){
-                        fetchEvents(calendar.getCalendarUid());
-                        SystemClock.sleep(5000); // cannot use thread sleep because of interrupt exception when sleep
-                    }
-                    fetchMessages();
+                // todo: here to list events
+                for(Calendar calendar : CalendarUtil.getInstance().getCalendar()){
+                    fetchEvents(calendar.getCalendarUid());
+                }
+                fetchMessages();
 
+                SystemClock.sleep(5000); // cannot use thread sleep because of interrupt exception when sleep
                 // do something
             }
             isPollingThreadRunning = false;
-
         }
 
     }

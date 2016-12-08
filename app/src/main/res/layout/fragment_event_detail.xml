@@ -259,6 +259,7 @@
                 </LinearLayout>
             </LinearLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -268,46 +269,49 @@
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/padding_10">
 
-                <!--Attendee -->
-                <RelativeLayout
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="@dimen/padding_5"
+                    android:background="@color/gray_b2b2b2"/>
+                <!--Attendee -->
+                <LinearLayout
+                    android:id="@+id/invitees_status_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="2dp"
+                    android:orientation="horizontal"
                     android:gravity="center_vertical">
+                </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/event_detail_host_attendee_title"
-                        android:layout_width="65dp"
-                        android:layout_height="45dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/invitee"
-                        android:textSize="17sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="@dimen/padding_5"
+                    android:background="@color/gray_b2b2b2"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="22dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="5dp"
-                        android:layout_toLeftOf="@+id/event_detail_host_attendee_arrow"
-                        android:text="@{hostDetailVM.evDtlHostEvent.invitee!= null ? EventUtil.getAttendeeString(context,EventUtil.fromInviteeListToArraylist(hostDetailVM.evDtlHostEvent.invitee)) : @string/none}"
-                        android:textColor="@color/gray_b2b2b2"
-                        android:textSize="17dp" />
-
-                    <TextView
-                        android:id="@+id/event_detail_host_attendee_arrow"
-                        android:layout_width="8dp"
-                        android:layout_height="13dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/padding_10"
-                        android:background="@drawable/icon_general_arrow_right" />
-
-                    <TextView
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/invitees_status_img"
+                        android:padding="5dp"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@id/event_detail_host_attendee_arrow"
-                        android:layout_marginTop="@dimen/padding_10"
-                        android:background="@color/gray_b2b2b2" />
-                </RelativeLayout>
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="@dimen/padding_5"
+                    android:background="@color/gray_b2b2b2"/>
 
                 <RelativeLayout
                     android:id="@+id/event_detail_host_photo_RL"

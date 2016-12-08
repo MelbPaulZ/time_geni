@@ -6,6 +6,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
@@ -596,7 +600,13 @@ public class EventUtil{
         return null;
     }
 
-
+    public static <T extends Transformation> void bindUrlHelper(Context context, String url, ImageView view, T transformer){
+        if (url != null && !url.equals("")){
+            Picasso.with(context).load(url).transform(transformer).into(view);
+        }else {
+            Picasso.with(context).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(transformer).into(view);
+        }
+    }
 
 
 }
