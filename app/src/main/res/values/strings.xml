@@ -268,5 +268,6 @@
     <string name="has_confirmed_this_event">has confirmed this events</string>
     <string name="You_have_not_confirmed_this_event">You has not confirmed this event</string>
     <string name="You_have_confirmed_this_event">You have confirmed this event</string>
+    <string name="Accepted">Accepted</string>
 
 </resources>

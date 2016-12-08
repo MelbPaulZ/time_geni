@@ -196,7 +196,7 @@ public class EventDetailViewModel extends CommonViewModel {
     public String getInviteeLeftBtnStr(Context context, Event event){
         Invitee me = EventUtil.getSelfInInvitees(event);
         if (me.getStatus().equals(context.getString(R.string.accepted))){
-            return context.getString(R.string.accepted);
+            return context.getString(R.string.Accepted);
         }else{
             return context.getString(R.string.accept);
         }

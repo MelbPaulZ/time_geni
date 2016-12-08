@@ -244,12 +244,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/event_detail_host_first_part"
-                    android:orientation="vertical"
-                    android:visibility="@{hostDetailVM.timeslotListVisibility(hostDetailVM.evDtlHostEvent)}">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:visibility="@{hostDetailVM.timeslotListVisibility(hostDetailVM.evDtlHostEvent)}"
                         android:layout_marginBottom="@dimen/padding_5"
                         android:layout_marginLeft="7dp"
                         android:gravity="bottom"
@@ -261,12 +261,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#ffffff"
+                        android:layout_marginTop="5dp"
                         android:orientation="vertical">
 
                         <org.unimelb.itime.widget.NonScrollListView
                             android:id="@+id/event_detail_timeslot_listview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:visibility="@{hostDetailVM.timeslotListVisibility(hostDetailVM.evDtlHostEvent)}"
                             android:divider="#00000000"/>
 
                         <TextView
