@@ -82,9 +82,6 @@ public class RemoteService extends Service{
         pollingThread.interrupt();
 
         while (isUpdateThreadRuning){
-            if (!isUpdateThreadRuning){
-                break;
-            }
             Log.i(TAG, "onDestroy: " + "isUpdateThread running");
             SystemClock.sleep(50);
         }

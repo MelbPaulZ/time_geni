@@ -134,6 +134,26 @@
                         android:textColor="@color/black"
                         android:text="@{hostDetailVM.evDtlHostEvent.title}"/>
 
+                    <!--todo  change view-->
+                    <!--<LinearLayout-->
+                        <!--android:id="@+id/event_detail_repeat_info"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal"-->
+                        <!--android:layout_marginTop="10dp">-->
+                        <!--<ImageView-->
+                            <!--android:layout_width="20dp"-->
+                            <!--android:layout_height="20dp"-->
+                            <!--android:layout_gravity="center_vertical"-->
+                            <!--android:src="@drawable/icon_event_repeated"/>-->
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="10dp"-->
+                            <!--android:text="@{EventUtil.getRepeatString(context,hostDetailVM.evDtlHostEvent)}"/>-->
+                    <!--</LinearLayout>-->
+
+
                     <LinearLayout
                         android:id="@+id/event_detail_repeat_info"
                         android:layout_width="match_parent"
