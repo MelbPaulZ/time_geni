@@ -106,7 +106,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     @Override
     public void viewInCalendar() {
         EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-        timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
         switchFragment(this,timeSlotFragment);
     }
 

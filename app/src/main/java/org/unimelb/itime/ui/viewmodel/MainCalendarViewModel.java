@@ -34,6 +34,11 @@ public class MainCalendarViewModel extends BaseObservable{
         toolbarTitle = initToolBarTitle();
     }
 
+    public String getToday(){
+        Calendar cal = Calendar.getInstance();
+        return cal.get(Calendar.DAY_OF_MONTH) + "";
+    }
+
     public String initToolBarTitle(){
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);

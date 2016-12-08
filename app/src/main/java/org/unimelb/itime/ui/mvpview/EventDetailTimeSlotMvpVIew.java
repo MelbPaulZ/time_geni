@@ -4,6 +4,7 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 /**
@@ -14,4 +15,6 @@ public interface EventDetailTimeSlotMvpVIew extends MvpView {
     void onClickDone();
     void reloadTimeslot();
     void addTimeslot(WeekView.TimeSlotStruct timeSlotStruct);
+    void popupTimeSlotWindow(TimeSlotView timeSlotView);
+    void onClickTimeSlotView(TimeSlotView timeSlotView);
 }

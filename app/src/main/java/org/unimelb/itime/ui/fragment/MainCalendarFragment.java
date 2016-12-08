@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -103,7 +104,7 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
     }
 
     public void initBackToday(){
-        ImageView backToday = (ImageView) binding.getRoot().findViewById(R.id.back_to_today);
+        TextView backToday = (TextView) binding.getRoot().findViewById(R.id.back_to_today);
         backToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

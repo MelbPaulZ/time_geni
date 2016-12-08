@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -126,6 +128,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3]);
         fragmentTransaction.commit();
         showFragmentById(0);
+        refreshTabStatus(0);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -160,7 +163,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         int count = main_tab_ll.getChildCount();
         for (int i = 0; i < count; i++) {
             boolean isActive = pageId == i;
-            int color = getResources().getColor(isActive ? R.color.blue : R.color.gray);
+            int color = getResources().getColor(isActive ? R.color.bg_event_group_a100 : R.color.gray_9b9b9b);
             View child = main_tab_ll.getChildAt(i);
             if (child instanceof ViewGroup){
                 int innerCount = ((ViewGroup) child).getChildCount();
@@ -169,6 +172,9 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
                     Object tag = innerChild.getTag();
                     if (tag != null){
                         if (innerChild.getTag().equals("tab_icon")){
+                            Drawable mDrawable = innerChild.getBackground();
+                            mDrawable.setColorFilter(new
+                                    PorterDuffColorFilter(color,PorterDuff.Mode.SRC_IN));
                         }else if(innerChild.getTag().equals("tab_text")){
                             ((TextView) innerChild).setTextColor(color);
                         }

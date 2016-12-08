@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.unimelb.itime.ui.presenter.MainSettingsPresenter;
+import org.unimelb.itime.util.UserUtil;
 
 import static java.security.AccessController.getContext;
 
@@ -20,6 +21,10 @@ public class MainSettingsViewModel extends BaseObservable{
     public MainSettingsViewModel(MainSettingsPresenter presenter){
         this.presenter = presenter;
 
+    }
+
+    public String getUsername(){
+        return UserUtil.getInstance().getUser().getEmail();
     }
 
     public View.OnClickListener onLogOutClick(){

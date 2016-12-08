@@ -25,78 +25,35 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentTop="true"
-                    android:text="14:00 PM - 15:00 PM"
+                    android:text=""
                     android:textSize="@dimen/page_text_size" />
 
                 <TextView
+                    android:id="@+id/timeslot_subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="Mon 9/10"
+                    android:text=""
                     android:layout_below="@+id/timeslot_title"
                     android:textSize="10dp" />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
     </LinearLayout>
 
-    <ScrollView
+    <ListView
+        android:id="@+id/response_view"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:divider="@null"
+        android:dividerHeight="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="300dp">
+    </ListView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/accept_attendees_blocks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:tag="accept_block"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:tag="accepted">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/page_blank_row_height"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:paddingBottom="@dimen/margin_small"
-                        android:layout_marginLeft="8dp"
-                        android:text="Accepted" />
-                </RelativeLayout>
-            </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:tag="accept_attendee1">
-
-                <ImageView
-                    android:id="@+id/icon0"
-                    android:layout_width="10dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin_small"
-                    android:background="@drawable/icon_event_selected_right" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/icon0"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
-                    android:text="Michael Morrision"
-                    android:textSize="@dimen/page_text_size" />
-            </RelativeLayout>
-        </LinearLayout>
-    </ScrollView>
+    <View
+        android:background="#000"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -113,6 +70,12 @@
             android:gravity="center"
             android:textColor="@color/green"
             />
+
+        <View
+            android:background="#000"
+            android:layout_width="1px"
+            android:layout_height="match_parent"/>
+
         <TextView
             android:id="@+id/invitee_response_select_button"
             android:layout_width="match_parent"

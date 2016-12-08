@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
+import org.unimelb.itime.adapter.InviteeInnerResponseAdapter;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
@@ -81,12 +82,14 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
 
            @Override
            public void onTimeSlotClick(TimeSlotView timeSlotView) {
-               // here should popup window
-               if(timeSlotView.isSelect()){
-                   // silence unselect
-                   onClickTimeSlotView(timeSlotView);
-               }else{
-                   popupTimeSlotWindow(timeSlotView);
+               if (presenter.getView() != null){
+                   // here should popup window
+                   if(timeSlotView.isSelect()){
+                       // silence unselect
+                       presenter.getView().onClickTimeSlotView(timeSlotView);
+                   }else{
+                       presenter.getView().popupTimeSlotWindow(timeSlotView);
+                   }
                }
            }
 
@@ -145,91 +148,33 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
             }
         };
     }
+//    &******************************
 
-    public void popupTimeSlotWindow(final TimeSlotView timeSlotView){
-        final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
-        LayoutInflater inflater = LayoutInflater.from(presenter.getContext());
-        View root = inflater.inflate(R.layout.fragment_timeslot_attendee_response, null);
-
-        TextView button_cancel = (TextView) root.findViewById(R.id.invitee_response_cancel_button);
-        button_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
-
-        TextView button_reject = (TextView) root.findViewById(R.id.invitee_response_select_button);
-        button_reject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-                // here should add presenter change event status as reject
-                onClickTimeSlotView(timeSlotView);
-            }
-        });
-        alertDialog.setView(root);
-        alertDialog.show();
-    }
-
-    public void onClickTimeSlotView(TimeSlotView timeSlotView){
-        // change status of view and struct
-        if (UserUtil.getUserUid().equals(eventDetailHostEvent.getHostUserUid())){
-            // for host , only one timeslot can be selected
-            // change here
-           if (TimeSlotUtil.getSelectedTimeSlots(getContext(),eventDetailHostEvent.getTimeslot()).size()<1){
-               // if no timeslot has been selected
-               changeTimeSlotView(timeSlotView);
-               hostClickTimeSlot(timeSlotView);
-           }else{
-               // if other timeslot has been selected
-               if (((WeekView.TimeSlotStruct)timeSlotView.getTag()).status==true){
-                   changeTimeSlotView(timeSlotView);
-                   hostClickTimeSlot(timeSlotView);
-               }else{
-                   Toast.makeText(presenter.getContext(), "already select one timeslot, please unclick and click another one",Toast.LENGTH_SHORT).show();
-               }
-           }
-        }else {
-            // for invitees, can choose multi timeslots
-            changeTimeSlotView(timeSlotView);
-            changeEventAttributes(timeSlotView);
-        }
-    }
-
-    private void hostClickTimeSlot(TimeSlotView timeSlotView){
-        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
-        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
-        if (timeSlot!=null){
-            if (timeSlot.getIsConfirmed()==1){
-                timeSlot.setIsConfirmed(0);
-            }else{
-                timeSlot.setIsConfirmed(1);
-            }
-        }
-    }
-
-
-    private void changeEventAttributes(TimeSlotView timeSlotView){
-        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct)timeSlotView.getTag()).object;
-        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
-        if (timeSlot!=null) {
-            if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))) {
-                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
-            } else if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_accept))) {
-                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
-            }
-        }else{
-            Log.i("error", "onTimeSlotClick: " + "no timeslot found");
-        }
-    }
-
-    private void changeTimeSlotView(TimeSlotView timeSlotView){
-        // if clicked -> unclicked; if unclicked -> clicked
-        boolean newStatus = !timeSlotView.isSelect();
-        timeSlotView.setStatus(newStatus);
-        ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
-    }
+//    public void popupTimeSlotWindow(final TimeSlotView timeSlotView){
+//        final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
+//        LayoutInflater inflater = LayoutInflater.from(presenter.getContext());
+//        View root = inflater.inflate(R.layout.fragment_timeslot_attendee_response, null);
+//
+//        TextView button_cancel = (TextView) root.findViewById(R.id.invitee_response_cancel_button);
+//        button_cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                alertDialog.dismiss();
+//            }
+//        });
+//
+//        TextView button_reject = (TextView) root.findViewById(R.id.invitee_response_select_button);
+//        button_reject.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                alertDialog.dismiss();
+//                // here should add presenter change event status as reject
+//                onClickTimeSlotView(timeSlotView);
+//            }
+//        });
+//        alertDialog.setView(root);
+//        alertDialog.show();
+//    }
 
 ////    *****************************************************************************************
     public String getTag() {
