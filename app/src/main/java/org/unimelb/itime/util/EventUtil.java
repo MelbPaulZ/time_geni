@@ -377,25 +377,36 @@ public class EventUtil{
         activity.startActivityForResult(intent, ACTIVITY_EDIT_EVENT);
     }
 
-    public static String getEventConfirmStatus(Event event){
-        switch (event.getParsedStatus()){
-            case 0:
-                return "has not confirmed this event";
-            case 1:
-                return "has updating this event";
-            case 2:
-                return "has confirmed this event";
-            case 3:
-                return "has cancelled this event";
-            default:
-                return "has confirmed this event";
+
+    public static String getEventConfirmStatus(Context context, Event event){
+        if (isUserHostOfEvent(event)){
+            if (event.getStatus().equals(context.getString(R.string.pending))){
+                return context.getString(R.string.You_have_not_confirmed_this_event);
+            }else if (event.getStatus().equals(context.getString(R.string.confirmed))){
+                return context.getString(R.string.You_have_confirmed_this_event);
+            }else{
+                return "todo:" + event.getStatus();
+            }
+        }else{
+            if (event.getStatus().equals(context.getString(R.string.pending))){
+                return context.getString(R.string.has_not_confirmed_this_event);
+            }else if (event.getStatus().equals(context.getString(R.string.confirmed))){
+                return context.getString(R.string.has_confirmed_this_event);
+            }else{
+                return "todo:" + event.getStatus();
+            }
         }
     }
 
     public static String getHostName(Event event){
         // need to change later
         String hostUid = event.getHostUserUid();
-        return "Captain America";
+        for (Invitee invitee:event.getInvitee()){
+            if (invitee.getUserUid().equals(hostUid)){
+                return invitee.getAliasName();
+            }
+        }
+        return "not found this person";
     }
 
     /** This get Repeat String methods return the message that should be displayed on screen

@@ -366,6 +366,14 @@ public class EventDetailViewModel extends CommonViewModel {
         }
     }
 
+    public int getMessageStatusColor(Event event){
+        if (event.getStatus().equals(context.getString(R.string.confirmed))){
+            return context.getResources().getColor(R.color.color_63ADF2);
+        }else{
+            return context.getResources().getColor(R.color.color_FF9600);
+        }
+    }
+
     public View.OnClickListener onClickHostQuit(Event event){
         return new View.OnClickListener() {
             @Override

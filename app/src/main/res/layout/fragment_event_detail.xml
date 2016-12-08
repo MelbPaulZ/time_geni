@@ -79,61 +79,64 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <RelativeLayout
+                    android:id="@+id/event_detail_first_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_corner_gray"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp">
+
+                    <ImageView
+                        android:id="@+id/host_photo"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/invitee_selected_default_picture" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignRight="@id/host_photo"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/event_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{EventUtil.getHostName(hostDetailVM.evDtlHostEvent)}"
+                            android:visibility="@{EventUtil.isUserHostOfEvent(hostDetailVM.evDtlHostEvent)? View.GONE: View.VISIBLE}"
+                            android:textColor="@{hostDetailVM.getMessageStatusColor(hostDetailVM.evDtlHostEvent)}"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/event_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{EventUtil.getEventConfirmStatus(context, hostDetailVM.evDtlHostEvent)}"
+                            android:textColor="@{hostDetailVM.getMessageStatusColor(hostDetailVM.evDtlHostEvent)}" />
+                    </LinearLayout>
+                </RelativeLayout>
+
                 <LinearLayout
                     android:id="@+id/event_detail_host_first_part"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_detail_first_message"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="@dimen/padding_10"
-                    android:layout_marginTop="23dp"
+                    android:layout_marginTop="13dp"
                     android:orientation="vertical">
                     <!-- ********************************************** -->
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/round_corner_gray"
-                        android:padding="10dp">
-
-                        <ImageView
-                            android:id="@+id/host_photo"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/invitee_selected_default_picture" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignRight="@id/host_photo"
-                            android:layout_centerInParent="true"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/event_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@{EventUtil.getHostName(hostDetailVM.evDtlHostEvent)}"
-                                android:textColor="@color/color_FF9600"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/event_status"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@{EventUtil.getEventConfirmStatus(hostDetailVM.evDtlHostEvent)}"
-                                android:textColor="@color/color_FF9600" />
-                        </LinearLayout>
-
-
-                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/event_detail_basic_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:orientation="vertical">
 
                         <TextView
