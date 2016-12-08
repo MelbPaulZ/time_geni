@@ -358,4 +358,25 @@ public class EventDetailViewModel extends CommonViewModel {
         }
     }
 
+    public int hostConfirmBtnVisibility(Event event){
+        if (EventUtil.isUserHostOfEvent(event) && event.getStatus().equals(context.getString(R.string.confirmed))){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+    }
+
+    public View.OnClickListener onClickHostQuit(Event event){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mvpView!=null) {
+                    // TODO: 8/12/2016 quit event update server and local
+                    Toast.makeText(context, "Quit This Event, To do", Toast.LENGTH_SHORT).show();
+                    mvpView.toCalendar();
+                }
+            }
+        };
+    }
+
 }

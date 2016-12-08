@@ -63,4 +63,31 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
         };
         HttpUtil.subscribe(observable, subscriber);
     }
+
+    public void deleteMessage(Message message){
+        ArrayList<String> messageList = new ArrayList<>();
+        messageList.add(message.getMessageUid());
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("messageUids", messageList);
+
+        Observable<HttpResult<Void>> observable = messageApi.delete(map);
+        Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: " + e.getMessage());
+            }
+
+            @Override
+            public void onNext(HttpResult<Void> voidHttpResult) {
+                Log.i(TAG, "onNext: ");
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
 }
