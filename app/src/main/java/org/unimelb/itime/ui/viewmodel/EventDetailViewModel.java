@@ -342,4 +342,20 @@ public class EventDetailViewModel extends CommonViewModel {
         return count + "";
     }
 
+    public int confirmTimeVisibility(Event event){
+        if (event.getStatus().equals(context.getString(R.string.confirmed))){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+    }
+
+    public int timeslotListVisibility(Event event){
+        if (event.getStatus().equals(context.getString(R.string.confirmed))){
+            return View.GONE;
+        }else{
+            return View.VISIBLE;
+        }
+    }
+
 }
