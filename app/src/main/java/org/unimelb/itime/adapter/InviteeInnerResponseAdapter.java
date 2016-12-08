@@ -101,7 +101,7 @@ public class InviteeInnerResponseAdapter extends BaseAdapter{
                 ) {
             View root = layoutInflater.inflate(R.layout.listview_timeslot_inner_response, null);
             ImageView imgView = (ImageView) root.findViewById(R.id.img_view);
-            imgView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_event_selected_right));
+            imgView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_event_status_rejected));
 
             TextView txtView = (TextView) root.findViewById(R.id.text_view);
             txtView.setText(invitee.getName() + ifHost(event, invitee));
@@ -118,7 +118,7 @@ public class InviteeInnerResponseAdapter extends BaseAdapter{
                 ) {
             View root = layoutInflater.inflate(R.layout.listview_timeslot_inner_response, null);
             ImageView imgView = (ImageView) root.findViewById(R.id.img_view);
-            imgView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_event_selected_right));
+            imgView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_event_status_pending_small));
 
             TextView txtView = (TextView) root.findViewById(R.id.text_view);
             txtView.setText(invitee.getName() + ifHost(event, invitee));
