@@ -77,7 +77,6 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
     private AutoCompleteTextView mAutocompleteView;
 
     private String TAG = "TAG";
-    private String tag;
     private static final int MY_PERMISSIONS_REQUEST_LOC = 30;
     private String place;
     private String pickLocation;
@@ -133,7 +132,6 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
         } else {
             longitude = EventUtil.longitude;
             latitude = EventUtil.latitude;
-            Toast.makeText(getContext(), "Application cannot find current location", Toast.LENGTH_SHORT).show();
         }
 
         // dynamically calculate location and search by this

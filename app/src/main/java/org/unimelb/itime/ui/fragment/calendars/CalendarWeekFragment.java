@@ -28,6 +28,7 @@ import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
+import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
@@ -129,8 +130,10 @@ public class CalendarWeekFragment extends BaseUiFragment<CommonMvpView, CommonPr
                                             newEvent.setEndTime(dayDraggableEventView.getEndTimeM());
                                             newEvent.setRecurringEventUid(orgEvent.getEventUid());
                                             newEvent.setRecurringEventId(orgEvent.getEventId());
-                                            String[] newRecurrence = new String[0];
-                                            newEvent.setRecurrence(newRecurrence);
+//                                            String[] newRecurrence = new String[0];
+//                                            newEvent.setRecurrence(newRecurrence);
+                                            newEvent.setRule(new RuleModel(newEvent));
+                                            newEvent.setRecurrence(newEvent.getRule().getRecurrence());
 
                                             // find the first event of repeat events, and update it to server
                                             Event firstOrg = null;
@@ -170,7 +173,7 @@ public class CalendarWeekFragment extends BaseUiFragment<CommonMvpView, CommonPr
                                             }else{
                                                 // not the same day
                                                 EventUtil.regenerateRelatedUid(copyEvent);
-                                                Date day = new Date(dayDraggableEventView.getStartTimeM());
+                                                Date day = new Date(orgEvent.getStartTime());
                                                 firstOrg.getRule().setUntil(day);
                                                 firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
                                                 EventManager.getInstance().getWaitingEditEventList().add(firstOrg);

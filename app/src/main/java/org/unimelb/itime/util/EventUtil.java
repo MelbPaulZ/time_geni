@@ -735,4 +735,20 @@ public class EventUtil {
 
         return sameDay;
     }
+
+    public static int getDayDifferent(long oldL,long newL){
+        Calendar c1 = Calendar.getInstance();
+        c1.setTimeInMillis(oldL);
+        Calendar c1Begin = getBeginOfDayCalendar(c1);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTimeInMillis(newL);
+        Calendar c2Begin = getBeginOfDayCalendar(c2);
+
+        long oneDay = 24 * 60 * 60 * 1000;
+        long delta = c2Begin.getTimeInMillis() - c1Begin.getTimeInMillis();
+        int dif = (int) (delta/oneDay);
+        return dif;
+
+    }
 }
