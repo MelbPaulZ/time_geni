@@ -24,7 +24,11 @@ public class MainSettingsViewModel extends BaseObservable{
     }
 
     public String getUsername(){
-        return UserUtil.getInstance().getUser().getEmail();
+        if (UserUtil.getInstance().getUser()!=null) {
+            return UserUtil.getInstance().getUser().getEmail();
+        }else{
+            return "";
+        }
     }
 
     public View.OnClickListener onLogOutClick(){
