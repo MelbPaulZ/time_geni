@@ -28,6 +28,8 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
@@ -142,6 +144,8 @@ public class RemoteService extends Service{
                     editor.apply();
 
                     DBManager.getInstance(getBaseContext()).deleteAllMessages();
+                    Collections.sort(listHttpResult.getData()); // sort data depends on edit time
+                    Collections.reverse(listHttpResult.getData()); // from the new time to old time
                     DBManager.getInstance(getBaseContext()).insertMessageList(listHttpResult.getData());
 
                     //set data to inbox;

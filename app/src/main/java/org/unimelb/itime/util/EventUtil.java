@@ -6,8 +6,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.ImageView;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -25,8 +27,11 @@ import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +39,7 @@ import java.util.Map;
 /**
  * Created by Paul on 8/09/2016.
  */
-public class EventUtil{
+public class EventUtil {
     public static final int ACTIVITY_EDIT_EVENT = 1;
     public static final int ACTIVITY_CREATE_EVENT = 2;
     public static double latitude = 0.0;
@@ -47,22 +52,21 @@ public class EventUtil{
     public final static int REPEAT_EVERY_MONTH = 4;
     public final static int REPEAT_EVERY_YEAR = 5;
 
-    public static String parseTimeToString(Context context, long time){
+    public static String parseTimeToString(Context context, long time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
         String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
         String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
         String month = getMonth(context, calendar.get(Calendar.MONTH));
-        String startTimeHour = calendar.get(Calendar.HOUR_OF_DAY)<10? "0" + String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) : String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-        String startMinute = calendar.get(Calendar.MINUTE)<10? "0"+String.valueOf(calendar.get(Calendar.MINUTE)): String.valueOf(calendar.get(Calendar.MINUTE));
+        String startTimeHour = calendar.get(Calendar.HOUR_OF_DAY) < 10 ? "0" + String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) : String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+        String startMinute = calendar.get(Calendar.MINUTE) < 10 ? "0" + String.valueOf(calendar.get(Calendar.MINUTE)) : String.valueOf(calendar.get(Calendar.MINUTE));
         return month + " " + day + ", " + calendar.get(Calendar.YEAR) + "   " + startTimeHour + ":" + startMinute;
     }
 
-    public static String parseDateToString(Context context, long time){
+    public static String parseDateToString(Context context, long time) {
         if (time == 0) {
             return context.getString(R.string.repeat_never);
-        }
-        else {
+        } else {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(time);
             String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
@@ -72,33 +76,32 @@ public class EventUtil{
         }
     }
 
-    public static String getAttendeeString(Context context,ArrayList<String> attendeesArrayList) {
+    public static String getAttendeeString(Context context, ArrayList<String> attendeesArrayList) {
         ArrayList<String> arrayList = attendeesArrayList;
-        if (attendeesArrayList==null){
+        if (attendeesArrayList == null) {
             return "solo event";
         }
         // attendees arraylist = 0 means no attendee selected, attendees arraylist = 1 means only it self, need to change later!!
-        if ( attendeesArrayList.size()==0) {
+        if (attendeesArrayList.size() == 0) {
             return context.getString(R.string.none);
-        }else if (attendeesArrayList.size()==1){
+        } else if (attendeesArrayList.size() == 1) {
             return attendeesArrayList.get(0);
-        }
-        else {
+        } else {
             return String.format("%s and %d more", attendeesArrayList.get(0), attendeesArrayList.size() - 1);
         }
     }
 
-    public static ArrayList<String> fromContactListToArrayList(ArrayList<ITimeContactInterface> contactList){
+    public static ArrayList<String> fromContactListToArrayList(ArrayList<ITimeContactInterface> contactList) {
         ArrayList<String> arrayList = new ArrayList<>();
-        for (ITimeContactInterface contact: contactList){
+        for (ITimeContactInterface contact : contactList) {
             arrayList.add(contact.getName());
         }
         return arrayList;
     }
 
-    public static ArrayList<String> fromInviteeListToArraylist(List<Invitee> inviteeArrayList){
+    public static ArrayList<String> fromInviteeListToArraylist(List<Invitee> inviteeArrayList) {
         ArrayList<String> arrayList = new ArrayList<>();
-        if (inviteeArrayList!=null) {
+        if (inviteeArrayList != null) {
             for (Invitee invitee : inviteeArrayList) {
                 arrayList.add(invitee.getName());
             }
@@ -106,7 +109,7 @@ public class EventUtil{
         return arrayList;
     }
 
-    public static CharSequence[] getAlertTimes(Context context){
+    public static CharSequence[] getAlertTimes(Context context) {
         CharSequence[] alertTimes = new CharSequence[]{
                 context.getString(R.string.none),
                 context.getString(R.string.five_mintues_before),
@@ -118,54 +121,54 @@ public class EventUtil{
                 context.getString(R.string.two_days_before),
                 context.getString(R.string.one_week_before)
         };
-                return alertTimes;
+        return alertTimes;
     }
 
-    public static String getAlertTimeFromIndex(Context context,int index){
+    public static String getAlertTimeFromIndex(Context context, int index) {
         return (String) getAlertTimes(context)[index];
     }
 
 
-    public static String getSuggestTimeStringFromLong(Context context, Long startTime,Long endtime){
+    public static String getSuggestTimeStringFromLong(Context context, Long startTime, Long endtime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime);
         String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
         String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
         String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         String startTimeHour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-        String startMinute = calendar.get(Calendar.MINUTE)<10? "0" + String.valueOf(calendar.get(Calendar.MINUTE)) : String.valueOf(calendar.get(Calendar.MINUTE));
+        String startMinute = calendar.get(Calendar.MINUTE) < 10 ? "0" + String.valueOf(calendar.get(Calendar.MINUTE)) : String.valueOf(calendar.get(Calendar.MINUTE));
         String startAmOrPm = calendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
 
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.setTimeInMillis(endtime);
         String endTimeHour = String.valueOf(endCalendar.get(Calendar.HOUR_OF_DAY));
-        String endTimeMinute = endCalendar.get(Calendar.MINUTE)<10? "0" + String.valueOf(endCalendar.get(Calendar.MINUTE)) : String.valueOf(endCalendar.get(Calendar.MINUTE));
-        String endAmOrPm = endCalendar.get(Calendar.HOUR_OF_DAY) >=12? "PM": "AM";
+        String endTimeMinute = endCalendar.get(Calendar.MINUTE) < 10 ? "0" + String.valueOf(endCalendar.get(Calendar.MINUTE)) : String.valueOf(endCalendar.get(Calendar.MINUTE));
+        String endAmOrPm = endCalendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
 
         return dayOfWeek + " " + day + "/" + month + " " + startTimeHour + ":" + startMinute +
                 " " + startAmOrPm + " - " + endTimeHour + ":" + endTimeMinute + endAmOrPm;
 
     }
 
-    public static String getSlotStringFromLong(Context context, Long startTime,Long endtime){
+    public static String getSlotStringFromLong(Context context, Long startTime, Long endtime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime);
         String startTimeHour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-        String startMinute = calendar.get(Calendar.MINUTE)<10? "0" + String.valueOf(calendar.get(Calendar.MINUTE)) : String.valueOf(calendar.get(Calendar.MINUTE));
+        String startMinute = calendar.get(Calendar.MINUTE) < 10 ? "0" + String.valueOf(calendar.get(Calendar.MINUTE)) : String.valueOf(calendar.get(Calendar.MINUTE));
         String startAmOrPm = calendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
 
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.setTimeInMillis(endtime);
         String endTimeHour = String.valueOf(endCalendar.get(Calendar.HOUR_OF_DAY));
-        String endTimeMinute = endCalendar.get(Calendar.MINUTE)<10? "0" + String.valueOf(endCalendar.get(Calendar.MINUTE)) : String.valueOf(endCalendar.get(Calendar.MINUTE));
-        String endAmOrPm = endCalendar.get(Calendar.HOUR_OF_DAY) >=12? "PM": "AM";
+        String endTimeMinute = endCalendar.get(Calendar.MINUTE) < 10 ? "0" + String.valueOf(endCalendar.get(Calendar.MINUTE)) : String.valueOf(endCalendar.get(Calendar.MINUTE));
+        String endAmOrPm = endCalendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
 
         return startTimeHour + ":" + startMinute +
                 " " + startAmOrPm + " - " + endTimeHour + ":" + endTimeMinute + endAmOrPm;
 
     }
 
-    public static String getDayOfWeekString(Context context, Long startTime){
+    public static String getDayOfWeekString(Context context, Long startTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime);
         String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
@@ -176,14 +179,14 @@ public class EventUtil{
     }
 
 
-    public static int generateTimeSlotUid(){
-        int uid = (int)(Math.random() * 1000000);
+    public static int generateTimeSlotUid() {
+        int uid = (int) (Math.random() * 1000000);
         return uid;
     }
 
-    public static ArrayList<PhotoUrl> fromStringToPhotoUrlList(ArrayList<String> urls){
+    public static ArrayList<PhotoUrl> fromStringToPhotoUrlList(ArrayList<String> urls) {
         ArrayList<PhotoUrl> arrayList = new ArrayList<>();
-        for (String url: urls){
+        for (String url : urls) {
             // here should update photoUrl, as Chuandong Request
             PhotoUrl photoUrl = new PhotoUrl();
             photoUrl.setLocalPath(url);
@@ -196,32 +199,32 @@ public class EventUtil{
         return arrayList;
     }
 
-    public static String getPhotoFileName(String url){
+    public static String getPhotoFileName(String url) {
         File f = new File(url);
         String name = f.getName();
         return name;
     }
 
-    public static Event getEventInDB(Context context,String eventUid){
+    public static Event getEventInDB(Context context, String eventUid) {
         Event event = DBManager.getInstance(context).getEvent(eventUid);
         event.getInvitee();
         event.getTimeslot();
         return event;
     }
 
-    public static CharSequence[] getCalendarTypes(Context context){
+    public static CharSequence[] getCalendarTypes(Context context) {
         return new CharSequence[]{"Work", "Private", "Group", "Public"};
     }
 
-    public static String getCalendarTypeFromIndex(Context context, String index){
-        if (index==null){
+    public static String getCalendarTypeFromIndex(Context context, String index) {
+        if (index == null) {
             return null;
         }
         int num = Integer.parseInt(index);
         return (String) getCalendarTypes(context)[num];
     }
 
-    public static CharSequence[] getRepeats(Context context, Event event){
+    public static CharSequence[] getRepeats(Context context, Event event) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
         String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
@@ -234,31 +237,30 @@ public class EventUtil{
                 String.format(context.getString(R.string.repeat_every_year))};
     }
 
-    public static void changeEventFrequency(Event event, int repeatIndex){
-        if (repeatIndex == REPEAT_NEVER){
+    public static void changeEventFrequency(Event event, int repeatIndex) {
+        if (repeatIndex == REPEAT_NEVER) {
             event.getRule().setFrequencyEnum(null);
             event.getRule().setInterval(1);
-        }else if (repeatIndex == REPEAT_EVERYDAY){
+        } else if (repeatIndex == REPEAT_EVERYDAY) {
             event.getRule().setFrequencyEnum(FrequencyEnum.DAILY);
             event.getRule().setInterval(1);
-        }else if (repeatIndex == REPEAT_EVERYWEEK){
+        } else if (repeatIndex == REPEAT_EVERYWEEK) {
             event.getRule().setFrequencyEnum(FrequencyEnum.WEEKLY);
             event.getRule().setInterval(1);
-        }else if (repeatIndex == REPEAT_EVERY_TWOWEEKS){
+        } else if (repeatIndex == REPEAT_EVERY_TWOWEEKS) {
             event.getRule().setFrequencyEnum(FrequencyEnum.WEEKLY);
             event.getRule().setInterval(2);
-        }else if (repeatIndex == REPEAT_EVERY_MONTH){
+        } else if (repeatIndex == REPEAT_EVERY_MONTH) {
             event.getRule().setFrequencyEnum(FrequencyEnum.MONTHLY);
             event.getRule().setInterval(1);
-        }else if (repeatIndex == REPEAT_EVERY_YEAR){
+        } else if (repeatIndex == REPEAT_EVERY_YEAR) {
             event.getRule().setFrequencyEnum(FrequencyEnum.YEARLY);
             event.getRule().setInterval(1);
         }
     }
 
 
-
-    public static String getDayOfWeekFull(Context context,int dayOfWeek) {
+    public static String getDayOfWeekFull(Context context, int dayOfWeek) {
         switch (dayOfWeek) {
             case 1:
                 return context.getString(R.string.day_of_week_1_full);
@@ -299,8 +301,8 @@ public class EventUtil{
         return "";
     }
 
-    public static String getMonth(Context context, int month){
-        switch (month){
+    public static String getMonth(Context context, int month) {
+        switch (month) {
             case 0:
                 return context.getString(R.string.month_1st_Abbr);
             case 1:
@@ -330,7 +332,7 @@ public class EventUtil{
         }
     }
 
-    public static ArrayList<String> getDurationTimes(){
+    public static ArrayList<String> getDurationTimes() {
         ArrayList<String> list = new ArrayList<String>();
         list.add("15 mins");
         list.add("30 mins");
@@ -346,8 +348,8 @@ public class EventUtil{
         return list;
     }
 
-    public static int getDurationInMintues(int position){
-        switch (position){
+    public static int getDurationInMintues(int position) {
+        switch (position) {
             case 0:
                 return 15;
             case 1:
@@ -366,8 +368,10 @@ public class EventUtil{
                 return 300;
             case 8:
                 return 360;
-            case 9: return 720;
-            case 10: return 1440;
+            case 9:
+                return 720;
+            case 10:
+                return 1440;
         }
         return 0;
     }
@@ -375,64 +379,65 @@ public class EventUtil{
 
     public static void startEditEventActivity(Context context, Activity activity, ITimeEventInterface iTimeEventInterface) {
         Intent intent = new Intent(activity, EventDetailActivity.class);
-        Event event = (Event)iTimeEventInterface;
+        Event event = (Event) iTimeEventInterface;
         event.getInvitee();
-        EventManager.getInstance().setCurrentEvent((Event)iTimeEventInterface);
+        EventManager.getInstance().setCurrentEvent((Event) iTimeEventInterface);
         activity.startActivityForResult(intent, ACTIVITY_EDIT_EVENT);
     }
 
 
-    public static String getEventConfirmStatus(Context context, Event event){
-        if (isUserHostOfEvent(event)){
-            if (event.getStatus().equals(context.getString(R.string.pending))){
+    public static String getEventConfirmStatus(Context context, Event event) {
+        if (isUserHostOfEvent(event)) {
+            if (event.getStatus().equals(context.getString(R.string.pending))) {
                 return context.getString(R.string.You_have_not_confirmed_this_event);
-            }else if (event.getStatus().equals(context.getString(R.string.confirmed))){
+            } else if (event.getStatus().equals(context.getString(R.string.confirmed))) {
                 return context.getString(R.string.You_have_confirmed_this_event);
-            }else{
+            } else {
                 return "todo:" + event.getStatus();
             }
-        }else{
-            if (event.getStatus().equals(context.getString(R.string.pending))){
+        } else {
+            if (event.getStatus().equals(context.getString(R.string.pending))) {
                 return context.getString(R.string.has_not_confirmed_this_event);
-            }else if (event.getStatus().equals(context.getString(R.string.confirmed))){
+            } else if (event.getStatus().equals(context.getString(R.string.confirmed))) {
                 return context.getString(R.string.has_confirmed_this_event);
-            }else{
+            } else {
                 return "todo:" + event.getStatus();
             }
         }
     }
 
-    public static String getHostName(Event event){
+    public static String getHostName(Event event) {
         // need to change later
         String hostUid = event.getHostUserUid();
-        for (Invitee invitee:event.getInvitee()){
-            if (invitee.getUserUid().equals(hostUid)){
+        for (Invitee invitee : event.getInvitee()) {
+            if (invitee.getUserUid().equals(hostUid)) {
                 return invitee.getAliasName();
             }
         }
         return "not found this person";
     }
 
-    /** This get Repeat String methods return the message that should be displayed on screen
-     * */
-    public static String getRepeatString(Context context, Event event){
+    /**
+     * This get Repeat String methods return the message that should be displayed on screen
+     */
+    public static String getRepeatString(Context context, Event event) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
         String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
         FrequencyEnum frequencyEnum = event.getRule().getFrequencyEnum();
-        if (frequencyEnum == null){
+        if (frequencyEnum == null) {
             return String.format(context.getString(R.string.repeat_never));
-        }else if (frequencyEnum == FrequencyEnum.DAILY){
+        } else if (frequencyEnum == FrequencyEnum.DAILY) {
             return String.format(context.getString(R.string.repeat_everyday));
-        }else if (frequencyEnum == FrequencyEnum.WEEKLY){
-            if (event.getRule().getInterval() == 1){
+        } else if (frequencyEnum == FrequencyEnum.WEEKLY) {
+            if (event.getRule().getInterval() == 1) {
                 return String.format(context.getString(R.string.repeat_everyweek), dayOfWeek);
-            }else if (event.getRule().getInterval() ==2){
+            } else if (event.getRule().getInterval() == 2) {
                 return String.format(context.getString(R.string.repeat_every_twoweek));
             }
-        }else if (frequencyEnum == FrequencyEnum.MONTHLY){
+        } else if (frequencyEnum == FrequencyEnum.MONTHLY) {
             return String.format(context.getString(R.string.repeat_every_month));
-        }else if (frequencyEnum == FrequencyEnum.YEARLY){
+        } else if (frequencyEnum == FrequencyEnum.YEARLY) {
             return String.format(context.getString(R.string.repeat_every_year));
         }
 
@@ -441,100 +446,101 @@ public class EventUtil{
     }
 
 
-    public static int parseEventType(String type){
+    public static int parseEventType(String type) {
         Map<String, Integer> map = new HashMap<>();
         map.put("solo", 0);
-        map.put("group",1);
-        map.put("public",2);
-        if (!map.containsKey(type)){
+        map.put("group", 1);
+        map.put("public", 2);
+        if (!map.containsKey(type)) {
             return 0;
         }
         return map.get(type);
     }
 
-    public static int parseEventStatus(String Status){
+    public static int parseEventStatus(String Status) {
         Map<String, Integer> map = new HashMap<>();
         map.put("pending", 0);
-        map.put("updating",1);
-        map.put("confirmed",2);
-        map.put("cancelled",3);
+        map.put("updating", 1);
+        map.put("confirmed", 2);
+        map.put("cancelled", 3);
 
-        if (!map.containsKey(Status)){
+        if (!map.containsKey(Status)) {
             return 0;
         }
         return map.get(Status);
     }
 
-    public static boolean isEventRepeat(Event event){
-        if (event.hasRecurrence() && event.getRecurrence().equals("0")){
+    public static boolean isEventRepeat(Event event) {
+        if (event.hasRecurrence() && event.getRecurrence().equals("0")) {
             return false;
-        }else if(!event.hasRecurrence()){
+        } else if (!event.hasRecurrence()) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
 
-    public static List<String> getYears(){
+    public static List<String> getYears() {
         List<String> years = new ArrayList<>();
-        for (int i = 2010 ; i<2030 ; i++){
-            years.add(i+"");
+        for (int i = 2010; i < 2030; i++) {
+            years.add(i + "");
         }
         return years;
     }
 
-    public static List<String> getMonths(){
+    public static List<String> getMonths() {
         List<String> months = new ArrayList<>();
-        for(int i = 1 ; i <= 12 ; i ++){
+        for (int i = 1; i <= 12; i++) {
             months.add(i + "");
         }
         return months;
     }
 
-    public static List<String> getDays(int month){
+    public static List<String> getDays(int month) {
         List<String> days = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MONTH, month);
         int numOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        for (int i = 1 ; i<= numOfDays ; i++){
+        for (int i = 1; i <= numOfDays; i++) {
             days.add(i + "");
         }
         return days;
     }
 
-    public static List<String> getHours(){
+    public static List<String> getHours() {
         List<String> hours = new ArrayList<>();
-        for( int i = 0 ; i<24; i ++){
-            hours.add( i + "");
+        for (int i = 0; i < 24; i++) {
+            hours.add(i + "");
         }
         return hours;
     }
 
-    public static List<String> getMinutes(){
+    public static List<String> getMinutes() {
         List<String> minutes = new ArrayList<>();
-        for (int i = 0 ; i < 4 ; i ++){
-            minutes.add( i*15 + "");
+        for (int i = 0; i < 4; i++) {
+            minutes.add(i * 15 + "");
         }
         return minutes;
     }
 
-    public static String getEventType(Event event, String userUid){
-        if (event.getInvitee().size()>1){
+    public static String getEventType(Event event, String userUid) {
+        if (event.getInvitee().size() > 1) {
             return "group";
-        }else{
+        } else {
             return "solo";
         }
     }
 
-    /** use when event has no invitees before, add self as host with a new generated inviteeUid
-     * */
-    public static void addSelfInInvitee(Context context,Event event){
-        if(!isSelfInEvent(event)){
+    /**
+     * use when event has no invitees before, add self as host with a new generated inviteeUid
+     */
+    public static void addSelfInInvitee(Context context, Event event) {
+        if (!isSelfInEvent(event)) {
             Invitee self = new Invitee();
             self.setStatus(context.getString(R.string.accept));
-            if (EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent())!=null){
+            if (EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent()) != null) {
                 self.setInviteeUid(EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent()));
-            }else{
+            } else {
                 self.setInviteeUid(AppUtil.generateUuid());
             }
             self.setUserUid(UserUtil.getUserUid());
@@ -546,18 +552,41 @@ public class EventUtil{
         }
     }
 
-    private static boolean isSelfInEvent(Event event){
+    private static boolean isSelfInEvent(Event event) {
         String selfUserUid = UserUtil.getUserUid();
-        for (Invitee invitee : event.getInvitee()){
-            if (invitee.getUserUid().equals(selfUserUid)){
+        for (Invitee invitee : event.getInvitee()) {
+            if (invitee.getUserUid().equals(selfUserUid)) {
                 return true;
             }
         }
         return false;
     }
 
+    public static Calendar getBeginOfDayCalendar(Calendar cal) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(cal.getTimeInMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar;
+    }
 
-    public static void addSoloEventBasicInfo(Context context,Event event){
+    public static Calendar parseTimeStringToCalendar(String timeString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date d = null;
+        try {
+            d = sdf.parse(timeString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar updateTimeCalendar = Calendar.getInstance();
+        updateTimeCalendar.setTime(d);
+        return updateTimeCalendar;
+    }
+
+
+    public static void addSoloEventBasicInfo(Context context, Event event) {
         event.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid());
         event.setStatus(context.getString(R.string.confirmed));
         event.setEventId(""); // might need change later, ask chuandong what is eventId
@@ -567,34 +596,34 @@ public class EventUtil{
         event.setFreebusyAccess(1); // ask chuandong
     }
 
-    public static void regenerateRelatedUid(Event event){
+    public static void regenerateRelatedUid(Event event) {
         // change eventUid
         String newEventUid = AppUtil.generateUuid();
         event.setEventUid(newEventUid);
         // change inviteeEventUid
-        for (Invitee invitee : event.getInvitee()){
+        for (Invitee invitee : event.getInvitee()) {
             invitee.setEventUid(newEventUid);
             invitee.setInviteeUid(AppUtil.generateUuid());
         }
 
         // change timeslotEventUid
-        for (Timeslot timeslot: event.getTimeslot()){
+        for (Timeslot timeslot : event.getTimeslot()) {
             timeslot.setEventUid(newEventUid);
             timeslot.setTimeslotUid(AppUtil.generateUuid());
         }
 
         // change PhotoEventUid
-        for (PhotoUrl photoUrl : event.getPhoto()){
+        for (PhotoUrl photoUrl : event.getPhoto()) {
             photoUrl.setEventUid(newEventUid);
             photoUrl.setPhotoUid(AppUtil.generateUuid());
         }
     }
 
-    public static boolean isUserHostOfEvent(Event event){
+    public static boolean isUserHostOfEvent(Event event) {
         return event.getHostUserUid().equals(UserUtil.getUserUid());
     }
 
-    public static CharSequence[] getRepeatEventChangeOptions(Context context){
+    public static CharSequence[] getRepeatEventChangeOptions(Context context) {
         CharSequence[] sequences = new CharSequence[3];
         sequences[0] = context.getString(R.string.Save_for_this_event_only);
         sequences[1] = context.getString(R.string.Save_for_future_events);
@@ -602,19 +631,19 @@ public class EventUtil{
         return sequences;
     }
 
-    public static Invitee getSelfInInvitees(Event event){
-        for (Invitee invitee: event.getInvitee()){
-            if (invitee.getUserUid().equals(UserUtil.getUserUid())){
+    public static Invitee getSelfInInvitees(Event event) {
+        for (Invitee invitee : event.getInvitee()) {
+            if (invitee.getUserUid().equals(UserUtil.getUserUid())) {
                 return invitee;
             }
         }
         return null;
     }
 
-    public static <T extends Transformation> void bindUrlHelper(Context context, String url, ImageView view, T transformer){
-        if (url != null && !url.equals("")){
+    public static <T extends Transformation> void bindUrlHelper(Context context, String url, ImageView view, T transformer) {
+        if (url != null && !url.equals("")) {
             Picasso.with(context).load(url).transform(transformer).into(view);
-        }else {
+        } else {
             Picasso.with(context).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(transformer).into(view);
         }
     }

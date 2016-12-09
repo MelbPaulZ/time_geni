@@ -85,11 +85,14 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
                 return 0;
             case Message.TPL_HOST_UNCONFIRMED:
                 return 1;
+            case Message.TPL_HOST_DELETED:
+                return 1;
             case Message.TPL_INVITEE:
                 return 2;
-            default:
-                return 0;
+            case Message.TPL_INVITEE_DELETED:
+                return 2;
         }
+        throw new RuntimeException("Message type not found : " + message.getTemplate());
     }
 
     @Override
@@ -105,14 +108,22 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
                 inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
                 inboxHostBinding.setVm(viewModel);
                 convertView = inboxHostBinding.getRoot();
-            }
-            else {
+            }else if (message.getTemplate().equals(Message.TPL_HOST_DELETED)){
+                inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
+                inboxHostBinding.setVm(viewModel);
+                convertView = inboxHostBinding.getRoot();
+            }else if (message.getTemplate().equals(Message.TPL_INVITEE_DELETED)){
+                inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
+                inboxInviteeBinding.setVm(viewModel);
+                convertView = inboxInviteeBinding.getRoot();
+                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)));
+            } else {
+                // message.template = invitee
                 inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
                 inboxInviteeBinding.setVm(viewModel);
                 convertView = inboxInviteeBinding.getRoot();
                 //david added
                 setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)));
-
             }
             convertView.setTag(viewModel);
         }else{

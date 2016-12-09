@@ -3,6 +3,7 @@
         <variable
             name="vm"
             type="org.unimelb.itime.ui.viewmodel.InboxViewModel"/>
+        <import type="org.unimelb.itime.bean.Message"/>
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -14,39 +15,51 @@
         android:layout_marginTop="14dp"
         android:layout_marginLeft="12dp"
         />
+
+    <!--title should be put in middle-->
     <TextView
         android:id="@+id/inbox_event_title"
         android:layout_width="236dp"
         android:layout_height="wrap_content"
         android:text="@{vm.message.title}"
-        android:textColor="@color/color_000000"
+        android:textColor="@{vm.message.template.equals(Message.TPL_INVITEE_DELETED) ? @color/gray_9b9b9b : @color/color_000000}"
         android:textSize="17sp"
         android:layout_toRightOf="@+id/inbox_avatar"
         android:paddingLeft="7dp"
-        android:paddingTop="10dp"
+        android:layout_marginTop="28dp"
+        android:maxLines="1"
+        app:crossLine="@{vm.message}"
         />
+
+    <!--todo gei title hua xian -->
+
+    <!--statue should be put in the top-->
     <TextView
         android:id="@+id/inbox_event_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/inbox_avatar"
         android:paddingLeft="7dp"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="12dp"
         android:text="@{vm.message.subtitle1}"
         android:textColor="@color/gray_9b9b9b"
         android:textSize="12sp"
+        android:maxLines="1"
         />
+
+    <!--invitee actions should be put at the last-->
     <TextView
         android:id="@+id/inbox_invitee_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/inbox_event_status"
+        android:layout_below="@+id/inbox_event_title"
         android:layout_toRightOf="@+id/inbox_avatar"
         android:paddingLeft="7dp"
         android:layout_marginBottom="10dp"
-        android:textColor="@color/color_FF9600"
+        android:textColor="@{vm.message.template.equals(Message.TPL_INVITEE_DELETED) ? @color/gray_9b9b9b : @color/color_FF9600}"
         android:text="@{vm.message.subtitle2}"
         android:textSize="12sp"
+        android:maxLines="1"
         />
     
     <ImageView
@@ -65,7 +78,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="12dp"
         android:textSize="10sp"
-        android:text="@{vm.message.updatedAt}"
+        android:text="@{vm.timeString}"
         android:textColor="@color/gray_9b9b9b"
         android:layout_alignParentEnd="true"
         />

@@ -1,7 +1,9 @@
 package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,11 +14,16 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Paul on 18/10/16.
  */
 public class CommonViewModel extends BaseObservable {
+    private final String TAG = "CommonViewModel";
 
 
     @BindingAdapter("imageResource")
@@ -53,4 +60,5 @@ public class CommonViewModel extends BaseObservable {
             }
         }
     }
+
 }

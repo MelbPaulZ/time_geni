@@ -8,16 +8,21 @@ import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Id;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.MessageDao;
+import org.unimelb.itime.util.EventUtil;
+
+import java.util.*;
 
 /**
  * Created by yuhaoliu on 1/12/16.
  */
 @Entity(active = true)
-public class Message {
+public class Message implements Comparable<Message>{
     public final static String TPL_INVITEE = "invitee";
     public final static String TPL_HOST_UNCONFIRMED = "host_unconfirmed";
-    public final static String TPL_DELETED = "deleted";
+    public final static String TPL_HOST_DELETED = "host_deleted";
+    public final static String TPL_INVITEE_DELETED = "invitee_deleted";
     public final static String TPL_HOST_CONFIRMED = "host_confirmed";
+
 
     String title = "";
     String subtitle1 = "";
@@ -267,4 +272,10 @@ public class Message {
         myDao = daoSession != null ? daoSession.getMessageDao() : null;
     }
 
+    @Override
+    public int compareTo(Message another) {
+        java.util.Calendar thisCalenadr = EventUtil.parseTimeStringToCalendar(this.getUpdatedAt());
+        java.util.Calendar anotherCalendar = EventUtil.parseTimeStringToCalendar(another.getUpdatedAt());
+        return Long.compare(thisCalenadr.getTimeInMillis(), anotherCalendar.getTimeInMillis());
+    }
 }

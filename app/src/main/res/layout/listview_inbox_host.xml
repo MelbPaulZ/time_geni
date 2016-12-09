@@ -3,6 +3,7 @@
         <variable
             name="vm"
             type="org.unimelb.itime.ui.viewmodel.InboxViewModel"/>
+        <import type="org.unimelb.itime.bean.Message"/>
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
         android:layout_marginTop="12dp"
-        android:text="@{vm.getTag1(context)}"
+        android:text="@{vm.getTag1(context,vm.message)}"
         android:textColor="@color/white"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
@@ -29,7 +30,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginTop="12dp"
         android:layout_toRightOf="@+id/inbox_host_tag1"
-        android:text="@{vm.getTag2(context)}"
+        android:text="@{vm.getTag2(context,vm.message)}"
         android:textColor="@color/white"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
@@ -46,7 +47,7 @@
         android:layout_marginTop="12dp"
         android:layout_toRightOf="@+id/inbox_host_tag2"
         app:visible="@{vm.message}"
-        android:text="@{vm.getTag3(context)}"
+        android:text="@{vm.getTag3(context,vm.message)}"
         android:textColor="@color/white"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
@@ -63,8 +64,9 @@
         android:layout_marginLeft="14dp"
         android:text="@{vm.message.title}"
         android:textSize="17sp"
-        android:textColor="@color/black"
+        android:textColor="@{vm.message.template.equals(Message.TPL_HOST_DELETED) ? @color/gray_9b9b9b : @color/color_000000}"
         android:maxLines="1"
+        app:crossLine="@{vm.message}"
         />
 
     <TextView
@@ -74,7 +76,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="12dp"
         android:textSize="10sp"
-        android:text="@{vm.message.updatedAt}"
+        android:text="@{vm.timeString}"
         android:textColor="@color/gray_9b9b9b"
         android:layout_alignParentEnd="true"
         />
@@ -93,7 +95,7 @@
         android:layout_below="@+id/inbox_host_title"
         android:layout_marginLeft="15dp"
         android:layout_marginBottom="10dp"
-        android:textColor="@color/color_FF9600"
+        android:textColor="@{vm.message.template.equals(Message.TPL_HOST_DELETED) ? @color/gray_9b9b9b : @color/color_FF9600}"
         android:text="@{vm.message.subtitle1}"
         android:textSize="12sp"
         />
