@@ -177,6 +177,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     @Override
     public void toTimeSlotView(Event event) {
         EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
+        timeSlotFragment.setEvent(event);
         timeSlotFragment.setClickFromFragment(this);
         switchFragment(this, timeSlotFragment);
     }
