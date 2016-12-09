@@ -723,4 +723,16 @@ public class EventUtil {
             return this.response;
         }
     }
+
+
+    public static boolean isSameDay(long t1, long t2){
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTimeInMillis(t1);
+        cal2.setTimeInMillis(t2);
+        boolean sameDay = (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) &&
+                (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+
+        return sameDay;
+    }
 }

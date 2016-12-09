@@ -52,7 +52,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
     private View root;
     private MonthDayView monthDayView;
     private CommonPresenter presenter;
-    private String TAG = "CalendarMonthDayFragment";
+    private String TAG = "MonthDayFragment";
 
     @Nullable
     @Override
@@ -173,7 +173,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
                                             Toast.makeText(getContext(), "change for all future events", Toast.LENGTH_SHORT).show();
                                             // first prepare a copy event for new events...
                                             Event copyEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
-                                            EventUtil.regenerateRelatedUid(copyEvent);
+//                                            EventUtil.regenerateRelatedUid(copyEvent);
                                             copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                                             copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
                                             copyEvent.setRecurrence(copyEvent.getRule().getRecurrence());
@@ -184,12 +184,30 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
                                                     firstOrg = event;
                                                 }
                                             }
-                                            Date day = new Date(dayDraggableEventView.getStartTimeM());
-                                            firstOrg.getRule().setUntil(day);
-                                            firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
-                                            EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
-                                            presenter.updateOnlyThisEvent(firstOrg, copyEvent);
-                                            break;
+
+                                            // if origin day is the first day of dragging events, then no need of update old event
+                                            if (EventUtil.isSameDay(firstOrg.getStartTime(), orgEvent.getStartTime())){
+                                                presenter.updateEventToServer(copyEvent);
+
+                                            }else{
+                                                // not the same day
+                                                EventUtil.regenerateRelatedUid(copyEvent);
+                                                Date day = new Date(dayDraggableEventView.getStartTimeM());
+                                                firstOrg.getRule().setUntil(day);
+                                                firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
+                                                EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
+
+                                                presenter.updateOnlyThisEvent(firstOrg, copyEvent);
+
+                                            }
+
+
+//                                            Date day = new Date(dayDraggableEventView.getStartTimeM());
+//                                            firstOrg.getRule().setUntil(day);
+//                                            firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
+//                                            EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
+//                                            presenter.updateOnlyThisEvent(firstOrg, copyEvent);
+//                                            break;
                                         }
                                         case 2:{
                                             // on click cancel
