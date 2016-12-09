@@ -107,6 +107,10 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         viewModel.initTimeSlots(weekView);
     }
 
+    public void setEvent(Event event){
+        this.setEvent(event, this.adapterData);
+    }
+
 
     @Override
     public EventDetailHostTimeSlotPresenter createPresenter() {
