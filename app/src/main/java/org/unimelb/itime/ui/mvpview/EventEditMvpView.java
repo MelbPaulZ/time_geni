@@ -7,7 +7,7 @@ import org.unimelb.itime.bean.Event;
 /**
  * Created by Paul on 28/08/2016.
  */
-public interface EventEditMvpView extends MvpView {
+public interface EventEditMvpView extends CommonMvpView {
     void toHostEventDetail(Event event);
     void toHostEventDetail();
     void changeLocation();

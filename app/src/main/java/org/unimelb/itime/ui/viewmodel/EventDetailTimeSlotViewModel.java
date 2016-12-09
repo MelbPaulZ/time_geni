@@ -3,6 +3,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.restfulapi.EventApi;
+import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.util.AppUtil;
@@ -43,6 +45,8 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
     private String hostToolBarString;
     private EventDetailTimeSlotMvpVIew mvpView;
 
+    private Fragment fromFragment;
+
 //
     public EventDetailTimeSlotViewModel(EventDetailHostTimeSlotPresenter presenter) {
         this.presenter = presenter;
@@ -50,6 +54,14 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         calendar.getTime();
         setHostToolBarString(EventUtil.getMonth(getContext(), calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR));
         this.mvpView = presenter.getView();
+    }
+
+    public Fragment getFromFragment() {
+        return fromFragment;
+    }
+
+    public void setFromFragment(Fragment fromFragment) {
+        this.fromFragment = fromFragment;
     }
 
     public WeekView.OnHeaderListener onWeekViewChange(){
@@ -152,20 +164,38 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //if time slot changed
-                if (EventManager.getInstance().getCurrentEvent().getTimeslot().size()
-                        != eventDetailHostEvent.getTimeslot().size()){
-                    List<Invitee> invitees = eventDetailHostEvent.getInvitee();
-                    for (Invitee invitee:invitees
-                            ) {
-                        for (SlotResponse response: invitee.getSlotResponses()
-                             ) {
-                            response.setStatus("pending");
+                //if from editTimeSlotFragment
+                if (fromFragment != null && fromFragment instanceof EventEditFragment){
+                    //if slot changed
+                    if (EventManager.getInstance().getCurrentEvent().getTimeslot().size()
+                            != eventDetailHostEvent.getTimeslot().size()){
+                        List<Invitee> invitees = eventDetailHostEvent.getInvitee();
+                        for (Invitee invitee:invitees
+                                ) {
+                            for (SlotResponse response: invitee.getSlotResponses()
+                                    ) {
+                                response.setStatus("pending");
+                            }
                         }
+//                        presenter.updateEvent(eventDetailHostEvent);
                     }
-
-                    presenter.updateEvent(eventDetailHostEvent);
                 }
+
+
+                //if time slot changed
+//                if (EventManager.getInstance().getCurrentEvent().getTimeslot().size()
+//                        != eventDetailHostEvent.getTimeslot().size()){
+//                    List<Invitee> invitees = eventDetailHostEvent.getInvitee();
+//                    for (Invitee invitee:invitees
+//                            ) {
+//                        for (SlotResponse response: invitee.getSlotResponses()
+//                             ) {
+//                            response.setStatus("pending");
+//                        }
+//                    }
+//
+//                    presenter.updateEvent(eventDetailHostEvent);
+//                }
 
                 if (mvpView!=null){
                     mvpView.onClickDone();

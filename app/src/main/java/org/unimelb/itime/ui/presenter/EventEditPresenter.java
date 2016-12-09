@@ -23,12 +23,14 @@ import rx.Subscriber;
 /**
  * Created by Paul on 28/08/2016.
  */
-public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
+public class EventEditPresenter extends CommonPresenter<EventEditMvpView> {
     private Context context;
     private EventApi eventApi;
     private String TAG = "EventEditPresenter";
 
+
     public EventEditPresenter(Context context) {
+        super(context);
         this.context = context;
         eventApi = HttpUtil.createService(context, EventApi.class);
     }
@@ -61,74 +63,75 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
         }
     }
 
-    private void updateServer(final Event event){
-        Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(),event.getEventUid(),event);
-        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
-            @Override
-            public void onCompleted() {
-                Log.i(TAG, "onCompleted: ");
-            }
+//    private void updateServer(final Event event){
+//        Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(),event.getEventUid(),event);
+//        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
+//            @Override
+//            public void onCompleted() {
+//                Log.i(TAG, "onCompleted: ");
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                Log.i(TAG, "onError: " + e.getMessage());
+//            }
+//
+//            @Override
+//            public void onNext(HttpResult<Event> eventHttpResult) {
+//                Event ev = eventHttpResult.getData();
+//                synchronizeLocal(ev);
+//
+//                if (ev.getEventType().equals(getContext().getString(R.string.group))) {
+//                    getView().toHostEventDetail(ev);
+//                }else{
+//                    getView().toSoloEventDetail(ev);
+//                }
+//            }
+//        };
+//        HttpUtil.subscribe(observable,subscriber);
+//    }
 
-            @Override
-            public void onError(Throwable e) {
-                Log.i(TAG, "onError: " + e.getMessage());
-            }
-
-            @Override
-            public void onNext(HttpResult<Event> eventHttpResult) {
-                Event ev = eventHttpResult.getData();
-                synchronizeLocal(ev);
-
-                if (ev.getEventType().equals(getContext().getString(R.string.group))) {
-                    getView().toHostEventDetail(ev);
-                }else{
-                    getView().toSoloEventDetail(ev);
-                }
-            }
-        };
-        HttpUtil.subscribe(observable,subscriber);
-    }
-
-    private void synchronizeLocal(Event newEvent){
-        Event oldEvent = EventManager.getInstance().getCurrentEvent();
-        Log.i(TAG, "APPP: synchronizeLocal: EventeditPresenter");
-        EventManager.getInstance().updateEvent(oldEvent, newEvent);
-    }
+//    private void synchronizeLocal(Event newEvent){
+//        Event oldEvent = EventManager.getInstance().getCurrentEvent();
+//        Log.i(TAG, "APPP: synchronizeLocal: EventeditPresenter");
+//        EventManager.getInstance().updateEvent(oldEvent, newEvent);
+//    }
 
     public void updateEvent(Event newEvent){
-        Toast.makeText(getContext(), "waiting for server update", Toast.LENGTH_SHORT).show();
-        updateServer(newEvent);
+//        Toast.makeText(getContext(), "waiting for server update", Toast.LENGTH_SHORT).show();
+//        updateServer(newEvent);
+        updateEventToServer(newEvent);
     }
 
     /** This method is update one of the repeat event, not all of them
      * */
     public void updateOnlyThisEvent(Event orgEvent,Event event){
         Toast.makeText(getContext(), "waiting for server update", Toast.LENGTH_SHORT).show();
-        updateOrgEventToServer(orgEvent);
+        updateEvent(orgEvent);
         insertNewEventToServer(event);
     }
 
-    private void updateOrgEventToServer(Event orgEvent){
-        Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(), orgEvent.getEventUid(), orgEvent);
-        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.i(TAG, "onError: " + e.getMessage());
-            }
-
-            @Override
-            public void onNext(HttpResult<Event> eventHttpResult) {
-                synchronizeLocal(eventHttpResult.getData());
-                Log.i(TAG, "onNext: " + "done");
-            }
-        };
-        HttpUtil.subscribe( observable ,  subscriber);
-    }
+//    private void updateOrgEventToServer(Event orgEvent){
+//        Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(), orgEvent.getEventUid(), orgEvent);
+//        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                Log.i(TAG, "onError: " + e.getMessage());
+//            }
+//
+//            @Override
+//            public void onNext(HttpResult<Event> eventHttpResult) {
+//                synchronizeLocal(eventHttpResult.getData());
+//                Log.i(TAG, "onNext: " + "done");
+//            }
+//        };
+//        HttpUtil.subscribe( observable ,  subscriber);
+//    }
 
     private void insertNewEventToServer(Event event){
         Observable<HttpResult<Event>> observable = eventApi.insert(event);
@@ -147,12 +150,6 @@ public class EventEditPresenter extends MvpBasePresenter<EventEditMvpView> {
             public void onNext(HttpResult<Event> eventHttpResult) {
                 Event ev = eventHttpResult.getData();
                 insertEventLocal(ev);
-                if (ev.getEventType().equals(getContext().getString(R.string.group))) {
-                    getView().toHostEventDetail(ev);
-                }else{
-                    getView().toSoloEventDetail(ev);
-                }
-                Log.i(TAG, "onNext: " + "done");
             }
         };
         HttpUtil.subscribe(observable,subscriber);

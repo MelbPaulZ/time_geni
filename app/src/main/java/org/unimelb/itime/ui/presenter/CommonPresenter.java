@@ -35,7 +35,21 @@ public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T
     public Context context;
     private EventApi eventApi;
     private String TAG = "CommonPresenter";
+    private OnUpdateEvent onUpdateEvent;
+
+    public OnUpdateEvent getOnUpdateEvent() {
+        return onUpdateEvent;
+    }
+
+
+
+    public void setOnUpdateEvent(OnUpdateEvent onUpdateEvent) {
+        this.onUpdateEvent = onUpdateEvent;
+    }
+
+
     public CommonPresenter() {
+        Log.i(TAG, "CommonPresenter: ");
     }
 
     public CommonPresenter(Context context){
@@ -45,17 +59,24 @@ public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T
 
     public void updateEventToServer(Event event){
         getView().onShowDialog();
+        EventManager.getInstance().getWaitingEditEventList().add(event);
 
         Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(),event.getEventUid(),event);
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
             public void onCompleted() {
+                if (onUpdateEvent != null){
+                    onUpdateEvent.onComplete();
+                }
                 Log.i(TAG, "onCompleted: ");
             }
 
             @Override
             public void onError(Throwable e) {
                 getView().onHideDialog();
+                if (onUpdateEvent != null){
+                    onUpdateEvent.onError(e);
+                }
                 Log.i(TAG, "onError: " + e.getMessage());
             }
 
@@ -63,6 +84,9 @@ public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T
             public void onNext(HttpResult<Event> eventHttpResult) {
                 synchronizeLocal(eventHttpResult.getData());
                 getView().onHideDialog();
+                if (onUpdateEvent != null){
+                    onUpdateEvent.onNext(eventHttpResult);
+                }
                 Log.i(TAG, "onNext: " +"done");
             }
         };
@@ -132,5 +156,10 @@ public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T
         DBManager.getInstance().insertEvent(event);
     }
 
+    public interface OnUpdateEvent{
+        void onComplete();
+        void onError(Throwable e);
+        void onNext(HttpResult<Event> eventHttpResult);
+    }
 
 }

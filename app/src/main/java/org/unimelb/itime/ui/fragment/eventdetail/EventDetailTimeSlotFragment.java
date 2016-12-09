@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,8 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     private WeekView weekView;
     private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
 
+    private Fragment clickFromFragment;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,10 +74,6 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         weekView.setEventClassName(Event.class);
         weekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
 
-        if (this.event.getStatus().equals("confirmed")){
-            weekView.removeAllOptListener();
-        }
-
         if (UserUtil.getUserUid().equals(event.getHostUserUid())){
             // which means this is host event
         }else{
@@ -84,7 +83,16 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     }
 
 
+    public Fragment getClickFromFragment() {
+        return clickFromFragment;
+    }
 
+    public void setClickFromFragment(Fragment clickFromFragment) {
+        this.clickFromFragment = clickFromFragment;
+        if (this.viewModel != null){
+            this.viewModel.setFromFragment(this.clickFromFragment);
+        }
+    }
 //
     public Event getEvent() {
         return event;
@@ -153,6 +161,14 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     }
 
     @Override
+    public void onEnter() {
+        super.onEnter();
+        if (!(getFrom() instanceof EventEditFragment)){
+            weekView.removeAllOptListener();
+        }
+    }
+
+    @Override
     public void popupTimeSlotWindow(final TimeSlotView timeSlotView) {
         final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
         LayoutInflater inflater = LayoutInflater.from(presenter.getContext());
@@ -214,32 +230,33 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
 
     @Override
     public void onClickTimeSlotView(TimeSlotView timeSlotView){
-        if (this.event.getStatus().equals("confirmed")){
-            Toast.makeText(presenter.getContext(), "This event is already confirmed",Toast.LENGTH_SHORT).show();
-        }else{
-            // change status of view and struct
-            if (UserUtil.getUserUid().equals(event.getHostUserUid())){
-                // for host , only one timeslot can be selected
-                // change here
-                if (TimeSlotUtil.getSelectedTimeSlots(getContext(),event.getTimeslot()).size()<1){
-                    // if no timeslot has been selected
+//        if (this.event.getStatus().equals("confirmed")){
+//            Toast.makeText(presenter.getContext(), "This event is already confirmed",Toast.LENGTH_SHORT).show();
+//        }else{
+
+        // change status of view and struct
+        if (UserUtil.getUserUid().equals(event.getHostUserUid())){
+            // for host , only one timeslot can be selected
+            // change here
+            if (TimeSlotUtil.getSelectedTimeSlots(getContext(),event.getTimeslot()).size()<1){
+                // if no timeslot has been selected
+                changeTimeSlotView(timeSlotView);
+                hostClickTimeSlot(timeSlotView);
+            }else{
+                // if other timeslot has been selected
+                if (((WeekView.TimeSlotStruct)timeSlotView.getTag()).status==true){
                     changeTimeSlotView(timeSlotView);
                     hostClickTimeSlot(timeSlotView);
                 }else{
-                    // if other timeslot has been selected
-                    if (((WeekView.TimeSlotStruct)timeSlotView.getTag()).status==true){
-                        changeTimeSlotView(timeSlotView);
-                        hostClickTimeSlot(timeSlotView);
-                    }else{
-                        Toast.makeText(presenter.getContext(), "already select one timeslot, please unclick and click another one",Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(presenter.getContext(), "already select one timeslot, please unclick and click another one",Toast.LENGTH_SHORT).show();
                 }
-            }else {
-                // for invitees, can choose multi timeslots
-                changeTimeSlotView(timeSlotView);
-                changeEventAttributes(timeSlotView);
             }
+        }else {
+            // for invitees, can choose multi timeslots
+            changeTimeSlotView(timeSlotView);
+            changeEventAttributes(timeSlotView);
         }
+//        }
 
     }
 
