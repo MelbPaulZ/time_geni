@@ -164,7 +164,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
                                                     firstOrg = event;
                                                 }
                                             }
-                                            firstOrg.getRule().addEXDate(new Date(dayDraggableEventView.getStartTimeM()));
+                                            firstOrg.getRule().addEXDate(new Date(orgEvent.getStartTime()));
                                             firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
                                             EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
 
