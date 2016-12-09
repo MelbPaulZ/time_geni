@@ -12,7 +12,7 @@ public interface EventEditMvpView extends CommonMvpView {
     void toHostEventDetail();
     void changeLocation();
     void toTimeSlotView(Event event);
-    void toInviteePicker();
+    void toInviteePicker(Event event);
     void toPhotoPicker();
     void toSoloEventDetail();
     void toSoloEventDetail(Event event);

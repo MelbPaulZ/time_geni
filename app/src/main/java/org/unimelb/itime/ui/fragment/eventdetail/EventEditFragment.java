@@ -182,7 +182,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     }
 
     @Override
-    public void toInviteePicker() {
+    public void toInviteePicker(Event event) {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
         inviteeFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
         switchFragment(this, inviteeFragment);

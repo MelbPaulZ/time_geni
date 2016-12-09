@@ -296,7 +296,7 @@ public class EventEditViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    mvpView.toInviteePicker();
+                    mvpView.toInviteePicker(eventEditViewEvent);
                 }
             }
         };
