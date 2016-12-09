@@ -33,6 +33,7 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
     private Context context;
     private EventApi eventApi;
     private PhotoApi photoApi;
+
     public EventCreateDetailBeforeSendingPresenter(Context context) {
         this.context = context;
         this.eventApi = HttpUtil.createService(context, EventApi.class);

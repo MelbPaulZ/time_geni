@@ -27,6 +27,7 @@ import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.ui.presenter.TimeslotInviteeResponsePresenter;
 import org.unimelb.itime.ui.viewmodel.InboxViewModel;
 import org.unimelb.itime.ui.viewmodel.TimeslotInviteeResponseViewModel;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.widget.NonScrollListView;
 
 import java.sql.Time;
@@ -81,7 +82,7 @@ public class InviteeTimeslotFragment extends BaseUiFragment {
         initListener();
     }
 
-    public void setData(Event event, List<EventDetailGroupFragment.StatusKeyStruct> data, Timeslot timeslot){
+    public void setData(Event event, List<EventUtil.StatusKeyStruct> data, Timeslot timeslot){
 //        this.event = event;
         this.timeslot = timeslot;
         this.adapter.setInvitees(data, event);

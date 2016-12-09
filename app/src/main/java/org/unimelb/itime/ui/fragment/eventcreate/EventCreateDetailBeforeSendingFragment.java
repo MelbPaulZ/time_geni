@@ -191,4 +191,13 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         super.onStop();
     }
 
+    @Override
+    public void onShowDialog() {
+
+    }
+
+    @Override
+    public void onHideDialog() {
+
+    }
 }

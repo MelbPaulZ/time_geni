@@ -23,7 +23,9 @@ import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.mvpview.CommonMvpView;
 import org.unimelb.itime.ui.presenter.CommonPresenter;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
@@ -38,7 +40,7 @@ import java.util.Date;
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarWeekFragment extends BaseUiFragment {
+public class CalendarWeekFragment extends BaseUiFragment<CommonMvpView, CommonPresenter<CommonMvpView>> implements CommonMvpView  {
 
     private View root;
     private WeekView weekView;
@@ -217,8 +219,8 @@ public class CalendarWeekFragment extends BaseUiFragment {
 
 
     @Override
-    public MvpPresenter createPresenter() {
-        presenter = new CommonPresenter(getContext());
+    public CommonPresenter createPresenter() {
+        presenter = new CommonPresenter(getActivity());
         return presenter;
     }
 
@@ -248,4 +250,13 @@ public class CalendarWeekFragment extends BaseUiFragment {
     }
 
 
+    @Override
+    public void onShowDialog() {
+        AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
+    }
+
+    @Override
+    public void onHideDialog() {
+        AppUtil.hideProgressBar();
+    }
 }

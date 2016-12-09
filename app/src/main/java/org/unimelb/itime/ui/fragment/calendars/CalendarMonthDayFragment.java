@@ -28,7 +28,9 @@ import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.mvpview.CommonMvpView;
 import org.unimelb.itime.ui.presenter.CommonPresenter;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
@@ -46,7 +48,7 @@ import java.util.Date;
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarMonthDayFragment extends BaseUiFragment {
+public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, CommonPresenter<CommonMvpView>> implements CommonMvpView {
     private View root;
     private MonthDayView monthDayView;
     private CommonPresenter presenter;
@@ -62,8 +64,8 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
     }
 
     @Override
-    public MvpPresenter createPresenter() {
-        this.presenter = new CommonPresenter(getContext());
+    public CommonPresenter createPresenter() {
+        this.presenter = new CommonPresenter(getActivity());
         return presenter;
     }
 
@@ -266,6 +268,16 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
 
     public void scrollTo(Calendar calendar){
         monthDayView.scrollTo(calendar);
+    }
+
+    @Override
+    public void onShowDialog() {
+        AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
+    }
+
+    @Override
+    public void onHideDialog() {
+        AppUtil.hideProgressBar();
     }
 }
 

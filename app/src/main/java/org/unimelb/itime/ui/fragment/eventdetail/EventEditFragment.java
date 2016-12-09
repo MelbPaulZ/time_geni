@@ -23,12 +23,15 @@ import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
+import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
@@ -51,7 +54,29 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
 
     @Override
     public EventEditPresenter createPresenter() {
-        return new EventEditPresenter(getContext());
+        EventEditPresenter presenter = new EventEditPresenter(getContext());
+        presenter.setOnUpdateEvent(new CommonPresenter.OnUpdateEvent() {
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(HttpResult<Event> eventHttpResult) {
+                Event ev = eventHttpResult.getData();
+                if (ev.getEventType().equals(getContext().getString(R.string.group))) {
+                    toHostEventDetail(ev);
+                }else{
+                    toSoloEventDetail(ev);
+                }
+            }
+        });
+        return presenter;
     }
 
     @Override
@@ -152,7 +177,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     @Override
     public void toTimeSlotView(Event event) {
         EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-        timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event),null);
+        timeSlotFragment.setClickFromFragment(this);
         switchFragment(this, timeSlotFragment);
     }
 
@@ -210,4 +235,14 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
         super.onStop();
     }
 
+
+    @Override
+    public void onShowDialog() {
+        AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
+    }
+
+    @Override
+    public void onHideDialog() {
+        AppUtil.hideProgressBar();
+    }
 }

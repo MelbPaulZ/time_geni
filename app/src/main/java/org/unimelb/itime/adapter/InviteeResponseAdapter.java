@@ -36,7 +36,7 @@ import java.util.Map;
 
 public class InviteeResponseAdapter extends BaseAdapter{
     private static final String TAG = "Response";
-    List<EventDetailGroupFragment.StatusKeyStruct> responses = new ArrayList<>();
+    List<EventUtil.StatusKeyStruct> responses = new ArrayList<>();
     LayoutInflater layoutInflater;
     Context context;
 
@@ -51,12 +51,12 @@ public class InviteeResponseAdapter extends BaseAdapter{
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public void setInvitees(List<EventDetailGroupFragment.StatusKeyStruct> responses, Event event){
+    public void setInvitees(List<EventUtil.StatusKeyStruct> responses, Event event){
         this.responses = responses;
         this.accepted = new ArrayList<>();
         this.rejected = new ArrayList<>();
         this.pending = new ArrayList<>();
-        for (EventDetailGroupFragment.StatusKeyStruct structs: responses
+        for (EventUtil.StatusKeyStruct structs: responses
              ) {
             if (structs.getStatus().equals("accepted")){
                 this.accepted.addAll(structs.getInviteeList());

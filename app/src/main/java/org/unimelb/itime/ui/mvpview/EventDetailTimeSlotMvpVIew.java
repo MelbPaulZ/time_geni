@@ -10,7 +10,7 @@ import org.unimelb.itime.vendor.weekview.WeekView;
 /**
  * Created by Paul on 10/09/2016.
  */
-public interface EventDetailTimeSlotMvpVIew extends MvpView {
+public interface EventDetailTimeSlotMvpVIew extends CommonMvpView {
     void onClickBack();
     void onClickDone();
     void reloadTimeslot();

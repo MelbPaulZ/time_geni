@@ -45,6 +45,8 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     private String summary = "";
     private long startTime;
     private long endTime;
+    private int confirmedCount;
+    private int showLevel;
     private String description = "";
     private String location = "";
     private String locationNote = "";
@@ -94,14 +96,15 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     }
 
-    @Generated(hash = 1003166659)
+    @Generated(hash = 242008653)
     public Event(String eventUid, String eventId, String hostUserUid, String userUid,
             String calendarUid, String iCalUID, String recurringEventUid, String recurringEventId,
             String[] recurrence, String status, String summary, long startTime, long endTime,
-            String description, String location, String locationNote, String locationLatitude,
-            String locationLongitude, String eventType, int reminder, int freebusyAccess,
-            String source, int deleteLevel, int icsSequence, int inviteeVisibility, String display,
-            String url, List<Invitee> invitee, List<PhotoUrl> photo, List<Timeslot> timeslot) {
+            int confirmedCount, int showLevel, String description, String location,
+            String locationNote, String locationLatitude, String locationLongitude, String eventType,
+            int reminder, int freebusyAccess, String source, int deleteLevel, int icsSequence,
+            int inviteeVisibility, String display, String url, List<Invitee> invitee,
+            List<PhotoUrl> photo, List<Timeslot> timeslot) {
         this.eventUid = eventUid;
         this.eventId = eventId;
         this.hostUserUid = hostUserUid;
@@ -115,6 +118,8 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         this.summary = summary;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.confirmedCount = confirmedCount;
+        this.showLevel = showLevel;
         this.description = description;
         this.location = location;
         this.locationNote = locationNote;
@@ -532,6 +537,22 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     public void setDisplay(String display) {
         this.display = display;
+    }
+
+    public int getShowLevel() {
+        return this.showLevel;
+    }
+
+    public void setShowLevel(int showLevel) {
+        this.showLevel = showLevel;
+    }
+
+    public int getConfirmedCount() {
+        return this.confirmedCount;
+    }
+
+    public void setConfirmedCount(int confirmedCount) {
+        this.confirmedCount = confirmedCount;
     }
 
 
