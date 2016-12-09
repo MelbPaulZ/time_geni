@@ -124,7 +124,7 @@ public class EventEditViewModel extends CommonViewModel {
                         EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
                         eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
                         eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence()); // set the repeat string
-
+                        eventEditViewEvent.setStatus("pending");
                         presenter.updateEvent(eventEditViewEvent);
                         // this if might change later, because the host can be kicked??????
 //                        if (eventEditViewEvent.getEventType().equals(getContext().getString(R.string.group))) {

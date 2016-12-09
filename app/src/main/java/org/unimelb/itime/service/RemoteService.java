@@ -238,7 +238,9 @@ public class RemoteService extends Service{
         for (Message msg:msgs
              ) {
             Event correspond = DBManager.getInstance().getEvent(msg.getEventUid());
+
             if (correspond == null){
+                Log.i("Error_msg", "checkMessageValidation: " + msg.getEventUid());
                 return false;
             }
         }

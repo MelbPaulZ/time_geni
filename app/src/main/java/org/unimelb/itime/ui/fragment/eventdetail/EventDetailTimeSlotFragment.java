@@ -169,6 +169,8 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         super.onEnter();
         if (!(getFrom() instanceof EventEditFragment)){
             weekView.removeAllOptListener();
+        }else{
+            weekView.enableTimeSlot();
         }
     }
 
