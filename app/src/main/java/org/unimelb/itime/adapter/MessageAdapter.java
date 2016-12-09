@@ -100,18 +100,15 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
             if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)) {
                 inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
                 inboxHostBinding.setVm(viewModel);
-                inboxHostBinding.setMessage(filteredMessageList.get(position));
                 convertView = inboxHostBinding.getRoot();
             }else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED)){
                 inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
                 inboxHostBinding.setVm(viewModel);
-                inboxHostBinding.setMessage(filteredMessageList.get(position));
                 convertView = inboxHostBinding.getRoot();
             }
             else {
                 inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
                 inboxInviteeBinding.setVm(viewModel);
-                inboxInviteeBinding.setMessage(filteredMessageList.get(position));
                 convertView = inboxInviteeBinding.getRoot();
                 //david added
                 setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)));
@@ -121,7 +118,7 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
         }else{
             viewModel = (InboxViewModel) convertView.getTag();
         }
-        viewModel.setMessage(filteredMessageList.get(position));
+        viewModel.setMessage(message);
         return convertView;
     }
 

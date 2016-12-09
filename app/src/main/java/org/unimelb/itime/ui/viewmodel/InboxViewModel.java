@@ -17,12 +17,16 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.util.EventUtil;
 
+
 /**
  * Created by Paul on 1/12/16.
  */
 public class InboxViewModel extends CommonViewModel {
     private MainInboxPresenter presenter;
     private Message message;
+
+    private int tag3Visible = View.VISIBLE;
+
 
     public InboxViewModel(MainInboxPresenter presenter) {
         this.presenter = presenter;
@@ -51,7 +55,7 @@ public class InboxViewModel extends CommonViewModel {
 
     public String getTag3(Context context){
         if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)){
-                return null;
+                return "";
             }else{
                 int noReplyNum = message.getNum3();
                 return noReplyNum + " " + context.getString(R.string.no_reply);
@@ -109,7 +113,22 @@ public class InboxViewModel extends CommonViewModel {
 
     public void setMessage(Message message) {
         this.message = message;
+        if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)){
+            setTag3Visible(View.GONE);
+        }else{
+            setTag3Visible(View.VISIBLE);
+        }
         notifyPropertyChanged(BR.message);
+    }
+
+    @Bindable
+    public int getTag3Visible() {
+        return tag3Visible;
+    }
+
+    public void setTag3Visible(int tag3Visible) {
+        this.tag3Visible = tag3Visible;
+        notifyPropertyChanged(BR.tag3Visible);
     }
 
 }

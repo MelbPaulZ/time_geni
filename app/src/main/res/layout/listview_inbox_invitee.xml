@@ -3,9 +3,6 @@
         <variable
             name="vm"
             type="org.unimelb.itime.ui.viewmodel.InboxViewModel"/>
-        <variable
-            name="message"
-            type="org.unimelb.itime.bean.Message"/>
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
