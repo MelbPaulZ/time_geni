@@ -54,7 +54,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     private Event event;
     private LayoutInflater inflater;
 
-    private Map<String, List<StatusKeyStruct>> adapterData;
+    private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
 
     @Nullable
     @Override
@@ -70,7 +70,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         eventDetailForHostViewModel = new EventDetailViewModel(getPresenter());
         if(event == null){
             event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
-            this.adapterData = getAdapterData(event);
+            this.adapterData = EventUtil.getAdapterData(event);
         }
         eventDetailForHostViewModel.setEvDtlHostEvent(event);
         eventDetailForHostViewModel.setEvAdapterEvent(adapterData);
@@ -92,7 +92,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         this.event = event;
         if (eventDetailForHostViewModel!=null) {
             eventDetailForHostViewModel.setEvDtlHostEvent(event);
-            this.adapterData = getAdapterData(event);
+            this.adapterData = EventUtil.getAdapterData(event);
             eventDetailForHostViewModel.setEvAdapterEvent(this.adapterData);
         }
         setProposedTimeSlots(event);
@@ -149,7 +149,9 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
                 RelativeLayout.LayoutParams status_params = new RelativeLayout.LayoutParams(width/4,width/4);
                 status_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 status_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                status.setImageDrawable(getContext().getResources().getDrawable(R.drawable.icon_event_attendee_selected));
+
+                status.setImageDrawable(getContext().getResources().getDrawable(
+                        invitee.getIsHost() == 1 ? R.drawable.icon_event_host_selected:R.drawable.icon_event_attendee_selected));
                 frame.addView(status,status_params);
 
                 status_img.addView(frame,frameParams);
@@ -182,6 +184,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     public void viewInCalendar() {
         EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
         timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
+
         switchFragment(this,timeSlotFragment);
     }
 
@@ -197,66 +200,5 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
 
-    private Map<String, List<StatusKeyStruct>> getAdapterData(Event event){
-        List<Invitee> invitees = event.getInvitee();
-        List<Timeslot> timeSlots = event.getTimeslot();
-        //slo Uid -- List (status - List invitee)
-        Map<String,List<StatusKeyStruct>> results = new HashMap<>();
 
-        for (Timeslot slot: timeSlots
-             ) {
-            List<StatusKeyStruct> structs = new ArrayList<>();
-            StatusKeyStruct acp_st = new StatusKeyStruct("accepted");
-            structs.add(acp_st);
-
-            StatusKeyStruct rejected_st = new StatusKeyStruct("rejected");
-            structs.add(rejected_st);
-
-            StatusKeyStruct pending_st = new StatusKeyStruct("pending");
-            structs.add(pending_st);
-
-            results.put(slot.getTimeslotUid(),structs);
-        }
-
-        for (Invitee invitee:invitees
-             ) {
-            List<SlotResponse> responses = invitee.getSlotResponses();
-
-            for (SlotResponse response: responses
-                 ) {
-                List<StatusKeyStruct> stucts = results.get(response.getTimeslotUid());
-                for (int i = 0; i < stucts.size(); i++) {
-                    if (stucts.get(i).getStatus().equals(response.getStatus())){
-                        stucts.get(i).addInvitee(invitee);
-                        break;
-                    }
-                }
-
-            }
-        }
-
-        return results;
-    }
-
-    public class StatusKeyStruct{
-        String status;
-        //status is key
-        List<Invitee> response = new ArrayList<>();
-
-        public StatusKeyStruct(String status) {
-            this.status = status;
-        }
-
-        public String getStatus(){
-            return this.status;
-        }
-
-        public void addInvitee(Invitee invitee){
-            response.add(invitee);
-        }
-
-        public List<Invitee> getInviteeList(){
-            return this.response;
-        }
-    }
 }

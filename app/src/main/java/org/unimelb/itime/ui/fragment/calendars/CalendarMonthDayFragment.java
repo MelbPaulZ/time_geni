@@ -63,7 +63,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment {
 
     @Override
     public MvpPresenter createPresenter() {
-        this.presenter = new CommonPresenter(getContext());
+        this.presenter = new CommonPresenter(getActivity());
         return presenter;
     }
 

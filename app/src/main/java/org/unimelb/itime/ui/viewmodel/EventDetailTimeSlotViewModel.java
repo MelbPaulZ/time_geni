@@ -13,11 +13,16 @@ import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.InviteeInnerResponseAdapter;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
@@ -26,6 +31,7 @@ import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Paul on 10/09/2016.
@@ -83,12 +89,16 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
            @Override
            public void onTimeSlotClick(TimeSlotView timeSlotView) {
                if (presenter.getView() != null){
-                   // here should popup window
-                   if(timeSlotView.isSelect()){
-                       // silence unselect
-                       presenter.getView().onClickTimeSlotView(timeSlotView);
-                   }else{
+                   if(eventDetailHostEvent.getStatus().equals("confirmed")){
                        presenter.getView().popupTimeSlotWindow(timeSlotView);
+                   }else{
+                       // here should popup window
+                       if(timeSlotView.isSelect()){
+                           // silence unselect
+                           presenter.getView().onClickTimeSlotView(timeSlotView);
+                       }else{
+                           presenter.getView().popupTimeSlotWindow(timeSlotView);
+                       }
                    }
                }
            }
@@ -142,6 +152,21 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //if time slot changed
+                if (EventManager.getInstance().getCurrentEvent().getTimeslot().size()
+                        != eventDetailHostEvent.getTimeslot().size()){
+                    List<Invitee> invitees = eventDetailHostEvent.getInvitee();
+                    for (Invitee invitee:invitees
+                            ) {
+                        for (SlotResponse response: invitee.getSlotResponses()
+                             ) {
+                            response.setStatus("pending");
+                        }
+                    }
+
+                    presenter.updateEvent(eventDetailHostEvent);
+                }
+
                 if (mvpView!=null){
                     mvpView.onClickDone();
                 }

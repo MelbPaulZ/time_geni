@@ -218,7 +218,7 @@ public class CalendarWeekFragment extends BaseUiFragment {
 
     @Override
     public MvpPresenter createPresenter() {
-        presenter = new CommonPresenter(getContext());
+        presenter = new CommonPresenter(getActivity());
         return presenter;
     }
 

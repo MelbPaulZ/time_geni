@@ -16,12 +16,15 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.InviteeInnerResponseAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -42,7 +45,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     private EventDetailTimeSlotViewModel viewModel;
     private Event event;
     private WeekView weekView;
-    private Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> adapterData;
+    private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
 
     @Nullable
     @Override
@@ -63,9 +66,15 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         binding.setTimeSlotHostVM(viewModel);
 
         weekView = (WeekView) binding.getRoot().findViewById(R.id.edit_timeslot_weekview);
+
         weekView.enableTimeSlot();
         weekView.setEventClassName(Event.class);
         weekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+
+        if (this.event.getStatus().equals("confirmed")){
+            weekView.removeAllOptListener();
+        }
+
         if (UserUtil.getUserUid().equals(event.getHostUserUid())){
             // which means this is host event
         }else{
@@ -74,12 +83,14 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         }
     }
 
+
+
 //
     public Event getEvent() {
         return event;
     }
 //
-    public void setEvent(Event event, Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> adapterData) {
+    public void setEvent(Event event, Map<String, List<EventUtil.StatusKeyStruct>> adapterData) {
         this.event = event;
         this.adapterData = adapterData;
         if (viewModel!=null){
@@ -91,7 +102,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
 
     @Override
     public EventDetailHostTimeSlotPresenter createPresenter() {
-        return new EventDetailHostTimeSlotPresenter(getContext());
+        return new EventDetailHostTimeSlotPresenter(getActivity());
     }
 
 
@@ -123,6 +134,22 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     @Override
     public void addTimeslot(WeekView.TimeSlotStruct timeSlotStruct) {
         weekView.addTimeSlot(timeSlotStruct);
+        List<Invitee> invitees = this.event.getInvitee();
+        for (Invitee invitee:invitees
+             ) {
+            SlotResponse defaultResponse = new SlotResponse();
+            defaultResponse.setStatus("pending");
+            defaultResponse.setRate(1);
+            defaultResponse.setTimeslotUid(((Timeslot)timeSlotStruct.object).getTimeslotUid());
+            defaultResponse.setInviteeUid(invitee.getInviteeUid());
+            defaultResponse.setEventUid(this.event.getEventUid());
+            defaultResponse.setUserUid(Integer.parseInt(invitee.getUserUid()));
+            invitee.getSlotResponses().add(defaultResponse);
+        }
+
+
+        //refresh event and slots data
+        this.adapterData = EventUtil.getAdapterData(event);
     }
 
     @Override
@@ -187,28 +214,33 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
 
     @Override
     public void onClickTimeSlotView(TimeSlotView timeSlotView){
-        // change status of view and struct
-        if (UserUtil.getUserUid().equals(event.getHostUserUid())){
-            // for host , only one timeslot can be selected
-            // change here
-            if (TimeSlotUtil.getSelectedTimeSlots(getContext(),event.getTimeslot()).size()<1){
-                // if no timeslot has been selected
-                changeTimeSlotView(timeSlotView);
-                hostClickTimeSlot(timeSlotView);
-            }else{
-                // if other timeslot has been selected
-                if (((WeekView.TimeSlotStruct)timeSlotView.getTag()).status==true){
+        if (this.event.getStatus().equals("confirmed")){
+            Toast.makeText(presenter.getContext(), "This event is already confirmed",Toast.LENGTH_SHORT).show();
+        }else{
+            // change status of view and struct
+            if (UserUtil.getUserUid().equals(event.getHostUserUid())){
+                // for host , only one timeslot can be selected
+                // change here
+                if (TimeSlotUtil.getSelectedTimeSlots(getContext(),event.getTimeslot()).size()<1){
+                    // if no timeslot has been selected
                     changeTimeSlotView(timeSlotView);
                     hostClickTimeSlot(timeSlotView);
                 }else{
-                    Toast.makeText(presenter.getContext(), "already select one timeslot, please unclick and click another one",Toast.LENGTH_SHORT).show();
+                    // if other timeslot has been selected
+                    if (((WeekView.TimeSlotStruct)timeSlotView.getTag()).status==true){
+                        changeTimeSlotView(timeSlotView);
+                        hostClickTimeSlot(timeSlotView);
+                    }else{
+                        Toast.makeText(presenter.getContext(), "already select one timeslot, please unclick and click another one",Toast.LENGTH_SHORT).show();
+                    }
                 }
+            }else {
+                // for invitees, can choose multi timeslots
+                changeTimeSlotView(timeSlotView);
+                changeEventAttributes(timeSlotView);
             }
-        }else {
-            // for invitees, can choose multi timeslots
-            changeTimeSlotView(timeSlotView);
-            changeEventAttributes(timeSlotView);
         }
+
     }
 
     private void hostClickTimeSlot(TimeSlotView timeSlotView){
@@ -243,5 +275,15 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         boolean newStatus = !timeSlotView.isSelect();
         timeSlotView.setStatus(newStatus);
         ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
+    }
+
+    @Override
+    public void onShowDialog() {
+        AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
+    }
+
+    @Override
+    public void onHideDialog() {
+        AppUtil.hideProgressBar();
     }
 }

@@ -16,6 +16,7 @@ import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
@@ -619,5 +620,78 @@ public class EventUtil{
         }
     }
 
+    public static String getHostPhotoUrl(Event event){
+        for(Invitee invitee :event.getInvitee() ){
+            if (invitee.getUserUid().equals(event.getHostUserUid())){
+                return invitee.getAliasPhoto();
+            }
+        }
+        return null;
+    }
 
+    //return ->
+    // String: timeslot Uid,
+    // List<StatusKeyStruct>: get(status),get(invitees)
+    public static Map<String, List<StatusKeyStruct>> getAdapterData(Event event){
+        List<Invitee> invitees = event.getInvitee();
+        List<Timeslot> timeSlots = event.getTimeslot();
+        //slo Uid -- List (status - List invitee)
+        Map<String,List<StatusKeyStruct>> results = new HashMap<>();
+
+        for (Timeslot slot: timeSlots
+                ) {
+            List<StatusKeyStruct> structs = new ArrayList<>();
+            StatusKeyStruct acp_st = new StatusKeyStruct("accepted");
+            structs.add(acp_st);
+
+            StatusKeyStruct rejected_st = new StatusKeyStruct("rejected");
+            structs.add(rejected_st);
+
+            StatusKeyStruct pending_st = new StatusKeyStruct("pending");
+            structs.add(pending_st);
+
+            results.put(slot.getTimeslotUid(),structs);
+        }
+
+        for (Invitee invitee:invitees
+                ) {
+            List<SlotResponse> responses = invitee.getSlotResponses();
+
+            for (SlotResponse response: responses
+                    ) {
+                List<StatusKeyStruct> stucts = results.get(response.getTimeslotUid());
+                for (int i = 0; i < stucts.size(); i++) {
+                    if (stucts.get(i).getStatus().equals(response.getStatus())){
+                        stucts.get(i).addInvitee(invitee);
+                        break;
+                    }
+                }
+
+            }
+        }
+
+        return results;
+    }
+
+    public static class StatusKeyStruct{
+        String status;
+        //status is key
+        List<Invitee> response = new ArrayList<>();
+
+        public StatusKeyStruct(String status) {
+            this.status = status;
+        }
+
+        public String getStatus(){
+            return this.status;
+        }
+
+        public void addInvitee(Invitee invitee){
+            response.add(invitee);
+        }
+
+        public List<Invitee> getInviteeList(){
+            return this.response;
+        }
+    }
 }

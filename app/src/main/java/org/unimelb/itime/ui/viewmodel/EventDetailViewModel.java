@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.BR;
@@ -25,9 +26,10 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
-import org.unimelb.itime.ui.fragment.eventdetail.EventDetailGroupFragment;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
+import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -49,16 +51,16 @@ public class EventDetailViewModel extends CommonViewModel {
     private Event evDtlHostEvent;
     private LayoutInflater inflater;
     private EventDetailGroupMvpView mvpView;
-    private Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> adapterData;
+    private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
     private String tag;
     private Context context;
 
-    public void setEvAdapterEvent(Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> adapterData){
+    public void setEvAdapterEvent(Map<String, List<EventUtil.StatusKeyStruct>> adapterData){
         this.adapterData = adapterData;
     }
 
     @Bindable
-    public Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> getEvAdapterEvent(){
+    public Map<String, List<EventUtil.StatusKeyStruct>> getEvAdapterEvent(){
         return this.adapterData;
     }
 
@@ -327,11 +329,11 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
-    public String getPeopleNum(Timeslot timeslot, Map<String, List<EventDetailGroupFragment.StatusKeyStruct>> adapterData){
+    public String getPeopleNum(Timeslot timeslot, Map<String, List<EventUtil.StatusKeyStruct>> adapterData){
 
-        List<EventDetailGroupFragment.StatusKeyStruct> structs = adapterData.get(timeslot.getTimeslotUid());
+        List<EventUtil.StatusKeyStruct> structs = adapterData.get(timeslot.getTimeslotUid());
         int count = 0;
-        for (EventDetailGroupFragment.StatusKeyStruct struct: structs
+        for (EventUtil.StatusKeyStruct struct: structs
              ) {
             if (struct.getStatus().equals("accepted")){
                 count = struct.getInviteeList().size();
@@ -385,6 +387,11 @@ public class EventDetailViewModel extends CommonViewModel {
                 }
             }
         };
+    }
+
+    @BindingAdapter({"bind:url"})
+    public static void bindUrlHelper(ImageView view,String url){
+        EventUtil.bindUrlHelper(view.getContext(), url, view, new CircleTransform());
     }
 
 }

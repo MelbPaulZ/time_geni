@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -14,6 +15,9 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
+import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.mvpview.CommonMvpView;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
 
@@ -26,7 +30,7 @@ import static java.security.AccessController.getContext;
  * Created by Paul on 3/10/16.
  */
 
-public class CommonPresenter extends MvpBasePresenter<MvpView> {
+public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T> {
 
     public Context context;
     private EventApi eventApi;
@@ -40,6 +44,8 @@ public class CommonPresenter extends MvpBasePresenter<MvpView> {
     }
 
     public void updateEventToServer(Event event){
+        getView().onShowDialog();
+
         Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(),event.getEventUid(),event);
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
@@ -49,12 +55,14 @@ public class CommonPresenter extends MvpBasePresenter<MvpView> {
 
             @Override
             public void onError(Throwable e) {
+                getView().onHideDialog();
                 Log.i(TAG, "onError: " + e.getMessage());
             }
 
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
                 synchronizeLocal(eventHttpResult.getData());
+                getView().onHideDialog();
                 Log.i(TAG, "onNext: " +"done");
             }
         };
