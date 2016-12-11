@@ -238,7 +238,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
-                            android:checked="@={eventVM.isAllDay}" />
+                            android:checked="@{eventVM.isAllDay}" />
                     </RelativeLayout>
 
                     <LinearLayout
@@ -273,7 +273,7 @@
                         android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border"
                         android:onClick="@{eventVM.onClickTime(eventVM.changeEndtime)}"
-                        android:visibility="@{eventVM.isAllDay ? View.GONE : View.VISIBLE}">
+                        android:visibility="@{eventVM.isAllDay? View.GONE : View.VISIBLE}">
 
                         <TextView
                             android:layout_width="wrap_content"

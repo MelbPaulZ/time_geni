@@ -22,7 +22,6 @@ public class ITimeApplication extends MultiDexApplication{
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
         GreenDaoUtil.init(this);
         registerLeanCloud();
     }

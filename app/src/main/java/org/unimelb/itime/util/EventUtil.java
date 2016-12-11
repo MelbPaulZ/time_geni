@@ -258,6 +258,7 @@ public class EventUtil {
             event.getRule().setFrequencyEnum(FrequencyEnum.YEARLY);
             event.getRule().setInterval(1);
         }
+        event.setRecurrence(event.getRule().getRecurrence());
     }
 
 
@@ -472,12 +473,10 @@ public class EventUtil {
     }
 
     public static boolean isEventRepeat(Event event) {
-        if (event.hasRecurrence() && event.getRecurrence().equals("0")) {
-            return false;
-        } else if (!event.hasRecurrence()) {
-            return false;
-        } else {
+        if (event.getRecurrence().length>0) {
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -749,6 +748,43 @@ public class EventUtil {
         long delta = c2Begin.getTimeInMillis() - c1Begin.getTimeInMillis();
         int dif = (int) (delta/oneDay);
         return dif;
-
     }
+
+    public static boolean isGroupEvent(Context context, Event event){
+        return event.getEventType().equals(context.getString(R.string.group));
+    }
+
+    public static boolean isEventConfirmed(Context context, Event event){
+        return event.getStatus().equals(context.getString(R.string.confirmed));
+    }
+
+    public static boolean isInviteeNeedsAction(Context context, Event event){
+        return isInvitee(context.getString(R.string.needs_action), event);
+    }
+
+    public static boolean isInviteeAccept(Context context, Event event){
+        return isInvitee(context.getString(R.string.accepted) , event);
+    }
+
+    public static boolean isInvitee(String status, Event event){
+        Invitee me = getSelfInInvitees(event);
+        if (me.getStatus().equals(status)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static boolean hasOtherInviteeExceptSelf(Event event){
+        for (Invitee invitee: event.getInvitee()){
+            if (!invitee.getUserUid().equals(UserUtil.getUserUid())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
 }

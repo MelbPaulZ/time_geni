@@ -299,6 +299,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="@{hostDetailVM.soloInvisible}"
                         android:orientation="vertical">
                         <LinearLayout
                             android:id="@+id/invitees_status_text"
@@ -516,10 +517,9 @@
             android:gravity="center"
             android:paddingLeft="@dimen/padding_10"
             android:paddingRight="@dimen/padding_10"
-            android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance.getUserUid())? View.VISIBLE : View.GONE }">
+            android:visibility="@{hostDetailVM.hostUnconfirmVisibility}">
 
             <TextView
-                android:id="@+id/event_detail_host_confirm_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? true: false}"
@@ -528,8 +528,7 @@
                 android:text="@string/confirm_event"
                 android:textAlignment="center"
                 android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? @color/color_FE9E18 : @color/gray_b2b2b2}"
-                android:textSize="17sp"
-                android:visibility="@{hostDetailVM.confirmVisibility(hostDetailVM.evDtlHostEvent)}" />
+                android:textSize="17sp" />
 
         </LinearLayout>
 
@@ -539,7 +538,7 @@
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:background="@color/color_f9f9f9"
-            android:visibility="@{hostDetailVM.hostConfirmBtnVisibility(hostDetailVM.evDtlHostEvent)}">
+            android:visibility="@{hostDetailVM.hostConfirmVisibility}">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -576,13 +575,13 @@
         </RelativeLayout>
 
 
-        <!--Invitee Unconfirmed-->
+        <!--Invitee Unresponse && response-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:background="@color/color_f9f9f9"
-            android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance.getUserUid)?  View.GONE:View.VISIBLE }">
+            android:visibility="@{hostDetailVM.inviteeVisibility}">
 
             <!--  left button-->
             <TextView

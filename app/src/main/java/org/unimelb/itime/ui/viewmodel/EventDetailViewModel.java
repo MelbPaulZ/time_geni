@@ -2,27 +2,21 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
+import com.android.databinding.library.baseAdapters.BR;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
@@ -30,18 +24,11 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
 import org.unimelb.itime.util.CircleTransform;
-import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
-import org.unimelb.itime.vendor.helper.DensityUtil;
 
-import java.io.File;
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static org.dmfs.rfc5545.calendarmetrics.IslamicCalendarMetrics.LeapYearPattern.I;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -52,8 +39,9 @@ public class EventDetailViewModel extends CommonViewModel {
     private LayoutInflater inflater;
     private EventDetailGroupMvpView mvpView;
     private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
-    private String tag;
     private Context context;
+    private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeVisibility, soloInvisible;
+
 
     public void setEvAdapterEvent(Map<String, List<EventUtil.StatusKeyStruct>> adapterData){
         this.adapterData = adapterData;
@@ -66,9 +54,8 @@ public class EventDetailViewModel extends CommonViewModel {
 
     public EventDetailViewModel(EventDetailGroupPresenter presenter) {
         this.presenter = presenter;
-        this.inflater = presenter.getInflater();
-        tag = presenter.getContext().getString(R.string.tag_host_event_detail);
         this.context = getContext();
+        this.inflater = LayoutInflater.from(getContext());
         mvpView = presenter.getView();
     }
 
@@ -255,13 +242,13 @@ public class EventDetailViewModel extends CommonViewModel {
         return false; // never reach here
     }
 
-    public int confirmVisibility(Event event){
-        if (event.getStatus().equals(getContext().getString(R.string.confirmed))){
-            return View.GONE;
-        }else{
-            return View.VISIBLE;
-        }
-    }
+//    public int confirmVisibility(Event event){
+//        if (event.getStatus().equals(getContext().getString(R.string.confirmed))){
+//            return View.GONE;
+//        }else{
+//            return View.VISIBLE;
+//        }
+//    }
 
 
     public View.OnClickListener onClickTimeSlot(final int position){
@@ -394,4 +381,67 @@ public class EventDetailViewModel extends CommonViewModel {
         EventUtil.bindUrlHelper(view.getContext(), url, view, new CircleTransform());
     }
 
+    // following get visibility in dif status of event
+
+    @Bindable
+    public int getHostConfirmVisibility() {
+        if (EventUtil.isGroupEvent(context, evDtlHostEvent) &&
+                EventUtil.isEventConfirmed(context, evDtlHostEvent) &&
+                EventUtil.isUserHostOfEvent(evDtlHostEvent))
+            return View.VISIBLE;
+        else
+            return View.GONE;
+    }
+
+    public void setHostConfirmVisibility(int hostConfirmVisibility) {
+        this.hostConfirmVisibility = hostConfirmVisibility;
+        notifyPropertyChanged(BR.hostConfirmVisibility);
+    }
+
+    @Bindable
+    public int getHostUnconfirmVisibility() {
+        if (EventUtil.isGroupEvent(context, evDtlHostEvent) &&
+                !EventUtil.isEventConfirmed(context, evDtlHostEvent) &&
+                EventUtil.isUserHostOfEvent(evDtlHostEvent)){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+
+    }
+
+    public void setHostUnconfirmVisibility(int hostUnconfirmVisibility) {
+        this.hostUnconfirmVisibility = hostUnconfirmVisibility;
+        notifyPropertyChanged(BR.hostUnconfirmVisibility);
+    }
+
+
+    @Bindable
+    public int getInviteeVisibility() {
+        if (EventUtil.isGroupEvent(context, evDtlHostEvent) &&
+                !EventUtil.isUserHostOfEvent(evDtlHostEvent)){
+            return View.VISIBLE;
+        }else {
+            return View.GONE;
+        }
+    }
+
+    public void setInviteeVisibility(int inviteeVisibility) {
+        this.inviteeVisibility = inviteeVisibility;
+        notifyPropertyChanged(BR.inviteeVisibility);
+    }
+
+    @Bindable
+    public int getSoloInvisible() {
+        if (!EventUtil.isGroupEvent(context, evDtlHostEvent)){
+            return View.GONE;
+        }else{
+            return View.VISIBLE;
+        }
+    }
+
+    public void setSoloInvisible(int soloInvisible) {
+        this.soloInvisible = soloInvisible;
+        notifyPropertyChanged(BR.soloInvisible);
+    }
 }

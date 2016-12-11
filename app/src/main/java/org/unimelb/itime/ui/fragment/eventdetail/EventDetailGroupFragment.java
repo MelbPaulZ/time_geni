@@ -162,7 +162,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
 
     @Override
     public EventDetailGroupPresenter createPresenter() {
-        return new EventDetailGroupPresenter(getContext(),inflater);
+        return new EventDetailGroupPresenter(getContext());
     }
     
 

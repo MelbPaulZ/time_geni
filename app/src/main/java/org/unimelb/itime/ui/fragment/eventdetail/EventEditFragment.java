@@ -36,6 +36,8 @@ import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 
+import static java.security.AccessController.getContext;
+
 /**
  * Created by Paul on 28/08/2016.
  */
@@ -69,11 +71,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
                 Event ev = eventHttpResult.getData();
-                if (ev.getEventType().equals(getContext().getString(R.string.group))) {
-                    toHostEventDetail(ev);
-                }else{
-                    toSoloEventDetail(ev);
-                }
+                toHostEventDetail(ev);
             }
         });
         return presenter;
@@ -88,23 +86,9 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
         }
         eventEditViewModel.setEventEditViewEvent(event);
         binding.setEventEditVM(eventEditViewModel);
-        setProposedTimeSlots(event);
+//        setProposedTimeSlots(event);
     }
 
-    // todo try databinding to bind the edit text
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//        if (!hidden){
-//            // pupup keyboard for title
-//            if (getFrom() instanceof EventDetailSoloFragment || getFrom() instanceof EventDetailGroupFragment){
-//                Log.i("show edit text", "onHiddenChanged: " + "show keyboard");
-//                EditText editText = (EditText) binding.getRoot().findViewById(R.id.edit_event_title);
-//                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
-//            }
-//        }
-//    }
 
 
     @Override
@@ -114,7 +98,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     @Override
     public void onEnter() {
         super.onEnter();
-        if (getFrom() instanceof EventDetailSoloFragment || getFrom() instanceof EventDetailGroupFragment){
+        if ( getFrom() instanceof EventDetailGroupFragment){
             EditText editText = (EditText) binding.getRoot().findViewById(R.id.edit_event_title);
             editText.setFocusable(true);
             editText.requestFocus();
@@ -131,23 +115,22 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
-    public void setProposedTimeSlots(Event event){
-        if (event.hasTimeslots()){
-            ArrayList<String> timeslotArrayList = new ArrayList<>();
-            for (Timeslot timeSlot: event.getTimeslot()){
-                timeslotArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()));
-            }
-            ArrayAdapter stringAdapter = new ArrayAdapter(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotArrayList);
-            binding.eventEditListview.setAdapter(stringAdapter);
-        }
-    }
+//    public void setProposedTimeSlots(Event event){
+////        if (event.hasTimeslots()){
+////            ArrayList<String> timeslotArrayList = new ArrayList<>();
+////            for (Timeslot timeSlot: event.getTimeslot()){
+////                timeslotArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()));
+////            }
+////            ArrayAdapter stringAdapter = new ArrayAdapter(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotArrayList);
+////            binding.eventEditListview.setAdapter(stringAdapter);
+////        }
+//    }
 
     public void setEvent(Event event){
         this.event = event;
         if (eventEditViewModel!=null){
             eventEditViewModel.setEventEditViewEvent(event);
         }
-        setProposedTimeSlots(event);
     }
 
     public void setPhotos(ArrayList<String> photos){
@@ -193,19 +176,6 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     @Override
     public void toPhotoPicker() {
         ((EventDetailActivity)getActivity()).checkPermission();
-    }
-
-    @Override
-    public void toSoloEventDetail() {
-        EventDetailSoloFragment soloFragment = (EventDetailSoloFragment) getFragmentManager().findFragmentByTag(EventDetailSoloFragment.class.getSimpleName());
-        switchFragment(this, soloFragment);
-    }
-
-    @Override
-    public void toSoloEventDetail(Event event) {
-        EventDetailSoloFragment soloFragment = (EventDetailSoloFragment) getFragmentManager().findFragmentByTag(EventDetailSoloFragment.class.getSimpleName());
-        soloFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
-        switchFragment(this, soloFragment);
     }
 
     @Subscribe

@@ -19,7 +19,6 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventDetailGroupFragment;
-import org.unimelb.itime.ui.fragment.eventdetail.EventDetailSoloFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventDetailTimeSlotFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.InviteeTimeslotFragment;
@@ -31,13 +30,8 @@ public class EventDetailActivity extends AppCompatActivity {
 
     private List<BaseUiFragment> fragmentList = new ArrayList<>();
     private Event event;
-
     private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
-    private final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
     private final int ACTIVITY_PHOTOPICKER = 2;
-
-    public static final String request = "request";
-    public static final int UPDATE_EVENT = 1000;
 
 
     @Override
@@ -46,39 +40,12 @@ public class EventDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_detail);
         event = EventManager.getInstance().getCurrentEvent();
         initFragments();
+        getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
 
-        if (event.getInvitee().size() > 1) {
-            // group event
-            // here... cannot use findFragmentByTag directly..
-            getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
-
-        } else {
-            // solo event
-            // here... cannot use findFragmentByTag directly..
-            getSupportFragmentManager().beginTransaction().show(fragmentList.get(1)).commit();
-        }
-    }
-
-    private void initAll(){
-        event = EventManager.getInstance().getCurrentEvent();
-        initFragments();
-        List<Fragment> lists = getSupportFragmentManager().getFragments();
-
-        if (event.getEventType().equals(getApplicationContext().getString(R.string.group))) {
-            // group event
-            // here... cannot use findFragmentByTag directly..
-            getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
-
-        } else {
-            // solo event
-            // here... cannot use findFragmentByTag directly..
-            getSupportFragmentManager().beginTransaction().show(fragmentList.get(1)).commit();
-        }
     }
 
     public void initFragments() {
         fragmentList.add(new EventDetailGroupFragment());
-        fragmentList.add(new EventDetailSoloFragment());
         fragmentList.add(new EventEditFragment());
         fragmentList.add(new EventDetailTimeSlotFragment());
         fragmentList.add(new EventLocationPickerFragment());
