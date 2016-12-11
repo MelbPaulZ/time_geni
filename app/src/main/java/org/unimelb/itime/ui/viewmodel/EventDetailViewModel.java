@@ -27,8 +27,11 @@ import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import me.tatarka.bindingcollectionadapter.ItemView;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -41,6 +44,7 @@ public class EventDetailViewModel extends CommonViewModel {
     private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
     private Context context;
     private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeVisibility, soloInvisible;
+
 
 
     public void setEvAdapterEvent(Map<String, List<EventUtil.StatusKeyStruct>> adapterData){
@@ -251,14 +255,13 @@ public class EventDetailViewModel extends CommonViewModel {
 //    }
 
 
-    public View.OnClickListener onClickTimeSlot(final int position){
+    public View.OnClickListener onClickTimeSlot(final Timeslot timeslot){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Timeslot timeSlot = evDtlHostEvent.getTimeslot().get(position);
+//                Timeslot timeSlot = evDtlHostEvent.getTimeslot().get(position);
                 if (evDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
                     // this is a host event
-                        Timeslot timeslot = evDtlHostEvent.getTimeslot().get(position);
                     if (timeslot.getIsConfirmed()==0){
                         for (Timeslot ts: evDtlHostEvent.getTimeslot()){
                             ts.setIsConfirmed(0);
@@ -269,10 +272,10 @@ public class EventDetailViewModel extends CommonViewModel {
                     }
                 }else {
                     // can choose any number of timeslots
-                    if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))) {
-                        timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
-                    } else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))) {
-                        timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    if (timeslot.getStatus().equals(context.getString(R.string.timeslot_status_pending))) {
+                        timeslot.setStatus(getContext().getString(R.string.timeslot_status_accept));
+                    } else if (timeslot.getStatus().equals(context.getString(R.string.timeslot_status_accept))) {
+                        timeslot.setStatus(getContext().getString(R.string.timeslot_status_pending));
                     }
                 }
                 setEvDtlHostEvent(evDtlHostEvent);
@@ -282,12 +285,12 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
-    public View.OnClickListener viewInviteeResponse(final int position){
+    public View.OnClickListener viewInviteeResponse(final Timeslot timeslot){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    mvpView.viewInviteeResponse(evDtlHostEvent.getTimeslot().get(position));
+                    mvpView.viewInviteeResponse(timeslot);
                 }
             }
         };
@@ -444,4 +447,5 @@ public class EventDetailViewModel extends CommonViewModel {
         this.soloInvisible = soloInvisible;
         notifyPropertyChanged(BR.soloInvisible);
     }
+
 }

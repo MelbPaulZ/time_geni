@@ -4,6 +4,7 @@
         <import type="org.unimelb.itime.util.EventUtil"/>
         <import type="org.unimelb.itime.util.TimeSlotUtil"/>
         <import type="android.view.View"/>
+        <import type="org.unimelb.itime.util.CalendarUtil"/>
         <import type="org.unimelb.itime.ui.viewmodel.EventEditViewModel.PickerTask"/>
         <variable
             name="eventEditVM"
@@ -130,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/padding_10"
                     android:layout_toLeftOf="@+id/edit_event_end_repeat_arrow"
-                    android:text="xxx"
+                    android:text="@{EventUtil.getRepeatEndString(context, eventEditVM.eventEditViewEvent)}"
                     android:textColor="@color/text_disable"
                     android:textSize="@dimen/page_text_size" />
 
@@ -377,7 +378,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/padding_10"
                     android:layout_toLeftOf="@+id/event_edit_calendarType_arrow"
-                    android:text=""
+                    android:text="@{CalendarUtil.instance.getCalendarName(eventEditVM.eventEditViewEvent)}"
                     android:textSize="17dp" />
 
                 <TextView

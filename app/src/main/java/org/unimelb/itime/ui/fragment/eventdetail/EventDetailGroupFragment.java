@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.fragment.eventdetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.Bindable;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -38,12 +39,12 @@ import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
-import org.unimelb.itime.vendor.helper.LoadImgHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by Paul on 4/09/2016.
@@ -52,7 +53,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     private org.unimelb.itime.databinding.FragmentEventDetailBinding binding;
     private EventDetailViewModel eventDetailForHostViewModel;
     private Event event;
-    private LayoutInflater inflater;
+
 
     private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
 
@@ -60,7 +61,6 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_detail, container, false);
-        this.inflater = inflater;
         return binding.getRoot();
     }
 
@@ -204,6 +204,5 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     public void refreshCalendars() {
         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
-
 
 }

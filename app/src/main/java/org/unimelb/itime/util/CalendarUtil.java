@@ -1,6 +1,7 @@
 package org.unimelb.itime.util;
 
 import org.unimelb.itime.bean.Calendar;
+import org.unimelb.itime.bean.Event;
 
 import java.util.List;
 
@@ -27,6 +28,16 @@ public class CalendarUtil {
 
     public void setCalendar(List<Calendar> calendars) {
         this.calendars = calendars;
+    }
+
+    public String getCalendarName(Event event){
+        String calendarUid = event.getCalendarUid();
+        for (Calendar calendar: getCalendar()){
+            if (calendarUid.equals(calendar.getCalendarUid())){
+                return calendar.getSummary();
+            }
+        }
+        return "";
     }
 
 }

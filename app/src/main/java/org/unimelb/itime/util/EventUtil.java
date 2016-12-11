@@ -77,6 +77,20 @@ public class EventUtil {
         }
     }
 
+    public static String getRepeatEndString(Context context, Event event){
+        Calendar calendar = Calendar.getInstance();
+        if (event.getRule().getUntil()!=null) {
+            calendar.setTime(event.getRule().getUntil());
+            String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
+            String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+            String month = getMonth(context, calendar.get(Calendar.MONTH));
+            String year = calendar.get(Calendar.YEAR) + "";
+            return dayOfWeek + " ," + month + " " + day + ", " + year;
+        }else{
+            return "";
+        }
+    }
+
     public static String getAttendeeString(Context context, ArrayList<String> attendeesArrayList) {
         ArrayList<String> arrayList = attendeesArrayList;
         if (attendeesArrayList == null) {
@@ -214,7 +228,11 @@ public class EventUtil {
     }
 
     public static CharSequence[] getCalendarTypes(Context context) {
-        return new CharSequence[]{"Work", "Private", "Group", "Public"};
+        ArrayList<String> calendarNames = new ArrayList<>();
+        for (org.unimelb.itime.bean.Calendar calendar : CalendarUtil.getInstance().getCalendar()){
+            calendarNames.add(calendar.getSummary());
+        }
+        return calendarNames.toArray(new CharSequence[calendarNames.size()]);
     }
 
     public static String getCalendarTypeFromIndex(Context context, String index) {

@@ -21,6 +21,7 @@ import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
+import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 
@@ -32,6 +33,8 @@ import java.util.List;
 
 import me.tatarka.bindingcollectionadapter.ItemView;
 import com.android.databinding.library.baseAdapters.BR;
+import com.google.android.gms.gcm.Task;
+
 /**
  * Created by Paul on 28/08/2016.
  */
@@ -69,7 +72,6 @@ public class EventEditViewModel extends CommonViewModel {
 
 
     private void initDialog(){
-        Calendar c = Calendar.getInstance();
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -100,12 +102,6 @@ public class EventEditViewModel extends CommonViewModel {
                 }
             }
         };
-//
-//        datePickerDialog = new DatePickerDialog(getContext(),
-//                AlertDialog.THEME_HOLO_LIGHT, dateSetListener,c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH));
-//
-//        timePickerDialog = new TimePickerDialog(getContext(),
-//                AlertDialog.THEME_HOLO_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
     }
 
 
@@ -113,7 +109,7 @@ public class EventEditViewModel extends CommonViewModel {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(eventEditViewEvent.getEndTime());
         timePickerDialog = new TimePickerDialog(getContext(),
-                AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+                AlertDialog.THEME_HOLO_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
         timePickerDialog.show();
         editYear = year;
         editMonth = monthOfYear;
@@ -124,7 +120,7 @@ public class EventEditViewModel extends CommonViewModel {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(eventEditViewEvent.getStartTime());
         timePickerDialog = new TimePickerDialog(getContext(),
-                AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+                AlertDialog.THEME_HOLO_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
         timePickerDialog.show();
         editYear = year;
         editMonth = monthOfYear;
@@ -136,14 +132,25 @@ public class EventEditViewModel extends CommonViewModel {
         c.set(year, monthOfYear, dayOfMonth);
         eventEditViewEvent.getRule().setUntil(c.getTime());
         eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence());
+        notifyPropertyChanged(BR.eventEditViewEvent);
     }
 
     private void onEndTimeSelected(int hour, int minute){
-
+        Calendar c = Calendar.getInstance();
+        editHour = hour;
+        editMinute = minute;
+        c.set(editYear, editMonth, editDay, editHour, editMinute);
+        eventEditViewEvent.setEndTime(c.getTimeInMillis());
+        notifyPropertyChanged(BR.eventEditViewEvent);
     }
 
     private void onStartTimeSelected(int hour, int minute){
-
+        Calendar c = Calendar.getInstance();
+        editHour = hour;
+        editMinute = minute;
+        c.set(editYear, editMonth, editDay, editHour, editMinute);
+        eventEditViewEvent.setStartTime(c.getTimeInMillis());
+        notifyPropertyChanged(BR.eventEditViewEvent);
     }
 
 
@@ -205,21 +212,16 @@ public class EventEditViewModel extends CommonViewModel {
                         // set event type
                         EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
                         eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
-                        eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence()); // set the repeat string
                         eventEditViewEvent.setStatus("pending");
                         presenter.updateEvent(eventEditViewEvent);
                         // this if might change later, because the host can be kicked??????
-//                        if (eventEditViewEvent.getEventType().equals(getContext().getString(R.string.group))) {
-//                            mvpView.toHostEventDetail(eventEditViewEvent);
-//                        }else{
-//                            mvpView.toSoloEventDetail(eventEditViewEvent);
-//                        }
                     }
                 }
             }
         };
     }
 
+    // TODO: 11/12/2016 redo the calculation of repeat
     private void changeAllEvent(Event event){
         if (mvpView!=null){
             // set event type
@@ -234,12 +236,6 @@ public class EventEditViewModel extends CommonViewModel {
             copyEventSendToServer.setEndTime(orgEvent.getEndTime());
 
             presenter.updateEvent(copyEventSendToServer);
-            // this if might change later, because the host can be kicked??????
-//            if (event.getEventType().equals(getContext().getString(R.string.group))) {
-//                mvpView.toHostEventDetail(event);
-//            }else{
-//                mvpView.toSoloEventDetail(event);
-//            }
         }
     }
 
@@ -259,12 +255,6 @@ public class EventEditViewModel extends CommonViewModel {
             event.setRecurringEventUid(orgEvent.getEventUid());
             event.setRecurringEventId(orgEvent.getEventId());
             presenter.updateOnlyThisEvent(orgEvent,event);
-            // this if might change later, because the host can be kicked??????
-//            if (event.getEventType().equals(getContext().getString(R.string.group))) {
-//                mvpView.toHostEventDetail(event);
-//            }else{
-//                mvpView.toSoloEventDetail(event);
-//            }
         }
     }
 
@@ -366,7 +356,7 @@ public class EventEditViewModel extends CommonViewModel {
             eventEditViewEvent.setEndTime(calendar.getTimeInMillis() + 3600 * 1000);
             setEventEditViewEvent(eventEditViewEvent);
         }
-//        notifyPropertyChanged(BR.isAllDayEvent);
+        notifyPropertyChanged(BR.isAllDayEvent);
     }
 
     public View.OnClickListener onChooseCalendarType(){
@@ -380,7 +370,7 @@ public class EventEditViewModel extends CommonViewModel {
                 builder.setItems(calendarType, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        eventEditViewEvent.setCalendarUid((String) calendarType[i]);
+                        eventEditViewEvent.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(i).getCalendarUid());
                         setEventEditViewEvent(eventEditViewEvent);
                     }
                 });
@@ -463,6 +453,21 @@ public class EventEditViewModel extends CommonViewModel {
             @Override
             public void onClick(View v) {
                 currentTask = task;
+                Calendar c = Calendar.getInstance();
+                switch (currentTask){
+                    case END_REPEAT:
+                        if (eventEditViewEvent.getRule().getUntil()!=null){
+                           c.setTime(eventEditViewEvent.getRule().getUntil());
+                        }
+                        break;
+                    case END_TIME:
+                        c.setTimeInMillis(eventEditViewEvent.getEndTime());
+                        break;
+                    case START_TIME:
+                        c.setTimeInMillis(eventEditViewEvent.getStartTime());
+                }
+                datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, dateSetListener,
+                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
             }
         };
