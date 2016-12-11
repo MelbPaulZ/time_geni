@@ -269,7 +269,8 @@
     <string name="You_have_not_confirmed_this_event">You has not confirmed this event</string>
     <string name="You_have_confirmed_this_event">You have confirmed this event</string>
     <string name="Accepted">Accepted</string>
-
+    <string name="Not_going">Not going</string>
+    <string name="Yesterday">Yesterday</string>
     <string-array name="users">
         <item>johncdyin@gmail.com</item>
         <item>liuyuhao@gmail.com</item>

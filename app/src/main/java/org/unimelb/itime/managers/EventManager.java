@@ -301,7 +301,7 @@ public class EventManager {
                     this.addEvent(newEvent);
 
                 }else {
-                    throw new RuntimeException("old event cannot be find in regularEventMap");
+//                    throw new RuntimeException("old event cannot be find in regularEventMap");
                 }
             }
         }else{

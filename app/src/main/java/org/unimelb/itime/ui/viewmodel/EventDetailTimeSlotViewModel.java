@@ -180,23 +180,6 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
 //                        presenter.updateEvent(eventDetailHostEvent);
                     }
                 }
-
-
-                //if time slot changed
-//                if (EventManager.getInstance().getCurrentEvent().getTimeslot().size()
-//                        != eventDetailHostEvent.getTimeslot().size()){
-//                    List<Invitee> invitees = eventDetailHostEvent.getInvitee();
-//                    for (Invitee invitee:invitees
-//                            ) {
-//                        for (SlotResponse response: invitee.getSlotResponses()
-//                             ) {
-//                            response.setStatus("pending");
-//                        }
-//                    }
-//
-//                    presenter.updateEvent(eventDetailHostEvent);
-//                }
-
                 if (mvpView!=null){
                     mvpView.onClickDone();
                 }
