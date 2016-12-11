@@ -104,7 +104,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
 
             @Override
             public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
-                Log.i("onclick time", "onEventCreate: "+System.currentTimeMillis());
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
                 ((MainActivity)getActivity()).startEventCreateActivity(calendar);
@@ -199,18 +198,9 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
                                                 firstOrg.getRule().setUntil(day);
                                                 firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
                                                 EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
-
                                                 presenter.updateOnlyThisEvent(firstOrg, copyEvent);
 
                                             }
-
-
-//                                            Date day = new Date(dayDraggableEventView.getStartTimeM());
-//                                            firstOrg.getRule().setUntil(day);
-//                                            firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
-//                                            EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
-//                                            presenter.updateOnlyThisEvent(firstOrg, copyEvent);
-//                                            break;
                                         }
                                         case 2:{
                                             // on click cancel
