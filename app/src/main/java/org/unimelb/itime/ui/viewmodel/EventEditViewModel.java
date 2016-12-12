@@ -9,6 +9,7 @@ import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
@@ -34,6 +35,7 @@ import java.util.List;
 import me.tatarka.bindingcollectionadapter.ItemView;
 import com.android.databinding.library.baseAdapters.BR;
 import com.google.android.gms.gcm.Task;
+import com.google.gson.Gson;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -216,6 +218,15 @@ public class EventEditViewModel extends CommonViewModel {
                         EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
                         eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
                         eventEditViewEvent.setStatus("pending");
+
+                        // TODO: 12/12/2016 test json convert
+                        Gson gson = new Gson();
+                        String str = gson.toJson(eventEditViewEvent);
+                        Log.i("event convert", "onClick: " + str);
+
+                        Event e = gson.fromJson(str, Event.class);
+                        Log.i("event convert", "onClick: " + e.getSummary());
+
                         presenter.updateEvent(eventEditViewEvent);
                         // this if might change later, because the host can be kicked??????
                     }

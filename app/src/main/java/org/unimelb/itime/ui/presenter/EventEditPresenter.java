@@ -50,7 +50,9 @@ public class EventEditPresenter extends CommonPresenter<EventEditMvpView> {
 
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
+                Log.i(TAG, "onNext: " + eventHttpResult.getData().getSummary());
                 // todo delete event
+
             }
         };
         HttpUtil.subscribe(observable, subscriber);

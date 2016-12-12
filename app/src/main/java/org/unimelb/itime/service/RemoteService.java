@@ -192,14 +192,10 @@ public class RemoteService extends Service{
                         @Override
                         public void run() {
                             super.run();
-                            Log.i(TAG, "run: " + "create new updateThread");
                             isUpdateThreadRuning = true;
-                            Log.i(TAG, "run: " + "updateThread start runs");
-                            Log.i(TAG, "numOfEventList: " + result.getData().size());
+
                             EventManager.getInstance().updateDB(eventList);
                             EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-                            Log.i(TAG, "run: " + "updateThread stop runs");
-                            Log.i(TAG, "onNext: " + result.getData().size());
                             isUpdateThreadRuning = false;
                         }
                     };
