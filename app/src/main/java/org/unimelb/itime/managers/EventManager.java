@@ -28,6 +28,7 @@ import java.util.Map;
 
 import static android.R.attr.id;
 import static android.R.attr.key;
+import static android.R.attr.trimPathEnd;
 
 /**
  * Created by yuhaoliu on 29/08/16.
@@ -126,11 +127,26 @@ public class EventManager {
                     regularEventMap.get(dayBeginMilliseconds).add(event);
                 }
             } else {
-                orgRepeatedEventList.add(event);
-                Log.i(TAG, "addEvent: addRepeatedEvent");
-                this.addRepeatedEvent(event, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
+                if (!isIncludeRepeate(event)){
+                    orgRepeatedEventList.add(event);
+                    this.addRepeatedEvent(event, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
+                }else{
+                    Log.i(TAG, "addEvent: Reapted adding reapte event, dropped.");
+                }
+               
             }
         }
+    }
+
+    private boolean isIncludeRepeate(Event repeater){
+        for (Event event:this.orgRepeatedEventList
+             ) {
+            if (event.getEventUid().equals(repeater.getEventUid())){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void deleteEvent(Event event){
@@ -289,7 +305,7 @@ public class EventManager {
 //    }
 
     // repeat event update need to change
-    public void updateEvent(Event oldEvent, Event newEvent){
+    public synchronized void updateEvent(Event oldEvent, Event newEvent){
         long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
 
         EventManager.getInstance().setCurrentEvent(newEvent);
@@ -305,8 +321,14 @@ public class EventManager {
                 }
                 if (old != null){
                     regularEventMap.get(oldBeginTime).remove(old);
-                    this.addEvent(newEvent);
+//                    this.orgRepeatedEventList.remove(oldEvent);
+//                    if(newEvent.getRecurrence().length >0){
+//                        this.removeRepeatedEvent(oldEvent);
+//                    }else{
+//
+//                    }
 
+                    this.addEvent(newEvent);
                 }else {
 //                    throw new RuntimeException("old event cannot be find in regularEventMap");
                 }
@@ -321,6 +343,30 @@ public class EventManager {
         Event dbOldEvent = DBManager.getInstance().getEvent(oldEvent.getEventUid());
         dbOldEvent.delete();
         DBManager.getInstance().insertEvent(newEvent);
+    }
+
+    public synchronized void updateDB(List<Event> events){
+        List<? extends ITimeEventInterface> orgITimeInterfaces = EventManager.getInstance().getAllEvents();
+        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
+
+        for (Event event:events) {
+            Event orgOld = null;
+
+            for (Event orgEvent:orgEvents) {
+                if (orgEvent.getEventUid().equals(event.getEventUid())){
+                    orgOld = orgEvent;
+                    // find event in event manager, and then update
+                    EventManager.getInstance().updateEvent(orgOld,event);
+                    break;
+                }
+            }
+
+            if (orgOld == null){
+                // if cannot find event, then insert it in DB and eventmanager
+                DBManager.getInstance().insertEvent(event);
+                EventManager.getInstance().addEvent(event);
+            }
+        }
     }
 
     public List<ITimeEventInterface> getAllEvents(){
@@ -430,29 +476,7 @@ public class EventManager {
         }
     }
 
-    public synchronized void updateDB(List<Event> events){
-        List<? extends ITimeEventInterface> orgITimeInterfaces = EventManager.getInstance().getAllEvents();
-        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
 
-        for (Event event:events) {
-            Event orgOld = null;
-
-            for (Event orgEvent:orgEvents) {
-                if (orgEvent.getEventUid().equals(event.getEventUid())){
-                    orgOld = orgEvent;
-                    // find event in event manager, and then update
-                    EventManager.getInstance().updateEvent(orgOld,event);
-                    break;
-                }
-            }
-
-            if (orgOld == null){
-                // if cannot find event, then insert it in DB and eventmanager
-                DBManager.getInstance().insertEvent(event);
-                EventManager.getInstance().addEvent(event);
-            }
-        }
-    }
 
     public class EventsPackage implements ITimeEventPackageInterface {
 
