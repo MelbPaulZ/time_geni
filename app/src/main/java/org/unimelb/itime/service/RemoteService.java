@@ -291,7 +291,7 @@ public class RemoteService extends Service{
         protected List<Message> doInBackground(HttpResult<List<Message>>... params) {
             HttpResult<List<Message>> listHttpResult = params[0];
             List<Message> msgs = listHttpResult.getData();
-            
+
             if (checkMessageValidation(msgs)){
                 token = listHttpResult.getSyncToken();
                 DBManager.getInstance(getBaseContext()).deleteAllMessages();
