@@ -22,6 +22,7 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
@@ -33,8 +34,11 @@ import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.sql.Struct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static android.R.id.list;
 
 /**
  * Created by Paul on 10/09/2016.
@@ -124,6 +128,8 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
             switchFragment(this, (EventDetailGroupFragment)getFrom());
         }else if (getFrom() instanceof EventEditFragment){
             switchFragment(this,(EventEditFragment)getFrom());
+        }else if (getFrom() instanceof InviteeFragment){
+            switchFragment(this, (InviteeFragment)getFrom());
         }
     }
 
@@ -135,8 +141,14 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         }else if (getFrom() instanceof EventDetailGroupFragment){
             ((EventDetailGroupFragment) getFrom()).setEvent(event);
             switchFragment(this, (EventDetailGroupFragment)getFrom());
+        }else if (getFrom() instanceof InviteeFragment){
+            EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+            eventEditFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+            switchFragment(this, eventEditFragment);
         }
     }
+
+
 
     @Override
     public void reloadTimeslot() {
@@ -167,11 +179,58 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     @Override
     public void onEnter() {
         super.onEnter();
-        if (!(getFrom() instanceof EventEditFragment)){
+        if (getFrom() instanceof EventDetailGroupFragment){
             weekView.removeAllOptListener();
-        }else{
+        }else if (getFrom() instanceof InviteeFragment){
+            presenter.getTimeSlots(event, event.getStartTime());
+            weekView.enableTimeSlot();
+        }else if (getFrom() instanceof EventEditFragment){
+            presenter.getTimeSlots(event, event.getStartTime());
             weekView.enableTimeSlot();
         }
+    }
+
+    /**
+     * need to check if fragment is doing creating task or editing task,
+     * if doing editing task, do we still recommend?
+     *
+     * @param list
+     */
+    @Override
+    public void onRecommend(List<Timeslot> list) {
+        if (!event.hasTimeslots()) {
+            event.setTimeslot(new ArrayList<Timeslot>());
+        }
+        for (Timeslot timeSlot : list) {
+            if (EventManager.getInstance().isTimeslotExistInEvent(event, timeSlot)) {
+                // already exist, then do nothing
+            } else {
+                // have to do this
+                timeSlot.setEventUid(event.getEventUid());
+                timeSlot.setStatus(getString(R.string.timeslot_status_create));
+                // todo: need to check if this timeslot already exists in a map
+                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
+                struct.startTime = timeSlot.getStartTime();
+                struct.endTime = timeSlot.getEndTime();
+                struct.object = timeSlot;
+                struct.status = false;
+                event.getTimeslot().add(timeSlot);
+                weekView.addTimeSlot(struct);
+            }
+        }
+        weekView.reloadTimeSlots(false);
+    }
+
+    @Override
+    public boolean isClickTSConfirm() {
+        if (getFrom() instanceof EventDetailGroupFragment){
+            return true;
+        }else if (getFrom() instanceof EventEditFragment){
+            return false;
+        }else if (getFrom() instanceof InviteeFragment){
+            return false;
+        }
+        return false;
     }
 
     @Override

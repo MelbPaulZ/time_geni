@@ -7,10 +7,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
@@ -58,6 +60,15 @@ public class CommonViewModel extends BaseObservable {
             }else{
                 imageView.setVisibility(View.GONE);
             }
+        }
+    }
+
+    @BindingAdapter({"bind:timeslotVisible"})
+    public static void setTimeslotVisible(RelativeLayout view, Event event){
+        if (EventUtil.hasOtherInviteeExceptSelf(event)){
+            view.setVisibility(view.VISIBLE);
+        }else{
+            view.setVisibility(View.GONE);
         }
     }
 

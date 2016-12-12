@@ -130,8 +130,6 @@ public class CalendarWeekFragment extends BaseUiFragment<CommonMvpView, CommonPr
                                             newEvent.setEndTime(dayDraggableEventView.getEndTimeM());
                                             newEvent.setRecurringEventUid(orgEvent.getEventUid());
                                             newEvent.setRecurringEventId(orgEvent.getEventId());
-//                                            String[] newRecurrence = new String[0];
-//                                            newEvent.setRecurrence(newRecurrence);
                                             newEvent.setRule(new RuleModel(newEvent));
                                             newEvent.setRecurrence(newEvent.getRule().getRecurrence());
 

@@ -2,10 +2,12 @@ package org.unimelb.itime.ui.fragment.eventdetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.Bindable;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,18 +34,22 @@ import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
+import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
+import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
-import org.unimelb.itime.vendor.helper.LoadImgHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by Paul on 4/09/2016.
@@ -52,7 +58,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     private org.unimelb.itime.databinding.FragmentEventDetailBinding binding;
     private EventDetailViewModel eventDetailForHostViewModel;
     private Event event;
-    private LayoutInflater inflater;
+
 
     private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
 
@@ -60,7 +66,6 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_detail, container, false);
-        this.inflater = inflater;
         return binding.getRoot();
     }
 
@@ -162,7 +167,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
 
     @Override
     public EventDetailGroupPresenter createPresenter() {
-        return new EventDetailGroupPresenter(getContext(),inflater);
+        return new EventDetailGroupPresenter(getContext());
     }
     
 
@@ -187,10 +192,19 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
 
     @Override
     public void viewInCalendar() {
-        EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-        timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
+        if (event.getStatus().equals("confirmed")){
+            ViewMainCalendarFragment viewMainCalendarFragment = (ViewMainCalendarFragment) getFragmentManager().findFragmentByTag(ViewMainCalendarFragment.class.getSimpleName());
+            ViewInCalendarMonthDayFragment viewInCalendarMonthDayFragment = viewMainCalendarFragment.getMonthDayFrag();
+            viewInCalendarMonthDayFragment.scrollToWithOffset(event.getStartTime());
 
-        switchFragment(this,timeSlotFragment);
+            switchFragment(this,viewMainCalendarFragment);
+        }else {
+            EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
+            timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
+
+            switchFragment(this,timeSlotFragment);
+        }
+
     }
 
     @Override
@@ -204,6 +218,5 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     public void refreshCalendars() {
         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
-
 
 }

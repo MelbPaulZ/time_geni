@@ -75,5 +75,15 @@ public class MainCalendarViewModel extends BaseObservable{
         };
     }
 
+    public View.OnClickListener onClickBack(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mvpView!=null){
+                    mvpView.backToGroupEvent();
+                }
+            }
+        };
+    }
 
 }

@@ -37,9 +37,8 @@ public class EventDetailGroupPresenter extends MvpBasePresenter<EventDetailGroup
     private EventApi eventApi;
     private String TAG = "EventDetailPresenter";
 
-    public EventDetailGroupPresenter(Context context, LayoutInflater inflater) {
+    public EventDetailGroupPresenter(Context context) {
         this.context = context;
-        this.inflater = inflater;
         eventApi = HttpUtil.createService(getContext(),EventApi.class);
     }
 

@@ -383,8 +383,9 @@ public class EventCreateNewVIewModel extends CommonViewModel {
         return isAllDay.get();
     }
 
-    public void setIsAllDay(boolean isAllDay) {
-        this.isAllDay.set(isAllDay);
+
+    public void setIsAllDay(ObservableField<Boolean> isAllDay) {
+        this.isAllDay.set(isAllDay.get());
         if (this.isAllDay.get()){
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(event.getStartTime());

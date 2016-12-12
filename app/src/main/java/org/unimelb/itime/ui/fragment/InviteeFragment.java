@@ -33,6 +33,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
+import org.unimelb.itime.ui.fragment.eventdetail.EventDetailTimeSlotFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.presenter.InviteePresenter;
 import org.unimelb.itime.util.AppUtil;
@@ -65,10 +66,8 @@ public class InviteeFragment extends BaseUiFragment {
     private TextView dialog;
     private SortAdapter adapter;
     private ClearEditText mClearEditText;
-
     private CharacterParser characterParser;
     private List<SortModel> SourceDateList;
-
     private PinyinComparator pinyinComparator;
     private View root;
     private Context context;
@@ -444,12 +443,13 @@ public class InviteeFragment extends BaseUiFragment {
                     eventTimeSlotViewFragment.resetCalendar(event);
                     switchFragment(self, (EventTimeSlotViewFragment)getFrom());
                 }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
-                    EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment)getFrom();
-                    beforeSendingFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
-                    switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
+                    EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+                    eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    switchFragment(self, eventTimeSlotViewFragment);
                 }else if (getFrom() instanceof EventEditFragment){
-                    ((EventEditFragment)getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
-                    switchFragment(self, (EventEditFragment)getFrom());
+                    EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
+                    eventDetailTimeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    switchFragment(self, eventDetailTimeSlotFragment);
                 }
             }
         });

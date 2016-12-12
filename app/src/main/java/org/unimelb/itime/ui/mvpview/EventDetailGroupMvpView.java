@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.mvpview;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 
 /**

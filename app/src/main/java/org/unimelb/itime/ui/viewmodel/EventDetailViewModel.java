@@ -2,27 +2,21 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
+import com.android.databinding.library.baseAdapters.BR;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
@@ -30,18 +24,12 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
 import org.unimelb.itime.util.CircleTransform;
-import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
-import org.unimelb.itime.vendor.helper.DensityUtil;
 
-import java.io.File;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static org.dmfs.rfc5545.calendarmetrics.IslamicCalendarMetrics.LeapYearPattern.I;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -52,8 +40,10 @@ public class EventDetailViewModel extends CommonViewModel {
     private LayoutInflater inflater;
     private EventDetailGroupMvpView mvpView;
     private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
-    private String tag;
     private Context context;
+    private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeVisibility, soloInvisible;
+
+
 
     public void setEvAdapterEvent(Map<String, List<EventUtil.StatusKeyStruct>> adapterData){
         this.adapterData = adapterData;
@@ -66,9 +56,8 @@ public class EventDetailViewModel extends CommonViewModel {
 
     public EventDetailViewModel(EventDetailGroupPresenter presenter) {
         this.presenter = presenter;
-        this.inflater = presenter.getInflater();
-        tag = presenter.getContext().getString(R.string.tag_host_event_detail);
         this.context = getContext();
+        this.inflater = LayoutInflater.from(getContext());
         mvpView = presenter.getView();
     }
 
@@ -255,23 +244,22 @@ public class EventDetailViewModel extends CommonViewModel {
         return false; // never reach here
     }
 
-    public int confirmVisibility(Event event){
-        if (event.getStatus().equals(getContext().getString(R.string.confirmed))){
-            return View.GONE;
-        }else{
-            return View.VISIBLE;
-        }
-    }
+//    public int confirmVisibility(Event event){
+//        if (event.getStatus().equals(getContext().getString(R.string.confirmed))){
+//            return View.GONE;
+//        }else{
+//            return View.VISIBLE;
+//        }
+//    }
 
 
-    public View.OnClickListener onClickTimeSlot(final int position){
+    public View.OnClickListener onClickTimeSlot(final Timeslot timeslot){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Timeslot timeSlot = evDtlHostEvent.getTimeslot().get(position);
+//                Timeslot timeSlot = evDtlHostEvent.getTimeslot().get(position);
                 if (evDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
                     // this is a host event
-                        Timeslot timeslot = evDtlHostEvent.getTimeslot().get(position);
                     if (timeslot.getIsConfirmed()==0){
                         for (Timeslot ts: evDtlHostEvent.getTimeslot()){
                             ts.setIsConfirmed(0);
@@ -282,10 +270,10 @@ public class EventDetailViewModel extends CommonViewModel {
                     }
                 }else {
                     // can choose any number of timeslots
-                    if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))) {
-                        timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
-                    } else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))) {
-                        timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+                    if (timeslot.getStatus().equals(context.getString(R.string.timeslot_status_pending))) {
+                        timeslot.setStatus(getContext().getString(R.string.timeslot_status_accept));
+                    } else if (timeslot.getStatus().equals(context.getString(R.string.timeslot_status_accept))) {
+                        timeslot.setStatus(getContext().getString(R.string.timeslot_status_pending));
                     }
                 }
                 setEvDtlHostEvent(evDtlHostEvent);
@@ -295,12 +283,12 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
-    public View.OnClickListener viewInviteeResponse(final int position){
+    public View.OnClickListener viewInviteeResponse(final Timeslot timeslot){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    mvpView.viewInviteeResponse(evDtlHostEvent.getTimeslot().get(position));
+                    mvpView.viewInviteeResponse(timeslot);
                 }
             }
         };
@@ -392,6 +380,70 @@ public class EventDetailViewModel extends CommonViewModel {
     @BindingAdapter({"bind:url"})
     public static void bindUrlHelper(ImageView view,String url){
         EventUtil.bindUrlHelper(view.getContext(), url, view, new CircleTransform());
+    }
+
+    // following get visibility in dif status of event
+
+    @Bindable
+    public int getHostConfirmVisibility() {
+        if (EventUtil.isGroupEvent(context, evDtlHostEvent) &&
+                EventUtil.isEventConfirmed(context, evDtlHostEvent) &&
+                EventUtil.isUserHostOfEvent(evDtlHostEvent))
+            return View.VISIBLE;
+        else
+            return View.GONE;
+    }
+
+    public void setHostConfirmVisibility(int hostConfirmVisibility) {
+        this.hostConfirmVisibility = hostConfirmVisibility;
+        notifyPropertyChanged(BR.hostConfirmVisibility);
+    }
+
+    @Bindable
+    public int getHostUnconfirmVisibility() {
+        if (EventUtil.isGroupEvent(context, evDtlHostEvent) &&
+                !EventUtil.isEventConfirmed(context, evDtlHostEvent) &&
+                EventUtil.isUserHostOfEvent(evDtlHostEvent)){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+
+    }
+
+    public void setHostUnconfirmVisibility(int hostUnconfirmVisibility) {
+        this.hostUnconfirmVisibility = hostUnconfirmVisibility;
+        notifyPropertyChanged(BR.hostUnconfirmVisibility);
+    }
+
+
+    @Bindable
+    public int getInviteeVisibility() {
+        if (EventUtil.isGroupEvent(context, evDtlHostEvent) &&
+                !EventUtil.isUserHostOfEvent(evDtlHostEvent)){
+            return View.VISIBLE;
+        }else {
+            return View.GONE;
+        }
+    }
+
+    public void setInviteeVisibility(int inviteeVisibility) {
+        this.inviteeVisibility = inviteeVisibility;
+        notifyPropertyChanged(BR.inviteeVisibility);
+    }
+
+    @Bindable
+    public int getSoloInvisible() {
+        if (!EventUtil.isGroupEvent(context, evDtlHostEvent)){
+            return View.GONE;
+        }else{
+            return View.VISIBLE;
+        }
+    }
+
+    public void setSoloInvisible(int soloInvisible) {
+        this.soloInvisible = soloInvisible;
+        notifyPropertyChanged(BR.soloInvisible);
     }
 
 }
