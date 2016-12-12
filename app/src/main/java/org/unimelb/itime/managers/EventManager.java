@@ -113,20 +113,23 @@ public class EventManager {
 
     public void addEvent(Event event){
         //if not repeated
-        if (event.getRecurrence().length == 0){
-            Long startTime = event.getStartTime();
-            Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
+        if (event.getDeleteLevel() == 0) {
+            // delete level == 0 means the event is not deleted
+            if (event.getRecurrence().length == 0) {
+                Long startTime = event.getStartTime();
+                Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
 
-            if (regularEventMap.containsKey(dayBeginMilliseconds)){
-                regularEventMap.get(dayBeginMilliseconds).add(event);
-            }else {
-                regularEventMap.put(dayBeginMilliseconds,new ArrayList<ITimeEventInterface>());
-                regularEventMap.get(dayBeginMilliseconds).add(event);
+                if (regularEventMap.containsKey(dayBeginMilliseconds)) {
+                    regularEventMap.get(dayBeginMilliseconds).add(event);
+                } else {
+                    regularEventMap.put(dayBeginMilliseconds, new ArrayList<ITimeEventInterface>());
+                    regularEventMap.get(dayBeginMilliseconds).add(event);
+                }
+            } else {
+                orgRepeatedEventList.add(event);
+                Log.i(TAG, "addEvent: addRepeatedEvent");
+                this.addRepeatedEvent(event, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
             }
-        }else{
-            orgRepeatedEventList.add(event);
-            Log.i(TAG, "addEvent: addRepeatedEvent");
-            this.addRepeatedEvent(event,nowRepeatedStartAt.getTimeInMillis(),nowRepeatedEndAt.getTimeInMillis());
         }
     }
 

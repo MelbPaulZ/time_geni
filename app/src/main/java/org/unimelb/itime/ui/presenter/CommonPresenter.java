@@ -107,6 +107,7 @@ public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T
     }
 
     private void updateOrgEventToServer(Event orgEvent){
+        EventManager.getInstance().getWaitingEditEventList().add(orgEvent);
         Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(), orgEvent.getEventUid(), orgEvent);
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
