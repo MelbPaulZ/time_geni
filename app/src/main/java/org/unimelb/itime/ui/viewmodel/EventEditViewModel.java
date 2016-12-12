@@ -264,6 +264,10 @@ public class EventEditViewModel extends CommonViewModel {
             Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
             orgEvent.getRule().addEXDate(new Date(event.getStartTime()));
             orgEvent.setRecurrence(orgEvent.getRule().getRecurrence());
+
+            if (!EventUtil.isGroupEvent(getContext(), event)){
+                event.setStatus(getContext().getString(R.string.confirmed));
+            }
             // here change the event as a new event
             EventUtil.regenerateRelatedUid(event);
             event.setRecurringEventUid(orgEvent.getEventUid());

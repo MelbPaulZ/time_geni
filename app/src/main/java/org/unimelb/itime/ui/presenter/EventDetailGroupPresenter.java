@@ -99,7 +99,7 @@ public class EventDetailGroupPresenter extends MvpBasePresenter<EventDetailGroup
         Event oldEvent = EventManager.getInstance().findEventByUUID(newEvent.getEventUid());
         Log.i(TAG, "APPP: synchronizeLocal: + EventDetail"+"call");
 
-        EventManager.getInstance().updateEvent(oldEvent,newEvent);
+//        EventManager.getInstance().updateEvent(oldEvent,newEvent);
         getView().refreshCalendars();
     }
 

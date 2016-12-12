@@ -65,43 +65,7 @@ public class EventEditPresenter extends CommonPresenter<EventEditMvpView> {
         }
     }
 
-//    private void updateServer(final Event event){
-//        Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(),event.getEventUid(),event);
-//        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
-//            @Override
-//            public void onCompleted() {
-//                Log.i(TAG, "onCompleted: ");
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                Log.i(TAG, "onError: " + e.getMessage());
-//            }
-//
-//            @Override
-//            public void onNext(HttpResult<Event> eventHttpResult) {
-//                Event ev = eventHttpResult.getData();
-//                synchronizeLocal(ev);
-//
-//                if (ev.getEventType().equals(getContext().getString(R.string.group))) {
-//                    getView().toHostEventDetail(ev);
-//                }else{
-//                    getView().toSoloEventDetail(ev);
-//                }
-//            }
-//        };
-//        HttpUtil.subscribe(observable,subscriber);
-//    }
-
-//    private void synchronizeLocal(Event newEvent){
-//        Event oldEvent = EventManager.getInstance().getCurrentEvent();
-//        Log.i(TAG, "APPP: synchronizeLocal: EventeditPresenter");
-//        EventManager.getInstance().updateEvent(oldEvent, newEvent);
-//    }
-
     public void updateEvent(Event newEvent){
-//        Toast.makeText(getContext(), "waiting for server update", Toast.LENGTH_SHORT).show();
-//        updateServer(newEvent);
         updateEventToServer(newEvent);
     }
 
