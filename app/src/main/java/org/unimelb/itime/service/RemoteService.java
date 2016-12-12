@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.base.C;
 import org.unimelb.itime.bean.Calendar;
@@ -121,6 +123,15 @@ public class RemoteService extends Service{
             @Override
             public void onNext(HttpResult<List<org.unimelb.itime.bean.Calendar>> httpResult) {
                 CalendarUtil.getInstance().setCalendar(httpResult.getData());
+
+                SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sp.edit();
+
+                Gson gson = new Gson();
+                String calendarListString = gson.toJson(httpResult.getData());
+                editor.putString(C.calendarString.CALENDAR_STRING,  calendarListString);
+                editor.apply();
+
                 pollingThread.start();
             }
         };
