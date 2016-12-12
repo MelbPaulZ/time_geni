@@ -80,7 +80,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
     }
 
     public void backToday(){
@@ -281,8 +280,16 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
     }
 
 
+
     public void scrollTo(Calendar calendar){
         monthDayView.scrollTo(calendar);
+    }
+
+    public void scrollToWithOffset(long time){
+        monthDayView.scrollToWithOffset(time);
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(time);
+        CalendarManager.getInstance().setCurrentShowCalendar(c);
     }
 
     @Override

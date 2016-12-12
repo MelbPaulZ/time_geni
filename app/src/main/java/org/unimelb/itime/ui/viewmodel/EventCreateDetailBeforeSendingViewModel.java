@@ -241,6 +241,8 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 newEvDtlEvent.setStatus("pending");
 
                 presenter.addEvent(newEvDtlEvent);
+
+                EventManager.getInstance().setCurrentEvent(newEvDtlEvent);
                 if (mvpView!=null){
                     mvpView.onClickSend();
                 }

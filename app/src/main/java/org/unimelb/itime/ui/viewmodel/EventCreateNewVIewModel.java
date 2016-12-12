@@ -296,6 +296,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 EventUtil.addSoloEventBasicInfo(getContext(), event);
                 EventManager.getInstance().setCurrentEvent(event);
                 presenter.addSoloEvent();
+                EventManager.getInstance().setCurrentEvent(event);
                 if (mvpView!=null){
                     mvpView.toCreateSoloEvent();
                 }

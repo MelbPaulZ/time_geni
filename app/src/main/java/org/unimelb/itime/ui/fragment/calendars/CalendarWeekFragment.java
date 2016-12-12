@@ -268,6 +268,13 @@ public class CalendarWeekFragment extends BaseUiFragment<CommonMvpView, CommonPr
 
     }
 
+    public void scrollToWithOffset(long time){
+        weekView.scrollToWithOffset(time);
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(time);
+        CalendarManager.getInstance().setCurrentShowCalendar(c);
+    }
+
 
     @Override
     public void onShowDialog() {
