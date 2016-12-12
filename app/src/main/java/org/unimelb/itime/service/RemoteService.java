@@ -18,6 +18,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.managers.MessageManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.restfulapi.CalendarApi;
@@ -29,6 +30,7 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -234,14 +236,30 @@ public class RemoteService extends Service{
     }
 
     private boolean checkMessageValidation(List<Message> msgs){
+        ArrayList<Message> dirtyMsgs = new ArrayList<>();
         for (Message msg:msgs
              ) {
+            // need to change later, deletelevel is ignored
+            if(msg.getDeleteLevel() == 1){
+                dirtyMsgs.add(msg);
+                continue;
+            }
+
             Event correspond = DBManager.getInstance().getEvent(msg.getEventUid());
 
             if (correspond == null){
                 Log.i("Error_msg", "checkMessageValidation: " + msg.getEventUid());
                 return false;
             }
+
+            if (MessageManager.getInstance().isInWaitList(msg.getMessageUid())){
+                dirtyMsgs.add(msg);
+            }
+        }
+
+        for (Message dirtyMsg: dirtyMsgs
+             ) {
+            msgs.remove(dirtyMsg);
         }
 
         return true;
@@ -272,17 +290,19 @@ public class RemoteService extends Service{
         @Override
         protected List<Message> doInBackground(HttpResult<List<Message>>... params) {
             HttpResult<List<Message>> listHttpResult = params[0];
-            if (checkMessageValidation(listHttpResult.getData())){
+            List<Message> msgs = listHttpResult.getData();
+            
+            if (checkMessageValidation(msgs)){
                 token = listHttpResult.getSyncToken();
                 DBManager.getInstance(getBaseContext()).deleteAllMessages();
-                Collections.sort(listHttpResult.getData()); // sort data depends on edit time
-                Collections.reverse(listHttpResult.getData()); // from the new time to old time
-                DBManager.getInstance(getBaseContext()).insertMessageList(listHttpResult.getData());
+                Collections.sort(msgs); // sort data depends on edit time
+                Collections.reverse(msgs); // from the new time to old time
+                DBManager.getInstance(getBaseContext()).insertMessageList(msgs);
                 valid = true;
                 //set data to inbox;
             }
 
-            return listHttpResult.getData();
+            return msgs;
         }
 
         @Override

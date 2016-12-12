@@ -98,11 +98,18 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Message message = (Message) messageAdapter.getItem(i);
-                message.setRead(true);
-                message.update();
-                presenter.updateMessage(message);
-                // try copy message list and reset
-                messageAdapter.notifyDataSetChanged();
+                if (!message.getIsRead()){
+                    //read to read
+                    message.setRead(true);
+                    message.update();
+                    presenter.updateMessage(message);
+                    // try copy message list and reset
+                    messageAdapter.notifyDataSetChanged();
+
+                }else{
+                    //unread to read
+                }
+
                 Event event = EventManager.getInstance().findEventByUid(getContext(), message.getEventUid());
                 if (event==null){
                     Toast.makeText(getContext(), "cannot find event, please try later", Toast.LENGTH_SHORT).show();

@@ -8,6 +8,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import org.unimelb.itime.bean.Message;
+import org.unimelb.itime.managers.MessageManager;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
@@ -64,13 +65,14 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void deleteMessage(Message message){
+    public void deleteMessage(final Message message){
         ArrayList<String> messageList = new ArrayList<>();
         messageList.add(message.getMessageUid());
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("messageUids", messageList);
 
+        MessageManager.getInstance().insertWaitMessage(message);
         Observable<HttpResult<Void>> observable = messageApi.delete(map);
         Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
             @Override
@@ -85,9 +87,10 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
 
             @Override
             public void onNext(HttpResult<Void> voidHttpResult) {
-                Log.i(TAG, "onNext: ");
+                MessageManager.getInstance().deleteWaitMessage(message);
             }
         };
+
         HttpUtil.subscribe(observable, subscriber);
     }
 }
