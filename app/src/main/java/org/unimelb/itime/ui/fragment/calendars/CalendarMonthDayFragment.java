@@ -289,6 +289,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
         monthDayView.scrollToWithOffset(time);
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(time);
+        Log.i(TAG, "scrollToWithOffset: " + c.getTime());
         CalendarManager.getInstance().setCurrentShowCalendar(c);
     }
 

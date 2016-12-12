@@ -7,7 +7,7 @@
         <import type="org.unimelb.itime.util.EventUtil" />
 
         <import type="android.view.View" />
-
+        <import type="org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel.PickerTask"/>
         <variable
             name="eventVM"
             type="org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel" />
@@ -157,7 +157,7 @@
                         android:layout_height="@{eventVM.isEventRepeat ? @dimen/wrap_content :@dimen/hide,default = @dimen/hide}"
                         android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border"
-                        android:onClick="@{eventVM.onClickTime(eventVM.changeEndrepeatTime)}"
+                        android:onClick="@{eventVM.onChangeTime(PickerTask.END_REPEAT)}"
                         android:orientation="horizontal">
 
                         <TextView
@@ -246,7 +246,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border"
-                        android:onClick="@{eventVM.onClickTime(eventVM.changeStarttime)}">
+                        android:onClick="@{eventVM.onChangeTime(PickerTask.START_TIME)}">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -272,7 +272,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border"
-                        android:onClick="@{eventVM.onClickTime(eventVM.changeEndtime)}"
+                        android:onClick="@{eventVM.onChangeTime(PickerTask.END_TIME)}"
                         android:visibility="@{eventVM.isAllDay? View.GONE : View.VISIBLE}">
 
                         <TextView
