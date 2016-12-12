@@ -14,11 +14,13 @@ import java.util.List;
  */
 public interface EventDetailTimeSlotMvpVIew extends CommonMvpView {
     void onClickBack();
-    void onClickDone();
+    void onClickDone(Event event);
     void reloadTimeslot();
     void addTimeslot(WeekView.TimeSlotStruct timeSlotStruct);
     void popupTimeSlotWindow(TimeSlotView timeSlotView);
     void onClickTimeSlotView(TimeSlotView timeSlotView);
     void onRecommend(List<Timeslot> timeslotList);
     boolean isClickTSConfirm();
+    boolean isFromEditFragment();
+    boolean isFromInviteeFragment();
 }

@@ -29,6 +29,7 @@ public abstract class BaseUiFragment<V extends MvpView, P extends MvpPresenter<V
 
 
 
+
     public String getClassName(){
         return getClass().getSimpleName();
     }

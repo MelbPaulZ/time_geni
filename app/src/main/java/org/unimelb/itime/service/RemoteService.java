@@ -3,6 +3,7 @@ package org.unimelb.itime.service;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -50,6 +51,8 @@ public class RemoteService extends Service{
     private PollingThread pollingThread;
     private Thread updateThread;
     private boolean isUpdateThreadRuning, isPollingThreadRunning = false;
+    private MessageHandler messageHandler;
+
 
     @Nullable
     @Override
@@ -74,6 +77,9 @@ public class RemoteService extends Service{
 
     @Override
     public void onDestroy() {
+        if (messageHandler != null){
+            messageHandler.cancel(true);
+        }
         isStart = false;
         while (isPollingThreadRunning){
             if (!isPollingThreadRunning){
@@ -136,23 +142,15 @@ public class RemoteService extends Service{
             @Override
             public void onNext(HttpResult<List<Message>> listHttpResult) {
                 Log.i(TAG, "listHttpResult: " + listHttpResult);
-                if (checkMessageValidation(listHttpResult.getData())){
-                    //update syncToken
-                    SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, listHttpResult.getSyncToken());
-                    editor.apply();
 
-                    DBManager.getInstance(getBaseContext()).deleteAllMessages();
-                    Collections.sort(listHttpResult.getData()); // sort data depends on edit time
-                    Collections.reverse(listHttpResult.getData()); // from the new time to old time
-                    DBManager.getInstance(getBaseContext()).insertMessageList(listHttpResult.getData());
-
-                    //set data to inbox;
-                    EventBus.getDefault().post(new MessageInboxMessage(listHttpResult.getData()));
-                }else{
-                    Toast.makeText(getApplicationContext(), "Message cannot find correspond event, dropped." ,Toast.LENGTH_LONG).show();
+                if (messageHandler == null){
+                    messageHandler = new MessageHandler();
+                    messageHandler.execute(listHttpResult);
+                }else if(messageHandler.getStatus() != AsyncTask.Status.RUNNING){
+                    messageHandler = new MessageHandler();
+                    messageHandler.execute(listHttpResult);
                 }
+
             }
         };
 
@@ -266,5 +264,42 @@ public class RemoteService extends Service{
             isPollingThreadRunning = false;
         }
 
+    }
+
+    private class MessageHandler extends AsyncTask< HttpResult<List<Message>> , Integer, List<Message>>{
+        boolean valid = false;
+        String token = "";
+        @Override
+        protected List<Message> doInBackground(HttpResult<List<Message>>... params) {
+            HttpResult<List<Message>> listHttpResult = params[0];
+            if (checkMessageValidation(listHttpResult.getData())){
+                token = listHttpResult.getSyncToken();
+                DBManager.getInstance(getBaseContext()).deleteAllMessages();
+                Collections.sort(listHttpResult.getData()); // sort data depends on edit time
+                Collections.reverse(listHttpResult.getData()); // from the new time to old time
+                DBManager.getInstance(getBaseContext()).insertMessageList(listHttpResult.getData());
+                valid = true;
+                //set data to inbox;
+            }
+
+            return listHttpResult.getData();
+        }
+
+        @Override
+        protected void onPostExecute(List<Message> messages) {
+            super.onPostExecute(messages);
+            if (valid){
+                //update syncToken
+                SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, token);
+                editor.apply();
+                EventBus.getDefault().post(new MessageInboxMessage(messages));
+            }else{
+                Toast.makeText(getApplicationContext(), "Message cannot find correspond event, dropped." ,Toast.LENGTH_LONG).show();
+            }
+
+            valid =false;
+        }
     }
 }

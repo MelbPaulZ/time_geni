@@ -11,5 +11,6 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
  */
 public interface MainCalendarMvpView extends MvpView{
     void startCreateEventActivity();
+    void backToGroupEvent();
     void startEditEventActivity(ITimeEventInterface iTimeEventInterface);
 }

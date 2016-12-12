@@ -1,0 +1,59 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="calenarVM"
+            type="org.unimelb.itime.ui.viewmodel.MainCalendarViewModel" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/event_detail_host_back_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:background="@null"
+                    android:drawableLeft="@drawable/back_arrow"
+                    android:gravity="center_vertical|left"
+                    android:onClick="@{calenarVM.onClickBack()}"
+                    android:text="@string/back"
+                    android:textColor="@color/page_title_color" />
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_horizontal"
+                    android:gravity="center"
+                    android:text="@{calenarVM.toolbarTitle}"
+                    android:textColor="@color/black"
+                    android:layout_centerInParent="true"
+                    android:textSize="20dp" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+        <FrameLayout
+            android:id="@+id/calendar_framelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+    </LinearLayout>
+</layout>

@@ -61,6 +61,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
         if (root ==null){
             root = inflater.inflate(R.layout.fragment_calendar_monthday, container, false);
         }
+        initView();
         return root;
     }
 
@@ -79,6 +80,14 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
+    }
+
+    public void backToday(){
+        monthDayView.backToToday();
+    }
+
+    private void initView(){
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
         monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
         monthDayView.setEventClassName(Event.class);
@@ -229,11 +238,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
             }
         });
     }
-
-    public void backToday(){
-        monthDayView.backToToday();
-    }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){

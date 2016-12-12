@@ -812,6 +812,10 @@ public class EventUtil {
         return timeslots;
     }
 
+    public static List<Timeslot> getTimeslotFromPending(Context context, Event event){
+       return getTimeslotFromStatus(event, context.getString(R.string.timeslot_status_pending));
+    }
+
 
 
 

@@ -201,6 +201,11 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
     }
 
     @Override
+    public void backToGroupEvent() {
+        //no such function in main calendar (normal)
+    }
+
+    @Override
     public void startEditEventActivity(ITimeEventInterface iTimeEventInterface) {
         EventUtil.startEditEventActivity(getContext(), getActivity(), iTimeEventInterface);
     }

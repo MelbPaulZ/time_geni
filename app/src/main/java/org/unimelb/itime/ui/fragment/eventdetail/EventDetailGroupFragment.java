@@ -7,6 +7,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,9 @@ import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
+import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
+import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
@@ -41,6 +45,7 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,6 +181,9 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     public void toEditEvent() {
         EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
         Event cpyEvent = EventManager.getInstance().copyCurrentEvent(event);
+        for (Timeslot timeslot: cpyEvent.getTimeslot()){
+            timeslot.setStatus(getContext().getString(R.string.pending));
+        }
         eventEditFragment.setEvent(cpyEvent);
 
 //        EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
@@ -188,9 +196,19 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
 
     @Override
     public void viewInCalendar() {
-        EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-        timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
-        switchFragment(this,timeSlotFragment);
+
+        if (event.getStatus().equals("confirmed")){
+            ViewMainCalendarFragment viewMainCalendarFragment = (ViewMainCalendarFragment) getFragmentManager().findFragmentByTag(ViewMainCalendarFragment.class.getSimpleName());
+            ViewInCalendarMonthDayFragment viewInCalendarMonthDayFragment = viewMainCalendarFragment.getMonthDayFrag();
+            viewInCalendarMonthDayFragment.scrollToWithOffset(event.getStartTime());
+
+            switchFragment(this,viewMainCalendarFragment);
+        }else {
+            EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
+            timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
+
+            switchFragment(this,timeSlotFragment);
+        }
     }
 
     @Override

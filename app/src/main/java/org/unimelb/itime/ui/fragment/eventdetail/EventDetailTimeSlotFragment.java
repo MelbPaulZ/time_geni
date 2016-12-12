@@ -140,7 +140,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     }
 
     @Override
-    public void onClickDone() {
+    public void onClickDone(Event event) {
         if (getFrom() instanceof EventEditFragment) {
             ((EventEditFragment) getFrom()).setEvent(event);
             switchFragment(this, (EventEditFragment) getFrom());
@@ -205,8 +205,8 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
      */
     @Override
     public void onRecommend(List<Timeslot> list) {
-        // only from edit fragment can receive new suggested timeslot
-        if (getFrom() instanceof EventEditFragment) {
+        // only from edit fragment and invitee fragment can receive new suggested timeslot
+        if (getFrom() instanceof EventEditFragment || getFrom() instanceof InviteeFragment) {
             if (!event.hasTimeslots()) {
                 event.setTimeslot(new ArrayList<Timeslot>());
             }
@@ -241,6 +241,16 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
             return false;
         }
         return false;
+    }
+
+    @Override
+    public boolean isFromEditFragment() {
+        return (getFrom() instanceof EventEditFragment);
+    }
+
+    @Override
+    public boolean isFromInviteeFragment() {
+        return (getFrom() instanceof  InviteeFragment);
     }
 
     @Override
@@ -308,33 +318,45 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                 , timeslot.getStartTime());
     }
 
+    private Timeslot getTimeslotFromTimeslotView(TimeSlotView timeslotView){
+        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeslotView.getTag()).object;
+        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
+        return timeSlot;
+    }
+
     @Override
     public void onClickTimeSlotView(TimeSlotView timeSlotView) {
-        // change status of view and struct
-        if (EventUtil.isUserHostOfEvent(event)) {
-            // for host , only one timeslot can be selected
-            if (TimeSlotUtil.getSelectedTimeSlots(getContext(), event.getTimeslot()).size() < 1) {
-                // if no timeslot has been selected
-                popupTimeSlotWindow(timeSlotView);
-            } else {
-                // if other timeslot has been selected
-                if (((WeekView.TimeSlotStruct) timeSlotView.getTag()).status == true) {
-                    changeTimeSlotView(timeSlotView);
-                    hostClickTimeSlot(timeSlotView);
+        if (getFrom() instanceof EventDetailGroupFragment) {
+            // change status of view and struct
+            if (EventUtil.isUserHostOfEvent(event)) {
+                // for host , only one timeslot can be selected
+                if (TimeSlotUtil.getSelectedTimeSlots(getContext(), event.getTimeslot()).size() < 1) {
+                    // if no timeslot has been selected
+                    popupTimeSlotWindow(timeSlotView);
                 } else {
-                    Toast.makeText(presenter.getContext(), "already select one timeslot, please unclick and click another one", Toast.LENGTH_SHORT).show();
+                    // if other timeslot has been selected
+                    if (((WeekView.TimeSlotStruct) timeSlotView.getTag()).status == true) {
+                        changeTimeSlotView(timeSlotView);
+                        hostClickTimeSlot(timeSlotView);
+                    } else {
+                        Toast.makeText(presenter.getContext(), "already select one timeslot, please unclick and click another one", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } else {
+                // for invitees, can choose multi timeslots
+                if (timeSlotView.isSelect() == true) {
+                    // mute unselect
+                    changeTimeSlotView(timeSlotView);
+                    changeEventAttributes(timeSlotView);
+                } else {
+                    // popup select
+                    popupTimeSlotWindow(timeSlotView);
                 }
             }
-        } else {
-            // for invitees, can choose multi timeslots
-            if (timeSlotView.isSelect()==true){
-                // mute unselect
+        }else{
+            // from invitee fragment or editFragment
                 changeTimeSlotView(timeSlotView);
-                changeEventAttributes(timeSlotView);
-            }else {
-                // popup select
-                popupTimeSlotWindow(timeSlotView);
-            }
+                changeTimeslotCreateAndPending(timeSlotView);
         }
     }
 
@@ -370,6 +392,18 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         boolean newStatus = !timeSlotView.isSelect();
         timeSlotView.setStatus(newStatus);
         ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
+    }
+
+    private void changeTimeslotCreateAndPending(TimeSlotView timeSlotView){
+        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
+        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
+        if (timeSlot!=null){
+            if (timeSlot.getStatus().equals(getContext().getString(R.string.pending))){
+                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_create));
+            }else if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_create))){
+                timeSlot.setStatus(getString(R.string.timeslot_status_pending));
+            }
+        }
     }
 
     @Override

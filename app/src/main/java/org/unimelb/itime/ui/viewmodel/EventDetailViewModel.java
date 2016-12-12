@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import me.tatarka.bindingcollectionadapter.ItemView;
-
 /**
  * Created by Paul on 4/09/2016.
  */

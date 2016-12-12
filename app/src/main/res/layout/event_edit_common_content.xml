@@ -210,9 +210,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:divider="#00000000"
-                        app:items="@{eventEditVM.timeslotList}"
+                        app:items="@{EventUtil.getTimeslotFromPending(context, eventEditVM.eventEditViewEvent)}"
                         app:itemView="@{eventEditVM.itemView}"
-                        ></org.unimelb.itime.widget.NonScrollListView>
+                        />
 
                 </LinearLayout>
 

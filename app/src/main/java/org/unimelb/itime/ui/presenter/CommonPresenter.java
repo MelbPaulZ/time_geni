@@ -83,11 +83,11 @@ public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
                 synchronizeLocal(eventHttpResult.getData());
-                getView().onHideDialog();
                 if (onUpdateEvent != null){
                     onUpdateEvent.onNext(eventHttpResult);
                 }
                 Log.i(TAG, "onNext: " +"done");
+                getView().onHideDialog();
             }
         };
         HttpUtil.subscribe(observable,subscriber);

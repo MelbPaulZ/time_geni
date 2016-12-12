@@ -178,6 +178,9 @@ public class EventEditViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 // popup alertDialog to choose whether change all or just one
+                List<Timeslot> timeslots = EventUtil.getTimeslotFromPending(getContext(), eventEditViewEvent);
+                eventEditViewEvent.setTimeslot(timeslots);
+
                 if (EventManager.getInstance().getCurrentEvent().getRecurrence().length>0){
                     // the event is repeat event
                     final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
