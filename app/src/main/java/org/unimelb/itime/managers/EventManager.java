@@ -365,6 +365,7 @@ public class EventManager {
         return copyEvent;
     }
 
+
     public Event getNewEvent(){
         return new Event();
     }

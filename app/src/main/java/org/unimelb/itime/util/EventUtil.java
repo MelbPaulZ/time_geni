@@ -802,6 +802,17 @@ public class EventUtil {
         return false;
     }
 
+    public static List<Timeslot> getTimeslotFromStatus(Event event, String status){
+        List<Timeslot> timeslots = new ArrayList<>();
+        for (Timeslot timeslot: event.getTimeslot()){
+            if (timeslot.getStatus().equals(status)){
+                timeslots.add(timeslot);
+            }
+        }
+        return timeslots;
+    }
+
+
 
 
 

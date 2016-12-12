@@ -175,10 +175,11 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     @Override
     public void toEditEvent() {
         EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-        eventEditFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        Event cpyEvent = EventManager.getInstance().copyCurrentEvent(event);
+        eventEditFragment.setEvent(cpyEvent);
 
-        EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-        timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
+//        EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
+//        timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
 
         EventManager.getInstance().setCurrentEvent(event);
 
@@ -189,7 +190,6 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     public void viewInCalendar() {
         EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
         timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
-
         switchFragment(this,timeSlotFragment);
     }
 

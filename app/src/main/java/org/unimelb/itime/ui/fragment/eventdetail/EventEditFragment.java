@@ -18,6 +18,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.messageevent.MessageInvitees;
@@ -160,10 +162,16 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     @Override
     public void toTimeSlotView(Event event) {
         EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-        timeSlotFragment.setEvent(event);
-        timeSlotFragment.setClickFromFragment(this);
+        Event cpyEvent = EventManager.getInstance().copyCurrentEvent(event);
+        Invitee me = EventUtil.getSelfInInvitees(cpyEvent);
+        // if the user is host, then reset all his timeslot as create
+        for (SlotResponse slotResponse:me.getSlotResponses()){
+            slotResponse.setStatus(getString(R.string.timeslot_status_create));
+        }
+        timeSlotFragment.setEvent(cpyEvent);
         switchFragment(this, timeSlotFragment);
     }
+
 
     @Override
     public void toInviteePicker(Event event) {
