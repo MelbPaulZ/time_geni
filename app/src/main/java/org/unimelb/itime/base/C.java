@@ -25,7 +25,10 @@ public class C {
         public final static String EVENT_LIST_SYNC_TOKEN = "event_list_sync_token";
         public final static String MESSAGE_LIST_SYNC_TOKEN = "message_list_sync_token";
         public final static String USER_SHARED_PREFERENCES = "user_shared_preferences";
+    }
 
+    public static class calendarString{
+        public final static String CALENDAR_STRING = "calendar_string";
     }
 
     public static class dao{

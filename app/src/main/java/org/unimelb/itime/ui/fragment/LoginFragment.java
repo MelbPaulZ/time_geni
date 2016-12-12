@@ -19,6 +19,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.databinding.FragmentLoginBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
@@ -30,7 +31,10 @@ import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.util.AuthUtil;
+import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.UserUtil;
+
+import java.util.List;
 
 import static android.os.SystemClock.currentThreadTimeMillis;
 import static org.unimelb.itime.util.UserUtil.getUserUid;
@@ -108,6 +112,11 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
                     userUid = UserUtil.getUserIdFromPreference(getContext());
                 }else{
                     userUid = UserUtil.getUserUid();
+                }
+                List<Calendar> calendars;
+                if (CalendarUtil.getInstance().getCalendar()==null){
+                    calendars = CalendarUtil.getCalendarsFromPreferences(getContext());
+                    CalendarUtil.getInstance().setCalendar(calendars);
                 }
                 AVInstallation.getCurrentInstallation().put("user_uid", userUid);
             }
