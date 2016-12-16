@@ -1,6 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -70,7 +69,7 @@
             <!-- input email layout -->
             <LinearLayout
                 android:layout_width="275dp"
-                android:layout_height="64dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="44dp"
                 android:orientation="vertical">
 
@@ -91,6 +90,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:hint="@string/login_input_email_edit_hint"
+                    android:text="@={loginVM.email}"
                     android:onFocusChange="@{loginVM.onInputEmailEditFocusChange}"
                     android:textColor="@color/color_3D5372"
                     android:textColorHint="@color/color_C0C7D3"
@@ -101,6 +101,19 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="13dp"
                     android:background="@color/color_C0C7D3" />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginStart="20dp"
+                    app:items="@{loginVM.suggestedEmailList}"
+                    app:itemView="@{loginVM.suggestedEmailItemView}"
+                    android:onListItemClick="@{loginVM.onSuggestedEmailItemClick}"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    android:scrollbars="none"
+                    />
             </LinearLayout>
         </LinearLayout>
 
