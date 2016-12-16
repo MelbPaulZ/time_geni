@@ -12,7 +12,6 @@ import org.unimelb.itime.dao.UserDao;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
-import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.util.HttpUtil;
@@ -42,7 +41,10 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
     public LoginPresenter(Context context) {
         this.context = context;
         userApi = HttpUtil.createService(context, UserApi.class);
+    }
 
+    public Context getContext(){
+        return context;
     }
 
     public void loginByEmail(String email, String password) {

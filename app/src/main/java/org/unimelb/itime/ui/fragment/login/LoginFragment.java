@@ -1,9 +1,8 @@
-package org.unimelb.itime.ui.fragment;
+package org.unimelb.itime.ui.fragment.login;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +23,6 @@ import org.unimelb.itime.databinding.FragmentLoginBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
-import org.unimelb.itime.restfulresponse.UserLoginRes;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
@@ -35,9 +33,6 @@ import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.UserUtil;
 
 import java.util.List;
-
-import static android.os.SystemClock.currentThreadTimeMillis;
-import static org.unimelb.itime.util.UserUtil.getUserUid;
 
 
 /**
