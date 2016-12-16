@@ -14,6 +14,7 @@ import org.unimelb.itime.databinding.FragmentLoginInputEmailBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
+import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 /**
  * Created by yinchuandong on 15/12/16.
@@ -26,6 +27,7 @@ public class LoginInputEmailFragment extends MvpFragment<LoginMvpView, LoginPres
     private FragmentLoginInputEmailBinding binding;
     private LoginViewModel loginViewModel;
 
+    private SoftKeyboardStateUtil softKeyboardStateUtil;
 
     @Nullable
     @Override
@@ -39,6 +41,25 @@ public class LoginInputEmailFragment extends MvpFragment<LoginMvpView, LoginPres
         super.onActivityCreated(savedInstanceState);
         loginViewModel = new LoginViewModel(getPresenter());
         binding.setLoginVM(loginViewModel);
+        softKeyboardStateUtil = new SoftKeyboardStateUtil(binding.getRoot());
+        bindSoftKeyboardEvent();
+    }
+
+    /**
+     * check the state of soft keyboard
+     */
+    private void bindSoftKeyboardEvent(){
+        softKeyboardStateUtil.addSoftKeyboardStateListener(new SoftKeyboardStateUtil.SoftKeyboardStateListener() {
+            @Override
+            public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+                loginViewModel.setTopEmailIconVisibility(View.GONE);
+            }
+
+            @Override
+            public void onSoftKeyboardClosed() {
+                loginViewModel.setTopEmailIconVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override

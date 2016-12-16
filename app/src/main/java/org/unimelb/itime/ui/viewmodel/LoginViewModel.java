@@ -9,7 +9,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import org.unimelb.itime.BR;
+import com.android.databinding.library.baseAdapters.BR;
+
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 
 /**
@@ -58,6 +59,7 @@ public class LoginViewModel extends BaseObservable{
 
     public void setTopEmailIconVisibility(int visibility){
         this.topEmailIconVisibility = visibility;
+        notifyPropertyChanged(BR.topEmailIconVisibility);
     }
 
     public View.OnClickListener onBtnEmailLogin(){
@@ -111,8 +113,10 @@ public class LoginViewModel extends BaseObservable{
                 Log.d(TAG, "onFocusChange: " + hasFocus);
                 if(hasFocus){
                     showKeyBoard((EditText) view);
+                    setTopEmailIconVisibility(View.GONE);
                 }else{
                     closeKeyBoard((EditText) view);
+                    setTopEmailIconVisibility(View.VISIBLE);
                 }
             }
         };

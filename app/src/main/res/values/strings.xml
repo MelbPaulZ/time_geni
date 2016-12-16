@@ -16,6 +16,7 @@
     <string name="login_input_email_subtitle">Enter your university student/staff email address</string>
     <string name="login_input_email_edit_title">YOUR EMAIL</string>
     <string name="login_input_email_edit_hint">Email</string>
+    <string name="login_input_email_agreement">By signing up, I agree to the Term of Use</string>
 
     <string name="tab_calendar">Calendar</string>
     <string name="tab_contact">Contact</string>
