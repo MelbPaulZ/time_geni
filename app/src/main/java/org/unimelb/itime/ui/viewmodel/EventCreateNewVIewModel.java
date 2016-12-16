@@ -31,6 +31,7 @@ import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
+import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
 import org.unimelb.itime.vendor.helper.DensityUtil;
@@ -269,7 +270,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 builder.setItems(types, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        event.setCalendarUid((String) types[i]);
+                        event.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(i).getCalendarUid());
                         viewModel.setEvent(event);
                     }
                 });

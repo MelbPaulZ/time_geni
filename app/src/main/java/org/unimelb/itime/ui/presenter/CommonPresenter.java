@@ -36,6 +36,8 @@ public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T
     private EventApi eventApi;
     private String TAG = "CommonPresenter";
     private OnUpdateEvent onUpdateEvent;
+    private OnInsertEvent onInsertEvent;
+    private boolean isUpdateFinish, isInsertFinish = false;
 
     public OnUpdateEvent getOnUpdateEvent() {
         return onUpdateEvent;
@@ -101,32 +103,9 @@ public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T
         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
 
-    public void updateOnlyThisEvent(Event orgEvent, Event newEvent){
-        updateOrgEventToServer(orgEvent);
+    public void updateAndInsertEvent(Event orgEvent, Event newEvent){
+        updateEventToServer(orgEvent);
         insertNewEventToServer(newEvent);
-    }
-
-    private void updateOrgEventToServer(Event orgEvent){
-        EventManager.getInstance().getWaitingEditEventList().add(orgEvent);
-        Observable<HttpResult<Event>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(), orgEvent.getEventUid(), orgEvent);
-        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.i(TAG, "onError: " + e.getMessage());
-            }
-
-            @Override
-            public void onNext(HttpResult<Event> eventHttpResult) {
-                synchronizeLocal(eventHttpResult.getData());
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-            }
-        };
-        HttpUtil.subscribe( observable ,  subscriber);
     }
 
     private void insertNewEventToServer(Event event){
@@ -134,18 +113,26 @@ public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
             public void onCompleted() {
-                Log.i(TAG, "onCompleted: ");
+                if (onInsertEvent!=null){
+                    onInsertEvent.onComplete();
+                }
             }
 
             @Override
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: " + e.getMessage());
+                if (onInsertEvent!=null){
+                    onInsertEvent.onError(e);
+                }
             }
 
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
                 Event ev = eventHttpResult.getData();
                 insertEventLocal(ev);
+                if (onInsertEvent!=null){
+                    onInsertEvent.onNext(eventHttpResult);
+                }
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
             }
         };
@@ -158,6 +145,12 @@ public class CommonPresenter<T extends CommonMvpView> extends MvpBasePresenter<T
     }
 
     public interface OnUpdateEvent{
+        void onComplete();
+        void onError(Throwable e);
+        void onNext(HttpResult<Event> eventHttpResult);
+    }
+
+    public interface OnInsertEvent{
         void onComplete();
         void onError(Throwable e);
         void onNext(HttpResult<Event> eventHttpResult);

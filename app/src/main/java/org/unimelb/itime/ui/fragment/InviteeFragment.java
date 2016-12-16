@@ -37,6 +37,7 @@ import org.unimelb.itime.ui.fragment.eventdetail.EventDetailTimeSlotFragment;
 import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.presenter.InviteePresenter;
 import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
@@ -434,26 +435,53 @@ public class InviteeFragment extends BaseUiFragment {
             public void onClick(View view) {
                 setSelectInvitees();
                 if(getFrom() instanceof EventCreateNewFragment){
-                    EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-                    eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
-                    switchFragment(self, eventTimeSlotViewFragment);
+                    if (event.getInvitee().size()>=1) {
+                        // pick at least one invitee
+                        EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+                        eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        switchFragment(self, eventTimeSlotViewFragment);
+                    }else{
+                        EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+                        beforeSendingFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        switchFragment(self, beforeSendingFragment);
+                    }
                 }else if (getFrom() instanceof EventTimeSlotViewFragment){
-                    EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment)getFrom();
-                    eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
-                    eventTimeSlotViewFragment.resetCalendar(event);
-                    switchFragment(self, (EventTimeSlotViewFragment)getFrom());
+                    if (event.getInvitee().size()>=1) {
+                        EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFrom();
+                        eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        eventTimeSlotViewFragment.resetCalendar(event);
+                        switchFragment(self, (EventTimeSlotViewFragment) getFrom());
+                    }else{
+                        EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+                        beforeSendingFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        switchFragment(self, beforeSendingFragment);
+                    }
                 }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
-                    EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-                    eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
-                    switchFragment(self, eventTimeSlotViewFragment);
+                    if (event.getInvitee().size()>=1) {
+                        EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+                        eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        switchFragment(self, eventTimeSlotViewFragment);
+                    }else{
+                        EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+                        beforeSendingFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        switchFragment(self, beforeSendingFragment);
+                    }
                 }else if (getFrom() instanceof EventEditFragment){
-                    EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-                    eventDetailTimeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
-                    switchFragment(self, eventDetailTimeSlotFragment);
+                    if (event.getInvitee().size()>=1) {
+                        EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
+                        eventDetailTimeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        switchFragment(self, eventDetailTimeSlotFragment);
+                    }else{
+                        EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+                        eventEditFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        switchFragment(self, eventEditFragment);
+                    }
                 }
             }
         });
     }
+
+
 
 
     private Invitee contactToInvitee(Contact contact, Event event) {

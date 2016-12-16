@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.fragment.eventdetail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,8 +28,10 @@ import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
+import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.ui.presenter.EventEditPresenter;
@@ -141,9 +144,8 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
 
     @Override
     public void toHostEventDetail(Event event) {
-        EventDetailGroupFragment hostFragment = (EventDetailGroupFragment) getFragmentManager().findFragmentByTag(EventDetailGroupFragment.class.getSimpleName());
-        hostFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
-        switchFragment(this, hostFragment);
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

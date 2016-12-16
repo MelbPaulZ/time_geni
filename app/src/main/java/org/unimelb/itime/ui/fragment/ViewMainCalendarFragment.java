@@ -124,4 +124,14 @@ public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onShowDialog() {
+
+    }
+
+    @Override
+    public void onHideDialog() {
+
+    }
 }
