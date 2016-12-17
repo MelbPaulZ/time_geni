@@ -35,7 +35,7 @@ public class LoginViewModel extends AndroidViewModel{
 
     public LoginViewModel(LoginPresenter presenter){
         this.presenter = presenter;
-        this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
+        this.suggestedEmailList.add("abc@student.unimelb.edu.au");
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
     }
