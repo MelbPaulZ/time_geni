@@ -131,4 +131,9 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
     public void onLoginFail(int errorCode, int errorMsg) {
         Toast.makeText(getContext(), "signin failure", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void invalidEmail() {
+
+    }
 }

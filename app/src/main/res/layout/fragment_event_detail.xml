@@ -615,7 +615,7 @@
                 android:paddingRight="10dp"
                 android:text="@{hostDetailVM.getInviteeRightBtnStr(hostDetailVM.evDtlHostEvent)}"
                 android:textAlignment="center"
-                android:textColor="@color/color_F45B69"
+                android:textColor="@{hostDetailVM.getRightBtnTextColor(hostDetailVM.evDtlHostEvent)}"
                 android:textSize="17sp" />
         </RelativeLayout>
 

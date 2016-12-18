@@ -159,9 +159,9 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
 
                                             // find the first event of repeat events, and update it to server
                                             Event firstOrg = null;
-                                            for (Event event : EventManager.getInstance().getOrgRepeatedEventList()){
-                                                if (event.getEventUid().equals(event.getEventUid())){
-                                                    firstOrg = event;
+                                            for (Event ev : EventManager.getInstance().getOrgRepeatedEventList()){
+                                                if (event.getEventUid().equals(ev.getEventUid())){
+                                                    firstOrg = ev;
                                                 }
                                             }
                                             firstOrg.getRule().addEXDate(new Date(event.getStartTime()));

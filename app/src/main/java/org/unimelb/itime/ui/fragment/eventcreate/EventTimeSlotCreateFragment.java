@@ -33,6 +33,7 @@ import java.util.zip.Inflater;
 
 /**
  * Created by Paul on 18/11/16.
+ * This fragment is used when create a new timeSlot, then this fragment will jump up.
  */
 public class EventTimeSlotCreateFragment extends BaseUiFragment<TimeslotCreateMvpView, TimeslotCreatePresenter>
         implements TimeslotCreateMvpView {

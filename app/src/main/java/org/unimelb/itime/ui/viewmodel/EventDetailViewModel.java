@@ -5,6 +5,7 @@ import android.content.Context;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +31,8 @@ import org.unimelb.itime.util.UserUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static org.unimelb.itime.util.EventUtil.getSelfInInvitees;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -129,8 +132,8 @@ public class EventDetailViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
-
-                inflater = presenter.getInflater();
+                String uid = evDtlHostEvent.getEventUid();
+                inflater = LayoutInflater.from(context);
                 View root = inflater.inflate(R.layout.event_detail_reject_alert_view, null);
 
                 TextView button_cancel = (TextView) root.findViewById(R.id.alert_message_cancel_button);
@@ -185,7 +188,7 @@ public class EventDetailViewModel extends CommonViewModel {
     // left buttons
 
     public String getInviteeLeftBtnStr(Context context, Event event){
-        Invitee me = EventUtil.getSelfInInvitees(event);
+        Invitee me = getSelfInInvitees(event);
         if (me.getStatus().equals(context.getString(R.string.accepted))){
             return context.getString(R.string.Accepted);
         }else{
@@ -202,16 +205,31 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
     public int getLeftBtnTextColor(Event event){
-        if (event.getStatus().equals(context.getString(R.string.pending))){
-            return context.getResources().getColor(R.color.color_63ADF2);
-        }else if(event.getStatus().equals(context.getString(R.string.accepted))){
+        Invitee me = EventUtil.getSelfInInvitees(event);
+        if (me.getStatus().equals(Invitee.INVITEE_STATUS_NEEDSACTION)){
+            if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
+                return context.getResources().getColor(R.color.color_63ADF2);
+            }else{
+                return context.getResources().getColor(R.color.gray_9b9b9b);
+            }
+        }else if (me.getStatus().equals(Invitee.INVITEE_STATUS_ACCEPTED)){
             return context.getResources().getColor(R.color.white);
-        }else
-            return context.getResources().getColor(R.color.white);
+        }else if (me.getStatus().equals(Invitee.INVITEE_STATUS_DECLINE)){
+            return context.getResources().getColor(R.color.gray_9b9b9b);
+        }
+        return context.getResources().getColor(R.color.red);
+    }
+
+    public int getRightBtnTextColor(Event event){
+        if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
+            return context.getResources().getColor(R.color.gray_9b9b9b);
+        }else{
+            return context.getResources().getColor(R.color.color_F45B69);
+        }
     }
 
     public Drawable getLeftBtnBg(Event event){
-        Invitee me = EventUtil.getSelfInInvitees(event);
+        Invitee me = getSelfInInvitees(event);
         if (me.getStatus().equals(context.getString(R.string.accepted))){
             return context.getResources().getDrawable(R.drawable.background_round_radius_able_blue);
         }else {
@@ -231,7 +249,7 @@ public class EventDetailViewModel extends CommonViewModel {
 
 
     public boolean getRightBtnClickable(Event event){
-        Invitee invitee = EventUtil.getSelfInInvitees(event);
+        Invitee invitee = getSelfInInvitees(event);
         if (invitee.getStatus().equals(context.getString(R.string.needs_action))){
             if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
                 return false;
@@ -244,13 +262,6 @@ public class EventDetailViewModel extends CommonViewModel {
         return false; // never reach here
     }
 
-//    public int confirmVisibility(Event event){
-//        if (event.getStatus().equals(getContext().getString(R.string.confirmed))){
-//            return View.GONE;
-//        }else{
-//            return View.VISIBLE;
-//        }
-//    }
 
 
     public View.OnClickListener onClickTimeSlot(final Timeslot timeslot){

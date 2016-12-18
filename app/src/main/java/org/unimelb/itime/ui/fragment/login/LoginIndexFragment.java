@@ -64,4 +64,9 @@ public class LoginIndexFragment extends MvpFragment<LoginMvpView, LoginPresenter
     public void onLoginFail(int errorCode, int errorMsg) {
 
     }
+
+    @Override
+    public void invalidEmail() {
+
+    }
 }

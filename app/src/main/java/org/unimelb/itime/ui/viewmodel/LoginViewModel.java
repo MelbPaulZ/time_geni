@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class LoginViewModel extends AndroidViewModel{
 
     private String email = "johncdyin@gmail.com";
     private String password = "123456";
+    private LoginMvpView mvpView;
 
     private int topEmailIconVisibility = View.VISIBLE;
 
@@ -35,6 +37,7 @@ public class LoginViewModel extends AndroidViewModel{
 
     public LoginViewModel(LoginPresenter presenter){
         this.presenter = presenter;
+        mvpView = presenter.getView();
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
@@ -78,9 +81,19 @@ public class LoginViewModel extends AndroidViewModel{
             @Override
             public void onClick(View view) {
                 //view.setSelected(true);
+                if (isEmailValid()){
+
+                }else{
+                    mvpView.invalidEmail();
+                }
                 Log.d(TAG, "OnIndexBtnSignInClick: ");
             }
         };
+    }
+
+    // todo implement regix
+    private boolean isEmailValid(){
+        return false;
     }
 
     /**

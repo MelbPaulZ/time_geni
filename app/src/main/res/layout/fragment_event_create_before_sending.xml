@@ -217,10 +217,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
                             android:layout_alignParentLeft="true"
+                            android:onClick="@{newEventDetailVM.onClickProposedTimeslots()}"
                             android:orientation="vertical">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
                                 android:text="Proposed Timeslots"
@@ -234,18 +235,22 @@
                             </org.unimelb.itime.widget.NonScrollListView>
 
                         </LinearLayout>
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
+                        <!--<RelativeLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="60dp"-->
+                            <!--android:layout_alignParentEnd="true"-->
+                            <!--android:layout_centerVertical="true">-->
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="40dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:paddingRight="-35dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true">
-                            <ImageView
-                                android:layout_width="10dp"
-                                android:layout_height="15dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:background="@drawable/icon_general_arrow_right" />
-                        </RelativeLayout>
+                            android:layout_centerVertical="true"
+                            android:onClick="@{newEventDetailVM.onClickProposedTimeslots()}"
+                            android:src="@drawable/arrow" />
+                        <!--</RelativeLayout>-->
                     </RelativeLayout>
 
                     <!--blank for border-->

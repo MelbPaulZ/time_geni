@@ -32,6 +32,10 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
     private String reason = "";
     private int isHost;
 
+    public final static String INVITEE_STATUS_NEEDSACTION = "needsAction";
+    public final static String INVITEE_STATUS_DECLINE = "decline";
+    public final static String INVITEE_STATUS_ACCEPTED = "accepted";
+
     @Convert(converter = Invitee.SlotResponseConverter.class , columnType = String.class)
     private List<SlotResponse> inviteeTimeslot = new ArrayList<>();
 
