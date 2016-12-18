@@ -9,24 +9,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.FragmentLoginInputEmailBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
-
-import static android.os.Build.VERSION_CODES.M;
-import static org.unimelb.itime.R.id.dialog;
-import static org.unimelb.itime.vendor.contact.widgets.SideBar.b;
 
 /**
  * Created by yinchuandong on 15/12/16.
@@ -40,7 +32,7 @@ public class LoginInputEmailFragment extends MvpFragment<LoginMvpView, LoginPres
     private LoginViewModel loginViewModel;
 
     private SoftKeyboardStateUtil softKeyboardStateUtil;
-    private AlertDialog unsupportEmailDialog, incorrectPWDialog;
+    private AlertDialog unsupportEmailDialog, pwTooSimpleDialog;
 
     @Nullable
     @Override
@@ -102,23 +94,22 @@ public class LoginInputEmailFragment extends MvpFragment<LoginMvpView, LoginPres
         TextView incorrectPasswordTitle = new TextView(getContext());
         incorrectPasswordTitle.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         incorrectPasswordTitle.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM);
-        incorrectPasswordTitle.setText(getString(R.string.incorrect_password));
+        incorrectPasswordTitle.setText(getString(R.string.password_too_simple));
         incorrectPasswordTitle.setTextSize(18);
         incorrectPasswordTitle.setPadding(0,50,0,0);
         incorrectPasswordTitle.setTextColor(getResources().getColor(R.color.black));
-        String incorrectPWmsg = "The password you entered is incorrect. Please try again";
+        String incorrectPWmsg = "Please choose a password with a minimum of 8 characters or numbers.";
         AlertDialog.Builder incorrectPWBuilder = new AlertDialog.Builder(getContext())
                 .setCustomTitle(incorrectPasswordTitle)
                 .setMessage(incorrectPWmsg)
                 .setCancelable(true)
-                .setPositiveButton(getString(R.string.try_again), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
-        incorrectPWDialog = incorrectPWBuilder.create();
-
+        pwTooSimpleDialog = incorrectPWBuilder.create();
 
     }
 
@@ -144,6 +135,12 @@ public class LoginInputEmailFragment extends MvpFragment<LoginMvpView, LoginPres
 
     @Override
     public void invalidEmail() {
-        unsupportEmailDialog.show();
+//        unsupportEmailDialog.show();
+
+
+        // for showing the incorrect password dialog
+        pwTooSimpleDialog.show();
+//        TextView incorrectPWTV = (TextView) pwTooSimpleDialog.findViewById(android.R.id.message);
+//        incorrectPWTV.setGravity(Gravity.CENTER);
     }
 }

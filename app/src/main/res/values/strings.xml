@@ -281,9 +281,9 @@
     <string name="Accepted">Accepted</string>
     <string name="Not_going">Not going</string>
     <string name="Yesterday">Yesterday</string>
-    <string name="unsupported_email">Unsupport Email</string>
+    <string name="password_too_simple">Password Too Simple</string>
     <string name="ok">OK</string>
-    <string name="incorrect_password">Incorrect Password</string>
+    <string name="unsupported_email">Unsupported Email</string>
     <string name="try_again">Try Again</string>
 
 </resources>
