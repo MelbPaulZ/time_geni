@@ -4,12 +4,13 @@ import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.unimelb.itime.ui.mvpview.CommonMvpView;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 
 /**
  * Created by yinchuandong on 11/08/2016.
  */
-public class MainCalendarPresenter extends MvpBasePresenter<MainCalendarMvpView>{
+public class MainCalendarPresenter extends CommonPresenter<MainCalendarMvpView>{
     private static final String TAG = "LoginPresenter";
     private Context context;
 
@@ -20,5 +21,7 @@ public class MainCalendarPresenter extends MvpBasePresenter<MainCalendarMvpView>
     public Context getContext() {
         return context;
     }
+
+
 
 }

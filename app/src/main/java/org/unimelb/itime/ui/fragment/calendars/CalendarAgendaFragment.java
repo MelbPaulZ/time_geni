@@ -119,6 +119,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
         super.onDestroy();
     }
 
+
     public void scrollTo(Calendar calendar){
         monthAgendaView.scrollTo(calendar);
     }

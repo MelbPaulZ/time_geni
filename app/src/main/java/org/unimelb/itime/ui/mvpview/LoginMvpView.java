@@ -10,4 +10,5 @@ public interface LoginMvpView extends MvpView{
     void onLoginStart();
     void onLoginSucceed();
     void onLoginFail(int errorCode, int errorMsg);
+    void invalidEmail();
 }

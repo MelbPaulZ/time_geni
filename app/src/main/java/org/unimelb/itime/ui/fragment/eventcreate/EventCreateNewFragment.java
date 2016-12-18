@@ -67,15 +67,6 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         event = EventManager.getInstance().getCurrentEvent();
         viewModel = new EventCreateNewVIewModel(getPresenter());
         binding.setEventVM(viewModel);
-
-//        // hide soft key board
-//        getActivity().getWindow().setSoftInputMode(
-//                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-//        );
-
-        // for time picker , spinner theme
-//         timePickerDialog = new TimePickerDialog(getActivity(),
-//                TimePickerDialog.THEME_HOLO_LIGHT, null, 11,11,false);
     }
 
     public void showTimePicker(){

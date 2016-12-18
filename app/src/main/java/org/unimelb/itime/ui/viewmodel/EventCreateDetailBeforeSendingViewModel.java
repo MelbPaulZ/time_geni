@@ -1,6 +1,8 @@
 package org.unimelb.itime.ui.viewmodel;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.Bindable;
@@ -28,6 +30,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
 import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -41,7 +44,6 @@ import java.util.List;
  */
 public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private Event newEvDtlEvent;
-    private CharSequence repeats[] = null;
     private ObservableField<Boolean> evDtlIsEventRepeat ;
     private EventCreateDetailBeforeSendingViewModel viewModel;
     private CharSequence alertTimes[] = null;
@@ -49,6 +51,17 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private int tempYear,tempMonth,tempDay,tempHour,tempMin;
     private EventCreateDetailBeforeSendingPresenter presenter;
     private ObservableField<Boolean> isEndRepeatChange;
+    private ObservableField<Boolean> isAllDay;
+    private PickerTask currentTask;
+    private int startVisibility, endVisibility;
+    private DatePickerDialog datePickerDialog;
+    private DatePickerDialog.OnDateSetListener dateSetListener;
+    private TimePickerDialog timePickerDialog;
+    private TimePickerDialog.OnTimeSetListener timeSetListener;
+    private int editYear, editMonth, editDay, editHour, editMinute;
+    public enum PickerTask{
+        START_TIME, END_TIME, END_REPEAT
+    }
 
     public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter) {
         this.presenter = presenter;
@@ -56,8 +69,120 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         evDtlIsEventRepeat = new ObservableField<>(false);
         isEndRepeatChange = new ObservableField<>(false);
         this.viewModel = this;
+        isAllDay = new ObservableField<>(false);
         mvpView = presenter.getView();
+        initDialog();
     }
+
+    private void initDialog(){
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                switch (currentTask){
+                    case END_TIME:
+                        onEndDateSelected(year, monthOfYear, dayOfMonth);
+                        break;
+                    case START_TIME:
+                        onStartDateSelected(year, monthOfYear, dayOfMonth);
+                        break;
+                    case END_REPEAT:
+                        onEndRepeatSelected(year, monthOfYear, dayOfMonth);
+                        break;
+                }
+            }
+        };
+
+        timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                switch (currentTask){
+                    case END_TIME:
+                        onEndTimeSelected(hourOfDay, minute);
+                        break;
+                    case START_TIME:
+                        onStartTimeSelected(hourOfDay, minute);
+                        break;
+                }
+            }
+        };
+    }
+
+
+    private void onEndDateSelected(int year, int monthOfYear, int dayOfMonth){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(newEvDtlEvent.getEndTime());
+        timePickerDialog = new TimePickerDialog(getContext(),
+                AlertDialog.THEME_HOLO_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+        timePickerDialog.show();
+        editYear = year;
+        editMonth = monthOfYear;
+        editDay = dayOfMonth;
+    }
+
+    private void onStartDateSelected(int year, int monthOfYear, int dayOfMonth){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(newEvDtlEvent.getStartTime());
+        timePickerDialog = new TimePickerDialog(getContext(),
+                AlertDialog.THEME_HOLO_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+        timePickerDialog.show();
+        editYear = year;
+        editMonth = monthOfYear;
+        editDay = dayOfMonth;
+    }
+
+    private void onEndRepeatSelected(int year, int monthOfYear, int dayOfMonth){
+        Calendar c = Calendar.getInstance();
+        c.set(year, monthOfYear, dayOfMonth);
+        newEvDtlEvent.getRule().setUntil(c.getTime());
+        newEvDtlEvent.setRecurrence(newEvDtlEvent.getRule().getRecurrence());
+        notifyPropertyChanged(BR.newEvDtlEvent);
+    }
+
+    private void onEndTimeSelected(int hour, int minute){
+        Calendar c = Calendar.getInstance();
+        editHour = hour;
+        editMinute = minute;
+        c.set(editYear, editMonth, editDay, editHour, editMinute);
+        newEvDtlEvent.setEndTime(c.getTimeInMillis());
+        notifyPropertyChanged(BR.newEvDtlEvent);
+    }
+
+    private void onStartTimeSelected(int hour, int minute){
+        Calendar c = Calendar.getInstance();
+        editHour = hour;
+        editMinute = minute;
+        c.set(editYear, editMonth, editDay, editHour, editMinute);
+        newEvDtlEvent.setStartTime(c.getTimeInMillis());
+        notifyPropertyChanged(BR.newEvDtlEvent);
+    }
+
+    @Bindable
+    public boolean getIsAllDay() {
+        return isAllDay.get();
+    }
+
+
+    public void setIsAllDay(ObservableField<Boolean> isAllDay) {
+        this.isAllDay.set(isAllDay.get());
+        if (this.isAllDay.get()){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(newEvDtlEvent.getStartTime());
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            newEvDtlEvent.setStartTime(calendar.getTimeInMillis());
+            newEvDtlEvent.setEndTime(newEvDtlEvent.getStartTime() + 3600 * 1000 * 24);
+            setNewEvDtlEvent(newEvDtlEvent);
+        }else{
+            Calendar calendar = Calendar.getInstance();
+            newEvDtlEvent.setStartTime(calendar.getTimeInMillis());
+            newEvDtlEvent.setEndTime(calendar.getTimeInMillis() + 3600 * 1000);
+            setNewEvDtlEvent(newEvDtlEvent);
+        }
+        notifyPropertyChanged(BR.isAllDay);
+    }
+
 
     public View.OnClickListener chooseRepeat() {
         return new View.OnClickListener() {
@@ -116,55 +241,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         };
     }
 
-
-    public View.OnClickListener onClickEndRepeat() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
-                final View popupView = inflater.inflate(R.layout.fragment_event_date_picker, null);
-                final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,true);
-                popupWindow.setOutsideTouchable(false);
-                popupView.findViewById(R.id.date_picker_button).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        DatePicker datePicker = (DatePicker) popupView.findViewById(R.id.date_picker);
-                        tempYear = datePicker.getYear();
-                        tempMonth = datePicker.getMonth();
-                        tempDay = datePicker.getDayOfMonth();
-
-                        // after click the next button, popup a new time picker window
-                        final View timePickerView = inflater.inflate(R.layout.fragment_event_time_picker, null);
-                        final PopupWindow timePopupWindow = new PopupWindow(timePickerView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-                        timePopupWindow.setOutsideTouchable(false);
-                        timePickerView.findViewById(R.id.time_picker_button).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                TimePicker timePicker = (TimePicker) timePickerView.findViewById(R.id.time_picker);
-                                tempMin = timePicker.getCurrentMinute();
-                                tempHour = timePicker.getCurrentHour();
-                                Calendar calendar = Calendar.getInstance();
-                                calendar.set(tempYear,tempMonth,tempDay,tempHour,tempMin, 0);
-                                newEvDtlEvent.setRepeatEndsTime(calendar.getTimeInMillis());
-                                viewModel.setNewEvDtlEvent(newEvDtlEvent);
-                                popupWindow.dismiss();
-                                timePopupWindow.dismiss();
-                            }
-                        });
-                        timePopupWindow.showAtLocation(timePickerView, Gravity.CENTER, 0, 0);
-                        timePopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                // if click outside on time picker, the date picker has to dismiss
-                                popupWindow.dismiss();
-                            }
-                        });
-                    }
-                });
-                popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-            }
-        };
-    }
 
     public View.OnClickListener onClickProposedTimeslots(){
         return new View.OnClickListener() {
@@ -241,9 +317,37 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 newEvDtlEvent.setStatus("pending");
 
                 presenter.addEvent(newEvDtlEvent);
+
+                EventManager.getInstance().setCurrentEvent(newEvDtlEvent);
                 if (mvpView!=null){
                     mvpView.onClickSend();
                 }
+            }
+        };
+    }
+
+    // TODO: 11/12/2016 implement starttime, endtime, endRepeat change
+    public View.OnClickListener onChangeTime(final PickerTask task){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentTask = task;
+                Calendar c = Calendar.getInstance();
+                switch (currentTask){
+                    case END_REPEAT:
+                        if (newEvDtlEvent.getRule().getUntil()!=null){
+                            c.setTime(newEvDtlEvent.getRule().getUntil());
+                        }
+                        break;
+                    case END_TIME:
+                        c.setTimeInMillis(newEvDtlEvent.getEndTime());
+                        break;
+                    case START_TIME:
+                        c.setTimeInMillis(newEvDtlEvent.getStartTime());
+                }
+                datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, dateSetListener,
+                        c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
             }
         };
     }
@@ -258,7 +362,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                     builder.setItems(types, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
-                            newEvDtlEvent.setCalendarUid((String) types[i]);
+                            newEvDtlEvent.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(i).getCalendarUid());
                             viewModel.setNewEvDtlEvent(newEvDtlEvent);
                         }
                     });
@@ -300,6 +404,8 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     public void setNewEvDtlEvent(Event newEvDtlEvent) {
         this.newEvDtlEvent = newEvDtlEvent;
         notifyPropertyChanged(BR.newEvDtlEvent);
+        notifyPropertyChanged(BR.startVisibility);
+        notifyPropertyChanged(BR.endVisibility);
     }
 
     @Bindable
@@ -329,7 +435,33 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.endRepeatChange);
     }
 
-//    *******************************************************************************************************
+    @Bindable
+    public int getStartVisibility() {
+        if (!EventUtil.hasOtherInviteeExceptSelf(newEvDtlEvent)){
+            startVisibility =  View.VISIBLE;
+        }else{
+            startVisibility =  View.GONE;
+        }
+        return startVisibility;
+    }
+
+    public void setStartVisibility(int startVisibility) {
+        this.startVisibility = startVisibility;
+        notifyPropertyChanged(BR.startVisibility);
+    }
+
+
+    @Bindable
+    public int getEndVisibility() {
+        return getStartVisibility();
+    }
+
+    public void setEndVisibility(int endVisibility) {
+        this.endVisibility = endVisibility;
+        notifyPropertyChanged(BR.endVisibility);
+    }
+
+    //    *******************************************************************************************************
 
 
 }

@@ -10,9 +10,11 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import org.antlr.v4.tool.Rule;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
@@ -24,6 +26,7 @@ import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
+import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 

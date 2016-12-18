@@ -3,7 +3,9 @@
 
     <data>
         <import type="org.unimelb.itime.util.EventUtil"/>
+        <import type="org.unimelb.itime.util.CalendarUtil"/>
         <import type="android.view.View"/>
+        <import type="org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel.PickerTask"/>
         <variable
             name="newEventDetailVM"
             type="org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel" />
@@ -147,9 +149,10 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@{EventUtil.isEventRepeat(newEventDetailVM.newEvDtlEvent)? @dimen/wrap_content: @dimen/hide,default = @dimen/hide}"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border"
-                        android:onClick="@{newEventDetailVM.onClickEndRepeat()}"
+                        android:onClick="@{newEventDetailVM.onChangeTime(PickerTask.END_REPEAT)}"
+                        android:visibility="@{EventUtil.isEventRepeat(newEventDetailVM.newEvDtlEvent) ? View.VISIBLE : View.GONE}"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="wrap_content"
@@ -165,7 +168,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:paddingRight="@dimen/padding_10"
-                            android:text="@{EventUtil.parseDateToString(context, newEventDetailVM.newEvDtlEvent.repeatEndsTime)}"
+                            android:text="@{EventUtil.getRepeatEndString(context, newEventDetailVM.newEvDtlEvent)}"
                             android:textColor="@color/text_disable"
                             android:textSize="16dp"/>
 
@@ -202,7 +205,8 @@
                     </LinearLayout>
 
                     <!--Proposed time slot-->
-                    <LinearLayout
+                    <RelativeLayout
+                        app:timeslotVisible="@{newEventDetailVM.newEvDtlEvent}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="@{newEventDetailVM.onClickProposedTimeslots()}"
@@ -212,11 +216,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
-                            android:layout_weight="1"
+                            android:layout_alignParentLeft="true"
+                            android:onClick="@{newEventDetailVM.onClickProposedTimeslots()}"
                             android:orientation="vertical">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
                                 android:text="Proposed Timeslots"
@@ -230,13 +235,31 @@
                             </org.unimelb.itime.widget.NonScrollListView>
 
                         </LinearLayout>
-
+                        <!--<RelativeLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="60dp"-->
+                            <!--android:layout_alignParentEnd="true"-->
+                            <!--android:layout_centerVertical="true">-->
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical|right"
+                            android:layout_width="60dp"
+                            android:layout_height="40dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:paddingRight="-35dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:onClick="@{newEventDetailVM.onClickProposedTimeslots()}"
                             android:src="@drawable/arrow" />
-                    </LinearLayout>
+                        <!--</RelativeLayout>-->
+                    </RelativeLayout>
+
+                    <!--blank for border-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/page_blank_row_height"
+                        android:background="@color/bg_new_event_edit" />
+                    <!--end -->
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -245,26 +268,73 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/page_text_size"
-                            android:text="@string/allow_invitee_to_see_each_other"
+                            android:text="@string/all_day"
                             android:textColor="@color/text_enable"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"/>
                         <Switch
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{newEventDetailVM.newEvDtlEvent.inviteeVisibility==1? true: false}"
-                            app:check="@{newEventDetailVM.newEvDtlEvent}"
+                            android:checked="@{newEventDetailVM.isAllDay}"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"/>
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:onClick="@{newEventDetailVM.onChangeTime(PickerTask.START_TIME)}"
+                        android:visibility="@{newEventDetailVM.startVisibility}">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Starts"
+                            android:textColor="@color/text_enable"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/create_event_start_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/padding_10"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@{EventUtil.parseTimeToString(context, newEventDetailVM.newEvDtlEvent.startTime)}"
+                            android:textColor="@color/text_enable"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:onClick="@{newEventDetailVM.onChangeTime(PickerTask.END_TIME)}"
+                        android:visibility="@{newEventDetailVM.endVisibility}">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ends"
+                            android:textColor="@color/text_enable"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/create_event_end_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/padding_10"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@{EventUtil.parseTimeToString(context, newEventDetailVM.newEvDtlEvent.endTime)}"
+                            android:textColor="@color/text_enable"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
-                <!--blank for border-->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/page_blank_row_height"
-                    android:background="@color/bg_new_event_edit" />
-                <!--end -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -329,7 +399,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{newEventDetailVM.newEvDtlEvent.calendarUid}"
+                            android:text="@{CalendarUtil.instance.getCalendarName(newEventDetailVM.newEvDtlEvent)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>

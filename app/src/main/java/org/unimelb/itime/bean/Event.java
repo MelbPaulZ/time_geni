@@ -211,6 +211,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         return status;
     }
 
+    // this duration is in minute as unit
     public int getDuration(){
         return (int)((endTime - startTime) /(1000*60));
     }

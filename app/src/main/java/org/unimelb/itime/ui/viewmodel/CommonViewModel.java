@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.viewmodel;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -12,12 +13,16 @@ import android.widget.RelativeLayout;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.mvpview.CommonMvpView;
+import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,7 +31,16 @@ import java.util.Date;
  */
 public class CommonViewModel extends BaseObservable {
     private final String TAG = "CommonViewModel";
+    private CommonPresenter presenter;
+    private CommonMvpView mvpView;
 
+    public CommonViewModel(){
+
+    }
+    public CommonViewModel(CommonPresenter presenter) {
+        this. presenter = presenter;
+        mvpView = (CommonMvpView) presenter.getView();
+    }
 
     @BindingAdapter("imageResource")
     public static void setImageResource(ImageView imageView, Event event){
@@ -71,5 +85,6 @@ public class CommonViewModel extends BaseObservable {
             view.setVisibility(View.GONE);
         }
     }
+
 
 }

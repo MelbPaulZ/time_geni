@@ -42,6 +42,8 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static org.unimelb.itime.R.string.calendar;
+
 /**
  * required login, need to extend BaseUiAuthFragment
  */
@@ -64,6 +66,15 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
         }
         if (weekFragment!=null && weekFragment.isAdded()){
             weekFragment.calendarNotifyDataSetChanged();
+        }
+    }
+
+    public void scrollToWithOffset(long eventStartTime){
+        if (monthDayFragment!=null && monthDayFragment.isAdded()){
+            monthDayFragment.scrollToWithOffset(eventStartTime);
+        }
+        if (weekFragment!=null && weekFragment.isAdded()){
+            weekFragment.scrollToWithOffset(calendar);
         }
     }
 
@@ -213,5 +224,15 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onShowDialog() {
+
+    }
+
+    @Override
+    public void onHideDialog() {
+
     }
 }

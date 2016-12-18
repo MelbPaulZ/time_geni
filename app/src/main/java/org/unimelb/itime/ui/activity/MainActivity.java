@@ -219,6 +219,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EventUtil.ACTIVITY_CREATE_EVENT ){
             ((MainCalendarFragment)tagFragments[0]).reloadEvent();
+            ((MainCalendarFragment)tagFragments[0]).scrollToWithOffset(EventManager.getInstance().getCurrentEvent().getStartTime());
         }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
             ((MainCalendarFragment)tagFragments[0]).reloadEvent();
         }
