@@ -30,6 +30,14 @@ import org.unimelb.itime.dao.EventDao;
 
 @Entity(active =  true)
 public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable, RuleInterface{
+    public static final String STATUS_PENDING = "pending";
+    public static final String STATUS_UPDATING = "updating";
+    public static final String STATUS_CONFIRMED = "confirmed";
+    public static final String STATUS_CANCELLED = "cancelled";
+
+    public static final String TYPE_GROUP = "group";
+    public static final String TYPE_SOLO = "solo";
+
     @Id
     private String eventUid = "";
     private String eventId = "";

@@ -82,10 +82,10 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
             public void onTimeSlotCreate(TimeSlotView timeSlotView) {
                 if (mvpView.isClickTSConfirm() && EventUtil.isUserHostOfEvent(getContext(),eventDetailHostEvent)) {
                     // is host and create timeslot as confirmed
-                    createTimeslotInStatus(timeSlotView, getContext().getString(R.string.accepted));
+                    createTimeslotInStatus(timeSlotView, Timeslot.STATUS_ACCEPTED);
                 } else if (EventUtil.isUserHostOfEvent(getContext(), eventDetailHostEvent)) {
                     // is host, and create timeslot as pending
-                    createTimeslotInStatus(timeSlotView, getContext().getString(R.string.timeslot_status_create));
+                    createTimeslotInStatus(timeSlotView, Timeslot.STATUS_CREATING);
                 }
             }
 
@@ -213,9 +213,9 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
                 struct.startTime = timeslot.getStartTime();
                 struct.endTime = timeslot.getEndTime();
                 struct.object = timeslot;
-                if (timeslot.getStatus().equals(getContext().getString(R.string.timeslot_status_create))){
+                if (timeslot.getStatus().equals(Timeslot.STATUS_CREATING)){
                     struct.status = false;
-                }else if (timeslot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
+                }else if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
                     struct.status = true;
                 }
                 weekView.addTimeSlot(struct);
@@ -265,9 +265,9 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
             }
         }else{
             // user is invitee
-            if (timeslot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
+            if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
                 struct.status = false;
-            }else if (timeslot.getStatus().equals(getContext().getString(R.string.timeslot_status_accept))){
+            }else if (timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
                 struct.status = true;
             }
         }

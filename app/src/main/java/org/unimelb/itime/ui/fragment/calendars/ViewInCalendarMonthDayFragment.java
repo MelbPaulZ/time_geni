@@ -36,6 +36,7 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
     private MonthDayView monthDayView;
     private EventCommonPresenter presenter;
     private String TAG = "MonthDayFragment";
+    private EventManager eventManager;
 
     @Nullable
     @Override
@@ -43,6 +44,7 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
         if (root ==null){
             root = inflater.inflate(R.layout.fragment_calendar_monthday, container, false);
         }
+        eventManager = EventManager.getInstance(getContext());
         initView();
         return root;
     }
@@ -61,12 +63,12 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
     private void initView(){
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
         monthDayView.removeAllOptListener();
-        monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthDayView.setDayEventMap(eventManager.getEventsPackage());
         monthDayView.setEventClassName(Event.class);
         monthDayView.setOnHeaderListener(new MonthDayView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
-                EventManager.getInstance().refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
+                eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });
@@ -86,14 +88,14 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
-            monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+            monthDayView.setDayEventMap(eventManager.getEventsPackage());
             monthDayView.reloadEvents();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(MessageEventRefresh messageEvent){
-        monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthDayView.setDayEventMap(eventManager.getEventsPackage());
         monthDayView.reloadEvents();
     }
 

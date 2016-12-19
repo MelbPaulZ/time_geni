@@ -51,7 +51,7 @@ public class EventSearchActivity extends AppCompatActivity implements SearchView
     }
 
     private void init(){
-        List<? extends ITimeEventInterface> eventList = EventManager.getInstance().getAllEvents();
+        List<? extends ITimeEventInterface> eventList = EventManager.getInstance(getApplicationContext()).getAllEvents();
         eventSearchAdapter = new EventAdapter(getApplicationContext(), R.layout.event_single_search_view, (List<Event>) eventList);
         eventSearchList = (ListView) findViewById(R.id.event_search_result_listview);
         eventSearchList.setAdapter(eventSearchAdapter);
@@ -72,7 +72,7 @@ public class EventSearchActivity extends AppCompatActivity implements SearchView
     }
 
     public void refreshAdapter(){
-        List<? extends ITimeEventInterface> interfaceList = EventManager.getInstance().getAllEvents();
+        List<? extends ITimeEventInterface> interfaceList = EventManager.getInstance(getApplicationContext()).getAllEvents();
         List<Event> eventList = (List<Event>)interfaceList;
         eventSearchAdapter.setEventList(eventList);
         eventSearchAdapter.notifyDataSetChanged();

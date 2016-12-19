@@ -46,6 +46,7 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
     private WeekView weekView;
     private EventCommonPresenter presenter;
     private String TAG = "CalendarWeekFragment";
+    private EventManager eventManager;
 
     @Nullable
     @Override
@@ -59,14 +60,15 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        eventManager = EventManager.getInstance(getContext());
         weekView = (WeekView) root.findViewById(R.id.week_view);
-        weekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        weekView.setDayEventMap(eventManager.getEventsPackage());
         weekView.setEventClassName(Event.class);
         weekView.setOnHeaderListener(new WeekView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
-                EventManager.getInstance().refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
+                eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });
@@ -106,7 +108,7 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
             @Override
             public void onEventDragDrop(final DayDraggableEventView dayDraggableEventView) {
                 final Event orgEvent = (Event) dayDraggableEventView.getEvent();
-                final Event event = EventManager.getInstance().copyCurrentEvent(orgEvent); // need to copy this event so wont change origin data
+                final Event event = eventManager.copyCurrentEvent(orgEvent); // need to copy this event so wont change origin data
                 if (orgEvent.getRecurrence().length>0){
                     // this is repeat event
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -124,7 +126,7 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
                                             Log.i(TAG, "orgEvent startTime: " + d.getTime());
 
                                             // here change the event as a new event
-                                            Event newEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
+                                            Event newEvent = eventManager.copyCurrentEvent(orgEvent);
                                             EventUtil.regenerateRelatedUid(newEvent);
                                             newEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                                             newEvent.setEndTime(dayDraggableEventView.getEndTimeM());
@@ -135,14 +137,14 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
 
                                             // find the first event of repeat events, and update it to server
                                             Event firstOrg = null;
-                                            for (Event event : EventManager.getInstance().getOrgRepeatedEventList()){
+                                            for (Event event : eventManager.getOrgRepeatedEventList()){
                                                 if (event.getEventUid().equals(orgEvent.getEventUid())){
                                                     firstOrg = event;
                                                 }
                                             }
                                             firstOrg.getRule().addEXDate(new Date(orgEvent.getStartTime()));
                                             firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
-                                            EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
+                                            eventManager.getWaitingEditEventList().add(firstOrg);
 
                                             presenter.updateAndInsertEvent(firstOrg, newEvent);
                                             break;
@@ -153,9 +155,9 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
                                             // need to consider move this event, or edit this event
                                             // to change all event, need to add until day to origin event, and create a new repeat event
                                             // first find the origin event
-                                            Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
+                                            Event orgEvent = eventManager.findOrgByUUID(event.getEventUid());
                                             // then copy the origin event rule model to a new rule model
-                                            Event cpyOrgEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
+                                            Event cpyOrgEvent = eventManager.copyCurrentEvent(orgEvent);
                                             // then add until day to the orgEvent
                                             if (EventUtil.isSameDay(event.getStartTime(), orgEvent.getStartTime())){
                                                 // the moving day is the first day of this repeat event
@@ -255,8 +257,8 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
                     alertDialog.show();
                 }else{
                     // this is not repeat event
-                    EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
-                    Event copyEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
+                    eventManager.getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
+                    Event copyEvent = eventManager.copyCurrentEvent(orgEvent);
                     copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                     copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
                     presenter.updateEventToServer(copyEvent);
@@ -282,7 +284,7 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
-            weekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+            weekView.setDayEventMap(eventManager.getEventsPackage());
             weekView.reloadEvents();
         }
     }

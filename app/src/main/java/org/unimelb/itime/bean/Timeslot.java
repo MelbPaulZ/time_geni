@@ -10,6 +10,11 @@ import java.io.Serializable;
  * Created by Paul on 10/09/2016.
  */
 public class Timeslot implements ITimeTimeSlotInterface,Serializable {
+    public final static String STATUS_CREATING = "creating";
+    public final static String STATUS_PENDING = "pending";
+    public final static String STATUS_ACCEPTED = "accepted";
+    public final static String STATUS_REJECTED = "rejected";
+
     private String timeslotUid = ""; //
     private String eventUid = ""; //
     private String userUid = "";

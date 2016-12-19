@@ -49,6 +49,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     private Event event;
     private WeekView weekView;
     private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
+    private EventManager eventManager;
 
 
     @Nullable
@@ -61,10 +62,11 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        eventManager = EventManager.getInstance(getContext());
         viewModel = new EventDetailTimeSlotViewModel(presenter);
         viewModel.setTag(tag);
         if (event == null) {
-            event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
+            event = eventManager.copyCurrentEvent(eventManager.getCurrentEvent());
         }
         viewModel.setEventDetailHostEvent(event);
         binding.setTimeSlotHostVM(viewModel);
@@ -73,7 +75,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
 
         weekView.enableTimeSlot();
         weekView.setEventClassName(Event.class);
-        weekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        weekView.setDayEventMap(eventManager.getEventsPackage());
 
         if (UserUtil.getInstance(getContext()).getUserUid().equals(event.getHostUserUid())) {
             // which means this is host event
@@ -146,7 +148,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
             switchFragment(this, (EventDetailGroupFragment) getFrom());
         } else if (getFrom() instanceof InviteeFragment) {
             EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-            eventEditFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+            eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
             switchFragment(this, eventEditFragment);
         }
     }
@@ -208,12 +210,12 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                 event.setTimeslot(new ArrayList<Timeslot>());
             }
             for (Timeslot timeSlot : list) {
-                if (EventManager.getInstance().isTimeslotExistInEvent(event, timeSlot)) {
+                if (eventManager.isTimeslotExistInEvent(event, timeSlot)) {
                     // already exist, then do nothing
                 } else {
                     // have to do this
                     timeSlot.setEventUid(event.getEventUid());
-                    timeSlot.setStatus(getString(R.string.timeslot_status_create));
+                    timeSlot.setStatus(Timeslot.STATUS_CREATING);
                     // todo: need to check if this timeslot already exists in a map
                     WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
                     struct.startTime = timeSlot.getStartTime();
@@ -374,10 +376,10 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot != null) {
-            if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))) {
-                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
-            } else if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_accept))) {
-                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)) {
+                timeSlot.setStatus(Timeslot.STATUS_ACCEPTED);
+            } else if (timeSlot.getStatus().equals(Timeslot.STATUS_ACCEPTED)) {
+                timeSlot.setStatus(Timeslot.STATUS_PENDING);
             }
         } else {
             Log.i("error", "onTimeSlotClick: " + "no timeslot found");
@@ -395,10 +397,10 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot!=null){
-            if (timeSlot.getStatus().equals(getContext().getString(R.string.pending))){
-                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_create));
-            }else if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_create))){
-                timeSlot.setStatus(getString(R.string.timeslot_status_pending));
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)){
+                timeSlot.setStatus(Timeslot.STATUS_CREATING);
+            }else if (timeSlot.getStatus().equals(Timeslot.STATUS_CREATING)){
+                timeSlot.setStatus(Timeslot.STATUS_PENDING);
             }
         }
     }

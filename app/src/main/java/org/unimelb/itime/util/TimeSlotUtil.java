@@ -23,9 +23,9 @@ public class TimeSlotUtil {
                 return true;
             }
         }else{
-            if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))){
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)){
                 return false;
-            }else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
+            }else if (timeSlot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
                 return true;
             }else{ // this might change later
                 return false;
@@ -50,7 +50,7 @@ public class TimeSlotUtil {
     public static List<Timeslot> getPendingTimeSlots(Context context, List<Timeslot> timeSlotList){
         List<Timeslot> selectedTimeSlots = new ArrayList<>();
         for (Timeslot timeSlot:timeSlotList){
-            if (timeslotStatusEquals(timeSlot, context.getString(R.string.timeslot_status_pending))){
+            if (timeslotStatusEquals(timeSlot, Timeslot.STATUS_PENDING)){
                 selectedTimeSlots.add(timeSlot);
             }
         }

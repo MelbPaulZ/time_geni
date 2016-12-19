@@ -95,9 +95,9 @@ public class MainCalendarViewModel extends CommonViewModel{
             // need to consider move this event, or edit this event
             // to change all event, need to add until day to origin event, and create a new repeat event
             // first find the origin event
-            Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
+            Event orgEvent = EventManager.getInstance(getContext()).findOrgByUUID(event.getEventUid());
             // then copy the origin event rule model to a new rule model
-            Event cpyOrgEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
+            Event cpyOrgEvent = EventManager.getInstance(getContext()).copyCurrentEvent(orgEvent);
             // then add until day to the orgEvent
             orgEvent.getRule().setUntil(new Date(event.getStartTime()));
             orgEvent.setRecurrence(orgEvent.getRule().getRecurrence());

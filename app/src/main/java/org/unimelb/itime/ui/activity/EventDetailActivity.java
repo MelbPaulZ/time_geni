@@ -38,7 +38,7 @@ public class EventDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
-        event = EventManager.getInstance().getCurrentEvent();
+        event = EventManager.getInstance(getApplicationContext()).getCurrentEvent();
         initFragments();
         getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
 

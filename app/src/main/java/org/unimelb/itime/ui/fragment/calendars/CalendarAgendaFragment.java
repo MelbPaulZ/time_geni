@@ -34,6 +34,7 @@ import java.util.Calendar;
 public class CalendarAgendaFragment extends BaseUiFragment {
     private View root;
     private MonthAgendaView monthAgendaView;
+    private EventManager eventManager;
 
     @Nullable
     @Override
@@ -48,8 +49,9 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        eventManager = EventManager.getInstance(getContext());
         monthAgendaView = (MonthAgendaView) root.findViewById(R.id.month_agenda_view);
-        monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthAgendaView.setDayEventMap(eventManager.getEventsPackage());
         monthAgendaView.setOnEventClickListener(new AgendaViewBody.OnEventClickListener() {
             @Override
             public void onEventClick(ITimeEventInterface iTimeEventInterface) {
@@ -61,7 +63,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
             public void onMonthChanged(MyCalendar myCalendar) {
                 Log.i("Header", "monthAgendaView: ");
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
-                EventManager.getInstance().refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
+                eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
 
@@ -74,7 +76,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(MessageEventRefresh messageEvent){
-        monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthAgendaView.setDayEventMap(eventManager.getEventsPackage());
     }
 
     @Override
@@ -93,7 +95,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
-            monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+            monthAgendaView.setDayEventMap(eventManager.getEventsPackage());
         }
     }
 
@@ -121,7 +123,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
 
     public void calendarNotifyDataSetChanged(){
         if (monthAgendaView!=null) {
-            monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+            monthAgendaView.setDayEventMap(eventManager.getEventsPackage());
         }
     }
 

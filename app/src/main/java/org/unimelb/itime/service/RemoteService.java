@@ -199,7 +199,7 @@ public class RemoteService extends Service{
                             super.run();
                             isUpdateThreadRuning = true;
 
-                            EventManager.getInstance().updateDB(eventList);
+                            EventManager.getInstance(getApplicationContext()).updateDB(eventList);
                             EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                             isUpdateThreadRuning = false;
                         }
@@ -246,7 +246,7 @@ public class RemoteService extends Service{
                 continue;
             }
 
-            Event correspond = DBManager.getInstance().getEvent(msg.getEventUid());
+            Event correspond = DBManager.getInstance(getApplicationContext()).getEvent(msg.getEventUid());
 
             if (correspond == null){
                 Log.i("Error_msg", "checkMessageValidation: " + msg.getEventUid());

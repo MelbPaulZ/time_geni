@@ -60,7 +60,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         super.onActivityCreated(savedInstanceState);
         eventDetailForHostViewModel = new EventDetailViewModel(getPresenter());
         if(event == null){
-            event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
+            event = EventManager.getInstance(getContext()).copyCurrentEvent(EventManager.getInstance(getContext()).getCurrentEvent());
             this.adapterData = EventUtil.getAdapterData(event);
         }
         eventDetailForHostViewModel.setEvDtlHostEvent(event);
@@ -165,16 +165,16 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     @Override
     public void toEditEvent() {
         EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-        Event cpyEvent = EventManager.getInstance().copyCurrentEvent(event);
+        Event cpyEvent = EventManager.getInstance(getContext()).copyCurrentEvent(event);
         for (Timeslot timeslot: cpyEvent.getTimeslot()){
-            timeslot.setStatus(getContext().getString(R.string.pending));
+            timeslot.setStatus(Timeslot.STATUS_PENDING);
         }
         eventEditFragment.setEvent(cpyEvent);
 
 //        EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
 //        timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
 
-        EventManager.getInstance().setCurrentEvent(event);
+        EventManager.getInstance(getContext()).setCurrentEvent(event);
 
         switchFragment(this, eventEditFragment);
     }
@@ -190,7 +190,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
             switchFragment(this,viewMainCalendarFragment);
         }else {
             EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-            timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
+            timeSlotFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event), this.adapterData);
 
             switchFragment(this,timeSlotFragment);
         }

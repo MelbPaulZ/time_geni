@@ -59,10 +59,12 @@ public class EventEditViewModel extends CommonViewModel {
     public enum PickerTask{
         START_TIME, END_TIME, END_REPEAT
     }
+    private EventManager eventManager;
 
 
     public EventEditViewModel(EventEditPresenter eventEditPresenter) {
         this.presenter = eventEditPresenter;
+        eventManager = EventManager.getInstance(getContext());
         mvpView = presenter.getView();
         editEventIsRepeat = new ObservableField<>(false); // TODO: 11/12/2016 change this and isAlldayEvent later.... needs to be bind with event
         isAllDayEvent = new ObservableField<>(false);
@@ -180,7 +182,7 @@ public class EventEditViewModel extends CommonViewModel {
                 List<Timeslot> timeslots = EventUtil.getTimeslotFromPending(getContext(), eventEditViewEvent);
                 eventEditViewEvent.setTimeslot(timeslots);
 
-                if (EventManager.getInstance().getCurrentEvent().getRecurrence().length>0){
+                if (eventManager.getCurrentEvent().getRecurrence().length>0){
                     // the event is repeat event
                     final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
 
@@ -236,9 +238,9 @@ public class EventEditViewModel extends CommonViewModel {
             // need to consider move this event, or edit this event
             // to change all event, need to add until day to origin event, and create a new repeat event
             // first find the origin event
-            Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
+            Event orgEvent = eventManager.findOrgByUUID(event.getEventUid());
             // then copy the origin event rule model to a new rule model
-            Event cpyOrgEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
+            Event cpyOrgEvent = eventManager.copyCurrentEvent(orgEvent);
             // then add until day to the orgEvent
             if (EventUtil.isSameDay(cpyOrgEvent.getStartTime(), event.getStartTime())){
                 // if the change is start from the first repeat event, then no need of creating new event
@@ -317,12 +319,12 @@ public class EventEditViewModel extends CommonViewModel {
             event.setEventType(EventUtil.getEventType(event, UserUtil.getInstance(getContext()).getUserUid()));
 
             // next find original event(the first event of repeat event)
-            Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
+            Event orgEvent = eventManager.findOrgByUUID(event.getEventUid());
             orgEvent.getRule().addEXDate(new Date(event.getStartTime()));
             orgEvent.setRecurrence(orgEvent.getRule().getRecurrence());
 
             if (!EventUtil.isGroupEvent(getContext(), event)){
-                event.setStatus(getContext().getString(R.string.confirmed));
+                event.setStatus(Event.STATUS_CONFIRMED);
             }
             // here change the event as a new event
             EventUtil.regenerateRelatedUid(event);
@@ -485,7 +487,7 @@ public class EventEditViewModel extends CommonViewModel {
     }
 
     public void setPhotos(ArrayList<String> photos){
-        eventEditViewEvent.setPhoto(EventUtil.fromStringToPhotoUrlList(photos));
+        eventEditViewEvent.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
         setEventEditViewEvent(eventEditViewEvent);
     }
 

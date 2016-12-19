@@ -153,14 +153,10 @@
     <string name="please_enter_the_reason_of_rejecting_this_event">Please enter the reason of rejecting this event</string>
     <string name="reject_this_event">Reject This Event</string>
     <string name="reject">Reject</string>
-    <string name="time_slots_confirm_array">time slots confirm array</string>
     <string name="event">event</string>
     <string name="timeslot_next_btn">next</string>
     <string name="calendar_type">Calendar Type</string>
     <string name="alert_time">Alert Time</string>
-    <string name="calendar_type_work">Work</string>
-    <string name="calendar_type_private">Private</string>
-    <string name="publish_to_public">Publish to Public</string>
     <string name="allow_invitee_to_see_each_other">Allow Invitee to See Each Other</string>
     <string name="all_day">All Day</string>
     <string name="accept">Accept</string>
@@ -184,14 +180,8 @@
     <!--tags are for fragment tag listener-->
     <string name="tag_create_event">tag create new event</string>
     <string name="tag_edit_event">tag edit event</string>
-    <string name="tag_start_time">tag start time</string>
-    <string name="tag_end_time">tag end time</string>
-    <string name="tag_end_repeat">tag end repeat</string>
     <string name="tag_create_event_before_sending">tag create event before sending</string>
-    <string name="tag_host_event_detail">tag host event detail</string>
     <string name="tag_host_event_edit">tag host event edit</string>
-    <string name="tag_before_sending_review">tag before sending review</string>
-    <string name="tag_before_sending_back">tag before sending back</string>
 
     <string name="day_of_week_1_full">Sunday</string>
     <string name="day_of_week_2_full">Monday</string>
@@ -241,11 +231,7 @@
     <string name="photos_num">%1$d CHOOSE</string>
 
 
-    <string name="timeslot_status_pending">pending</string>
-    <string name="timeslot_status_accept">accepted</string>
-    <string name="timeslot_status_reject">rejected</string>
-    <string name="timeslot_status_delete">timeslot status delete</string>
-    <string name="timeslot_status_create">timeslot status create</string>
+
     <string name="duration">Duration</string>
     <string name="select">Select</string>
     <string name="calendar">Calendar</string>
@@ -253,9 +239,6 @@
     <string name="starts">Starts</string>
     <string name="end">Ends</string>
     <string name="new_timeslot">New Timeslot</string>
-    <string name="needs_action">needsAction</string>
-    <string name="confirmed">confirmed</string>
-    <string name="solo">solo</string>
 
     <string name="choose_repeat">Choose Repeat</string>
     <string name="change_all_repeat_or_just_this_event">Change all repeat events or just this event</string>
@@ -265,12 +248,10 @@
     <string name="going">Going</string>
     <string name="no_reply">No Reply</string>
     <string name="inbox">Inbox</string>
-    <string name="group">group</string>
 
     <string name="Save_for_this_event_only">Save for this event only</string>
     <string name="Save_for_future_events">Save for future events</string>
     <string name="confirm_event">Confirm Event</string>
-    <string name="pending">pending</string>
     <string name="quit">Quit</string>
     <string name="Messages">Messages</string>
 

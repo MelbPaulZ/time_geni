@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.presenter;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,6 +33,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
     private EventApi eventApi;
     private String TAG = "EventCommonPresenter";
     private CalendarUtil calendarUtil;
+    private EventManager eventManager;
 
     public EventCommonPresenter() {
         Log.i(TAG, "EventCommonPresenter: ");
@@ -41,6 +43,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         this.context = context;
         eventApi = HttpUtil.createService(context, EventApi.class);
         calendarUtil = CalendarUtil.getInstance(context);
+        eventManager = EventManager.getInstance(context);
     }
 
     // todo fetch all calendars
@@ -49,7 +52,13 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         if(getView() != null){
             getView().onTaskStart();
         }
-        EventManager.getInstance().getWaitingEditEventList().add(event);
+
+        Gson gson = new Gson();
+        String str = gson.toJson(event);
+        Log.i(TAG, "updateEventToServer: " + str);
+
+
+        eventManager.getWaitingEditEventList().add(event);
         String syncToken = AppUtil.getEventSyncToken(context);
         Observable<HttpResult<List<Event>>> observable = eventApi.update(calendarUtil.getCalendar().get(0).getCalendarUid(),event.getEventUid(),event, syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
@@ -83,10 +92,10 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
     }
 
     private void synchronizeLocal(Event newEvent){
-        Event oldEvent = EventManager.getInstance().findEventByUUID(newEvent.getEventUid());
+        Event oldEvent = eventManager.findEventByUUID(newEvent.getEventUid());
         Log.i(TAG, "APPP: synchronizeLocal: "+"call");
-        EventManager.getInstance().updateEvent(oldEvent, newEvent);
-        EventManager.getInstance().getWaitingEditEventList().remove(oldEvent);
+        eventManager.updateEvent(oldEvent, newEvent);
+        eventManager.getWaitingEditEventList().remove(oldEvent);
     }
 
     public void updateAndInsertEvent(Event orgEvent, Event newEvent){

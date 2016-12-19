@@ -67,7 +67,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         ArrayList<String> timeslotsArrayList = new ArrayList<>();
         for (Timeslot timeSlot: event.getTimeslot()){
             // only display chosen timeSlot
-            if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending)))
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING))
                 timeslotsArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()) );
         }
         ArrayAdapter timeslotAdapter = new ArrayAdapter<String>(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotsArrayList);
@@ -155,7 +155,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     @Override
     public void changeLocation() {
         EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
-        eventLocationPickerFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        eventLocationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         switchFragment(this, eventLocationPickerFragment);
     }
 
@@ -163,7 +163,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     @Override
     public void pickInvitees() {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        inviteeFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         switchFragment(this, inviteeFragment);
     }
 

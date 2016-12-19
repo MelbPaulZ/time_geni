@@ -154,7 +154,7 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
             FilterResults filterResults = new FilterResults();
             if (constraint != null && constraint.length() > 0) {
                 ArrayList<Message> matchList = new ArrayList<>();
-                for (Message message : DBManager.getInstance().getAllMessages()) {
+                for (Message message : DBManager.getInstance(context).getAllMessages()) {
                     if (message.getTitle().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         matchList.add(message);
                     }
@@ -163,8 +163,8 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
                 filterResults.values = matchList;
                 filterResults.count = matchList.size();
             } else {
-                filterResults.values = DBManager.getInstance().getAllMessages();
-                filterResults.count = DBManager.getInstance().getAllMessages().size();
+                filterResults.values = DBManager.getInstance(context).getAllMessages();
+                filterResults.count = DBManager.getInstance(context).getAllMessages().size();
             }
             return filterResults;
         }

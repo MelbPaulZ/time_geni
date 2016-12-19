@@ -62,7 +62,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        event = EventManager.getInstance().getCurrentEvent();
+        event = EventManager.getInstance(getContext()).getCurrentEvent();
         viewModel = new EventCreateNewVIewModel(getPresenter());
         binding.setEventVM(viewModel);
     }
@@ -122,14 +122,14 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     @Override
     public void pickLocation() {
         EventLocationPickerFragment locationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
-        locationPickerFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        locationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         switchFragment(this, locationPickerFragment);
     }
 
     @Override
     public void pickInvitee() {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        inviteeFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         switchFragment(this, inviteeFragment);
     }
 
@@ -150,7 +150,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     public void getLocationChange(MessageLocation messageLocation){
         if (messageLocation.tag.equals(this.getClassName())){
             event.setLocation(messageLocation.locationString);
-            EventManager.getInstance().getCurrentEvent().setLocation(messageLocation.locationString);
+            EventManager.getInstance(getContext()).getCurrentEvent().setLocation(messageLocation.locationString);
             viewModel.setEvent(event);
         }
     }

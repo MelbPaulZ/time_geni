@@ -58,10 +58,12 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
 
     private UserUtil userUtil;
     private CalendarUtil calendarUtil;
+    private EventManager eventManager;
 
     public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter) {
         this.presenter = presenter;
-        newEvDtlEvent = EventManager.getInstance().getCurrentEvent();
+        eventManager = EventManager.getInstance(getContext());
+        newEvDtlEvent = eventManager.getCurrentEvent();
         evDtlIsEventRepeat = new ObservableField<>(false);
         isEndRepeatChange = new ObservableField<>(false);
         this.viewModel = this;
@@ -263,7 +265,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     }
 
     public void setPhotos(ArrayList<String> photos){
-        newEvDtlEvent.setPhoto(EventUtil.fromStringToPhotoUrlList(photos));
+        newEvDtlEvent.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
         setNewEvDtlEvent(newEvDtlEvent);
     }
 
@@ -283,7 +285,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 // pending Timeslots filtered out timeslots which not is not chosed by host
                 List<Timeslot> pendingTimeslots = new ArrayList<>();
                 for (Timeslot timeSlot : newEvDtlEvent.getTimeslot()){
-                    if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
+                    if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)){
                         pendingTimeslots.add(timeSlot);
                     }
                 }
@@ -316,7 +318,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
 
                 presenter.addEvent(newEvDtlEvent);
 
-                EventManager.getInstance().setCurrentEvent(newEvDtlEvent);
+                eventManager.setCurrentEvent(newEvDtlEvent);
                 if (mvpView!=null){
                     mvpView.onClickSend();
                 }

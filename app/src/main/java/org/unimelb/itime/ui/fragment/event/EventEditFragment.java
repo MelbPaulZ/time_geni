@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.SlotResponse;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInvitees;
@@ -40,9 +42,11 @@ import java.util.List;
  */
 public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEditPresenter> implements EventEditMvpView {
 
+    private static final String TAG = "EdifFragment";
     private FragmentEventEditDetailBinding binding;
     private EventEditViewModel eventEditViewModel;
     private Event event;
+    private EventManager eventManager;
 
     @Nullable
     @Override
@@ -61,9 +65,10 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        eventManager = EventManager.getInstance(getContext());
         eventEditViewModel = new EventEditViewModel(getPresenter());
         if (event==null) {
-            event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
+            event = eventManager.copyCurrentEvent(EventManager.getInstance(getContext()).getCurrentEvent());
         }
         eventEditViewModel.setEventEditViewEvent(event);
         binding.setEventEditVM(eventEditViewModel);
@@ -127,19 +132,19 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     @Override
     public void changeLocation() {
         EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
-        eventLocationPickerFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        eventLocationPickerFragment.setEvent(eventManager.copyCurrentEvent(event));
         switchFragment(this,eventLocationPickerFragment);
     }
 
     @Override
     public void toTimeSlotView(Event event) {
         EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-        Event cpyEvent = EventManager.getInstance().copyCurrentEvent(event);
+        Event cpyEvent = eventManager.copyCurrentEvent(event);
         Invitee me = EventUtil.getSelfInInvitees(getContext(), cpyEvent);
         // if the user is host, then reset all his timeslot as create
         if (me!=null) {
             for (SlotResponse slotResponse : me.getSlotResponses()) {
-                slotResponse.setStatus(getString(R.string.timeslot_status_create));
+                slotResponse.setStatus(Timeslot.STATUS_CREATING);
             }
         }
 
@@ -151,7 +156,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     @Override
     public void toInviteePicker(Event event) {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        inviteeFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        inviteeFragment.setEvent(eventManager.copyCurrentEvent(event));
         switchFragment(this, inviteeFragment);
     }
 
@@ -197,6 +202,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
 
     @Override
     public void onTaskError(Throwable e) {
+        Log.i(TAG, "onTaskError: " + e.getMessage());
         AppUtil.hideProgressBar();
     }
 

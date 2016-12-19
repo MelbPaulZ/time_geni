@@ -85,7 +85,7 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
             @Override
             public void run() {
                 super.run();
-                EventManager.getInstance().loadDB(getContext());
+                EventManager.getInstance(getContext()).loadDB();
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
             }
         }.start();
