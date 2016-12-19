@@ -11,7 +11,6 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
-import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -20,22 +19,16 @@ import org.unimelb.itime.vendor.listener.ITimeEventPackageInterface;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.R.attr.id;
-import static android.R.attr.key;
-import static android.R.attr.trimPathEnd;
 
 /**
  * Created by yuhaoliu on 29/08/16.
  */
 public class EventManager {
     private final String TAG = "EventManager";
-    private static EventManager ourInstance;
+    private static EventManager instance;
 
     private Event currentEvent = new Event();
 
@@ -57,36 +50,10 @@ public class EventManager {
     private Calendar nowRepeatedStartAt = Calendar.getInstance();
 
     private Calendar calendar = Calendar.getInstance();
+    private Context context;
 
-    public static EventManager getInstance() {
-        if (ourInstance == null){
-            ourInstance = new EventManager();
-            loadDB();
-        }
-
-        return ourInstance;
-    }
-
-    public static EventManager getInstance(Context context){
-        if (ourInstance == null){
-            ourInstance = new EventManager();
-            loadDB(context);
-        }
-        return ourInstance;
-    }
-
-    public List<Event> getOrgRepeatedEventList(){
-        return this.orgRepeatedEventList;
-    }
-
-
-    public void clearManager(){
-        this.ourInstance = null;
-    }
-
-    private List<Event> waitingEditEventList= new ArrayList<>(); // this list contains all events that waits for update
-
-    private EventManager() {
+    public EventManager(Context context){
+        this.context = context;
         setToBeginOfDay(nowRepeatedStartAt);
         setToBeginOfDay(nowRepeatedEndAt);
 
@@ -95,9 +62,27 @@ public class EventManager {
 
         eventsPackage.setRepeatedEventMap(repeatedEventMap);
         eventsPackage.setRegularEventMap(regularEventMap);
-
-//        EventBus.getDefault().register(this);
     }
+
+    public static EventManager getInstance(Context context){
+        if (instance == null){
+            instance = new EventManager(context);
+            instance.loadDB();
+        }
+        return instance;
+    }
+
+    public List<Event> getOrgRepeatedEventList(){
+        return this.orgRepeatedEventList;
+    }
+
+
+    public void clearManager(){
+        this.instance = null;
+    }
+
+    private List<Event> waitingEditEventList= new ArrayList<>(); // this list contains all events that waits for update
+
 
     private Calendar setToBeginOfDay(Calendar cal){
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -308,7 +293,7 @@ public class EventManager {
     public synchronized void updateEvent(Event oldEvent, Event newEvent){
         long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
 
-        EventManager.getInstance().setCurrentEvent(newEvent);
+        setCurrentEvent(newEvent);
         //if old not repeated
         if (oldEvent.getRecurrence().length == 0){
             if (this.regularEventMap.containsKey(oldBeginTime)){
@@ -340,13 +325,13 @@ public class EventManager {
             this.addEvent(newEvent);
         }
         // here update DB
-        Event dbOldEvent = DBManager.getInstance().getEvent(oldEvent.getEventUid());
+        Event dbOldEvent = DBManager.getInstance(context).getEvent(oldEvent.getEventUid());
         dbOldEvent.delete();
-        DBManager.getInstance().insertEvent(newEvent);
+        DBManager.getInstance(context).insertEvent(newEvent);
     }
 
     public synchronized void updateDB(List<Event> events){
-        List<? extends ITimeEventInterface> orgITimeInterfaces = EventManager.getInstance().getAllEvents();
+        List<? extends ITimeEventInterface> orgITimeInterfaces = getAllEvents();
         List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
 
         for (Event event:events) {
@@ -356,15 +341,15 @@ public class EventManager {
                 if (orgEvent.getEventUid().equals(event.getEventUid())){
                     orgOld = orgEvent;
                     // find event in event manager, and then update
-                    EventManager.getInstance().updateEvent(orgOld,event);
+                    updateEvent(orgOld,event);
                     break;
                 }
             }
 
             if (orgOld == null){
                 // if cannot find event, then insert it in DB and eventmanager
-                DBManager.getInstance().insertEvent(event);
-                EventManager.getInstance().addEvent(event);
+                DBManager.getInstance(context).insertEvent(event);
+                addEvent(event);
             }
         }
     }
@@ -384,7 +369,7 @@ public class EventManager {
         if (event==null){
             return null;
         }
-        Long key = EventManager.getInstance().getDayBeginMilliseconds(event.getStartTime());
+        Long key = getDayBeginMilliseconds(event.getStartTime());
         if (event.getRecurrence().length!=0){
             // repeat event
             for (Event ev : orgRepeatedEventList){
@@ -462,20 +447,12 @@ public class EventManager {
     }
 
 
-    public static void loadDB(Context context){
+    public void loadDB(){
         List<Event> list = DBManager.getInstance(context).getAllEvents();
         for (Event ev: list) {
-            EventManager.getInstance().addEvent(ev);
+            addEvent(ev);
         }
     }
-
-    public static void loadDB(){
-        List<Event> list = DBManager.getInstance().getAllEvents();
-        for (Event ev: list) {
-            EventManager.getInstance().addEvent(ev);
-        }
-    }
-
 
 
     public class EventsPackage implements ITimeEventPackageInterface {

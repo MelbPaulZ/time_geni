@@ -63,11 +63,13 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     private MainTabBarViewModel tabBarViewModel;
 
     private final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_AND_CAMERA = 1001;
+    private EventManager eventManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        eventManager = EventManager.getInstance(getApplicationContext());
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
@@ -134,7 +136,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getInboxMessage(MessageInboxMessage messageInboxMessage){
-        List<Message> messageList = DBManager.getInstance().getAllMessages();
+        List<Message> messageList = DBManager.getInstance(getApplicationContext()).getAllMessages();
         int unReadNum = 0;
         for (Message message : messageList){
             if (!message.isRead()){
@@ -203,14 +205,14 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     public void initNewEvent(Calendar startTimeCalendar){
         // initial default values for new event
-        Event event = EventManager.getInstance().getNewEvent();
-        EventManager.getInstance().setCurrentEvent(event);
+        Event event = eventManager.getNewEvent();
+        eventManager.setCurrentEvent(event);
         event.setEventUid(AppUtil.generateUuid());
-        event.setHostUserUid(UserUtil.getUserUid());
+        event.setHostUserUid(UserUtil.getInstance(getApplicationContext()).getUserUid());
         long endTime = startTimeCalendar.getTimeInMillis() + 3600 * 1000;
         event.setStartTime(startTimeCalendar.getTimeInMillis());
         event.setEndTime(endTime);
-        EventManager.getInstance().setCurrentEvent(event);
+        eventManager.setCurrentEvent(event);
     }
 
 
@@ -219,7 +221,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EventUtil.ACTIVITY_CREATE_EVENT ){
             ((MainCalendarFragment)tagFragments[0]).reloadEvent();
-            ((MainCalendarFragment)tagFragments[0]).scrollToWithOffset(EventManager.getInstance().getCurrentEvent().getStartTime());
+            ((MainCalendarFragment)tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
         }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
             ((MainCalendarFragment)tagFragments[0]).reloadEvent();
         }

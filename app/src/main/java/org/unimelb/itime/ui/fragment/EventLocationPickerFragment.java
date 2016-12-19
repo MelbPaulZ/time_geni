@@ -53,10 +53,10 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
-import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
-import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
+import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
+import org.unimelb.itime.ui.fragment.event.EventCreateNewFragment;
+import org.unimelb.itime.ui.fragment.event.EventEditFragment;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
@@ -84,6 +84,7 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
     private EventLocationPickerFragment self;
     double longitude, latitude;
     private Event event;
+    private EventManager eventManager;
 
 
     @Nullable
@@ -98,12 +99,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
 
     @Override
     public MvpPresenter createPresenter() {
-        return new CommonPresenter();
+        return new EventCommonPresenter();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        eventManager = EventManager.getInstance(getContext());
         init();
     }
 
@@ -204,13 +206,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                 if (getFrom() instanceof EventCreateNewFragment) {
                     // no need of set from for event create new fragment
                     EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-                    eventCreateNewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    eventCreateNewFragment.setEvent(eventManager.copyCurrentEvent(event));
                     switchFragment(self, eventCreateNewFragment);
                 } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-                    ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                     switchFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
                 } else if (getFrom() instanceof EventEditFragment) {
-                    ((EventEditFragment) getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                     switchFragment(self, ((EventEditFragment) getFrom()));
                 }
             }
@@ -318,13 +320,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                 // tiao zhuan
                 if (getFrom() instanceof EventCreateNewFragment) {
                     // no need of set from for event create new fragment
-                    ((EventCreateNewFragment) getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    ((EventCreateNewFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                     switchFragment(self, (EventCreateNewFragment) getFrom());
                 } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-                    ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                     switchFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
                 } else if (getFrom() instanceof EventEditFragment) {
-                    ((EventEditFragment) getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                    ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                     switchFragment(self, ((EventEditFragment) getFrom()));
                 }
             } else {
@@ -366,13 +368,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
 //             find a way fix here later
             if (getFrom() instanceof EventCreateNewFragment) {
                 // no need of set from for event create new fragment
-                ((EventCreateNewFragment) getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                ((EventCreateNewFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                 switchFragment(self, (EventCreateNewFragment) getFrom());
             } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-                ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                 switchFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
             } else if (getFrom() instanceof EventEditFragment) {
-                ((EventEditFragment) getFrom()).setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                 switchFragment(self, ((EventEditFragment) getFrom()));
             }
         }

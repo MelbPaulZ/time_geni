@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.viewmodel;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.view.View;
 import android.widget.Button;
@@ -23,12 +24,12 @@ public class MainSettingsViewModel extends BaseObservable{
 
     }
 
+    private Context getContext(){
+        return presenter.getContext();
+    }
+
     public String getUsername(){
-        if (UserUtil.getInstance().getUser()!=null) {
-            return UserUtil.getInstance().getUser().getEmail();
-        }else{
-            return "";
-        }
+            return UserUtil.getInstance(getContext()).getUser().getEmail();
     }
 
     public View.OnClickListener onLogOutClick(){

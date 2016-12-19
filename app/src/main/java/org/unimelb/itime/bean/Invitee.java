@@ -22,6 +22,11 @@ import org.greenrobot.greendao.annotation.Generated;
  * Created by yuhaoliu on 10/09/2016.
  */
 public class Invitee implements ITimeInviteeInterface, Serializable {
+    public final static String STATUS_NEEDSACTION = "needsAction";
+    public final static String STATUS_ACCEPTED = "accepted";
+    public final static String STATUS_REJECTED = "rejected";
+    public final static String STATUS_DECLINED = "declined";
+
     private String eventUid = "";
     private String inviteeUid = "";
     private String userUid = "";
@@ -31,10 +36,6 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
     private String status = "";
     private String reason = "";
     private int isHost;
-
-    public final static String INVITEE_STATUS_NEEDSACTION = "needsAction";
-    public final static String INVITEE_STATUS_DECLINE = "decline";
-    public final static String INVITEE_STATUS_ACCEPTED = "accepted";
 
     @Convert(converter = Invitee.SlotResponseConverter.class , columnType = String.class)
     private List<SlotResponse> inviteeTimeslot = new ArrayList<>();

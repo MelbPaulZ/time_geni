@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment.eventcreate;
+package org.unimelb.itime.ui.fragment.event;
 
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -93,10 +93,10 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot != null) {
-            if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_create))) {
-                timeSlot.setStatus(getString(R.string.timeslot_status_pending));
-            } else if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending))) {
-                timeSlot.setStatus(getString(R.string.timeslot_status_create));
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_CREATING)) {
+                timeSlot.setStatus(Timeslot.STATUS_PENDING);
+            } else if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)) {
+                timeSlot.setStatus(Timeslot.STATUS_CREATING);
             }
         } else {
             Log.i("error", "onTimeSlotClick: " + "no timeslot found");
@@ -123,8 +123,8 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         // what is the difference between getTag().startTime and startTimeM .... discuss with David
         timeSlot.setStartTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).startTime);
         timeSlot.setEndTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).endTime);
-        timeSlot.setStatus(getString(R.string.timeslot_status_create));
-        timeSlot.setUserUid(UserUtil.getUserUid());
+        timeSlot.setStatus(Timeslot.STATUS_CREATING);
+        timeSlot.setUserUid(UserUtil.getInstance(getContext()).getUserUid());
         event.getTimeslot().add(timeSlot);
         WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
         struct.object = timeSlot;
@@ -143,7 +143,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         });
         timeslotWeekView.setEventClassName(Event.class);
         timeslotWeekView.enableTimeSlot();
-        timeslotWeekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        timeslotWeekView.setDayEventMap(EventManager.getInstance(getContext()).getEventsPackage());
         timeslotWeekView.setOnTimeSlotOuterListener(new FlexibleLenViewBody.OnTimeSlotListener() {
             @Override
             public void onTimeSlotCreate(TimeSlotView timeSlotView) {
@@ -315,12 +315,12 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
             event.setTimeslot(new ArrayList<Timeslot>());
         }
         for (Timeslot timeSlot : list) {
-            if (EventManager.getInstance().isTimeslotExistInEvent(event, timeSlot)) {
+            if (EventManager.getInstance(getContext()).isTimeslotExistInEvent(event, timeSlot)) {
                 // already exist, then do nothing
             } else {
                 // have to do this
                 timeSlot.setEventUid(event.getEventUid());
-                timeSlot.setStatus(getString(R.string.timeslot_status_create));
+                timeSlot.setStatus(Timeslot.STATUS_CREATING);
                 // todo: need to check if this timeslot already exists in a map
                 WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
                 struct.startTime = timeSlot.getStartTime();

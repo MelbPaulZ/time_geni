@@ -3,8 +3,6 @@ package org.unimelb.itime.ui.presenter;
 import android.content.Context;
 import android.util.Log;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
@@ -12,7 +10,6 @@ import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.util.HttpUtil;
-import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 
 import java.util.List;
 
@@ -22,7 +19,7 @@ import rx.Subscriber;
 /**
  * Created by Paul on 10/09/2016.
  */
-public class EventDetailHostTimeSlotPresenter extends CommonPresenter<EventDetailTimeSlotMvpVIew> {
+public class EventDetailHostTimeSlotPresenter extends EventCommonPresenter<EventDetailTimeSlotMvpVIew> {
     private Context context;
     private EventApi eventApi;
     private final String TAG = "DetailHostTSPresenter";

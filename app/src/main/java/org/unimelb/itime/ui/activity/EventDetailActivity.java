@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -19,12 +18,10 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
-import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
-import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
-import org.unimelb.itime.ui.fragment.eventdetail.EventDetailGroupFragment;
-import org.unimelb.itime.ui.fragment.eventdetail.EventDetailTimeSlotFragment;
-import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
-import org.unimelb.itime.ui.fragment.eventdetail.InviteeTimeslotFragment;
+import org.unimelb.itime.ui.fragment.event.EventDetailGroupFragment;
+import org.unimelb.itime.ui.fragment.event.EventDetailTimeSlotFragment;
+import org.unimelb.itime.ui.fragment.event.EventEditFragment;
+import org.unimelb.itime.ui.fragment.event.InviteeTimeslotFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +38,7 @@ public class EventDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
-        event = EventManager.getInstance().getCurrentEvent();
+        event = EventManager.getInstance(getApplicationContext()).getCurrentEvent();
         initFragments();
         getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
 

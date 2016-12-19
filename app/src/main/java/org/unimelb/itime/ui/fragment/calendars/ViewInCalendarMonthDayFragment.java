@@ -1,20 +1,16 @@
 package org.unimelb.itime.ui.fragment.calendars;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.managers.EventManager;
@@ -22,28 +18,25 @@ import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.MainActivity;
-import org.unimelb.itime.ui.mvpview.CommonMvpView;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
+import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.AppUtil;
-import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.rulefactory.RuleModel;
-import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.dayview.MonthDayView;
-import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 
 /**
  * Created by Paul on 21/09/2016.
  */
-public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment implements CommonMvpView {
+public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment implements EventCommonMvpView {
     private View root;
     private MonthDayView monthDayView;
-    private CommonPresenter presenter;
+    private EventCommonPresenter presenter;
     private String TAG = "MonthDayFragment";
+    private EventManager eventManager;
 
     @Nullable
     @Override
@@ -51,13 +44,14 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
         if (root ==null){
             root = inflater.inflate(R.layout.fragment_calendar_monthday, container, false);
         }
+        eventManager = EventManager.getInstance(getContext());
         initView();
         return root;
     }
 
     @Override
-    public CommonPresenter createPresenter() {
-        this.presenter = new CommonPresenter(getActivity());
+    public EventCommonPresenter createPresenter() {
+        this.presenter = new EventCommonPresenter(getActivity());
         return presenter;
     }
 
@@ -69,12 +63,12 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
     private void initView(){
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
         monthDayView.removeAllOptListener();
-        monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthDayView.setDayEventMap(eventManager.getEventsPackage());
         monthDayView.setEventClassName(Event.class);
         monthDayView.setOnHeaderListener(new MonthDayView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
-                EventManager.getInstance().refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
+                eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });
@@ -94,14 +88,14 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
-            monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+            monthDayView.setDayEventMap(eventManager.getEventsPackage());
             monthDayView.reloadEvents();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(MessageEventRefresh messageEvent){
-        monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthDayView.setDayEventMap(eventManager.getEventsPackage());
         monthDayView.reloadEvents();
     }
 
@@ -139,13 +133,26 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
         monthDayView.scrollToWithOffset(time);
     }
 
+
     @Override
-    public void onShowDialog() {
+    public void onTaskStart() {
         AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
     }
 
     @Override
-    public void onHideDialog() {
+    public void onTaskError(Throwable e) {
+        AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
+        AppUtil.hideProgressBar();
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
         AppUtil.hideProgressBar();
     }
 }

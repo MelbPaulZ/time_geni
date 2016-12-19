@@ -75,9 +75,11 @@ public class EventCreateNewVIewModel extends CommonViewModel {
     }
 
     private final String TAG = "EventCreateNewViewModel";
+    private EventManager eventManager;
 
     public EventCreateNewVIewModel(EventCreateNewPresenter presenter) {
         this.presenter = presenter;
+        eventManager = EventManager.getInstance(getContext());
         mvpView = presenter.getView();
         init();
         initDialog();
@@ -203,7 +205,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
         isAllDay = new ObservableField<>(false);
         tag = presenter.getContext().getString(R.string.tag_create_event);
         this.viewModel = this;
-        setEvent(EventManager.getInstance().getCurrentEvent());
+        setEvent(eventManager.getCurrentEvent());
         repeats = EventUtil.getRepeats(getContext(), event);
     }
 
@@ -217,7 +219,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
 
 
     public void setPhotos(ArrayList<String> urls){
-        event.setPhoto(EventUtil.fromStringToPhotoUrlList(urls));
+        event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), urls));
         setEvent(event);
     }
 
@@ -270,7 +272,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 builder.setItems(types, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        event.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(i).getCalendarUid());
+                        event.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(i).getCalendarUid());
                         viewModel.setEvent(event);
                     }
                 });
@@ -351,9 +353,8 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 event.setRecurrence(event.getRule().getRecurrence());
                 EventUtil.addSelfInInvitee(getContext(), event);
                 EventUtil.addSoloEventBasicInfo(getContext(), event);
-                EventManager.getInstance().setCurrentEvent(event);
+                eventManager.setCurrentEvent(event);
                 presenter.addSoloEvent();
-                EventManager.getInstance().setCurrentEvent(event);
                 if (mvpView!=null){
                     mvpView.toCreateSoloEvent();
                 }

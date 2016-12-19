@@ -25,9 +25,11 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
 
     private String TAG = "EventCreateNewPresenter";
     private Context context;
+    private EventManager eventManager;
     public EventCreateNewPresenter(Context context){
         this.context = context;
         eventApi = HttpUtil.createService(context, EventApi.class);
+        eventManager = EventManager.getInstance(context);
     }
     public Context getContext() {
         return context;
@@ -44,8 +46,8 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
     public void addSoloEvent(){
         updateServer();
 
-        Event event = EventManager.getInstance().getCurrentEvent();
-        EventManager.getInstance().addEvent(event);
+        Event event = eventManager.getCurrentEvent();
+        eventManager.addEvent(event);
         DBManager.getInstance(getContext()).insertEvent(event);
         event.update();
         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
@@ -55,7 +57,7 @@ public class EventCreateNewPresenter extends MvpBasePresenter<EventCreateNewMvpV
      *  this is for insert new solo event to server
      */
     public void updateServer(){
-        Event event = EventManager.getInstance().getCurrentEvent();
+        Event event = eventManager.getCurrentEvent();
         Observable<HttpResult<Event>> observable = eventApi.insert(event);
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override

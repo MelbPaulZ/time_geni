@@ -2,14 +2,11 @@ package org.unimelb.itime.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -18,17 +15,11 @@ import com.squareup.picasso.Transformation;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.Message;
-import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.fragment.eventdetail.EventDetailGroupFragment;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.helper.LoadImgHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by yuhaoliu on 3/12/2016.

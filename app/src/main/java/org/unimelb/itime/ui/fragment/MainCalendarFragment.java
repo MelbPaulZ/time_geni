@@ -1,14 +1,11 @@
 package org.unimelb.itime.ui.fragment;
 
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +14,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
-import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.EventSearchActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
@@ -40,7 +33,7 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.List;
 
 import static org.unimelb.itime.R.string.calendar;
 
@@ -226,13 +219,24 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
     @Override
-    public void onShowDialog() {
+    public void onTaskStart() {
 
     }
 
     @Override
-    public void onHideDialog() {
+    public void onTaskError(Throwable e) {
+
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
+
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
 
     }
 }

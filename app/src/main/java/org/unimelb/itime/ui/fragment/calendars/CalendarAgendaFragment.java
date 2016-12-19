@@ -1,15 +1,11 @@
 package org.unimelb.itime.ui.fragment.calendars;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
@@ -23,7 +19,7 @@ import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.agendaview.AgendaViewBody;
 import org.unimelb.itime.vendor.agendaview.MonthAgendaView;
@@ -31,7 +27,6 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by Paul on 21/09/2016.
@@ -39,6 +34,7 @@ import java.util.List;
 public class CalendarAgendaFragment extends BaseUiFragment {
     private View root;
     private MonthAgendaView monthAgendaView;
+    private EventManager eventManager;
 
     @Nullable
     @Override
@@ -53,8 +49,9 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        eventManager = EventManager.getInstance(getContext());
         monthAgendaView = (MonthAgendaView) root.findViewById(R.id.month_agenda_view);
-        monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthAgendaView.setDayEventMap(eventManager.getEventsPackage());
         monthAgendaView.setOnEventClickListener(new AgendaViewBody.OnEventClickListener() {
             @Override
             public void onEventClick(ITimeEventInterface iTimeEventInterface) {
@@ -66,7 +63,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
             public void onMonthChanged(MyCalendar myCalendar) {
                 Log.i("Header", "monthAgendaView: ");
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
-                EventManager.getInstance().refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
+                eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
 
@@ -79,7 +76,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(MessageEventRefresh messageEvent){
-        monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthAgendaView.setDayEventMap(eventManager.getEventsPackage());
     }
 
     @Override
@@ -98,13 +95,13 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
-            monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+            monthAgendaView.setDayEventMap(eventManager.getEventsPackage());
         }
     }
 
     @Override
     public MvpPresenter createPresenter() {
-        return new CommonPresenter(getContext());
+        return new EventCommonPresenter(getContext());
     }
 
     @Override
@@ -126,7 +123,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
 
     public void calendarNotifyDataSetChanged(){
         if (monthAgendaView!=null) {
-            monthAgendaView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+            monthAgendaView.setDayEventMap(eventManager.getEventsPackage());
         }
     }
 

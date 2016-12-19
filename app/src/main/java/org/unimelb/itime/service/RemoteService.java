@@ -33,14 +33,11 @@ import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
-
-import static com.google.common.collect.ComparisonChain.start;
 
 /**
  * Created by yinchuandong on 20/06/2016.
@@ -122,7 +119,7 @@ public class RemoteService extends Service{
 
             @Override
             public void onNext(HttpResult<List<org.unimelb.itime.bean.Calendar>> httpResult) {
-                CalendarUtil.getInstance().setCalendar(httpResult.getData());
+                CalendarUtil.getInstance(getApplicationContext()).setCalendar(httpResult.getData());
 
                 SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = sp.edit();
@@ -171,7 +168,7 @@ public class RemoteService extends Service{
     }
 
     public void fetchEvents(String calendarUid) {
-        String synToken = AppUtil.getSharedPreferences(getApplicationContext()).getString(C.spkey.EVENT_LIST_SYNC_TOKEN,"");
+        String synToken = AppUtil.getEventSyncToken(getApplicationContext());
         Log.i(TAG, "fetchEvents: " + synToken);
         Observable<HttpResult<List<Event>>> observable = eventApi.list(
                 calendarUid
@@ -193,10 +190,7 @@ public class RemoteService extends Service{
                 final List<Event> eventList = result.getData();
                 Log.i(TAG, "__onNext: " + result.getData().size());
                 //update syncToken
-                SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, result.getSyncToken());
-                editor.apply();
+                AppUtil.saveEventSyncToken(getApplicationContext(), result.getSyncToken());
                 // successfully get event from server
                 if(eventList.size() > 0){
                     updateThread = new Thread() {
@@ -205,7 +199,7 @@ public class RemoteService extends Service{
                             super.run();
                             isUpdateThreadRuning = true;
 
-                            EventManager.getInstance().updateDB(eventList);
+                            EventManager.getInstance(getApplicationContext()).updateDB(eventList);
                             EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                             isUpdateThreadRuning = false;
                         }
@@ -252,7 +246,7 @@ public class RemoteService extends Service{
                 continue;
             }
 
-            Event correspond = DBManager.getInstance().getEvent(msg.getEventUid());
+            Event correspond = DBManager.getInstance(getApplicationContext()).getEvent(msg.getEventUid());
 
             if (correspond == null){
                 Log.i("Error_msg", "checkMessageValidation: " + msg.getEventUid());
@@ -278,7 +272,7 @@ public class RemoteService extends Service{
             isPollingThreadRunning = true;
             while (isStart) {
                 // todo: here to list events
-                for(Calendar calendar : CalendarUtil.getInstance().getCalendar()){
+                for(Calendar calendar : CalendarUtil.getInstance(getApplication()).getCalendar()){
                     fetchEvents(calendar.getCalendarUid());
                 }
                 fetchMessages();

@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.viewmodel;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -36,11 +37,16 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
     public EventCreateTimeslotViewModel(EventCreateTimeSlotPresenter presenter){
         this.presenter = presenter;
         titleString = initToolBarTitle();
-        event= EventManager.getInstance().getCurrentEvent();
+        event= EventManager.getInstance(getContext()).getCurrentEvent();
         mvpView = presenter.getView();
 //        presenter.initData(event);
         initTimeSlots();
     }
+
+    private Context getContext(){
+        return presenter.getContext();
+    }
+
     public void initTimeSlots(){
         if (mvpView!=null){
             mvpView.initTimeSlots(event);

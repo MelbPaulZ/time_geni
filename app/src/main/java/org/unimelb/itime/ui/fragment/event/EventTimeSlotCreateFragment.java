@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment.eventcreate;
+package org.unimelb.itime.ui.fragment.event;
 
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -9,15 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.aigestudio.wheelpicker.WheelPicker;
-import com.wx.wheelview.adapter.ArrayWheelAdapter;
-import com.wx.wheelview.widget.WheelView;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.TimeslotCreateConfirmBinding;
 import org.unimelb.itime.databinding.TimeslotCreatePickerBinding;
 import org.unimelb.itime.ui.mvpview.TimeslotCreateMvpView;
@@ -26,10 +22,8 @@ import org.unimelb.itime.ui.viewmodel.TimeslotCreateViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by Paul on 18/11/16.

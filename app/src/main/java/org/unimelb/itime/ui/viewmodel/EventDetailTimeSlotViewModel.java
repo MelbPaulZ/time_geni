@@ -1,31 +1,18 @@
 package org.unimelb.itime.ui.viewmodel;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
-import org.unimelb.itime.adapter.InviteeInnerResponseAdapter;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
-import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.restfulapi.EventApi;
-import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
@@ -33,14 +20,7 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-
-import static java.security.AccessController.getContext;
-import static kotlin.text.Typography.tm;
-import static org.unimelb.itime.R.string.select;
 
 /**
  * Created by Paul on 10/09/2016.
@@ -85,7 +65,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         timeSlot.setStartTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).startTime);
         timeSlot.setEndTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).endTime);
         timeSlot.setStatus(status);
-        timeSlot.setUserUid(UserUtil.getUserUid());
+        timeSlot.setUserUid(UserUtil.getInstance(getContext()).getUserUid());
         eventDetailHostEvent.getTimeslot().add(timeSlot);
         WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
         struct.object = timeSlot;
@@ -100,19 +80,19 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         return new FlexibleLenViewBody.OnTimeSlotListener() {
             @Override
             public void onTimeSlotCreate(TimeSlotView timeSlotView) {
-                if (mvpView.isClickTSConfirm() && EventUtil.isUserHostOfEvent(eventDetailHostEvent)) {
+                if (mvpView.isClickTSConfirm() && EventUtil.isUserHostOfEvent(getContext(),eventDetailHostEvent)) {
                     // is host and create timeslot as confirmed
-                    createTimeslotInStatus(timeSlotView, getContext().getString(R.string.accepted));
-                } else if (EventUtil.isUserHostOfEvent(eventDetailHostEvent)) {
+                    createTimeslotInStatus(timeSlotView, Timeslot.STATUS_ACCEPTED);
+                } else if (EventUtil.isUserHostOfEvent(getContext(), eventDetailHostEvent)) {
                     // is host, and create timeslot as pending
-                    createTimeslotInStatus(timeSlotView, getContext().getString(R.string.timeslot_status_create));
+                    createTimeslotInStatus(timeSlotView, Timeslot.STATUS_CREATING);
                 }
             }
 
             // TODO: 11/12/2016 check this method, see if it is right
             @Override
             public void onTimeSlotClick(TimeSlotView timeSlotView) {
-                if (EventUtil.isUserHostOfEvent(eventDetailHostEvent)) {
+                if (EventUtil.isUserHostOfEvent(getContext(), eventDetailHostEvent)) {
                     onHostClickTimeslotView(timeSlotView);
                 }else{
                     // user is as invitee
@@ -132,7 +112,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
 
             @Override
             public void onTimeSlotDragDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
-                if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
+                if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getInstance(getContext()).getUserUid())) {
                     // host:
                     WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
                     struct.startTime = startTime;
@@ -233,9 +213,9 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
                 struct.startTime = timeslot.getStartTime();
                 struct.endTime = timeslot.getEndTime();
                 struct.object = timeslot;
-                if (timeslot.getStatus().equals(getContext().getString(R.string.timeslot_status_create))){
+                if (timeslot.getStatus().equals(Timeslot.STATUS_CREATING)){
                     struct.status = false;
-                }else if (timeslot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
+                }else if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
                     struct.status = true;
                 }
                 weekView.addTimeSlot(struct);
@@ -276,7 +256,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
     }
 
     private void setTimeslotFromDetailFragment(Timeslot timeslot, WeekView.TimeSlotStruct struct){
-        if (EventUtil.isUserHostOfEvent(eventDetailHostEvent)){
+        if (EventUtil.isUserHostOfEvent(getContext(), eventDetailHostEvent)){
             // user is host
             if (timeslot.getIsConfirmed()==1){
                 struct.status = true;
@@ -285,9 +265,9 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
             }
         }else{
             // user is invitee
-            if (timeslot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))){
+            if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
                 struct.status = false;
-            }else if (timeslot.getStatus().equals(getContext().getString(R.string.timeslot_status_accept))){
+            }else if (timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
                 struct.status = true;
             }
         }

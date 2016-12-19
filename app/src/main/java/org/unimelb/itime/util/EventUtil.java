@@ -2,21 +2,14 @@ package org.unimelb.itime.util;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.ImageView;
 
-import com.android.databinding.library.baseAdapters.BR;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
-import org.antlr.v4.tool.Rule;
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
@@ -26,7 +19,6 @@ import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
-import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
@@ -56,6 +48,8 @@ public class EventUtil {
     public final static int REPEAT_EVERY_MONTH = 4;
     public final static int REPEAT_EVERY_YEAR = 5;
 
+
+
     public static String parseTimeToString(Context context, long time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
@@ -67,18 +61,6 @@ public class EventUtil {
         return month + " " + day + ", " + calendar.get(Calendar.YEAR) + "   " + startTimeHour + ":" + startMinute;
     }
 
-    public static String parseDateToString(Context context, long time) {
-        if (time == 0) {
-            return context.getString(R.string.repeat_never);
-        } else {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(time);
-            String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
-            String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-            String month = getMonth(context, calendar.get(Calendar.MONTH));
-            return dayOfWeek + " ," + month + " " + day;
-        }
-    }
 
     public static String getRepeatEndString(Context context, Event event){
         Calendar calendar = Calendar.getInstance();
@@ -109,13 +91,6 @@ public class EventUtil {
         }
     }
 
-    public static ArrayList<String> fromContactListToArrayList(ArrayList<ITimeContactInterface> contactList) {
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (ITimeContactInterface contact : contactList) {
-            arrayList.add(contact.getName());
-        }
-        return arrayList;
-    }
 
     public static ArrayList<String> fromInviteeListToArraylist(List<Invitee> inviteeArrayList) {
         ArrayList<String> arrayList = new ArrayList<>();
@@ -197,12 +172,8 @@ public class EventUtil {
     }
 
 
-    public static int generateTimeSlotUid() {
-        int uid = (int) (Math.random() * 1000000);
-        return uid;
-    }
 
-    public static ArrayList<PhotoUrl> fromStringToPhotoUrlList(ArrayList<String> urls) {
+    public static ArrayList<PhotoUrl> fromStringToPhotoUrlList(Context context, ArrayList<String> urls) {
         ArrayList<PhotoUrl> arrayList = new ArrayList<>();
         for (String url : urls) {
             // here should update photoUrl, as Chuandong Request
@@ -211,40 +182,27 @@ public class EventUtil {
             photoUrl.setFilename(getPhotoFileName(url));
             photoUrl.setSuccess(0);
             photoUrl.setPhotoUid(AppUtil.generateUuid());
-            photoUrl.setEventUid(EventManager.getInstance().getCurrentEvent().getEventUid());
+            photoUrl.setEventUid(EventManager.getInstance(context).getCurrentEvent().getEventUid());
             arrayList.add(photoUrl);
         }
         return arrayList;
     }
 
-    public static String getPhotoFileName(String url) {
+    private static String getPhotoFileName(String url) {
         File f = new File(url);
         String name = f.getName();
         return name;
     }
 
-    public static Event getEventInDB(Context context, String eventUid) {
-        Event event = DBManager.getInstance(context).getEvent(eventUid);
-        event.getInvitee();
-        event.getTimeslot();
-        return event;
-    }
 
     public static CharSequence[] getCalendarTypes(Context context) {
         ArrayList<String> calendarNames = new ArrayList<>();
-        for (org.unimelb.itime.bean.Calendar calendar : CalendarUtil.getInstance().getCalendar()){
+        for (org.unimelb.itime.bean.Calendar calendar : CalendarUtil.getInstance(context).getCalendar()){
             calendarNames.add(calendar.getSummary());
         }
         return calendarNames.toArray(new CharSequence[calendarNames.size()]);
     }
 
-    public static String getCalendarTypeFromIndex(Context context, String index) {
-        if (index == null) {
-            return null;
-        }
-        int num = Integer.parseInt(index);
-        return (String) getCalendarTypes(context)[num];
-    }
 
     public static CharSequence[] getRepeats(Context context, Event event) {
         Calendar calendar = Calendar.getInstance();
@@ -304,7 +262,7 @@ public class EventUtil {
     }
 
 
-    public static String getDayOfWeekAbbr(Context context, int dayOfWeek) {
+    private static String getDayOfWeekAbbr(Context context, int dayOfWeek) {
         switch (dayOfWeek) {
             case 1:
                 return context.getString(R.string.day_of_week_1_abbr);
@@ -404,24 +362,24 @@ public class EventUtil {
         Intent intent = new Intent(activity, EventDetailActivity.class);
         Event event = (Event) iTimeEventInterface;
         event.getInvitee();
-        EventManager.getInstance().setCurrentEvent((Event) iTimeEventInterface);
+        EventManager.getInstance(context).setCurrentEvent((Event) iTimeEventInterface);
         activity.startActivityForResult(intent, ACTIVITY_EDIT_EVENT);
     }
 
 
     public static String getEventConfirmStatus(Context context, Event event) {
-        if (isUserHostOfEvent(event)) {
-            if (event.getStatus().equals(context.getString(R.string.pending))) {
+        if (isUserHostOfEvent(context, event)) {
+            if (event.getStatus().equals(Event.STATUS_PENDING)) {
                 return context.getString(R.string.You_have_not_confirmed_this_event);
-            } else if (event.getStatus().equals(context.getString(R.string.confirmed))) {
+            } else if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
                 return context.getString(R.string.You_have_confirmed_this_event);
             } else {
                 return "todo:" + event.getStatus();
             }
         } else {
-            if (event.getStatus().equals(context.getString(R.string.pending))) {
+            if (event.getStatus().equals(Event.STATUS_PENDING)) {
                 return context.getString(R.string.has_not_confirmed_this_event);
-            } else if (event.getStatus().equals(context.getString(R.string.confirmed))) {
+            } else if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
                 return context.getString(R.string.has_confirmed_this_event);
             } else {
                 return "todo:" + event.getStatus();
@@ -556,25 +514,25 @@ public class EventUtil {
      * use when event has no invitees before, add self as host with a new generated inviteeUid
      */
     public static void addSelfInInvitee(Context context, Event event) {
-        if (!isSelfInEvent(event)) {
+        if (!isSelfInEvent(context, event)) {
             Invitee self = new Invitee();
-            self.setStatus(context.getString(R.string.accept));
-            if (EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent()) != null) {
-                self.setInviteeUid(EventManager.getInstance().getHostInviteeUid(EventManager.getInstance().getCurrentEvent()));
+            self.setStatus(Invitee.STATUS_ACCEPTED);
+            if (EventManager.getInstance(context).getHostInviteeUid(EventManager.getInstance(context).getCurrentEvent()) != null) {
+                self.setInviteeUid(EventManager.getInstance(context).getHostInviteeUid(EventManager.getInstance(context).getCurrentEvent()));
             } else {
                 self.setInviteeUid(AppUtil.generateUuid());
             }
-            self.setUserUid(UserUtil.getUserUid());
+            self.setUserUid(UserUtil.getInstance(context).getUserUid());
             self.setEventUid(event.getEventUid());
-            self.setUserId(UserUtil.getInstance().getUser().getUserId());
+            self.setUserId(UserUtil.getInstance(context).getUser().getUserId());
             self.setIsHost(1); // 1 refers to host
-            self.setAliasName(UserUtil.getInstance().getUser().getPersonalAlias());
+            self.setAliasName(UserUtil.getInstance(context).getUser().getPersonalAlias());
             event.addInvitee(self);
         }
     }
 
-    private static boolean isSelfInEvent(Event event) {
-        String selfUserUid = UserUtil.getUserUid();
+    private static boolean isSelfInEvent(Context context, Event event) {
+        String selfUserUid = UserUtil.getInstance(context).getUserUid();
         for (Invitee invitee : event.getInvitee()) {
             if (invitee.getUserUid().equals(selfUserUid)) {
                 return true;
@@ -608,11 +566,11 @@ public class EventUtil {
 
 
     public static void addSoloEventBasicInfo(Context context, Event event) {
-        event.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid());
-        event.setStatus(context.getString(R.string.confirmed));
+        event.setCalendarUid(CalendarUtil.getInstance(context).getCalendar().get(0).getCalendarUid());
+        event.setStatus(Event.STATUS_CONFIRMED);
         event.setEventId(""); // might need change later, ask chuandong what is eventId
-        event.setUserUid(UserUtil.getUserUid());
-        event.setEventType(context.getString(R.string.solo));
+        event.setUserUid(UserUtil.getInstance(context).getUserUid());
+        event.setEventType(Event.TYPE_SOLO);
         event.setInviteeVisibility(1);
         event.setFreebusyAccess(1); // ask chuandong
     }
@@ -640,8 +598,8 @@ public class EventUtil {
         }
     }
 
-    public static boolean isUserHostOfEvent(Event event) {
-        return event.getHostUserUid().equals(UserUtil.getUserUid());
+    public static boolean isUserHostOfEvent(Context context, Event event) {
+        return event.getHostUserUid().equals(UserUtil.getInstance(context).getUserUid());
     }
 
     public static CharSequence[] getRepeatEventChangeOptions(Context context) {
@@ -652,9 +610,9 @@ public class EventUtil {
         return sequences;
     }
 
-    public static Invitee getSelfInInvitees(Event event) {
+    public static Invitee getSelfInInvitees(Context context, Event event) {
         for (Invitee invitee : event.getInvitee()) {
-            if (invitee.getUserUid().equals(UserUtil.getUserUid())) {
+            if (invitee.getUserUid().equals(UserUtil.getInstance(context).getUserUid())) {
                 return invitee;
             }
         }
@@ -772,23 +730,16 @@ public class EventUtil {
     }
 
     public static boolean isGroupEvent(Context context, Event event){
-        return event.getEventType().equals(context.getString(R.string.group));
+        return event.getEventType().equals(Event.TYPE_GROUP);
     }
 
     public static boolean isEventConfirmed(Context context, Event event){
-        return event.getStatus().equals(context.getString(R.string.confirmed));
+        return event.getStatus().equals(Event.STATUS_CONFIRMED);
     }
 
-    public static boolean isInviteeNeedsAction(Context context, Event event){
-        return isInvitee(context.getString(R.string.needs_action), event);
-    }
 
-    public static boolean isInviteeAccept(Context context, Event event){
-        return isInvitee(context.getString(R.string.accepted) , event);
-    }
-
-    public static boolean isInvitee(String status, Event event){
-        Invitee me = getSelfInInvitees(event);
+    public static boolean isInvitee(Context context, String status, Event event){
+        Invitee me = getSelfInInvitees(context, event);
         if (me.getStatus().equals(status)){
             return true;
         }else{
@@ -796,9 +747,9 @@ public class EventUtil {
         }
     }
 
-    public static boolean hasOtherInviteeExceptSelf(Event event){
+    public static boolean hasOtherInviteeExceptSelf(Context context, Event event){
         for (Invitee invitee: event.getInvitee()){
-            if (!invitee.getUserUid().equals(UserUtil.getUserUid())){
+            if (!invitee.getUserUid().equals(UserUtil.getInstance(context).getUserUid())){
                 return true;
             }
         }
@@ -816,7 +767,7 @@ public class EventUtil {
     }
 
     public static List<Timeslot> getTimeslotFromPending(Context context, Event event){
-       return getTimeslotFromStatus(event, context.getString(R.string.timeslot_status_pending));
+       return getTimeslotFromStatus(event, Timeslot.STATUS_PENDING);
     }
 
 

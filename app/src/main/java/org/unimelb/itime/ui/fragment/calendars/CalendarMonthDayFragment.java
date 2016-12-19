@@ -22,8 +22,8 @@ import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
-import org.unimelb.itime.ui.mvpview.CommonMvpView;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
+import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.rulefactory.RuleModel;
@@ -35,17 +35,18 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
+import java.util.List;
 
 
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, CommonPresenter<CommonMvpView>> implements CommonMvpView {
+public class CalendarMonthDayFragment extends BaseUiFragment<EventCommonMvpView, EventCommonPresenter<EventCommonMvpView>> implements EventCommonMvpView {
     private View root;
     private MonthDayView monthDayView;
-    private CommonPresenter presenter;
+    private EventCommonPresenter presenter;
     private String TAG = "MonthDayFragment";
+    private EventManager eventManager;
 
     @Nullable
     @Override
@@ -53,13 +54,14 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
         if (root ==null){
             root = inflater.inflate(R.layout.fragment_calendar_monthday, container, false);
         }
+        eventManager = EventManager.getInstance(getContext());
         initView();
         return root;
     }
 
     @Override
-    public CommonPresenter createPresenter() {
-        this.presenter = new CommonPresenter(getActivity());
+    public EventCommonPresenter createPresenter() {
+        this.presenter = new EventCommonPresenter(getActivity());
         return presenter;
     }
 
@@ -80,14 +82,14 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
 
     private void initView(){
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
-        monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthDayView.setDayEventMap(eventManager.getEventsPackage());
         monthDayView.setEventClassName(Event.class);
         monthDayView.setOnHeaderListener(new MonthDayView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
                 Log.i("Header", "monthDayView: " + myCalendar.getCalendar().getTime());
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
-                EventManager.getInstance().refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
+                eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });
@@ -128,7 +130,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
             public void onEventDragDrop(final DayDraggableEventView dayDraggableEventView) {
 
                 final Event originEvent = (Event) dayDraggableEventView.getEvent();
-                final Event event = EventManager.getInstance().copyCurrentEvent(originEvent);
+                final Event event = eventManager.copyCurrentEvent(originEvent);
                 if (event.getRecurrence().length>0){
                     // this is repeat event
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -146,7 +148,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
                                             Log.i(TAG, "orgEvent startTime: " + d.getTime());
 
                                             // here change the event as a new event
-                                            Event newEvent = EventManager.getInstance().copyCurrentEvent(event);
+                                            Event newEvent = eventManager.copyCurrentEvent(event);
                                             EventUtil.regenerateRelatedUid(newEvent);
                                             newEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                                             newEvent.setEndTime(dayDraggableEventView.getEndTimeM());
@@ -159,14 +161,14 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
 
                                             // find the first event of repeat events, and update it to server
                                             Event firstOrg = null;
-                                            for (Event ev : EventManager.getInstance().getOrgRepeatedEventList()){
+                                            for (Event ev : eventManager.getOrgRepeatedEventList()){
                                                 if (event.getEventUid().equals(ev.getEventUid())){
                                                     firstOrg = ev;
                                                 }
                                             }
                                             firstOrg.getRule().addEXDate(new Date(event.getStartTime()));
                                             firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
-                                            EventManager.getInstance().getWaitingEditEventList().add(firstOrg);
+                                            eventManager.getWaitingEditEventList().add(firstOrg);
 
                                             presenter.updateAndInsertEvent(firstOrg, newEvent);
                                             break;
@@ -177,9 +179,9 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
                                             // need to consider move this event, or edit this event
                                             // to change all event, need to add until day to origin event, and create a new repeat event
                                             // first find the origin event
-                                            Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
+                                            Event orgEvent = eventManager.findOrgByUUID(event.getEventUid());
                                             // then copy the origin event rule model to a new rule model
-                                            Event cpyOrgEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
+                                            Event cpyOrgEvent = eventManager.copyCurrentEvent(orgEvent);
                                             // then add until day to the orgEvent
                                             if (EventUtil.isSameDay(event.getStartTime(), orgEvent.getStartTime())){
                                                 // the moving day is the first day of this repeat event
@@ -279,33 +281,29 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
                     alertDialog.show();
                 }else{
                     // this is not repeat event
-                    EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
-                    Event copyEvent = EventManager.getInstance().copyCurrentEvent(event);
+                    eventManager.getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
+                    Event copyEvent = eventManager.copyCurrentEvent(event);
                     copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                     copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
                     presenter.updateEventToServer(copyEvent);
                 }
 
-//                EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
-//                Event copyEvent = EventManager.getInstance().copyCurrentEvent(newEvent);
-//                copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
-//                copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-//                presenter.updateEventToServer(copyEvent);
             }
         });
     }
 
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
-            monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+            monthDayView.setDayEventMap(eventManager.getEventsPackage());
             monthDayView.reloadEvents();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshData(MessageEventRefresh messageEvent){
-        monthDayView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        monthDayView.setDayEventMap(eventManager.getEventsPackage());
         monthDayView.reloadEvents();
     }
 
@@ -351,12 +349,25 @@ public class CalendarMonthDayFragment extends BaseUiFragment<CommonMvpView, Comm
     }
 
     @Override
-    public void onShowDialog() {
+    public void onTaskStart() {
         AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
     }
 
     @Override
-    public void onHideDialog() {
+    public void onTaskError(Throwable e) {
+
+        AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
+
+        AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
+
         AppUtil.hideProgressBar();
     }
 }

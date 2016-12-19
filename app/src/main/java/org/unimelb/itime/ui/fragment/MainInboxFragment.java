@@ -110,7 +110,7 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
                     //unread to read
                 }
 
-                Event event = EventManager.getInstance().findEventByUid(getContext(), message.getEventUid());
+                Event event = EventManager.getInstance(getContext()).findEventByUid(getContext(), message.getEventUid());
                 if (event==null){
                     Toast.makeText(getContext(), "cannot find event, please try later", Toast.LENGTH_SHORT).show();
                 }else {
@@ -123,11 +123,11 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 Toast.makeText(getContext(), "Delete Message",Toast.LENGTH_SHORT).show();
-                Message msg = DBManager.getInstance().getAllMessages().get(position);
+                Message msg = DBManager.getInstance(getContext()).getAllMessages().get(position);
                 // TODO: 8/12/2016 message delete ask chuandong about server
                 presenter.deleteMessage(msg);
                 msg.delete();
-                messageAdapter.setMessageList(DBManager.getInstance().getAllMessages());
+                messageAdapter.setMessageList(DBManager.getInstance(getContext()).getAllMessages());
                 return false;
             }
         });
@@ -152,7 +152,7 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getInboxMessage(MessageInboxMessage messageInboxMessage){
-        List<Message> messageList = DBManager.getInstance().getAllMessages();
+        List<Message> messageList = DBManager.getInstance(getContext()).getAllMessages();
         messageAdapter.setMessageList(messageList);
     }
 

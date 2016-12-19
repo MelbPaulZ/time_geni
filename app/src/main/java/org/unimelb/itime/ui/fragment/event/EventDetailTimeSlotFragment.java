@@ -1,10 +1,10 @@
-package org.unimelb.itime.ui.fragment.eventdetail;
+package org.unimelb.itime.ui.fragment.event;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +22,7 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
@@ -33,13 +34,9 @@ import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static android.R.attr.button;
-import static android.R.id.list;
 
 /**
  * Created by Paul on 10/09/2016.
@@ -52,6 +49,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     private Event event;
     private WeekView weekView;
     private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
+    private EventManager eventManager;
 
 
     @Nullable
@@ -64,10 +62,11 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        eventManager = EventManager.getInstance(getContext());
         viewModel = new EventDetailTimeSlotViewModel(presenter);
         viewModel.setTag(tag);
         if (event == null) {
-            event = EventManager.getInstance().copyCurrentEvent(EventManager.getInstance().getCurrentEvent());
+            event = eventManager.copyCurrentEvent(eventManager.getCurrentEvent());
         }
         viewModel.setEventDetailHostEvent(event);
         binding.setTimeSlotHostVM(viewModel);
@@ -76,9 +75,9 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
 
         weekView.enableTimeSlot();
         weekView.setEventClassName(Event.class);
-        weekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
+        weekView.setDayEventMap(eventManager.getEventsPackage());
 
-        if (UserUtil.getUserUid().equals(event.getHostUserUid())) {
+        if (UserUtil.getInstance(getContext()).getUserUid().equals(event.getHostUserUid())) {
             // which means this is host event
         } else {
             // which means this is invitee event
@@ -149,7 +148,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
             switchFragment(this, (EventDetailGroupFragment) getFrom());
         } else if (getFrom() instanceof InviteeFragment) {
             EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-            eventEditFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+            eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
             switchFragment(this, eventEditFragment);
         }
     }
@@ -211,12 +210,12 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                 event.setTimeslot(new ArrayList<Timeslot>());
             }
             for (Timeslot timeSlot : list) {
-                if (EventManager.getInstance().isTimeslotExistInEvent(event, timeSlot)) {
+                if (eventManager.isTimeslotExistInEvent(event, timeSlot)) {
                     // already exist, then do nothing
                 } else {
                     // have to do this
                     timeSlot.setEventUid(event.getEventUid());
-                    timeSlot.setStatus(getString(R.string.timeslot_status_create));
+                    timeSlot.setStatus(Timeslot.STATUS_CREATING);
                     // todo: need to check if this timeslot already exists in a map
                     WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
                     struct.startTime = timeSlot.getStartTime();
@@ -286,7 +285,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                if (EventUtil.isUserHostOfEvent(event)) {
+                if (EventUtil.isUserHostOfEvent(getContext(), event)) {
                     changeTimeSlotView(timeSlotView);
                     hostClickTimeSlot(timeSlotView);
                 } else {
@@ -328,7 +327,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     public void onClickTimeSlotView(TimeSlotView timeSlotView) {
         if (getFrom() instanceof EventDetailGroupFragment) {
             // change status of view and struct
-            if (EventUtil.isUserHostOfEvent(event)) {
+            if (EventUtil.isUserHostOfEvent(getContext(), event)) {
                 // for host , only one timeslot can be selected
                 if (TimeSlotUtil.getSelectedTimeSlots(getContext(), event.getTimeslot()).size() < 1) {
                     // if no timeslot has been selected
@@ -377,10 +376,10 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot != null) {
-            if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_pending))) {
-                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_accept));
-            } else if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_accept))) {
-                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_pending));
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)) {
+                timeSlot.setStatus(Timeslot.STATUS_ACCEPTED);
+            } else if (timeSlot.getStatus().equals(Timeslot.STATUS_ACCEPTED)) {
+                timeSlot.setStatus(Timeslot.STATUS_PENDING);
             }
         } else {
             Log.i("error", "onTimeSlotClick: " + "no timeslot found");
@@ -398,21 +397,31 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot!=null){
-            if (timeSlot.getStatus().equals(getContext().getString(R.string.pending))){
-                timeSlot.setStatus(getContext().getString(R.string.timeslot_status_create));
-            }else if (timeSlot.getStatus().equals(getContext().getString(R.string.timeslot_status_create))){
-                timeSlot.setStatus(getString(R.string.timeslot_status_pending));
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)){
+                timeSlot.setStatus(Timeslot.STATUS_CREATING);
+            }else if (timeSlot.getStatus().equals(Timeslot.STATUS_CREATING)){
+                timeSlot.setStatus(Timeslot.STATUS_PENDING);
             }
         }
     }
 
     @Override
-    public void onShowDialog() {
-        AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
+    public void onTaskStart() {
+        AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
     }
 
     @Override
-    public void onHideDialog() {
+    public void onTaskError(Throwable e) {
+        AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
+        AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
         AppUtil.hideProgressBar();
     }
 }

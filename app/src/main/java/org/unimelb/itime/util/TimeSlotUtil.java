@@ -15,16 +15,17 @@ import java.util.List;
 public class TimeSlotUtil {
     public static boolean isTimeSlotSelected(Context context, Event event , int position){
         Timeslot timeSlot = event.getTimeslot().get(position);
-        if(event.getHostUserUid().equals(UserUtil.getUserUid())){
+
+        if(event.getHostUserUid().equals(UserUtil.getInstance(context).getUserUid())){
             if (timeSlot.getIsConfirmed()==0){
                 return false;
             }else{
                 return true;
             }
         }else{
-            if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_pending))){
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)){
                 return false;
-            }else if (timeSlot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
+            }else if (timeSlot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
                 return true;
             }else{ // this might change later
                 return false;
@@ -49,7 +50,7 @@ public class TimeSlotUtil {
     public static List<Timeslot> getPendingTimeSlots(Context context, List<Timeslot> timeSlotList){
         List<Timeslot> selectedTimeSlots = new ArrayList<>();
         for (Timeslot timeSlot:timeSlotList){
-            if (timeslotStatusEquals(timeSlot, context.getString(R.string.timeslot_status_pending))){
+            if (timeslotStatusEquals(timeSlot, Timeslot.STATUS_PENDING)){
                 selectedTimeSlots.add(timeSlot);
             }
         }

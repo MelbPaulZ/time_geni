@@ -1,13 +1,10 @@
 package org.unimelb.itime.util;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.ProgressBar;
 
 import org.unimelb.itime.base.C;
-import org.unimelb.itime.ui.activity.MainActivity;
 
 import java.util.UUID;
 
@@ -49,5 +46,26 @@ public class AppUtil {
         if(pgBar != null){
             pgBar.dismiss();
         }
+    }
+
+    /**
+     * read event sync token into
+     * @param context
+     * @return
+     */
+    public static String getEventSyncToken(Context context){
+        return AppUtil.getSharedPreferences(context).getString(C.spkey.EVENT_LIST_SYNC_TOKEN,"");
+    }
+
+    /**
+     * save the event sync token into sp
+     * @param context
+     * @param syncToken
+     */
+    public static void saveEventSyncToken(Context context, String syncToken){
+        SharedPreferences sp = AppUtil.getSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, syncToken);
+        editor.apply();
     }
 }

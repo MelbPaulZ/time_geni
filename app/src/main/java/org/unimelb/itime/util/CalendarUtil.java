@@ -15,19 +15,23 @@ import org.unimelb.itime.restfulresponse.UserLoginRes;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import static io.fabric.sdk.android.services.concurrency.AsyncTask.init;
+
 /**
  * Created by Paul on 24/09/2016.
  */
 public class CalendarUtil {
     private static CalendarUtil instance;
     private List<Calendar> calendars;
-    private CalendarUtil(){
-
+    private Context context;
+    private CalendarUtil(Context context){
+        this.context = context;
     }
 
-    public static CalendarUtil getInstance(){
+    public static CalendarUtil getInstance(Context context){
         if (instance == null){
-            instance = new CalendarUtil();
+            instance = new CalendarUtil(context);
+            instance.init();
         }
         return instance;
     }
@@ -48,6 +52,15 @@ public class CalendarUtil {
             }
         }
         return "";
+    }
+
+    private void init(){
+        SharedPreferences sp = AppUtil.getSharedPreferences(context);
+        String calendarStr = sp.getString(C.calendarString.CALENDAR_STRING,"");
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<Calendar>>() {}.getType();
+        List<Calendar> calendars = gson.fromJson(calendarStr, listType);
+        this.calendars = calendars;
     }
 
 

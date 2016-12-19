@@ -5,10 +5,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
@@ -19,7 +17,7 @@ import rx.Subscriber;
 /**
  * Created by Paul on 28/08/2016.
  */
-public class EventEditPresenter extends CommonPresenter<EventEditMvpView> {
+public class EventEditPresenter extends EventCommonPresenter<EventEditMvpView> {
     private Context context;
     private EventApi eventApi;
     private String TAG = "EventEditPresenter";
@@ -32,7 +30,7 @@ public class EventEditPresenter extends CommonPresenter<EventEditMvpView> {
     }
 
     public void deleteEvent(Event event){
-        Observable<HttpResult<Event>> observable = eventApi.delete(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(), event.getEventUid());
+        Observable<HttpResult<Event>> observable = eventApi.delete(CalendarUtil.getInstance(context).getCalendar().get(0).getCalendarUid(), event.getEventUid());
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
             public void onCompleted() {

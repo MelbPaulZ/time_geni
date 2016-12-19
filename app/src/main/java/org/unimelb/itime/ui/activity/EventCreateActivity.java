@@ -24,12 +24,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.messageevent.MessageUrl;
-import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
+import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
-import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
+import org.unimelb.itime.ui.fragment.event.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotCreateFragment;
-import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
+import org.unimelb.itime.ui.fragment.event.EventTimeSlotCreateFragment;
+import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
 
 import java.util.ArrayList;
 import java.util.List;

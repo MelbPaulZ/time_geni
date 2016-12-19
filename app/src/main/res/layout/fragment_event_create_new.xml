@@ -351,7 +351,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:onClick="@{eventVM.chooseCalendarType()}"
-                            android:text="@{CalendarUtil.instance.getCalendarName(eventVM.event)}"
+                            android:text="@{CalendarUtil.getInstance(context).getCalendarName(eventVM.event)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>

@@ -14,6 +14,9 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.android.databinding.library.baseAdapters.BR;
+import com.google.gson.Gson;
+
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
@@ -23,17 +26,13 @@ import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
-import org.unimelb.itime.util.rulefactory.RuleModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
 import me.tatarka.bindingcollectionadapter.ItemView;
-import com.android.databinding.library.baseAdapters.BR;
-import com.google.gson.Gson;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -60,10 +59,12 @@ public class EventEditViewModel extends CommonViewModel {
     public enum PickerTask{
         START_TIME, END_TIME, END_REPEAT
     }
+    private EventManager eventManager;
 
 
     public EventEditViewModel(EventEditPresenter eventEditPresenter) {
         this.presenter = eventEditPresenter;
+        eventManager = EventManager.getInstance(getContext());
         mvpView = presenter.getView();
         editEventIsRepeat = new ObservableField<>(false); // TODO: 11/12/2016 change this and isAlldayEvent later.... needs to be bind with event
         isAllDayEvent = new ObservableField<>(false);
@@ -181,7 +182,7 @@ public class EventEditViewModel extends CommonViewModel {
                 List<Timeslot> timeslots = EventUtil.getTimeslotFromPending(getContext(), eventEditViewEvent);
                 eventEditViewEvent.setTimeslot(timeslots);
 
-                if (EventManager.getInstance().getCurrentEvent().getRecurrence().length>0){
+                if (eventManager.getCurrentEvent().getRecurrence().length>0){
                     // the event is repeat event
                     final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
 
@@ -211,23 +212,21 @@ public class EventEditViewModel extends CommonViewModel {
                     });
 
                 }else {
-                    if (mvpView!=null){
-                        // set event type
-                        EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
-                        eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
-                        eventEditViewEvent.setStatus("pending");
+                    // set event type
+                    EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
+                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
+                    eventEditViewEvent.setStatus("pending");
 
-                        // TODO: 12/12/2016 test json convert
-                        Gson gson = new Gson();
-                        String str = gson.toJson(eventEditViewEvent);
-                        Log.i("event convert", "onClick: " + str);
+                    // TODO: 12/12/2016 test json convert
+                    Gson gson = new Gson();
+                    String str = gson.toJson(eventEditViewEvent);
+                    Log.i("event convert", "onClick: " + str);
 
-                        Event e = gson.fromJson(str, Event.class);
-                        Log.i("event convert", "onClick: " + e.getSummary());
+                    Event e = gson.fromJson(str, Event.class);
+                    Log.i("event convert", "onClick: " + e.getSummary());
 
-                        presenter.updateEvent(eventEditViewEvent);
-                        // this if might change later, because the host can be kicked??????
-                    }
+                    presenter.updateEvent(eventEditViewEvent);
+                    // this if might change later, because the host can be kicked??????
                 }
             }
         };
@@ -239,9 +238,9 @@ public class EventEditViewModel extends CommonViewModel {
             // need to consider move this event, or edit this event
             // to change all event, need to add until day to origin event, and create a new repeat event
             // first find the origin event
-            Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
+            Event orgEvent = eventManager.findOrgByUUID(event.getEventUid());
             // then copy the origin event rule model to a new rule model
-            Event cpyOrgEvent = EventManager.getInstance().copyCurrentEvent(orgEvent);
+            Event cpyOrgEvent = eventManager.copyCurrentEvent(orgEvent);
             // then add until day to the orgEvent
             if (EventUtil.isSameDay(cpyOrgEvent.getStartTime(), event.getStartTime())){
                 // if the change is start from the first repeat event, then no need of creating new event
@@ -317,15 +316,15 @@ public class EventEditViewModel extends CommonViewModel {
             // set event type
             event.setRecurrence(event.getRule().getRecurrence()); // set the repeat string
             EventUtil.addSelfInInvitee(getContext(), event);
-            event.setEventType(EventUtil.getEventType(event, UserUtil.getUserUid()));
+            event.setEventType(EventUtil.getEventType(event, UserUtil.getInstance(getContext()).getUserUid()));
 
             // next find original event(the first event of repeat event)
-            Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
+            Event orgEvent = eventManager.findOrgByUUID(event.getEventUid());
             orgEvent.getRule().addEXDate(new Date(event.getStartTime()));
             orgEvent.setRecurrence(orgEvent.getRule().getRecurrence());
 
             if (!EventUtil.isGroupEvent(getContext(), event)){
-                event.setStatus(getContext().getString(R.string.confirmed));
+                event.setStatus(Event.STATUS_CONFIRMED);
             }
             // here change the event as a new event
             EventUtil.regenerateRelatedUid(event);
@@ -447,7 +446,7 @@ public class EventEditViewModel extends CommonViewModel {
                 builder.setItems(calendarType, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        eventEditViewEvent.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(i).getCalendarUid());
+                        eventEditViewEvent.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(i).getCalendarUid());
                         setEventEditViewEvent(eventEditViewEvent);
                     }
                 });
@@ -488,7 +487,7 @@ public class EventEditViewModel extends CommonViewModel {
     }
 
     public void setPhotos(ArrayList<String> photos){
-        eventEditViewEvent.setPhoto(EventUtil.fromStringToPhotoUrlList(photos));
+        eventEditViewEvent.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
         setEventEditViewEvent(eventEditViewEvent);
     }
 
@@ -553,7 +552,7 @@ public class EventEditViewModel extends CommonViewModel {
 
     @Bindable
     public int getStartTimeVisibility() {
-        if (!EventUtil.hasOtherInviteeExceptSelf(eventEditViewEvent)){
+        if (!EventUtil.hasOtherInviteeExceptSelf(getContext(), eventEditViewEvent)){
             startTimeVisibility =  View.VISIBLE;
         }else{
             startTimeVisibility =  View.GONE;

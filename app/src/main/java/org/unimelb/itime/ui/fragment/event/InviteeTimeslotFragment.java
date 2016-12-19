@@ -1,17 +1,13 @@
-package org.unimelb.itime.ui.fragment.eventdetail;
+package org.unimelb.itime.ui.fragment.event;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.util.Pair;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
@@ -19,22 +15,13 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.InviteeResponseAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentSelectedInviteeBinding;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
-import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.ui.presenter.TimeslotInviteeResponsePresenter;
-import org.unimelb.itime.ui.viewmodel.InboxViewModel;
 import org.unimelb.itime.ui.viewmodel.TimeslotInviteeResponseViewModel;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.widget.NonScrollListView;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Paul on 4/09/2016.

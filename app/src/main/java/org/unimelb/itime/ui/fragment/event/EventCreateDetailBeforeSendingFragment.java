@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment.eventcreate;
+package org.unimelb.itime.ui.fragment.event;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -20,12 +19,10 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventCreateBeforeSendingBinding;
-import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.messageevent.MessageShowEvent;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
@@ -37,6 +34,7 @@ import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Paul on 31/08/2016.
@@ -69,7 +67,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         ArrayList<String> timeslotsArrayList = new ArrayList<>();
         for (Timeslot timeSlot: event.getTimeslot()){
             // only display chosen timeSlot
-            if (timeSlot.getStatus().equals(getString(R.string.timeslot_status_pending)))
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING))
                 timeslotsArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()) );
         }
         ArrayAdapter timeslotAdapter = new ArrayAdapter<String>(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotsArrayList);
@@ -157,7 +155,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     @Override
     public void changeLocation() {
         EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
-        eventLocationPickerFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        eventLocationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         switchFragment(this, eventLocationPickerFragment);
     }
 
@@ -165,7 +163,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     @Override
     public void pickInvitees() {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        inviteeFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+        inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         switchFragment(this, inviteeFragment);
     }
 
@@ -193,13 +191,24 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         super.onStop();
     }
 
+
     @Override
-    public void onShowDialog() {
+    public void onTaskStart() {
 
     }
 
     @Override
-    public void onHideDialog() {
+    public void onTaskError(Throwable e) {
+
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
+
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
 
     }
 }

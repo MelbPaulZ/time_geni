@@ -36,24 +36,26 @@ public class EventDetailGroupPresenter extends MvpBasePresenter<EventDetailGroup
     private LayoutInflater inflater;
     private EventApi eventApi;
     private String TAG = "EventDetailPresenter";
+    private EventManager eventManager;
 
     public EventDetailGroupPresenter(Context context) {
         this.context = context;
         eventApi = HttpUtil.createService(getContext(),EventApi.class);
+        eventManager = EventManager.getInstance(context);
     }
 
     public void acceptTimeslots(Event event){
-        EventManager.getInstance().getWaitingEditEventList().add(event);
+        eventManager.getWaitingEditEventList().add(event);
         ArrayList<String> timeslotUids = new ArrayList<>();
         for (Timeslot timeslot: event.getTimeslot()){
-            if (timeslot.getStatus().equals(context.getString(R.string.accepted))){
+            if (timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
                 timeslotUids.add(timeslot.getTimeslotUid());
             }
         }
 
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("timeslots", timeslotUids);
-        Observable<HttpResult<Event>> observable = eventApi.acceptTimeslot(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(), event.getEventUid(), parameters);
+        Observable<HttpResult<Event>> observable = eventApi.acceptTimeslot(CalendarUtil.getInstance(getContext()).getCalendar().get(0).getCalendarUid(), event.getEventUid(), parameters);
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
             public void onCompleted() {
@@ -96,7 +98,7 @@ public class EventDetailGroupPresenter extends MvpBasePresenter<EventDetailGroup
     }
 
     private void synchronizeLocal(Event newEvent){
-        Event oldEvent = EventManager.getInstance().findEventByUUID(newEvent.getEventUid());
+        Event oldEvent = eventManager.findEventByUUID(newEvent.getEventUid());
         Log.i(TAG, "APPP: synchronizeLocal: + EventDetail"+"call");
 
 //        EventManager.getInstance().updateEvent(oldEvent,newEvent);

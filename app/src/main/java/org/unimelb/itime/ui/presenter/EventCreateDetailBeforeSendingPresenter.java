@@ -68,7 +68,7 @@ public class EventCreateDetailBeforeSendingPresenter extends MvpBasePresenter<Ev
                 // after inset event into server, upload images
 
                 Event event = eventHttpResult.getData();
-                EventManager.getInstance().addEvent(event);
+                EventManager.getInstance(context).addEvent(event);
                 DBManager.getInstance(getContext()).insertEvent(event);
                 uploadImage(event);
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));

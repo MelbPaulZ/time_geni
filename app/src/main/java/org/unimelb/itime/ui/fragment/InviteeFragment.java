@@ -30,15 +30,13 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.fragment.eventcreate.EventCreateDetailBeforeSendingFragment;
-import org.unimelb.itime.ui.fragment.eventcreate.EventCreateNewFragment;
-import org.unimelb.itime.ui.fragment.eventcreate.EventTimeSlotViewFragment;
-import org.unimelb.itime.ui.fragment.eventdetail.EventDetailTimeSlotFragment;
-import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
+import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
+import org.unimelb.itime.ui.fragment.event.EventCreateNewFragment;
+import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
+import org.unimelb.itime.ui.fragment.event.EventDetailTimeSlotFragment;
+import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 import org.unimelb.itime.ui.presenter.InviteePresenter;
 import org.unimelb.itime.util.AppUtil;
-import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.contact.SortAdapter;
 import org.unimelb.itime.vendor.contact.helper.CharacterParser;
 import org.unimelb.itime.vendor.contact.helper.ClearEditText;
@@ -76,7 +74,7 @@ public class InviteeFragment extends BaseUiFragment {
     private Event event;
     private String tag;
     private View thePublicView;
-
+    private EventManager eventManager;
 
     private LinearLayout ll_checkedList;
 
@@ -97,6 +95,7 @@ public class InviteeFragment extends BaseUiFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        eventManager = EventManager.getInstance(context);
         initView();
         initData();
         initListener();
@@ -438,42 +437,42 @@ public class InviteeFragment extends BaseUiFragment {
                     if (event.getInvitee().size()>=1) {
                         // pick at least one invitee
                         EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-                        eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
                         switchFragment(self, eventTimeSlotViewFragment);
                     }else{
                         EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-                        beforeSendingFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
                         switchFragment(self, beforeSendingFragment);
                     }
                 }else if (getFrom() instanceof EventTimeSlotViewFragment){
                     if (event.getInvitee().size()>=1) {
                         EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFrom();
-                        eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
                         eventTimeSlotViewFragment.resetCalendar(event);
                         switchFragment(self, (EventTimeSlotViewFragment) getFrom());
                     }else{
                         EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-                        beforeSendingFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
                         switchFragment(self, beforeSendingFragment);
                     }
                 }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
                     if (event.getInvitee().size()>=1) {
                         EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-                        eventTimeSlotViewFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
                         switchFragment(self, eventTimeSlotViewFragment);
                     }else{
                         EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-                        beforeSendingFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
                         switchFragment(self, beforeSendingFragment);
                     }
                 }else if (getFrom() instanceof EventEditFragment){
                     if (event.getInvitee().size()>=1) {
                         EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-                        eventDetailTimeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        eventDetailTimeSlotFragment.setEvent(eventManager.copyCurrentEvent(event));
                         switchFragment(self, eventDetailTimeSlotFragment);
                     }else{
                         EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-                        eventEditFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event));
+                        eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
                         switchFragment(self, eventEditFragment);
                     }
                 }

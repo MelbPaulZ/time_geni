@@ -5,7 +5,6 @@ import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.restfulresponse.HttpResult;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public interface EventApi {
     Observable<HttpResult<Event>> insert(@Body Event event);
 
     @POST("event/update/{calendarUid}/{eventUid}")
-    Observable<HttpResult<Event>> update(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body Event event);
+    Observable<HttpResult<List<Event>>> update(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body Event event, @Query("syncToken") String syncToken);
 
     @POST("event/delete/{calendarUid}/{eventUid}")
     Observable<HttpResult<Event>> delete(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid);

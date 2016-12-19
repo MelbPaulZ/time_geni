@@ -9,32 +9,24 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentViewCalendarBinding;
 import org.unimelb.itime.messageevent.MessageMonthYear;
-import org.unimelb.itime.ui.activity.EventSearchActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
-import org.unimelb.itime.ui.fragment.calendars.CalendarAgendaFragment;
-import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
-import org.unimelb.itime.ui.fragment.calendars.CalendarWeekFragment;
 import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
-import org.unimelb.itime.ui.fragment.eventdetail.EventDetailGroupFragment;
+import org.unimelb.itime.ui.fragment.event.EventDetailGroupFragment;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * required login, need to extend BaseUiAuthFragment
@@ -126,12 +118,22 @@ public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView
     }
 
     @Override
-    public void onShowDialog() {
+    public void onTaskStart() {
 
     }
 
     @Override
-    public void onHideDialog() {
+    public void onTaskError(Throwable e) {
+
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
+
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
 
     }
 }

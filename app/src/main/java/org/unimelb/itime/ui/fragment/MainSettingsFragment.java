@@ -96,9 +96,9 @@ public class MainSettingsFragment extends MvpFragment<MainSettingsMvpView, MainS
 
         Log.i(TAG, "clearAccount: " + "clear DB manager");
         DBManager.getInstance(getContext()).deleteAllMessages();
-        DBManager.getInstance().clearDB();
+        DBManager.getInstance(getContext()).clearDB();
         Log.i(TAG, "clearAccount: " + "clear Event manager");
-        EventManager.getInstance().clearManager();
+        EventManager.getInstance(getContext()).clearManager();
     }
 
     @Override
