@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.databinding.FragmentSetPasswordBinding;
+import org.unimelb.itime.databinding.FragmentLoginInputPasswordBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
@@ -26,7 +26,7 @@ import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 public class LoginSetPWFragment extends BaseUiFragment<LoginMvpView, LoginPresenter> implements LoginMvpView{
 
-    private FragmentSetPasswordBinding binding;
+    private FragmentLoginInputPasswordBinding binding;
     private LoginViewModel viewModel;
     private Dialog pwTooSimpleDialog;
     private SoftKeyboardStateUtil softKeyboardStateUtil;

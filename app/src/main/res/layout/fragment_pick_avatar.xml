@@ -11,58 +11,77 @@
     android:focusable="true"
     android:clickable="true"
     android:focusableInTouchMode="true">
-    <ImageView
-        android:layout_width="8dp"
-        android:layout_height="14dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="36dp"
-        android:onClick="@{loginVM.onClickAvatar}"
-        android:background="@drawable/icon_back_arrow"
-        />
-    <ImageView
-        android:layout_width="136dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="95dp"
-        android:background="@drawable/icon_profile_pic"
-        android:layout_centerHorizontal="true"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="282dp"
-        android:layout_marginLeft="70dp"
-        android:text="@string/your_name"
-        android:textSize="11sp"
-        android:textColor="@color/color_8190A7" />
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="315dp"
-        android:background="#00000000"
-        android:text="Alex Wang"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        />
-
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="346dp"
-        android:background="@color/color_bec9d1"
-        android:src="@drawable/itime_header_divider_line"
-        />
-    <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="389dp"
-        android:text="@string/complete_your_profile_so_that_your_friends_can_recognize_you"
-        android:textSize="18sp"
-        android:textColor="@color/color_C0C7D3"
-        />
+        android:orientation="vertical">
+
+        <!--back btn-->
+        <ImageView
+            android:layout_width="8dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="17dp"
+            android:onClick="@{loginVM.onClickAvatar}"
+            android:background="@drawable/icon_back_arrow"
+            />
+
+        <!--avatar image-->
+        <ImageView
+            android:layout_width="136dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/icon_profile_pic"
+            android:layout_gravity="center_horizontal"/>
+
+        <!--title-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37dp"
+            android:layout_marginLeft="70dp"
+            android:text="@string/your_name"
+            android:textSize="11sp"
+            android:textColor="@color/color_8190A7" />
+
+        <!--input name-->
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="14dp"
+            android:background="#00000000"
+            android:text="Alex Wang"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            />
+
+        <!--divider-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="14dp"
+            android:background="@color/color_bec9d1"
+            android:src="@drawable/itime_header_divider_line"
+            />
+
+        <!--hint-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="23dp"
+            android:text="@string/complete_your_profile_so_that_your_friends_can_recognize_you"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textColor="@color/color_C0C7D3"
+            />
+    </LinearLayout>
+
+    <!--next button-->
     <RelativeLayout
         android:layout_width="250dp"
         android:layout_height="65dp"
@@ -78,8 +97,19 @@
             android:textSize="14sp"
             android:layout_centerInParent="true"
             />
-
     </RelativeLayout>
+
+    <!--agreement part-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="23dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/login_input_email_agreement"
+        android:textColor="@color/color_C0C7D3"
+        android:textSize="11sp"
+        />
 
 </RelativeLayout>
 </layout>
