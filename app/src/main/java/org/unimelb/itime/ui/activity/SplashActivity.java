@@ -7,12 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import org.unimelb.itime.R;
 import org.unimelb.itime.ui.fragment.login.LoginIndexFragment;
 import org.unimelb.itime.ui.fragment.login.LoginInputEmailFragment;
+import org.unimelb.itime.ui.fragment.login.LoginPickAvatarFragment;
+import org.unimelb.itime.ui.fragment.login.LoginSetPWFragment;
 
 public class SplashActivity extends AppCompatActivity {
 
     private static final String TAG = "SplashActivity";
     private LoginIndexFragment indexFragment;
     private LoginInputEmailFragment inputEmailFragment;
+    private LoginSetPWFragment setPWFragment;
+    private LoginPickAvatarFragment pickAvatarFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,8 +29,13 @@ public class SplashActivity extends AppCompatActivity {
     public void initFragment(){
 //        indexFragment = new LoginIndexFragment();
 //        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, indexFragment).commit();
-        inputEmailFragment = new LoginInputEmailFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, inputEmailFragment).commit();
+//        inputEmailFragment = new LoginInputEmailFragment();
+//        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, inputEmailFragment).commit();
+//        setPWFragment = new LoginSetPWFragment();
+//        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, setPWFragment).commit();
+        pickAvatarFragment = new LoginPickAvatarFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, pickAvatarFragment).commit();
+
     }
 
 

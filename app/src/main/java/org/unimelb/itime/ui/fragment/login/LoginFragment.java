@@ -133,7 +133,7 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
     }
 
     @Override
-    public void invalidEmail() {
+    public void invalidPopup() {
 
     }
 }

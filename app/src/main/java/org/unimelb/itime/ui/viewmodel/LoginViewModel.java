@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.content.Context;
 import android.databinding.Bindable;
+import android.databinding.BindingAdapter;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -29,6 +30,9 @@ public class LoginViewModel extends AndroidViewModel{
     private String email = "johncdyin@gmail.com";
     private String password = "123456";
     private LoginMvpView mvpView;
+
+    private String newPassword = "";
+    private int passwordKeyBoardVisibility = View.VISIBLE;
 
     private int topEmailIconVisibility = View.VISIBLE;
 
@@ -84,7 +88,7 @@ public class LoginViewModel extends AndroidViewModel{
                 if (isEmailValid()){
 
                 }else{
-                    mvpView.invalidEmail();
+                    mvpView.invalidPopup();
                 }
                 Log.d(TAG, "OnIndexBtnSignInClick: ");
             }
@@ -114,6 +118,46 @@ public class LoginViewModel extends AndroidViewModel{
                 }
             }
         };
+    }
+
+    public View.OnFocusChangeListener onPasswordEditFocusChange(){
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Log.i(TAG, "onFocusChange: " + hasFocus);
+                if(hasFocus){
+                    showKeyBoard((EditText) v);
+                }else{
+                    closeKeyBoard((EditText) v);
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener onPasswordNextClick(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (newPassword.length()>=8){
+
+                }else {
+                    mvpView.invalidPopup();
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener onClickAvatar(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        };
+    }
+
+    public void onPasswordChange(CharSequence s, int start, int before, int count) {
+        Log.w("tag", "onTextChanged " + s);
     }
 
     public AdapterView.OnItemClickListener onSuggestedEmailItemClick(){
@@ -184,5 +228,24 @@ public class LoginViewModel extends AndroidViewModel{
     public void setSuggestedEmailItemView(ItemView suggestedEmailItemView){
         this.suggestedEmailItemView = suggestedEmailItemView;
         notifyPropertyChanged(BR.suggestedEmailItemView);
+    }
+
+
+    @Bindable
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+        notifyPropertyChanged(BR.newPassword);
+    }
+
+    public int getPasswordKeyBoardVisibility() {
+        return passwordKeyBoardVisibility;
+    }
+
+    public void setPasswordKeyBoardVisibility(int passwordKeyBoardVisibility) {
+        this.passwordKeyBoardVisibility = passwordKeyBoardVisibility;
     }
 }

@@ -18,6 +18,17 @@
     <string name="login_input_email_edit_hint">Email</string>
     <string name="login_input_email_agreement">By signing up, I agree to the Term of Use</string>
 
+
+    <string name="login_input_password_title">Set A Password</string>
+    <string name="login_input_password_subtitle">Password should contain at least 8 characters</string>
+    <string name="login_input_password_edit_title">PASSWORD</string>
+    <string name="login_input_password_next">NEXT</string>
+    <string name="your_name">YOUR NAME</string>
+    <string name="complete_your_profile_so_that_your_friends_can_recognize_you">Complete your profile so that your friends can recognize you</string>>
+
+
+
+
     <string name="tab_calendar">Calendar</string>
     <string name="tab_contact">Contact</string>
     <string name="tab_inbox">Inbox</string>
@@ -285,5 +296,4 @@
     <string name="ok">OK</string>
     <string name="unsupported_email">Unsupported Email</string>
     <string name="try_again">Try Again</string>
-
 </resources>

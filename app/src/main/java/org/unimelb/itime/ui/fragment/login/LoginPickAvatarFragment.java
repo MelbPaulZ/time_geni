@@ -7,48 +7,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
-
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.databinding.FragmentLoginIndexBinding;
+import org.unimelb.itime.databinding.FragmentPickAvatarBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
- * Created by yinchuandong on 15/12/16.
+ * Created by Paul on 19/12/2016.
  */
 
-public class LoginIndexFragment extends BaseUiFragment<LoginMvpView, LoginPresenter> implements LoginMvpView {
+public class LoginPickAvatarFragment extends BaseUiFragment<LoginMvpView, LoginPresenter> implements LoginMvpView{
 
-    private final static String TAG = "LoginIndexFragment";
-
-    private FragmentLoginIndexBinding binding;
-    private LoginViewModel loginViewModel;
-
-
+    private FragmentPickAvatarBinding binding;
+    private LoginViewModel viewModel;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_index, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pick_avatar, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loginViewModel = new LoginViewModel(getPresenter());
-        binding.setLoginVM(loginViewModel);
+        viewModel = new LoginViewModel(getPresenter());
+        binding.setLoginVM(viewModel);
     }
 
     @Override
     public LoginPresenter createPresenter() {
         return new LoginPresenter(getContext());
-    }
-
-    public void signUpClick(View v){
-
     }
 
     @Override
@@ -70,5 +60,4 @@ public class LoginIndexFragment extends BaseUiFragment<LoginMvpView, LoginPresen
     public void invalidPopup() {
 
     }
-
 }
