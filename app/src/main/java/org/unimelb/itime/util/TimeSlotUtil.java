@@ -15,7 +15,8 @@ import java.util.List;
 public class TimeSlotUtil {
     public static boolean isTimeSlotSelected(Context context, Event event , int position){
         Timeslot timeSlot = event.getTimeslot().get(position);
-        if(event.getHostUserUid().equals(UserUtil.getUserUid())){
+
+        if(event.getHostUserUid().equals(UserUtil.getInstance(context).getUserUid())){
             if (timeSlot.getIsConfirmed()==0){
                 return false;
             }else{

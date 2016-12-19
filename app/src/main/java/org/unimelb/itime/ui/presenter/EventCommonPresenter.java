@@ -31,6 +31,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
     public Context context;
     private EventApi eventApi;
     private String TAG = "EventCommonPresenter";
+    private CalendarUtil calendarUtil;
 
     public EventCommonPresenter() {
         Log.i(TAG, "EventCommonPresenter: ");
@@ -39,7 +40,10 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
     public EventCommonPresenter(Context context){
         this.context = context;
         eventApi = HttpUtil.createService(context, EventApi.class);
+        calendarUtil = CalendarUtil.getInstance(context);
     }
+
+    // todo fetch all calendars
 
     public void updateEventToServer(Event event){
         if(getView() != null){
@@ -47,7 +51,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         }
         EventManager.getInstance().getWaitingEditEventList().add(event);
         String syncToken = AppUtil.getEventSyncToken(context);
-        Observable<HttpResult<List<Event>>> observable = eventApi.update(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(),event.getEventUid(),event, syncToken);
+        Observable<HttpResult<List<Event>>> observable = eventApi.update(calendarUtil.getCalendar().get(0).getCalendarUid(),event.getEventUid(),event, syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
             public void onCompleted() {

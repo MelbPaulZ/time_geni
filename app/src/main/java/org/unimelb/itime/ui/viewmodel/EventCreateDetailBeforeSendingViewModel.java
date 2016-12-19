@@ -57,6 +57,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     }
 
     private UserUtil userUtil;
+    private CalendarUtil calendarUtil;
 
     public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter) {
         this.presenter = presenter;
@@ -68,6 +69,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         mvpView = presenter.getView();
         initDialog();
         userUtil = UserUtil.getInstance(getContext());
+        calendarUtil = CalendarUtil.getInstance(getContext());
     }
 
     private void initDialog(){
@@ -358,7 +360,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                     builder.setItems(types, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
-                            newEvDtlEvent.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(i).getCalendarUid());
+                            newEvDtlEvent.setCalendarUid(calendarUtil.getCalendar().get(i).getCalendarUid());
                             viewModel.setNewEvDtlEvent(newEvDtlEvent);
                         }
                     });
@@ -433,7 +435,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
 
     @Bindable
     public int getStartVisibility() {
-        if (!EventUtil.hasOtherInviteeExceptSelf(newEvDtlEvent)){
+        if (!EventUtil.hasOtherInviteeExceptSelf(getContext(), newEvDtlEvent)){
             startVisibility =  View.VISIBLE;
         }else{
             startVisibility =  View.GONE;

@@ -49,6 +49,7 @@ public class UserUtil {
         Gson gson = new Gson();
         editor.putString(C.spkey.USER_SHARED_PREFERENCES, gson.toJson(userLoginRes));
         editor.apply();
+        this.userLoginRes = userLoginRes;
     }
 
     /**

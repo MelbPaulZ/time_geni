@@ -78,8 +78,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
                     Toast.makeText(context, "username or password error",Toast.LENGTH_SHORT);
                 }else {
                     AuthUtil.saveJwtToken(context, result.getData().getToken());
-
-                    UserUtil.getInstance().setUserLoginRes(context, result.getData());
+                    UserUtil.getInstance(context).login(result.getData());
                     if (getView() != null) {
                         getView().onLoginSucceed();
                     }

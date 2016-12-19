@@ -212,7 +212,7 @@ public class EventEditViewModel extends CommonViewModel {
                 }else {
                     // set event type
                     EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
-                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
+                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
                     eventEditViewEvent.setStatus("pending");
 
                     // TODO: 12/12/2016 test json convert
@@ -314,7 +314,7 @@ public class EventEditViewModel extends CommonViewModel {
             // set event type
             event.setRecurrence(event.getRule().getRecurrence()); // set the repeat string
             EventUtil.addSelfInInvitee(getContext(), event);
-            event.setEventType(EventUtil.getEventType(event, UserUtil.getUserUid()));
+            event.setEventType(EventUtil.getEventType(event, UserUtil.getInstance(getContext()).getUserUid()));
 
             // next find original event(the first event of repeat event)
             Event orgEvent = EventManager.getInstance().findOrgByUUID(event.getEventUid());
@@ -444,7 +444,7 @@ public class EventEditViewModel extends CommonViewModel {
                 builder.setItems(calendarType, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        eventEditViewEvent.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(i).getCalendarUid());
+                        eventEditViewEvent.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(i).getCalendarUid());
                         setEventEditViewEvent(eventEditViewEvent);
                     }
                 });
@@ -550,7 +550,7 @@ public class EventEditViewModel extends CommonViewModel {
 
     @Bindable
     public int getStartTimeVisibility() {
-        if (!EventUtil.hasOtherInviteeExceptSelf(eventEditViewEvent)){
+        if (!EventUtil.hasOtherInviteeExceptSelf(getContext(), eventEditViewEvent)){
             startTimeVisibility =  View.VISIBLE;
         }else{
             startTimeVisibility =  View.GONE;

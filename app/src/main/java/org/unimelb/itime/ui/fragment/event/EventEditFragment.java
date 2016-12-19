@@ -135,7 +135,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     public void toTimeSlotView(Event event) {
         EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
         Event cpyEvent = EventManager.getInstance().copyCurrentEvent(event);
-        Invitee me = EventUtil.getSelfInInvitees(cpyEvent);
+        Invitee me = EventUtil.getSelfInInvitees(getContext(), cpyEvent);
         // if the user is host, then reset all his timeslot as create
         if (me!=null) {
             for (SlotResponse slotResponse : me.getSlotResponses()) {

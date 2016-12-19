@@ -65,7 +65,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         timeSlot.setStartTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).startTime);
         timeSlot.setEndTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).endTime);
         timeSlot.setStatus(status);
-        timeSlot.setUserUid(UserUtil.getUserUid());
+        timeSlot.setUserUid(UserUtil.getInstance(getContext()).getUserUid());
         eventDetailHostEvent.getTimeslot().add(timeSlot);
         WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
         struct.object = timeSlot;
@@ -80,10 +80,10 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         return new FlexibleLenViewBody.OnTimeSlotListener() {
             @Override
             public void onTimeSlotCreate(TimeSlotView timeSlotView) {
-                if (mvpView.isClickTSConfirm() && EventUtil.isUserHostOfEvent(eventDetailHostEvent)) {
+                if (mvpView.isClickTSConfirm() && EventUtil.isUserHostOfEvent(getContext(),eventDetailHostEvent)) {
                     // is host and create timeslot as confirmed
                     createTimeslotInStatus(timeSlotView, getContext().getString(R.string.accepted));
-                } else if (EventUtil.isUserHostOfEvent(eventDetailHostEvent)) {
+                } else if (EventUtil.isUserHostOfEvent(getContext(), eventDetailHostEvent)) {
                     // is host, and create timeslot as pending
                     createTimeslotInStatus(timeSlotView, getContext().getString(R.string.timeslot_status_create));
                 }
@@ -92,7 +92,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
             // TODO: 11/12/2016 check this method, see if it is right
             @Override
             public void onTimeSlotClick(TimeSlotView timeSlotView) {
-                if (EventUtil.isUserHostOfEvent(eventDetailHostEvent)) {
+                if (EventUtil.isUserHostOfEvent(getContext(), eventDetailHostEvent)) {
                     onHostClickTimeslotView(timeSlotView);
                 }else{
                     // user is as invitee
@@ -112,7 +112,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
 
             @Override
             public void onTimeSlotDragDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
-                if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getUserUid())) {
+                if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getInstance(getContext()).getUserUid())) {
                     // host:
                     WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
                     struct.startTime = startTime;
@@ -256,7 +256,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
     }
 
     private void setTimeslotFromDetailFragment(Timeslot timeslot, WeekView.TimeSlotStruct struct){
-        if (EventUtil.isUserHostOfEvent(eventDetailHostEvent)){
+        if (EventUtil.isUserHostOfEvent(getContext(), eventDetailHostEvent)){
             // user is host
             if (timeslot.getIsConfirmed()==1){
                 struct.status = true;

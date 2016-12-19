@@ -124,7 +124,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         timeSlot.setStartTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).startTime);
         timeSlot.setEndTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).endTime);
         timeSlot.setStatus(getString(R.string.timeslot_status_create));
-        timeSlot.setUserUid(UserUtil.getUserUid());
+        timeSlot.setUserUid(UserUtil.getInstance(getContext()).getUserUid());
         event.getTimeslot().add(timeSlot);
         WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
         struct.object = timeSlot;

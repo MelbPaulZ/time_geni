@@ -75,7 +75,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         weekView.setEventClassName(Event.class);
         weekView.setDayEventMap(EventManager.getInstance().getEventsPackage());
 
-        if (UserUtil.getUserUid().equals(event.getHostUserUid())) {
+        if (UserUtil.getInstance(getContext()).getUserUid().equals(event.getHostUserUid())) {
             // which means this is host event
         } else {
             // which means this is invitee event
@@ -283,7 +283,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                if (EventUtil.isUserHostOfEvent(event)) {
+                if (EventUtil.isUserHostOfEvent(getContext(), event)) {
                     changeTimeSlotView(timeSlotView);
                     hostClickTimeSlot(timeSlotView);
                 } else {
@@ -325,7 +325,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     public void onClickTimeSlotView(TimeSlotView timeSlotView) {
         if (getFrom() instanceof EventDetailGroupFragment) {
             // change status of view and struct
-            if (EventUtil.isUserHostOfEvent(event)) {
+            if (EventUtil.isUserHostOfEvent(getContext(), event)) {
                 // for host , only one timeslot can be selected
                 if (TimeSlotUtil.getSelectedTimeSlots(getContext(), event.getTimeslot()).size() < 1) {
                     // if no timeslot has been selected

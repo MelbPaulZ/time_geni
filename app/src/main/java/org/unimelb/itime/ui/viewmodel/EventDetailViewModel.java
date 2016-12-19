@@ -188,7 +188,7 @@ public class EventDetailViewModel extends CommonViewModel {
     // left buttons
 
     public String getInviteeLeftBtnStr(Context context, Event event){
-        Invitee me = getSelfInInvitees(event);
+        Invitee me = getSelfInInvitees(context, event);
         if (me.getStatus().equals(context.getString(R.string.accepted))){
             return context.getString(R.string.Accepted);
         }else{
@@ -205,7 +205,7 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
     public int getLeftBtnTextColor(Event event){
-        Invitee me = EventUtil.getSelfInInvitees(event);
+        Invitee me = EventUtil.getSelfInInvitees(getContext(), event);
         if (me.getStatus().equals(Invitee.INVITEE_STATUS_NEEDSACTION)){
             if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
                 return context.getResources().getColor(R.color.color_63ADF2);
@@ -229,7 +229,7 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
     public Drawable getLeftBtnBg(Event event){
-        Invitee me = getSelfInInvitees(event);
+        Invitee me = getSelfInInvitees(getContext(), event);
         if (me.getStatus().equals(context.getString(R.string.accepted))){
             return context.getResources().getDrawable(R.drawable.background_round_radius_able_blue);
         }else {
@@ -249,7 +249,7 @@ public class EventDetailViewModel extends CommonViewModel {
 
 
     public boolean getRightBtnClickable(Event event){
-        Invitee invitee = getSelfInInvitees(event);
+        Invitee invitee = getSelfInInvitees(getContext(), event);
         if (invitee.getStatus().equals(context.getString(R.string.needs_action))){
             if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
                 return false;
@@ -269,7 +269,7 @@ public class EventDetailViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
 //                Timeslot timeSlot = evDtlHostEvent.getTimeslot().get(position);
-                if (evDtlHostEvent.getHostUserUid().equals(UserUtil.getUserUid())){
+                if (evDtlHostEvent.getHostUserUid().equals(UserUtil.getInstance(context).getUserUid())){
                     // this is a host event
                     if (timeslot.getIsConfirmed()==0){
                         for (Timeslot ts: evDtlHostEvent.getTimeslot()){
@@ -360,7 +360,7 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
     public int hostConfirmBtnVisibility(Event event){
-        if (EventUtil.isUserHostOfEvent(event) && event.getStatus().equals(context.getString(R.string.confirmed))){
+        if (EventUtil.isUserHostOfEvent(context, event) && event.getStatus().equals(context.getString(R.string.confirmed))){
             return View.VISIBLE;
         }else{
             return View.GONE;
@@ -399,7 +399,7 @@ public class EventDetailViewModel extends CommonViewModel {
     public int getHostConfirmVisibility() {
         if (EventUtil.isGroupEvent(context, evDtlHostEvent) &&
                 EventUtil.isEventConfirmed(context, evDtlHostEvent) &&
-                EventUtil.isUserHostOfEvent(evDtlHostEvent))
+                EventUtil.isUserHostOfEvent(context, evDtlHostEvent))
             return View.VISIBLE;
         else
             return View.GONE;
@@ -414,7 +414,7 @@ public class EventDetailViewModel extends CommonViewModel {
     public int getHostUnconfirmVisibility() {
         if (EventUtil.isGroupEvent(context, evDtlHostEvent) &&
                 !EventUtil.isEventConfirmed(context, evDtlHostEvent) &&
-                EventUtil.isUserHostOfEvent(evDtlHostEvent)){
+                EventUtil.isUserHostOfEvent(context, evDtlHostEvent)){
             return View.VISIBLE;
         }else{
             return View.GONE;
@@ -431,7 +431,7 @@ public class EventDetailViewModel extends CommonViewModel {
     @Bindable
     public int getInviteeVisibility() {
         if (EventUtil.isGroupEvent(context, evDtlHostEvent) &&
-                !EventUtil.isUserHostOfEvent(evDtlHostEvent)){
+                !EventUtil.isUserHostOfEvent(context, evDtlHostEvent)){
             return View.VISIBLE;
         }else {
             return View.GONE;

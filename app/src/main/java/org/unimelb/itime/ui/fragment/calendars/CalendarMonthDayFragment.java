@@ -286,14 +286,10 @@ public class CalendarMonthDayFragment extends BaseUiFragment<EventCommonMvpView,
                     presenter.updateEventToServer(copyEvent);
                 }
 
-//                EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
-//                Event copyEvent = EventManager.getInstance().copyCurrentEvent(newEvent);
-//                copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
-//                copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-//                presenter.updateEventToServer(copyEvent);
             }
         });
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){

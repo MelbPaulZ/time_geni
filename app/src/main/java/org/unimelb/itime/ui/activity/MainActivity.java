@@ -206,7 +206,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         Event event = EventManager.getInstance().getNewEvent();
         EventManager.getInstance().setCurrentEvent(event);
         event.setEventUid(AppUtil.generateUuid());
-        event.setHostUserUid(UserUtil.getUserUid());
+        event.setHostUserUid(UserUtil.getInstance(getApplicationContext()).getUserUid());
         long endTime = startTimeCalendar.getTimeInMillis() + 3600 * 1000;
         event.setStartTime(startTimeCalendar.getTimeInMillis());
         event.setEndTime(endTime);

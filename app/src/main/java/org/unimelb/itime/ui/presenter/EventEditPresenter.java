@@ -30,7 +30,7 @@ public class EventEditPresenter extends EventCommonPresenter<EventEditMvpView> {
     }
 
     public void deleteEvent(Event event){
-        Observable<HttpResult<Event>> observable = eventApi.delete(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(), event.getEventUid());
+        Observable<HttpResult<Event>> observable = eventApi.delete(CalendarUtil.getInstance(context).getCalendar().get(0).getCalendarUid(), event.getEventUid());
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
             public void onCompleted() {

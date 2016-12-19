@@ -119,7 +119,7 @@ public class RemoteService extends Service{
 
             @Override
             public void onNext(HttpResult<List<org.unimelb.itime.bean.Calendar>> httpResult) {
-                CalendarUtil.getInstance().setCalendar(httpResult.getData());
+                CalendarUtil.getInstance(getApplicationContext()).setCalendar(httpResult.getData());
 
                 SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = sp.edit();
@@ -272,7 +272,7 @@ public class RemoteService extends Service{
             isPollingThreadRunning = true;
             while (isStart) {
                 // todo: here to list events
-                for(Calendar calendar : CalendarUtil.getInstance().getCalendar()){
+                for(Calendar calendar : CalendarUtil.getInstance(getApplication()).getCalendar()){
                     fetchEvents(calendar.getCalendarUid());
                 }
                 fetchMessages();

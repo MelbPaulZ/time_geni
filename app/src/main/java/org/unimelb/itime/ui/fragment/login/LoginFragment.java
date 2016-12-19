@@ -102,17 +102,13 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
                 } else {
 
                 }
-                String userUid;
-                if (UserUtil.getUserLoginRes()==null){
-                    userUid = UserUtil.getUserIdFromPreference(getContext());
-                }else{
-                    userUid = UserUtil.getUserUid();
-                }
-                List<Calendar> calendars;
-                if (CalendarUtil.getInstance().getCalendar()==null){
-                    calendars = CalendarUtil.getCalendarsFromPreferences(getContext());
-                    CalendarUtil.getInstance().setCalendar(calendars);
-                }
+                String userUid = UserUtil.getInstance(getContext()).getUserUid();
+
+//                List<Calendar> calendars;
+//                if (CalendarUtil.getInstance(getContext()).getCalendar()==null){
+//                    calendars = CalendarUtil.getCalendarsFromPreferences(getContext());
+//                    CalendarUtil.getInstance(getContext()).setCalendar(calendars);
+//                }
                 AVInstallation.getCurrentInstallation().put("user_uid", userUid);
             }
         });

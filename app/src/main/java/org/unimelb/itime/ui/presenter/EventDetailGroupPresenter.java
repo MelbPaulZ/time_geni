@@ -53,7 +53,7 @@ public class EventDetailGroupPresenter extends MvpBasePresenter<EventDetailGroup
 
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("timeslots", timeslotUids);
-        Observable<HttpResult<Event>> observable = eventApi.acceptTimeslot(CalendarUtil.getInstance().getCalendar().get(0).getCalendarUid(), event.getEventUid(), parameters);
+        Observable<HttpResult<Event>> observable = eventApi.acceptTimeslot(CalendarUtil.getInstance(getContext()).getCalendar().get(0).getCalendarUid(), event.getEventUid(), parameters);
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
             public void onCompleted() {

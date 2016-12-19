@@ -64,7 +64,7 @@
                     android:onClick="@{hostDetailVM.onClickEdit()}"
                     android:text="@string/edit"
                     android:textColor="@color/page_title_color"
-                    android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getUserUid())? View.VISIBLE : View.INVISIBLE}" />
+                    android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance(context).getUserUid())? View.VISIBLE : View.INVISIBLE}" />
             </android.support.v7.widget.Toolbar>
         </LinearLayout>
 
@@ -110,7 +110,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{EventUtil.getHostName(hostDetailVM.evDtlHostEvent)}"
-                            android:visibility="@{EventUtil.isUserHostOfEvent(hostDetailVM.evDtlHostEvent)? View.GONE: View.VISIBLE}"
+                            android:visibility="@{EventUtil.isUserHostOfEvent(context, hostDetailVM.evDtlHostEvent)? View.GONE: View.VISIBLE}"
                             android:textColor="@{hostDetailVM.getMessageStatusColor(hostDetailVM.evDtlHostEvent)}"
                             android:textStyle="bold" />
 

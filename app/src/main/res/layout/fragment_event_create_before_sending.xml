@@ -399,7 +399,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{CalendarUtil.instance.getCalendarName(newEventDetailVM.newEvDtlEvent)}"
+                            android:text="@{CalendarUtil.getInstance(context).getCalendarName(newEventDetailVM.newEvDtlEvent)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>

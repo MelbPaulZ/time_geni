@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.viewmodel;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
 import android.view.View;
@@ -32,6 +33,7 @@ public class CommonViewModel extends BaseObservable {
         this. presenter = presenter;
         mvpView = (EventCommonMvpView) presenter.getView();
     }
+
 
     @BindingAdapter("imageResource")
     public static void setImageResource(ImageView imageView, Event event){
@@ -70,7 +72,7 @@ public class CommonViewModel extends BaseObservable {
 
     @BindingAdapter({"bind:timeslotVisible"})
     public static void setTimeslotVisible(RelativeLayout view, Event event){
-        if (EventUtil.hasOtherInviteeExceptSelf(event)){
+        if (EventUtil.hasOtherInviteeExceptSelf(view.getContext(), event)){
             view.setVisibility(view.VISIBLE);
         }else{
             view.setVisibility(View.GONE);

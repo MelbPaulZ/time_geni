@@ -270,7 +270,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 builder.setItems(types, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        event.setCalendarUid(CalendarUtil.getInstance().getCalendar().get(i).getCalendarUid());
+                        event.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(i).getCalendarUid());
                         viewModel.setEvent(event);
                     }
                 });
