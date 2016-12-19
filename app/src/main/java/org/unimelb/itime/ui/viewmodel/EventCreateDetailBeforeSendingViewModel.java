@@ -8,28 +8,21 @@ import android.content.DialogInterface;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TimePicker;
 
 import com.android.databinding.library.baseAdapters.BR;
-import com.google.gson.Gson;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.Timeslot;
-import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
@@ -63,6 +56,8 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         START_TIME, END_TIME, END_REPEAT
     }
 
+    private UserUtil userUtil;
+
     public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter) {
         this.presenter = presenter;
         newEvDtlEvent = EventManager.getInstance().getCurrentEvent();
@@ -72,6 +67,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         isAllDay = new ObservableField<>(false);
         mvpView = presenter.getView();
         initDialog();
+        userUtil = UserUtil.getInstance(getContext());
     }
 
     private void initDialog(){
@@ -299,7 +295,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
 
                 newEvDtlEvent.setRecurrence(newEvDtlEvent.getRule().getRecurrence());
                 newEvDtlEvent.setTimeslot(pendingTimeslots);
-                newEvDtlEvent.setHostUserUid(UserUtil.getUserUid());
+                newEvDtlEvent.setHostUserUid(UserUtil.getInstance(getContext()).getUserUid());
                 EventUtil.addSelfInInvitee(getContext(), newEvDtlEvent);
                 if(!newEvDtlEvent.hasPhoto()){
                     newEvDtlEvent.setPhoto(new ArrayList<PhotoUrl>());
@@ -311,7 +307,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 }
 
                 // todo: delete it after finishing calendar
-                newEvDtlEvent.setCalendarUid(UserUtil.getUserUid());
+                newEvDtlEvent.setCalendarUid(userUtil.getUserUid());
                 newEvDtlEvent.setRecurringEventUid(newEvDtlEvent.getEventUid());
                 newEvDtlEvent.setRecurringEventId(newEvDtlEvent.getEventUid());
                 newEvDtlEvent.setStatus("pending");

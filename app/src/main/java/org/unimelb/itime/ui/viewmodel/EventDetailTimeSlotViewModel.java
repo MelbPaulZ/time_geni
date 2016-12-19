@@ -1,31 +1,18 @@
 package org.unimelb.itime.ui.viewmodel;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
-import org.unimelb.itime.adapter.InviteeInnerResponseAdapter;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
-import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.restfulapi.EventApi;
-import org.unimelb.itime.ui.fragment.eventdetail.EventEditFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
@@ -33,14 +20,7 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-
-import static java.security.AccessController.getContext;
-import static kotlin.text.Typography.tm;
-import static org.unimelb.itime.R.string.select;
 
 /**
  * Created by Paul on 10/09/2016.

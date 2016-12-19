@@ -1,15 +1,11 @@
 package org.unimelb.itime.ui.fragment.calendars;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
@@ -23,7 +19,7 @@ import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.agendaview.AgendaViewBody;
 import org.unimelb.itime.vendor.agendaview.MonthAgendaView;
@@ -31,7 +27,6 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by Paul on 21/09/2016.
@@ -104,7 +99,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
 
     @Override
     public MvpPresenter createPresenter() {
-        return new CommonPresenter(getContext());
+        return new EventCommonPresenter(getContext());
     }
 
     @Override

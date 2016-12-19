@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment.eventcreate;
+package org.unimelb.itime.ui.fragment.event;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -20,7 +19,6 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventCreateNewBinding;
-import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;

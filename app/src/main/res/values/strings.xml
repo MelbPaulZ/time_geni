@@ -192,7 +192,7 @@
     <string name="tag_host_event_edit">tag host event edit</string>
     <string name="tag_before_sending_review">tag before sending review</string>
     <string name="tag_before_sending_back">tag before sending back</string>
-    
+
     <string name="day_of_week_1_full">Sunday</string>
     <string name="day_of_week_2_full">Monday</string>
     <string name="day_of_week_3_full">Tuesday</string>
@@ -200,7 +200,7 @@
     <string name="day_of_week_5_full">Thursday</string>
     <string name="day_of_week_6_full">Friday</string>
     <string name="day_of_week_7_full">Saturday</string>
-    
+
     <string name="day_of_week_1_abbr">Sun</string>
     <string name="day_of_week_2_abbr">Mon</string>
     <string name="day_of_week_3_abbr">Tue</string>

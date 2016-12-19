@@ -21,8 +21,8 @@ import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
-import org.unimelb.itime.ui.mvpview.CommonMvpView;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
+import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.rulefactory.RuleModel;
@@ -34,16 +34,17 @@ import org.unimelb.itime.vendor.weekview.WeekView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarWeekFragment extends BaseUiFragment<CommonMvpView, CommonPresenter<CommonMvpView>> implements CommonMvpView  {
+public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, EventCommonPresenter<EventCommonMvpView>> implements EventCommonMvpView {
 
     private View root;
     private WeekView weekView;
-    private CommonPresenter presenter;
+    private EventCommonPresenter presenter;
     private String TAG = "CalendarWeekFragment";
 
     @Nullable
@@ -292,8 +293,8 @@ public class CalendarWeekFragment extends BaseUiFragment<CommonMvpView, CommonPr
 
 
     @Override
-    public CommonPresenter createPresenter() {
-        presenter = new CommonPresenter(getActivity());
+    public EventCommonPresenter createPresenter() {
+        presenter = new EventCommonPresenter(getActivity());
         return presenter;
     }
 
@@ -331,12 +332,22 @@ public class CalendarWeekFragment extends BaseUiFragment<CommonMvpView, CommonPr
 
 
     @Override
-    public void onShowDialog() {
+    public void onTaskStart() {
         AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
     }
 
     @Override
-    public void onHideDialog() {
+    public void onTaskError(Throwable e) {
+
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
         AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
+
     }
 }

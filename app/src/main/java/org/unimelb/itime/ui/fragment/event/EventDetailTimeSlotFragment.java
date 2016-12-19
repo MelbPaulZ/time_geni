@@ -1,10 +1,10 @@
-package org.unimelb.itime.ui.fragment.eventdetail;
+package org.unimelb.itime.ui.fragment.event;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +22,7 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
@@ -33,13 +34,9 @@ import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static android.R.attr.button;
-import static android.R.id.list;
 
 /**
  * Created by Paul on 10/09/2016.
@@ -407,12 +404,22 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     }
 
     @Override
-    public void onShowDialog() {
-        AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
+    public void onTaskStart() {
+        AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
     }
 
     @Override
-    public void onHideDialog() {
+    public void onTaskError(Throwable e) {
+        AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
+        AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
         AppUtil.hideProgressBar();
     }
 }

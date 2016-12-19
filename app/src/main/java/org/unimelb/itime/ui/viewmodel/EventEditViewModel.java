@@ -14,6 +14,9 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.android.databinding.library.baseAdapters.BR;
+import com.google.gson.Gson;
+
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
@@ -23,17 +26,13 @@ import org.unimelb.itime.ui.presenter.EventEditPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
-import org.unimelb.itime.util.rulefactory.RuleModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
 import me.tatarka.bindingcollectionadapter.ItemView;
-import com.android.databinding.library.baseAdapters.BR;
-import com.google.gson.Gson;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -211,23 +210,21 @@ public class EventEditViewModel extends CommonViewModel {
                     });
 
                 }else {
-                    if (mvpView!=null){
-                        // set event type
-                        EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
-                        eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
-                        eventEditViewEvent.setStatus("pending");
+                    // set event type
+                    EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
+                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getUserUid()));
+                    eventEditViewEvent.setStatus("pending");
 
-                        // TODO: 12/12/2016 test json convert
-                        Gson gson = new Gson();
-                        String str = gson.toJson(eventEditViewEvent);
-                        Log.i("event convert", "onClick: " + str);
+                    // TODO: 12/12/2016 test json convert
+                    Gson gson = new Gson();
+                    String str = gson.toJson(eventEditViewEvent);
+                    Log.i("event convert", "onClick: " + str);
 
-                        Event e = gson.fromJson(str, Event.class);
-                        Log.i("event convert", "onClick: " + e.getSummary());
+                    Event e = gson.fromJson(str, Event.class);
+                    Log.i("event convert", "onClick: " + e.getSummary());
 
-                        presenter.updateEvent(eventEditViewEvent);
-                        // this if might change later, because the host can be kicked??????
-                    }
+                    presenter.updateEvent(eventEditViewEvent);
+                    // this if might change later, because the host can be kicked??????
                 }
             }
         };

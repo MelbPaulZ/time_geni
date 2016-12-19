@@ -9,16 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
-
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.ui.fragment.eventdetail.EventDetailGroupFragment;
-import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;

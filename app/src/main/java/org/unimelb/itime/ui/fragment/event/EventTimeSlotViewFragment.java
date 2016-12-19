@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment.eventcreate;
+package org.unimelb.itime.ui.fragment.event;
 
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
