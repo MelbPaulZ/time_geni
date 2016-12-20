@@ -9,15 +9,12 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
@@ -27,13 +24,12 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.rulefactory.FrequencyEnum;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
@@ -354,7 +350,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 EventUtil.addSelfInInvitee(getContext(), event);
                 EventUtil.addSoloEventBasicInfo(getContext(), event);
                 eventManager.setCurrentEvent(event);
-                presenter.addSoloEvent();
+                presenter.insertNewEventToServer(event);
                 if (mvpView!=null){
                     mvpView.toCreateSoloEvent();
                 }
@@ -379,8 +375,8 @@ public class EventCreateNewVIewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 tag = getContext().getString(R.string.tag_create_event);
-                if (mvpView!=null){
-                    presenter.pickPhoto(tag);
+                if (presenter.getView() != null){
+                    presenter.getView().pickPhoto(tag);
                 }
             }
         };

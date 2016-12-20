@@ -9,15 +9,11 @@ import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
  */
 public class MainCalendarPresenter extends EventCommonPresenter<MainCalendarMvpView> {
     private static final String TAG = "LoginPresenter";
-    private Context context;
 
     public MainCalendarPresenter(Context context){
-        this.context = context;
+        super(context);
     }
 
-    public Context getContext() {
-        return context;
-    }
 
 
 

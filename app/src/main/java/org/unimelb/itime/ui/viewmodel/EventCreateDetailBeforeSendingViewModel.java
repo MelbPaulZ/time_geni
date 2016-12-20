@@ -316,7 +316,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 newEvDtlEvent.setRecurringEventId(newEvDtlEvent.getEventUid());
                 newEvDtlEvent.setStatus("pending");
 
-                presenter.addEvent(newEvDtlEvent);
+                presenter.insertNewEventToServer(newEvDtlEvent);
 
                 eventManager.setCurrentEvent(newEvDtlEvent);
                 if (mvpView!=null){

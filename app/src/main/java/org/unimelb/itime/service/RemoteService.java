@@ -124,6 +124,7 @@ public class RemoteService extends Service{
                 SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = sp.edit();
 
+                //todo: save it into db
                 Gson gson = new Gson();
                 String calendarListString = gson.toJson(httpResult.getData());
                 editor.putString(C.calendarString.CALENDAR_STRING,  calendarListString);
@@ -311,7 +312,7 @@ public class RemoteService extends Service{
             super.onPostExecute(messages);
             if (valid){
                 //update syncToken
-                SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
+                SharedPreferences sp = AppUtil.getTokenSaver(getApplicationContext());
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, token);
                 editor.apply();

@@ -266,19 +266,19 @@ public class EventManager {
     }
 
     // this is for event drag
-//    public void updateEvent(Event oldEvent, long newStartTime, long newEndTime){
+//    public void updateEventToServer(Event oldEvent, long newStartTime, long newEndTime){
 //        if (oldEvent.getRecurrence().length == 0){
 //            long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
 //            if (this.regularEventMap.containsKey(oldBeginTime)){
-//                Event updateEvent = null;
+//                Event updateEventToServer = null;
 //                for (ITimeEventInterface ev : regularEventMap.get(oldBeginTime)){
 //                    if (((Event)ev).getEventUid().equals(oldEvent.getEventUid())){
-//                        updateEvent = (Event) ev;
+//                        updateEventToServer = (Event) ev;
 //                        break;
 //                    }
 //                }
-//                if (updateEvent!=null){
-//                    this.regularEventMap.get(oldBeginTime).remove(updateEvent);
+//                if (updateEventToServer!=null){
+//                    this.regularEventMap.get(oldBeginTime).remove(updateEventToServer);
 //                }
 //                oldEvent.setStartTime(newStartTime);
 //                oldEvent.setEndTime(newEndTime);

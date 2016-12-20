@@ -30,6 +30,7 @@ import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Paul on 23/08/2016.
@@ -40,9 +41,6 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     private FragmentEventCreateNewBinding binding;
     private EventCreateNewVIewModel viewModel;
     private Event event;
-    private int year,month,day,hour,minute;
-
-    private final int ACTIVITY_PHOTOPICKER = 1;
 
     private TimePickerDialog timePickerDialog;
 
@@ -169,4 +167,23 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     }
 
 
+    @Override
+    public void onTaskStart() {
+
+    }
+
+    @Override
+    public void onTaskError(Throwable e) {
+
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
+
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
+
+    }
 }
