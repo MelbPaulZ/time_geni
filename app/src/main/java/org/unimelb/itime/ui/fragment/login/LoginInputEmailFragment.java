@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
-
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentLoginInputEmailBinding;
@@ -25,14 +23,12 @@ import org.unimelb.itime.util.SoftKeyboardStateUtil;
  * Created by yinchuandong on 15/12/16.
  */
 
-public class LoginInputEmailFragment extends BaseUiFragment<LoginMvpView, LoginPresenter> implements LoginMvpView {
+public class LoginInputEmailFragment extends LoginCommonFragment implements LoginMvpView {
 
     private final static String TAG = "LoginIndexFragment";
 
     private FragmentLoginInputEmailBinding binding;
-    private LoginViewModel loginViewModel;
 
-    private SoftKeyboardStateUtil softKeyboardStateUtil;
     private AlertDialog unsupportEmailDialog;
 
     @Nullable
@@ -45,28 +41,8 @@ public class LoginInputEmailFragment extends BaseUiFragment<LoginMvpView, LoginP
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loginViewModel = new LoginViewModel(getPresenter());
         binding.setLoginVM(loginViewModel);
-        softKeyboardStateUtil = new SoftKeyboardStateUtil(binding.getRoot());
-        bindSoftKeyboardEvent();
         initViews();
-    }
-
-    /**
-     * check the state of soft keyboard
-     */
-    private void bindSoftKeyboardEvent(){
-        softKeyboardStateUtil.addSoftKeyboardStateListener(new SoftKeyboardStateUtil.SoftKeyboardStateListener() {
-            @Override
-            public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-                loginViewModel.setTopEmailIconVisibility(View.GONE);
-            }
-
-            @Override
-            public void onSoftKeyboardClosed() {
-                loginViewModel.setTopEmailIconVisibility(View.VISIBLE);
-            }
-        });
     }
 
     /** init unsupported warning dialog
@@ -94,11 +70,6 @@ public class LoginInputEmailFragment extends BaseUiFragment<LoginMvpView, LoginP
 
 
 
-    }
-
-    @Override
-    public LoginPresenter createPresenter() {
-        return new LoginPresenter(getContext());
     }
 
     @Override

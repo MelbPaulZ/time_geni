@@ -172,7 +172,7 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
 
-//            viewModel.setMessages((List<Message>) results.values);
+//            loginViewModel.setMessages((List<Message>) results.values);
             filteredMessageList = (List<Message>) results.values;
             notifyDataSetChanged();
         }

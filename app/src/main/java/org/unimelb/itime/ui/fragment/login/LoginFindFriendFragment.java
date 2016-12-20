@@ -7,30 +7,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
-
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.databinding.FragmentLoginIndexBinding;
+import org.unimelb.itime.databinding.FragmentLoginFindFriendBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
-import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
- * Created by yinchuandong on 15/12/16.
+ * Created by Paul on 20/12/2016.
  */
 
-public class LoginIndexFragment extends LoginCommonFragment implements LoginMvpView {
+public class LoginFindFriendFragment extends LoginCommonFragment implements LoginMvpView{
 
-    private final static String TAG = "LoginIndexFragment";
-
-    private FragmentLoginIndexBinding binding;
-
+    private FragmentLoginFindFriendBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_index, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_find_friend, container, false);
         return binding.getRoot();
     }
 
@@ -38,11 +32,6 @@ public class LoginIndexFragment extends LoginCommonFragment implements LoginMvpV
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setLoginVM(loginViewModel);
-    }
-
-
-    public void signUpClick(View v){
-
     }
 
     @Override
@@ -64,5 +53,4 @@ public class LoginIndexFragment extends LoginCommonFragment implements LoginMvpV
     public void invalidPopup() {
 
     }
-
 }

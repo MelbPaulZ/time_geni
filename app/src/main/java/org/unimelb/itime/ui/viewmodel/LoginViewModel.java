@@ -2,7 +2,6 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.content.Context;
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -34,7 +33,7 @@ public class LoginViewModel extends AndroidViewModel{
     private String newPassword = "";
     private int passwordKeyBoardVisibility = View.VISIBLE;
 
-    private int topEmailIconVisibility = View.VISIBLE;
+    private int topIconVisibility = View.VISIBLE;
 
     private ArrayList<String> suggestedEmailList = new ArrayList<>();
     private ItemView suggestedEmailItemView = ItemView.of(BR.itemText, R.layout.listview_login_email_tips);
@@ -104,35 +103,22 @@ public class LoginViewModel extends AndroidViewModel{
      * check the focus of email edit text
      * @return
      */
-    public View.OnFocusChangeListener onInputEmailEditFocusChange(){
+    public View.OnFocusChangeListener onInputEditFocusChange(){
         return new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 Log.d(TAG, "onFocusChange: " + hasFocus);
                 if(hasFocus){
                     showKeyBoard((EditText) view);
-                    setTopEmailIconVisibility(View.GONE);
+                    setTopIconVisibility(View.GONE);
                 }else{
                     closeKeyBoard((EditText) view);
-                    setTopEmailIconVisibility(View.VISIBLE);
+                    setTopIconVisibility(View.VISIBLE);
                 }
             }
         };
     }
 
-    public View.OnFocusChangeListener onPasswordEditFocusChange(){
-        return new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                Log.i(TAG, "onFocusChange: " + hasFocus);
-                if(hasFocus){
-                    showKeyBoard((EditText) v);
-                }else{
-                    closeKeyBoard((EditText) v);
-                }
-            }
-        };
-    }
 
     public View.OnClickListener onPasswordNextClick(){
         return new View.OnClickListener() {
@@ -156,9 +142,15 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-    public void onPasswordChange(CharSequence s, int start, int before, int count) {
-        Log.w("tag", "onTextChanged " + s);
+    public View.OnClickListener onAvatarClickBtn(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        };
     }
+
 
     public AdapterView.OnItemClickListener onSuggestedEmailItemClick(){
         return new AdapterView.OnItemClickListener() {
@@ -168,6 +160,35 @@ public class LoginViewModel extends AndroidViewModel{
             }
         };
     }
+
+    public View.OnClickListener addFromContact(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        };
+    }
+
+
+    public View.OnClickListener addFromGmail(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        };
+    }
+
+    public View.OnClickListener onClickLogin(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        };
+    }
+
 
     private void showKeyBoard(EditText view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -201,13 +222,13 @@ public class LoginViewModel extends AndroidViewModel{
     }
 
     @Bindable
-    public int getTopEmailIconVisibility(){
-        return this.topEmailIconVisibility;
+    public int getTopIconVisibility(){
+        return this.topIconVisibility;
     }
 
-    public void setTopEmailIconVisibility(int visibility){
-        this.topEmailIconVisibility = visibility;
-        notifyPropertyChanged(BR.topEmailIconVisibility);
+    public void setTopIconVisibility(int visibility){
+        this.topIconVisibility = visibility;
+        notifyPropertyChanged(BR.topIconVisibility);
     }
 
     @Bindable

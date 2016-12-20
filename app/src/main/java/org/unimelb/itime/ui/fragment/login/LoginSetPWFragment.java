@@ -24,12 +24,10 @@ import org.unimelb.itime.util.SoftKeyboardStateUtil;
  * Created by Paul on 19/12/2016.
  */
 
-public class LoginSetPWFragment extends BaseUiFragment<LoginMvpView, LoginPresenter> implements LoginMvpView{
+public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpView{
 
     private FragmentLoginInputPasswordBinding binding;
-    private LoginViewModel viewModel;
     private Dialog pwTooSimpleDialog;
-    private SoftKeyboardStateUtil softKeyboardStateUtil;
 
     @Nullable
     @Override
@@ -41,11 +39,8 @@ public class LoginSetPWFragment extends BaseUiFragment<LoginMvpView, LoginPresen
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = new LoginViewModel(getPresenter());
-        binding.setVm(viewModel);
-        softKeyboardStateUtil = new SoftKeyboardStateUtil(binding.getRoot());
+        binding.setVm(loginViewModel);
         initViews();
-        bindSoftKeyboardEvent();
     }
 
     private void initViews(){
@@ -68,25 +63,6 @@ public class LoginSetPWFragment extends BaseUiFragment<LoginMvpView, LoginPresen
                     }
                 });
         pwTooSimpleDialog = incorrectPWBuilder.create();
-    }
-
-    private void bindSoftKeyboardEvent(){
-        softKeyboardStateUtil.addSoftKeyboardStateListener(new SoftKeyboardStateUtil.SoftKeyboardStateListener() {
-            @Override
-            public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-
-            }
-
-            @Override
-            public void onSoftKeyboardClosed() {
-
-            }
-        });
-    }
-
-    @Override
-    public LoginPresenter createPresenter() {
-        return new LoginPresenter(getContext());
     }
 
 

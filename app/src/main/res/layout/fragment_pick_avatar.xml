@@ -11,9 +11,13 @@
     android:focusable="true"
     android:clickable="true"
     android:focusableInTouchMode="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <!--back btn-->
@@ -28,6 +32,7 @@
 
         <!--avatar image-->
         <ImageView
+            android:visibility="@{loginVM.topIconVisibility}"
             android:layout_width="136dp"
             android:layout_height="150dp"
             android:layout_marginTop="45dp"
@@ -42,6 +47,9 @@
             android:layout_marginLeft="70dp"
             android:text="@string/your_name"
             android:textSize="11sp"
+            android:focusable="true"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
             android:textColor="@color/color_8190A7" />
 
         <!--input name-->
@@ -51,6 +59,7 @@
             android:layout_marginLeft="70dp"
             android:layout_marginTop="14dp"
             android:background="#00000000"
+            android:onFocusChange="@{loginVM.onInputEditFocusChange}"
             android:text="Alex Wang"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -82,34 +91,38 @@
     </LinearLayout>
 
     <!--next button-->
-    <RelativeLayout
-        android:layout_width="250dp"
-        android:layout_height="65dp"
-        android:layout_marginBottom="73dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/background_round_radius_able_blue">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/signup"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:layout_centerInParent="true"
-            />
-    </RelativeLayout>
 
-    <!--agreement part-->
-    <TextView
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="23dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/login_input_email_agreement"
-        android:textColor="@color/color_C0C7D3"
-        android:textSize="11sp"
-        />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="65dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/selector_signup_btn_bg"
+            android:gravity="center"
+            android:onClick="@{loginVM.onAvatarClickBtn()}"
+            android:textSize="14sp"
+            android:text="@string/signup"
+            android:textColor="@color/white" />
+
+        <!-- agreement part -->
+        <TextView
+            android:visibility="@{loginVM.topIconVisibility}"
+            android:layout_width="284dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="22dp"
+            android:gravity="center"
+            android:text="@string/login_input_email_agreement"
+            android:textColor="@color/color_C0C7D3"
+            android:textSize="11sp" />
+    </LinearLayout>
 
 </RelativeLayout>
 </layout>

@@ -13,15 +13,15 @@ import org.unimelb.itime.databinding.FragmentPickAvatarBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
+import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 /**
  * Created by Paul on 19/12/2016.
  */
 
-public class LoginPickAvatarFragment extends BaseUiFragment<LoginMvpView, LoginPresenter> implements LoginMvpView{
+public class LoginPickAvatarFragment extends LoginCommonFragment implements LoginMvpView{
 
     private FragmentPickAvatarBinding binding;
-    private LoginViewModel viewModel;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,13 +32,8 @@ public class LoginPickAvatarFragment extends BaseUiFragment<LoginMvpView, LoginP
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = new LoginViewModel(getPresenter());
-        binding.setLoginVM(viewModel);
-    }
-
-    @Override
-    public LoginPresenter createPresenter() {
-        return new LoginPresenter(getContext());
+        softKeyboardStateUtil = new SoftKeyboardStateUtil(binding.getRoot());
+        binding.setLoginVM(loginViewModel);
     }
 
     @Override

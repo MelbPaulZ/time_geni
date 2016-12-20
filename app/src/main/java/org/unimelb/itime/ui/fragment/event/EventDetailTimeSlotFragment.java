@@ -98,7 +98,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         if (viewModel != null) {
             viewModel.setEventDetailHostEvent(event);
         }
-//        viewModel.initTimeSlots(weekView);
+//        loginViewModel.initTimeSlots(weekView);
 
     }
 

@@ -24,7 +24,16 @@
     <string name="login_input_password_edit_title">PASSWORD</string>
     <string name="login_input_password_next">NEXT</string>
     <string name="your_name">YOUR NAME</string>
-    <string name="complete_your_profile_so_that_your_friends_can_recognize_you">Complete your profile so that your friends can recognize you</string>>
+    <string name="complete_your_profile_so_that_your_friends_can_recognize_you">Complete your profile so that your friends can recognize you</string>
+    <string name="login_find_friend_title">Find Your Friends</string>
+    <string name="login_find_friend_subtitle">You can add your friends from phone contacts and socials networks.</string>
+    <string name="login_find_friend_button1">ADD FROM CONTACT</string>
+    <string name="login_find_friend_button2">ADD FROM GMAIL</string>
+    <string name="login_title">Log In</string>
+    <string name="login_input_password_hint">Password</string>
+    <string name="login_forget_password">Forget Your Password?</string>
+    <string name="login_no_account_signup">Don’t have an iTime account?<u>Sign Up</u></string>
+
 
 
 
