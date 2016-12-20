@@ -52,6 +52,7 @@ public abstract class BaseUiFragment<V extends MvpView, P extends MvpPresenter<V
         getFragmentManager().beginTransaction().hide(from).show(to).commit();
     }
 
+
     public <T> void switchFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to, T t){
 
     }

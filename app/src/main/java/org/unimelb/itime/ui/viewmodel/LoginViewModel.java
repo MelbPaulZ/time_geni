@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 
@@ -24,7 +25,7 @@ import me.tatarka.bindingcollectionadapter.ItemView;
 public class LoginViewModel extends AndroidViewModel{
 
     private static final String TAG = "LoginViewModel";
-    LoginPresenter presenter;
+    private LoginPresenter presenter;
 
     private String email = "johncdyin@gmail.com";
     private String password = "123456";
@@ -38,12 +39,31 @@ public class LoginViewModel extends AndroidViewModel{
     private ArrayList<String> suggestedEmailList = new ArrayList<>();
     private ItemView suggestedEmailItemView = ItemView.of(BR.itemText, R.layout.listview_login_email_tips);
 
+    private String inputEmail = "";
+    private String inputPassword = "";
+    private String inputName = "";
+
+    public final static int TO_EMAIL_SENT_FRAG = 1;
+    public final static int TO_FIND_FRIEND_FRAG = 2;
+    public final static int TO_LOGIN_FRAG = 3;
+    public final static int TO_INDEX_FRAG = 4;
+    public final static int TO_INPUT_EMAIL_FRAG = 5;
+    public final static int TO_PICK_AVATAR_FRAG = 6;
+    public final static int TO_RESET_PASSWORD_FRAG = 7;
+    public final static int TO_SET_PASSWORD_FRAG = 8;
+    public final static int TO_TERM_AGREEMENT_FRAG = 9;
+
+
     public LoginViewModel(LoginPresenter presenter){
         this.presenter = presenter;
         mvpView = presenter.getView();
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
+    }
+
+    private Context getContext(){
+        return presenter.getContext();
     }
 
     public View.OnClickListener onBtnEmailLogin(){
@@ -66,6 +86,14 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
+    public View.OnClickListener onSwitchFragment(final int task){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mvpView.switchFragment(task);
+            }
+        };
+    }
 
     public View.OnClickListener onBtnListUser(){
         return new View.OnClickListener() {
@@ -77,22 +105,19 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-
-    // step 1, index btn sign in click
-    public View.OnClickListener onIndexBtnSignInClick(){
+    public View.OnClickListener onClickInputEmailBtn(final int task){
         return new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //view.setSelected(true);
+            public void onClick(View v) {
                 if (isEmailValid()){
-
+                    mvpView.switchFragment(task);
                 }else{
                     mvpView.invalidPopup();
                 }
-                Log.d(TAG, "OnIndexBtnSignInClick: ");
             }
         };
     }
+
 
     // todo implement regix
     private boolean isEmailValid(){
@@ -125,7 +150,7 @@ public class LoginViewModel extends AndroidViewModel{
             @Override
             public void onClick(View v) {
                 if (newPassword.length()>=8){
-
+                    onSwitchFragment(TO_PICK_AVATAR_FRAG);
                 }else {
                     mvpView.invalidPopup();
                 }
@@ -165,7 +190,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(getContext(), "add from contact", Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -175,7 +200,17 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(), "add from Gmail", Toast.LENGTH_SHORT).show();
 
+            }
+        };
+    }
+
+    public View.OnClickListener onClickForgetPassword(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "onClick Forget Password", Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -184,7 +219,81 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(), "login here , change later", Toast.LENGTH_SHORT).show();
+//                mvpView.invalidPopup();
+            }
+        };
+    }
 
+    public View.OnClickListener onClickLoginSignUp(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "onClick sign up", Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+    public View.OnClickListener onCleanEmail(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(presenter.getContext(), "onClick X", Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+    public View.OnClickListener onClickResetCleanEmail(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setInputEmail("");
+            }
+        };
+    }
+
+    public View.OnClickListener onClickResetRememberPassword(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "onClick reset remember password", Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+
+    public View.OnClickListener onClickResetPasswordCloseBtn(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "onClick reset back btn", Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+    public View.OnClickListener onClickEmailSentBackBtn(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        };
+    }
+
+    public View.OnClickListener onClickEmailSentDone(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        };
+    }
+
+    public View.OnClickListener toCalendar(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "tocalendar here", Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -268,5 +377,35 @@ public class LoginViewModel extends AndroidViewModel{
 
     public void setPasswordKeyBoardVisibility(int passwordKeyBoardVisibility) {
         this.passwordKeyBoardVisibility = passwordKeyBoardVisibility;
+    }
+
+    @Bindable
+    public String getInputEmail() {
+        return inputEmail;
+    }
+
+    public void setInputEmail(String inputEmail) {
+        this.inputEmail = inputEmail;
+        notifyPropertyChanged(BR.inputEmail);
+    }
+
+    @Bindable
+    public String getInputPassword() {
+        return inputPassword;
+    }
+
+    public void setInputPassword(String inputPassword) {
+        this.inputPassword = inputPassword;
+        notifyPropertyChanged(BR.inputPassword);
+    }
+
+    @Bindable
+    public String getInputName() {
+        return inputName;
+    }
+
+    public void setInputName(String inputName) {
+        this.inputName = inputName;
+        notifyPropertyChanged(BR.inputName);
     }
 }

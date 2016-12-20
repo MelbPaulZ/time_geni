@@ -13,12 +13,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentLoginInputPasswordBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
-import org.unimelb.itime.ui.presenter.LoginPresenter;
-import org.unimelb.itime.ui.viewmodel.LoginViewModel;
-import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 /**
  * Created by Paul on 19/12/2016.
@@ -32,7 +28,7 @@ public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpV
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_input_password,container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_set_password,container, false);
         return binding.getRoot();
     }
 
@@ -87,5 +83,10 @@ public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpV
         pwTooSimpleDialog.show();
 //        TextView incorrectPWTV = (TextView) pwTooSimpleDialog.findViewById(android.R.id.message);
 //        incorrectPWTV.setGravity(Gravity.CENTER);
+    }
+
+    @Override
+    public void switchFragment(int task) {
+
     }
 }

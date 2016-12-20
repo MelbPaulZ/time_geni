@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="loginVM"
+            type="org.unimelb.itime.ui.viewmodel.LoginViewModel" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--close button-->
+            <ImageView
+                android:id="@+id/reset_password_close_btn"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="17dp"
+                android:background="@drawable/icon_close"
+                android:onClick="@{loginVM.onSwitchFragment(loginVM.TO_RESET_PASSWORD_FRAG)}" />
+
+            <!--email icon-->
+            <ImageView
+                android:layout_width="89dp"
+                android:layout_height="85dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="59dp"
+                android:background="@drawable/icon_email" />
+
+            <!--title-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="6dp"
+                android:text="@string/login_email_sent_title"
+                android:textColor="@color/color_8190A7"
+                android:textSize="28sp" />
+
+            <!--subtitle-->
+            <TextView
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal"
+                android:text="@string/login_email_sent_subtitle"
+                android:textColor="@color/color_C0C7D3"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                android:text="@{loginVM.inputEmail}"
+                android:textColor="@color/color_3D5372"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="65dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="73dp"
+            android:background="@drawable/selector_signup_btn_bg"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="@{loginVM.onSwitchFragment(loginVM.TO_INDEX_FRAG)}"
+            android:text="@string/login_email_sent_btn"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</layout>

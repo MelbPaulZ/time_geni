@@ -65,4 +65,16 @@ public class LoginIndexFragment extends LoginCommonFragment implements LoginMvpV
 
     }
 
+    @Override
+    public void switchFragment(int task) {
+        switch (task){
+            case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
+                switchFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+            }
+            case LoginViewModel.TO_LOGIN_FRAG:{
+                switchFragment(this, (LoginFragmentNew)getFragmentManager().findFragmentByTag(LoginFragmentNew.class.getSimpleName()));
+            }
+        }
+    }
+
 }

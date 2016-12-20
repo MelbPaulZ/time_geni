@@ -53,4 +53,9 @@ public class LoginFindFriendFragment extends LoginCommonFragment implements Logi
     public void invalidPopup() {
 
     }
+
+    @Override
+    public void switchFragment(int task) {
+
+    }
 }

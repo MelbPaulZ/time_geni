@@ -21,7 +21,7 @@ import java.io.File;
 /**
  * Created by Paul on 18/10/16.
  */
-public class CommonViewModel extends BaseObservable {
+public class CommonViewModel extends AndroidViewModel {
     private final String TAG = "CommonViewModel";
     private EventCommonPresenter presenter;
     private EventCommonMvpView mvpView;

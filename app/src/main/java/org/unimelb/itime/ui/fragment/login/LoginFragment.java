@@ -132,4 +132,9 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
     public void invalidPopup() {
 
     }
+
+    @Override
+    public void switchFragment(int task) {
+
+    }
 }

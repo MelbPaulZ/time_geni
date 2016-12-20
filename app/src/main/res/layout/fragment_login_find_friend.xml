@@ -15,6 +15,7 @@
         android:layout_height="15dp"
         android:background="@drawable/icon_close"
         android:layout_marginTop="17dp"
+        android:onClick="@{loginVM.toCalendar()}"
         android:layout_marginLeft="20dp" />
     
     <!--Friend icon-->

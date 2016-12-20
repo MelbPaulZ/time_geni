@@ -67,9 +67,6 @@ public class LoginInputEmailFragment extends LoginCommonFragment implements Logi
                     }
                 });
         unsupportEmailDialog = builder.create();
-
-
-
     }
 
     @Override
@@ -91,5 +88,15 @@ public class LoginInputEmailFragment extends LoginCommonFragment implements Logi
     public void invalidPopup() {
         unsupportEmailDialog.show();
 
+    }
+
+    @Override
+    public void switchFragment(int task) {
+        switch (task){
+            case LoginViewModel.TO_INDEX_FRAG:{
+                switchFragment(this, (LoginIndexFragment)getFragmentManager().findFragmentByTag(LoginIndexFragment.class.getSimpleName()));
+            }
+            case 
+        }
     }
 }
