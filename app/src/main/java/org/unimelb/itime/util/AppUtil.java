@@ -54,7 +54,7 @@ public class AppUtil {
      * @return
      */
     public static String getEventSyncToken(Context context){
-        return AppUtil.getSharedPreferences(context).getString(C.spkey.EVENT_LIST_SYNC_TOKEN,"");
+        return AppUtil.getTokenSaver(context).getString(C.spkey.EVENT_LIST_SYNC_TOKEN,"");
     }
 
     /**
@@ -63,7 +63,7 @@ public class AppUtil {
      * @param syncToken
      */
     public static void saveEventSyncToken(Context context, String syncToken){
-        SharedPreferences sp = AppUtil.getSharedPreferences(context);
+        SharedPreferences sp = AppUtil.getTokenSaver(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, syncToken);
         editor.apply();

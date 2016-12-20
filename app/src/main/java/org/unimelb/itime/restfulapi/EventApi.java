@@ -28,7 +28,7 @@ public interface EventApi {
     Observable<HttpResult<Event>> get(@Path("calendarUid") String calendarUid);
 
     @POST("event/insert")
-    Observable<HttpResult<Event>> insert(@Body Event event);
+    Observable<HttpResult<List<Event>>> insert(@Body Event event, @Query("syncToken") String syncToken);
 
     @POST("event/update/{calendarUid}/{eventUid}")
     Observable<HttpResult<List<Event>>> update(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body Event event, @Query("syncToken") String syncToken);
@@ -37,19 +37,19 @@ public interface EventApi {
     Observable<HttpResult<Event>> delete(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid);
 
     @POST("event/confirm/{calendarUid}/{eventUid}/{timeslotUid}")
-    Observable<HttpResult<Event>> confirm(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Path("timeslotUid") String timeslotUid,@Body Event event);
+    Observable<HttpResult<List<Event>>> confirm(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Path("timeslotUid") String timeslotUid,@Body Event event);
 
     @POST("event/invitee/accept/{eventUid}")
-    Observable<HttpResult<Event>> acceptEvent();
+    Observable<HttpResult<List<Event>>> acceptEvent();
 
     @POST("event/invitee/quit/{eventUid}")
-    Observable<HttpResult<Event>> quitEvent();
+    Observable<HttpResult<List<Event>>> quitEvent();
 
     @POST("event/timeslot/accept/{calendarUid}/{eventUid}")
-    Observable<HttpResult<Event>> acceptTimeslot(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body HashMap<String, Object> parameters);
+    Observable<HttpResult<List<Event>>> acceptTimeslot(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body HashMap<String, Object> parameters);
 
     @POST("event/timeslot/reject/{eventUid}")
-    Observable<HttpResult<Event>> rejectTimeslot();
+    Observable<HttpResult<List<Event>>> rejectTimeslot();
 
     @FormUrlEncoded
     @POST("event/timeslot/recommend")

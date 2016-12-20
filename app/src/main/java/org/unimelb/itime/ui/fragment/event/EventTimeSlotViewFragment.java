@@ -338,4 +338,24 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     public EventCreateTimeSlotPresenter createPresenter() {
         return new EventCreateTimeSlotPresenter(getContext());
     }
+
+    @Override
+    public void onTaskStart() {
+
+    }
+
+    @Override
+    public void onTaskError(Throwable e) {
+
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
+
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
+
+    }
 }

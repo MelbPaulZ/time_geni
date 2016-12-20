@@ -225,7 +225,7 @@ public class EventEditViewModel extends CommonViewModel {
                     Event e = gson.fromJson(str, Event.class);
                     Log.i("event convert", "onClick: " + e.getSummary());
 
-                    presenter.updateEvent(eventEditViewEvent);
+                    presenter.updateEventToServer(eventEditViewEvent);
                     // this if might change later, because the host can be kicked??????
                 }
             }

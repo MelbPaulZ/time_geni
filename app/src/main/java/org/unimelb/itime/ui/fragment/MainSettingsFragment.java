@@ -1,7 +1,6 @@
 package org.unimelb.itime.ui.fragment;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
@@ -11,15 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.base.C;
 import org.unimelb.itime.databinding.FragmentMainSettingsBinding;
 import org.unimelb.itime.managers.DBManager;
@@ -27,10 +23,8 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.LoginActivity;
-import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.mvpview.MainSettingsMvpView;
 import org.unimelb.itime.ui.presenter.MainSettingsPresenter;
-import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.AuthUtil;
@@ -88,7 +82,7 @@ public class MainSettingsFragment extends MvpFragment<MainSettingsMvpView, MainS
 
     private void clearAccount(){
         AuthUtil.clearJwtToken(getContext());
-        SharedPreferences sp = AppUtil.getSharedPreferences(getContext());
+        SharedPreferences sp = AppUtil.getTokenSaver(getContext());
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, "");
         editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, "");

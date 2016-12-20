@@ -208,4 +208,23 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
 
+    @Override
+    public void onTaskStart() {
+
+    }
+
+    @Override
+    public void onTaskError(Throwable e) {
+
+    }
+
+    @Override
+    public void onTaskComplete(List<Event> dataList) {
+
+    }
+
+    @Override
+    public void onTaskComplete(Event data) {
+
+    }
 }

@@ -99,7 +99,7 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
 
     @Override
     public MvpPresenter createPresenter() {
-        return new EventCommonPresenter();
+        return new EventCommonPresenter(getContext());
     }
 
     @Override

@@ -73,6 +73,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
 
             @Override
             public void onNext(HttpResult<UserLoginRes> result) {
+                if(result.getStatus() != 1){
+                    throw new RuntimeException(result.getInfo());
+                }
                 Log.d(TAG, "onNext: " + result.getData().getToken());
                 if (result.getStatus()!=1){
                     Toast.makeText(context, "username or password error",Toast.LENGTH_SHORT);
