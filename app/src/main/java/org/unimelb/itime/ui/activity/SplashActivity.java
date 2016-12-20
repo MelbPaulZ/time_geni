@@ -38,21 +38,21 @@ public class SplashActivity extends AppCompatActivity {
 
     private void initFragment(){
         indexFragment = new LoginIndexFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, indexFragment).hide(indexFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, indexFragment, indexFragment.getClassName()).hide(indexFragment).commit();
         inputEmailFragment = new LoginInputEmailFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, inputEmailFragment).hide(inputEmailFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, inputEmailFragment, inputEmailFragment.getClassName()).hide(inputEmailFragment).commit();
         setPWFragment = new LoginSetPWFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, setPWFragment).hide(setPWFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, setPWFragment, setPWFragment.getClassName()).hide(setPWFragment).commit();
         pickAvatarFragment = new LoginPickAvatarFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, pickAvatarFragment).hide(pickAvatarFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, pickAvatarFragment, pickAvatarFragment.getClassName()).hide(pickAvatarFragment).commit();
         loginFragmentNew = new LoginFragmentNew();
-        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, loginFragmentNew).hide(loginFragmentNew).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, loginFragmentNew, loginFragmentNew.getClassName()).hide(loginFragmentNew).commit();
         resetPasswordFragment = new LoginResetPasswordFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, resetPasswordFragment).hide(resetPasswordFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, resetPasswordFragment, resetPasswordFragment.getClassName()).hide(resetPasswordFragment).commit();
         sentFragment = new LoginEmailSentFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, sentFragment).hide(sentFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, sentFragment, sentFragment.getClassName()).hide(sentFragment).commit();
         findFriendFragment = new LoginFindFriendFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, findFriendFragment).hide(findFriendFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, findFriendFragment, findFriendFragment.getClassName()).hide(findFriendFragment).commit();
     }
 
     private void showIndexFragment(){

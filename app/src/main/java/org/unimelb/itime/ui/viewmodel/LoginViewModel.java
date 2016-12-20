@@ -90,7 +90,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mvpView.switchFragment(task);
+                mvpView.onPageChange(task);
             }
         };
     }
@@ -110,7 +110,7 @@ public class LoginViewModel extends AndroidViewModel{
             @Override
             public void onClick(View v) {
                 if (isEmailValid()){
-                    mvpView.switchFragment(task);
+                    mvpView.onPageChange(task);
                 }else{
                     mvpView.invalidPopup();
                 }
@@ -121,7 +121,7 @@ public class LoginViewModel extends AndroidViewModel{
 
     // todo implement regix
     private boolean isEmailValid(){
-        return false;
+        return true;
     }
 
     /**
@@ -150,7 +150,7 @@ public class LoginViewModel extends AndroidViewModel{
             @Override
             public void onClick(View v) {
                 if (newPassword.length()>=8){
-                    onSwitchFragment(TO_PICK_AVATAR_FRAG);
+                    mvpView.onPageChange(TO_PICK_AVATAR_FRAG);
                 }else {
                     mvpView.invalidPopup();
                 }
@@ -167,14 +167,6 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-    public View.OnClickListener onAvatarClickBtn(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
-    }
 
 
     public AdapterView.OnItemClickListener onSuggestedEmailItemClick(){
@@ -206,33 +198,18 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-    public View.OnClickListener onClickForgetPassword(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "onClick Forget Password", Toast.LENGTH_SHORT).show();
-            }
-        };
-    }
 
     public View.OnClickListener onClickLogin(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "login here , change later", Toast.LENGTH_SHORT).show();
+                presenter.loginByEmail(getEmail(), getPassword());
+                Toast.makeText(getContext(), "logging in", Toast.LENGTH_SHORT).show();
 //                mvpView.invalidPopup();
             }
         };
     }
 
-    public View.OnClickListener onClickLoginSignUp(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "onClick sign up", Toast.LENGTH_SHORT).show();
-            }
-        };
-    }
 
     public View.OnClickListener onCleanEmail(){
         return new View.OnClickListener() {
@@ -252,42 +229,7 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-    public View.OnClickListener onClickResetRememberPassword(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "onClick reset remember password", Toast.LENGTH_SHORT).show();
-            }
-        };
-    }
 
-
-    public View.OnClickListener onClickResetPasswordCloseBtn(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "onClick reset back btn", Toast.LENGTH_SHORT).show();
-            }
-        };
-    }
-
-    public View.OnClickListener onClickEmailSentBackBtn(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
-    }
-
-    public View.OnClickListener onClickEmailSentDone(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
-    }
 
     public View.OnClickListener toCalendar(){
         return new View.OnClickListener() {

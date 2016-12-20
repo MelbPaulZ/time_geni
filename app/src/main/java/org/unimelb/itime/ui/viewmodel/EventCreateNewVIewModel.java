@@ -27,7 +27,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
-import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
@@ -40,7 +40,7 @@ import java.util.Calendar;
  * Created by Paul on 25/08/2016.
  */
 public class EventCreateNewVIewModel extends CommonViewModel {
-    private EventCreateNewPresenter presenter;
+    private EventCommonPresenter<EventCreateNewMvpView> presenter;
     private EventCreateNewMvpView mvpView;
     private Event event;
 
@@ -73,7 +73,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
     private final String TAG = "EventCreateNewViewModel";
     private EventManager eventManager;
 
-    public EventCreateNewVIewModel(EventCreateNewPresenter presenter) {
+    public EventCreateNewVIewModel(EventCommonPresenter<EventCreateNewMvpView> presenter) {
         this.presenter = presenter;
         eventManager = EventManager.getInstance(getContext());
         mvpView = presenter.getView();

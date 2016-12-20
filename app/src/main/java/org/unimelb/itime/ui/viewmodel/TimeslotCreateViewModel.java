@@ -3,12 +3,10 @@ package org.unimelb.itime.ui.viewmodel;
 import android.content.Context;
 import android.databinding.Bindable;
 import android.view.View;
-import android.widget.PopupWindow;
 
 import org.unimelb.itime.BR;
-import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.ui.mvpview.TimeslotCreateMvpView;
-import org.unimelb.itime.ui.presenter.TimeslotCreatePresenter;
+import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
@@ -21,13 +19,13 @@ import java.util.Calendar;
  */
 public class TimeslotCreateViewModel extends CommonViewModel {
     private TimeSlotView newTimeSlotView;
-    private TimeslotCreatePresenter presenter;
+    private TimeslotCommonPresenter<TimeslotCreateMvpView> presenter;
     private TimeslotCreateMvpView mvpView;
     public final int STARTTIME = 1000;
     public final int ENDTIME = 1001;
 
 
-    public TimeslotCreateViewModel(TimeslotCreatePresenter presenter) {
+    public TimeslotCreateViewModel(TimeslotCommonPresenter<TimeslotCreateMvpView> presenter) {
         this.presenter = presenter;
         mvpView = presenter.getView();
 

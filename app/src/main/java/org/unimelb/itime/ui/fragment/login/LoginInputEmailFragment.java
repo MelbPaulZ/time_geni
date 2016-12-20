@@ -12,12 +12,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentLoginInputEmailBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
-import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
-import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 /**
  * Created by yinchuandong on 15/12/16.
@@ -91,12 +88,19 @@ public class LoginInputEmailFragment extends LoginCommonFragment implements Logi
     }
 
     @Override
-    public void switchFragment(int task) {
+    public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_INDEX_FRAG:{
-                switchFragment(this, (LoginIndexFragment)getFragmentManager().findFragmentByTag(LoginIndexFragment.class.getSimpleName()));
+                closeFragment(this, (LoginIndexFragment)getFragmentManager().findFragmentByTag(LoginIndexFragment.class.getSimpleName()));
+                break;
             }
-            case 
+            case LoginViewModel.TO_SET_PASSWORD_FRAG:{
+                openFragment(this, (LoginSetPWFragment)getFragmentManager().findFragmentByTag(LoginSetPWFragment.class.getSimpleName()));
+                break;
+            }
+            case LoginViewModel.TO_TERM_AGREEMENT_FRAG:{
+                // todo implement agreement
+            }
         }
     }
 }

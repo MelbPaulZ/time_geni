@@ -416,14 +416,14 @@ public class InviteeFragment extends BaseUiFragment {
                 if (getFrom() instanceof EventCreateNewFragment){
                     self.resetAll();
                     EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-                    switchFragment(self, eventCreateNewFragment);
+                    openFragment(self, eventCreateNewFragment);
                 }else if (getFrom() instanceof EventTimeSlotViewFragment){
                     EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-                    switchFragment(self, eventCreateNewFragment);
+                    openFragment(self, eventCreateNewFragment);
                 } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
-                    switchFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
+                    openFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
                 }else if (getFrom() instanceof EventEditFragment){
-                    switchFragment(self, (EventEditFragment)getFrom());
+                    openFragment(self, (EventEditFragment)getFrom());
                 }
             }
         });
@@ -438,42 +438,42 @@ public class InviteeFragment extends BaseUiFragment {
                         // pick at least one invitee
                         EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
                         eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
-                        switchFragment(self, eventTimeSlotViewFragment);
+                        openFragment(self, eventTimeSlotViewFragment);
                     }else{
                         EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
                         beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
-                        switchFragment(self, beforeSendingFragment);
+                        openFragment(self, beforeSendingFragment);
                     }
                 }else if (getFrom() instanceof EventTimeSlotViewFragment){
                     if (event.getInvitee().size()>=1) {
                         EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFrom();
                         eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
                         eventTimeSlotViewFragment.resetCalendar(event);
-                        switchFragment(self, (EventTimeSlotViewFragment) getFrom());
+                        openFragment(self, (EventTimeSlotViewFragment) getFrom());
                     }else{
                         EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
                         beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
-                        switchFragment(self, beforeSendingFragment);
+                        openFragment(self, beforeSendingFragment);
                     }
                 }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
                     if (event.getInvitee().size()>=1) {
                         EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
                         eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
-                        switchFragment(self, eventTimeSlotViewFragment);
+                        openFragment(self, eventTimeSlotViewFragment);
                     }else{
                         EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
                         beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
-                        switchFragment(self, beforeSendingFragment);
+                        openFragment(self, beforeSendingFragment);
                     }
                 }else if (getFrom() instanceof EventEditFragment){
                     if (event.getInvitee().size()>=1) {
                         EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
                         eventDetailTimeSlotFragment.setEvent(eventManager.copyCurrentEvent(event));
-                        switchFragment(self, eventDetailTimeSlotFragment);
+                        openFragment(self, eventDetailTimeSlotFragment);
                     }else{
                         EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
                         eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
-                        switchFragment(self, eventEditFragment);
+                        openFragment(self, eventEditFragment);
                     }
                 }
             }

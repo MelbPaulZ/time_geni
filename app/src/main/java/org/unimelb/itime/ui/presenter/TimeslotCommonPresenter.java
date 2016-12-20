@@ -3,11 +3,14 @@ package org.unimelb.itime.ui.presenter;
 import android.content.Context;
 import android.util.Log;
 
+import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
+import org.unimelb.itime.ui.mvpview.TimeslotCommonMvpView;
 import org.unimelb.itime.util.HttpUtil;
 
 import java.util.List;
@@ -16,22 +19,23 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Created by Paul on 27/08/2016.
+ * Created by Paul on 20/12/2016.
  */
-public class EventCreateTimeSlotPresenter extends EventCommonPresenter<EventCreateNewTimeSlotMvpView> {
-    private final String TAG = "CreateTimeSlotPresenter";
-    private Event event;
 
-    public EventCreateTimeSlotPresenter(Context context) {
-        super(context);
+public class TimeslotCommonPresenter<T extends TimeslotCommonMvpView> extends MvpBasePresenter<T> {
+    private Context context;
+    private EventApi eventApi;
+    private final static String TAG = "TimeslotCommonPresenter";
+    public TimeslotCommonPresenter(Context context) {
+        this.context = context;
+        eventApi = HttpUtil.createService(context, EventApi.class);
     }
 
-    public void setEvent(Event event){
-        this.event = event;
+    public Context getContext() {
+        return context;
     }
 
-
-    public void getTimeSlots(long startTime) {
+    public void getTimeSlots(Event event, long startTime) {
         List<Invitee> invitees = event.getInvitee();
 
         Observable<HttpResult<List<Timeslot>>> observable = eventApi.recommend(invitees, startTime);
@@ -57,6 +61,4 @@ public class EventCreateTimeSlotPresenter extends EventCommonPresenter<EventCrea
 
         HttpUtil.subscribe(observable, subscriber);
     }
-
-
 }

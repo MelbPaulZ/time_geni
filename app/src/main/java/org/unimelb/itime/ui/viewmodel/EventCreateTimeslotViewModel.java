@@ -12,9 +12,9 @@ import android.widget.RelativeLayout;
 
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
+import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.vendor.BR;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.weekview.WeekView;
@@ -27,31 +27,24 @@ import java.util.Calendar;
 public class EventCreateTimeslotViewModel extends BaseObservable {
 
     private String titleString;
-    private EventCreateTimeSlotPresenter presenter;
+    private TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView> presenter;
     private Event event;
     private String tag;
     private ObservableField<Boolean> isChangeDuration = new ObservableField<>(false);
     private String durationTimeString = "1 hour";
     private EventCreateNewTimeSlotMvpView mvpView;
 
-    public EventCreateTimeslotViewModel(EventCreateTimeSlotPresenter presenter){
+    public EventCreateTimeslotViewModel(TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView> presenter){
         this.presenter = presenter;
         titleString = initToolBarTitle();
         event= EventManager.getInstance(getContext()).getCurrentEvent();
         mvpView = presenter.getView();
-//        presenter.initData(event);
-        initTimeSlots();
     }
 
     private Context getContext(){
         return presenter.getContext();
     }
 
-    public void initTimeSlots(){
-        if (mvpView!=null){
-            mvpView.initTimeSlots(event);
-        }
-    }
 
     public View.OnClickListener onClickBack(){
         return new View.OnClickListener() {
@@ -83,7 +76,7 @@ public class EventCreateTimeslotViewModel extends BaseObservable {
                Calendar calendar = Calendar.getInstance();
                calendar.set(myCalendar.getYear(), myCalendar.getMonth(), myCalendar.getDay(), 0, 0,0 );
                long weekStartTime = calendar.getTimeInMillis();
-               presenter.getTimeSlots(weekStartTime);
+               presenter.getTimeSlots(event, weekStartTime);
            }
        };
     }

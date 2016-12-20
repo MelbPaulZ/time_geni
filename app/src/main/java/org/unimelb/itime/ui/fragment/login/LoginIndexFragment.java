@@ -7,13 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
-
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentLoginIndexBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
-import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
@@ -66,13 +62,15 @@ public class LoginIndexFragment extends LoginCommonFragment implements LoginMvpV
     }
 
     @Override
-    public void switchFragment(int task) {
+    public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
-                switchFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+                openFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+                break;
             }
             case LoginViewModel.TO_LOGIN_FRAG:{
-                switchFragment(this, (LoginFragmentNew)getFragmentManager().findFragmentByTag(LoginFragmentNew.class.getSimpleName()));
+                openFragment(this, (LoginFragmentNew)getFragmentManager().findFragmentByTag(LoginFragmentNew.class.getSimpleName()));
+                break;
             }
         }
     }

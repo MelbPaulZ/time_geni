@@ -28,7 +28,7 @@ import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
-import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel;
 import org.unimelb.itime.util.EventUtil;
 
@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * Created by Paul on 31/08/2016.
  */
-public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<EventCreateDetailBeforeSendingMvpView, EventCreateDetailBeforeSendingPresenter> implements EventCreateDetailBeforeSendingMvpView{
+public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<EventCreateDetailBeforeSendingMvpView, EventCommonPresenter<EventCreateDetailBeforeSendingMvpView>> implements EventCreateDetailBeforeSendingMvpView{
     private FragmentEventCreateBeforeSendingBinding binding;
     private EventCreateDetailBeforeSendingViewModel eventCreateDetailBeforeSendingViewModel;
     private Event event;
@@ -129,8 +129,8 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     }
 
     @Override
-    public EventCreateDetailBeforeSendingPresenter createPresenter() {
-        return new EventCreateDetailBeforeSendingPresenter(getContext());
+    public EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> createPresenter() {
+        return new EventCommonPresenter<>(getContext());
     }
 
 
@@ -156,7 +156,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     public void changeLocation() {
         EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
         eventLocationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        switchFragment(this, eventLocationPickerFragment);
+        openFragment(this, eventLocationPickerFragment);
     }
 
 
@@ -164,7 +164,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     public void pickInvitees() {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
         inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        switchFragment(this, inviteeFragment);
+        openFragment(this, inviteeFragment);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     @Override
     public void onClickProposedTimeslots() {
         EventTimeSlotViewFragment timeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-        switchFragment(this, timeSlotViewFragment);
+        openFragment(this, timeSlotViewFragment);
         timeSlotViewFragment.setTo(this);
     }
 
@@ -191,24 +191,18 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
         super.onStop();
     }
 
-
     @Override
-    public void onTaskStart() {
+    public void onTaskStart(int task) {
 
     }
 
     @Override
-    public void onTaskError(Throwable e) {
+    public void onTaskError(int task, String errorMsg, int code) {
 
     }
 
     @Override
-    public void onTaskComplete(List<Event> dataList) {
-
-    }
-
-    @Override
-    public void onTaskComplete(Event data) {
+    public void onTaskComplete(int task, List<Event> dataList) {
 
     }
 }

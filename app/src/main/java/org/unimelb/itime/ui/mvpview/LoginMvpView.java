@@ -11,5 +11,5 @@ public interface LoginMvpView extends MvpView{
     void onLoginSucceed();
     void onLoginFail(int errorCode, int errorMsg);
     void invalidPopup();
-    void switchFragment(int task);
+    void onPageChange(int task);
 }

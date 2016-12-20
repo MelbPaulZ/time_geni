@@ -12,8 +12,7 @@ import java.util.List;
 
 public interface EventCommonMvpView extends MvpView {
 
-    void onTaskStart();
-    void onTaskError(Throwable e);
-    void onTaskComplete(List<Event> dataList);
-    void onTaskComplete(Event data);
+    void onTaskStart(int task);
+    void onTaskError(int task, String errorMsg, int code);
+    void onTaskComplete(int task, List<Event> dataList);
 }

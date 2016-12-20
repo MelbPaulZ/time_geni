@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginResetPasswordBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
+import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
  * Created by Paul on 20/12/2016.
@@ -52,7 +53,20 @@ public class LoginResetPasswordFragment extends LoginCommonFragment implements L
     }
 
     @Override
-    public void switchFragment(int task) {
-
+    public void onPageChange(int task) {
+        switch (task){
+            case LoginViewModel.TO_LOGIN_FRAG:{
+                closeFragment(this, (LoginFragmentNew)getFragmentManager().findFragmentByTag(LoginFragmentNew.class.getSimpleName()));
+                break;
+            }
+            case LoginViewModel.TO_EMAIL_SENT_FRAG:{
+                openFragment(this, (LoginEmailSentFragment)getFragmentManager().findFragmentByTag(LoginEmailSentFragment.class.getSimpleName()));
+                break;
+            }
+            case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
+                openFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+                break;
+            }
+        }
     }
 }

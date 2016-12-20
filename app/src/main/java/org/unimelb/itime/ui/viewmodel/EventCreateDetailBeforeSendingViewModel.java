@@ -22,7 +22,7 @@ import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
-import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
@@ -42,7 +42,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private CharSequence alertTimes[] = null;
     private EventCreateDetailBeforeSendingMvpView mvpView;
     private int tempYear,tempMonth,tempDay,tempHour,tempMin;
-    private EventCreateDetailBeforeSendingPresenter presenter;
+    private EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> presenter;
     private ObservableField<Boolean> isEndRepeatChange;
     private ObservableField<Boolean> isAllDay;
     private PickerTask currentTask;
@@ -60,7 +60,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private CalendarUtil calendarUtil;
     private EventManager eventManager;
 
-    public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter) {
+    public EventCreateDetailBeforeSendingViewModel(EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> presenter) {
         this.presenter = presenter;
         eventManager = EventManager.getInstance(getContext());
         newEvDtlEvent = eventManager.getCurrentEvent();

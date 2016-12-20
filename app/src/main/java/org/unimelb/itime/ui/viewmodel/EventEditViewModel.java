@@ -22,7 +22,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
-import org.unimelb.itime.ui.presenter.EventEditPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -40,7 +40,7 @@ import me.tatarka.bindingcollectionadapter.ItemView;
 public class EventEditViewModel extends CommonViewModel {
 
     private Event eventEditViewEvent;
-    private EventEditPresenter presenter;
+    private EventCommonPresenter<EventEditMvpView> presenter;
     private ObservableField<Boolean> editEventIsRepeat = new ObservableField<>();
     private EventEditMvpView mvpView;
     private ObservableField<Boolean> isAllDayEvent= new ObservableField<>();
@@ -62,7 +62,7 @@ public class EventEditViewModel extends CommonViewModel {
     private EventManager eventManager;
 
 
-    public EventEditViewModel(EventEditPresenter eventEditPresenter) {
+    public EventEditViewModel(EventCommonPresenter<EventEditMvpView> eventEditPresenter) {
         this.presenter = eventEditPresenter;
         eventManager = EventManager.getInstance(getContext());
         mvpView = presenter.getView();

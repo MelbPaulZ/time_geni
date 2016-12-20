@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.EventTimeSlotAdapter;
 import org.unimelb.itime.base.BaseUiFragment;
@@ -21,12 +20,11 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
 import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
-import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
@@ -40,7 +38,7 @@ import java.util.Map;
 /**
  * Created by Paul on 4/09/2016.
  */
-public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvpView, EventDetailGroupPresenter> implements EventDetailGroupMvpView {
+public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView, EventCommonPresenter<EventDetailGroupMvpView>> implements EventDetailGroupMvpView {
     private org.unimelb.itime.databinding.FragmentEventDetailBinding binding;
     private EventDetailViewModel eventDetailForHostViewModel;
     private Event event;
@@ -151,8 +149,8 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
 
 
     @Override
-    public EventDetailGroupPresenter createPresenter() {
-        return new EventDetailGroupPresenter(getContext());
+    public EventCommonPresenter<EventDetailGroupMvpView> createPresenter() {
+        return new EventCommonPresenter<>(getContext());
     }
     
 
@@ -176,7 +174,7 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
 
         EventManager.getInstance(getContext()).setCurrentEvent(event);
 
-        switchFragment(this, eventEditFragment);
+        openFragment(this, eventEditFragment);
     }
 
     @Override
@@ -187,12 +185,12 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
             ViewInCalendarMonthDayFragment viewInCalendarMonthDayFragment = viewMainCalendarFragment.getMonthDayFrag();
             viewInCalendarMonthDayFragment.scrollToWithOffset(event.getStartTime());
 
-            switchFragment(this,viewMainCalendarFragment);
+            openFragment(this,viewMainCalendarFragment);
         }else {
             EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
             timeSlotFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event), this.adapterData);
 
-            switchFragment(this,timeSlotFragment);
+            openFragment(this,timeSlotFragment);
         }
     }
 
@@ -200,31 +198,22 @@ public class EventDetailGroupFragment extends BaseUiFragment<EventDetailGroupMvp
     public void viewInviteeResponse(Timeslot timeSlot) {
         InviteeTimeslotFragment inviteeTimeslotFragment = (InviteeTimeslotFragment) getFragmentManager().findFragmentByTag(InviteeTimeslotFragment.class.getSimpleName());
         inviteeTimeslotFragment.setData(this.event, adapterData.get(timeSlot.getTimeslotUid()),timeSlot);
-        switchFragment(this, inviteeTimeslotFragment);
+        openFragment(this, inviteeTimeslotFragment);
     }
 
-    @Override
-    public void refreshCalendars() {
-        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-    }
 
     @Override
-    public void onTaskStart() {
+    public void onTaskStart(int task) {
 
     }
 
     @Override
-    public void onTaskError(Throwable e) {
+    public void onTaskError(int task, String errorMsg, int code) {
 
     }
 
     @Override
-    public void onTaskComplete(List<Event> dataList) {
-
-    }
-
-    @Override
-    public void onTaskComplete(Event data) {
+    public void onTaskComplete(int task, List<Event> dataList) {
 
     }
 }

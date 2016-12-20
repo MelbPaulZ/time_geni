@@ -24,12 +24,12 @@
 
             <!--close btn-->
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="left|top"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="17dp"
-                android:layout_marginBottom="15dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="7dp"
+                android:layout_gravity="left"
                 android:onClick="@{loginVM.onSwitchFragment(loginVM.TO_INDEX_FRAG)}"
                 android:src="@drawable/icon_close" />
 

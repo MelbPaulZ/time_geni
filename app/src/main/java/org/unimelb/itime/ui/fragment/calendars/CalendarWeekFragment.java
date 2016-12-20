@@ -333,23 +333,20 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
     }
 
 
+
     @Override
-    public void onTaskStart() {
+    public void onTaskStart(int task) {
         AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
     }
 
     @Override
-    public void onTaskError(Throwable e) {
-
-    }
-
-    @Override
-    public void onTaskComplete(List<Event> dataList) {
+    public void onTaskError(int task, String errorMsg, int code) {
         AppUtil.hideProgressBar();
+
     }
 
     @Override
-    public void onTaskComplete(Event data) {
-
+    public void onTaskComplete(int task, List<Event> dataList) {
+        AppUtil.hideProgressBar();
     }
 }

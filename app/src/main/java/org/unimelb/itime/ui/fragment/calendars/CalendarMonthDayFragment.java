@@ -348,27 +348,23 @@ public class CalendarMonthDayFragment extends BaseUiFragment<EventCommonMvpView,
         CalendarManager.getInstance().setCurrentShowCalendar(c);
     }
 
+
     @Override
-    public void onTaskStart() {
+    public void onTaskStart(int task) {
         AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
     }
 
     @Override
-    public void onTaskError(Throwable e) {
-
+    public void onTaskError(int task, String errorMsg, int code) {
         AppUtil.hideProgressBar();
+
     }
 
     @Override
-    public void onTaskComplete(List<Event> dataList) {
-
+    public void onTaskComplete(int task, List<Event> dataList) {
         AppUtil.hideProgressBar();
-    }
 
-    @Override
-    public void onTaskComplete(Event data) {
 
-        AppUtil.hideProgressBar();
     }
 }
 

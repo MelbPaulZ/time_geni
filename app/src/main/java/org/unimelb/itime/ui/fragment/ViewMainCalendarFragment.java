@@ -14,24 +14,21 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentViewCalendarBinding;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
-import org.unimelb.itime.ui.fragment.event.EventDetailGroupFragment;
+import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
-import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
+import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
-import java.util.List;
-
 /**
  * required login, need to extend BaseUiAuthFragment
  */
-public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, MainCalendarPresenter> implements MainCalendarMvpView {
+public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, CommonPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
 
     private final static String TAG = "MainCalendarFragment";
     private ViewInCalendarMonthDayFragment monthDayFragment;
@@ -39,8 +36,8 @@ public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView
     private MainCalendarViewModel mainCalendarViewModel;
 
     @Override
-    public MainCalendarPresenter createPresenter() {
-        return new MainCalendarPresenter(getContext());
+    public CommonPresenter<MainCalendarMvpView> createPresenter() {
+        return new CommonPresenter<>(getContext());
     }
 
     @Nullable
@@ -103,8 +100,8 @@ public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView
 
     @Override
     public void backToGroupEvent() {
-        EventDetailGroupFragment eventDetailGroupFragment = (EventDetailGroupFragment) getFragmentManager().findFragmentByTag(EventDetailGroupFragment.class.getSimpleName());
-        switchFragment(this,eventDetailGroupFragment);
+        EventDetailFragment eventDetailFragment = (EventDetailFragment) getFragmentManager().findFragmentByTag(EventDetailFragment.class.getSimpleName());
+        openFragment(this, eventDetailFragment);
     }
 
     @Override
@@ -115,25 +112,5 @@ public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onTaskStart() {
-
-    }
-
-    @Override
-    public void onTaskError(Throwable e) {
-
-    }
-
-    @Override
-    public void onTaskComplete(List<Event> dataList) {
-
-    }
-
-    @Override
-    public void onTaskComplete(Event data) {
-
     }
 }

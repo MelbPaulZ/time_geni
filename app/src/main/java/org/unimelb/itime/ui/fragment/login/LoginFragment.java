@@ -104,11 +104,6 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
                 }
                 String userUid = UserUtil.getInstance(getContext()).getUserUid();
 
-//                List<Calendar> calendars;
-//                if (CalendarUtil.getInstance(getContext()).getCalendar()==null){
-//                    calendars = CalendarUtil.getCalendarsFromPreferences(getContext());
-//                    CalendarUtil.getInstance(getContext()).setCalendar(calendars);
-//                }
                 AVInstallation.getCurrentInstallation().put("user_uid", userUid);
             }
         });
@@ -134,7 +129,7 @@ public class LoginFragment extends MvpFragment<LoginMvpView, LoginPresenter> imp
     }
 
     @Override
-    public void switchFragment(int task) {
+    public void onPageChange(int task) {
 
     }
 }

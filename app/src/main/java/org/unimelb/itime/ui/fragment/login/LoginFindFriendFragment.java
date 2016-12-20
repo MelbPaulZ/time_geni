@@ -55,7 +55,7 @@ public class LoginFindFriendFragment extends LoginCommonFragment implements Logi
     }
 
     @Override
-    public void switchFragment(int task) {
+    public void onPageChange(int task) {
 
     }
 }

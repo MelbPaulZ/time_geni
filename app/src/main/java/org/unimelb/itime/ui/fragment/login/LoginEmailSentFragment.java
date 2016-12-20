@@ -54,13 +54,15 @@ public class LoginEmailSentFragment extends LoginCommonFragment implements Login
     }
 
     @Override
-    public void switchFragment(int task) {
+    public void onPageChange(int task) {
         switch(task){
             case LoginViewModel.TO_INDEX_FRAG: {
-                switchFragment(this, (LoginIndexFragment) getFragmentManager().findFragmentByTag(LoginIndexFragment.class.getSimpleName()));
+                openFragment(this, (LoginIndexFragment) getFragmentManager().findFragmentByTag(LoginIndexFragment.class.getSimpleName()));
+                break;
             }
             case LoginViewModel.TO_RESET_PASSWORD_FRAG:{
-                switchFragment(this, (LoginResetPasswordFragment)getFragmentManager().findFragmentByTag(LoginResetPasswordFragment.class.getSimpleName()));
+                closeFragment(this, (LoginResetPasswordFragment)getFragmentManager().findFragmentByTag(LoginResetPasswordFragment.class.getSimpleName()));
+                break;
             }
         }
     }

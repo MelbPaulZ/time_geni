@@ -23,6 +23,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.LoginActivity;
+import org.unimelb.itime.ui.activity.SplashActivity;
 import org.unimelb.itime.ui.mvpview.MainSettingsMvpView;
 import org.unimelb.itime.ui.presenter.MainSettingsPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
@@ -68,7 +69,7 @@ public class MainSettingsFragment extends MvpFragment<MainSettingsMvpView, MainS
     public void logout(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.LOGOUT){
             clearAccount();
-            Intent i = new Intent(getContext(), LoginActivity.class);
+            Intent i = new Intent(getContext(), SplashActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
             getActivity().finish();

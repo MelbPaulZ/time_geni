@@ -13,8 +13,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.FragmentLoginInputPasswordBinding;
+import org.unimelb.itime.databinding.FragmentLoginSetPasswordBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
+import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
  * Created by Paul on 19/12/2016.
@@ -22,7 +23,7 @@ import org.unimelb.itime.ui.mvpview.LoginMvpView;
 
 public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpView{
 
-    private FragmentLoginInputPasswordBinding binding;
+    private FragmentLoginSetPasswordBinding binding;
     private Dialog pwTooSimpleDialog;
 
     @Nullable
@@ -35,7 +36,7 @@ public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpV
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        binding.setVm(loginViewModel);
+        binding.setLoginVM(loginViewModel);
         initViews();
     }
 
@@ -86,7 +87,16 @@ public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpV
     }
 
     @Override
-    public void switchFragment(int task) {
-
+    public void onPageChange(int task) {
+        switch (task){
+            case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
+                closeFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+                break;
+            }
+            case LoginViewModel.TO_PICK_AVATAR_FRAG:{
+                openFragment(this, (LoginPickAvatarFragment)getFragmentManager().findFragmentByTag(LoginPickAvatarFragment.class.getSimpleName()));
+                break;
+            }
+        }
     }
 }

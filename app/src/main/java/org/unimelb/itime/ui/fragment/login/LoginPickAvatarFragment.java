@@ -8,10 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentPickAvatarBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
-import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
@@ -57,7 +55,19 @@ public class LoginPickAvatarFragment extends LoginCommonFragment implements Logi
     }
 
     @Override
-    public void switchFragment(int task) {
-
+    public void onPageChange(int task) {
+        switch (task){
+            case LoginViewModel.TO_SET_PASSWORD_FRAG:{
+                closeFragment(this, (LoginSetPWFragment)getFragmentManager().findFragmentByTag(LoginSetPWFragment.class.getSimpleName()));
+                break;
+            }
+            case LoginViewModel.TO_FIND_FRIEND_FRAG:{
+                openFragment(this, (LoginFindFriendFragment)getFragmentManager().findFragmentByTag(LoginFindFriendFragment.class.getSimpleName()));
+                break;
+            }
+            case LoginViewModel.TO_TERM_AGREEMENT_FRAG:{
+                // todo implement
+            }
+        }
     }
 }
