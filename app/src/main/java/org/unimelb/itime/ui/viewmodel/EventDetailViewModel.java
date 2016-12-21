@@ -105,7 +105,6 @@ public class EventDetailViewModel extends CommonViewModel {
                 Timeslot selectedTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
                 selectedTimeSlot.setIsConfirmed(1);
                 evDtlHostEvent.setStatus(Event.STATUS_CONFIRMED);
-                EventManager.getInstance(context).getWaitingEditEventList().add(evDtlHostEvent); // add event to waiting list, for server response
                 presenter.confirmEvent(evDtlHostEvent, selectedTimeSlot.getTimeslotUid());
                 if (mvpView!=null){
                     mvpView.toCalendar();

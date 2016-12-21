@@ -110,7 +110,7 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
                     //unread to read
                 }
 
-                Event event = EventManager.getInstance(getContext()).findEventByUid(getContext(), message.getEventUid());
+                Event event = EventManager.getInstance(getContext()).findEventByUid(message.getEventUid());
                 if (event==null){
                     Toast.makeText(getContext(), "cannot find event, please try later", Toast.LENGTH_SHORT).show();
                 }else {

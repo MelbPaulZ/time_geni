@@ -233,7 +233,13 @@ public class EventEditViewModel extends CommonViewModel {
                     // set event type
                     EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
                     eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
-                    eventEditViewEvent.setStatus("pending");
+
+                    // if solo, need to manually set status confirmed, otherwise server do it
+                    if (eventEditViewEvent.getEventType().equals(Event.TYPE_SOLO)){
+                        eventEditViewEvent.setEventType(Event.STATUS_CONFIRMED);
+                    }else {
+                        eventEditViewEvent.setStatus(Event.STATUS_PENDING);
+                    }
 
                     // TODO: 12/12/2016 test json convert
                     Gson gson = new Gson();

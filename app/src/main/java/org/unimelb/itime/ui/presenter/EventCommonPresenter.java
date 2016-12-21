@@ -82,8 +82,6 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         String str = gson.toJson(event);
         Log.i(TAG, "updateEventToServer: " + str);
 
-
-        eventManager.getWaitingEditEventList().add(event);
         String syncToken = AppUtil.getEventSyncToken(context);
         Observable<HttpResult<List<Event>>> observable = eventApi.update(calendarUtil.getCalendar().get(0).getCalendarUid(),event.getEventUid(),event, syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
@@ -122,9 +120,13 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
      */
     public void synchronizeLocal(List<Event> events){
         for (Event ev: events){
-            Event oldEvent = eventManager.findEventByUUID(ev.getEventUid());
-            eventManager.updateEvent(oldEvent, ev);
-            eventManager.getWaitingEditEventList().remove(oldEvent);
+            Event oldEvent = eventManager.findEventByUid(ev.getEventUid());
+            if (oldEvent!=null) {
+                eventManager.updateEvent(oldEvent, ev);
+            }else{
+                eventManager.addEvent(ev);
+                DBManager.getInstance(context).insertEvent(ev);
+            }
         }
         Log.i(TAG, "APPP: synchronizeLocal: "+"call");
     }
@@ -188,7 +190,6 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
             getView().onTaskStart(TASK_TIMESLOT_ACCEPT);
         }
 
-        eventManager.getWaitingEditEventList().add(event);
         ArrayList<String> timeslotUids = new ArrayList<>();
         for (Timeslot timeslot: event.getTimeslot()){
             if (timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
