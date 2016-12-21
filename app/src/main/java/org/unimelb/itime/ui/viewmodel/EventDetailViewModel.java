@@ -149,6 +149,7 @@ public class EventDetailViewModel extends CommonViewModel {
                         Toast.makeText(presenter.getContext(), msg, Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                         // here should add presenter change event status as reject
+                        presenter.rejectTimeslots(evDtlHostEvent.getEventUid());
                         if (mvpView!=null){
                             mvpView.toCalendar();
                         }

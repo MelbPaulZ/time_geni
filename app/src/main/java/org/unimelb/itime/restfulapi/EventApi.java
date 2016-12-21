@@ -49,7 +49,7 @@ public interface EventApi {
     Observable<HttpResult<List<Event>>> acceptTimeslot(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body HashMap<String, Object> parameters);
 
     @POST("event/timeslot/reject/{eventUid}")
-    Observable<HttpResult<List<Event>>> rejectTimeslot();
+    Observable<HttpResult<List<Event>>> rejectTimeslot(@Path("eventUid") String eventUid);
 
     @FormUrlEncoded
     @POST("event/timeslot/recommend")

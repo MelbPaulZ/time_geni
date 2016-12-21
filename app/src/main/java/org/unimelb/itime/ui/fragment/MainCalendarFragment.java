@@ -65,7 +65,7 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Co
             monthDayFragment.scrollToWithOffset(eventStartTime);
         }
         if (weekFragment!=null && weekFragment.isAdded()){
-            weekFragment.scrollToWithOffset(calendar);
+            weekFragment.scrollToWithOffset(eventStartTime);
         }
     }
 

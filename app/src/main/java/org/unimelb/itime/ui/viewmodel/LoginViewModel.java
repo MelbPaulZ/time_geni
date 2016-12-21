@@ -39,8 +39,6 @@ public class LoginViewModel extends AndroidViewModel{
     private ArrayList<String> suggestedEmailList = new ArrayList<>();
     private ItemView suggestedEmailItemView = ItemView.of(BR.itemText, R.layout.listview_login_email_tips);
 
-    private String inputEmail = "";
-    private String inputPassword = "";
     private String inputName = "";
 
     public final static int TO_EMAIL_SENT_FRAG = 1;
@@ -223,7 +221,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setInputEmail("");
+                setEmail("");
             }
         };
     }
@@ -291,44 +289,6 @@ public class LoginViewModel extends AndroidViewModel{
         notifyPropertyChanged(BR.suggestedEmailItemView);
     }
 
-
-    @Bindable
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-        notifyPropertyChanged(BR.newPassword);
-    }
-
-    public int getPasswordKeyBoardVisibility() {
-        return passwordKeyBoardVisibility;
-    }
-
-    public void setPasswordKeyBoardVisibility(int passwordKeyBoardVisibility) {
-        this.passwordKeyBoardVisibility = passwordKeyBoardVisibility;
-    }
-
-    @Bindable
-    public String getInputEmail() {
-        return inputEmail;
-    }
-
-    public void setInputEmail(String inputEmail) {
-        this.inputEmail = inputEmail;
-        notifyPropertyChanged(BR.inputEmail);
-    }
-
-    @Bindable
-    public String getInputPassword() {
-        return inputPassword;
-    }
-
-    public void setInputPassword(String inputPassword) {
-        this.inputPassword = inputPassword;
-        notifyPropertyChanged(BR.inputPassword);
-    }
 
     @Bindable
     public String getInputName() {

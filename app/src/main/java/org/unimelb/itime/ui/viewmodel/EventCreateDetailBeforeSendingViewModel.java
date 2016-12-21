@@ -61,6 +61,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private UserUtil userUtil;
     private CalendarUtil calendarUtil;
     private EventManager eventManager;
+    private boolean isEndTimeChange = false;
 
     public EventCreateDetailBeforeSendingViewModel(EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> presenter) {
         this.presenter = presenter;
@@ -146,6 +147,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         editMinute = minute;
         c.set(editYear, editMonth, editDay, editHour, editMinute);
         newEvDtlEvent.setEndTime(c.getTimeInMillis());
+        isEndTimeChange = true;
         notifyPropertyChanged(BR.newEvDtlEvent);
     }
 
@@ -155,6 +157,9 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         editMinute = minute;
         c.set(editYear, editMonth, editDay, editHour, editMinute);
         newEvDtlEvent.setStartTime(c.getTimeInMillis());
+        if (!isEndTimeChange){
+            newEvDtlEvent.setEndTime(c.getTimeInMillis() + 60 * 60 * 1000);
+        }
         notifyPropertyChanged(BR.newEvDtlEvent);
     }
 

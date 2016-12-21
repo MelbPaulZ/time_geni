@@ -225,6 +225,38 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         HttpUtil.subscribe(observable, subscriber);
     }
 
+    public void rejectTimeslots(String eventUid){
+        if (getView()!=null){
+            getView().onTaskStart(TASK_TIMESLOT_REJECT);
+        }
+        Observable<HttpResult<List<Event>>> observable = eventApi.rejectTimeslot(eventUid);
+        Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (getView()!=null){
+                    getView().onTaskError(TASK_TIMESLOT_REJECT, e.getMessage(), -1);
+                }
+            }
+
+            @Override
+            public void onNext(HttpResult<List<Event>> listHttpResult) {
+                synchronizeLocal(listHttpResult.getData());
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                if (getView()!=null){
+                    getView().onTaskComplete(TASK_TIMESLOT_REJECT, listHttpResult.getData());
+                }
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
+
+
+
     /** call the api to confirm event to server,
      *  after this api called, it will automatically sync db
      *  @param newEvent

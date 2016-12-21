@@ -162,7 +162,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
         c.set(editYear, editMonth, editDay, editHour, editMinute);
         event.setStartTime(c.getTimeInMillis());
         if (!isEndTimeChanged){
-            event.setEndTime(c.getTimeInMillis() + 24 * 60 * 60 * 1000);
+            event.setEndTime(c.getTimeInMillis() + 60 * 60 * 1000);
         }
         notifyPropertyChanged(BR.event);
     }

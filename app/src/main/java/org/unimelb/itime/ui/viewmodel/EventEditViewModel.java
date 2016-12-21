@@ -61,6 +61,7 @@ public class EventEditViewModel extends CommonViewModel {
         START_TIME, END_TIME, END_REPEAT
     }
     private EventManager eventManager;
+    private boolean isEndTimeChanged = false;
 
 
     public EventEditViewModel(EventCommonPresenter<EventEditMvpView> eventEditPresenter) {
@@ -160,6 +161,7 @@ public class EventEditViewModel extends CommonViewModel {
         editMinute = minute;
         c.set(editYear, editMonth, editDay, editHour, editMinute);
         eventEditViewEvent.setEndTime(c.getTimeInMillis());
+        isEndTimeChanged = true;
         notifyPropertyChanged(BR.eventEditViewEvent);
     }
 
@@ -169,6 +171,9 @@ public class EventEditViewModel extends CommonViewModel {
         editMinute = minute;
         c.set(editYear, editMonth, editDay, editHour, editMinute);
         eventEditViewEvent.setStartTime(c.getTimeInMillis());
+        if (!isEndTimeChanged){
+            eventEditViewEvent.setEndTime(c.getTimeInMillis() + 60 * 60 * 1000);
+        }
         notifyPropertyChanged(BR.eventEditViewEvent);
     }
 
