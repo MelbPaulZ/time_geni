@@ -144,7 +144,6 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-
     public View.OnClickListener onPasswordNextClick(){
         return new View.OnClickListener() {
             @Override
@@ -240,16 +239,6 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-
-    private void showKeyBoard(EditText view) {
-        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-    }
-
-    private void closeKeyBoard(EditText view) {
-        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-    }
 
 
     @Bindable

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -187,6 +188,24 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, dateSetListener,
                         c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
+            }
+        };
+    }
+
+    /**
+     * check the focus of email edit text
+     * @return
+     */
+    public View.OnFocusChangeListener onEditFocusChange(){
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                Log.d(TAG, "onFocusChange: " + hasFocus);
+                if(hasFocus){
+                    showKeyBoard(view);
+                }else{
+                    closeKeyBoard(view);
+                }
             }
         };
     }

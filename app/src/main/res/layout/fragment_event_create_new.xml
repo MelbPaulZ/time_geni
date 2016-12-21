@@ -16,7 +16,8 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,11 +65,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/bg_new_event_edit"
+            android:onTouch="@{eventVM.onScrollViewTouch}"
             android:scrollbarStyle="insideOverlay">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
+                android:clickable="true"
                 android:orientation="vertical">
                 <!--blank for border-->
                 <TextView
@@ -90,6 +95,9 @@
                         android:layout_marginLeft="@dimen/padding_10"
                         android:background="@drawable/table_row_border"
                         android:hint="Title"
+                        android:onFocusChange="@{eventVM.onEditFocusChange}"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:text="@={eventVM.event.title}"
                         android:textColor="@color/text_enable"
                         android:textSize="@dimen/page_text_size" />
@@ -409,7 +417,9 @@
                                 android:background="@drawable/table_row_border"
                                 android:hint="URL"
                                 android:inputType="textUri"
-                                android:onClick="@{eventVM.gotoUrl()}"
+                                android:onFocusChange="@{eventVM.onEditFocusChange}"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:text="@={eventVM.event.url}"
                                 android:textColor="@color/blue"
                                 android:textSize="@dimen/page_text_size" />
@@ -427,6 +437,9 @@
                                 android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
                                 android:hint="@string/note"
+                                android:onFocusChange="@{eventVM.onEditFocusChange}"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:text="@={eventVM.event.description}"
                                 android:textColor="@color/text_enable"
                                 android:textSize="@dimen/page_text_size" />

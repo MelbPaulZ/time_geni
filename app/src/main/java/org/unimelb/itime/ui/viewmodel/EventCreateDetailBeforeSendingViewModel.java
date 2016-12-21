@@ -8,9 +8,11 @@ import android.content.DialogInterface;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
@@ -259,6 +261,23 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
             public void onClick(View view) {
                 if (mvpView!=null){
                     mvpView.pickInvitees();
+                }
+            }
+        };
+    }
+
+    /**
+     * check the focus of email edit text
+     * @return
+     */
+    public View.OnFocusChangeListener onEditFocusChange(){
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus){
+                    showKeyBoard((EditText) view);
+                }else{
+                    closeKeyBoard((EditText) view);
                 }
             }
         };

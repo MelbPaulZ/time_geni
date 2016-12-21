@@ -63,6 +63,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         event = EventManager.getInstance(getContext()).getCurrentEvent();
         viewModel = new EventCreateNewVIewModel(getPresenter());
         binding.setEventVM(viewModel);
+        onEnter(); // show key board
     }
 
     public void showTimePicker(){

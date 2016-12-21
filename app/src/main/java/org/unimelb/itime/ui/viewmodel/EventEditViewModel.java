@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -100,6 +101,23 @@ public class EventEditViewModel extends CommonViewModel {
                     case START_TIME:
                         onStartTimeSelected(hourOfDay, minute);
                         break;
+                }
+            }
+        };
+    }
+
+    /**
+     * check the focus of email edit text
+     * @return
+     */
+    public View.OnFocusChangeListener onEditFocusChange(){
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus){
+                    showKeyBoard((EditText) view);
+                }else{
+                    closeKeyBoard((EditText) view);
                 }
             }
         };
