@@ -69,7 +69,7 @@ public class LoginIndexFragment extends LoginCommonFragment implements LoginMvpV
                 break;
             }
             case LoginViewModel.TO_LOGIN_FRAG:{
-                openFragment(this, (LoginFragmentNew)getFragmentManager().findFragmentByTag(LoginFragmentNew.class.getSimpleName()));
+                openFragment(this, (LoginFragment)getFragmentManager().findFragmentByTag(LoginFragment.class.getSimpleName()));
                 break;
             }
         }

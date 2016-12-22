@@ -133,7 +133,7 @@ public class EventManager {
     }
 
     public void deleteEvent(Event event){
-//        if (event.)
+        
     }
 
     private synchronized void addRepeatedEvent(Event event, long rangeStart, long rangeEnd){

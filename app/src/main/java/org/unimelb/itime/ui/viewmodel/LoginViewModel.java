@@ -31,9 +31,6 @@ public class LoginViewModel extends AndroidViewModel{
     private String password = "123456";
     private LoginMvpView mvpView;
 
-    private String newPassword = "";
-    private int passwordKeyBoardVisibility = View.VISIBLE;
-
     private int topIconVisibility = View.VISIBLE;
 
     private ArrayList<String> suggestedEmailList = new ArrayList<>();
@@ -146,7 +143,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (newPassword.length()>=8){
+                if (password.length()>=8){
                     mvpView.onPageChange(TO_PICK_AVATAR_FRAG);
                 }else {
                     mvpView.invalidPopup();
