@@ -101,10 +101,10 @@ public class EventManager {
 
     public void addEvent(Event event){
         //check if special event
-//        checkSpecialEvent(event);
+        checkSpecialEvent(event);
 
         //if should show
-        if (event.getShowLevel() == 1){
+//        if (event.getShowLevel() == 1){
             //if not repeated
             if (event.getDeleteLevel() == 0) {
                 // delete level == 0 means the event is not deleted
@@ -119,7 +119,7 @@ public class EventManager {
                         regularEventMap.get(dayBeginMilliseconds).add(event);
                     }
                 } else {
-                    if (!isIncludeRepeate(event)){
+                    if (!isIncludeRepeated(event)){
                         orgRepeatedEventList.add(event);
                         this.addRepeatedEvent(event, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
                     }else{
@@ -128,7 +128,7 @@ public class EventManager {
 
                 }
             }
-        }
+//        }
     }
 
     public Map<String, ArrayList<Event>> getSpecialEventMap(){
@@ -144,7 +144,7 @@ public class EventManager {
         }
     }
 
-    private boolean isIncludeRepeate(Event repeater){
+    private boolean isIncludeRepeated(Event repeater){
         for (Event event:this.orgRepeatedEventList
              ) {
             if (event.getEventUid().equals(repeater.getEventUid())){
@@ -188,19 +188,19 @@ public class EventManager {
             dup_event.setEndTime(time + duration);
 
             //handle special event
-//            if (specialList != null){
-//                boolean cancelled = false;
-//                for (Event spEvent:specialList
-//                     ) {
-//                    if (EventUtil.isSameDay(dup_event.getStartTime(), spEvent.getStartTime()) && spEvent.getStatus().equals(Event.STATUS_CANCELLED)){
-//                        cancelled = true;
-//                        break;
-//                    }
-//                }
-//                if (cancelled){
-//                    continue;
-//                }
-//            }
+            if (specialList != null){
+                boolean cancelled = false;
+                for (Event spEvent:specialList
+                     ) {
+                    if (EventUtil.isSameDay(dup_event.getStartTime(), spEvent.getStartTime()) && spEvent.getStatus().equals(Event.STATUS_CANCELLED)){
+                        cancelled = true;
+                        break;
+                    }
+                }
+                if (cancelled){
+                    continue;
+                }
+            }
 
             //if should show
             Long startTime = dup_event.getStartTime();
@@ -465,7 +465,7 @@ public class EventManager {
     public void loadDB(){
         List<Event> list = DBManager.getInstance(context).getAllEvents();
         for (Event ev: list) {
-            if (ev.getShowLevel() == 1){
+            if (ev.getShowLevel() > 0){
                 addEvent(ev);
             }
         }
