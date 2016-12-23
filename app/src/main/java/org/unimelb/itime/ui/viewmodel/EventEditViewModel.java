@@ -241,7 +241,7 @@ public class EventEditViewModel extends CommonViewModel {
 
                     // if solo, need to manually set status confirmed, otherwise server do it
                     if (eventEditViewEvent.getEventType().equals(Event.TYPE_SOLO)){
-                        eventEditViewEvent.setEventType(Event.STATUS_CONFIRMED);
+                        eventEditViewEvent.setStatus(Event.STATUS_CONFIRMED);
                     }else {
                         eventEditViewEvent.setStatus(Event.STATUS_PENDING);
                     }

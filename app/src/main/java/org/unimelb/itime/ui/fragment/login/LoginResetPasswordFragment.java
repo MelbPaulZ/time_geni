@@ -56,7 +56,7 @@ public class LoginResetPasswordFragment extends LoginCommonFragment implements L
     public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_LOGIN_FRAG:{
-                closeFragment(this, (LoginFragmentNew)getFragmentManager().findFragmentByTag(LoginFragmentNew.class.getSimpleName()));
+                closeFragment(this, (LoginFragment)getFragmentManager().findFragmentByTag(LoginFragment.class.getSimpleName()));
                 break;
             }
             case LoginViewModel.TO_EMAIL_SENT_FRAG:{

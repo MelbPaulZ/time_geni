@@ -155,10 +155,6 @@ public class EventManager {
         return false;
     }
 
-//    public void deleteEvent(Event event){
-////        if (event.)
-//    }
-
     private synchronized void addRepeatedEvent(Event event, long rangeStart, long rangeEnd){
         RuleModel rule = RuleFactory.getInstance().getRuleModel(event);
         event.setRule(rule);
