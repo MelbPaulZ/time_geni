@@ -11,6 +11,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -39,6 +40,9 @@ public class EventManager {
 
     //<UUID, List of tracer> : For tracking event on Day of repeated event map
     private Map<String,ArrayList<EventTracer>> uidTracerMap = new HashMap();
+
+    //recurrence uid (origin event uid) : special events for origin event
+    private Map<String, ArrayList<Event>> specialEvent = new HashMap<>();
 
     private EventsPackage eventsPackage = new EventsPackage();
 
@@ -96,27 +100,46 @@ public class EventManager {
     }
 
     public void addEvent(Event event){
-        //if not repeated
-        if (event.getDeleteLevel() == 0) {
-            // delete level == 0 means the event is not deleted
-            if (event.getRecurrence().length == 0) {
-                Long startTime = event.getStartTime();
-                Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
+        //check if special event
+//        checkSpecialEvent(event);
 
-                if (regularEventMap.containsKey(dayBeginMilliseconds)) {
-                    regularEventMap.get(dayBeginMilliseconds).add(event);
+        //if should show
+        if (event.getShowLevel() == 1){
+            //if not repeated
+            if (event.getDeleteLevel() == 0) {
+                // delete level == 0 means the event is not deleted
+                if (event.getRecurrence().length == 0) {
+                    Long startTime = event.getStartTime();
+                    Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
+
+                    if (regularEventMap.containsKey(dayBeginMilliseconds)) {
+                        regularEventMap.get(dayBeginMilliseconds).add(event);
+                    } else {
+                        regularEventMap.put(dayBeginMilliseconds, new ArrayList<ITimeEventInterface>());
+                        regularEventMap.get(dayBeginMilliseconds).add(event);
+                    }
                 } else {
-                    regularEventMap.put(dayBeginMilliseconds, new ArrayList<ITimeEventInterface>());
-                    regularEventMap.get(dayBeginMilliseconds).add(event);
+                    if (!isIncludeRepeate(event)){
+                        orgRepeatedEventList.add(event);
+                        this.addRepeatedEvent(event, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
+                    }else{
+                        Log.i(TAG, "addEvent: Reapted adding reapte event, dropped.");
+                    }
+
                 }
-            } else {
-                if (!isIncludeRepeate(event)){
-                    orgRepeatedEventList.add(event);
-                    this.addRepeatedEvent(event, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
-                }else{
-                    Log.i(TAG, "addEvent: Reapted adding reapte event, dropped.");
-                }
-               
+            }
+        }
+    }
+
+    public Map<String, ArrayList<Event>> getSpecialEventMap(){
+        return  this.specialEvent;
+    }
+
+    private void checkSpecialEvent(Event event){
+        String rEUID = event.getRecurringEventUid();
+        if (!rEUID.equals("")){
+            if (this.specialEvent.containsKey(rEUID)){
+                this.specialEvent.get(rEUID).add(event);
             }
         }
     }
@@ -132,15 +155,21 @@ public class EventManager {
         return false;
     }
 
-    public void deleteEvent(Event event){
-//        if (event.)
-    }
+//    public void deleteEvent(Event event){
+////        if (event.)
+//    }
 
     private synchronized void addRepeatedEvent(Event event, long rangeStart, long rangeEnd){
         RuleModel rule = RuleFactory.getInstance().getRuleModel(event);
         event.setRule(rule);
 
         ArrayList<Long> repeatedEventsTimes = rule.getOccurenceDates(rangeStart,rangeEnd);
+        ArrayList<Event> specialList = null;
+        //special event
+        if (this.specialEvent.containsKey(event.getEventUid())){
+            specialList = this.specialEvent.get(event.getEventUid());
+        }
+
         for (Long time: repeatedEventsTimes
                 ) {
             Event dup_event = null;
@@ -154,11 +183,26 @@ public class EventManager {
             }
 
             //dup time is right
-
             long duration = dup_event.getDurationMilliseconds();
             dup_event.setStartTime(time);
             dup_event.setEndTime(time + duration);
 
+            //handle special event
+//            if (specialList != null){
+//                boolean cancelled = false;
+//                for (Event spEvent:specialList
+//                     ) {
+//                    if (EventUtil.isSameDay(dup_event.getStartTime(), spEvent.getStartTime()) && spEvent.getStatus().equals(Event.STATUS_CANCELLED)){
+//                        cancelled = true;
+//                        break;
+//                    }
+//                }
+//                if (cancelled){
+//                    continue;
+//                }
+//            }
+
+            //if should show
             Long startTime = dup_event.getStartTime();
             Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
 
@@ -263,30 +307,6 @@ public class EventManager {
         return calendar.getTimeInMillis();
     }
 
-    // this is for event drag
-//    public void updateEventToServer(Event oldEvent, long newStartTime, long newEndTime){
-//        if (oldEvent.getRecurrence().length == 0){
-//            long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
-//            if (this.regularEventMap.containsKey(oldBeginTime)){
-//                Event updateEventToServer = null;
-//                for (ITimeEventInterface ev : regularEventMap.get(oldBeginTime)){
-//                    if (((Event)ev).getEventUid().equals(oldEvent.getEventUid())){
-//                        updateEventToServer = (Event) ev;
-//                        break;
-//                    }
-//                }
-//                if (updateEventToServer!=null){
-//                    this.regularEventMap.get(oldBeginTime).remove(updateEventToServer);
-//                }
-//                oldEvent.setStartTime(newStartTime);
-//                oldEvent.setEndTime(newEndTime);
-//                this.addEvent(oldEvent);
-//            }
-//        }else {
-//
-//        }
-//    }
-
     // repeat event update need to change
     public synchronized void updateEvent(Event oldEvent, Event newEvent){
         long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
@@ -302,16 +322,17 @@ public class EventManager {
                         old = (Event) iTimeEventInterface;
                     }
                 }
+
                 if (old != null){
                     regularEventMap.get(oldBeginTime).remove(old);
-//                    this.orgRepeatedEventList.remove(oldEvent);
-//                    if(newEvent.getRecurrence().length >0){
-//                        this.removeRepeatedEvent(oldEvent);
-//                    }else{
-//
-//                    }
-
-                    this.addEvent(newEvent);
+                    //update deleted level
+                    //show -> hide
+                    if (oldEvent.getShowLevel() == 1 && newEvent.getShowLevel() != 1){
+                        //deleted
+                    }else{
+                        //not deleted
+                        this.addEvent(newEvent);
+                    }
                 }else {
 //                    throw new RuntimeException("old event cannot be find in regularEventMap");
                 }
@@ -444,7 +465,9 @@ public class EventManager {
     public void loadDB(){
         List<Event> list = DBManager.getInstance(context).getAllEvents();
         for (Event ev: list) {
-            addEvent(ev);
+            if (ev.getShowLevel() == 1){
+                addEvent(ev);
+            }
         }
     }
 
