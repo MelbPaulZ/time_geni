@@ -253,7 +253,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
                 // after synchronizeLocal, remove this event from EventManager
                 for (Event ev: listHttpResult.getData()){
                     if (ev.getShowLevel()!=1){
-                        EventManager.getInstance(context).deleteEvent(event);
+//                        EventManager.getInstance(context).deleteEvent(event);
                     }
                 }
 
