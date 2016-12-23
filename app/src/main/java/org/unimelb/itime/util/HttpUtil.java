@@ -62,6 +62,7 @@ public class HttpUtil {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 String authToken = AuthUtil.getJwtToken(context);
+                //String authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsImlzcyI6Imh0dHA6XC9cL2Rldi50aW1lZ2VuaWkuY29tXC9hcGlcL3VzZXJcL3NpZ25pbiIsImlhdCI6MTQ4MjMxMTIzMiwiZXhwIjoxNDg0OTAzMjMyLCJuYmYiOjE0ODIzMTEyMzIsImp0aSI6ImM1NTZlZjhiNWU2ZDUxMGM0Yzc0MDQ0OGY0OTViYTI5In0.QS0kswULdd-UWVLdG6PJzu2_5gpdW_i6WZap5rynAOs";
                 Request original = chain.request();
                 Request.Builder requestBuilder = original.newBuilder()
                         .header("Authorization", "Bearer " + authToken)

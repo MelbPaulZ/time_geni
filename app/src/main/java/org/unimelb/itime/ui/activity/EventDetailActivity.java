@@ -115,7 +115,7 @@ public class EventDetailActivity extends AppCompatActivity {
         }
     }
 
-    // this is for invitee confirm
+    // this is for invitee accept
     public void confirmAndGotoWeekViewCalendar(Event event) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

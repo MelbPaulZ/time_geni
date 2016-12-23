@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="org.unimelb.itime.ui.contact.ViewModel.InviteFriendViewModel"/>
+    </data>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightGrey">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lightGrey"
+        android:orientation="vertical">
+
+        <org.unimelb.itime.ui.contact.Widget.InviteeGroupView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corner_boarder"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
+            app:hintText="@string/search_hint"
+            android:id="@+id/inviteeGroupView"
+            />
+
+
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="12dp"
+            android:textColor="@color/normalGrey"
+            android:text="@{viewModel.countStr}"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="10dp"/>
+    </LinearLayout>
+
+    <include layout="@layout/line"/>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/inviteAndFriendsLayout"
+        android:visibility="@{viewModel.searching?View.GONE:View.VISIBLE}">
+
+        <LinearLayout android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:id="@+id/inviteContactsLayout">
+
+            <!--<org.unimelb.itime.ui.contact.Widget.WideArrowButton-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="@{()->viewModel.gotoInviteMobileContacts()}"-->
+                <!--app:image="@drawable/phone_contact_icon"-->
+                <!--app:text="Invite Mobile Contacts"/>-->
+
+            <!--<include layout="@layout/line"/>-->
+
+            <!--<org.unimelb.itime.ui.contact.Widget.WideArrowButton-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="@{()->viewModel.gotoInviteGmailContacts()}"-->
+                <!--app:image="@drawable/gmail_contact"-->
+                <!--app:text="Invite Gmail Contacts"/>-->
+
+            <!--<include layout="@layout/line"/>-->
+
+            <!--<org.unimelb.itime.ui.contact.Widget.WideArrowButton-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="@{()->viewModel.gotoInviteFacebookContacts()}"-->
+                <!--app:image="@drawable/facebook_contact"-->
+                <!--app:text="Invite Facebook Contacts"/>-->
+
+            <!--<include layout="@layout/line"/>-->
+
+            <org.unimelb.itime.ui.contact.Widget.WideArrowButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:image="@drawable/qr_code_icon"
+                app:text="@string/invite_friend_through_qr_code"
+                android:onClick=""/>
+            <include layout="@layout/line"/>
+
+        </LinearLayout>
+
+        <include layout="@layout/line"/>
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="iTime Friends"
+            android:textColor="@color/normalGrey"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:visibility="@{viewModel.searching?View.GONE:View.VISIBLE}"/>
+
+        <include layout="@layout/line"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

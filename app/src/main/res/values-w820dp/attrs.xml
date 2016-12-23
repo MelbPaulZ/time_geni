@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="InviteeGroupView">
+        <attr name="avatarHeight" format="dimension"/>
+        <attr name="avatarWeight" format="dimension"/>
+        <attr name="squareHeight" format="dimension"/>
+        <attr name="emailColor" format="color"/>
+        <attr name="phoneColor" format="color"/>
+        <attr name="hintText" format="string"/>
+
+    </declare-styleable>
+    <declare-styleable name="BaseTitleBar">
+        <attr name="title" format = "string"/>
+        <attr name="showRight" format="boolean"/>
+        <attr name="showLeft" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="SortListView">
+        <attr name="showSideBar" format = "boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="WideArrowButton">
+        <attr name="text" format = "string"/>
+        <attr name="image" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="RoundImageView">
+        <attr name="border_thickness" format="dimension" />
+        <attr name="border_inside_color" format="color" />
+        <attr name="border_outside_color" format="color"/>
+    </declare-styleable>
+</resources>

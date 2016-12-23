@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="mainViewModel"
+            type="org.unimelb.itime.ui.contact.ViewModel.AddFriendsViewModel"/>
+    </data>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+    <org.unimelb.itime.ui.contact.Widget.PlusTitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@{mainViewModel.title}"
+        app:titleBackListener = "@{mainViewModel.titleBackListener}"
+        app:showLeft="@{mainViewModel.showTitileBack}"
+        app:showRight="@{mainViewModel.showTitleRight}"/>
+    <org.unimelb.itime.ui.contact.Widget.SearchBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchBar"
+        app:searchListener = "@{mainViewModel.onEditListener}"/>
+    <include layout="@layout/line"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/buttonsLayout"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="@{mainViewModel.showButtons?View.VISIBLE:View.GONE}">
+        <!--<org.unimelb.itime.ui.contact.Widget.WideArrowButton-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:image="@drawable/phone_contact_icon"-->
+            <!--app:text="Add Mobile Contacts"-->
+            <!--android:onClick="@{mainViewModel.phoneListener}"/>-->
+        <!--<include layout="@layout/line"/>-->
+        <!--<org.unimelb.itime.ui.contact.Widget.WideArrowButton-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:image="@drawable/gmail_contact"-->
+            <!--app:text="Add Gmail Contacts"-->
+            <!--android:onClick="@{mainViewModel.gmailListener}"/>-->
+        <!--<include layout="@layout/line"/>-->
+        <!--<org.unimelb.itime.ui.contact.Widget.WideArrowButton-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:image="@drawable/facebook_contact"-->
+            <!--app:text="Add Facebook Contacts"-->
+            <!--android:onClick="@{mainViewModel.facebookListenser}"/>-->
+        <!--<include layout="@layout/line"/>-->
+        <org.unimelb.itime.ui.contact.Widget.WideArrowButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:image="@drawable/qr_code_icon"
+            app:text="@string/scan_qr_code"
+            android:onClick="@{mainViewModel.qdListener}"/>
+        <include layout="@layout/line"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <org.unimelb.itime.ui.contact.Widget.WideArrowButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:image="@drawable/searching_icon"
+        app:text="@{mainViewModel.searchText}"
+        android:id="@+id/searchButton"
+        android:onClick="@{mainViewModel.searchButtonListener}"
+        android:visibility="@{mainViewModel.showSearch?View.VISIBLE:View.GONE}" />
+        <include layout="@layout/line"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="@{mainViewModel.showNotFound?View.VISIBLE:View.GONE}">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_big"
+            android:text="User not found"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal"/>
+        <org.unimelb.itime.ui.contact.Widget.BlueButton
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@{mainViewModel.inviteText}"
+            android:textSize = "@dimen/font_big"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+
+</LinearLayout>
+    </layout>

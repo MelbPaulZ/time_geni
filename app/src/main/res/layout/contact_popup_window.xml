@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/popupLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        >
+        <TextView
+            android:id="@+id/firstButton"
+            android:background="@drawable/corner_boarder"
+            android:layout_marginTop="5dp"
+            android:textSize="@dimen/font_big"
+            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:text="First"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/secondButton"
+            android:background="@drawable/corner_boarder"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:textSize="@dimen/font_big"
+            android:layout_height="50dp"
+            android:text="First"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/cancelButton"
+            android:background="@drawable/corner_boarder"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:textSize="@dimen/font_big"
+            android:layout_height="50dp"
+            android:text="Cacncel"
+            android:gravity="center"
+            android:textColor="@color/lightRed"
+            />
+    </LinearLayout>
+</RelativeLayout>
+</layout>

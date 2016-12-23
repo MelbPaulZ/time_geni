@@ -5,9 +5,15 @@ import android.support.annotation.Nullable;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.ToOne;
+import org.greenrobot.greendao.annotation.Transient;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 
 import java.io.Serializable;
+import org.greenrobot.greendao.DaoException;
+import org.unimelb.itime.dao.DaoSession;
+import org.unimelb.itime.dao.ContactDao;
+import org.unimelb.itime.dao.UserDao;
 
 /**
  * Created by yuhaoliu on 17/08/16.
@@ -16,6 +22,7 @@ import java.io.Serializable;
 public class Contact implements ITimeContactInterface, Serializable {
 
     private String userUid;
+    @Id
     private String contactUid;
     private int relationship;
     private int ratingVisibility;
@@ -28,12 +35,49 @@ public class Contact implements ITimeContactInterface, Serializable {
     private long lastCatchupTime;
     private String note;
     private String status;
+    private int blockLevel;
 
-    @Generated(hash = 401063312)
-    public Contact(String userUid, String contactUid, int relationship,
-            int ratingVisibility, int eventVisibility, String source,
-            String aliasName, String aliasPhoto, int catchCount,
-            long nextCatchupTime, long lastCatchupTime, String note, String status) {
+    @Transient
+    private User userDetail;
+
+//@Generated(hash = 283800893)
+//    public Contact(String userUid, String contactUid, int relationship, int ratingVisibility, int eventVisibility, String source, String aliasName, String aliasPhoto, int catchCount, long nextCatchupTime, long lastCatchupTime, String note, String status, int blockLevel) {
+//        this.userUid = userUid;
+//        this.contactUid = contactUid;
+//        this.relationship = relationship;
+//        this.ratingVisibility = ratingVisibility;
+//        this.eventVisibility = eventVisibility;
+//        this.source = source;
+//        this.aliasName = aliasName;
+//        this.aliasPhoto = aliasPhoto;
+//        this.catchCount = catchCount;
+//        this.nextCatchupTime = nextCatchupTime;
+//        this.lastCatchupTime = lastCatchupTime;
+//        this.note = note;
+//        this.status = status;
+//        this.blockLevel = blockLevel;
+//    }
+
+//     @Generated(hash = 283800893)
+//    public Contact(String userUid, String contactUid, int relationship, int ratingVisibility, int eventVisibility, String source, String aliasName, String aliasPhoto, int catchCount, long nextCatchupTime, long lastCatchupTime, String note, String status, int blockLevel) {
+//        this.userUid = userUid;
+//        this.contactUid = contactUid;
+//        this.relationship = relationship;
+//        this.ratingVisibility = ratingVisibility;
+//        this.eventVisibility = eventVisibility;
+//        this.source = source;
+//        this.aliasName = aliasName;
+//        this.aliasPhoto = aliasPhoto;
+//        this.catchCount = catchCount;
+//        this.nextCatchupTime = nextCatchupTime;
+//        this.lastCatchupTime = lastCatchupTime;
+//        this.note = note;
+//        this.status = status;
+//        this.blockLevel = blockLevel;
+//    }
+
+    @Generated(hash = 283800893)
+    public Contact(String userUid, String contactUid, int relationship, int ratingVisibility, int eventVisibility, String source, String aliasName, String aliasPhoto, int catchCount, long nextCatchupTime, long lastCatchupTime, String note, String status, int blockLevel) {
         this.userUid = userUid;
         this.contactUid = contactUid;
         this.relationship = relationship;
@@ -47,10 +91,27 @@ public class Contact implements ITimeContactInterface, Serializable {
         this.lastCatchupTime = lastCatchupTime;
         this.note = note;
         this.status = status;
+        this.blockLevel = blockLevel;
     }
 
     @Generated(hash = 672515148)
     public Contact() {
+    }
+
+    public User getUserDetail() {
+        return userDetail;
+    }
+
+    public void setUserDetail(User userDetail) {
+       this.userDetail = userDetail;
+    }
+
+    public int getBlockLevel() {
+        return blockLevel;
+    }
+
+    public void setBlockLevel(int blockLevel) {
+        this.blockLevel = blockLevel;
     }
 
     public String getUserUid() {

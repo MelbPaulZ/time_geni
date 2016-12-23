@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="org.unimelb.itime.ui.contact.ViewModel.SideBarListViewModel"/>
+    </data>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+        <org.unimelb.itime.ui.contact.Widget.ContactListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sortedContactListView"
+            android:background="@color/white"
+            android:layout_toLeftOf="@+id/sidrbar"
+            app:items="@{viewModel.items}"
+            app:itemView="@{viewModel.itemView}"/>
+
+        <TextView
+            android:id="@+id/dialog"
+            android:layout_width="80.0dip"
+            android:layout_height="80.0dip"
+            android:layout_centerInParent="true"
+            android:background="@drawable/number_base"
+            android:textColor="@color/normalGrey"
+            android:textSize="30.0dip"
+            android:gravity="center"
+            android:visibility="invisible" />
+
+        <org.unimelb.itime.ui.contact.Widget.SideBar
+            android:id="@+id/sidrbar"
+            android:layout_width="30.0dip"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/white"/>
+    </RelativeLayout>
+</layout>

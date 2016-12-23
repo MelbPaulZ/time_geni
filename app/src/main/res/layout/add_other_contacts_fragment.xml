@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout >
+    <data>
+        <variable
+            name="viewModel"
+            type="org.unimelb.itime.ui.contact.ViewModel.AddOtherContactsViewModel"/>
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <org.unimelb.itime.ui.contact.Widget.BaseTitleBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/titleBar"
+            app:title="@{viewModel.title}"
+            app:showLeft="@{viewModel.showTitileBack}"
+            app:showRight="@{viewModel.showTitleRight}"
+            app:titleBackListener="@{viewModel.titleBackListener}" />
+        <org.unimelb.itime.ui.contact.Widget.SearchBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:searchListener = "@{viewModel.onEditListener}"
+            android:id="@+id/searchBar"/>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:items="@{viewModel.items}"
+            app:itemView="@{viewModel.itemView}"
+            android:id="@+id/listView"/>
+    </LinearLayout>
+</layout>

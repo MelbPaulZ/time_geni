@@ -1,0 +1,42 @@
+package org.unimelb.itime.ui.contact.Widget;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import org.unimelb.itime.R;
+import org.unimelb.itime.ui.contact.Model.SizeHelper;
+
+/**
+ * Created by 37925 on 2016/12/8.
+ */
+
+public class PlusTitleBar extends BaseTitleBar{
+
+    public PlusTitleBar(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initPlusTextView();
+    }
+
+    private void initPlusTextView(){
+        ImageView plusTextView = new ImageView(getContext());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                SizeHelper.dp2px(getContext(),25),
+                SizeHelper.dp2px(getContext(),25));
+        params.addRule(CENTER_HORIZONTAL);
+        params.addRule(CENTER_IN_PARENT);
+        params.addRule(ALIGN_PARENT_RIGHT);
+        params.setMargins(SizeHelper.dp2px(getContext(), 10),
+                0,
+                SizeHelper.dp2px(getContext(), 20),
+                0);
+        plusTextView.setLayoutParams(params);
+        plusTextView.setImageResource(R.drawable.icon_plus);
+        rightView = plusTextView;
+        this.addView(rightView);
+    }
+
+}

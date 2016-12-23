@@ -344,4 +344,19 @@
     <color name="color_b1cef9">#B1CEF9</color>
     <color name="color_bec9d1">#BEC9D1</color>
 
+    <!--contact-->
+    <!--<color name="green">#32CD32</color>-->
+    <!--<color name="white">#FFFFFF</color>-->
+    <!--<color name="black">#000000</color>-->
+    <!--<color name="orange">#FF8000</color>-->
+    <color name="darkOrange">#CC8000</color>
+    <color name="lightGrey">#EFEFEF</color>
+    <color name="normalGrey">#808080</color>
+    <color name="matchColor">#66AAFF</color>
+    <color name="darkBlue">#3366cc</color>
+    <color name="lightRed">#CC3399</color>
+    <color name="badgeRed">#FF2211</color>
+    <color name="halfTransparent">#33000000</color>
+    <color name="transparent">#00000000</color>
+
 </resources>

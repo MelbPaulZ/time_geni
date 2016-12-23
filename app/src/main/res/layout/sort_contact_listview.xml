@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content" >
+<ListView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/sortedContactListView"
+    android:background="@color/white"
+    android:layout_toLeftOf="@+id/sidrbar"
+    >
+</ListView>
+
+<TextView
+    android:id="@+id/dialog"
+    android:layout_width="80.0dip"
+    android:layout_height="80.0dip"
+    android:layout_centerInParent="true"
+    android:background="@drawable/number_base"
+    android:textColor="@color/normalGrey"
+    android:textSize="30.0dip"
+    android:gravity="center"
+    android:visibility="invisible" />
+
+<org.unimelb.itime.ui.contact.Widget.SideBar
+    android:id="@+id/sidrbar"
+    android:layout_width="30.0dip"
+    android:layout_height="fill_parent"
+    android:layout_alignParentRight="true"
+    android:background="@color/white"/>
+</RelativeLayout>
+</layout>

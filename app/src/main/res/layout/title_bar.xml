@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="titleBean"
+            type="org.unimelb.itime.ui.contact.Beans.TitleBean"/>
+    </data>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="@{titleBean.backOnClickListener}">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_general_arrow_back"
+            android:layout_margin="10dp"
+            android:id="@+id/backIcon"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/normalGrey"
+            android:layout_gravity="center_vertical"
+            android:text="Back"
+            android:textSize="16dp"
+            android:id="@+id/backText"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normalGrey"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:textSize="16dp"
+        android:text="@{titleBean.title}"
+        android:id="@+id/middleText"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:textColor="@color/orange"
+        android:textSize="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp"
+        android:id="@+id/rightText"
+        android:onClick="@{titleBean.doneOnClickListener}"/>
+</RelativeLayout>
+</layout>

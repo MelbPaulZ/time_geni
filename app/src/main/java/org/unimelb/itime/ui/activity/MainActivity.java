@@ -36,6 +36,7 @@ import org.unimelb.itime.databinding.ActivityMainBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
+import org.unimelb.itime.ui.contact.Fragments.ContactHomePageFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainContactsFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
@@ -119,7 +120,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     private void init(){
         tagFragments = new MvpFragment[4];
         tagFragments[0] = new MainCalendarFragment();
-        tagFragments[1] = new MainContactsFragment();
+        tagFragments[1] = new ContactHomePageFragment();
         tagFragments[2] = new MainInboxFragment();
         tagFragments[3] = new MainSettingsFragment();
 

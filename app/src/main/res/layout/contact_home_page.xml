@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout >
+    <data>
+        <variable
+            name="mainViewModel"
+            type="org.unimelb.itime.ui.contact.ViewModel.ContactHomePageViewModel"/>
+    </data>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <org.unimelb.itime.ui.contact.Widget.PlusTitleBar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="@{mainViewModel.title}"
+        app:showLeft="@{mainViewModel.showTitileBack}"
+        app:showRight="@{mainViewModel.showTitleRight}"
+        app:titleRightListener="@{mainViewModel.titleRightListener}"
+        android:id="@+id/titleBar"
+        />
+    <org.unimelb.itime.ui.contact.Widget.SearchBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchBar"
+        app:searchListener = "@{mainViewModel.onEditListener}"/>
+    <org.unimelb.itime.ui.contact.Widget.WideBadgeArrowButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:image="@drawable/ic_new_contact"
+        app:text="New Friends"
+        android:onClick="@{mainViewModel.newFriendListener}"
+        app:badgeCount = "@{mainViewModel.requestCount}"/>
+
+    <include layout="@layout/line"/>
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="iTime Friends"
+        android:textColor="@color/normalGrey"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"/>
+
+    <include layout="@layout/line"/>
+
+    <org.unimelb.itime.ui.contact.Widget.SideBarListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sortListView"
+        />
+
+</LinearLayout>
+</layout>
