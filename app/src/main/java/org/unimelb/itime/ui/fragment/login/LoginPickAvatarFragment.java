@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.FragmentPickAvatarBinding;
+import org.unimelb.itime.bean.User;
+import org.unimelb.itime.databinding.FragmentLoginPickAvatarBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
@@ -19,11 +20,11 @@ import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 public class LoginPickAvatarFragment extends LoginCommonFragment implements LoginMvpView{
 
-    private FragmentPickAvatarBinding binding;
+    private FragmentLoginPickAvatarBinding binding;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pick_avatar, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_pick_avatar, container, false);
         return binding.getRoot();
     }
 
@@ -40,14 +41,15 @@ public class LoginPickAvatarFragment extends LoginCommonFragment implements Logi
     }
 
     @Override
-    public void onLoginSucceed() {
-
+    public void onLoginSucceed(int task) {
+        onPageChange(task);
     }
 
     @Override
-    public void onLoginFail(int errorCode, int errorMsg) {
+    public void onLoginFail(int task, String errorMsg) {
 
     }
+
 
     @Override
     public void invalidPopup() {
@@ -70,4 +72,6 @@ public class LoginPickAvatarFragment extends LoginCommonFragment implements Logi
             }
         }
     }
+
+
 }

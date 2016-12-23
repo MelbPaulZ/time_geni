@@ -5,9 +5,11 @@ import org.unimelb.itime.bean.User;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -33,5 +35,8 @@ public interface UserApi {
 
     @GET("user/list")
     Observable<User> list();
+
+    @POST("user/signup")
+    Observable<HttpResult<User>> signup(@Body HashMap<String, Object> params);
 
 }

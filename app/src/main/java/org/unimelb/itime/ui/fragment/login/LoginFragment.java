@@ -52,13 +52,14 @@ public class LoginFragment extends LoginCommonFragment implements LoginMvpView {
         super.onActivityCreated(savedInstanceState);
         binding.setLoginVM(loginViewModel);
         initViews();
+        loginViewModel.setLoginUser(loginUser);
 
         String synToken = AuthUtil.getJwtToken(getContext());
         // this use to create DB manager...
         DBManager.getInstance(getContext());
         EventManager.getInstance(getContext());
         if (!synToken.equals("")){
-            onLoginSucceed();
+            onLoginSucceed(LoginViewModel.TO_CALENDAR);
         }else {
             loadData();
         }
@@ -105,34 +106,16 @@ public class LoginFragment extends LoginCommonFragment implements LoginMvpView {
     }
 
     @Override
-    public void onLoginSucceed() {
-        PushService.setDefaultPushCallback(getActivity().getApplication(), MainActivity.class);
-        AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
-            public void done(AVException e) {
-                if (e == null) {
-                    String installationId = AVInstallation.getCurrentInstallation().getInstallationId();
-                    Log.d(TAG, "done: " + installationId);
-                } else {
-
-                }
-                String userUid = UserUtil.getInstance(getContext()).getUserUid();
-
-                AVInstallation.getCurrentInstallation().put("user_uid", userUid);
-            }
-        });
-        // start service and go to main activity
-        long start = System.currentTimeMillis();
-        Intent intent = new Intent(getActivity(), RemoteService.class);
-        getActivity().startService(intent);
-//        Toast.makeText(getContext(), "signin success", Toast.LENGTH_SHORT).show();
-        Intent mainIntent = new Intent(getActivity(), MainActivity.class);
-        startActivity(mainIntent);
-        getActivity().finish();
-        Log.i(TAG, "onLoginSucceed: " + (System.currentTimeMillis() - start));
+    public void onLoginSucceed(int task) {
+        if (task == LoginViewModel.TO_CALENDAR) {
+            successLogin();
+        }
     }
 
+
+
     @Override
-    public void onLoginFail(int errorCode, int errorMsg) {
+    public void onLoginFail(int task, String msg) {
 
     }
 

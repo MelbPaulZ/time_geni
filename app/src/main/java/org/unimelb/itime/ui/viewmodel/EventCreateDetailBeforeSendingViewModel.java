@@ -43,7 +43,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private EventCreateDetailBeforeSendingViewModel viewModel;
     private CharSequence alertTimes[] = null;
     private EventCreateDetailBeforeSendingMvpView mvpView;
-    private int tempYear,tempMonth,tempDay,tempHour,tempMin;
     private EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> presenter;
     private ObservableField<Boolean> isEndRepeatChange;
     private ObservableField<Boolean> isAllDay;
@@ -280,9 +279,9 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if(hasFocus){
-                    showKeyBoard((EditText) view);
+                    showKeyBoard(view);
                 }else{
-                    closeKeyBoard((EditText) view);
+                    closeKeyBoard(view);
                 }
             }
         };
