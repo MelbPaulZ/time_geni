@@ -31,10 +31,10 @@ public interface EventApi {
     Observable<HttpResult<List<Event>>> insert(@Body Event event, @Query("syncToken") String syncToken);
 
     @POST("event/update/{calendarUid}/{eventUid}")
-    Observable<HttpResult<List<Event>>> update(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body Event event, @Query("syncToken") String syncToken);
+    Observable<HttpResult<List<Event>>> update(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body Event event, @Query("type") String type, @Query("syncToken") String syncToken);
 
     @POST("event/delete/{calendarUid}/{eventUid}")
-    Observable<HttpResult<Event>> delete(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Query("syncToken") String syncToken);
+    Observable<HttpResult<List<Event>>> delete(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Query("syncToken") String syncToken);
 
     @POST("event/confirm/{calendarUid}/{eventUid}/{timeslotUid}")
     Observable<HttpResult<List<Event>>> confirm(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Path("timeslotUid") String timeslotUid,@Body Event event, @Query("syncToken") String syncToken);

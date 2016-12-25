@@ -24,8 +24,9 @@ import org.greenrobot.greendao.annotation.Generated;
 public class Invitee implements ITimeInviteeInterface, Serializable {
     public final static String STATUS_NEEDSACTION = "needsAction";
     public final static String STATUS_ACCEPTED = "accepted";
-    public final static String STATUS_REJECTED = "rejected";
     public final static String STATUS_DECLINED = "declined";
+
+
 
     private String eventUid = "";
     private String inviteeUid = "";

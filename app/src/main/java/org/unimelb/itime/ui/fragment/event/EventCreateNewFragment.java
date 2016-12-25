@@ -132,11 +132,6 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         openFragment(this, inviteeFragment);
     }
 
-    @Override
-    public void toCreateSoloEvent() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
-    }
 
     public void pickPhoto(String tag){
         ((EventCreateActivity)getActivity()).checkPermission(tag);
@@ -179,6 +174,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
 
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
-
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
 }
