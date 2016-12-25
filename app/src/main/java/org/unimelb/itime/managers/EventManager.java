@@ -104,30 +104,28 @@ public class EventManager {
         checkSpecialEvent(event);
 
         //if should show
-        if (event.getShowLevel() > 0){
-            //if not repeated
-            if (event.getDeleteLevel() == 0) {
-                // delete level == 0 means the event is not deleted
-                if (event.getRecurrence().length == 0) {
-                    Long startTime = event.getStartTime();
-                    Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
+        if (event.getShowLevel() <= 0) {
+            return;
+        }
 
-                    if (regularEventMap.containsKey(dayBeginMilliseconds)) {
-                        regularEventMap.get(dayBeginMilliseconds).add(event);
-                    } else {
-                        regularEventMap.put(dayBeginMilliseconds, new ArrayList<ITimeEventInterface>());
-                        regularEventMap.get(dayBeginMilliseconds).add(event);
-                    }
-                } else {
-                    if (!isIncludeRepeated(event)){
-                        orgRepeatedEventList.add(event);
-                        this.addRepeatedEvent(event, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
-                    }else{
-                        Log.i(TAG, "addEvent: Reapted adding reapte event, dropped.");
-                    }
+        if (event.getRecurrence().length == 0) {
+            Long startTime = event.getStartTime();
+            Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
 
-                }
+            if (regularEventMap.containsKey(dayBeginMilliseconds)) {
+                regularEventMap.get(dayBeginMilliseconds).add(event);
+            } else {
+                regularEventMap.put(dayBeginMilliseconds, new ArrayList<ITimeEventInterface>());
+                regularEventMap.get(dayBeginMilliseconds).add(event);
             }
+        } else {
+            if (!isIncludeRepeated(event)){
+                orgRepeatedEventList.add(event);
+                this.addRepeatedEvent(event, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
+            }else{
+                Log.i(TAG, "addEvent: Reapted adding reapte event, dropped.");
+            }
+
         }
     }
 
