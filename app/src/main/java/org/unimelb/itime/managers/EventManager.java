@@ -104,7 +104,7 @@ public class EventManager {
         checkSpecialEvent(event);
 
         //if should show
-//        if (event.getShowLevel() == 1){
+        if (event.getShowLevel() > 0){
             //if not repeated
             if (event.getDeleteLevel() == 0) {
                 // delete level == 0 means the event is not deleted
@@ -128,7 +128,7 @@ public class EventManager {
 
                 }
             }
-//        }
+        }
     }
 
     public Map<String, ArrayList<Event>> getSpecialEventMap(){
@@ -137,7 +137,8 @@ public class EventManager {
 
     private void checkSpecialEvent(Event event){
         String rEUID = event.getRecurringEventUid();
-        if (!rEUID.equals("")){
+
+        if (!rEUID.equals("") && !rEUID.equals(event.getEventUid())){
             if (this.specialEvent.containsKey(rEUID)){
                 this.specialEvent.get(rEUID).add(event);
             }
