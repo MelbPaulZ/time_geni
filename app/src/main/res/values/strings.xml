@@ -298,4 +298,14 @@
     <string name="ok">OK</string>
     <string name="unsupported_email">Unsupported Email</string>
     <string name="try_again">Try Again</string>
+
+
+
+    <!--setting-->
+    <string name="blocked_users">Blocked Users</string>
+    <string name="notifications">Notifications</string>
+    <string name="calendar_preferences">Calendar Preferences</string>
+    <string name="help_and_feedback">Help &amp; Feedbacks</string>
+    <string name="about">About</string>
+    <string name="logout">Log Out</string>
 </resources>
