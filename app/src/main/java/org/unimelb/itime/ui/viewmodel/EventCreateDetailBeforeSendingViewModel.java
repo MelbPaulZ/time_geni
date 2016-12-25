@@ -8,11 +8,9 @@ import android.content.DialogInterface;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
@@ -339,7 +337,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 newEvDtlEvent.setRecurringEventId(newEvDtlEvent.getEventUid());
                 newEvDtlEvent.setStatus("pending");
 
-                presenter.insertNewEventToServer(newEvDtlEvent);
+                presenter.insertEvent(newEvDtlEvent);
 
                 eventManager.setCurrentEvent(newEvDtlEvent);
                 if (mvpView!=null){

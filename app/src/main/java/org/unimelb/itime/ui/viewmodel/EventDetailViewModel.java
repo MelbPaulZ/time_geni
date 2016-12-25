@@ -173,7 +173,7 @@ public class EventDetailViewModel extends CommonViewModel {
 //                        acceptedTimeslots.add(timeslot);
 //                    }
 //                }
-
+                view.setSelected(true);
                 if (mvpView!=null){
                     presenter.acceptTimeslots(evDtlHostEvent);
                     mvpView.toCalendar();
@@ -186,12 +186,22 @@ public class EventDetailViewModel extends CommonViewModel {
     // left buttons
 
     public String getInviteeLeftBtnStr(Context context, Event event){
-        Invitee me = getSelfInInvitees(context, event);
-        if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
-            return context.getString(R.string.Accepted);
-        }else{
-            return context.getString(R.string.accept);
+        Invitee me = EventUtil.getSelfInInvitees(context, event);
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+            // event has been confirmed by host
+            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+                return context.getString(R.string.accepted);
+            }else{
+                return context.getString(R.string.accept);
+            }
+        }else if (event.getStatus().equals(Event.STATUS_PENDING) || event.getStatus().equals(Event.STATUS_UPDATING)){
+            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+                return context.getString(R.string.accepted);
+            }else{
+                return context.getString(R.string.accept);
+            }
         }
+        return event.getStatus();
     }
 
     public boolean getLeftBtnClickable(Event event){
@@ -244,12 +254,21 @@ public class EventDetailViewModel extends CommonViewModel {
     // right buttons
     public String getInviteeRightBtnStr(Event event){
         Invitee me = EventUtil.getSelfInInvitees(context, event);
-        if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
-            return context.getString(R.string.quit);
-        }else{
-            return context.getString(R.string.reject_all);
-
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+            // event has been confirmed by host
+            if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
+                return context.getString(R.string.quitted);
+            }else{
+                return context.getString(R.string.quit);
+            }
+        }else if (event.getStatus().equals(Event.STATUS_PENDING) || event.getStatus().equals(Event.STATUS_UPDATING)){
+            if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
+                return context.getString(R.string.all_rejected);
+            }else{
+                return context.getString(R.string.reject_all);
+            }
         }
+        return event.getStatus();
     }
 
 

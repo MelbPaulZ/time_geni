@@ -591,15 +591,16 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="10dp"
-                android:background="@{hostDetailVM.getLeftBtnBg(hostDetailVM.evDtlHostEvent)}"
+                android:background="@drawable/selector_event_detail_btn_bg_left"
                 android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
                 android:onClick="@{hostDetailVM.onClickAccept()}"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@{hostDetailVM.getInviteeLeftBtnStr(context, hostDetailVM.evDtlHostEvent)}"
                 android:textAlignment="center"
-                android:textColor="@{hostDetailVM.getLeftBtnTextColor(hostDetailVM.evDtlHostEvent)}"
-                android:textSize="17sp" />
+                android:textColor="@drawable/selector_event_detail_btn_text_left"
+                android:textSize="17sp"
+                />
             <!--right button-->
             <TextView
                 android:layout_width="wrap_content"

@@ -37,6 +37,8 @@ import org.unimelb.itime.util.EventUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.unimelb.itime.vendor.contact.widgets.SideBar.b;
+
 /**
  * Created by Paul on 28/08/2016.
  */
@@ -214,11 +216,16 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventCom
             case EventCommonPresenter.TASK_EVENT_INSERT:
                 break;
             case EventCommonPresenter.TASK_EVENT_UPDATE:{
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
+                toCalendar();
                 break;
-            }
-
+            }case EventCommonPresenter.TASK_EVENT_DELETE:
+                toCalendar();
+                break;
         }
+    }
+
+    private void toCalendar(){
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
 }

@@ -49,6 +49,11 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
     public static final int TASK_TIMESLOT_ACCEPT = 8;
     public static final int TASK_TIMESLOT_REJECT = 9;
 
+
+    public static final String UPDATE_THIS = "this";
+    public static final String UPDATE_ALL = "all";
+    public static final String UPDATE_FOLLOWING = "following";
+
     private String TAG = "EventCommonPresenter";
 
     public Context context;
@@ -72,18 +77,23 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         return context;
     }
 
-    // todo fetch all calendars
-    public void updateEventToServer(Event event){
+    /**
+     *
+     * @param event an event set the start time and endtime
+     * @param type in {this, following, all}
+     */
+    public void updateEvent(Event event, String type){
         if(getView() != null){
             getView().onTaskStart(TASK_EVENT_UPDATE);
         }
 
-        Gson gson = new Gson();
-        String str = gson.toJson(event);
-        Log.i(TAG, "updateEventToServer: " + str);
-
         String syncToken = AppUtil.getEventSyncToken(context);
-        Observable<HttpResult<List<Event>>> observable = eventApi.update(calendarUtil.getCalendar().get(0).getCalendarUid(),event.getEventUid(),event, syncToken);
+        Observable<HttpResult<List<Event>>> observable = eventApi.update(
+                event.getCalendarUid(),
+                event.getEventUid(),
+                event,
+                type ,
+                syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
             public void onCompleted() {
@@ -131,17 +141,13 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         Log.i(TAG, "APPP: synchronizeLocal: "+"call");
     }
 
-    public void updateAndInsertEvent(Event orgEvent, Event newEvent){
-        updateEventToServer(orgEvent);
-        insertNewEventToServer(newEvent);
-    }
 
     /**
      * call the api to insert a event to server
      * after this api is called, it will automatically sync with local db
      * @param event
      */
-    public void insertNewEventToServer(Event event){
+    public void insertEvent(Event event){
         if (getView()!=null){
             getView().onTaskStart(TASK_EVENT_INSERT);
         }
@@ -310,9 +316,12 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
      *  @param event
      * */
     public void deleteEvent(Event event) {
+        if (getView()!=null){
+            getView().onTaskStart(TASK_EVENT_DELETE);
+        }
         String syncToken = AppUtil.getEventSyncToken(context);
-        Observable<HttpResult<Event>> observable = eventApi.delete(CalendarUtil.getInstance(context).getCalendar().get(0).getCalendarUid(), event.getEventUid(), syncToken);
-        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
+        Observable<HttpResult<List<Event>>> observable = eventApi.delete(CalendarUtil.getInstance(context).getCalendar().get(0).getCalendarUid(), event.getEventUid(), syncToken);
+        Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
             public void onCompleted() {
                 Log.i(TAG, "onCompleted: ");
@@ -326,11 +335,21 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
             }
 
             @Override
-            public void onNext(HttpResult<Event> eventHttpResult) {
-                Log.i(TAG, "onNext: " + eventHttpResult.getData().getSummary());
-                AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
-                // todo delete event
+            public void onNext(HttpResult<List<Event>> listHttpResult) {
+                AppUtil.saveEventSyncToken(context, listHttpResult.getSyncToken());
+                synchronizeLocal(listHttpResult.getData());
+                if (getView()!=null){
+                    getView().onTaskComplete(TASK_EVENT_DELETE, listHttpResult.getData());
+                }
+
             }
+
+//            @Override
+//            public void onNext(HttpResult<Event> eventHttpResult) {
+//                Log.i(TAG, "onNext: " + eventHttpResult.getData().getSummary());
+//                // todo delete event
+//
+//            }
         };
         HttpUtil.subscribe(observable, subscriber);
     }

@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -369,10 +368,8 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 EventUtil.addSelfInInvitee(getContext(), event);
                 EventUtil.addSoloEventBasicInfo(getContext(), event);
                 eventManager.setCurrentEvent(event);
-                presenter.insertNewEventToServer(event);
-                if (mvpView!=null){
-                    mvpView.toCreateSoloEvent();
-                }
+                presenter.insertEvent(event);
+
             }
         };
     }
