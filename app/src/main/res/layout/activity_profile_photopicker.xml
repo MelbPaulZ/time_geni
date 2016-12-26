@@ -6,6 +6,55 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
+    <!--toolbar-->
+    <android.support.v7.widget.Toolbar
+        style="@style/itime_toolbar">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--toolbar back arrow-->
+            <ImageView
+                android:layout_width="11dp"
+                android:layout_height="18dp"
+                android:src="@drawable/icon_back_arrow"
+                android:layout_centerVertical="true"
+                />
+
+            <!--toolbar settings text-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_my_profile"
+                android:textColor="@color/title_6D6D6D"
+                android:textSize="17sp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="14dp"
+                />
+
+            <!--toolbar title-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/photo_my_profile"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:layout_centerInParent="true"
+                />
+
+            <Button
+                android:id="@+id/choose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="dianwo"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+
     <ImageView
         android:id="@+id/profile_image"
         android:layout_width="match_parent"
@@ -13,4 +62,5 @@
         android:layout_centerInParent="true"
         android:background="@android:color/transparent"
         android:adjustViewBounds="true" />
+
 </RelativeLayout>

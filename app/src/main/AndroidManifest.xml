@@ -96,6 +96,14 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.ProfilePhotoPickerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            </intent-filter>
+        </activity>
+
 
         <activity android:name=".ui.activity.EventCreateActivity"
             android:launchMode="singleTask"

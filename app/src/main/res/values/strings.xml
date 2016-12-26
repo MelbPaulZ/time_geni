@@ -322,4 +322,5 @@
     <string name="setting_gender">Gender</string>
     <string name="region">Region</string>
     <string name="setting_my_profile">My Profile</string>
+    <string name="photo_my_profile">Photo</string>
 </resources>

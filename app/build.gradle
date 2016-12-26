@@ -102,8 +102,8 @@ dependencies {
 
     compile 'org.unimelb.itime.vendor:vendor:2.0.0'
     compile 'com.lling.photopicker:photopicker:2.0.0'
-    compile 'com.lzy.imagepicker:imagepicker:2.0.0'
-    compile 'me.fesky.library:IOSDialog:2.0.0'
+    compile 'com.lzy.imagepicker:imagepicker:+'
+    compile 'me.fesky.library:IOSDialog:+'
 
     //leancloud
     compile 'cn.leancloud.android:avoscloud-sdk:v3.7.1'

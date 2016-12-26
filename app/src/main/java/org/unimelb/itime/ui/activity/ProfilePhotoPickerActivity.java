@@ -3,7 +3,9 @@ package org.unimelb.itime.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageCropActivity;
+import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.view.CropImageView;
 import com.squareup.picasso.Picasso;
 
@@ -18,6 +21,8 @@ import org.unimelb.itime.R;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import me.fesky.library.widget.ios.ActionSheetDialog;
 
 public class ProfilePhotoPickerActivity extends AppCompatActivity {
     public static final int CHOOSE_FROM_LIBRARY = 0;
@@ -38,35 +43,35 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
 
                 findViewById(R.id.profile_image).getLayoutParams().height = width;
 
-//                Button btn = (Button) findViewById(R.id.open);
-//                btn.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//                        new ActionSheetDialog(ProfilePhotoPickerActivity.this)
-//                                .builder()
-//                                .setCancelable(true)
-//                                .setCanceledOnTouchOutside(true)
-//                                .addSheetItem("Take Photo", ActionSheetDialog.SheetItemColor.Black,
-//                                        new ActionSheetDialog.OnSheetItemClickListener() {
-//                                            @Override
-//                                            public void onClick(int which) {
-//                                                ImagePicker.getInstance().takePicture(ProfilePhotoPickerActivity.this,ImagePicker.REQUEST_CODE_TAKE);
-////                                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
-////                                                startActivityForResult(intent, TAKE_PHOTO);
-//                                            }
-//                                        })
-//                                .addSheetItem("Choose from Photos", ActionSheetDialog.SheetItemColor.Black,
-//                                        new ActionSheetDialog.OnSheetItemClickListener() {
-//                                            @Override
-//                                            public void onClick(int which) {
+                Button btn = (Button) findViewById(R.id.choose);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        new ActionSheetDialog(ProfilePhotoPickerActivity.this)
+                                .builder()
+                                .setCancelable(true)
+                                .setCanceledOnTouchOutside(true)
+                                .addSheetItem("Take Photo", ActionSheetDialog.SheetItemColor.Black,
+                                        new ActionSheetDialog.OnSheetItemClickListener() {
+                                            @Override
+                                            public void onClick(int which) {
+                                                ImagePicker.getInstance().takePicture(ProfilePhotoPickerActivity.this,ImagePicker.REQUEST_CODE_TAKE);
 //                                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
-//                                                startActivityForResult(intent, CHOOSE_FROM_LIBRARY);
-//                                            }
-//                                        })
-//                                .show();
-//                    }
-//                });
+//                                                startActivityForResult(intent, TAKE_PHOTO);
+                                            }
+                                        })
+                                .addSheetItem("Choose from Photos", ActionSheetDialog.SheetItemColor.Black,
+                                        new ActionSheetDialog.OnSheetItemClickListener() {
+                                            @Override
+                                            public void onClick(int which) {
+                                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
+                                                startActivityForResult(intent, CHOOSE_FROM_LIBRARY);
+                                            }
+                                        })
+                                .show();
+                    }
+                });
 
                 imagePicker = ImagePicker.getInstance();
                 imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器

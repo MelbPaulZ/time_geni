@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.MainSettingsPresenter;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.util.UserUtil;
@@ -18,7 +19,8 @@ import static java.security.AccessController.getContext;
 
 public class MainSettingsViewModel extends BaseObservable{
     private static final String TAG = "MainSettingsViewModel";
-    SettingCommonPresenter presenter;
+    private SettingCommonPresenter presenter;
+
 
     public MainSettingsViewModel(SettingCommonPresenter presenter){
         this.presenter = presenter;
@@ -44,14 +46,5 @@ public class MainSettingsViewModel extends BaseObservable{
         };
     }
 
-
-    public View.OnClickListener onChangeAvatar(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
-    }
 
 }
