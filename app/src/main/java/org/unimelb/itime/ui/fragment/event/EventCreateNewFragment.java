@@ -49,7 +49,6 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
             return new EventCommonPresenter<>(getContext());
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
