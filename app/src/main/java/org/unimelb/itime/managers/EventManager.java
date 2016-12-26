@@ -104,31 +104,29 @@ public class EventManager {
         checkSpecialEvent(event);
 
         //if should show
-//        if (event.getShowLevel() == 1){
-            //if not repeated
-            if (event.getDeleteLevel() == 0) {
-                // delete level == 0 means the event is not deleted
-                if (event.getRecurrence().length == 0) {
-                    Long startTime = event.getStartTime();
-                    Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
+        if (event.getShowLevel() <= 0) {
+            return;
+        }
 
-                    if (regularEventMap.containsKey(dayBeginMilliseconds)) {
-                        regularEventMap.get(dayBeginMilliseconds).add(event);
-                    } else {
-                        regularEventMap.put(dayBeginMilliseconds, new ArrayList<ITimeEventInterface>());
-                        regularEventMap.get(dayBeginMilliseconds).add(event);
-                    }
-                } else {
-                    if (!isIncludeRepeated(event)){
-                        orgRepeatedEventList.add(event);
-                        this.addRepeatedEvent(event, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
-                    }else{
-                        Log.i(TAG, "addEvent: Reapted adding reapte event, dropped.");
-                    }
+        if (event.getRecurrence().length == 0) {
+            Long startTime = event.getStartTime();
+            Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
 
-                }
+            if (regularEventMap.containsKey(dayBeginMilliseconds)) {
+                regularEventMap.get(dayBeginMilliseconds).add(event);
+            } else {
+                regularEventMap.put(dayBeginMilliseconds, new ArrayList<ITimeEventInterface>());
+                regularEventMap.get(dayBeginMilliseconds).add(event);
             }
-//        }
+        } else {
+            if (!isIncludeRepeated(event)){
+                orgRepeatedEventList.add(event);
+                this.addRepeatedEvent(event, nowRepeatedStartAt.getTimeInMillis(), nowRepeatedEndAt.getTimeInMillis());
+            }else{
+                Log.i(TAG, "addEvent: Reapted adding reapte event, dropped.");
+            }
+
+        }
     }
 
     public Map<String, ArrayList<Event>> getSpecialEventMap(){
@@ -137,9 +135,19 @@ public class EventManager {
 
     private void checkSpecialEvent(Event event){
         String rEUID = event.getRecurringEventUid();
-        if (!rEUID.equals("")){
+
+        if (!rEUID.equals("") && !rEUID.equals(event.getEventUid())){
             if (this.specialEvent.containsKey(rEUID)){
                 this.specialEvent.get(rEUID).add(event);
+            }else{
+                ArrayList<Event> specialList = new ArrayList<>();
+                specialList.add(event);
+                this.specialEvent.put(rEUID, specialList);
+            }
+
+            Event org = findOrgByUUID(event.getRecurringEventUid());
+            if (org != null){
+                refreshRepeatedEvent(org);
             }
         }
     }
@@ -185,15 +193,15 @@ public class EventManager {
 
             //handle special event
             if (specialList != null){
-                boolean cancelled = false;
+                boolean skip = false;
                 for (Event spEvent:specialList
                      ) {
-                    if (EventUtil.isSameDay(dup_event.getStartTime(), spEvent.getStartTime()) && spEvent.getStatus().equals(Event.STATUS_CANCELLED)){
-                        cancelled = true;
+                    if (EventUtil.isSameDay(dup_event.getStartTime(), spEvent.getStartTime())){
+                        skip = true;
                         break;
                     }
                 }
-                if (cancelled){
+                if (skip){
                     continue;
                 }
             }
@@ -266,16 +274,6 @@ public class EventManager {
         return cal.getTimeInMillis();
     }
 
-//    public void loadRepeatedEvent(long rangeStart, long rangeEnd){
-//        this.nowRepeatedStartAt.setTimeInMillis(rangeStart);
-//        this.nowRepeatedEndAt.setTimeInMillis(rangeEnd);
-//        for (Event event:orgRepeatedEventList
-//                ) {
-//            this.removeRepeatedEvent(event);
-//            this.addRepeatedEvent(event, rangeStart, rangeEnd);
-//        }
-//    }
-
     public void removeRepeatedEvent(Event event){
         List<EventTracer> tracers = uidTracerMap.get(event.getEventUid());
         if (tracers != null){
@@ -286,11 +284,6 @@ public class EventManager {
             uidTracerMap.remove(event.getEventUid());
         }
     }
-
-//    public void updateRepeatedEvent(Event event){
-//        removeRepeatedEvent(event);
-//        addRepeatedEvent(event,nowRepeatedStartAt.getTimeInMillis(),nowRepeatedEndAt.getTimeInMillis());
-//    }
 
     private long getDayBeginMilliseconds(long startTime){
         calendar.setTimeInMillis(startTime);
@@ -467,6 +460,12 @@ public class EventManager {
         }
     }
 
+    private void refreshRepeatedEvent(Event event){
+        this.removeRepeatedEvent(event);
+        this.orgRepeatedEventList.remove(event);
+        this.addEvent(event);
+    }
+
 
     public class EventsPackage implements ITimeEventPackageInterface {
 
@@ -522,7 +521,7 @@ public class EventManager {
                 return orgE;
             }
         }
-        throw new RuntimeException("findOrgByUUID: cannot find org event by UUID: " + UUID);
+        return null;
     }
 
 
