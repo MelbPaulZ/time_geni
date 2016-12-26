@@ -122,11 +122,11 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
                                     switch (which) {
 //
                                         case 0: {
-                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_THIS);
+                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_THIS, originEvent.getStartTime());
                                             break;
                                         }
                                         case 1: {
-                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL);
+                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL, originEvent.getStartTime());
                                             break;
                                         }
                                         case 2: {
@@ -143,7 +143,7 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
                     Event copyEvent = eventManager.copyCurrentEvent(event);
                     copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                     copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-                    presenter.updateEvent(copyEvent, EventCommonPresenter.UPDATE_ALL);
+                    presenter.updateEvent(copyEvent, EventCommonPresenter.UPDATE_ALL, originEvent.getStartTime());
                 }
 
             }

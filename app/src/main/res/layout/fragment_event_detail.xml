@@ -612,7 +612,7 @@
                 android:layout_marginRight="40dp"
                 android:layout_marginTop="10dp"
                 android:clickable="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
-                android:onClick="@{hostDetailVM.onClickRejectAll()}"
+                android:onClick="@{hostDetailVM.onInviteeClickRightBtn()}"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@{hostDetailVM.rightBtnText}"

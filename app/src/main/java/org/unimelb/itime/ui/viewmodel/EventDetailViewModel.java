@@ -18,6 +18,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.EventUtil;
@@ -124,12 +125,11 @@ public class EventDetailViewModel extends CommonViewModel {
         };
     }
 
-    public View.OnClickListener onClickRejectAll() {
+    public View.OnClickListener onInviteeClickRightBtn() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
-                String uid = evDtlHostEvent.getEventUid();
                 inflater = LayoutInflater.from(context);
                 View root = inflater.inflate(R.layout.event_detail_reject_alert_view, null);
 
@@ -148,8 +148,13 @@ public class EventDetailViewModel extends CommonViewModel {
                         CharSequence msg = "send reject message";
                         Toast.makeText(presenter.getContext(), msg, Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
-                        // here should add presenter change event status as reject
-                        presenter.rejectTimeslots(evDtlHostEvent);
+
+                        Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
+                        if (EventUtil.isEventConfirmed(context, evDtlHostEvent)) {
+                            presenter.quitEvent(evDtlHostEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                        }else {
+                            presenter.rejectTimeslots(evDtlHostEvent);
+                        }
 
                     }
                 });
@@ -165,8 +170,10 @@ public class EventDetailViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
 //                setIsLeftBtnSelected(true);
+                Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
                 if (evDtlHostEvent.getStatus().equals(Event.STATUS_CONFIRMED)){
-                    presenter.acceptEvent(evDtlHostEvent);
+                    // todo implement update only this
+                    presenter.acceptEvent(evDtlHostEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
                 }else {
                     presenter.acceptTimeslots(evDtlHostEvent);
                 }
@@ -356,13 +363,17 @@ public class EventDetailViewModel extends CommonViewModel {
         }
     }
 
-    public View.OnClickListener onClickHostQuit(Event event){
+    public View.OnClickListener onClickHostQuit(final Event event){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mvpView!=null) {
                     // TODO: 8/12/2016 quit event update server and local
                     Toast.makeText(context, "Quit This Event, To do", Toast.LENGTH_SHORT).show();
+                    Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
+                    // TODO: 26/12/2016 implement quit only this?
+                    presenter.quitEvent(event, EventCommonPresenter.UPDATE_ALL ,orgEvent.getStartTime());
+
                 }
             }
         };

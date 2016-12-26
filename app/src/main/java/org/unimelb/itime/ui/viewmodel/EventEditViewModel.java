@@ -246,7 +246,8 @@ public class EventEditViewModel extends CommonViewModel {
                         eventEditViewEvent.setStatus(Event.STATUS_PENDING);
                     }
 
-                    presenter.updateEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL);
+                    Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
+                    presenter.updateEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
                     // this if might change later, because the host can be kicked??????
                 }
             }
@@ -255,10 +256,8 @@ public class EventEditViewModel extends CommonViewModel {
 
     // TODO: test this change all
     private void changeAllEvent(Event event){
-        if (mvpView!=null){
-            presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL);
-
-        }
+        Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
+        presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
     }
 
     private void changeOnlyThisEvent(Event event){
@@ -270,8 +269,8 @@ public class EventEditViewModel extends CommonViewModel {
             event.setStatus(Event.STATUS_CONFIRMED);
         }
         // here change the event as a new event
-
-        presenter.updateEvent(event, EventCommonPresenter.UPDATE_THIS);
+        Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
+        presenter.updateEvent(event, EventCommonPresenter.UPDATE_THIS, orgEvent.getStartTime());
 
     }
 
@@ -411,7 +410,15 @@ public class EventEditViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.deleteEvent(eventEditViewEvent);
+                Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
+                if (EventUtil.isEventRepeat(eventEditViewEvent)) {
+                    // repeat event delete
+                    // todo implement delete this one
+                    presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                }else{
+                    // none repeat event delete
+                    presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                }
             }
         };
     }

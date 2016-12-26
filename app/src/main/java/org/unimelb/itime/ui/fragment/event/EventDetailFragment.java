@@ -220,6 +220,8 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
             toCalendar();
         }else if (task == EventCommonPresenter.TASK_EVENT_ACCEPT){
             toCalendar();
+        }else if (task == EventCommonPresenter.TASK_EVENT_REJECT){
+            toCalendar();
         }
     }
 }

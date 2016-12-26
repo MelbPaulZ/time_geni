@@ -33,6 +33,8 @@ import okhttp3.RequestBody;
 import rx.Observable;
 import rx.Subscriber;
 
+import static android.R.attr.type;
+
 /**
  * Created by Paul on 3/10/16.
  */
@@ -83,7 +85,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
      * @param event an event set the start time and endtime
      * @param type in {this, following, all}
      */
-    public void updateEvent(Event event, String type){
+    public void updateEvent(Event event, String type, long originStartTime){
         if(getView() != null){
             getView().onTaskStart(TASK_EVENT_UPDATE);
         }
@@ -94,6 +96,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
                 event.getEventUid(),
                 event,
                 type ,
+                originStartTime,
                 syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
@@ -234,7 +237,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void acceptEvent(Event event){
+    public void acceptEvent(Event event, String type, long orgStartTime){
         if (getView()!=null){
             getView().onTaskStart(TASK_TIMESLOT_ACCEPT);
         }
@@ -243,6 +246,8 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         Observable<HttpResult<List<Event>>> observable = eventApi.acceptEvent(
                 event.getCalendarUid(),
                 event.getEventUid(),
+                type,
+                orgStartTime,
                 syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
@@ -351,12 +356,17 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
      *  todo sync db
      *  @param event
      * */
-    public void deleteEvent(Event event) {
+    public void deleteEvent(Event event, String type, long orgStartTime) {
         if (getView()!=null){
             getView().onTaskStart(TASK_EVENT_DELETE);
         }
         String syncToken = AppUtil.getEventSyncToken(context);
-        Observable<HttpResult<List<Event>>> observable = eventApi.delete(CalendarUtil.getInstance(context).getCalendar().get(0).getCalendarUid(), event.getEventUid(), syncToken);
+        Observable<HttpResult<List<Event>>> observable = eventApi.delete(
+                event.getCalendarUid(),
+                event.getEventUid(),
+                type,
+                orgStartTime,
+                syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
             public void onCompleted() {
@@ -462,6 +472,42 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
                 Log.i(TAG, "onNext: ");
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
+
+    public void quitEvent(Event event, String type, long originStartTime){
+        if (getView()!=null){
+            getView().onTaskStart(TASK_EVENT_REJECT);
+        }
+        String syncToken = AppUtil.getEventSyncToken(context);
+        Observable<HttpResult<List<Event>>> observable = eventApi.quitEvent(
+                event.getCalendarUid(),
+                event.getEventUid(),
+                type,
+                originStartTime,
+                syncToken);
+        Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: " + e.getMessage());
+                if (getView()!=null){
+                    getView().onTaskError(TASK_EVENT_REJECT, e.getMessage(), -1);
+                }
+            }
+
+            @Override
+            public void onNext(HttpResult<List<Event>> listHttpResult) {
+                synchronizeLocal(listHttpResult.getData());
+                if (getView()!=null){
+                    getView().onTaskComplete(TASK_EVENT_REJECT, listHttpResult.getData());
+                }
             }
         };
         HttpUtil.subscribe(observable, subscriber);

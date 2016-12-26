@@ -311,4 +311,15 @@
     <string name="help_and_feedback">Help &amp; Feedbacks</string>
     <string name="about">About</string>
     <string name="logout">Log Out</string>
+    <string name="rate_itime">Rate iTime</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="profile_photo">Profile Photo</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="setting_reset_password">Reset Password</string>
+    <string name="my_qr_code">My QR Code</string>
+    <string name="setting_gender">Gender</string>
+    <string name="region">Region</string>
+    <string name="setting_my_profile">My Profile</string>
 </resources>

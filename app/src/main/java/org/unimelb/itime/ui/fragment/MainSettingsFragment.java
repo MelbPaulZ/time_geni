@@ -25,6 +25,7 @@ import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.LoginActivity;
 import org.unimelb.itime.ui.mvpview.MainSettingsMvpView;
 import org.unimelb.itime.ui.presenter.MainSettingsPresenter;
+import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.AuthUtil;
@@ -34,7 +35,7 @@ import org.unimelb.itime.util.AuthUtil;
 /**
  * required login, need to extend BaseUiAuthFragment
  */
-public class MainSettingsFragment extends MvpFragment<MainSettingsMvpView, MainSettingsPresenter> implements MainSettingsMvpView{
+public class MainSettingsFragment extends MvpFragment<MainSettingsMvpView, SettingCommonPresenter<MainSettingsMvpView>> implements MainSettingsMvpView {
     private MainSettingsViewModel settingVM;
     private FragmentMainSettingsBinding binding;
     private String TAG =  "MainSettingsFragment";
@@ -43,8 +44,8 @@ public class MainSettingsFragment extends MvpFragment<MainSettingsMvpView, MainS
     }
 
     @Override
-    public MainSettingsPresenter createPresenter() {
-        return new MainSettingsPresenter(getContext());
+    public SettingCommonPresenter createPresenter() {
+        return new SettingCommonPresenter(getContext());
     }
 
     @Override
@@ -61,10 +62,6 @@ public class MainSettingsFragment extends MvpFragment<MainSettingsMvpView, MainS
         return binding.getRoot();
     }
 
-    @Override
-    public void logOut() {
-        stopRemoteService();
-    }
 
     @Subscribe
     public void logout(MessageEvent messageEvent){
@@ -107,5 +104,10 @@ public class MainSettingsFragment extends MvpFragment<MainSettingsMvpView, MainS
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    @Override
+    public void logout() {
+        stopRemoteService();
     }
 }

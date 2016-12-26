@@ -55,6 +55,74 @@
             android:src="@drawable/icon_about_logo"
             android:layout_gravity="center_horizontal"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Itime 1.0.01"
+            android:textSize="17sp"
+            android:textColor="@color/title_6D6D6D"
+            android:layout_marginTop="2dp"
+            />
+    </LinearLayout>
+
+    <!--second part-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/background_top_bottom_divider">
+
+        <!--Rate itime-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginLeft="16dp">
+            <TextView
+                style="@style/itime_blacktitle_17sp"
+                android:text="@string/rate_itime"/>
+
+            <ImageView
+                style="@style/image_right_arrow" />
+
+            <TextView
+                style="@style/itime_bottom_divider_line" />
+
+        </RelativeLayout>
+
+
+        <!--Terms of services-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginLeft="16dp">
+            <TextView
+                style="@style/itime_blacktitle_17sp"
+                android:text="@string/terms_of_service"/>
+
+            <ImageView
+                style="@style/image_right_arrow" />
+
+            <TextView
+                style="@style/itime_bottom_divider_line" />
+        </RelativeLayout>
+
+        <!--Privacy policy-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginLeft="16dp">
+            <TextView
+                style="@style/itime_blacktitle_17sp"
+                android:text="@string/privacy_policy"/>
+
+            <ImageView
+                style="@style/image_right_arrow" />
+
+        </RelativeLayout>
+
+
     </LinearLayout>
 
 </LinearLayout>

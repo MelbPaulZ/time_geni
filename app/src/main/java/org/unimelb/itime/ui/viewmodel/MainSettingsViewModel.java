@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.unimelb.itime.ui.presenter.MainSettingsPresenter;
+import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.util.UserUtil;
 
 import static java.security.AccessController.getContext;
@@ -17,9 +18,9 @@ import static java.security.AccessController.getContext;
 
 public class MainSettingsViewModel extends BaseObservable{
     private static final String TAG = "MainSettingsViewModel";
-    MainSettingsPresenter presenter;
+    SettingCommonPresenter presenter;
 
-    public MainSettingsViewModel(MainSettingsPresenter presenter){
+    public MainSettingsViewModel(SettingCommonPresenter presenter){
         this.presenter = presenter;
 
     }
@@ -38,7 +39,17 @@ public class MainSettingsViewModel extends BaseObservable{
             public void onClick(View v) {
                 v.setClickable(false);
                 Toast.makeText(presenter.getContext(), "Logging Out", Toast.LENGTH_SHORT).show();
-                presenter.logOut();
+
+            }
+        };
+    }
+
+
+    public View.OnClickListener onChangeAvatar(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         };
     }
