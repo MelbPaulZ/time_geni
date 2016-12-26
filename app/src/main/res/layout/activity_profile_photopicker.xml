@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/black">
-
     <!--toolbar-->
     <android.support.v7.widget.Toolbar
         style="@style/itime_toolbar">
@@ -53,14 +53,16 @@
                 />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
-
-
-    <ImageView
-        android:id="@+id/profile_image"
+    <RelativeLayout
+        android:id="@+id/gallery"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_centerInParent="true"
-        android:background="@android:color/transparent"
-        android:adjustViewBounds="true" />
-
-</RelativeLayout>
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:adjustViewBounds="true" />
+    </RelativeLayout>
+</LinearLayout>

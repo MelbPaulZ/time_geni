@@ -100,8 +100,8 @@ dependencies {
     //badge view
     compile 'com.github.chaossss:BadgedView:1.1.1'
 
-    compile 'org.unimelb.itime.vendor:vendor:2.0.0'
-    compile 'com.lling.photopicker:photopicker:2.0.0'
+    compile 'org.unimelb.itime.vendor:vendor:+'
+    compile 'com.lling.photopicker:photopicker:+'
     compile 'com.lzy.imagepicker:imagepicker:+'
     compile 'me.fesky.library:IOSDialog:+'
 

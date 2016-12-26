@@ -33,7 +33,7 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_photopicker);
 
-        final RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.activity_main);
+        final RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.gallery);
         ViewTreeObserver vto = mainLayout.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
