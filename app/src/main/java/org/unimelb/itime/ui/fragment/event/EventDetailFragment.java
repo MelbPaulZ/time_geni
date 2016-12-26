@@ -154,8 +154,7 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
     }
     
 
-    @Override
-    public void toCalendar() {
+    private void toCalendar() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
     }
@@ -168,9 +167,6 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
             timeslot.setStatus(Timeslot.STATUS_PENDING);
         }
         eventEditFragment.setEvent(cpyEvent);
-
-//        EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-//        timeSlotFragment.setEvent(EventManager.getInstance().copyCurrentEvent(event), this.adapterData);
 
         EventManager.getInstance(getContext()).setCurrentEvent(event);
 
@@ -214,6 +210,16 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
 
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
-
+        if (task == EventCommonPresenter.TASK_TIMESLOT_ACCEPT){
+            toCalendar();
+        }else if (task == EventCommonPresenter.TASK_EVENT_CONFIRM){
+            toCalendar();
+        }else if (task == EventCommonPresenter.TASK_TIMESLOT_REJECT){
+            toCalendar();
+        }else if (task == EventCommonPresenter.TASK_BACK){
+            toCalendar();
+        }else if (task == EventCommonPresenter.TASK_EVENT_ACCEPT){
+            toCalendar();
+        }
     }
 }

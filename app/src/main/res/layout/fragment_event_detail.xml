@@ -593,10 +593,11 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/selector_event_detail_btn_bg_left"
                 android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
-                android:onClick="@{hostDetailVM.onClickAccept()}"
+                android:onClick="@{hostDetailVM.onClickInviteeLeftBtn()}"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="@{hostDetailVM.getInviteeLeftBtnStr(context, hostDetailVM.evDtlHostEvent)}"
+                android:text="@{hostDetailVM.leftBtnText}"
+                android:selected="@{hostDetailVM.isLeftBtnSelected}"
                 android:textAlignment="center"
                 android:textColor="@drawable/selector_event_detail_btn_text_left"
                 android:textSize="17sp"
@@ -614,9 +615,11 @@
                 android:onClick="@{hostDetailVM.onClickRejectAll()}"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="@{hostDetailVM.getInviteeRightBtnStr(hostDetailVM.evDtlHostEvent)}"
+                android:text="@{hostDetailVM.rightBtnText}"
+                android:selected="@{hostDetailVM.isRightBtnSelected}"
                 android:textAlignment="center"
-                android:textColor="@{hostDetailVM.getRightBtnTextColor(hostDetailVM.evDtlHostEvent)}"
+                android:textColor="@drawable/selector_event_detail_btn_text_right"
+                android:background="@drawable/selector_event_detail_btn_bg_right"
                 android:textSize="17sp" />
         </RelativeLayout>
 

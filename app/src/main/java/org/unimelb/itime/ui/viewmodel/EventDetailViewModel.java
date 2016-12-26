@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
-import android.graphics.drawable.Drawable;
+import android.databinding.ObservableBoolean;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,7 +18,6 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
-import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.EventUtil;
@@ -30,6 +29,7 @@ import org.unimelb.itime.util.UserUtil;
 import java.util.List;
 import java.util.Map;
 
+import static org.unimelb.itime.R.string.event;
 import static org.unimelb.itime.util.EventUtil.getSelfInInvitees;
 
 /**
@@ -42,6 +42,8 @@ public class EventDetailViewModel extends CommonViewModel {
     private EventDetailGroupMvpView mvpView;
     private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
     private Context context;
+    private ObservableBoolean isLeftBtnSelected = new ObservableBoolean(false), isRightBtnSelected = new ObservableBoolean(false);
+    private String leftBtnText = "" , rightBtnText = "";
     private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeVisibility, soloInvisible;
 
 
@@ -106,9 +108,7 @@ public class EventDetailViewModel extends CommonViewModel {
                 selectedTimeSlot.setIsConfirmed(1);
                 evDtlHostEvent.setStatus(Event.STATUS_CONFIRMED);
                 presenter.confirmEvent(evDtlHostEvent, selectedTimeSlot.getTimeslotUid());
-                if (mvpView!=null){
-                    mvpView.toCalendar();
-                }
+
             }
         };
     }
@@ -118,7 +118,7 @@ public class EventDetailViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 if(mvpView!=null){
-                    mvpView.toCalendar();
+                    mvpView.onTaskComplete(EventCommonPresenter.TASK_BACK, null);
                 }
             }
         };
@@ -150,9 +150,7 @@ public class EventDetailViewModel extends CommonViewModel {
                         alertDialog.dismiss();
                         // here should add presenter change event status as reject
                         presenter.rejectTimeslots(evDtlHostEvent);
-                        if (mvpView!=null){
-                            mvpView.toCalendar();
-                        }
+
                     }
                 });
                 alertDialog.setView(root);
@@ -162,128 +160,102 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
     // this is for invitee click accept
-    public View.OnClickListener onClickAccept() {
+    public View.OnClickListener onClickInviteeLeftBtn() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // here, invitee responses
-//                List<Timeslot> acceptedTimeslots = new ArrayList<>();
-//                for (Timeslot timeslot: evDtlHostEvent.getTimeslot()){
-//                    if (timeslot.getStatus().equals(context.getString(R.string.timeslot_status_accept))){
-//                        acceptedTimeslots.add(timeslot);
-//                    }
-//                }
-                view.setSelected(true);
-                if (mvpView!=null){
+//                setIsLeftBtnSelected(true);
+                if (evDtlHostEvent.getStatus().equals(Event.STATUS_CONFIRMED)){
+                    presenter.acceptEvent(evDtlHostEvent);
+                }else {
                     presenter.acceptTimeslots(evDtlHostEvent);
-                    mvpView.toCalendar();
                 }
 
             }
         };
     }
 
-    // left buttons
 
-    public String getInviteeLeftBtnStr(Context context, Event event){
-        Invitee me = EventUtil.getSelfInInvitees(context, event);
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
-            // event has been confirmed by host
-            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
-                return context.getString(R.string.accepted);
-            }else{
-                return context.getString(R.string.accept);
-            }
-        }else if (event.getStatus().equals(Event.STATUS_PENDING) || event.getStatus().equals(Event.STATUS_UPDATING)){
-            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
-                return context.getString(R.string.accepted);
-            }else{
-                return context.getString(R.string.accept);
-            }
-        }
-        return event.getStatus();
+    private void resetState(){
+        resetLeftBtn();
+        resetRightBtn();
     }
 
+    // left buttons
+
+    public void resetLeftBtn(){
+        Invitee me = EventUtil.getSelfInInvitees(context, evDtlHostEvent);
+        if (evDtlHostEvent.getStatus().equals(Event.STATUS_CONFIRMED)){
+            // event has been confirmed by host
+            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+                setIsLeftBtnSelected(true);
+                setLeftBtnText(context.getString(R.string.accepted));
+            }else{
+                setIsLeftBtnSelected(false);
+                setLeftBtnText(context.getString(R.string.accept));
+            }
+        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_PENDING) || evDtlHostEvent.getStatus().equals(Event.STATUS_UPDATING)){
+            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+                setIsLeftBtnSelected(true);
+                setLeftBtnText(context.getString(R.string.accepted));
+            }else{
+                setIsLeftBtnSelected(false);
+                setLeftBtnText(context.getString(R.string.accept));
+            }
+        }
+    }
+
+
     public boolean getLeftBtnClickable(Event event){
+        Invitee me = EventUtil.getSelfInInvitees(context, event);
         if (event.getStatus().equals(Event.STATUS_PENDING) && TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
+            // event not confirm and invitee select at least one timeslot
             return true;
-        }else{
+        }else if ( (event.getStatus().equals(Event.STATUS_CONFIRMED))||(event.getStatus().equals(Event.STATUS_UPDATING))
+                &&
+                me.getStatus().equals(Invitee.STATUS_NEEDSACTION)){
+            return true;
+        }
+        else{
             return false;
         }
     }
 
-    public int getLeftBtnTextColor(Event event){
-        Invitee me = EventUtil.getSelfInInvitees(getContext(), event);
-        if (me.getStatus().equals(Invitee.STATUS_NEEDSACTION)){
-            if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
-                return context.getResources().getColor(R.color.color_63ADF2);
-            }else{
-                return context.getResources().getColor(R.color.gray_9b9b9b);
-            }
-        }else if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
-            return context.getResources().getColor(R.color.white);
-        }else if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
-            return context.getResources().getColor(R.color.gray_9b9b9b);
-        }
-        return context.getResources().getColor(R.color.red);
-    }
-
-    public int getRightBtnTextColor(Event event){
-        Invitee me = EventUtil.getSelfInInvitees(context, event);
-        if (me.getStatus().equals(Invitee.STATUS_NEEDSACTION)) {
-            if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)) {
-                return context.getResources().getColor(R.color.gray_9b9b9b);
-            } else {
-                return context.getResources().getColor(R.color.color_F45B69);
-            }
-        }else{
-            return context.getResources().getColor(R.color.color_F45B69);
-        }
-    }
-
-    public Drawable getLeftBtnBg(Event event){
-        Invitee me = getSelfInInvitees(getContext(), event);
-        if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
-            return context.getResources().getDrawable(R.drawable.background_round_radius_able_blue);
-        }else {
-            return null;
-        }
-    }
 
 
     // right buttons
-    public String getInviteeRightBtnStr(Event event){
-        Invitee me = EventUtil.getSelfInInvitees(context, event);
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+    private void resetRightBtn(){
+        Invitee me = EventUtil.getSelfInInvitees(context, evDtlHostEvent);
+        if (evDtlHostEvent.getStatus().equals(Event.STATUS_CONFIRMED)){
             // event has been confirmed by host
             if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
-                return context.getString(R.string.quitted);
+                setIsRightBtnSelected(true);
+                setRightBtnText(context.getString(R.string.quitted));
             }else{
-                return context.getString(R.string.quit);
+                setIsRightBtnSelected(false);
+                setRightBtnText(context.getString(R.string.quit));
             }
-        }else if (event.getStatus().equals(Event.STATUS_PENDING) || event.getStatus().equals(Event.STATUS_UPDATING)){
+        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_PENDING) || evDtlHostEvent.getStatus().equals(Event.STATUS_UPDATING)){
             if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
-                return context.getString(R.string.all_rejected);
+                setIsRightBtnSelected(true);
+                setRightBtnText(context.getString(R.string.all_rejected));
             }else{
-                return context.getString(R.string.reject_all);
+                setIsRightBtnSelected(false);
+                setRightBtnText(context.getString(R.string.reject_all));
             }
         }
-        return event.getStatus();
     }
 
 
     public boolean getRightBtnClickable(Event event){
         Invitee invitee = getSelfInInvitees(getContext(), event);
-        if (invitee.getStatus().equals(Invitee.STATUS_NEEDSACTION)){
-            if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
+        if (invitee.getStatus().equals(Invitee.STATUS_NEEDSACTION)
+                && TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
                 return false;
-            }else{
-                return true;
-            }
-        }else if (invitee.getStatus().equals(Invitee.STATUS_ACCEPTED)){
-            return true;
+        }else if ( invitee.getStatus().equals(Invitee.STATUS_DECLINED) ){
+            return false;
         }
-        return false; // never reach here
+        return true;
     }
 
 
@@ -340,15 +312,8 @@ public class EventDetailViewModel extends CommonViewModel {
 
     public void setEvDtlHostEvent(Event evDtlHostEvent) {
         this.evDtlHostEvent = evDtlHostEvent;
+        resetState();
         notifyPropertyChanged(BR.evDtlHostEvent);
-    }
-
-    public void unselectRestTimeSlots(int notChangePostion){
-        for (int i = 0; i < evDtlHostEvent.getTimeslot().size() ; i ++){
-            if (i != notChangePostion){
-                evDtlHostEvent.getTimeslot().get(i).setStatus(Timeslot.STATUS_PENDING);
-            }
-        }
     }
 
 
@@ -382,14 +347,6 @@ public class EventDetailViewModel extends CommonViewModel {
             return View.VISIBLE;
         }
     }
-//
-//    public int hostConfirmBtnVisibility(Event event){
-//        if (EventUtil.isUserHostOfEvent(context, event) && event.getStatus().equals(context.getString(R.string.confirmed))){
-//            return View.VISIBLE;
-//        }else{
-//            return View.GONE;
-//        }
-//    }
 
     public int getMessageStatusColor(Event event){
         if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
@@ -406,7 +363,6 @@ public class EventDetailViewModel extends CommonViewModel {
                 if (mvpView!=null) {
                     // TODO: 8/12/2016 quit event update server and local
                     Toast.makeText(context, "Quit This Event, To do", Toast.LENGTH_SHORT).show();
-                    mvpView.toCalendar();
                 }
             }
         };
@@ -481,4 +437,41 @@ public class EventDetailViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.soloInvisible);
     }
 
+    @Bindable
+    public ObservableBoolean getIsLeftBtnSelected() {
+        return isLeftBtnSelected;
+    }
+
+    public void setIsLeftBtnSelected(boolean isLeftBtnSelected) {
+        this.isLeftBtnSelected.set(isLeftBtnSelected);
+
+    }
+
+    @Bindable
+    public ObservableBoolean getIsRightBtnSelected() {
+        return isRightBtnSelected;
+    }
+
+    public void setIsRightBtnSelected(boolean isRightBtnSelected) {
+        this.isRightBtnSelected.set(isRightBtnSelected);
+    }
+
+    @Bindable
+    public String getLeftBtnText() {
+        return leftBtnText;
+    }
+
+    public void setLeftBtnText(String leftBtnText) {
+        this.leftBtnText = leftBtnText;
+        notifyPropertyChanged(BR.leftBtnText);
+    }
+
+    @Bindable
+    public String getRightBtnText() {
+        return rightBtnText;
+    }
+
+    public void setRightBtnText(String rightBtnText) {
+        this.rightBtnText = rightBtnText;
+    }
 }

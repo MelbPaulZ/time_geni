@@ -48,6 +48,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
     public static final int TASK_EVENT_REJECT = 7;
     public static final int TASK_TIMESLOT_ACCEPT = 8;
     public static final int TASK_TIMESLOT_REJECT = 9;
+    public static final int TASK_BACK = 10;
 
 
     public static final String UPDATE_THIS = "this";
@@ -206,7 +207,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("timeslots", timeslotUids);
         String syncToken = AppUtil.getEventSyncToken(context);
-        Observable<HttpResult<List<Event>>> observable = eventApi.acceptTimeslot(CalendarUtil.getInstance(getContext()).getCalendar().get(0).getCalendarUid(), event.getEventUid(), parameters, syncToken);
+        Observable<HttpResult<List<Event>>> observable = eventApi.acceptTimeslot(event.getCalendarUid(), event.getEventUid(), parameters, syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
             public void onCompleted() {
@@ -227,6 +228,41 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
                 if (getView()!=null){
                     getView().onTaskComplete(TASK_TIMESLOT_ACCEPT, eventHttpResult.getData());
+                }
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
+
+    public void acceptEvent(Event event){
+        if (getView()!=null){
+            getView().onTaskStart(TASK_TIMESLOT_ACCEPT);
+        }
+
+        String syncToken = AppUtil.getEventSyncToken(context);
+        Observable<HttpResult<List<Event>>> observable = eventApi.acceptEvent(
+                event.getCalendarUid(),
+                event.getEventUid(),
+                syncToken);
+        Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(HttpResult<List<Event>> listHttpResult) {
+                synchronizeLocal(listHttpResult.getData());
+
+                AppUtil.saveEventSyncToken(context, listHttpResult.getSyncToken());
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                if (getView()!=null){
+                    getView().onTaskComplete(TASK_EVENT_ACCEPT, listHttpResult.getData());
                 }
             }
         };
