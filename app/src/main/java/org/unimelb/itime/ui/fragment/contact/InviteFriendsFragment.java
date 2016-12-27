@@ -10,9 +10,15 @@ import android.widget.LinearLayout;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentInviteFridendsBinding;
 import org.unimelb.itime.databinding.ListviewInviteeHeaderBinding;
+import org.unimelb.itime.messageevent.MessageAddContact;
+import org.unimelb.itime.messageevent.MessageRemoveContact;
 import org.unimelb.itime.ui.mvpview.contact.InviteFriendMvpView;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
 import org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel;
@@ -55,12 +61,18 @@ public class InviteFriendsFragment  extends MvpFragment<InviteFriendMvpView, Inv
         binding.setViewModel(viewModel);
         headerBinding.setViewModel(viewModel);
         fm = getFragmentManager();
+        EventBus.getDefault().register(this);
         return binding.getRoot();
     }
 
-    public void onResume(){
-        super.onResume();
-        viewModel.loadData();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void removeContact(MessageRemoveContact msg){
+        viewModel.removeContact(msg.contact);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void addContact(MessageAddContact msg){
+        viewModel.addContact(msg.contact);
     }
 
     public void gotoInviteMobileContacts(){
@@ -101,4 +113,8 @@ public class InviteFriendsFragment  extends MvpFragment<InviteFriendMvpView, Inv
                 .commit();
     }
 
+    public void onDestroy(){
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

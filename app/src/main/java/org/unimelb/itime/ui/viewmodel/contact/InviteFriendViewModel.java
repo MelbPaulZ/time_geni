@@ -10,6 +10,8 @@ import android.widget.ListView;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import org.unimelb.itime.bean.Contact;
+import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.databinding.ListviewInviteeFriendItemBinding;
 import org.unimelb.itime.bean.BaseContact;
 import org.unimelb.itime.util.ContactFilterUtil;
@@ -70,6 +72,34 @@ public class InviteFriendViewModel extends BaseObservable {
     public void setShowAlertMsg(boolean showAlertMsg) {
         this.showAlertMsg = showAlertMsg;
         notifyPropertyChanged(BR.showAlertMsg);
+    }
+
+
+    public void removeContact(Contact contact){
+        if(friendList==null){
+            return;
+        }
+        for(BaseContact user:friendList){
+            if(user.getContact().getContactUid().equals(contact.getContactUid())){
+                friendList.remove(user);
+                generateITimeListView(friendList);
+                break;
+            }
+        }
+    }
+
+    public void addContact(Contact contact){
+        if(friendList==null){
+            return;
+        }
+        for(BaseContact user:friendList){
+            if(user.getContact().getContactUid().equals(contact.getContactUid())){
+                friendList.remove(user);
+                break;
+            }
+        }
+        friendList.add(new ITimeUser(contact));
+        generateITimeListView(friendList);
     }
 
     @Bindable
