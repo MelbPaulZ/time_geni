@@ -349,4 +349,26 @@
     <string name="setting_female">Female</string>
     <string name="setting_Undefined">Undefined</string>
     <string name="setting_calendar_preference">Calendar Preferences</string>
+    <string name="setting_calendars">Calendars</string>
+    <string name="setting_default_calendar">Default Calendar</string>
+    <string name="setting_default_alert">Default Alert</string>
+    <string name="setting_import_calendar_from">Import Calendar From Other Accounts</string>
+    <string name="setting_import_calendar">Import Calendar</string>
+    <string name="setting_google_calendar">Google Calendar</string>
+    <string name="setting_melbourne_university">Melbourne University</string>
+    <string name="setting_notifications_subtext1">Enable or disable iTime Notifications via
+“Settings”->“Notifications” on your iPhone.</string>
+    <string name="setting_show_preview_Text">Show Preview Text</string>
+    <string name="setting_notifications_subtext2">Message notifications will contain event summary when enabled</string>
+    <string name="setting_in_app_alert_sound">In-App Alert Sound</string>
+    <string name="setting_vibrate">Vibrate</string>
+    <string name="setting_notifications_subtext3">Specify preference to be notified by Sound or Vibration when receiving new notifications</string>
+    <string name="setting_reset_password_subtext1">Enter a new password for this account. You can use the Email and the password to log in to iTime next time.</string>
+    <string name="setting_email">Email</string>
+    <string name="setting_password">Password</string>
+    <string name="setting_confirm">Confirm</string>
+    <string name="setting_password_hint">New iTime password</string>
+    <string name="setting_confirm_hint">Confirm password</string>
+    <string name="setting_calendar_import_unimelb_subtext1">Enter your university account information to import its calendar into iTime</string>
+
 </resources>

@@ -56,6 +56,18 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
+    
+    <!--for setting, subtitle on right, beside the right arrow-->
+    <style name="itime_subtitle_15sp">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginRight">33dp</item>
+        <item name="android:textColor">@color/color_757575</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
 
     <!--the bottom gray divider line-->
     <style name="itime_bottom_divider_line">
@@ -71,5 +83,7 @@
         <item name="android:layout_height">46dp</item>
         <item name="android:background">@drawable/background_top_bottom_divider</item>
     </style>
+    
+    
 
 </resources>
