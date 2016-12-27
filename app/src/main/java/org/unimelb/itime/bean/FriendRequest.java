@@ -18,12 +18,16 @@ import org.unimelb.itime.dao.UserDao;
 
 @Entity
 public class FriendRequest implements Serializable {
-    public static final String SENT = "sent";
-    public static final String CONFIRMED = "confirmed";
-    public static final String ITIME = "itime";
-    public static final String MOBILE = "mobile";
-    public static final String GMAIL = "gmail";
-    public static final String FACEBOOK = "facebook";
+    public static final String STATUS_SENT = "sent";
+    public static final String STATUS_CONFIRMED = "confirmed";
+    public static final String SOURCE_ITIME = "itime";
+    public static final String SOURCE_MOBILE = "mobile";
+    public static final String SOURCE_GMAIL = "gmail";
+    public static final String SOURCE_FACEBOOK = "facebook";
+    public static final String DISPLAY_STATUS_ADDED = "Added";
+    public static final String DISPLAY_STATUS_ACCEPT = "Accept";
+    public static final String DISPLAY_STATUS_ACCEPTED = "Accepted";
+
 
     private String source;
     private String note;
@@ -40,20 +44,52 @@ public class FriendRequest implements Serializable {
     private int isRead;
     private String createdAt;
     private String updatedAt;
+    private String displayStatus;
 
-    @Transient
-    private Contact contact;
+    @ToOne
+    private User userDetail;
+    @Generated(hash = 1490846957)
+    private transient boolean userDetail__refreshed;
+    /** Used for active entity operations. */
+    @Generated(hash = 1817986260)
+    private transient FriendRequestDao myDao;
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
 
-    public Contact getContact() {
-        return contact;
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 158590870)
+    public User getUserDetail() {
+        if (userDetail != null || !userDetail__refreshed) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            UserDao targetDao = daoSession.getUserDao();
+            targetDao.refresh(userDetail);
+            userDetail__refreshed = true;
+        }
+        return userDetail;
     }
 
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 180278300)
+    public void setUserDetail(User userDetail) {
+        synchronized (this) {
+            this.userDetail = userDetail;
+            userDetail__refreshed = true;
+        }
     }
 
-    @Generated(hash = 348599141)
-    public FriendRequest(String source, String note, String status, String freqUid, String userUid, String freqUserUid, String userId, int isRead, String createdAt, String updatedAt) {
+    public String getDisplayStatus() {
+        return displayStatus;
+    }
+
+    public void setDisplayStatus(String displayStatus) {
+        this.displayStatus = displayStatus;
+    }
+
+    @Generated(hash = 1332562442)
+    public FriendRequest(String source, String note, String status, String freqUid, String userUid, String freqUserUid, String userId, int isRead, String createdAt, String updatedAt, String displayStatus) {
         this.source = source;
         this.note = note;
         this.status = status;
@@ -64,6 +100,7 @@ public class FriendRequest implements Serializable {
         this.isRead = isRead;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.displayStatus = displayStatus;
     }
 
     public FriendRequest(){}
@@ -158,6 +195,55 @@ public class FriendRequest implements Serializable {
 
     public void setIsRead(int isRead) {
         this.isRead = isRead;
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+    /** To-one relationship, returned entity is not refreshed and may carry only the PK property. */
+    @Generated(hash = 1955325331)
+    public User peakUserDetail() {
+        return userDetail;
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 240767073)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getFriendRequestDao() : null;
     }
 
 }

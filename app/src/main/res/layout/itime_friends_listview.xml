@@ -39,7 +39,7 @@
                 android:gravity="center"
                 android:visibility="gone" />
 
-            <org.unimelb.itime.ui.contact.Widget.SideBar
+            <org.unimelb.itime.widget.SideBar
                 android:id="@+id/sidrbar"
                 android:layout_width="30.0dip"
                 android:layout_height="match_parent"

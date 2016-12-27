@@ -4,6 +4,7 @@ package org.unimelb.itime.bean;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Index;
 
 import java.io.Serializable;
 
@@ -16,6 +17,7 @@ public class User implements Serializable {
 
     @Id
     private String userUid;
+
     private String userId;
     private String personalAlias;
     private String email;

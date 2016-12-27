@@ -5,7 +5,6 @@ import android.content.Context;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,14 +20,13 @@ import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
-import org.unimelb.itime.ui.presenter.EventDetailGroupPresenter;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +36,7 @@ import static org.unimelb.itime.util.EventUtil.getSelfInInvitees;
  * Created by Paul on 4/09/2016.
  */
 public class EventDetailViewModel extends CommonViewModel {
-    private EventDetailGroupPresenter presenter;
+    private EventCommonPresenter<EventDetailGroupMvpView> presenter;
     private Event evDtlHostEvent;
     private LayoutInflater inflater;
     private EventDetailGroupMvpView mvpView;
@@ -57,7 +55,7 @@ public class EventDetailViewModel extends CommonViewModel {
         return this.adapterData;
     }
 
-    public EventDetailViewModel(EventDetailGroupPresenter presenter) {
+    public EventDetailViewModel(EventCommonPresenter<EventDetailGroupMvpView> presenter) {
         this.presenter = presenter;
         this.context = getContext();
         this.inflater = LayoutInflater.from(getContext());
@@ -107,7 +105,6 @@ public class EventDetailViewModel extends CommonViewModel {
                 Timeslot selectedTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, evDtlHostEvent.getTimeslot()).get(0);
                 selectedTimeSlot.setIsConfirmed(1);
                 evDtlHostEvent.setStatus(Event.STATUS_CONFIRMED);
-                EventManager.getInstance(context).getWaitingEditEventList().add(evDtlHostEvent); // add event to waiting list, for server response
                 presenter.confirmEvent(evDtlHostEvent, selectedTimeSlot.getTimeslotUid());
                 if (mvpView!=null){
                     mvpView.toCalendar();
@@ -152,6 +149,7 @@ public class EventDetailViewModel extends CommonViewModel {
                         Toast.makeText(presenter.getContext(), msg, Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                         // here should add presenter change event status as reject
+                        presenter.rejectTimeslots(evDtlHostEvent);
                         if (mvpView!=null){
                             mvpView.toCalendar();
                         }

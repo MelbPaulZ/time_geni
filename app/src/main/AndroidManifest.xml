@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -67,27 +68,12 @@
             android:name=".base.BaseActivity"
             android:label="@string/title_activity_base" />
         <activity
-            android:name=".ui.activity.SplashActivity"
-            android:label="@string/title_activity_splash"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".ui.activity.LoginActivity"
             android:label="Itime">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.activity.SettingActivity"
-            android:label="@string/title_activity_settings">
         </activity>
         <activity android:name=".ui.activity.TestActivity">
             <intent-filter>
@@ -159,21 +145,21 @@
             android:name="io.fabric.ApiKey"
             android:value="5c0c3245d4ad893a84a0fb55ae1e3016baaac822" />
 
-        <activity android:name=".ui.contact.ContactTestActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+        <activity android:name=".ui.activity.ContactTestActivityContact">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".ui.contact.Activities.InviteFriendsActivity"/>
+        <activity android:name=".ui.activity.InviteFriendsActivityContact"/>
 
-        <activity android:name=".ui.contact.Activities.ContactHomePageActivity"/>
-        <activity android:name=".ui.contact.QRCode.CaptureActivity"/>
-        <activity android:name=".ui.contact.Activities.MyQRCodeActivity"/>
-        <activity android:name=".ui.activity.ProfileActivity"/>
-        <activity android:name=".ui.activity.AddFriendActivity"/>
-        <activity android:name=".ui.activity.FriendRequestActivity"/>
+        <activity android:name=".ui.activity.ContactHomePageActivityContact"/>
+        <activity android:name=".widget.QRCode.CaptureActivityContact"/>
+        <activity android:name=".ui.activity.MyQRCodeActivityContact"/>
+        <activity android:name=".ui.activity.ProfileActivityContact"/>
+        <activity android:name=".ui.activity.AddFriendActivityContact"/>
+        <activity android:name=".ui.activity.FriendRequestActivityContact"/>
     </application>
 
 </manifest>

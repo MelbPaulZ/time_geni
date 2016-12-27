@@ -28,28 +28,31 @@ public interface EventApi {
     Observable<HttpResult<Event>> get(@Path("calendarUid") String calendarUid);
 
     @POST("event/insert")
-    Observable<HttpResult<Event>> insert(@Body Event event);
+    Observable<HttpResult<List<Event>>> insert(@Body Event event, @Query("syncToken") String syncToken);
 
     @POST("event/update/{calendarUid}/{eventUid}")
     Observable<HttpResult<List<Event>>> update(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body Event event, @Query("syncToken") String syncToken);
 
     @POST("event/delete/{calendarUid}/{eventUid}")
-    Observable<HttpResult<Event>> delete(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid);
+    Observable<HttpResult<Event>> delete(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Query("syncToken") String syncToken);
 
-    @POST("event/accept/{calendarUid}/{eventUid}/{timeslotUid}")
-    Observable<HttpResult<Event>> confirm(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Path("timeslotUid") String timeslotUid,@Body Event event);
 
-    @POST("event/invitee/accept/{eventUid}")
-    Observable<HttpResult<Event>> acceptEvent();
+    @POST("event/confirm/{calendarUid}/{eventUid}/{timeslotUid}")
+    Observable<HttpResult<List<Event>>> confirm(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Path("timeslotUid") String timeslotUid,@Body Event event, @Query("syncToken") String syncToken);
 
-    @POST("event/invitee/quit/{eventUid}")
-    Observable<HttpResult<Event>> quitEvent();
+    // after event has been confirmed, use accept event
+    @POST("event/invitee/accept/{calendarUid}/{eventUid}")
+    Observable<HttpResult<List<Event>>> acceptEvent(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Query("syncToken") String syncToken );
+
+
+    @POST("event/invitee/quit/{calendarUid}/{eventUid}")
+    Observable<HttpResult<List<Event>>> quitEvent(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Query("syncToken") String syncToken);
 
     @POST("event/timeslot/accept/{calendarUid}/{eventUid}")
-    Observable<HttpResult<Event>> acceptTimeslot(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body HashMap<String, Object> parameters);
+    Observable<HttpResult<List<Event>>> acceptTimeslot(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Body HashMap<String, Object> parameters, @Query("syncToken") String syncToken);
 
-    @POST("event/timeslot/reject/{eventUid}")
-    Observable<HttpResult<Event>> rejectTimeslot();
+    @POST("event/timeslot/reject/{calendarUid}/{eventUid}")
+    Observable<HttpResult<List<Event>>> rejectTimeslot(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid, @Query("syncToken") String syncToken);
 
     @FormUrlEncoded
     @POST("event/timeslot/recommend")

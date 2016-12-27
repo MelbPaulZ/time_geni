@@ -82,6 +82,24 @@
                     android:textSize="10sp"
                     android:tag="tab_text"
                     />
+                <!--add in last, for bring to front-->
+                <View
+                    android:id="@+id/contactAnchor"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_centerInParent="true" />
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="10sp"
+                    android:textColor="@color/white"
+                    android:text='@{tabBarVM.unReadFriendRequest+""}'
+                    android:visibility="@{tabBarVM.unReadFriendRequest==0?View.GONE:View.VISIBLE}"
+                    android:layout_toRightOf="@id/contactAnchor"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:background="@drawable/ic_notice_number"/>
             </RelativeLayout>
             
             <RelativeLayout

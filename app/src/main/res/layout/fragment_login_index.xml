@@ -37,7 +37,7 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:background="@drawable/selector_signup_btn_bg"
-            android:onClick="@{loginVM.onIndexBtnSignInClick()}"
+            android:onClick="@{loginVM.onSwitchFragment(loginVM.TO_INPUT_EMAIL_FRAG)}"
             />
         <TextView
             android:layout_width="250dp"
@@ -47,7 +47,7 @@
             android:gravity="center"
             android:textColor="@drawable/selector_login_btn_text"
             android:background="@drawable/selector_login_btn_bg"
-            android:onClick="@{loginVM.onIndexBtnSignInClick()}"
+            android:onClick="@{loginVM.onSwitchFragment(loginVM.TO_LOGIN_FRAG)}"
             />
     </LinearLayout>
 </layout>

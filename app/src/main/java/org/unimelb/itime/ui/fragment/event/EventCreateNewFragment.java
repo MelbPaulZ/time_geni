@@ -24,31 +24,29 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.InviteeFragment;
+import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
-import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Paul on 23/08/2016.
  */
-public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView, EventCreateNewPresenter> implements EventCreateNewMvpView, TimePickerDialog.OnTimeSetListener{
+public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView, EventCommonPresenter<EventCreateNewMvpView>> implements EventCreateNewMvpView, TimePickerDialog.OnTimeSetListener{
 
     private final static String TAG = "EventCreateNewFragment";
     private FragmentEventCreateNewBinding binding;
     private EventCreateNewVIewModel viewModel;
     private Event event;
-    private int year,month,day,hour,minute;
-
-    private final int ACTIVITY_PHOTOPICKER = 1;
 
     private TimePickerDialog timePickerDialog;
 
     @Override
-    public EventCreateNewPresenter createPresenter() {
-            return new EventCreateNewPresenter(getContext());
+    public EventCommonPresenter<EventCreateNewMvpView> createPresenter() {
+            return new EventCommonPresenter<>(getContext());
     }
 
 
@@ -65,6 +63,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         event = EventManager.getInstance(getContext()).getCurrentEvent();
         viewModel = new EventCreateNewVIewModel(getPresenter());
         binding.setEventVM(viewModel);
+        onEnter(); // show key board
     }
 
     public void showTimePicker(){
@@ -123,14 +122,14 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     public void pickLocation() {
         EventLocationPickerFragment locationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
         locationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        switchFragment(this, locationPickerFragment);
+        openFragment(this, locationPickerFragment);
     }
 
     @Override
     public void pickInvitee() {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
         inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        switchFragment(this, inviteeFragment);
+        openFragment(this, inviteeFragment);
     }
 
     @Override
@@ -168,5 +167,18 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         super.onStop();
     }
 
+    @Override
+    public void onTaskStart(int task) {
 
+    }
+
+    @Override
+    public void onTaskError(int task, String errorMsg, int code) {
+
+    }
+
+    @Override
+    public void onTaskComplete(int task, List<Event> dataList) {
+
+    }
 }

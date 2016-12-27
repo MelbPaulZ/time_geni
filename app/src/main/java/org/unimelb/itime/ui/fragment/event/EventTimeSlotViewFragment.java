@@ -23,9 +23,9 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.fragment.InviteeFragment;
+import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
-import org.unimelb.itime.ui.presenter.EventCreateTimeSlotPresenter;
+import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
@@ -43,7 +43,7 @@ import java.util.List;
 /**
  * Created by Paul on 27/08/2016.
  */
-public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTimeSlotMvpView, EventCreateTimeSlotPresenter>
+public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTimeSlotMvpView, TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView>>
         implements EventCreateNewTimeSlotMvpView {
 
     private FragmentEventCreateTimeslotViewBinding binding;
@@ -73,9 +73,10 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         inflater = LayoutInflater.from(getContext());
     }
 
+
+
     public void setEvent(Event event) {
         this.event = event;
-        getPresenter().setEvent(event);
         viewModel.setEvent(event);
     }
 
@@ -112,7 +113,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
         if (event != null || event.getTimeslot() == null || event.getTimeslot().size() == 0) {
             Calendar calendar = Calendar.getInstance();
-            presenter.getTimeSlots(calendar.getTimeInMillis());
+            presenter.getTimeSlots(event, calendar.getTimeInMillis());
         }
     }
 
@@ -150,7 +151,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
                 // popup timeslot create page
                 EventTimeSlotCreateFragment eventTimeSlotCreateFragment = (EventTimeSlotCreateFragment) getFragmentManager().findFragmentByTag(EventTimeSlotCreateFragment.class.getSimpleName());
                 eventTimeSlotCreateFragment.setTimeSlotView(timeSlotView);
-                switchFragment(self, eventTimeSlotCreateFragment);
+                openFragment(self, eventTimeSlotCreateFragment);
             }
 
             @Override
@@ -267,30 +268,30 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         if (getFrom() instanceof InviteeFragment || getFrom() instanceof EventTimeSlotCreateFragment) {
             EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
             beforeSendingFragment.setEvent(event);
-            switchFragment(this, beforeSendingFragment);
+            openFragment(this, beforeSendingFragment);
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
             EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFrom();
             beforeSendingFragment.setEvent(event);
-            switchFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
+            openFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
         }
     }
 
     @Override
     public void onClickBack() {
         if (getFrom() instanceof InviteeFragment) {
-            switchFragment(this, (InviteeFragment) getFrom());
+            openFragment(this, (InviteeFragment) getFrom());
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof InviteeFragment) {
             InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-            switchFragment(this, inviteeFragment);
+            openFragment(this, inviteeFragment);
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof EventCreateDetailBeforeSendingFragment) {
-            switchFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
+            openFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
         }else if (getFrom() instanceof EventTimeSlotCreateFragment){
-            switchFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
+            openFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
         }
     }
 
-    @Override
-    public void initTimeSlots(Event event) {
+    // todo init
+    private void initTimeSlots(Event event) {
         if (event.hasTimeslots()) {
             for (Timeslot timeSlot : event.getTimeslot()) {
                 WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
@@ -302,13 +303,13 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         }
     }
 
-
-    /**
-     * need to check if fragment is doing creating task or editing task,
-     * if doing editing task, do we still recommend?
-     *
-     * @param list
-     */
+//
+//    /**
+//     * need to check if fragment is doing creating task or editing task,
+//     * if doing editing task, do we still recommend?
+//     *
+//     * @param list
+//     */
     @Override
     public void onRecommend(List<Timeslot> list) {
         if (!event.hasTimeslots()) {
@@ -335,7 +336,8 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     }
 
     @Override
-    public EventCreateTimeSlotPresenter createPresenter() {
-        return new EventCreateTimeSlotPresenter(getContext());
+    public TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView> createPresenter() {
+        return new TimeslotCommonPresenter<>(getContext());
     }
+
 }

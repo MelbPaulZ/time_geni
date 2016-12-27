@@ -14,6 +14,8 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
+import org.unimelb.itime.R;
+
 /**
  * provide some common methods and initialise parameters
  */
@@ -44,15 +46,26 @@ public abstract class BaseUiFragment<V extends MvpView, P extends MvpPresenter<V
     }
 
 
-    public void switchFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to){
+    public void openFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to){
         to.setFrom(from);
         from.onLeave();
         to.onEnter();
         // switch
-        getFragmentManager().beginTransaction().hide(from).show(to).commit();
+        getFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).hide(from).show(to).commit();
     }
 
-    public <T> void switchFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to, T t){
+    public void closeFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to){
+        to.setFrom(from);
+        from.onLeave();
+        to.onEnter();
+        // switch
+        getFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right).hide(from).show(to).commit();
+    }
+
+
+
+
+    public <T> void openFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to, T t){
 
     }
 

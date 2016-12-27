@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.fragment.event;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.inputmethod.InputMethodManager;
 
@@ -9,7 +10,9 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
+import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 /**
  * provide some common methods and initialise parameters
@@ -24,8 +27,10 @@ public abstract class EventBaseFragment<V extends MvpView, P extends MvpPresente
         super.onCreate(savedInstanceState);
     }
 
-
-
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 
     public String getClassName(){
         return getClass().getSimpleName();
@@ -41,12 +46,20 @@ public abstract class EventBaseFragment<V extends MvpView, P extends MvpPresente
     }
 
 
-    public void switchFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to){
+    public void openFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to){
         to.setFrom(from);
         from.onLeave();
         to.onEnter();
         // switch
-        getFragmentManager().beginTransaction().hide(from).show(to).commit();
+        getFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).hide(from).show(to).commit();
+    }
+
+    public void closeFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to){
+        to.setFrom(from);
+        from.onLeave();
+        to.onEnter();
+        // switch
+        getFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right).hide(from).show(to).commit();
     }
 
     public <T> void switchFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to, T t){

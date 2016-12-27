@@ -24,12 +24,13 @@
 
             <!--close btn-->
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="left|top"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="17dp"
-                android:layout_marginBottom="15dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="7dp"
+                android:layout_gravity="left"
+                android:onClick="@{loginVM.onSwitchFragment(loginVM.TO_INDEX_FRAG)}"
                 android:src="@drawable/icon_close" />
 
             <!-- the middle banner with email icon and title -->
@@ -133,7 +134,7 @@
                 android:layout_marginBottom="32dp"
                 android:background="@drawable/selector_signup_btn_bg"
                 android:gravity="center"
-                android:onClick="@{loginVM.onIndexBtnSignInClick()}"
+                android:onClick="@{loginVM.onClickInputEmailBtn(loginVM.TO_SET_PASSWORD_FRAG)}"
                 android:text="@string/signup"
                 android:textColor="@color/white" />
 
@@ -147,6 +148,7 @@
                 android:gravity="center"
                 android:text="@string/login_input_email_agreement"
                 android:textColor="@color/color_C0C7D3"
+                android:onClick="@{loginVM.onSwitchFragment(loginVM.TO_TERM_AGREEMENT_FRAG)}"
                 android:textSize="11sp" />
         </LinearLayout>
     </RelativeLayout>

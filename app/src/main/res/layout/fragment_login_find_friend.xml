@@ -11,11 +11,13 @@
     
     <!--close icon-->
     <ImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:background="@drawable/icon_close"
-        android:layout_marginTop="17dp"
-        android:layout_marginLeft="20dp" />
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:padding="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="7dp"
+        android:src="@drawable/icon_close"
+        android:onClick="@{loginVM.toCalendar()}" />
     
     <!--Friend icon-->
     <ImageView

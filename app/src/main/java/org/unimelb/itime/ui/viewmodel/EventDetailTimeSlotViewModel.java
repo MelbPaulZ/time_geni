@@ -6,11 +6,10 @@ import android.databinding.Bindable;
 import android.view.View;
 
 import org.unimelb.itime.BR;
-import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
-import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
+import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
@@ -26,7 +25,7 @@ import java.util.Calendar;
  * Created by Paul on 10/09/2016.
  */
 public class EventDetailTimeSlotViewModel extends BaseObservable {
-    private EventDetailHostTimeSlotPresenter presenter;
+    private TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew> presenter;
     private Event eventDetailHostEvent;
     private String tag;
     private String hostToolBarString;
@@ -34,7 +33,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
 
 
     //
-    public EventDetailTimeSlotViewModel(EventDetailHostTimeSlotPresenter presenter) {
+    public EventDetailTimeSlotViewModel(TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew> presenter) {
         this.presenter = presenter;
         Calendar calendar = Calendar.getInstance();
         calendar.getTime();

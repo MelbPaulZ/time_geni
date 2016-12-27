@@ -14,10 +14,11 @@ import com.aigestudio.wheelpicker.WheelPicker;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.TimeslotCreateConfirmBinding;
 import org.unimelb.itime.databinding.TimeslotCreatePickerBinding;
 import org.unimelb.itime.ui.mvpview.TimeslotCreateMvpView;
-import org.unimelb.itime.ui.presenter.TimeslotCreatePresenter;
+import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.TimeslotCreateViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
@@ -29,7 +30,7 @@ import java.util.List;
  * Created by Paul on 18/11/16.
  * This fragment is used when create a new timeSlot, then this fragment will jump up.
  */
-public class EventTimeSlotCreateFragment extends BaseUiFragment<TimeslotCreateMvpView, TimeslotCreatePresenter>
+public class EventTimeSlotCreateFragment extends BaseUiFragment<TimeslotCreateMvpView, TimeslotCommonPresenter<TimeslotCreateMvpView>>
         implements TimeslotCreateMvpView {
     private TimeslotCreateViewModel viewModel;
     private TimeSlotView timeSlotView;
@@ -62,18 +63,18 @@ public class EventTimeSlotCreateFragment extends BaseUiFragment<TimeslotCreateMv
 
 
     @Override
-    public TimeslotCreatePresenter createPresenter() {
-        return new TimeslotCreatePresenter(getContext());
+    public TimeslotCommonPresenter<TimeslotCreateMvpView> createPresenter() {
+        return new TimeslotCommonPresenter<>(getContext());
     }
 
     @Override
     public void onClickCancel() {
-        switchFragment(this, (EventTimeSlotViewFragment)getFrom());
+        openFragment(this, (EventTimeSlotViewFragment)getFrom());
     }
 
     @Override
     public void onClickDone() {
-        switchFragment(this, (EventTimeSlotViewFragment)getFrom());
+        openFragment(this, (EventTimeSlotViewFragment)getFrom());
         // // TODO: 20/11/16 use event bus instead of calling another fragment method
         ((EventTimeSlotViewFragment)getFrom()).createTimeSlot(this.timeSlotView);
     }
@@ -145,4 +146,8 @@ public class EventTimeSlotCreateFragment extends BaseUiFragment<TimeslotCreateMv
     }
 
 
+    @Override
+    public void onRecommend(List<Timeslot> timeslotList) {
+
+    }
 }

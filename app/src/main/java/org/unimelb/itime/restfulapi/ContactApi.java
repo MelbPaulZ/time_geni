@@ -32,7 +32,7 @@ public interface ContactApi {
 
 //    Description: Delete a contact. {contactUid} is the user_uid of the user who will be deleted.
     @POST("contact/delete/{contactUid}")
-    Observable<HttpResult<Void>> delete(@Path("contactUid") String contactUid);
+    Observable<HttpResult<Contact>> delete(@Path("contactUid") String contactUid);
 
     @POST("contact/clear/{contactUid}")
     Observable<HttpResult<Void>> clear(@Path("contactUid") String contactUid);

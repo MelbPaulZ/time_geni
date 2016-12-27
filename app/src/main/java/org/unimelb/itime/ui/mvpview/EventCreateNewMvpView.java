@@ -1,14 +1,9 @@
 package org.unimelb.itime.ui.mvpview;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
-
-import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
-
 /**
  * Created by Paul on 25/08/2016.
  */
-public interface EventCreateNewMvpView extends MvpView {
+public interface EventCreateNewMvpView extends EventCommonMvpView{
     void gotoWeekViewCalendar();
     void pickLocation();
     void pickInvitee();

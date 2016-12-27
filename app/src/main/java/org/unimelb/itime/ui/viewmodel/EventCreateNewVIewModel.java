@@ -9,15 +9,13 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
@@ -27,13 +25,12 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
-import org.unimelb.itime.ui.presenter.EventCreateNewPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.rulefactory.FrequencyEnum;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
@@ -44,7 +41,7 @@ import java.util.Calendar;
  * Created by Paul on 25/08/2016.
  */
 public class EventCreateNewVIewModel extends CommonViewModel {
-    private EventCreateNewPresenter presenter;
+    private EventCommonPresenter<EventCreateNewMvpView> presenter;
     private EventCreateNewMvpView mvpView;
     private Event event;
 
@@ -77,7 +74,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
     private final String TAG = "EventCreateNewViewModel";
     private EventManager eventManager;
 
-    public EventCreateNewVIewModel(EventCreateNewPresenter presenter) {
+    public EventCreateNewVIewModel(EventCommonPresenter<EventCreateNewMvpView> presenter) {
         this.presenter = presenter;
         eventManager = EventManager.getInstance(getContext());
         mvpView = presenter.getView();
@@ -165,7 +162,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
         c.set(editYear, editMonth, editDay, editHour, editMinute);
         event.setStartTime(c.getTimeInMillis());
         if (!isEndTimeChanged){
-            event.setEndTime(c.getTimeInMillis() + 24 * 60 * 60 * 1000);
+            event.setEndTime(c.getTimeInMillis() + 60 * 60 * 1000);
         }
         notifyPropertyChanged(BR.event);
     }
@@ -191,6 +188,24 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, dateSetListener,
                         c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
+            }
+        };
+    }
+
+    /**
+     * check the focus of email edit text
+     * @return
+     */
+    public View.OnFocusChangeListener onEditFocusChange(){
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                Log.d(TAG, "onFocusChange: " + hasFocus);
+                if(hasFocus){
+                    showKeyBoard(view);
+                }else{
+                    closeKeyBoard(view);
+                }
             }
         };
     }
@@ -354,7 +369,7 @@ public class EventCreateNewVIewModel extends CommonViewModel {
                 EventUtil.addSelfInInvitee(getContext(), event);
                 EventUtil.addSoloEventBasicInfo(getContext(), event);
                 eventManager.setCurrentEvent(event);
-                presenter.addSoloEvent();
+                presenter.insertNewEventToServer(event);
                 if (mvpView!=null){
                     mvpView.toCreateSoloEvent();
                 }
@@ -379,8 +394,8 @@ public class EventCreateNewVIewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 tag = getContext().getString(R.string.tag_create_event);
-                if (mvpView!=null){
-                    presenter.pickPhoto(tag);
+                if (presenter.getView() != null){
+                    presenter.getView().pickPhoto(tag);
                 }
             }
         };

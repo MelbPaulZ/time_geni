@@ -99,7 +99,7 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
 
     @Override
     public MvpPresenter createPresenter() {
-        return new EventCommonPresenter();
+        return new EventCommonPresenter(getContext());
     }
 
     @Override
@@ -176,12 +176,12 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             public void onClick(View view) {
                 if (getFrom() instanceof EventCreateNewFragment) {
                     // no need of set from for event create new fragment
-                    switchFragment(self, (EventCreateNewFragment) getFrom());
+                    openFragment(self, (EventCreateNewFragment) getFrom());
                 } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-                    switchFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
+                    openFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
                 }
                 if (getFrom() instanceof EventEditFragment) {
-                    switchFragment(self, (EventEditFragment) getFrom());
+                    openFragment(self, (EventEditFragment) getFrom());
                 }
             }
         });
@@ -207,13 +207,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                     // no need of set from for event create new fragment
                     EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
                     eventCreateNewFragment.setEvent(eventManager.copyCurrentEvent(event));
-                    switchFragment(self, eventCreateNewFragment);
+                    openFragment(self, eventCreateNewFragment);
                 } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
                     ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                    switchFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
+                    openFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
                 } else if (getFrom() instanceof EventEditFragment) {
                     ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                    switchFragment(self, ((EventEditFragment) getFrom()));
+                    openFragment(self, ((EventEditFragment) getFrom()));
                 }
             }
         });
@@ -321,13 +321,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                 if (getFrom() instanceof EventCreateNewFragment) {
                     // no need of set from for event create new fragment
                     ((EventCreateNewFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                    switchFragment(self, (EventCreateNewFragment) getFrom());
+                    openFragment(self, (EventCreateNewFragment) getFrom());
                 } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
                     ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                    switchFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
+                    openFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
                 } else if (getFrom() instanceof EventEditFragment) {
                     ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                    switchFragment(self, ((EventEditFragment) getFrom()));
+                    openFragment(self, ((EventEditFragment) getFrom()));
                 }
             } else {
                 Toast.makeText(getContext(), "network error, cannot find current location", Toast.LENGTH_SHORT).show();
@@ -369,13 +369,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             if (getFrom() instanceof EventCreateNewFragment) {
                 // no need of set from for event create new fragment
                 ((EventCreateNewFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                switchFragment(self, (EventCreateNewFragment) getFrom());
+                openFragment(self, (EventCreateNewFragment) getFrom());
             } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
                 ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                switchFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
+                openFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
             } else if (getFrom() instanceof EventEditFragment) {
                 ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                switchFragment(self, ((EventEditFragment) getFrom()));
+                openFragment(self, ((EventEditFragment) getFrom()));
             }
         }
     };

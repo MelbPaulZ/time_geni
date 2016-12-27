@@ -4,24 +4,19 @@ import android.databinding.Bindable;
 
 import com.android.databinding.library.baseAdapters.BR;
 
-import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.bean.Timeslot;
-import org.unimelb.itime.ui.presenter.TimeslotCreatePresenter;
-import org.unimelb.itime.ui.presenter.TimeslotInviteeResponsePresenter;
+import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.util.EventUtil;
-
-import java.sql.Time;
-import java.util.List;
 
 /**
  * Created by yuhaoliu on 3/12/2016.
  */
 
 public class TimeslotInviteeResponseViewModel extends CommonViewModel {
-    private TimeslotInviteeResponsePresenter presenter;
+    private TimeslotCommonPresenter presenter;
     private Timeslot responseTimeslot;
 
-    public TimeslotInviteeResponseViewModel(TimeslotInviteeResponsePresenter presenter) {
+    public TimeslotInviteeResponseViewModel(TimeslotCommonPresenter presenter) {
         this.presenter = presenter;
     }
 

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -22,7 +23,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
-import org.unimelb.itime.ui.presenter.EventEditPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -40,7 +41,7 @@ import me.tatarka.bindingcollectionadapter.ItemView;
 public class EventEditViewModel extends CommonViewModel {
 
     private Event eventEditViewEvent;
-    private EventEditPresenter presenter;
+    private EventCommonPresenter<EventEditMvpView> presenter;
     private ObservableField<Boolean> editEventIsRepeat = new ObservableField<>();
     private EventEditMvpView mvpView;
     private ObservableField<Boolean> isAllDayEvent= new ObservableField<>();
@@ -60,9 +61,10 @@ public class EventEditViewModel extends CommonViewModel {
         START_TIME, END_TIME, END_REPEAT
     }
     private EventManager eventManager;
+    private boolean isEndTimeChanged = false;
 
 
-    public EventEditViewModel(EventEditPresenter eventEditPresenter) {
+    public EventEditViewModel(EventCommonPresenter<EventEditMvpView> eventEditPresenter) {
         this.presenter = eventEditPresenter;
         eventManager = EventManager.getInstance(getContext());
         mvpView = presenter.getView();
@@ -105,6 +107,23 @@ public class EventEditViewModel extends CommonViewModel {
         };
     }
 
+    /**
+     * check the focus of email edit text
+     * @return
+     */
+    public View.OnFocusChangeListener onEditFocusChange(){
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus){
+                    showKeyBoard((EditText) view);
+                }else{
+                    closeKeyBoard((EditText) view);
+                }
+            }
+        };
+    }
+
 
     private void onEndDateSelected(int year, int monthOfYear, int dayOfMonth){
         Calendar c = Calendar.getInstance();
@@ -142,6 +161,7 @@ public class EventEditViewModel extends CommonViewModel {
         editMinute = minute;
         c.set(editYear, editMonth, editDay, editHour, editMinute);
         eventEditViewEvent.setEndTime(c.getTimeInMillis());
+        isEndTimeChanged = true;
         notifyPropertyChanged(BR.eventEditViewEvent);
     }
 
@@ -151,6 +171,9 @@ public class EventEditViewModel extends CommonViewModel {
         editMinute = minute;
         c.set(editYear, editMonth, editDay, editHour, editMinute);
         eventEditViewEvent.setStartTime(c.getTimeInMillis());
+        if (!isEndTimeChanged){
+            eventEditViewEvent.setEndTime(c.getTimeInMillis() + 60 * 60 * 1000);
+        }
         notifyPropertyChanged(BR.eventEditViewEvent);
     }
 
@@ -215,7 +238,13 @@ public class EventEditViewModel extends CommonViewModel {
                     // set event type
                     EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
                     eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
-                    eventEditViewEvent.setStatus("pending");
+
+                    // if solo, need to manually set status confirmed, otherwise server do it
+                    if (eventEditViewEvent.getEventType().equals(Event.TYPE_SOLO)){
+                        eventEditViewEvent.setStatus(Event.STATUS_CONFIRMED);
+                    }else {
+                        eventEditViewEvent.setStatus(Event.STATUS_PENDING);
+                    }
 
                     // TODO: 12/12/2016 test json convert
                     Gson gson = new Gson();
@@ -225,7 +254,7 @@ public class EventEditViewModel extends CommonViewModel {
                     Event e = gson.fromJson(str, Event.class);
                     Log.i("event convert", "onClick: " + e.getSummary());
 
-                    presenter.updateEvent(eventEditViewEvent);
+                    presenter.updateEventToServer(eventEditViewEvent);
                     // this if might change later, because the host can be kicked??????
                 }
             }

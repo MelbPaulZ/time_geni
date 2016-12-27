@@ -81,8 +81,6 @@ public class EventManager {
         this.instance = null;
     }
 
-    private List<Event> waitingEditEventList= new ArrayList<>(); // this list contains all events that waits for update
-
 
     private Calendar setToBeginOfDay(Calendar cal){
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -135,7 +133,7 @@ public class EventManager {
     }
 
     public void deleteEvent(Event event){
-//        if (event.)
+        
     }
 
     private synchronized void addRepeatedEvent(Event event, long rangeStart, long rangeEnd){
@@ -266,19 +264,19 @@ public class EventManager {
     }
 
     // this is for event drag
-//    public void updateEvent(Event oldEvent, long newStartTime, long newEndTime){
+//    public void updateEventToServer(Event oldEvent, long newStartTime, long newEndTime){
 //        if (oldEvent.getRecurrence().length == 0){
 //            long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
 //            if (this.regularEventMap.containsKey(oldBeginTime)){
-//                Event updateEvent = null;
+//                Event updateEventToServer = null;
 //                for (ITimeEventInterface ev : regularEventMap.get(oldBeginTime)){
 //                    if (((Event)ev).getEventUid().equals(oldEvent.getEventUid())){
-//                        updateEvent = (Event) ev;
+//                        updateEventToServer = (Event) ev;
 //                        break;
 //                    }
 //                }
-//                if (updateEvent!=null){
-//                    this.regularEventMap.get(oldBeginTime).remove(updateEvent);
+//                if (updateEventToServer!=null){
+//                    this.regularEventMap.get(oldBeginTime).remove(updateEventToServer);
 //                }
 //                oldEvent.setStartTime(newStartTime);
 //                oldEvent.setEndTime(newEndTime);
@@ -363,7 +361,7 @@ public class EventManager {
         return allEvents;
     }
 
-    public Event findEventByUid(Context context, String eventUid){
+    public Event findEventByUid(String eventUid){
 
         Event event = DBManager.getInstance(context).getEvent(eventUid);
         if (event==null){
@@ -442,10 +440,6 @@ public class EventManager {
         return null;
     }
 
-    public List<Event> getWaitingEditEventList() {
-        return waitingEditEventList;
-    }
-
 
     public void loadDB(){
         List<Event> list = DBManager.getInstance(context).getAllEvents();
@@ -512,16 +506,5 @@ public class EventManager {
         throw new RuntimeException("findOrgByUUID: cannot find org event by UUID: " + UUID);
     }
 
-    /** priority search in waiting list, if not find, then go through all events
-     * */
-    public Event findEventByUUID(String UUID){
-        for (Event event : waitingEditEventList){
-            if (event.getEventUid().equals(UUID)){
-                return event;
-            }
-        }
-        // if event is not in waiting list, should never happens
-        throw new RuntimeException("cannot find event in waiting list");
-    }
 
 }

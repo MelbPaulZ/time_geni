@@ -1,7 +1,6 @@
 package org.unimelb.itime.ui.fragment.event;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,12 +21,10 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.activity.MainActivity;
-import org.unimelb.itime.ui.fragment.InviteeFragment;
+import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
-import org.unimelb.itime.ui.presenter.EventDetailHostTimeSlotPresenter;
+import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -41,7 +38,7 @@ import java.util.Map;
 /**
  * Created by Paul on 10/09/2016.
  */
-public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeSlotMvpVIew, EventDetailHostTimeSlotPresenter>
+public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeSlotMvpVIew, TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew>>
         implements EventDetailTimeSlotMvpVIew {
     private String tag;
     private FragmentEventDetailTimeslotHostViewBinding binding;
@@ -122,19 +119,19 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
 
 
     @Override
-    public EventDetailHostTimeSlotPresenter createPresenter() {
-        return new EventDetailHostTimeSlotPresenter(getActivity());
+    public TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew> createPresenter() {
+        return new TimeslotCommonPresenter<>(getContext());
     }
 
 
     @Override
     public void onClickBack() {
-        if (getFrom() instanceof EventDetailGroupFragment) {
-            switchFragment(this, (EventDetailGroupFragment) getFrom());
+        if (getFrom() instanceof EventDetailFragment) {
+            openFragment(this, (EventDetailFragment) getFrom());
         } else if (getFrom() instanceof EventEditFragment) {
-            switchFragment(this, (EventEditFragment) getFrom());
+            openFragment(this, (EventEditFragment) getFrom());
         } else if (getFrom() instanceof InviteeFragment) {
-            switchFragment(this, (InviteeFragment) getFrom());
+            openFragment(this, (InviteeFragment) getFrom());
         }
     }
 
@@ -142,14 +139,14 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     public void onClickDone(Event event) {
         if (getFrom() instanceof EventEditFragment) {
             ((EventEditFragment) getFrom()).setEvent(event);
-            switchFragment(this, (EventEditFragment) getFrom());
-        } else if (getFrom() instanceof EventDetailGroupFragment) {
-            ((EventDetailGroupFragment) getFrom()).setEvent(event);
-            switchFragment(this, (EventDetailGroupFragment) getFrom());
+            openFragment(this, (EventEditFragment) getFrom());
+        } else if (getFrom() instanceof EventDetailFragment) {
+            ((EventDetailFragment) getFrom()).setEvent(event);
+            openFragment(this, (EventDetailFragment) getFrom());
         } else if (getFrom() instanceof InviteeFragment) {
             EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
             eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
-            switchFragment(this, eventEditFragment);
+            openFragment(this, eventEditFragment);
         }
     }
 
@@ -176,13 +173,14 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         }
         //refresh event and slots data
         this.adapterData = EventUtil.getAdapterData(event);
+        weekView.reloadTimeSlots(false);
     }
 
     @Override
     public void onEnter() {
         super.onEnter();
 
-        if (getFrom() instanceof EventDetailGroupFragment) {
+        if (getFrom() instanceof EventDetailFragment) {
             initTimeslotsFromDetailFragment(weekView);
             weekView.removeAllOptListener();
         } else if (getFrom() instanceof InviteeFragment) {
@@ -232,7 +230,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
 
     @Override
     public boolean isClickTSConfirm() {
-        if (getFrom() instanceof EventDetailGroupFragment) {
+        if (getFrom() instanceof EventDetailFragment) {
             return true;
         } else if (getFrom() instanceof EventEditFragment) {
             return false;
@@ -242,15 +240,6 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         return false;
     }
 
-    @Override
-    public boolean isFromEditFragment() {
-        return (getFrom() instanceof EventEditFragment);
-    }
-
-    @Override
-    public boolean isFromInviteeFragment() {
-        return (getFrom() instanceof  InviteeFragment);
-    }
 
     @Override
     public void popupTimeSlotWindow(final TimeSlotView timeSlotView) {
@@ -286,6 +275,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
             public void onClick(View view) {
                 alertDialog.dismiss();
                 if (EventUtil.isUserHostOfEvent(getContext(), event)) {
+
                     changeTimeSlotView(timeSlotView);
                     hostClickTimeSlot(timeSlotView);
                 } else {
@@ -325,7 +315,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
 
     @Override
     public void onClickTimeSlotView(TimeSlotView timeSlotView) {
-        if (getFrom() instanceof EventDetailGroupFragment) {
+        if (getFrom() instanceof EventDetailFragment) {
             // change status of view and struct
             if (EventUtil.isUserHostOfEvent(getContext(), event)) {
                 // for host , only one timeslot can be selected
@@ -403,25 +393,5 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                 timeSlot.setStatus(Timeslot.STATUS_PENDING);
             }
         }
-    }
-
-    @Override
-    public void onTaskStart() {
-        AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
-    }
-
-    @Override
-    public void onTaskError(Throwable e) {
-        AppUtil.hideProgressBar();
-    }
-
-    @Override
-    public void onTaskComplete(List<Event> dataList) {
-        AppUtil.hideProgressBar();
-    }
-
-    @Override
-    public void onTaskComplete(Event data) {
-        AppUtil.hideProgressBar();
     }
 }

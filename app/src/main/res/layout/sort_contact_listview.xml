@@ -24,7 +24,7 @@ android:layout_height="wrap_content" >
     android:gravity="center"
     android:visibility="invisible" />
 
-<org.unimelb.itime.ui.contact.Widget.SideBar
+<org.unimelb.itime.widget.SideBar
     android:id="@+id/sidrbar"
     android:layout_width="30.0dip"
     android:layout_height="fill_parent"

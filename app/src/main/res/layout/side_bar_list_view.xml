@@ -3,19 +3,19 @@
     <data>
         <variable
             name="viewModel"
-            type="org.unimelb.itime.ui.contact.ViewModel.SideBarListViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.contact.SideBarListViewModel"/>
     </data>
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/white">
-        <org.unimelb.itime.ui.contact.Widget.ContactListView
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/sortedContactListView"
             android:background="@color/white"
-            android:layout_toLeftOf="@+id/sidrbar"
+            android:layout_toLeftOf="@id/sidrbar"
             app:items="@{viewModel.items}"
             app:itemView="@{viewModel.itemView}"/>
 
@@ -30,7 +30,7 @@
             android:gravity="center"
             android:visibility="invisible" />
 
-        <org.unimelb.itime.ui.contact.Widget.SideBar
+        <org.unimelb.itime.widget.SideBar
             android:id="@+id/sidrbar"
             android:layout_width="30.0dip"
             android:layout_height="fill_parent"

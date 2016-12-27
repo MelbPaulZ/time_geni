@@ -3,13 +3,13 @@
     <data>
         <variable
             name="mainViewModel"
-            type="org.unimelb.itime.ui.contact.ViewModel.ContactHomePageViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel"/>
     </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <org.unimelb.itime.ui.contact.Widget.PlusTitleBar
+    <org.unimelb.itime.widget.PlusTitleBar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:title="@{mainViewModel.title}"
@@ -18,12 +18,12 @@
         app:titleRightListener="@{mainViewModel.titleRightListener}"
         android:id="@+id/titleBar"
         />
-    <org.unimelb.itime.ui.contact.Widget.SearchBar
+    <org.unimelb.itime.widget.SearchBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/searchBar"
         app:searchListener = "@{mainViewModel.onEditListener}"/>
-    <org.unimelb.itime.ui.contact.Widget.WideBadgeArrowButton
+    <org.unimelb.itime.widget.WideBadgeArrowButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:image="@drawable/ic_new_contact"
@@ -42,7 +42,7 @@
 
     <include layout="@layout/line"/>
 
-    <org.unimelb.itime.ui.contact.Widget.SideBarListView
+    <org.unimelb.itime.widget.SideBarListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sortListView"

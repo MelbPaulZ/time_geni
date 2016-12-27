@@ -1,10 +1,13 @@
 package org.unimelb.itime.restfulapi;
 
 import org.unimelb.itime.bean.FriendRequest;
+import org.unimelb.itime.bean.RequestReadBody;
 import org.unimelb.itime.restfulresponse.HttpResult;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -16,7 +19,7 @@ import rx.Observable;
 
 public interface FriendRequestApi {
 
-//    Description: Get all friend requests that is SENT TO THIS USER. (Other Users->This User)
+//    Description: Get all friend requests that is STATUS_SENT TO THIS USER. (Other Users->This User)
     @GET("contact/friend_request/list")
     Observable<HttpResult<List<FriendRequest>>> list();
 
@@ -30,7 +33,7 @@ public interface FriendRequestApi {
 
 //    Description: Mark the already read requests as 'is_read = 1' in DB.
     @POST("contact/friend_request/read")
-    Observable<HttpResult<List<FriendRequest>>> read(@Path("freqUserUid") String freqUserUid, @Path("source") String source);
+    Observable<HttpResult<Void>> read(@Body RequestReadBody body);
 
 //    Description: Confirm a friend request.
 //    Parameter: "freqUid", NOT "freqUserUid".

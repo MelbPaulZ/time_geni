@@ -8,9 +8,11 @@ import android.content.DialogInterface;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
@@ -22,7 +24,7 @@ import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
-import org.unimelb.itime.ui.presenter.EventCreateDetailBeforeSendingPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
@@ -42,7 +44,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private CharSequence alertTimes[] = null;
     private EventCreateDetailBeforeSendingMvpView mvpView;
     private int tempYear,tempMonth,tempDay,tempHour,tempMin;
-    private EventCreateDetailBeforeSendingPresenter presenter;
+    private EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> presenter;
     private ObservableField<Boolean> isEndRepeatChange;
     private ObservableField<Boolean> isAllDay;
     private PickerTask currentTask;
@@ -59,8 +61,9 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private UserUtil userUtil;
     private CalendarUtil calendarUtil;
     private EventManager eventManager;
+    private boolean isEndTimeChange = false;
 
-    public EventCreateDetailBeforeSendingViewModel(EventCreateDetailBeforeSendingPresenter presenter) {
+    public EventCreateDetailBeforeSendingViewModel(EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> presenter) {
         this.presenter = presenter;
         eventManager = EventManager.getInstance(getContext());
         newEvDtlEvent = eventManager.getCurrentEvent();
@@ -144,6 +147,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         editMinute = minute;
         c.set(editYear, editMonth, editDay, editHour, editMinute);
         newEvDtlEvent.setEndTime(c.getTimeInMillis());
+        isEndTimeChange = true;
         notifyPropertyChanged(BR.newEvDtlEvent);
     }
 
@@ -153,6 +157,9 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         editMinute = minute;
         c.set(editYear, editMonth, editDay, editHour, editMinute);
         newEvDtlEvent.setStartTime(c.getTimeInMillis());
+        if (!isEndTimeChange){
+            newEvDtlEvent.setEndTime(c.getTimeInMillis() + 60 * 60 * 1000);
+        }
         notifyPropertyChanged(BR.newEvDtlEvent);
     }
 
@@ -264,6 +271,23 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         };
     }
 
+    /**
+     * check the focus of email edit text
+     * @return
+     */
+    public View.OnFocusChangeListener onEditFocusChange(){
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus){
+                    showKeyBoard((EditText) view);
+                }else{
+                    closeKeyBoard((EditText) view);
+                }
+            }
+        };
+    }
+
     public void setPhotos(ArrayList<String> photos){
         newEvDtlEvent.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
         setNewEvDtlEvent(newEvDtlEvent);
@@ -316,7 +340,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 newEvDtlEvent.setRecurringEventId(newEvDtlEvent.getEventUid());
                 newEvDtlEvent.setStatus("pending");
 
-                presenter.addEvent(newEvDtlEvent);
+                presenter.insertNewEventToServer(newEvDtlEvent);
 
                 eventManager.setCurrentEvent(newEvDtlEvent);
                 if (mvpView!=null){

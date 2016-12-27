@@ -25,7 +25,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
-import org.unimelb.itime.ui.fragment.InviteeFragment;
+import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.fragment.event.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.event.EventTimeSlotCreateFragment;

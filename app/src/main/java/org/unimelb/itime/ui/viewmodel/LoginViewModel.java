@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 
@@ -24,19 +25,29 @@ import me.tatarka.bindingcollectionadapter.ItemView;
 public class LoginViewModel extends AndroidViewModel{
 
     private static final String TAG = "LoginViewModel";
-    LoginPresenter presenter;
+    private LoginPresenter presenter;
 
     private String email = "johncdyin@gmail.com";
     private String password = "123456";
     private LoginMvpView mvpView;
 
-    private String newPassword = "";
-    private int passwordKeyBoardVisibility = View.VISIBLE;
-
     private int topIconVisibility = View.VISIBLE;
 
     private ArrayList<String> suggestedEmailList = new ArrayList<>();
     private ItemView suggestedEmailItemView = ItemView.of(BR.itemText, R.layout.listview_login_email_tips);
+
+    private String inputName = "";
+
+    public final static int TO_EMAIL_SENT_FRAG = 1;
+    public final static int TO_FIND_FRIEND_FRAG = 2;
+    public final static int TO_LOGIN_FRAG = 3;
+    public final static int TO_INDEX_FRAG = 4;
+    public final static int TO_INPUT_EMAIL_FRAG = 5;
+    public final static int TO_PICK_AVATAR_FRAG = 6;
+    public final static int TO_RESET_PASSWORD_FRAG = 7;
+    public final static int TO_SET_PASSWORD_FRAG = 8;
+    public final static int TO_TERM_AGREEMENT_FRAG = 9;
+
 
     public LoginViewModel(LoginPresenter presenter){
         this.presenter = presenter;
@@ -44,6 +55,10 @@ public class LoginViewModel extends AndroidViewModel{
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
         this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
+    }
+
+    private Context getContext(){
+        return presenter.getContext();
     }
 
     public View.OnClickListener onBtnEmailLogin(){
@@ -66,6 +81,14 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
+    public View.OnClickListener onSwitchFragment(final int task){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mvpView.onPageChange(task);
+            }
+        };
+    }
 
     public View.OnClickListener onBtnListUser(){
         return new View.OnClickListener() {
@@ -77,26 +100,23 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-
-    // step 1, index btn sign in click
-    public View.OnClickListener onIndexBtnSignInClick(){
+    public View.OnClickListener onClickInputEmailBtn(final int task){
         return new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //view.setSelected(true);
+            public void onClick(View v) {
                 if (isEmailValid()){
-
+                    mvpView.onPageChange(task);
                 }else{
                     mvpView.invalidPopup();
                 }
-                Log.d(TAG, "OnIndexBtnSignInClick: ");
             }
         };
     }
 
+
     // todo implement regix
     private boolean isEmailValid(){
-        return false;
+        return true;
     }
 
     /**
@@ -119,13 +139,12 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-
     public View.OnClickListener onPasswordNextClick(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (newPassword.length()>=8){
-
+                if (password.length()>=8){
+                    mvpView.onPageChange(TO_PICK_AVATAR_FRAG);
                 }else {
                     mvpView.invalidPopup();
                 }
@@ -142,14 +161,6 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-    public View.OnClickListener onAvatarClickBtn(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
-    }
 
 
     public AdapterView.OnItemClickListener onSuggestedEmailItemClick(){
@@ -165,7 +176,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(getContext(), "add from contact", Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -175,30 +186,54 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(), "add from Gmail", Toast.LENGTH_SHORT).show();
 
             }
         };
     }
+
 
     public View.OnClickListener onClickLogin(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                presenter.loginByEmail(getEmail(), getPassword());
+                Toast.makeText(getContext(), "logging in", Toast.LENGTH_SHORT).show();
+//                mvpView.invalidPopup();
             }
         };
     }
 
 
-    private void showKeyBoard(EditText view) {
-        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+    public View.OnClickListener onCleanEmail(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(presenter.getContext(), "onClick X", Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 
-    private void closeKeyBoard(EditText view) {
-        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    public View.OnClickListener onClickResetCleanEmail(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setEmail("");
+            }
+        };
     }
+
+
+
+    public View.OnClickListener toCalendar(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "tocalendar here", Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
 
 
     @Bindable
@@ -253,20 +288,12 @@ public class LoginViewModel extends AndroidViewModel{
 
 
     @Bindable
-    public String getNewPassword() {
-        return newPassword;
+    public String getInputName() {
+        return inputName;
     }
 
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-        notifyPropertyChanged(BR.newPassword);
-    }
-
-    public int getPasswordKeyBoardVisibility() {
-        return passwordKeyBoardVisibility;
-    }
-
-    public void setPasswordKeyBoardVisibility(int passwordKeyBoardVisibility) {
-        this.passwordKeyBoardVisibility = passwordKeyBoardVisibility;
+    public void setInputName(String inputName) {
+        this.inputName = inputName;
+        notifyPropertyChanged(BR.inputName);
     }
 }

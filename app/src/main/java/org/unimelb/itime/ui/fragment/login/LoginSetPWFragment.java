@@ -13,12 +13,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.databinding.FragmentLoginInputPasswordBinding;
+import org.unimelb.itime.databinding.FragmentLoginSetPasswordBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
-import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
-import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 /**
  * Created by Paul on 19/12/2016.
@@ -26,20 +23,20 @@ import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpView{
 
-    private FragmentLoginInputPasswordBinding binding;
+    private FragmentLoginSetPasswordBinding binding;
     private Dialog pwTooSimpleDialog;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_input_password,container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_set_password,container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        binding.setVm(loginViewModel);
+        binding.setLoginVM(loginViewModel);
         initViews();
     }
 
@@ -87,5 +84,19 @@ public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpV
         pwTooSimpleDialog.show();
 //        TextView incorrectPWTV = (TextView) pwTooSimpleDialog.findViewById(android.R.id.message);
 //        incorrectPWTV.setGravity(Gravity.CENTER);
+    }
+
+    @Override
+    public void onPageChange(int task) {
+        switch (task){
+            case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
+                closeFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+                break;
+            }
+            case LoginViewModel.TO_PICK_AVATAR_FRAG:{
+                openFragment(this, (LoginPickAvatarFragment)getFragmentManager().findFragmentByTag(LoginPickAvatarFragment.class.getSimpleName()));
+                break;
+            }
+        }
     }
 }

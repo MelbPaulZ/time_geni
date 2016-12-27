@@ -8,11 +8,13 @@ import org.greenrobot.greendao.query.QueryBuilder;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.MessageDao;
+import org.unimelb.itime.dao.UserDao;
 
 
 import java.util.List;
@@ -79,10 +81,30 @@ public class DBManager {
 //    }
 
     public void insertContact(Contact contact) {
+        if(contact==null){
+            return;
+        }
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
-        contactDao.insert(contact);
+        contactDao.insertOrReplace(contact);
+    }
+
+    public void deleteContac(Contact contact){
+        if(contact==null){
+            return;
+        }
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        ContactDao contactDao = daoSession.getContactDao();
+        contactDao.delete(contact);
+    }
+
+    public void insertUser(User user){
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        UserDao userDao = daoSession.getUserDao();
+        userDao.insertOrReplace(user);
     }
 
 //    public void insertTimeSlot(Timeslot timeSlot){
@@ -91,6 +113,8 @@ public class DBManager {
 //        TimeslotDao timeSlotDao = daoSession.getTimeslotDao();
 //        timeSlotDao.insert(timeSlot);
 //    }
+
+
 
     public void insertEventList(List<Event> events) {
         if (events == null || events.isEmpty()) {
@@ -154,6 +178,13 @@ public class DBManager {
         QueryBuilder<Contact> qb = contactDao.queryBuilder();
         List<Contact> list = qb.list();
         return list;
+    }
+
+    public synchronized void deleteAllContact(){
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        ContactDao contactDao = daoSession.getContactDao();
+        contactDao.deleteAll();
     }
 
     public Event getEvent(String uid) {

@@ -22,12 +22,13 @@
 
         <!--back btn-->
         <ImageView
-            android:layout_width="8dp"
-            android:layout_height="14dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="17dp"
-            android:onClick="@{loginVM.onClickAvatar}"
-            android:background="@drawable/icon_back_arrow"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="7dp"
+            android:onClick="@{loginVM.onSwitchFragment(loginVM.TO_SET_PASSWORD_FRAG)}"
+            android:src="@drawable/icon_back_arrow"
             />
 
         <!--avatar image-->
@@ -36,6 +37,7 @@
             android:layout_width="136dp"
             android:layout_height="150dp"
             android:layout_marginTop="45dp"
+            android:onClick="@{loginVM.onClickAvatar}"
             android:background="@drawable/icon_profile_pic"
             android:layout_gravity="center_horizontal"/>
 
@@ -106,7 +108,7 @@
             android:layout_marginBottom="32dp"
             android:background="@drawable/selector_signup_btn_bg"
             android:gravity="center"
-            android:onClick="@{loginVM.onAvatarClickBtn()}"
+            android:onClick="@{loginVM.onSwitchFragment(loginVM.TO_FIND_FRIEND_FRAG)}"
             android:textSize="14sp"
             android:text="@string/signup"
             android:textColor="@color/white" />

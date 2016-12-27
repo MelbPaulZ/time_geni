@@ -27,9 +27,9 @@ import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.InviteeFragment;
+import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
-import org.unimelb.itime.ui.presenter.EventEditPresenter;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * Created by Paul on 28/08/2016.
  */
-public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEditPresenter> implements EventEditMvpView {
+public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventCommonPresenter<EventEditMvpView>> implements EventEditMvpView {
 
     private static final String TAG = "EdifFragment";
     private FragmentEventEditDetailBinding binding;
@@ -56,8 +56,8 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     }
 
     @Override
-    public EventEditPresenter createPresenter() {
-        EventEditPresenter presenter = new EventEditPresenter(getContext());
+    public EventCommonPresenter<EventEditMvpView> createPresenter() {
+        EventCommonPresenter<EventEditMvpView> presenter = new EventCommonPresenter<>(getContext());
         return presenter;
     }
 
@@ -84,7 +84,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     @Override
     public void onEnter() {
         super.onEnter();
-        if ( getFrom() instanceof EventDetailGroupFragment){
+        if ( getFrom() instanceof EventDetailFragment){
             EditText editText = (EditText) binding.getRoot().findViewById(R.id.edit_event_title);
             editText.setFocusable(true);
             editText.requestFocus();
@@ -125,15 +125,15 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
 
     @Override
     public void toHostEventDetail() {
-        EventDetailGroupFragment hostFragment = (EventDetailGroupFragment) getFragmentManager().findFragmentByTag(EventDetailGroupFragment.class.getSimpleName());
-        switchFragment(this, hostFragment);
+        EventDetailFragment hostFragment = (EventDetailFragment) getFragmentManager().findFragmentByTag(EventDetailFragment.class.getSimpleName());
+        openFragment(this, hostFragment);
     }
 
     @Override
     public void changeLocation() {
         EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
         eventLocationPickerFragment.setEvent(eventManager.copyCurrentEvent(event));
-        switchFragment(this,eventLocationPickerFragment);
+        openFragment(this,eventLocationPickerFragment);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
         }
 
         timeSlotFragment.setEvent(cpyEvent);
-        switchFragment(this, timeSlotFragment);
+        openFragment(this, timeSlotFragment);
     }
 
 
@@ -157,7 +157,7 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     public void toInviteePicker(Event event) {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
         inviteeFragment.setEvent(eventManager.copyCurrentEvent(event));
-        switchFragment(this, inviteeFragment);
+        openFragment(this, inviteeFragment);
     }
 
 
@@ -195,26 +195,30 @@ public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventEdi
     }
 
 
+
     @Override
-    public void onTaskStart() {
+    public void onTaskStart(int task) {
         AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
     }
 
     @Override
-    public void onTaskError(Throwable e) {
-        Log.i(TAG, "onTaskError: " + e.getMessage());
+    public void onTaskError(int task, String errorMsg, int code) {
+        Log.i(TAG, "onTaskError: " + errorMsg);
         AppUtil.hideProgressBar();
     }
 
     @Override
-    public void onTaskComplete(List<Event> dataList) {
+    public void onTaskComplete(int task, List<Event> dataList) {
         AppUtil.hideProgressBar();
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
-    }
+        switch (task){
+            case EventCommonPresenter.TASK_EVENT_INSERT:
+                break;
+            case EventCommonPresenter.TASK_EVENT_UPDATE:{
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                break;
+            }
 
-    @Override
-    public void onTaskComplete(Event data) {
-        AppUtil.hideProgressBar();
+        }
     }
 }

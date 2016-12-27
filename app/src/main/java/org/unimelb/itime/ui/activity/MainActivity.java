@@ -5,18 +5,15 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -36,9 +33,8 @@ import org.unimelb.itime.databinding.ActivityMainBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
-import org.unimelb.itime.ui.contact.Fragments.ContactHomePageFragment;
+import org.unimelb.itime.ui.fragment.contact.ContactHomePageFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
-import org.unimelb.itime.ui.fragment.MainContactsFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
 import org.unimelb.itime.ui.fragment.MainSettingsFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
@@ -50,7 +46,6 @@ import org.unimelb.itime.util.UserUtil;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
 

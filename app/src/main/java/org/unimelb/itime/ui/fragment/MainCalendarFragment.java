@@ -18,7 +18,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.EventSearchActivity;
@@ -27,20 +26,19 @@ import org.unimelb.itime.ui.fragment.calendars.CalendarAgendaFragment;
 import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
 import org.unimelb.itime.ui.fragment.calendars.CalendarWeekFragment;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
-import org.unimelb.itime.ui.presenter.MainCalendarPresenter;
+import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.unimelb.itime.R.string.calendar;
 
 /**
  * required login, need to extend BaseUiAuthFragment
  */
-public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, MainCalendarPresenter> implements MainCalendarMvpView {
+public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, CommonPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
 
     private final static String TAG = "MainCalendarFragment";
     private CalendarMonthDayFragment monthDayFragment;
@@ -67,13 +65,13 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
             monthDayFragment.scrollToWithOffset(eventStartTime);
         }
         if (weekFragment!=null && weekFragment.isAdded()){
-            weekFragment.scrollToWithOffset(calendar);
+            weekFragment.scrollToWithOffset(eventStartTime);
         }
     }
 
     @Override
-    public MainCalendarPresenter createPresenter() {
-        return new MainCalendarPresenter(getContext());
+    public CommonPresenter<MainCalendarMvpView> createPresenter() {
+        return new CommonPresenter<>(getContext());
     }
 
     @Nullable
@@ -219,24 +217,4 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Ma
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-    @Override
-    public void onTaskStart() {
-
-    }
-
-    @Override
-    public void onTaskError(Throwable e) {
-
-    }
-
-    @Override
-    public void onTaskComplete(List<Event> dataList) {
-
-    }
-
-    @Override
-    public void onTaskComplete(Event data) {
-
-    }
 }

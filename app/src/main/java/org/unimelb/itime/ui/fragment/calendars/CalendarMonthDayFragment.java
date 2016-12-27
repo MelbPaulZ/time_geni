@@ -168,7 +168,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment<EventCommonMvpView,
                                             }
                                             firstOrg.getRule().addEXDate(new Date(event.getStartTime()));
                                             firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
-                                            eventManager.getWaitingEditEventList().add(firstOrg);
 
                                             presenter.updateAndInsertEvent(firstOrg, newEvent);
                                             break;
@@ -281,7 +280,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment<EventCommonMvpView,
                     alertDialog.show();
                 }else{
                     // this is not repeat event
-                    eventManager.getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
                     Event copyEvent = eventManager.copyCurrentEvent(event);
                     copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                     copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
@@ -348,27 +346,27 @@ public class CalendarMonthDayFragment extends BaseUiFragment<EventCommonMvpView,
         CalendarManager.getInstance().setCurrentShowCalendar(c);
     }
 
+
     @Override
-    public void onTaskStart() {
-        AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
+    public void onTaskStart(int task) {
+        if (task == EventCommonPresenter.TASK_EVENT_UPDATE) {
+            AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
+        }
     }
 
     @Override
-    public void onTaskError(Throwable e) {
+    public void onTaskError(int task, String errorMsg, int code) {
+        if (task == EventCommonPresenter.TASK_EVENT_UPDATE) {
+            AppUtil.hideProgressBar();
+        }
 
-        AppUtil.hideProgressBar();
     }
 
     @Override
-    public void onTaskComplete(List<Event> dataList) {
-
-        AppUtil.hideProgressBar();
-    }
-
-    @Override
-    public void onTaskComplete(Event data) {
-
-        AppUtil.hideProgressBar();
+    public void onTaskComplete(int task, List<Event> dataList) {
+        if (task == EventCommonPresenter.TASK_EVENT_UPDATE) {
+            AppUtil.hideProgressBar();
+        }
     }
 }
 

@@ -33,6 +33,18 @@
     <string name="login_input_password_hint">Password</string>
     <string name="login_forget_password">Forget Your Password?</string>
     <string name="login_no_account_signup">Don’t have an iTime account?<u>Sign Up</u></string>
+    <string name="login_fail_alert_title">Log In Failed</string>
+    <string name="login_fail_alert_msg">Please check that your email address and password are correct</string>
+    <string name="login_fail_alert_btn">Try Again</string>
+    <string name="login_reset_password_title">Reset Your Password</string>
+    <string name="login_reset_password_subtitle">Enter your email address to reset your password</string>
+    <string name="login_reset_password_edit_title">YOUR EMAIL</string>
+    <string name="login_reset_password_edit_hint">Email</string>
+    <string name="login_reset_password_remember_password"><u>Remember your password?</u></string>
+    <string name="login_reset_password_btn_submit">SUBMIT</string>
+    <string name="login_email_sent_title">EMAIL SENT</string>
+    <string name="login_email_sent_subtitle">We just sent instructions for resetting your pass word to this account.</string>
+    <string name="login_email_sent_btn">DONE</string>
 
 
 
@@ -306,4 +318,6 @@
     <string name="accept_fail">Accpt failed, please check your network</string>
     <string name="album">Album</string>
     <string name="search_hint">Type in E-mail</string>
+    <string name="save_qr_code_success">Save qr code success</string>
+    <string name="save_qr_code_failed">Save qr code failed</string>
 </resources>

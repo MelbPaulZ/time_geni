@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
@@ -45,5 +46,11 @@ public class LoginCommonFragment extends BaseUiFragment<LoginMvpView, LoginPrese
                 loginViewModel.setTopIconVisibility(View.VISIBLE);
             }
         });
+    }
+
+    protected  void addFragmentToManager(LoginCommonFragment fragment){
+        if (!fragment.isAdded()){
+            getFragmentManager().beginTransaction().add(R.id.login_framelayout,fragment,fragment.getClassName());
+        }
     }
 }
