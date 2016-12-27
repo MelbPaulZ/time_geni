@@ -9,8 +9,14 @@ import android.view.ViewGroup;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.ContactHomePageBinding;
+import org.unimelb.itime.messageevent.MessageAddContact;
+import org.unimelb.itime.messageevent.MessageNewFriendRequest;
+import org.unimelb.itime.messageevent.MessageRemoveContact;
 import org.unimelb.itime.ui.activity.AddFriendActivityContact;
 import org.unimelb.itime.ui.activity.FriendRequestActivityContact;
 import org.unimelb.itime.ui.activity.ProfileActivityContact;
@@ -38,7 +44,25 @@ public class ContactHomePageFragment extends MvpFragment<ContactHomePageMvpView,
         initMainView();
         fm = getFragmentManager();
         viewModel.initSideBarListView(binding.sortListView);
+
+        EventBus.getDefault().register(this);
         return binding.getRoot();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void removeContact(MessageRemoveContact msg){
+        System.out.println("remove " + msg.contact.getContactUid());
+        viewModel.removeContact(msg.contact);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void addContact(MessageAddContact msg){
+        viewModel.addContact(msg.contact);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setRequestCount(MessageNewFriendRequest msg){
+        viewModel.setRequestCount(msg.count);
     }
 
     @Override
@@ -53,7 +77,6 @@ public class ContactHomePageFragment extends MvpFragment<ContactHomePageMvpView,
 
     public void onResume(){
         super.onResume();
-        viewModel.loadData();
     }
 
     public void initMainView() {
@@ -62,6 +85,8 @@ public class ContactHomePageFragment extends MvpFragment<ContactHomePageMvpView,
         viewModel.setPresenter(presenter);
         binding.setMainViewModel(viewModel);
     }
+
+
 
     public void goToNewFriendFragment() {
         Intent intent = new Intent();
@@ -102,5 +127,11 @@ public class ContactHomePageFragment extends MvpFragment<ContactHomePageMvpView,
     @Override
     public ContactHomePagePresenter createPresenter() {
         return new ContactHomePagePresenter(getContext());
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

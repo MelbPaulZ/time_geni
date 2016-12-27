@@ -5,7 +5,9 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.FriendRequest;
+import org.unimelb.itime.messageevent.MessageNewFriendRequest;
 import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
@@ -47,7 +49,7 @@ public class MainTabBarPresenter extends MvpBasePresenter<MainTabBarView>{
         tabBarView.refreshTabStatus(pageId);
     }
 
-    public void getRequestCount(final MainTabBarViewModel.RequestNumCallBack callBack){
+    public void getRequestCount(){
         FriendRequestApi requestApi = HttpUtil.createService(context, FriendRequestApi.class);
         Observable<HttpResult<List<FriendRequest>>> observable = requestApi.list();
         Subscriber<HttpResult<List<FriendRequest>>> subscriber = new Subscriber<HttpResult<List<FriendRequest>>>() {
@@ -74,7 +76,7 @@ public class MainTabBarPresenter extends MvpBasePresenter<MainTabBarView>{
                                 count++;
                             }
                         }
-                        callBack.success(count);
+                    EventBus.getDefault().post(new MessageNewFriendRequest(count));
                     }
             }
         };

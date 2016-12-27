@@ -5,10 +5,13 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Block;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.messageevent.MessageAddContact;
+import org.unimelb.itime.messageevent.MessageRemoveContact;
 import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulapi.UserApi;
@@ -74,6 +77,7 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
                 }else {
                     user.getContact().setBlockLevel(result.getData().getBlockLevel());
                     dbManager.updateContact(user.getContact());
+                    EventBus.getDefault().post(new MessageRemoveContact(user.getContact()));
                     callBack.success();
                 }
             }
@@ -102,6 +106,7 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
                 }else {
                     user.getContact().setBlockLevel(result.getData().getBlockLevel());
                     dbManager.updateContact(user.getContact());
+                    EventBus.getDefault().post(new MessageAddContact(user.getContact()));
                     callBack.success();
                 }
             }
@@ -130,6 +135,7 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
                 }else {
                     user.getContact().setStatus(result.getData().getStatus());
                     dbManager.updateContact(user.getContact());
+                    EventBus.getDefault().post(new MessageRemoveContact(result.getData()));
                     callBack.success();
                 }
             }

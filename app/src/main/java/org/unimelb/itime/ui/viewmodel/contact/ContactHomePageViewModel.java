@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.util.ContactFilterUtil;
 import org.unimelb.itime.ui.presenter.contact.ContactHomePagePresenter;
@@ -48,6 +49,33 @@ public class ContactHomePageViewModel  extends BaseObservable {
             itemView = ItemView.of(BR.viewModel, R.layout.listview_itime_friend_item);
         }
         return itemView;
+    }
+
+    public void removeContact(Contact contact){
+        if(friendList==null){
+            return;
+        }
+        for(ITimeUser user:friendList){
+            if(user.getContact().getContactUid().equals(contact.getContactUid())){
+                friendList.remove(user);
+                updateListView(friendList);
+                break;
+            }
+        }
+    }
+
+    public void addContact(Contact contact){
+        if(friendList==null){
+            return;
+        }
+        for(ITimeUser user:friendList){
+            if(user.getContact().getContactUid().equals(contact.getContactUid())){
+                friendList.remove(user);
+                break;
+            }
+        }
+        friendList.add(new ITimeUser(contact));
+        updateListView(friendList);
     }
 
     private void updateListView(List<ITimeUser> list){

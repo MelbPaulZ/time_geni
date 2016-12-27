@@ -33,6 +33,7 @@ import org.unimelb.itime.databinding.ActivityMainBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
+import org.unimelb.itime.messageevent.MessageNewFriendRequest;
 import org.unimelb.itime.ui.fragment.contact.ContactHomePageFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
@@ -140,6 +141,11 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
             }
         }
         tabBarViewModel.setUnReadNum(unReadNum+"");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setNewFriendRequestCount(MessageNewFriendRequest msg){
+        tabBarViewModel.setUnReadFriendRequest(msg.count);
     }
 
 

@@ -22,7 +22,7 @@ public class MainTabBarViewModel extends BaseObservable{
 
     public MainTabBarViewModel(MainTabBarPresenter presenter){
         this.presenter = presenter;
-        presenter.getRequestCount(new RequestNumCallBack());
+        presenter.getRequestCount();
     }
 
     public View.OnClickListener onTabBarClick(final int pageId){
@@ -65,13 +65,5 @@ public class MainTabBarViewModel extends BaseObservable{
     public void setUnReadFriendRequest(int unReadFriendRequest) {
         this.unReadFriendRequest = unReadFriendRequest;
         notifyPropertyChanged(BR.unReadFriendRequest);
-    }
-
-
-
-    public class RequestNumCallBack{
-        public void success(int num){
-            setUnReadFriendRequest(num);
-        }
     }
 }
