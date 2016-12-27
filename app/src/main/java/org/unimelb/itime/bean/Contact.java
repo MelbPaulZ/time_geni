@@ -21,6 +21,9 @@ import org.unimelb.itime.dao.UserDao;
  */
 @Entity
 public class Contact implements ITimeContactInterface, Serializable {
+    public static final String DELETED = "deleted";
+    public static final String ACTIVATED = "activated";
+
 
     private String userUid;
     @Id

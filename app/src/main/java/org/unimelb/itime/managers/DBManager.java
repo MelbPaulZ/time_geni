@@ -3,7 +3,6 @@ package org.unimelb.itime.managers;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
@@ -90,7 +89,7 @@ public class DBManager {
         contactDao.insertOrReplace(contact);
     }
 
-    public void deleteContac(Contact contact){
+    public void deleteContact(Contact contact){
         if(contact==null){
             return;
         }
@@ -100,12 +99,20 @@ public class DBManager {
         contactDao.delete(contact);
     }
 
+    public void updateContact(Contact contact){
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        ContactDao contactDao = daoSession.getContactDao();
+        contactDao.update(contact);
+    }
+
     public void insertUser(User user){
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         UserDao userDao = daoSession.getUserDao();
         userDao.insertOrReplace(user);
     }
+
 
 //    public void insertTimeSlot(Timeslot timeSlot){
 //        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
@@ -176,9 +183,14 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
         QueryBuilder<Contact> qb = contactDao.queryBuilder();
+        qb.where(
+                 qb.and(ContactDao.Properties.Status.eq(Contact.ACTIVATED),
+                         ContactDao.Properties.BlockLevel.eq(0)));
         List<Contact> list = qb.list();
         return list;
     }
+
+
 
     public synchronized void deleteAllContact(){
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
