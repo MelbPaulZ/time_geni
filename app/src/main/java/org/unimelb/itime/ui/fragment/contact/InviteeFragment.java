@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment;
+package org.unimelb.itime.ui.fragment.contact;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

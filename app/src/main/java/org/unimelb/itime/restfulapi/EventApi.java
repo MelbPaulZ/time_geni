@@ -51,6 +51,7 @@ public interface EventApi {
             @Query("originStartTime") long originStartTime,
             @Query("syncToken") String syncToken);
 
+
     @POST("event/confirm/{calendarUid}/{eventUid}/{timeslotUid}")
     Observable<HttpResult<List<Event>>> confirm(
             @Path("calendarUid") String calendarUid,

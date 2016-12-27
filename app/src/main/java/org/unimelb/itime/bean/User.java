@@ -3,7 +3,8 @@ package org.unimelb.itime.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Keep;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Index;
 
 import java.io.Serializable;
 
@@ -11,12 +12,12 @@ import java.io.Serializable;
  * Created by yinchuandong on 20/06/2016.
  */
 
-@Entity(
-        active = false
-)
-public class User implements Serializable{
+@Entity
+public class User implements Serializable {
 
+    @Id
     private String userUid;
+
     private String userId;
     private String personalAlias;
     private String email;
@@ -31,40 +32,54 @@ public class User implements Serializable{
     private int signinCount;
     private String createdAt;
     private String updatedAt;
+    private String gender;
+    private String location;
 
-
-
-
-    @Generated(hash = 6482242)
-    public User(String userUid, String userId, String personalAlias, String email,
-            String phone, String photo, String source, String deviceToken,
-            String deviceId, String averageRatingValue, String timezone,
-            String lastSigninTime, int signinCount, String createdAt,
-            String updatedAt) {
-        this.userUid = userUid;
-        this.userId = userId;
-        this.personalAlias = personalAlias;
-        this.email = email;
-        this.phone = phone;
-        this.photo = photo;
-        this.source = source;
-        this.deviceToken = deviceToken;
-        this.deviceId = deviceId;
-        this.averageRatingValue = averageRatingValue;
-        this.timezone = timezone;
-        this.lastSigninTime = lastSigninTime;
-        this.signinCount = signinCount;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+@Generated(hash = 1717660507)
+public User(String userUid, String userId, String personalAlias, String email,
+        String phone, String photo, String source, String deviceToken,
+        String deviceId, String averageRatingValue, String timezone,
+        String lastSigninTime, int signinCount, String createdAt,
+        String updatedAt, String gender, String location) {
+    this.userUid = userUid;
+    this.userId = userId;
+    this.personalAlias = personalAlias;
+    this.email = email;
+    this.phone = phone;
+    this.photo = photo;
+    this.source = source;
+    this.deviceToken = deviceToken;
+    this.deviceId = deviceId;
+    this.averageRatingValue = averageRatingValue;
+    this.timezone = timezone;
+    this.lastSigninTime = lastSigninTime;
+    this.signinCount = signinCount;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.gender = gender;
+    this.location = location;
+}
 
     @Generated(hash = 586692638)
     public User() {
     }
 
+    public String getLocation() {
+        return location;
+    }
 
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-    
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public String getUserUid() {
         return userUid;
     }
