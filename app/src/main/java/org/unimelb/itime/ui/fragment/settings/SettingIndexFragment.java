@@ -34,6 +34,7 @@ import org.unimelb.itime.util.AuthUtil;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 
+import static org.unimelb.itime.R.id.main_fragment_container;
 import static org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity.CHOOSE_FROM_LIBRARY;
 
 /**
@@ -63,6 +64,15 @@ implements SettingCommonMvpView{
         super.onActivityCreated(savedInstanceState);
         MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
+        initSettingFragments();
+    }
+
+
+    private void initSettingFragments(){
+        SettingMyProfileFragment myProfileFragment = new SettingMyProfileFragment();
+        SettingMyProfileNameFragment myProfileNameFragment = new SettingMyProfileNameFragment();
+        getFragmentManager().beginTransaction().add(R.id.main_fragment_container, myProfileFragment, myProfileFragment.getClassName()).hide(myProfileFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.main_fragment_container, myProfileNameFragment, myProfileNameFragment.getClassName()).hide(myProfileNameFragment).commit();
     }
 
     @Subscribe

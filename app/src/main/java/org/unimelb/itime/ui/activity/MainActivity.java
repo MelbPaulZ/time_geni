@@ -38,6 +38,8 @@ import org.unimelb.itime.ui.fragment.contact.ContactHomePageFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingIndexFragment;
+import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
+import org.unimelb.itime.ui.fragment.settings.SettingMyProfileNameFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
@@ -124,8 +126,9 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[0]);
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[1]);
-        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[2]);
+        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[2], MainInboxFragment.class.getSimpleName());
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3]);
+
         fragmentTransaction.commit();
         showFragmentById(0);
         refreshTabStatus(0);
