@@ -39,8 +39,9 @@ public class MainSettingsViewModel extends BaseObservable{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setClickable(false);
+//                v.setClickable(false);
                 Toast.makeText(presenter.getContext(), "Logging Out", Toast.LENGTH_SHORT).show();
+                
 
             }
         };
