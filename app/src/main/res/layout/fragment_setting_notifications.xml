@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        style="@style/itime_toolbar">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--toolbar back arrow-->
+            <ImageView
+                android:layout_width="11dp"
+                android:layout_height="18dp"
+                android:src="@drawable/icon_back_arrow"
+                android:layout_centerVertical="true"
+                />
+
+            <!--toolbar settings text-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_activity_settings"
+                android:textColor="@color/title_6D6D6D"
+                android:textSize="17sp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="14dp"
+                />
+
+            <!--toolbar title-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notifications"
+                android:textSize="17sp"
+                android:textColor="@color/color_424242"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/color_fafafa">
+
+        <!--first part-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="16dp"
+            android:background="@drawable/background_top_bottom_divider">
+
+            <TextView
+                style="@style/itime_blacktitle_17sp"
+                android:text="@string/notifications"/>
+            
+            <TextView
+                style="@style/itime_subtitle_15sp"
+                android:layout_marginRight="15dp"
+                android:text="Enable"/>
+        </RelativeLayout>
+
+        <!-- second part, subtext 1 -->
+        <TextView
+            android:layout_width="282dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:paddingTop="5dp"
+            android:text="@string/setting_notifications_subtext1"
+            android:textColor="@color/color_757575"
+            android:textSize="15sp"
+            />
+
+        <!--third part, show preview text-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/background_top_bottom_divider"
+            android:paddingLeft="16dp"
+            android:layout_marginTop="21dp"
+            >
+            <TextView
+                style="@style/itime_blacktitle_17sp"
+                android:text="@string/setting_show_preview_Text"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:checked="true"
+                />
+        </RelativeLayout>
+
+        <!--forth part, subtext 2-->
+        <TextView
+            android:layout_width="282dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:paddingTop="5dp"
+            android:text="@string/setting_notifications_subtext2"
+            android:textColor="@color/color_757575"
+            android:textSize="15sp"
+            />
+
+        <!--fifth part-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="21dp"
+            android:background="@drawable/background_top_bottom_divider"
+            android:paddingLeft="16dp">
+
+            <!--in app alert sound-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                >
+                <TextView
+                    style="@style/itime_blacktitle_17sp"
+                    android:text="@string/setting_in_app_alert_sound"/>
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="16dp"
+                    android:checked="true"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    style="@style/itime_bottom_divider_line" />
+
+            </RelativeLayout>
+
+            <!--Vibrate-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp">
+                <TextView
+                    style="@style/itime_blacktitle_17sp"
+                    android:text="@string/setting_vibrate"/>
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="16dp"
+                    android:layout_centerVertical="true"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+        <!--sixth part, subtext 3-->
+        <TextView
+            android:layout_width="317dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:paddingTop="5dp"
+            android:text="@string/setting_notifications_subtext3"
+            android:textColor="@color/color_757575"
+            android:textSize="15sp"
+            />
+
+
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

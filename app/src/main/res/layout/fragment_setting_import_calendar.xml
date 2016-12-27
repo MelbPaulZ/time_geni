@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_setting"
+                android:text="@string/back"
                 android:textColor="@color/title_6D6D6D"
                 android:textSize="17sp"
                 android:layout_centerVertical="true"
@@ -32,7 +32,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/calendar_preferences"
+                android:text="@string/setting_import_calendar"
                 android:textSize="17sp"
                 android:textColor="@color/color_424242"
                 android:layout_centerInParent="true"
@@ -46,22 +46,22 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/color_fafafa">
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/background_top_bottom_divider">
-
-            <!--Calendars part-->
+            android:background="@drawable/background_top_bottom_divider"
+            android:layout_marginTop="20dp">
+            <!--Google Calendar-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginLeft="16dp">
+                
                 <TextView
                     style="@style/itime_blacktitle_17sp"
-                    android:text="@string/setting_calendars"/>
+                    android:text="@string/setting_google_calendar"/>
 
                 <ImageView
                     style="@style/image_right_arrow" />
@@ -70,47 +70,8 @@
                     style="@style/itime_bottom_divider_line" />
             </RelativeLayout>
 
-            <!--Default Calendar-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="16dp">
-                <TextView
-                    style="@style/itime_blacktitle_17sp"
-                    android:text="@string/setting_default_calendar"/>
 
-                <ImageView
-                    style="@style/image_right_arrow" />
-
-                <TextView
-                    style="@style/itime_subtitle_15sp"
-                    android:text="work"
-                    />
-
-                <TextView
-                    style="@style/itime_bottom_divider_line" />
-            </RelativeLayout>
-
-            <!--Default alert-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="16dp">
-                <TextView
-                    style="@style/itime_blacktitle_17sp"
-                    android:text="@string/setting_default_alert"/>
-
-                <ImageView
-                    style="@style/image_right_arrow" />
-
-                <TextView
-                    style="@style/itime_bottom_divider_line" />
-
-                <TextView
-                    style="@style/itime_subtitle_15sp"
-                    android:text="15 minutes before"/>
-            </RelativeLayout>
-            
+            <!--Melbourne University-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
@@ -118,17 +79,14 @@
 
                 <TextView
                     style="@style/itime_blacktitle_17sp"
-                    android:text="@string/setting_import_calendar_from"/>
+                    android:text="@string/setting_melbourne_university"/>
 
                 <ImageView
                     style="@style/image_right_arrow" />
 
             </RelativeLayout>
-
 
 
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>
