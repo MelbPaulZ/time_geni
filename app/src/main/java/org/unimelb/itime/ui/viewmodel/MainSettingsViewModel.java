@@ -3,6 +3,8 @@ package org.unimelb.itime.ui.viewmodel;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
@@ -27,8 +29,8 @@ public class MainSettingsViewModel extends BaseObservable{
     private SettingCommonPresenter presenter;
     private SettingCommonMvpView mvpView;
 
-    private List<Calendar> calendars = new ArrayList<>();
-    private ItemView calendarItemView = ItemView.of(BR.timeslot, R.layout.timeslot_listview_show);
+    private ObservableList<Calendar> calendars = new ObservableArrayList<>();
+    private ItemView calendarItemView = ItemView.of(BR.calendar, R.layout.setting_default_calendar_listview);
 
     public final static int TASK_LOGOUT = 1;
     public final static int TASK_VIEW_AVATAR = 2;
@@ -70,7 +72,6 @@ public class MainSettingsViewModel extends BaseObservable{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setClickable(false);
                 mvpView.onViewChange(task);
                 }
         };
@@ -84,5 +85,15 @@ public class MainSettingsViewModel extends BaseObservable{
     public void setCalendarItemView(ItemView calendarItemView) {
         this.calendarItemView = calendarItemView;
         notifyPropertyChanged(BR.itemView);
+    }
+
+    @Bindable
+    public ObservableList<Calendar> getCalendars() {
+        return this.calendars;
+    }
+
+    public void setCalendars(ObservableList<Calendar> calendars) {
+        this.calendars = calendars;
+        notifyPropertyChanged(BR.calendars);
     }
 }

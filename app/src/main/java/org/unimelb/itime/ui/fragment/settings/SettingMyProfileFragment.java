@@ -93,7 +93,9 @@ public class SettingMyProfileFragment extends BaseUiFragment<SettingCommonMvpVie
         if (task == MainSettingsViewModel.TASK_VIEW_AVATAR){
             gotoPhotoPicker();
         }else if (task == MainSettingsViewModel.TASK_TO_SETTING){
-            closeFragment(this, (SettingIndexFragment)getFragmentManager().findFragmentByTag(SettingIndexFragment.class.getSimpleName()));
+            getActivity().finish();
+            getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//            closeFragment(this, (SettingIndexFragment)getFragmentManager().findFragmentByTag(SettingIndexFragment.class.getSimpleName()));
         }else if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE_NAME){
             openFragment(this, (SettingMyProfileNameFragment)getFragmentManager().findFragmentByTag(SettingMyProfileNameFragment.class.getSimpleName()));
         }else if (task == MainSettingsViewModel.TASK_TO_QR_CODE){

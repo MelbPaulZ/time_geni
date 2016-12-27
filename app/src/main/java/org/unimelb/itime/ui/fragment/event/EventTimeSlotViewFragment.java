@@ -60,6 +60,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_create_timeslot_view, container, false);
+
         return binding.getRoot();
     }
 
@@ -108,13 +109,13 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     public void onEnter() {
         super.onEnter();
         // need to change later
-
         initListeners();
 
         if (event != null || event.getTimeslot() == null || event.getTimeslot().size() == 0) {
             Calendar calendar = Calendar.getInstance();
             presenter.getTimeSlots(event, calendar.getTimeInMillis());
         }
+        timeslotWeekView.reloadTimeSlots(false);
     }
 
     public void createTimeSlot(TimeSlotView timeSlotView) {

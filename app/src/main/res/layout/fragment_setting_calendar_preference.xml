@@ -29,6 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tab_setting"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING)}"
                 android:textColor="@color/title_6D6D6D"
                 android:textSize="17sp"
                 android:layout_centerVertical="true"

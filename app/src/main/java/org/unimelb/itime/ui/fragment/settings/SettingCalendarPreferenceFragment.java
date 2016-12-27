@@ -45,7 +45,9 @@ implements SettingCommonMvpView{
     @Override
     public void onViewChange(int task) {
         if (task == MainSettingsViewModel.TASK_TO_SETTING){
-            closeFragment(this, (SettingIndexFragment)getFragmentManager().findFragmentByTag(SettingIndexFragment.class.getSimpleName()));
+            getActivity().finish();
+            getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//            closeFragment(this, (SettingIndexFragment)getFragmentManager().findFragmentByTag(SettingIndexFragment.class.getSimpleName()));
         }else if (task == MainSettingsViewModel.TASK_TO_DEFAULT_CALENDAR){
             openFragment(this, (SettingDefaultCalendarFragment)getFragmentManager().findFragmentByTag(SettingDefaultCalendarFragment.class.getSimpleName()));
         }

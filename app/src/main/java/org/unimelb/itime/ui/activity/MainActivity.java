@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -225,10 +227,15 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EventUtil.ACTIVITY_CREATE_EVENT ){
-            ((MainCalendarFragment)tagFragments[0]).reloadEvent();
-            ((MainCalendarFragment)tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+            if (resultCode == Activity.RESULT_OK) {
+                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
+                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+            }
         }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
-            ((MainCalendarFragment)tagFragments[0]).reloadEvent();
+            if (requestCode == Activity.RESULT_OK) {
+                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
+                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+            }
         }
     }
 
