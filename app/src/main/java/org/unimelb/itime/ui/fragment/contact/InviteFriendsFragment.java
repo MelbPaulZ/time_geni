@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentInviteFridendsBinding;
 import org.unimelb.itime.databinding.ListviewInviteeHeaderBinding;
@@ -27,7 +28,7 @@ import org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel;
  * Created by 37925 on 2016/12/4.
  */
 
-public class InviteFriendsFragment  extends MvpFragment<InviteFriendMvpView, InviteFriendPresenter> implements InviteFriendMvpView {
+public class InviteFriendsFragment  extends BaseUiFragment<InviteFriendMvpView, InviteFriendPresenter> implements InviteFriendMvpView {
     private FragmentInviteFridendsBinding binding;
     private ListviewInviteeHeaderBinding headerBinding;
     private FragmentManager fm;

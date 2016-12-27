@@ -24,6 +24,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
+import org.unimelb.itime.ui.fragment.contact.InviteFriendsFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
@@ -41,8 +42,6 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     private FragmentEventCreateNewBinding binding;
     private EventCreateNewVIewModel viewModel;
     private Event event;
-
-    private TimePickerDialog timePickerDialog;
 
     @Override
     public EventCommonPresenter<EventCreateNewMvpView> createPresenter() {
@@ -65,18 +64,12 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         onEnter(); // show key board
     }
 
-    public void showTimePicker(){
-        this.timePickerDialog.show();
-    }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minutes) {
 
     }
 
-    public void showDatePicker(){
-
-    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
@@ -126,9 +119,11 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
 
     @Override
     public void pickInvitee() {
-        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        openFragment(this, inviteeFragment);
+//        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+//        inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
+
+        InviteFriendsFragment inviteFriendsFragment = (InviteFriendsFragment)getFragmentManager().findFragmentByTag(InviteFriendsFragment.class.getSimpleName());
+        openFragment(this, inviteFriendsFragment);
     }
 
 

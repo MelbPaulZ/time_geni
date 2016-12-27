@@ -51,7 +51,7 @@ public abstract class BaseUiFragment<V extends MvpView, P extends MvpPresenter<V
         from.onLeave();
         to.onEnter();
         // switch
-        getFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).hide(from).show(to).commit();
+        getFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).hide(from).show(to).addToBackStack(null).commit();
     }
 
     public void closeFragment(BaseUiFragment<V, P> from, BaseUiFragment<? extends MvpView, ? extends MvpPresenter> to){
@@ -59,7 +59,7 @@ public abstract class BaseUiFragment<V extends MvpView, P extends MvpPresenter<V
         from.onLeave();
         to.onEnter();
         // switch
-        getFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right).hide(from).show(to).commit();
+        getFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right).hide(from).show(to).addToBackStack(null).commit();
     }
 
 

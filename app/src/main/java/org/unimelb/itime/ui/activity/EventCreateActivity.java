@@ -24,6 +24,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.messageevent.MessageUrl;
+import org.unimelb.itime.ui.fragment.contact.InviteFriendsFragment;
 import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.fragment.event.EventCreateNewFragment;
@@ -72,6 +73,7 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
             @Override
             public void run() {
                 super.run();
+                fragmentList.add(new InviteFriendsFragment());
                 fragmentList.add(new InviteeFragment());
                 fragmentList.add(new EventTimeSlotViewFragment());
                 fragmentList.add(new EventCreateDetailBeforeSendingFragment());
