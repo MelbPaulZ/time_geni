@@ -20,10 +20,10 @@ public class TestActivityPaul extends BaseActivity {
 
 //        CalendarWeekFragment calendarWeekFragment = new CalendarWeekFragment();
 //        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, calendarWeekFragment).commit();
-//        SettingMyProfileFragment fragment = new SettingMyProfileFragment();
-//        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, fragment).commit();
-        SettingMyProfileNameFragment fragment = new SettingMyProfileNameFragment();
+        SettingMyProfileFragment fragment = new SettingMyProfileFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, fragment).commit();
+//        SettingMyProfileNameFragment fragment = new SettingMyProfileNameFragment();
+//        getSupportFragmentManager().beginTransaction().add(R.id.test_paul_fragment, fragment).commit();
     }
 
 
