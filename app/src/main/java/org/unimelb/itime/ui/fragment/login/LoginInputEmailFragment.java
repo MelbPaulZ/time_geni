@@ -39,6 +39,7 @@ public class LoginInputEmailFragment extends LoginCommonFragment implements Logi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setLoginVM(loginViewModel);
+//        loginViewModel.setLoginUser(loginUser); // this is for init the loginUser
         initViews();
     }
 
@@ -72,14 +73,15 @@ public class LoginInputEmailFragment extends LoginCommonFragment implements Logi
     }
 
     @Override
-    public void onLoginSucceed() {
+    public void onLoginSucceed(int task) {
 
     }
 
     @Override
-    public void onLoginFail(int errorCode, int errorMsg) {
+    public void onLoginFail(int task, String errorMsg) {
 
     }
+
 
     @Override
     public void invalidPopup() {
@@ -95,7 +97,9 @@ public class LoginInputEmailFragment extends LoginCommonFragment implements Logi
                 break;
             }
             case LoginViewModel.TO_SET_PASSWORD_FRAG:{
-                openFragment(this, (LoginSetPWFragment)getFragmentManager().findFragmentByTag(LoginSetPWFragment.class.getSimpleName()));
+                LoginSetPWFragment loginSetPWFragment = (LoginSetPWFragment)getFragmentManager().findFragmentByTag(LoginSetPWFragment.class.getSimpleName());
+                loginSetPWFragment.setLoginUser(loginUser.getCopyLoginUser());
+                openFragment(this, loginSetPWFragment);
                 break;
             }
             case LoginViewModel.TO_TERM_AGREEMENT_FRAG:{

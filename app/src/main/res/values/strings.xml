@@ -173,6 +173,8 @@
     <string name="no_repeat">No Repeat</string>
     <string name="no_location">No Location</string>
     <string name="reject_all">Reject All</string>
+    <string name="all_rejected">All Rejected</string>
+
     <string name="no_title">No Title</string>
     <string name="none">None</string>
     <string name="view_in_calendar">View in Calendar</string>
@@ -285,6 +287,7 @@
     <string name="Save_for_future_events">Save for future events</string>
     <string name="confirm_event">Confirm Event</string>
     <string name="quit">Quit</string>
+    <string name="quitted">Quitted</string>
     <string name="Messages">Messages</string>
 
     <string name="has_not_confirmed_this_event">has not confirmed this event</string>
@@ -320,4 +323,30 @@
     <string name="search_hint">Type in E-mail</string>
     <string name="save_qr_code_success">Save qr code success</string>
     <string name="save_qr_code_failed">Save qr code failed</string>
+
+
+    <!--setting-->
+    <string name="blocked_users">Blocked Users</string>
+    <string name="notifications">Notifications</string>
+    <string name="calendar_preferences">Calendar Preferences</string>
+    <string name="help_and_feedback">Help &amp; Feedbacks</string>
+    <string name="about">About</string>
+    <string name="logout">Log Out</string>
+    <string name="rate_itime">Rate iTime</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="profile_photo">Profile Photo</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="setting_reset_password">Reset Password</string>
+    <string name="my_qr_code">My QR Code</string>
+    <string name="setting_gender">Gender</string>
+    <string name="region">Region</string>
+    <string name="setting_my_profile">My Profile</string>
+    <string name="photo_my_profile">Photo</string>
+    <string name="setting_save">Save</string>
+    <string name="setting_male">Male</string>
+    <string name="setting_female">Female</string>
+    <string name="setting_Undefined">Undefined</string>
+    <string name="setting_calendar_preference">Calendar Preferences</string>
 </resources>

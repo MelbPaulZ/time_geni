@@ -8,11 +8,9 @@ import android.content.DialogInterface;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
@@ -43,7 +41,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private EventCreateDetailBeforeSendingViewModel viewModel;
     private CharSequence alertTimes[] = null;
     private EventCreateDetailBeforeSendingMvpView mvpView;
-    private int tempYear,tempMonth,tempDay,tempHour,tempMin;
     private EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> presenter;
     private ObservableField<Boolean> isEndRepeatChange;
     private ObservableField<Boolean> isAllDay;
@@ -280,9 +277,9 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if(hasFocus){
-                    showKeyBoard((EditText) view);
+                    showKeyBoard(view);
                 }else{
-                    closeKeyBoard((EditText) view);
+                    closeKeyBoard(view);
                 }
             }
         };
@@ -340,7 +337,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 newEvDtlEvent.setRecurringEventId(newEvDtlEvent.getEventUid());
                 newEvDtlEvent.setStatus("pending");
 
-                presenter.insertNewEventToServer(newEvDtlEvent);
+                presenter.insertEvent(newEvDtlEvent);
 
                 eventManager.setCurrentEvent(newEvDtlEvent);
                 if (mvpView!=null){

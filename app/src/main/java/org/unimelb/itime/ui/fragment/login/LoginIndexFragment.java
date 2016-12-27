@@ -47,14 +47,15 @@ public class LoginIndexFragment extends LoginCommonFragment implements LoginMvpV
     }
 
     @Override
-    public void onLoginSucceed() {
+    public void onLoginSucceed(int task) {
 
     }
 
     @Override
-    public void onLoginFail(int errorCode, int errorMsg) {
+    public void onLoginFail(int task, String errorMsg) {
 
     }
+
 
     @Override
     public void invalidPopup() {

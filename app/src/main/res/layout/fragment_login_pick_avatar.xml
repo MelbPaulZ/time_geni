@@ -58,11 +58,13 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="150dp"
+            android:minHeight="30dp"
             android:layout_marginLeft="70dp"
             android:layout_marginTop="14dp"
             android:background="#00000000"
             android:onFocusChange="@{loginVM.onInputEditFocusChange}"
-            android:text="Alex Wang"
+            android:text="@={loginVM.loginUser.personalAlias}"
             android:focusable="true"
             android:focusableInTouchMode="true"
             />

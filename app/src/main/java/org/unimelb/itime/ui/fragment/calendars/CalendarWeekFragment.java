@@ -76,9 +76,9 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
             @Override
             public boolean isDraggable(DayDraggableEventView dayDraggableEventView) {
                 Event event = (Event) dayDraggableEventView.getEvent();
-                if (event.getEventType().equals("solo")){
+                if (event.getEventType().equals("solo")) {
                     return true;
-                }else{
+                } else {
                     return false;
                 }
             }
@@ -87,7 +87,7 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
             public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
-                ((MainActivity)getActivity()).startEventCreateActivity(calendar);
+                ((MainActivity) getActivity()).startEventCreateActivity(calendar);
             }
 
             @Override
@@ -107,145 +107,29 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
 
             @Override
             public void onEventDragDrop(final DayDraggableEventView dayDraggableEventView) {
-                final Event orgEvent = (Event) dayDraggableEventView.getEvent();
-                final Event event = eventManager.copyCurrentEvent(orgEvent); // need to copy this event so wont change origin data
-                if (orgEvent.getRecurrence().length>0){
+
+                final Event originEvent = (Event) dayDraggableEventView.getEvent();
+                final Event event = eventManager.copyCurrentEvent(originEvent);
+                event.setStartTime(dayDraggableEventView.getStartTimeM());
+                event.setEndTime(dayDraggableEventView.getEndTimeM());
+                if (event.getRecurrence().length > 0) {
                     // this is repeat event
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("this is a repeat event")
                             .setItems(EventUtil.getRepeatEventChangeOptions(getContext()), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    switch (which){
+                                    switch (which) {
+//
                                         case 0: {
-                                            // update only this event
-                                            // next find original event(the first event of repeat event)
-                                            Toast.makeText(getContext(), "change only this event", Toast.LENGTH_SHORT).show();
-                                            Calendar d = Calendar.getInstance();
-                                            d.setTimeInMillis(orgEvent.getStartTime());
-                                            Log.i(TAG, "orgEvent startTime: " + d.getTime());
-
-                                            // here change the event as a new event
-                                            Event newEvent = eventManager.copyCurrentEvent(orgEvent);
-                                            EventUtil.regenerateRelatedUid(newEvent);
-                                            newEvent.setStartTime(dayDraggableEventView.getStartTimeM());
-                                            newEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-                                            newEvent.setRecurringEventUid(orgEvent.getEventUid());
-                                            newEvent.setRecurringEventId(orgEvent.getEventId());
-                                            newEvent.setRule(new RuleModel(newEvent));
-                                            newEvent.setRecurrence(newEvent.getRule().getRecurrence());
-
-                                            // find the first event of repeat events, and update it to server
-                                            Event firstOrg = null;
-                                            for (Event event : eventManager.getOrgRepeatedEventList()){
-                                                if (event.getEventUid().equals(orgEvent.getEventUid())){
-                                                    firstOrg = event;
-                                                }
-                                            }
-                                            firstOrg.getRule().addEXDate(new Date(orgEvent.getStartTime()));
-                                            firstOrg.setRecurrence(firstOrg.getRule().getRecurrence());
-
-                                            presenter.updateAndInsertEvent(firstOrg, newEvent);
+                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_THIS, originEvent.getStartTime());
                                             break;
                                         }
-                                        case 1:{
-                                            // update all future events
-                                            Toast.makeText(getContext(), "change for all future events", Toast.LENGTH_SHORT).show();
-                                            // need to consider move this event, or edit this event
-                                            // to change all event, need to add until day to origin event, and create a new repeat event
-                                            // first find the origin event
-                                            Event orgEvent = eventManager.findOrgByUUID(event.getEventUid());
-                                            // then copy the origin event rule model to a new rule model
-                                            Event cpyOrgEvent = eventManager.copyCurrentEvent(orgEvent);
-                                            // then add until day to the orgEvent
-                                            if (EventUtil.isSameDay(event.getStartTime(), orgEvent.getStartTime())){
-                                                // the moving day is the first day of this repeat event
-                                                // amend the old event
-                                                // first get transfer exDates to the new event, calculate as
-                                                ArrayList<Date> exDates = orgEvent.getRule().getEXDates();
-                                                Date orgStartDate = new Date(orgEvent.getStartTime());
-                                                ArrayList<Integer> gapDates = new ArrayList<>();
-                                                for (Date exDate: exDates){
-                                                    int gap = EventUtil.getDayDifferent(orgStartDate.getTime(), exDate.getTime());
-                                                    gapDates.add(gap);
-                                                }
-                                                // use the old gap dates to calculate new exDates
-                                                Date newStartDate = new Date(dayDraggableEventView.getStartTimeM());
-                                                ArrayList<Date> newExDates = new ArrayList<>();
-                                                long oneDay = 24 * 60 * 60 * 1000;
-                                                for (Integer gap : gapDates){
-                                                    newExDates.add(new Date(newStartDate.getTime() + gap * oneDay));
-                                                }
-
-                                                // also need to calculate the old until, and if there is an old until, set to event
-                                                Date oldUntil = cpyOrgEvent.getRule().getUntil();
-                                                Date newUntil = null;
-                                                if (oldUntil!=null) {
-                                                    int gapUntil = EventUtil.getDayDifferent(orgStartDate.getTime(), oldUntil.getTime());
-                                                    newUntil = new Date(dayDraggableEventView.getStartTimeM() + gapUntil * oneDay);
-                                                    event.getRule().setUntil(newUntil);
-                                                }
-                                                // set untilDate and exDate for new event then generate its recurrence
-                                                event.setRule(cpyOrgEvent.getRule());
-                                                if (newUntil!=null){
-                                                    event.getRule().setUntil(newUntil);
-                                                }
-                                                event.getRule().setEXDates(newExDates);
-                                                event.setRecurrence(event.getRule().getRecurrence());
-                                                // last set the starttime and endtime
-                                                long duration = event.getEndTime() - event.getStartTime();
-                                                event.setStartTime(dayDraggableEventView.getStartTimeM());
-                                                event.setEndTime(event.getStartTime() + duration);
-                                                presenter.updateEventToServer(event);
-                                            }else{
-                                                orgEvent.getRule().setUntil(new Date(event.getStartTime()));
-                                                orgEvent.setRecurrence(orgEvent.getRule().getRecurrence());
-                                                // change origin event done
-
-                                                // next create the new event
-                                                // first get transfer exDates to the new event, calculate as
-                                                ArrayList<Date> exDates = orgEvent.getRule().getEXDates();
-                                                Date orgStartDate = new Date(orgEvent.getStartTime());
-                                                ArrayList<Integer> gapDates = new ArrayList<>();
-                                                for (Date exDate: exDates){
-                                                    int gap = EventUtil.getDayDifferent(orgStartDate.getTime(), exDate.getTime());
-                                                    gapDates.add(gap);
-                                                }
-                                                // use the old gap dates to calculate new exDates
-                                                Date newStartDate = new Date(event.getStartTime());
-                                                ArrayList<Date> newExDates = new ArrayList<>();
-                                                long oneDay = 24 * 60 * 60 * 1000;
-                                                for (Integer gap : gapDates){
-                                                    newExDates.add(new Date(newStartDate.getTime() + gap * oneDay));
-                                                }
-
-                                                // also need to calculate the old until, and if there is an old until, set to event
-                                                Date oldUntil = cpyOrgEvent.getRule().getUntil();
-                                                Date newUntil= null;
-                                                if (oldUntil!=null) {
-                                                    // for until, need current change time to calculate gay
-                                                    int gapUntil = EventUtil.getDayDifferent(event.getStartTime(), oldUntil.getTime());
-                                                    newUntil = new Date(dayDraggableEventView.getStartTimeM() + gapUntil * oneDay);
-                                                }
-                                                // set untilDate and exDate for new event then generate its recurrence
-                                                event.setRule(cpyOrgEvent.getRule());
-                                                if (newUntil!=null){
-                                                    event.getRule().setUntil(newUntil);
-                                                }
-                                                event.getRule().setEXDates(newExDates);
-                                                event.setRecurrence(event.getRule().getRecurrence());
-                                                // regeneate Uids so it will be a new event
-                                                EventUtil.regenerateRelatedUid(event);
-                                                // last set the starttime and endtime
-                                                long duration = event.getEndTime() - event.getStartTime();
-                                                event.setStartTime(dayDraggableEventView.getStartTimeM());
-                                                event.setEndTime(event.getStartTime() + duration);
-                                                presenter.updateAndInsertEvent(orgEvent, event);
-                                            }
-
+                                        case 1: {
+                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL, originEvent.getStartTime());
+                                            break;
                                         }
-                                        case 2:{
-                                            // on click cancel
+                                        case 2: {
                                             break;
                                         }
 
@@ -254,40 +138,32 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
                             });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
-                }else{
+                } else {
                     // this is not repeat event
-                    Event copyEvent = eventManager.copyCurrentEvent(orgEvent);
+                    Event copyEvent = eventManager.copyCurrentEvent(event);
                     copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                     copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-                    presenter.updateEventToServer(copyEvent);
+                    presenter.updateEvent(copyEvent, EventCommonPresenter.UPDATE_ALL, originEvent.getStartTime());
                 }
 
-
-
-
-//                Event newEvent = (Event) dayDraggableEventView.getEvent();
-//                EventManager.getInstance().getWaitingEditEventList().add((Event) dayDraggableEventView.getEvent());
-//                Event copyEvent = EventManager.getInstance().copyCurrentEvent(newEvent);
-//                copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
-//                copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-//                presenter.updateEventToServer(copyEvent);
             }
+
         });
     }
 
-    public void backToday(){
+    public void backToday() {
         weekView.backToToday();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void loadData(MessageEvent messageEvent){
+    public void loadData(MessageEvent messageEvent) {
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
             weekView.setDayEventMap(eventManager.getEventsPackage());
             weekView.reloadEvents();
         }
     }
 
-    public void scrollTo(Calendar calendar){
+    public void scrollTo(Calendar calendar) {
         weekView.scrollTo(calendar);
     }
 
@@ -310,8 +186,8 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
         super.onStop();
     }
 
-    public void calendarNotifyDataSetChanged(){
-        if (weekView!=null) {
+    public void calendarNotifyDataSetChanged() {
+        if (weekView != null) {
             weekView.reloadEvents();
         }
     }
@@ -323,7 +199,7 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
 
     }
 
-    public void scrollToWithOffset(long time){
+    public void scrollToWithOffset(long time) {
         weekView.scrollToWithOffset(time);
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(time);

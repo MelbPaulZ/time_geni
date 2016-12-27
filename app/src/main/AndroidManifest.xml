@@ -72,7 +72,8 @@
             android:label="Itime">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+
+               <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.TestActivity">
@@ -84,6 +85,14 @@
         </activity>
 
         <activity android:name=".ui.activity.TestActivityPaul">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.activity.ProfilePhotoPickerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -116,10 +125,10 @@
         <activity android:name=".ui.activity.PhotoPickerActivity"
             android:launchMode="singleTask"
             android:label="pick photos">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--&lt;!&ndash;<category android:name="android.intent.category.LAUNCHER" />&ndash;&gt;-->
+            <!--</intent-filter>-->
         </activity>
 
         <service android:name=".service.RemoteService"/>
@@ -149,7 +158,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.InviteFriendsActivityContact"/>

@@ -61,8 +61,8 @@ public class HttpUtil {
         httpClientBuilder.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
-                //String authToken = AuthUtil.getJwtToken(context);
-                String authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjMsImlzcyI6Imh0dHA6XC9cL2Rldi50aW1lZ2VuaWkuY29tXC9hcGlcL3VzZXJcL3NpZ25pbiIsImlhdCI6MTQ4MjcxMDg1NywiZXhwIjoxNDg1MzAyODU3LCJuYmYiOjE0ODI3MTA4NTcsImp0aSI6ImFjZTJlNmY1YTQwMDliM2JkMjZmZDE1ZDAwNDYxYmI2In0.sRbOvRS9lVVaUh9F9lydef4FTsb1b94UXEKljyLHpwg";
+                String authToken = AuthUtil.getJwtToken(context);
+                //String authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjMsImlzcyI6Imh0dHA6XC9cL2Rldi50aW1lZ2VuaWkuY29tXC9hcGlcL3VzZXJcL3NpZ25pbiIsImlhdCI6MTQ4MjcxMDg1NywiZXhwIjoxNDg1MzAyODU3LCJuYmYiOjE0ODI3MTA4NTcsImp0aSI6ImFjZTJlNmY1YTQwMDliM2JkMjZmZDE1ZDAwNDYxYmI2In0.sRbOvRS9lVVaUh9F9lydef4FTsb1b94UXEKljyLHpwg";
                 Request original = chain.request();
                 Request.Builder requestBuilder = original.newBuilder()
                         .header("Authorization", "Bearer " + authToken)

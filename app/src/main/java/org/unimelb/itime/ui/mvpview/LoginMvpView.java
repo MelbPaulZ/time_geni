@@ -8,8 +8,8 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 public interface LoginMvpView extends MvpView{
 
     void onLoginStart();
-    void onLoginSucceed();
-    void onLoginFail(int errorCode, int errorMsg);
+    void onLoginSucceed(int task);
+    void onLoginFail(int task, String errorMsg);
     void invalidPopup();
     void onPageChange(int task);
 }

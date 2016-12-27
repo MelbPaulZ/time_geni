@@ -12,6 +12,7 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentLoginFindFriendBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
+import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
  * Created by Paul on 20/12/2016.
@@ -40,14 +41,18 @@ public class LoginFindFriendFragment extends LoginCommonFragment implements Logi
     }
 
     @Override
-    public void onLoginSucceed() {
+    public void onLoginSucceed(int task) {
+        if (task == LoginViewModel.TO_CALENDAR){
+            successLogin();
+        }
 
     }
 
     @Override
-    public void onLoginFail(int errorCode, int errorMsg) {
+    public void onLoginFail(int task, String errorMsg) {
 
     }
+
 
     @Override
     public void invalidPopup() {

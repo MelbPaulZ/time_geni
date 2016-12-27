@@ -2,29 +2,22 @@ package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
-import org.unimelb.itime.ui.mvpview.MainSettingsMvpView;
+import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 
 /**
  * Created by Paul on 3/10/16.
  */
-public class MainSettingsPresenter extends MvpBasePresenter<MainSettingsMvpView> {
+public class MainSettingsPresenter<T extends SettingCommonMvpView> extends CommonPresenter<T> {
     private String TAG = "MainSettingPresenter";
-    Context context;
+    private Context context;
 
     public MainSettingsPresenter(Context context) {
-        this.context = context;
+        super(context);
     }
+
 
     public Context getContext(){
         return context;
-    }
-
-    public void logOut(){
-        if(getView() != null){
-            getView().logOut();
-        }
     }
 
 }

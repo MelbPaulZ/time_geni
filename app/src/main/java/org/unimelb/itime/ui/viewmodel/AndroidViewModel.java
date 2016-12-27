@@ -31,6 +31,11 @@ public class AndroidViewModel extends BaseObservable {
         ((ListView)view).setOnItemClickListener(listener);
     }
 
+    @BindingAdapter("android:selected")
+    public static void setSelected(View view, boolean isSelected){
+        view.setSelected(isSelected);
+    }
+
 
     public void showKeyBoard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -12,12 +12,18 @@ import android.widget.Toast;
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.LoginUser;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 import me.tatarka.bindingcollectionadapter.ItemView;
+
+import static org.unimelb.itime.vendor.contact.widgets.SideBar.b;
 
 /**
  * Created by yinchuandong on 11/08/2016.
@@ -27,8 +33,7 @@ public class LoginViewModel extends AndroidViewModel{
     private static final String TAG = "LoginViewModel";
     private LoginPresenter presenter;
 
-    private String email = "johncdyin@gmail.com";
-    private String password = "123456";
+
     private LoginMvpView mvpView;
 
     private int topIconVisibility = View.VISIBLE;
@@ -36,7 +41,8 @@ public class LoginViewModel extends AndroidViewModel{
     private ArrayList<String> suggestedEmailList = new ArrayList<>();
     private ItemView suggestedEmailItemView = ItemView.of(BR.itemText, R.layout.listview_login_email_tips);
 
-    private String inputName = "";
+
+    private LoginUser loginUser;
 
     public final static int TO_EMAIL_SENT_FRAG = 1;
     public final static int TO_FIND_FRIEND_FRAG = 2;
@@ -47,6 +53,7 @@ public class LoginViewModel extends AndroidViewModel{
     public final static int TO_RESET_PASSWORD_FRAG = 7;
     public final static int TO_SET_PASSWORD_FRAG = 8;
     public final static int TO_TERM_AGREEMENT_FRAG = 9;
+    public final static int TO_CALENDAR = 10;
 
 
     public LoginViewModel(LoginPresenter presenter){
@@ -61,16 +68,16 @@ public class LoginViewModel extends AndroidViewModel{
         return presenter.getContext();
     }
 
-    public View.OnClickListener onBtnEmailLogin(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onEmailLoginClick: " + getEmail() +
-                        "/" + getPassword());
-                presenter.loginByEmail(getEmail(), getPassword());
-            }
-        };
-    }
+//    public View.OnClickListener onBtnEmailLogin(){
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d(TAG, "onEmailLoginClick: " + loginUser.getEmail() +
+//                        "/" + loginUser.getPassword());
+//                presenter.loginByEmail(loginUser.getEmail(), loginUser.getPassword());
+//            }
+//        };
+//    }
 
     public View.OnClickListener onBtnRefreshToken(){
         return new View.OnClickListener() {
@@ -85,10 +92,21 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mvpView.onPageChange(task);
+
+                switch (task){
+                    case TO_EMAIL_SENT_FRAG:
+                        presenter.sendResetLink(task, loginUser.getEmail());
+                        break;
+                    case TO_FIND_FRIEND_FRAG:
+                        signUp(task);
+                        break;
+                    default:
+                        mvpView.onPageChange(task);
+                }
             }
         };
     }
+
 
     public View.OnClickListener onBtnListUser(){
         return new View.OnClickListener() {
@@ -113,6 +131,18 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
+    private void signUp(int task){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userId", loginUser.getEmail()); // might need to change later
+        hashMap.put("password", loginUser.getPassword());
+        hashMap.put("email", loginUser.getEmail());
+        hashMap.put("personalAlias", loginUser.getPersonalAlias());
+        hashMap.put("phone", loginUser.getPhone());
+        hashMap.put("photo", loginUser.getPhoto());
+        hashMap.put("source", LoginUser.SOURCE_EMAIL);
+        presenter.signUp(task, hashMap);
+    }
+
 
     // todo implement regix
     private boolean isEmailValid(){
@@ -129,10 +159,10 @@ public class LoginViewModel extends AndroidViewModel{
             public void onFocusChange(View view, boolean hasFocus) {
                 Log.d(TAG, "onFocusChange: " + hasFocus);
                 if(hasFocus){
-                    showKeyBoard((EditText) view);
+                    showKeyBoard(view);
                     setTopIconVisibility(View.GONE);
                 }else{
-                    closeKeyBoard((EditText) view);
+                    closeKeyBoard(view);
                     setTopIconVisibility(View.VISIBLE);
                 }
             }
@@ -143,7 +173,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (password.length()>=8){
+                if (loginUser.getPassword().length()>=8){
                     mvpView.onPageChange(TO_PICK_AVATAR_FRAG);
                 }else {
                     mvpView.invalidPopup();
@@ -167,7 +197,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                setEmail(suggestedEmailList.get(i));
+                loginUser.setEmail(suggestedEmailList.get(i));
             }
         };
     }
@@ -197,7 +227,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.loginByEmail(getEmail(), getPassword());
+                presenter.loginByEmail( TO_CALENDAR ,loginUser.getEmail(), loginUser.getPassword());
                 Toast.makeText(getContext(), "logging in", Toast.LENGTH_SHORT).show();
 //                mvpView.invalidPopup();
             }
@@ -209,7 +239,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(presenter.getContext(), "onClick X", Toast.LENGTH_SHORT).show();
+                loginUser.setEmail("");
             }
         };
     }
@@ -218,7 +248,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setEmail("");
+                loginUser.setEmail("");
             }
         };
     }
@@ -229,32 +259,14 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mvpView!=null){
+                    mvpView.onLoginSucceed(TO_CALENDAR);
+                }
                 Toast.makeText(getContext(), "tocalendar here", Toast.LENGTH_SHORT).show();
             }
         };
     }
 
-
-
-    @Bindable
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-        notifyPropertyChanged(BR.email);
-    }
-
-    @Bindable
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-        notifyPropertyChanged(BR.password);
-    }
 
     @Bindable
     public int getTopIconVisibility(){
@@ -286,14 +298,13 @@ public class LoginViewModel extends AndroidViewModel{
         notifyPropertyChanged(BR.suggestedEmailItemView);
     }
 
-
     @Bindable
-    public String getInputName() {
-        return inputName;
+    public LoginUser getLoginUser() {
+        return loginUser;
     }
 
-    public void setInputName(String inputName) {
-        this.inputName = inputName;
-        notifyPropertyChanged(BR.inputName);
+    public void setLoginUser(LoginUser loginUser) {
+        this.loginUser = loginUser;
+        notifyPropertyChanged(BR.loginUser);
     }
 }

@@ -38,4 +38,38 @@
         <item name="@android:windowEnterAnimation">@anim/popup_bottom_appear</item>
         <item name="@android:windowExitAnimation">@anim/popup_bottom_disappear</item>
     </style>
+
+    <style name="image_right_arrow">
+        <item name="android:src">@drawable/icon_general_arrow_right</item>
+        <item name="android:padding">11dp</item>
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
+    </style>
+
+    <!--for setting-->
+    <style name="itime_blacktitle_17sp">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <!--the bottom gray divider line-->
+    <style name="itime_bottom_divider_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@drawable/itime_header_divider_line</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <!--toolbar style-->
+    <style name="itime_toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">46dp</item>
+        <item name="android:background">@drawable/background_top_bottom_divider</item>
+    </style>
+
 </resources>

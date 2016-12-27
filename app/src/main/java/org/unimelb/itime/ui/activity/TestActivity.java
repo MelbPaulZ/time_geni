@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
+import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
 
 
 public class TestActivity extends BaseActivity{
@@ -15,15 +16,11 @@ public class TestActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.fragment_setting);
 
+        SettingMyProfileFragment fragment = new SettingMyProfileFragment();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
 
 
 }

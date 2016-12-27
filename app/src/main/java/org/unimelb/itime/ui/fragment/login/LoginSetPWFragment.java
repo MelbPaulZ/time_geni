@@ -70,14 +70,15 @@ public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpV
     }
 
     @Override
-    public void onLoginSucceed() {
-
+    public void onLoginSucceed(int task) {
+        onPageChange(task);
     }
 
     @Override
-    public void onLoginFail(int errorCode, int errorMsg) {
+    public void onLoginFail(int task, String errorMsg) {
 
     }
+
 
     @Override
     public void invalidPopup() {
@@ -94,7 +95,9 @@ public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpV
                 break;
             }
             case LoginViewModel.TO_PICK_AVATAR_FRAG:{
-                openFragment(this, (LoginPickAvatarFragment)getFragmentManager().findFragmentByTag(LoginPickAvatarFragment.class.getSimpleName()));
+                LoginPickAvatarFragment avatarFragment = (LoginPickAvatarFragment)getFragmentManager().findFragmentByTag(LoginPickAvatarFragment.class.getSimpleName());
+                avatarFragment.setLoginUser(loginUser.getCopyLoginUser());
+                openFragment(this, avatarFragment);
                 break;
             }
         }

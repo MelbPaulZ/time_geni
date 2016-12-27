@@ -246,15 +246,8 @@ public class EventEditViewModel extends CommonViewModel {
                         eventEditViewEvent.setStatus(Event.STATUS_PENDING);
                     }
 
-                    // TODO: 12/12/2016 test json convert
-                    Gson gson = new Gson();
-                    String str = gson.toJson(eventEditViewEvent);
-                    Log.i("event convert", "onClick: " + str);
-
-                    Event e = gson.fromJson(str, Event.class);
-                    Log.i("event convert", "onClick: " + e.getSummary());
-
-                    presenter.updateEventToServer(eventEditViewEvent);
+                    Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
+                    presenter.updateEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
                     // this if might change later, because the host can be kicked??????
                 }
             }
@@ -263,104 +256,22 @@ public class EventEditViewModel extends CommonViewModel {
 
     // TODO: test this change all
     private void changeAllEvent(Event event){
-        if (mvpView!=null){
-            // need to consider move this event, or edit this event
-            // to change all event, need to add until day to origin event, and create a new repeat event
-            // first find the origin event
-            Event orgEvent = eventManager.findOrgByUUID(event.getEventUid());
-            // then copy the origin event rule model to a new rule model
-            Event cpyOrgEvent = eventManager.copyCurrentEvent(orgEvent);
-            // then add until day to the orgEvent
-            if (EventUtil.isSameDay(cpyOrgEvent.getStartTime(), event.getStartTime())){
-                // if the change is start from the first repeat event, then no need of creating new event
-                // first get transfer exDates
-                ArrayList<Date> exDates = orgEvent.getRule().getEXDates();
-                Date orgStartDate = new Date(orgEvent.getStartTime());
-                ArrayList<Integer> gapDates = new ArrayList<>();
-                for (Date exDate: exDates){
-                    int gap = EventUtil.getDayDifferent(orgStartDate.getTime(), exDate.getTime());
-                    gapDates.add(gap);
-                }
-                // use the old gap dates to calculate new exDates
-                Date newStartDate = new Date(event.getStartTime());
-                ArrayList<Date> newExDates = new ArrayList<>();
-                long oneDay = 24 * 60 * 60 * 1000;
-                for (Integer gap : gapDates){
-                    newExDates.add(new Date(newStartDate.getTime() + gap * oneDay));
-                }
-                // next transfer new until date
-                Date oldUntil = cpyOrgEvent.getRule().getUntil();
-                if (oldUntil!=null) {
-                    int gapUntil = EventUtil.getDayDifferent(orgStartDate.getTime(), oldUntil.getTime());
-                    Date newUntil = new Date(event.getStartTime() + gapUntil * oneDay);
-                    event.getRule().setUntil(newUntil);
-                }
-                event.getRule().setEXDates(newExDates);
-                event.setRecurrence(event.getRule().getRecurrence());
-                presenter.updateEventToServer(event);
-            }else{
-                // need to create new event and update previous event
-                orgEvent.getRule().setUntil(new Date(event.getStartTime()));
-                orgEvent.setRecurrence(orgEvent.getRule().getRecurrence());
-                // change origin event done
-
-                // next create the new event
-                // first get transfer exDates to the new event, calculate as
-                ArrayList<Date> exDates = orgEvent.getRule().getEXDates();
-                Date orgStartDate = new Date(orgEvent.getStartTime());
-                ArrayList<Integer> gapDates = new ArrayList<>();
-                for (Date exDate: exDates){
-                    int gap = EventUtil.getDayDifferent(orgStartDate.getTime(), exDate.getTime());
-                    gapDates.add(gap);
-                }
-                // use the old gap dates to calculate new exDates
-                Date newStartDate = new Date(event.getStartTime());
-                ArrayList<Date> newExDates = new ArrayList<>();
-                long oneDay = 24 * 60 * 60 * 1000;
-                for (Integer gap : gapDates){
-                    newExDates.add(new Date(newStartDate.getTime() + gap * oneDay));
-                }
-
-                // also need to calculate the old until, and if there is an old until, set to event
-                Date oldUntil = cpyOrgEvent.getRule().getUntil();
-                if (oldUntil!=null) {
-                    int gapUntil = EventUtil.getDayDifferent(orgStartDate.getTime(), oldUntil.getTime());
-                    Date newUntil = new Date(event.getStartTime() + gapUntil * oneDay);
-                    event.getRule().setUntil(newUntil);
-                }
-                // set untilDate and exDate for new event then generate its recurrence
-                event.setRule(cpyOrgEvent.getRule());
-                event.getRule().setEXDates(newExDates);
-                event.setRecurrence(event.getRule().getRecurrence());
-                // regeneate Uids so it will be a new event
-                EventUtil.regenerateRelatedUid(event);
-                presenter.updateAndInsertEvent(orgEvent, event);
-            }
-
-        }
+        Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
+        presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
     }
 
     private void changeOnlyThisEvent(Event event){
-        if (mvpView!=null){
-            // set event type
-            event.setRecurrence(event.getRule().getRecurrence()); // set the repeat string
-            EventUtil.addSelfInInvitee(getContext(), event);
-            event.setEventType(EventUtil.getEventType(event, UserUtil.getInstance(getContext()).getUserUid()));
+        event.setRecurrence(event.getRule().getRecurrence()); // set the repeat string
+        EventUtil.addSelfInInvitee(getContext(), event);
+        event.setEventType(EventUtil.getEventType(event, UserUtil.getInstance(getContext()).getUserUid()));
 
-            // next find original event(the first event of repeat event)
-            Event orgEvent = eventManager.findOrgByUUID(event.getEventUid());
-            orgEvent.getRule().addEXDate(new Date(event.getStartTime()));
-            orgEvent.setRecurrence(orgEvent.getRule().getRecurrence());
-
-            if (!EventUtil.isGroupEvent(getContext(), event)){
-                event.setStatus(Event.STATUS_CONFIRMED);
-            }
-            // here change the event as a new event
-            EventUtil.regenerateRelatedUid(event);
-            event.setRecurringEventUid(orgEvent.getEventUid());
-            event.setRecurringEventId(orgEvent.getEventId());
-            presenter.updateAndInsertEvent(orgEvent,event);
+        if (!EventUtil.isGroupEvent(getContext(), event)){
+            event.setStatus(Event.STATUS_CONFIRMED);
         }
+        // here change the event as a new event
+        Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
+        presenter.updateEvent(event, EventCommonPresenter.UPDATE_THIS, orgEvent.getStartTime());
+
     }
 
 
@@ -499,7 +410,15 @@ public class EventEditViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.deleteEvent(eventEditViewEvent);
+                Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
+                if (EventUtil.isEventRepeat(eventEditViewEvent)) {
+                    // repeat event delete
+                    // todo implement delete this one
+                    presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                }else{
+                    // none repeat event delete
+                    presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                }
             }
         };
     }

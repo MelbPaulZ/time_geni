@@ -34,4 +34,7 @@
     <dimen name="font_small">12sp</dimen>
     <dimen name="font_tiny">10sp</dimen>
     <dimen name="font_extra">18sp</dimen>
+    <dimen name="divider_width">0.5dp</dimen>
+
+    <dimen name="toolbar_height">46dp</dimen>
 </resources>

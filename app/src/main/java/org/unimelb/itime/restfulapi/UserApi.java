@@ -6,9 +6,11 @@ import org.unimelb.itime.bean.User;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -36,7 +38,6 @@ public interface UserApi {
     @GET("user/list")
     Observable<User> list();
 
-
     //    Description: Search the phone/email of a user. It only returns the user information with precise match of the query.
 //    Parameter:{query} is the query the user search for.If search query is Email, then api doesn't return its phone;
 //      If search query is phone number, then api doesn't return its email, in order to protect the privacy of users.
@@ -59,5 +60,7 @@ public interface UserApi {
     Observable<HttpResult<Block>> unblock(@Path("blockUserUid") int blockUserUid);
 
 
+    @POST("user/signup")
+    Observable<HttpResult<User>> signup(@Body HashMap<String, Object> params);
 
 }

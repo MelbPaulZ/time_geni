@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="32dp"
-                android:text="@{loginVM.email}"
+                android:text="@{loginVM.loginUser.email}"
                 android:textColor="@color/color_3D5372"
                 android:textSize="14sp" />
         </LinearLayout>

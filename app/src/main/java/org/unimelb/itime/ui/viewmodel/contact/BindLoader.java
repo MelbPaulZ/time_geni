@@ -32,17 +32,17 @@ public class BindLoader extends BaseObservable {
 
     @BindingAdapter("bind:img")
     public static void loadAvartar(ImageView iv, int img) {
-        Picasso.with(iv.getContext()).load(img).into(iv);
+        Picasso.with(iv.getContext()).load(img).resize(100,100).centerCrop().into(iv);
     }
 
     @BindingAdapter("bind:qrcode")
-    public static void loadAvartar(ImageView iv, Bitmap img) {
+    public static void loadQRCode(ImageView iv, Bitmap img) {
         iv.setImageBitmap(img);
     }
 
     @BindingAdapter("bind:smallAvatar")
-    public static void loadQRAvartar(ImageView iv, String img) {
-        Picasso.with(iv.getContext()).load(img).resize(50,50).centerCrop().into(iv);
+    public static void loadSmallAvartar(ImageView iv, String img) {
+        Picasso.with(iv.getContext()).load(img).resize(100,100).centerCrop().into(iv);
     }
 
     @BindingAdapter("bind:avatar")
