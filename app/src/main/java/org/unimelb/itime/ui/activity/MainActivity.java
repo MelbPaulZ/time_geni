@@ -127,7 +127,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[0]);
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[1]);
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[2], MainInboxFragment.class.getSimpleName());
-        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3]);
+        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3], SettingIndexFragment.class.getSimpleName());
 
         fragmentTransaction.commit();
         showFragmentById(0);

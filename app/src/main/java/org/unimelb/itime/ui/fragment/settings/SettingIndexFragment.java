@@ -10,10 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.ui.ImageGridActivity;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
@@ -25,7 +21,6 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.LoginActivity;
-import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
@@ -33,9 +28,6 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.AuthUtil;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
-
-import static org.unimelb.itime.R.id.main_fragment_container;
-import static org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity.CHOOSE_FROM_LIBRARY;
 
 /**
  * Created by Paul on 25/12/2016.
@@ -56,6 +48,7 @@ implements SettingCommonMvpView{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false);
+        initSettingFragments();
         return binding.getRoot();
     }
 
@@ -64,15 +57,35 @@ implements SettingCommonMvpView{
         super.onActivityCreated(savedInstanceState);
         MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
-        initSettingFragments();
     }
 
 
     private void initSettingFragments(){
         SettingMyProfileFragment myProfileFragment = new SettingMyProfileFragment();
         SettingMyProfileNameFragment myProfileNameFragment = new SettingMyProfileNameFragment();
-        getFragmentManager().beginTransaction().add(R.id.main_fragment_container, myProfileFragment, myProfileFragment.getClassName()).hide(myProfileFragment).commit();
-        getFragmentManager().beginTransaction().add(R.id.main_fragment_container, myProfileNameFragment, myProfileNameFragment.getClassName()).hide(myProfileNameFragment).commit();
+        SettingAboutFragment aboutFragment = new SettingAboutFragment();
+        SettingCalendarPreferenceFragment calendarPreferenceFragment = new SettingCalendarPreferenceFragment();
+        SettingDefaultCalendarFragment defaultCalendarFragment = new SettingDefaultCalendarFragment();
+        SettingImportCalendarUnimelbFragment importCalendarUnimelbFragment = new SettingImportCalendarUnimelbFragment();
+        SettingNotificationFragment notificationFragment = new SettingNotificationFragment();
+        SettingProfileGenderFragment profileGenderFragment = new SettingProfileGenderFragment();
+        SettingProfileResetPasswordFragment resetPasswordFragment = new SettingProfileResetPasswordFragment();
+        SettingImportCalendarFragment importCalendarFragment = new SettingImportCalendarFragment();
+
+        hideFragment(myProfileFragment);
+        hideFragment(myProfileNameFragment);
+        hideFragment(aboutFragment);
+        hideFragment(calendarPreferenceFragment);
+        hideFragment(defaultCalendarFragment);
+        hideFragment(importCalendarUnimelbFragment);
+        hideFragment(notificationFragment);
+        hideFragment(profileGenderFragment);
+        hideFragment(resetPasswordFragment);
+        hideFragment(importCalendarFragment);
+    }
+
+    private void hideFragment(BaseUiFragment fragment){
+        getFragmentManager().beginTransaction().add(R.id.main_fragment_container, fragment, fragment.getClassName()).hide(fragment).commit();
     }
 
     @Subscribe
@@ -141,9 +154,21 @@ implements SettingCommonMvpView{
     public void onViewChange(int task) {
         if (task == MainSettingsViewModel.TASK_LOGOUT){
             popupDialog();
-        }else if (task == MainSettingsViewModel.TASK_VIEW_MY_PROFILE){
+        }else if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
             SettingMyProfileFragment myProfileFragment = (SettingMyProfileFragment) getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
             openFragment(this, myProfileFragment);
+        }else if (task == MainSettingsViewModel.TASK_TO_SCAN_QR_CODE){
+
+        }else if (task == MainSettingsViewModel.TASK_TO_BLOCK_USER){
+
+        }else if (task == MainSettingsViewModel.TASK_TO_NOTICIFATION){
+            openFragment(this, (SettingNotificationFragment)getFragmentManager().findFragmentByTag(SettingNotificationFragment.class.getSimpleName()));
+        }else if (task == MainSettingsViewModel.TASK_TO_CALENDAR_PREFERENCE){
+            openFragment(this, (SettingCalendarPreferenceFragment)getFragmentManager().findFragmentByTag(SettingCalendarPreferenceFragment.class.getSimpleName()));
+        }else if (task == MainSettingsViewModel.TASK_TO_HELP_AND_FEEDBACK){
+
+        }else if (task == MainSettingsViewModel.TASK_TO_ABOUT){
+            openFragment(this, (SettingAboutFragment)getFragmentManager().findFragmentByTag(SettingAboutFragment.class.getSimpleName()));
         }
     }
 

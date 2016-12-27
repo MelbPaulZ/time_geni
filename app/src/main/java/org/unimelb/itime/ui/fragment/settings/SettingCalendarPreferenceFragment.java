@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.databinding.FragmentSettingImportUnimelbBinding;
+import org.unimelb.itime.databinding.FragmentSettingCalendarPreferenceBinding;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
@@ -19,17 +18,15 @@ import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
  * Created by Paul on 27/12/2016.
  */
 
-
-
-public class SettingImportCalendarUnimelbFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
+public class SettingCalendarPreferenceFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
 implements SettingCommonMvpView{
 
-    private FragmentSettingImportUnimelbBinding binding;
+    private FragmentSettingCalendarPreferenceBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_import_unimelb, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_calendar_preference, container, false);
         return binding.getRoot();
     }
 
@@ -38,7 +35,6 @@ implements SettingCommonMvpView{
         super.onActivityCreated(savedInstanceState);
         MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
-
     }
 
     @Override
@@ -48,8 +44,10 @@ implements SettingCommonMvpView{
 
     @Override
     public void onViewChange(int task) {
-        if (task == MainSettingsViewModel.TASK_TO_IMPORT_CALENDAR){
-            closeFragment(this, (SettingImportCalendarFragment)getFragmentManager().findFragmentByTag(SettingImportCalendarFragment.class.getSimpleName()));
+        if (task == MainSettingsViewModel.TASK_TO_SETTING){
+            closeFragment(this, (SettingIndexFragment)getFragmentManager().findFragmentByTag(SettingIndexFragment.class.getSimpleName()));
+        }else if (task == MainSettingsViewModel.TASK_TO_DEFAULT_CALENDAR){
+            openFragment(this, (SettingDefaultCalendarFragment)getFragmentManager().findFragmentByTag(SettingDefaultCalendarFragment.class.getSimpleName()));
         }
     }
 }

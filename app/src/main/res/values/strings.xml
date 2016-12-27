@@ -370,5 +370,6 @@
     <string name="setting_password_hint">New iTime password</string>
     <string name="setting_confirm_hint">Confirm password</string>
     <string name="setting_calendar_import_unimelb_subtext1">Enter your university account information to import its calendar into iTime</string>
+    <string name="setting_itime_calendars">iTime Calendars</string>
 
 </resources>

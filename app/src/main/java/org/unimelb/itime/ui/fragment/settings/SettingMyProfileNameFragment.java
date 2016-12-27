@@ -50,6 +50,8 @@ public class SettingMyProfileNameFragment extends BaseUiFragment<SettingMyProfil
 
     @Override
     public void onViewChange(int task) {
-
+        if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
+            closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
+        }
     }
 }

@@ -224,4 +224,6 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
             toCalendar();
         }
     }
+
+
 }
