@@ -232,7 +232,7 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
                 ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
             }
         }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
-            if (requestCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 ((MainCalendarFragment) tagFragments[0]).reloadEvent();
                 ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
             }
