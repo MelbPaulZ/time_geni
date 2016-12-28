@@ -84,7 +84,6 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         }
     }
 
-
     //
     public Event getEvent() {
         return event;
