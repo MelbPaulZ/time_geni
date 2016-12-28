@@ -60,6 +60,10 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
         super.onCreate(savedInstanceState);
     }
 
+    public void showAnim(Event event){
+
+    }
+
     private void initView(){
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
         monthDayView.removeAllOptListener();

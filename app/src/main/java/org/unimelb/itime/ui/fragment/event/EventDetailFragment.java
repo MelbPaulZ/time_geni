@@ -23,6 +23,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
 import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
+import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarWeekFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
@@ -177,9 +178,11 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
     public void viewInCalendar() {
 
         if (event.getStatus().equals("confirmed")){
+
             ViewMainCalendarFragment viewMainCalendarFragment = (ViewMainCalendarFragment) getFragmentManager().findFragmentByTag(ViewMainCalendarFragment.class.getSimpleName());
-            ViewInCalendarMonthDayFragment viewInCalendarMonthDayFragment = viewMainCalendarFragment.getMonthDayFrag();
-            viewInCalendarMonthDayFragment.scrollToWithOffset(event.getStartTime());
+            ViewInCalendarWeekFragment viewInCalendarWeekFragment = viewMainCalendarFragment.getWeekViewFrag();
+            viewInCalendarWeekFragment.scrollToWithOffset(event.getStartTime());
+            viewInCalendarWeekFragment.showAnim(event);
 
             openFragment(this,viewMainCalendarFragment);
         }else {
