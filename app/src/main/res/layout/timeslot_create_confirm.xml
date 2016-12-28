@@ -67,7 +67,7 @@
             android:paddingRight="10dp"
             android:layout_alignParentRight="true"
             android:gravity="center_vertical"
-            android:text="@{vm.getTimeString(vm.newTimeSlotView.startTimeM)}"
+            android:text="@{vm.getTimeString(vm.newTimeSlotView.newStartTime)}"
             android:onClick="@{vm.onChooseTime(vm.STARTTIME)}"/>
     </RelativeLayout>
     <RelativeLayout
@@ -86,7 +86,7 @@
             android:paddingRight="10dp"
             android:layout_alignParentRight="true"
             android:gravity="center_vertical"
-            android:text="@{vm.getTimeString(vm.newTimeSlotView.endTimeM)}"/>
+            android:text="@{vm.getTimeString(vm.newTimeSlotView.newEndTime)}"/>
     </RelativeLayout>
 
 </LinearLayout>

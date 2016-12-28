@@ -29,6 +29,9 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     private int isSystemSuggested; //
     private String inviteeUid = "";
 
+    private transient boolean isSelected = false;
+
+
     /*"status": "pending",
           "rate": 1,
           "timeslotUid": "1",
@@ -73,6 +76,16 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     @Override
     public String getStatus() {
         return this.status;
+    }
+
+    @Override
+    public void setDisplayStatus(boolean b) {
+        this.isSelected = b;
+    }
+
+    @Override
+    public boolean getDisplayStatus() {
+        return this.isSelected;
     }
 
     @Override

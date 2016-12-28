@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static kotlin.text.Typography.times;
+
 
 /**
  * Created by Paul on 27/08/2016.
@@ -89,12 +91,12 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     private void changeTimeSlots(TimeSlotView timeSlotView) {
         // change status of view and struct
         boolean newStatus = !timeSlotView.isSelect();
+        Timeslot timeSlot = (Timeslot) timeSlotView.getTimeslot();
         timeSlotView.setStatus(newStatus);
-        ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
         // change event attributes
-        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
-        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot != null) {
+            timeSlot.setDisplayStatus(newStatus);
+
             if (timeSlot.getStatus().equals(Timeslot.STATUS_CREATING)) {
                 timeSlot.setStatus(Timeslot.STATUS_PENDING);
             } else if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)) {
@@ -123,14 +125,12 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
         timeSlot.setTimeslotUid(AppUtil.generateUuid());
         timeSlot.setEventUid(event.getEventUid());
         // what is the difference between getTag().startTime and startTimeM .... discuss with David
-        timeSlot.setStartTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).startTime);
-        timeSlot.setEndTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).endTime);
+        timeSlot.setStartTime(timeSlotView.getNewStartTime());
+        timeSlot.setEndTime(timeSlotView.getNewEndTime());
         timeSlot.setStatus(Timeslot.STATUS_CREATING);
         timeSlot.setUserUid(UserUtil.getInstance(getContext()).getUserUid());
         event.getTimeslot().add(timeSlot);
-        WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
-        struct.object = timeSlot;
-        timeslotWeekView.addTimeSlot(struct);
+        timeslotWeekView.addTimeSlot(timeSlot);
         timeslotWeekView.reloadTimeSlots(false);
     }
 
@@ -188,19 +188,19 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
 
 
     private void timeslotDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
-        // update timeslot struct
-        WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
-        struct.startTime = startTime;
-        struct.endTime = endTime;
+        // update timeslot info
+        Timeslot timeslot = (Timeslot) timeSlotView.getTimeslot();
+        timeslot.setStartTime(startTime);
+        timeslot.setEndTime(endTime);
         timeslotWeekView.reloadTimeSlots(false);
 
-        // update timeslot info
-        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
-        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
-        if (timeSlot != null) {
-            timeSlot.setStartTime(timeSlotView.getStartTimeM());
-            timeSlot.setEndTime(timeSlotView.getEndTimeM());
-        }
+//        // update timeslot info
+//        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
+//        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
+//        if (timeSlot != null) {
+//            timeSlot.setStartTime(timeSlotView.getStartTimeM());
+//            timeSlot.setEndTime(timeSlotView.getEndTimeM());
+//        }
     }
 
     public void initWheelPickers() {
@@ -295,11 +295,7 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
     private void initTimeSlots(Event event) {
         if (event.hasTimeslots()) {
             for (Timeslot timeSlot : event.getTimeslot()) {
-                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
-                struct.startTime = timeSlot.getStartTime();
-                struct.endTime = timeSlot.getEndTime();
-                struct.object = timeSlot;
-                timeslotWeekView.addTimeSlot(struct);
+                timeslotWeekView.addTimeSlot(timeSlot);
             }
         }
     }
@@ -324,13 +320,8 @@ public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTime
                 timeSlot.setEventUid(event.getEventUid());
                 timeSlot.setStatus(Timeslot.STATUS_CREATING);
                 // todo: need to check if this timeslot already exists in a map
-                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
-                struct.startTime = timeSlot.getStartTime();
-                struct.endTime = timeSlot.getEndTime();
-                struct.object = timeSlot;
-                struct.status = false;
                 event.getTimeslot().add(timeSlot);
-                timeslotWeekView.addTimeSlot(struct);
+                timeslotWeekView.addTimeSlot(timeSlot);
             }
         }
         timeslotWeekView.reloadTimeSlots(false);

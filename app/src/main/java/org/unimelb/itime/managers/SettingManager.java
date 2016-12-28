@@ -25,11 +25,11 @@ public class SettingManager {
             instance = new SettingManager(context);
         }
 
-        instance.init(context);
+        instance.init();
         return instance;
     }
 
-    private void init(Context context){
+    private void init(){
         if (instance.setting==null){
             instance.setting = new Setting();
         }
@@ -39,6 +39,10 @@ public class SettingManager {
         if (!instance.setting.hasCalendar()){
             instance.setting.setCalendars(CalendarUtil.getInstance(context).getCalendar());
         }
+    }
+
+    public void saveSettings(){
+        // TODO: 28/12/2016 inset setting to db 
     }
 
     public Context getContext() {

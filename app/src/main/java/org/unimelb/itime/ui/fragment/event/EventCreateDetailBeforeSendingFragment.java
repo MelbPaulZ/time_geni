@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.event;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -142,14 +143,16 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
 
     @Override
     public void onClickSend() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+        Intent intent = new Intent();
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        getActivity().finish();
     }
 
     @Override
     public void onClickCancel() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+        Intent intent = new Intent();
+        getActivity().setResult(Activity.RESULT_CANCELED, intent);
+        getActivity().finish();
     }
 
     @Override
@@ -203,6 +206,6 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
 
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
-
+        onClickSend();
     }
 }

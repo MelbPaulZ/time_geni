@@ -28,19 +28,22 @@ import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
+import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static android.R.attr.tag;
 
 /**
  * Created by Paul on 10/09/2016.
  */
 public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeSlotMvpVIew, TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew>>
         implements EventDetailTimeSlotMvpVIew {
-    private String tag;
     private FragmentEventDetailTimeslotHostViewBinding binding;
     private EventDetailTimeSlotViewModel viewModel;
     private Event event;
@@ -61,7 +64,6 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         super.onActivityCreated(savedInstanceState);
         eventManager = EventManager.getInstance(getContext());
         viewModel = new EventDetailTimeSlotViewModel(presenter);
-        viewModel.setTag(tag);
         if (event == null) {
             event = eventManager.copyCurrentEvent(eventManager.getCurrentEvent());
         }
@@ -157,15 +159,15 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     }
 
     @Override
-    public void addTimeslot(WeekView.TimeSlotStruct timeSlotStruct) {
-        weekView.addTimeSlot(timeSlotStruct);
+    public void addTimeslot(Timeslot timeslot) {
+        weekView.addTimeSlot(timeslot);
         List<Invitee> invitees = this.event.getInvitee();
         for (Invitee invitee : invitees
                 ) {
             SlotResponse defaultResponse = new SlotResponse();
             defaultResponse.setStatus("pending");
             defaultResponse.setRate(1);
-            defaultResponse.setTimeslotUid(((Timeslot) timeSlotStruct.object).getTimeslotUid());
+            defaultResponse.setTimeslotUid(timeslot.getTimeslotUid());
             defaultResponse.setInviteeUid(invitee.getInviteeUid());
             defaultResponse.setEventUid(this.event.getEventUid());
             defaultResponse.setUserUid(Integer.parseInt(invitee.getUserUid()));
@@ -215,13 +217,8 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                     timeSlot.setEventUid(event.getEventUid());
                     timeSlot.setStatus(Timeslot.STATUS_CREATING);
                     // todo: need to check if this timeslot already exists in a map
-                    WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
-                    struct.startTime = timeSlot.getStartTime();
-                    struct.endTime = timeSlot.getEndTime();
-                    struct.object = timeSlot;
-                    struct.status = false;
                     event.getTimeslot().add(timeSlot);
-                    weekView.addTimeSlot(struct);
+                    weekView.addTimeSlot(timeSlot);
                 }
             }
             weekView.reloadTimeSlots(false);
@@ -249,7 +246,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
 
         ListView response_view = (ListView) root.findViewById(R.id.response_view);
         InviteeInnerResponseAdapter innerAdapter = new InviteeInnerResponseAdapter(getContext());
-        Timeslot timeslot = (Timeslot) (((WeekView.TimeSlotStruct) timeSlotView.getTag()).object);
+        Timeslot timeslot = (Timeslot) timeSlotView.getTimeslot();
 
         TextView timeslot_title = (TextView) root.findViewById(R.id.timeslot_title);
         timeslot_title.setText(this.getTimeTitle(timeslot));
@@ -307,12 +304,6 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                 , timeslot.getStartTime());
     }
 
-    private Timeslot getTimeslotFromTimeslotView(TimeSlotView timeslotView){
-        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeslotView.getTag()).object;
-        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
-        return timeSlot;
-    }
-
     @Override
     public void onClickTimeSlotView(TimeSlotView timeSlotView) {
         if (getFrom() instanceof EventDetailFragment) {
@@ -324,7 +315,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                     popupTimeSlotWindow(timeSlotView);
                 } else {
                     // if other timeslot has been selected
-                    if (((WeekView.TimeSlotStruct) timeSlotView.getTag()).status == true) {
+                    if (timeSlotView.isSelect() == true) {
                         changeTimeSlotView(timeSlotView);
                         hostClickTimeSlot(timeSlotView);
                     } else {
@@ -350,7 +341,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     }
 
     private void hostClickTimeSlot(TimeSlotView timeSlotView) {
-        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
+        Timeslot calendarTimeSlot = (Timeslot) timeSlotView.getTimeslot();
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot != null) {
             if (timeSlot.getIsConfirmed() == 1) {
@@ -363,7 +354,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
 
 
     private void changeEventAttributes(TimeSlotView timeSlotView) {
-        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
+        Timeslot calendarTimeSlot = (Timeslot) timeSlotView.getTimeslot();
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot != null) {
             if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)) {
@@ -380,11 +371,11 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         // if clicked -> unclicked; if unclicked -> clicked
         boolean newStatus = !timeSlotView.isSelect();
         timeSlotView.setStatus(newStatus);
-        ((WeekView.TimeSlotStruct) timeSlotView.getTag()).status = newStatus;
+        timeSlotView.getTimeslot().setDisplayStatus(newStatus);
     }
 
     private void changeTimeslotCreateAndPending(TimeSlotView timeSlotView){
-        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
+        Timeslot calendarTimeSlot = (Timeslot) timeSlotView.getTimeslot();
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot!=null){
             if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)){
