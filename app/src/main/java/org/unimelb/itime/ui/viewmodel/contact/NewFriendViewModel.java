@@ -64,24 +64,15 @@ public class NewFriendViewModel extends BaseObservable {
 
     public NewFriendViewModel(NewFriendFragmentPresenter presenter){
         this.presenter = presenter;
-        presenter.getRequestFriendList(new RequestListCallBack());
+    }
 
+    public void loadData(){
+        presenter.getRequestFriendList(new RequestListCallBack());
     }
 
     public void setRequestList(List<RequestFriend> list){
         requestList = list;
-        for(RequestFriend request: requestList){
-            RequestFriendItemViewModel item = new RequestFriendItemViewModel(presenter);
-            item.setRequestFriend(request);
-            items.add(item);
-        }
-    }
-
-    private void addRequest(RequestFriend requestFriend){
-        requestList.add(requestFriend);
-        RequestFriendItemViewModel item = new RequestFriendItemViewModel(presenter);
-        item.setRequestFriend(requestFriend);
-        items.add(item);
+        updateListView(requestList);
     }
 
     public View.OnClickListener getTitleRightListener(){
@@ -125,8 +116,9 @@ public class NewFriendViewModel extends BaseObservable {
     }
 
     public class RequestListCallBack{
-        public void success(RequestFriend request){
-            addRequest(request);
+        public void success(List<RequestFriend> list){
+            System.out.println(list.size());
+            setRequestList(list);
         }
 
         public void fail(){

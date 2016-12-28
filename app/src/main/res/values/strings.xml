@@ -323,6 +323,7 @@
     <string name="search_hint">Type in E-mail</string>
     <string name="save_qr_code_success">Save qr code success</string>
     <string name="save_qr_code_failed">Save qr code failed</string>
+    <string name="Added">Added</string>
 
 
     <!--setting-->

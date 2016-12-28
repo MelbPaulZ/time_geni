@@ -79,7 +79,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:background="#00000000"
-                android:text="Alex wang"/>
+                android:text="@={settingVM.setting.user.personalAlias}"/>
             
             <ImageView
                 android:layout_width="15dp"

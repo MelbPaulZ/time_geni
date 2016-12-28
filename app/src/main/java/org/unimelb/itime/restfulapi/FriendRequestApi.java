@@ -1,6 +1,8 @@
 package org.unimelb.itime.restfulapi;
 
 import org.unimelb.itime.bean.FriendRequest;
+import org.unimelb.itime.bean.FriendRequestResult;
+import org.unimelb.itime.bean.RequestFriend;
 import org.unimelb.itime.bean.RequestReadBody;
 import org.unimelb.itime.restfulresponse.HttpResult;
 
@@ -21,7 +23,7 @@ public interface FriendRequestApi {
 
 //    Description: Get all friend requests that is STATUS_SENT TO THIS USER. (Other Users->This User)
     @GET("contact/friend_request/list")
-    Observable<HttpResult<List<FriendRequest>>> list();
+    Observable<HttpResult<FriendRequestResult>> list();
 
 //    Description: Send a friend request to a particular user.
 //
@@ -38,7 +40,7 @@ public interface FriendRequestApi {
 //    Description: Confirm a friend request.
 //    Parameter: "freqUid", NOT "freqUserUid".
     @POST("contact/friend_request/confirm/{freqUid}")
-    Observable<HttpResult<Void>> confirm(@Path("freqUid") String freqUid);
+    Observable<HttpResult<List<FriendRequest>>> confirm(@Path("freqUid") String freqUid);
 
 
 }

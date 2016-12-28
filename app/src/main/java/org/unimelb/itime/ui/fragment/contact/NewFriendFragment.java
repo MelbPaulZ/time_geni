@@ -53,4 +53,16 @@ public class NewFriendFragment extends MvpFragment<NewFriendMvpView, NewFriendFr
     public NewFriendFragmentPresenter createPresenter() {
         return new NewFriendFragmentPresenter(getContext());
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.loadData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.loadData();
+    }
 }

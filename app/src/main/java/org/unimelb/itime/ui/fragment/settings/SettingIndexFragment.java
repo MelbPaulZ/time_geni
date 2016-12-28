@@ -19,6 +19,7 @@ import org.unimelb.itime.base.C;
 import org.unimelb.itime.databinding.FragmentSettingBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.LoginActivity;
@@ -58,6 +59,7 @@ implements SettingCommonMvpView{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
+        viewModel.setSetting(SettingManager.getInstance(getContext()).getSetting());
         binding.setSettingVM(viewModel);
     }
 
@@ -72,6 +74,7 @@ implements SettingCommonMvpView{
             getActivity().finish();
         }
     }
+
 
     private void stopRemoteService(){
         Intent serviceI = new Intent(getContext(), RemoteService.class);
@@ -126,24 +129,6 @@ implements SettingCommonMvpView{
 
     @Override
     public void onViewChange(int task) {
-//        if (task == MainSettingsViewModel.TASK_LOGOUT){
-//            popupDialog();
-//        }else if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
-//            SettingMyProfileFragment myProfileFragment = (SettingMyProfileFragment) getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
-//            openFragment(this, myProfileFragment);
-//        }else if (task == MainSettingsViewModel.TASK_TO_SCAN_QR_CODE){
-//
-//        }else if (task == MainSettingsViewModel.TASK_TO_BLOCK_USER){
-//
-//        }else if (task == MainSettingsViewModel.TASK_TO_NOTICIFATION){
-//            openFragment(this, (SettingNotificationFragment)getFragmentManager().findFragmentByTag(SettingNotificationFragment.class.getSimpleName()));
-//        }else if (task == MainSettingsViewModel.TASK_TO_CALENDAR_PREFERENCE){
-//            openFragment(this, (SettingCalendarPreferenceFragment)getFragmentManager().findFragmentByTag(SettingCalendarPreferenceFragment.class.getSimpleName()));
-//        }else if (task == MainSettingsViewModel.TASK_TO_HELP_AND_FEEDBACK){
-//
-//        }else if (task == MainSettingsViewModel.TASK_TO_ABOUT){
-//            openFragment(this, (SettingAboutFragment)getFragmentManager().findFragmentByTag(SettingAboutFragment.class.getSimpleName()));
-//        }
         if (task == MainSettingsViewModel.TASK_LOGOUT){
             popupDialog();
         }else if (task == MainSettingsViewModel.TASK_TO_SCAN_QR_CODE ||

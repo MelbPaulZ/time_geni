@@ -15,7 +15,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.databinding.FragmentInviteFridendsBinding;
 import org.unimelb.itime.databinding.ListviewInviteeHeaderBinding;
 import org.unimelb.itime.messageevent.MessageAddContact;
@@ -23,6 +25,11 @@ import org.unimelb.itime.messageevent.MessageRemoveContact;
 import org.unimelb.itime.ui.mvpview.contact.InviteFriendMvpView;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
 import org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel;
+import org.unimelb.itime.vendor.listener.ITimeContactInterface;
+import org.unimelb.itime.widget.InviteeGroupView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 37925 on 2016/12/4.
@@ -37,6 +44,8 @@ public class InviteFriendsFragment  extends BaseUiFragment<InviteFriendMvpView, 
     private InviteOtherContactsFragment facebookFragment;
     private InviteFriendViewModel viewModel;
     private boolean isInit = true;
+    private Event event;
+    private InviteeGroupView inviteeGroupView;
 
     @Override
     public InviteFriendPresenter createPresenter() {
@@ -47,7 +56,8 @@ public class InviteFriendsFragment  extends BaseUiFragment<InviteFriendMvpView, 
         super.onStart();
         viewModel.setHeaderView((LinearLayout) headerBinding.getRoot());
         viewModel.setSideBarListView(binding.friendsListView);
-        viewModel.setInviteeGroupView(headerBinding.inviteeGroupView);
+        inviteeGroupView = headerBinding.inviteeGroupView;
+        viewModel.setInviteeGroupView(inviteeGroupView);
         viewModel.loadData();
     }
 
@@ -117,5 +127,17 @@ public class InviteFriendsFragment  extends BaseUiFragment<InviteFriendMvpView, 
     public void onDestroy(){
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    public void setEvent(Event event){
+        this.event = event;
+        if(viewModel!=null){
+            viewModel.setEvent(event);
+        }
+    }
+
+    //Write your code here
+    public void onDoneClicked(){
+
     }
 }

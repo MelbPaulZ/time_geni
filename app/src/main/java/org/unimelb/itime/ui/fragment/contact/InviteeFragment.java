@@ -424,6 +424,9 @@ public class InviteeFragment extends BaseUiFragment {
                     openFragment(self, (EventCreateDetailBeforeSendingFragment)getFrom());
                 }else if (getFrom() instanceof EventEditFragment){
                     openFragment(self, (EventEditFragment)getFrom());
+                }else if (getFrom() instanceof  EventDetailTimeSlotFragment){
+                    EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+                    closeFragment(self, eventEditFragment);
                 }
             }
         });
@@ -472,6 +475,16 @@ public class InviteeFragment extends BaseUiFragment {
                         openFragment(self, eventDetailTimeSlotFragment);
                     }else{
                         EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+                        eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
+                        openFragment(self, eventEditFragment);
+                    }
+                }else if (getFrom() instanceof EventDetailTimeSlotFragment){
+                    if (event.getInvitee().size()>1){
+                        EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment)getFrom();
+                        eventDetailTimeSlotFragment.setEvent(eventManager.copyCurrentEvent(event));
+                        openFragment(self, eventDetailTimeSlotFragment);
+                    }else{
+                        EventEditFragment eventEditFragment = (EventEditFragment)getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
                         eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
                         openFragment(self, eventEditFragment);
                     }

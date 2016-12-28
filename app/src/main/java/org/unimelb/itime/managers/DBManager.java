@@ -6,12 +6,14 @@ import android.database.sqlite.SQLiteDatabase;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
+import org.unimelb.itime.dao.FriendRequestDao;
 import org.unimelb.itime.dao.MessageDao;
 import org.unimelb.itime.dao.UserDao;
 
@@ -231,5 +233,22 @@ public class DBManager {
         }
         SQLiteDatabase db = openHelper.getWritableDatabase();
         return db;
+    }
+
+    public void insertFriendRequest(FriendRequest request) {
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        FriendRequestDao friendRequestDao = daoSession.getFriendRequestDao();
+        friendRequestDao.insertOrReplace(request);
+    }
+
+    public List<FriendRequest> getAllFriendRequest(){
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        FriendRequestDao friendRequestDao = daoSession.getFriendRequestDao();
+        QueryBuilder<FriendRequest> qb = friendRequestDao.queryBuilder();
+        qb.orderDesc(FriendRequestDao.Properties.UpdatedAt);
+        List<FriendRequest> list = qb.list();
+        return list;
     }
 }

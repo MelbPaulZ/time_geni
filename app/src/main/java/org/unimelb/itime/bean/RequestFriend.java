@@ -5,7 +5,7 @@ package org.unimelb.itime.bean;
  */
 
 public class RequestFriend extends ITimeUser {
-    private boolean accepted = false;
+    private String displayStatus;
     private FriendRequest request;
 
     public FriendRequest getRequest() {
@@ -23,11 +23,11 @@ public class RequestFriend extends ITimeUser {
 
     public RequestFriend(){}
 
-    public boolean getAccepted() {
-        return request.getStatus().equals(FriendRequest.STATUS_CONFIRMED);
+    public String getDisplayStatus() {
+        return request.getDisplayStatus();
     }
 
-    public void accept(){
-        request.setStatus(FriendRequest.STATUS_CONFIRMED);
+    public void setDisplayStatus(String displayStatus) {
+        this.request.setDisplayStatus(displayStatus);
     }
 }

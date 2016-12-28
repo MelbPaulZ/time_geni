@@ -24,7 +24,7 @@ public class WideArrowButton extends RelativeLayout {
     private ImageView arrowImageView;
     private String text;
     private int icon;
-    private static int FONT_SIZE = SizeCollector.FONT_EXTR;
+    private static int FONT_SIZE = SizeCollector.FONT_BIG;
 
 
     public WideArrowButton(Context context, AttributeSet attrs) {

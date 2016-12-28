@@ -4,6 +4,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -11,12 +12,16 @@ import android.widget.ListView;
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.bean.Contact;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.ITimeUser;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.databinding.ListviewInviteeFriendItemBinding;
 import org.unimelb.itime.bean.BaseContact;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.ContactFilterUtil;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
+import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 import org.unimelb.itime.widget.ContactListView;
 import org.unimelb.itime.widget.InviteeGroupView;
 
@@ -51,6 +56,7 @@ public class InviteFriendViewModel extends BaseObservable {
     private InviteFriendAdapter adapter;
     private Map<String, Integer> positionMap;
     private boolean showAlertMsg = false;
+    private Event event;
 
     public LinearLayout getHeaderView() {
         return headerView;
@@ -62,6 +68,17 @@ public class InviteFriendViewModel extends BaseObservable {
 
     public InviteFriendViewModel(InviteFriendPresenter presenter){
         this.presenter = presenter;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+        for(Invitee invitee: event.getInvitee()){
+            inviteeGroupView.addInvitee(invitee);
+        }
     }
 
     @Bindable
@@ -285,11 +302,11 @@ public class InviteFriendViewModel extends BaseObservable {
                 BaseContact user = (BaseContact) viewModel.getContact();
                 if (viewModel.getSelected()) {
                     viewModel.setSelected(false);
-                    inviteeGroupView.deleteInvitee(user.getContact());
+                    inviteeGroupView.deleteInvitee(user.getContact().getContactUid());
                     setCountStr(inviteeGroupView.countInvitee());
                 } else {
                     viewModel.setSelected(true);
-                    inviteeGroupView.addAvatarInvitee(user.getContact());
+                    inviteeGroupView.addAvatarInvitee(contactToInvitee(user.getContact(), event));
                     setCountStr(inviteeGroupView.countInvitee());
                 }
                 inviteeGroupView.clearInput();
@@ -309,11 +326,11 @@ public class InviteFriendViewModel extends BaseObservable {
                     if(item.getContact()==user){
                         if (item.getSelected()) {
                             item.setSelected(false);
-                            inviteeGroupView.deleteInvitee(user.getContact());
+                            inviteeGroupView.deleteInvitee(user.getContact().getContactUid());
                             setCountStr(inviteeGroupView.countInvitee());
                         } else {
                             item.setSelected(true);
-                            inviteeGroupView.addAvatarInvitee(user.getContact());
+                            inviteeGroupView.addAvatarInvitee(contactToInvitee(user.getContact(), event));
                             setCountStr(inviteeGroupView.countInvitee());
                         }
                         break;
@@ -327,11 +344,11 @@ public class InviteFriendViewModel extends BaseObservable {
     public InviteeGroupView.OnItemClickListener getOnInviteeGroupViewItemClickListener(){
         return new InviteeGroupView.OnItemClickListener() {
             @Override
-            public void onClick(View view, ITimeContactInterface invitee) {
+            public void onClick(View view, ITimeInviteeInterface invitee) {
                 for(int i=0;i<iTimeFriendItems.size();i++){
                     ListItemViewModel vm = (ListItemViewModel) iTimeFriendItems.get(i);
-                    ITimeContactInterface in = vm.getContact().getContact();
-                    if(in == invitee){
+                    String uid = vm.getContact().getContact().getContactUid();
+                    if(uid.equals(invitee.getUserUid())){
                         vm.setSelected(false);
                         break;
                     }
@@ -359,7 +376,7 @@ public class InviteFriendViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //presenter.onBackPress();
+                presenter.onDoneClicked();
             }
         };
     }
@@ -369,12 +386,10 @@ public class InviteFriendViewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 if(getValidInput()) {
-                    ITimeContactInterface contact = new BaseContact();
-                    contact.setContactUid(addButtonText);
                     if (presenter.isEmail(addButtonText)) {
-                        inviteeGroupView.addEmailInvitee(contact);
+                        inviteeGroupView.addEmailInvitee(unactivatedInvitee(addButtonText, event));
                     } else {
-                        inviteeGroupView.addPhoneInvitee(contact);
+                        inviteeGroupView.addPhoneInvitee(unactivatedInvitee(addButtonText, event));
                     }
                     inviteeGroupView.clearInput();
                 } else {
@@ -421,5 +436,44 @@ public class InviteFriendViewModel extends BaseObservable {
         public void failed(){
             //Toast.makeText(presenter.getView().getActivity(), )
         }
+    }
+
+    private Invitee contactToInvitee(Contact contact, Event event) {
+        Invitee invitee = new Invitee();
+        invitee.setEventUid(event.getEventUid());
+        // need to check if the contact in the invitee list
+        invitee.setInviteeUid(getInviteeUid(contact,event));
+        invitee.setUserUid(contact.getContactUid());
+        invitee.setUserId(contact.getAliasName());
+        invitee.setStatus("needsAction");
+        invitee.setAliasPhoto(contact.getPhoto());
+        invitee.setAliasName(contact.getName());
+        invitee.setUserStatus(contact.getStatus());
+        return invitee;
+    }
+
+    // str is email or phone
+    private Invitee unactivatedInvitee(String str, Event event) {
+        Invitee invitee = new Invitee();
+        invitee.setUserStatus(Invitee.USER_STATUS_UNACTIVATED);
+        invitee.setUserId(str);
+
+        //please replace these two with right value
+        invitee.setAliasName(str);
+        invitee.setUserUid(str);
+
+        return  invitee;
+    }
+
+    /** if the contact is already in the event's invitees, then no need of setting up a new InviteeUid,
+     * otherwise use its previous inviteeUid
+     * */
+    private String getInviteeUid(Contact contact,Event event){
+        for (Invitee invitee : event.getInvitee()){
+            if(invitee.getUserUid().equals(contact.getContactUid())){
+                return invitee.getInviteeUid();
+            }
+        }
+        return AppUtil.generateUuid();
     }
 }
