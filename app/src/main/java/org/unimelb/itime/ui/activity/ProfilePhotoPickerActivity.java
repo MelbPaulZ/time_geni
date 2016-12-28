@@ -96,14 +96,14 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
         myProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toMainActivity();
+                toSettingActivity();
             }
         });
     }
 
-    private void toMainActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    private void toSettingActivity(){
+        finish();
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
     @Override
