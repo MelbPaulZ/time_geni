@@ -73,18 +73,18 @@ android {
 }
 
 greendao {
-    schemaVersion 49
+    schemaVersion 50
     daoPackage "org.unimelb.itime.dao"
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-
     // Ui components
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.hannesdorfmann.mosby:mvp:2.0.1'
-    compile 'com.hannesdorfmann.mosby:viewstate:2.0.1' // optional viewstate feature
+    compile 'com.hannesdorfmann.mosby:viewstate:2.0.1'
+    // optional viewstate feature
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.google.code.gson:gson:2.6.1'
     compile 'org.greenrobot:greendao:3.1.0'
@@ -94,7 +94,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-
     compile 'com.jakewharton:butterknife:8.2.1'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
     //badge view
@@ -104,21 +103,20 @@ dependencies {
     compile 'com.lling.photopicker:photopicker:+'
     compile 'com.lzy.imagepicker:imagepicker:+'
     compile 'me.fesky.library:IOSDialog:+'
-
     //leancloud
     compile 'cn.leancloud.android:avoscloud-sdk:v3.7.1'
     compile 'cn.leancloud.android:avoscloud-push:v3.7.1@aar'
     compile 'cn.leancloud.android:Java-WebSocket:1.2.0-leancloud'
     compile 'cn.leancloud.android:avoscloud-statistics:v3.7.1@aar'
-
-
     // Unit test dependency
+
     // Set this dependency to use JUnit 4 rules
     androidTestCompile 'com.android.support.test:rules:0.4'
     // Set this dependency to build and run Espresso tests
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     // Set this dependency to build and run UI Automator tests
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+
 //    androidTestCompile 'com.android.support:support-annotations:24.0.0'
 
     compile "com.android.support:support-v4:23.1.1"
@@ -126,20 +124,20 @@ dependencies {
     compile "com.android.support:cardview-v7:23.1.1"
 
 //    compile 'com.google.android.gms:play-services:8.4.0'
+
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
-
-
-
     compile 'com.wx.wheelview:wheelview:1.3.3'
     compile 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
     compile 'com.android.support:multidex:1.0.1'
-    compile group: 'org.dmfs', name: 'lib-recur', version: '0.9.2'
-
+    compile 'org.dmfs:lib-recur:0.9.2'
     compile 'com.baoyz.swipemenulistview:library:1.3.0'
     compile 'me.tatarka.bindingcollectionadapter:bindingcollectionadapter:1.3.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
+//    compile files('libs/zxing.jar')
+    compile files('libs/badgeview.jar')
 
+    compile 'com.google.zxing:core:3.3.0'
 }

@@ -2,6 +2,8 @@ package org.unimelb.itime.restfulapi;
 
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.FriendRequest;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.restfulresponse.HttpResult;
 
 import java.util.List;
@@ -28,10 +30,12 @@ public interface ContactApi {
     @POST("contact/update/{contactUid}")
     Observable<HttpResult<Void>> update(@Path("contactUid") String contactUid);
 
+//    Description: Delete a contact. {contactUid} is the user_uid of the user who will be deleted.
     @POST("contact/delete/{contactUid}")
-    Observable<HttpResult<Void>> delete(@Path("contactUid") String contactUid);
+    Observable<HttpResult<Contact>> delete(@Path("contactUid") String contactUid);
 
     @POST("contact/clear/{contactUid}")
     Observable<HttpResult<Void>> clear(@Path("contactUid") String contactUid);
+
 
 }

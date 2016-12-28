@@ -302,6 +302,27 @@
     <string name="unsupported_email">Unsupported Email</string>
     <string name="try_again">Try Again</string>
 
+    <!--Contact Part-->
+    <string name="my_qr_code_explain">Scan the QR code to add me on iTime</string>
+    <string name="my_qr_code_title">My QR Code</string>
+    <string name="save_to_album">Save to album</string>
+    <string name="scan_qr_code">Scan QR code</string>
+    <string name="qr_code">QR Code</string>
+    <string name="scan_qr_code_explain">Align QR code within frame to scan</string>
+    <string name="invite_friend_through_qr_code">Invite Friend Through QR Code</string>
+    <string name="unblock_fail">Unblock failed, please check your network</string>
+    <string name="block_fail">Block failed, please check your network</string>
+    <string name="unblock_contact">Unblock contact</string>
+    <string name="block_contact">Block contact</string>
+    <string name="delete_contact">Delete contact</string>
+    <string name="delete_success">Delete success</string>
+    <string name="delete_fail">Delete failed, please check your network</string>
+    <string name="add_fail">Add failed, please check your network</string>
+    <string name="accept_fail">Accpt failed, please check your network</string>
+    <string name="album">Album</string>
+    <string name="search_hint">Type in E-mail</string>
+    <string name="save_qr_code_success">Save qr code success</string>
+    <string name="save_qr_code_failed">Save qr code failed</string>
 
 
     <!--setting-->
@@ -349,5 +370,6 @@
     <string name="setting_password_hint">New iTime password</string>
     <string name="setting_confirm_hint">Confirm password</string>
     <string name="setting_calendar_import_unimelb_subtext1">Enter your university account information to import its calendar into iTime</string>
+    <string name="setting_itime_calendars">iTime Calendars</string>
 
 </resources>

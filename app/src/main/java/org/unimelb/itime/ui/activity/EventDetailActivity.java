@@ -16,7 +16,7 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.InviteeFragment;
+import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
 import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
 import org.unimelb.itime.ui.fragment.event.EventDetailTimeSlotFragment;
@@ -115,7 +115,7 @@ public class EventDetailActivity extends AppCompatActivity {
         }
     }
 
-    // this is for invitee confirm
+    // this is for invitee accept
     public void confirmAndGotoWeekViewCalendar(Event event) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

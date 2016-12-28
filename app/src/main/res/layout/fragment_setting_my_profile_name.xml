@@ -3,7 +3,7 @@
     <data>
         <variable
             name="settingVM"
-            type="org.unimelb.itime.ui.viewmodel.SettingProfileViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
     </data>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -29,6 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_my_profile"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE)}"
                 android:textColor="@color/title_6D6D6D"
                 android:textSize="17sp"
                 android:layout_centerVertical="true"
@@ -53,6 +54,7 @@
                 android:layout_marginRight="7dp"
                 android:layout_centerVertical="true"
                 android:text="@string/setting_save"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE)}"
                 android:textSize="17sp"
                 android:textColor="@color/color_448aff"
                 />

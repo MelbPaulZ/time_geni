@@ -7,6 +7,6 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
  */
 
 public interface SettingCommonMvpView extends MvpView {
-    void logout();
 
+    void onViewChange(int task);
 }

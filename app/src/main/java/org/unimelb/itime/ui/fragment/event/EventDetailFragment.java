@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.event;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -155,9 +156,10 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
     }
     
 
-    private void toCalendar() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+    private void toCalendar(int resultCode) {
+        Intent intent = new Intent();
+        getActivity().setResult(resultCode, intent);
+        getActivity().finish();
     }
 
     @Override
@@ -214,17 +216,19 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
         if (task == EventCommonPresenter.TASK_TIMESLOT_ACCEPT){
-            toCalendar();
+            toCalendar(Activity.RESULT_OK);
         }else if (task == EventCommonPresenter.TASK_EVENT_CONFIRM){
-            toCalendar();
+            toCalendar(Activity.RESULT_OK);
         }else if (task == EventCommonPresenter.TASK_TIMESLOT_REJECT){
-            toCalendar();
+            toCalendar(Activity.RESULT_OK);
         }else if (task == EventCommonPresenter.TASK_BACK){
-            toCalendar();
+            toCalendar(Activity.RESULT_CANCELED);
         }else if (task == EventCommonPresenter.TASK_EVENT_ACCEPT){
-            toCalendar();
+            toCalendar(Activity.RESULT_OK);
         }else if (task == EventCommonPresenter.TASK_EVENT_REJECT){
-            toCalendar();
+            toCalendar(Activity.RESULT_OK);
         }
     }
+
+
 }

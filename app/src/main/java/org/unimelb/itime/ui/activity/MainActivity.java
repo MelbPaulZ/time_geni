@@ -1,15 +1,14 @@
 package org.unimelb.itime.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -36,10 +35,13 @@ import org.unimelb.itime.databinding.ActivityMainBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
+import org.unimelb.itime.messageevent.MessageNewFriendRequest;
+import org.unimelb.itime.ui.fragment.contact.ContactHomePageFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
-import org.unimelb.itime.ui.fragment.MainContactsFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
-import org.unimelb.itime.ui.fragment.MainSettingsFragment;
+import org.unimelb.itime.ui.fragment.settings.SettingIndexFragment;
+import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
+import org.unimelb.itime.ui.fragment.settings.SettingMyProfileNameFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
@@ -49,7 +51,6 @@ import org.unimelb.itime.util.UserUtil;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
 
@@ -119,16 +120,17 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     private void init(){
         tagFragments = new MvpFragment[4];
         tagFragments[0] = new MainCalendarFragment();
-        tagFragments[1] = new MainContactsFragment();
+        tagFragments[1] = new ContactHomePageFragment();
         tagFragments[2] = new MainInboxFragment();
-        tagFragments[3] = new MainSettingsFragment();
+        tagFragments[3] = new SettingIndexFragment();
 
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[0]);
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[1]);
-        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[2]);
-        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3]);
+        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[2], MainInboxFragment.class.getSimpleName());
+        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3], SettingIndexFragment.class.getSimpleName());
+
         fragmentTransaction.commit();
         showFragmentById(0);
         refreshTabStatus(0);
@@ -144,6 +146,11 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
             }
         }
         tabBarViewModel.setUnReadNum(unReadNum+"");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setNewFriendRequestCount(MessageNewFriendRequest msg){
+        tabBarViewModel.setUnReadFriendRequest(msg.count);
     }
 
 
@@ -220,10 +227,15 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EventUtil.ACTIVITY_CREATE_EVENT ){
-            ((MainCalendarFragment)tagFragments[0]).reloadEvent();
-            ((MainCalendarFragment)tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+            if (resultCode == Activity.RESULT_OK) {
+                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
+                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+            }
         }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
-            ((MainCalendarFragment)tagFragments[0]).reloadEvent();
+            if (requestCode == Activity.RESULT_OK) {
+                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
+                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+            }
         }
     }
 

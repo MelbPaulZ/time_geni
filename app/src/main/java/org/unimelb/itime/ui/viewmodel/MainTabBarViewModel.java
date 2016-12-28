@@ -18,9 +18,11 @@ public class MainTabBarViewModel extends BaseObservable{
     private MainTabBarPresenter presenter;
     private String unReadNum;
     private int visible;
+    private int unReadFriendRequest;
 
     public MainTabBarViewModel(MainTabBarPresenter presenter){
         this.presenter = presenter;
+        presenter.getRequestCount();
     }
 
     public View.OnClickListener onTabBarClick(final int pageId){
@@ -53,6 +55,15 @@ public class MainTabBarViewModel extends BaseObservable{
         }
         notifyPropertyChanged(BR.unReadNum);
         notifyPropertyChanged(BR.visible);
+    }
 
+    @Bindable
+    public int getUnReadFriendRequest() {
+        return unReadFriendRequest;
+    }
+
+    public void setUnReadFriendRequest(int unReadFriendRequest) {
+        this.unReadFriendRequest = unReadFriendRequest;
+        notifyPropertyChanged(BR.unReadFriendRequest);
     }
 }

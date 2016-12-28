@@ -3,7 +3,7 @@
     <data>
         <variable
             name="settingVM"
-            type="org.unimelb.itime.ui.viewmodel.SettingProfileViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
     </data>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -30,8 +30,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_activity_settings"
+                android:padding="10dp"
                 android:textColor="@color/title_6D6D6D"
                 android:textSize="17sp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING)}"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="14dp"
                 />
@@ -67,7 +69,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="84dp"
-                android:onClick="@{settingVM.onChangeAvatar()}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_VIEW_AVATAR)}"
                 android:layout_marginLeft="16dp">
 
                 <TextView
@@ -94,7 +96,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginLeft="16dp">
+                android:layout_marginLeft="16dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE_NAME)}"
+                >
 
                 <TextView
                     style="@style/itime_blacktitle_17sp"
@@ -146,7 +150,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginLeft="16dp">
+                android:layout_marginLeft="16dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_RESET_PASSWORD)}"
+                >
                 <TextView
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/setting_reset_password"/>
@@ -163,7 +169,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginLeft="16dp">
+                android:layout_marginLeft="16dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_QR_CODE)}"
+                >
                 <TextView
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/my_qr_code"/>
@@ -196,7 +204,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginLeft="16dp">
+                android:layout_marginLeft="16dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_GENDER)}">
                 <TextView
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/setting_gender"/>
@@ -213,7 +222,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginLeft="16dp">
+                android:layout_marginLeft="16dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_REGION)}">
                 <TextView
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/region"/>

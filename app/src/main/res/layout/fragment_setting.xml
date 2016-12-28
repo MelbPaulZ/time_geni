@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="settingVM"
+            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
+    </data>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_fafafa"
@@ -19,6 +25,11 @@
             />
     </android.support.v7.widget.Toolbar>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE)}"
             android:background="@drawable/background_top_bottom_divider">
             <!--Avatar-->
             <ImageView
@@ -68,6 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_marginTop="20dp"
+            android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SCAN_QR_CODE)}"
             android:background="@drawable/background_top_bottom_divider">
 
             <TextView
@@ -103,7 +116,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:paddingLeft="16dp">
+                android:paddingLeft="16dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_BLOCK_USER)}">
 
                 <TextView
                     style="@style/itime_blacktitle_17sp"
@@ -119,7 +133,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:paddingLeft="16dp">
+                android:paddingLeft="16dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_NOTICIFATION)}"
+                >
 
                 <TextView
                     style="@style/itime_blacktitle_17sp"
@@ -134,7 +150,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:paddingLeft="16dp">
+                android:paddingLeft="16dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_CALENDAR_PREFERENCE)}"
+                >
 
                 <TextView
                     style="@style/itime_blacktitle_17sp"
@@ -156,7 +174,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:paddingLeft="16dp">
+                android:paddingLeft="16dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_HELP_AND_FEEDBACK)}">
 
                 <TextView
                     style="@style/itime_blacktitle_17sp"
@@ -171,7 +190,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:paddingLeft="16dp">
+                android:paddingLeft="16dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_ABOUT)}"
+                >
 
                 <TextView
                     style="@style/itime_blacktitle_17sp"
@@ -195,9 +216,12 @@
                 android:gravity="center"
                 android:text="@string/logout"
                 android:textColor="@color/black"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_LOGOUT)}"
                 android:textSize="17sp" />
         </LinearLayout>
 
 
     </LinearLayout>
+    </ScrollView>
 </LinearLayout>
+</layout>

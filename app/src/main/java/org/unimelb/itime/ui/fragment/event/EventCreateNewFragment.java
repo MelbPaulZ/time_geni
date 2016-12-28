@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.event;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +25,8 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.InviteeFragment;
+import org.unimelb.itime.ui.fragment.contact.InviteFriendsFragment;
+import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
@@ -41,8 +43,6 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     private FragmentEventCreateNewBinding binding;
     private EventCreateNewVIewModel viewModel;
     private Event event;
-
-    private TimePickerDialog timePickerDialog;
 
     @Override
     public EventCommonPresenter<EventCreateNewMvpView> createPresenter() {
@@ -65,18 +65,12 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         onEnter(); // show key board
     }
 
-    public void showTimePicker(){
-        this.timePickerDialog.show();
-    }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minutes) {
 
     }
 
-    public void showDatePicker(){
-
-    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
@@ -114,7 +108,8 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     @Override
     public void gotoWeekViewCalendar() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+        getActivity().setResult(Activity.RESULT_CANCELED, intent);
+        getActivity().finish();
     }
 
     @Override
@@ -129,6 +124,9 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
         inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         openFragment(this, inviteeFragment);
+//
+//        InviteFriendsFragment inviteFriendsFragment = (InviteFriendsFragment)getFragmentManager().findFragmentByTag(InviteFriendsFragment.class.getSimpleName());
+//        openFragment(this, inviteFriendsFragment);
     }
 
 
@@ -173,7 +171,8 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
 
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+        Intent intent = new Intent();
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        getActivity().finish();
     }
 }

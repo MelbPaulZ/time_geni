@@ -7,15 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
-
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.base.C;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileNameBinding;
 import org.unimelb.itime.ui.mvpview.SettingMyProfileMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
-import org.unimelb.itime.ui.viewmodel.SettingProfileViewModel;
+import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
 /**
  * Created by Paul on 26/12/2016.
@@ -36,7 +33,7 @@ public class SettingMyProfileNameFragment extends BaseUiFragment<SettingMyProfil
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SettingProfileViewModel viewModel = new SettingProfileViewModel(getPresenter());
+        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 
@@ -50,8 +47,11 @@ public class SettingMyProfileNameFragment extends BaseUiFragment<SettingMyProfil
 
     }
 
-    @Override
-    public void logout() {
 
+    @Override
+    public void onViewChange(int task) {
+        if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
+            closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
+        }
     }
 }
