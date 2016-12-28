@@ -11,6 +11,7 @@ import com.squareup.picasso.Transformation;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.ITimeComparable;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.SlotResponse;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +90,6 @@ public class EventUtil {
             return String.format("%s and %d more", attendeesArrayList.get(0), attendeesArrayList.size() - 1);
         }
     }
-
 
     public static ArrayList<String> fromInviteeListToArraylist(List<Invitee> inviteeArrayList) {
         ArrayList<String> arrayList = new ArrayList<>();
@@ -768,7 +769,16 @@ public class EventUtil {
        return getTimeslotFromStatus(event, Timeslot.STATUS_PENDING);
     }
 
-
+    public static <T extends ITimeComparable> void removeWhileLooping(ArrayList<T> list, T rmObj){
+        Iterator<T> i = list.iterator();
+        while (i.hasNext()) {
+            T obj = i.next(); // must be called before you can call i.remove()
+            if (obj.iTimeEquals(rmObj)){
+                i.remove();
+                break;
+            }
+        }
+    }
 
 
 
