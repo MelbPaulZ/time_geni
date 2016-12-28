@@ -66,39 +66,6 @@ public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMv
             getView().goToAddFriendsFragment();
     }
 
-    public void getRequestCount(){
-        Observable<HttpResult<List<FriendRequest>>> observable = requestApi.list();
-        Subscriber<HttpResult<List<FriendRequest>>> subscriber = new Subscriber<HttpResult<List<FriendRequest>>>() {
-            @Override
-            public void onCompleted() {
-                Log.d(TAG, "onCompleted: ");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "onError: " + e.getMessage());
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onNext(HttpResult<List<FriendRequest>> result) {
-                Log.d(TAG, "onNext: " + result.getInfo());
-                if (result.getStatus()!=1){
-
-                }else {
-                        int count = 0;
-                        for(FriendRequest request:result.getData()){
-                            if(!request.isRead()){
-                                count++;
-                            }
-                        }
-                        requestCountListener.setCount(count);
-                    }
-                }
-        };
-        HttpUtil.subscribe(observable, subscriber);
-    }
-
     public void getFriends(final ContactHomePageViewModel.FriendsCallBack callBack){
         DBManager dbManager = DBManager.getInstance(context);
         List<ITimeUser> list = generateITimeUserList(dbManager.getAllContact());
@@ -153,10 +120,8 @@ public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMv
     private List<ITimeUser> generateITimeUserList(List<Contact> list){
         List<ITimeUser> result = new ArrayList<>();
         for(Contact contact: list){
-            if(contact.getBlockLevel()==0) {
                 ITimeUser user = new ITimeUser(contact);
                 result.add(user);
-            }
         }
         return result;
     }

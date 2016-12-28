@@ -83,7 +83,7 @@
             android:layout_marginTop="20dp"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:text= "*Please enter a valid E-mail address.(Melbourne \n University account only)"
+            android:text= "*Sorry, currently iTime is only available to University of\n Melbourne E-mail Account.)"
             android:textColor="@color/red"
             android:layout_gravity="center_horizontal"
             android:gravity="center"

@@ -88,20 +88,22 @@ public class AddOtherContactsItemViewModel extends BaseObservable implements Con
 
     @Bindable
     public String getAddButtonText(){
-        if(contact.getDisplayStatus()==ADD){
-            return "Add";
-        }else{
-            return "Re-add";
-        }
+//        if(contact.getDisplayStatus()==ADD){
+//            return "Add";
+//        }else{
+//            return "Re-add";
+//        }
+        return null;
     }
 
     @Bindable
     public String getInviteButtonText(){
-        if(contact.getDisplayStatus()==INVITE){
-            return "Invite";
-        }else{
-            return "Re-invite";
-        }
+//        if(contact.getDisplayStatus()==INVITE){
+//            return "Invite";
+//        }else{
+//            return "Re-invite";
+//        }
+        return null;
     }
 
     @Bindable
@@ -122,26 +124,26 @@ public class AddOtherContactsItemViewModel extends BaseObservable implements Con
         setShowSent(false);
         setShowAdded(false);
         setShowInvite(false);
-        switch (contact.getDisplayStatus()){
-            case ADD:
-                setShowAdd(true);
-                break;
-            case SENT_ADD:
-                setShowAdd(true);
-                break;
-            case ADDED:
-                setShowAdded(true);
-                break;
-            case INVITE:
-                setShowInvite(true);
-                break;
-            case SENT_INVITE:
-                setShowInvite(true);
-                break;
-            case INVITED:
-                setShowSent(true);
-                break;
-        }
+//        switch (contact.getDisplayStatus()){
+//            case ADD:
+//                setShowAdd(true);
+//                break;
+//            case SENT_ADD:
+//                setShowAdd(true);
+//                break;
+//            case ADDED:
+//                setShowAdded(true);
+//                break;
+//            case INVITE:
+//                setShowInvite(true);
+//                break;
+//            case SENT_INVITE:
+//                setShowInvite(true);
+//                break;
+//            case INVITED:
+//                setShowSent(true);
+//                break;
+//        }
     }
 
     @Bindable
@@ -173,7 +175,7 @@ public class AddOtherContactsItemViewModel extends BaseObservable implements Con
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                contact.setDisplayStatus(SENT_ADD);
+                //contact.setDisplayStatus(SENT_ADD);
                 setShowAdd(false);
                 setShowAdded(true);
             }
@@ -184,7 +186,7 @@ public class AddOtherContactsItemViewModel extends BaseObservable implements Con
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                contact.setDisplayStatus(SENT_INVITE);
+               // contact.setDisplayStatus(SENT_INVITE);
                 setShowInvite(false);
                 setShowSent(true);
             }

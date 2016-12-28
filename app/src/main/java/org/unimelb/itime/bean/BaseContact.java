@@ -17,7 +17,6 @@ public class BaseContact implements ITimeContactInterface, Serializable,Comparab
     private String sortLetters = "";
     private String pinyin = "";
     private String matchStr = "";
-    private int displayStatus;
 
     private Contact contact;
 
@@ -59,14 +58,6 @@ public class BaseContact implements ITimeContactInterface, Serializable,Comparab
 
     public void setContact(Contact contact) {
         this.contact = contact;
-    }
-
-    public int getDisplayStatus() {
-        return displayStatus;
-    }
-
-    public void setDisplayStatus(int displayStatus) {
-        this.displayStatus = displayStatus;
     }
 
     public String getPinyin() {

@@ -360,7 +360,8 @@
     <color name="darkOrange">#CC8000</color>
     <color name="lightGrey">#EFEFEF</color>
     <color name="normalGrey">#808080</color>
-    <color name="matchColor">#66AAFF</color>
+    <!--<color name="matchColor">#66AAFF</color>-->
+    <color name="matchColor">#000000</color>
     <color name="darkBlue">#3366cc</color>
     <color name="lightRed">#CC3399</color>
     <color name="badgeRed">#FF2211</color>

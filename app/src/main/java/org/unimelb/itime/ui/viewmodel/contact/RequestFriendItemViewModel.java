@@ -8,6 +8,7 @@ import android.text.style.ForegroundColorSpan;
 import android.widget.Toast;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.bean.RequestFriend;
 import org.unimelb.itime.ui.presenter.contact.NewFriendFragmentPresenter;
 import com.android.databinding.library.baseAdapters.BR;
@@ -19,8 +20,19 @@ import com.android.databinding.library.baseAdapters.BR;
 
 public class RequestFriendItemViewModel extends BaseObservable {
 
-    RequestFriend requestFriend;
-    NewFriendFragmentPresenter presenter;
+    private RequestFriend requestFriend;
+    private NewFriendFragmentPresenter presenter;
+
+    @Bindable
+    public String getDisplayStatus() {
+        return requestFriend.getDisplayStatus();
+    }
+
+    public void setDisplayStatus(String displayStatus) {
+        requestFriend.setDisplayStatus(displayStatus);
+        notifyPropertyChanged(BR.displayStatus);
+    }
+
     public RequestFriendItemViewModel(NewFriendFragmentPresenter presenter){
         this.presenter = presenter;
     }
@@ -35,6 +47,7 @@ public class RequestFriendItemViewModel extends BaseObservable {
         notifyPropertyChanged(BR.requestFriend);
         notifyPropertyChanged(BR.name);
         notifyPropertyChanged(BR.contactId);
+        notifyPropertyChanged(BR.displayStatus);
     }
 
     @Bindable
@@ -71,8 +84,7 @@ public class RequestFriendItemViewModel extends BaseObservable {
 
     public class AcceptCallBack{
         public void accept(){
-            requestFriend.accept();
-            notifyPropertyChanged(BR.requestFriend);
+            setDisplayStatus(FriendRequest.DISPLAY_STATUS_ADDED);
         }
 
         public void fail(){

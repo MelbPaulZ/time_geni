@@ -25,7 +25,8 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
     public final static String STATUS_NEEDSACTION = "needsAction";
     public final static String STATUS_ACCEPTED = "accepted";
     public final static String STATUS_DECLINED = "declined";
-
+    public final static String USER_STATUS_ACTIVATED = "activated";
+    public final static String USER_STATUS_UNACTIVATED = "unactivated";
 
 
     private String eventUid = "";
@@ -37,6 +38,16 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
     private String status = "";
     private String reason = "";
     private int isHost;
+    private String userStatus = "";
+
+    @Override
+    public String getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(String userStatus) {
+        this.userStatus = userStatus;
+    }
 
     @Convert(converter = Invitee.SlotResponseConverter.class , columnType = String.class)
     private List<SlotResponse> inviteeTimeslot = new ArrayList<>();
