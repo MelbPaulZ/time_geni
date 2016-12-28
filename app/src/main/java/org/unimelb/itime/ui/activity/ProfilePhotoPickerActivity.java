@@ -19,6 +19,7 @@ import com.lzy.imagepicker.view.CropImageView;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.managers.SettingManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -89,6 +90,10 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
         });
 
         initListener();
+
+        // display photo on screen
+        String url = SettingManager.getInstance(getApplicationContext()).getSetting().getUser().getPhoto();
+        setPhoto(url);
     }
 
     private void initListener(){
@@ -106,6 +111,10 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
+    private void setPhoto(String url){
+        Picasso.with(ProfilePhotoPickerActivity.this).load(url).into((ImageView) findViewById(R.id.profile_image));
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -116,6 +125,7 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                 for (int i = 0; i < images.size(); i++) {
                     Picasso.with(ProfilePhotoPickerActivity.this).load(new File(images.get(i).path)).into((ImageView) findViewById(R.id.profile_image));
+                    // todo update photo to server
                     break;
                 }
             } else {

@@ -78,27 +78,27 @@
                     style="@style/itime_bottom_divider_line" />
             </RelativeLayout>
 
-            <!--Default Calendar-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_DEFAULT_CALENDAR)}">
-                <TextView
-                    style="@style/itime_blacktitle_17sp"
-                    android:text="@string/setting_default_calendar"/>
+            <!--&lt;!&ndash;Default Calendar&ndash;&gt;-->
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="44dp"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_DEFAULT_CALENDAR)}">-->
+                <!--<TextView-->
+                    <!--style="@style/itime_blacktitle_17sp"-->
+                    <!--android:text="@string/setting_default_calendar"/>-->
 
-                <ImageView
-                    style="@style/image_right_arrow" />
+                <!--<ImageView-->
+                    <!--style="@style/image_right_arrow" />-->
 
-                <TextView
-                    style="@style/itime_subtitle_15sp"
-                    android:text="work"
-                    />
+                <!--<TextView-->
+                    <!--style="@style/itime_subtitle_15sp"-->
+                    <!--android:text="work"-->
+                    <!--/>-->
 
-                <TextView
-                    style="@style/itime_bottom_divider_line" />
-            </RelativeLayout>
+                <!--<TextView-->
+                    <!--style="@style/itime_bottom_divider_line" />-->
+            <!--</RelativeLayout>-->
 
             <!--Default alert-->
             <RelativeLayout
