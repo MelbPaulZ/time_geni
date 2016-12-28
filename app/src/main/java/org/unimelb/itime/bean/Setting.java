@@ -11,6 +11,7 @@ import static android.R.attr.id;
  * Created by Paul on 28/12/2016.
  */
 
+
 public class Setting {
 
     private User user;

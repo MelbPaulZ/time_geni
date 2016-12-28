@@ -52,7 +52,7 @@ public class TimeslotCreateViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                long time = index==STARTTIME? newTimeSlotView.getStartTimeM() : newTimeSlotView.getEndTimeM();
+                long time = index==STARTTIME? newTimeSlotView.getNewStartTime() : newTimeSlotView.getNewEndTime();
                 mvpView.onChooseTime(index, time);
             }
         };
@@ -73,9 +73,6 @@ public class TimeslotCreateViewModel extends CommonViewModel {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
         newTimeSlotView.setCalendar(new MyCalendar(calendar));
-        WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) newTimeSlotView.getTag();
-        struct.startTime = time;
-        struct.endTime = struct.startTime + newTimeSlotView.getDuration();
         setNewTimeSlotView(newTimeSlotView);
     }
 

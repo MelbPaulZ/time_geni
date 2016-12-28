@@ -27,7 +27,6 @@ import java.util.Calendar;
 public class EventDetailTimeSlotViewModel extends BaseObservable {
     private TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew> presenter;
     private Event eventDetailHostEvent;
-    private String tag;
     private String hostToolBarString;
     private EventDetailTimeSlotMvpVIew mvpView;
 
@@ -61,15 +60,13 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         Timeslot timeSlot = new Timeslot();
         timeSlot.setTimeslotUid(AppUtil.generateUuid());
         timeSlot.setEventUid(eventDetailHostEvent.getEventUid());
-        timeSlot.setStartTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).startTime);
-        timeSlot.setEndTime(((WeekView.TimeSlotStruct) timeSlotView.getTag()).endTime);
+        timeSlot.setStartTime(timeSlotView.getNewStartTime());
+        timeSlot.setEndTime(timeSlotView.getNewEndTime());
         timeSlot.setStatus(status);
         timeSlot.setUserUid(UserUtil.getInstance(getContext()).getUserUid());
         eventDetailHostEvent.getTimeslot().add(timeSlot);
-        WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
-        struct.object = timeSlot;
         // after add, needs reload to display it
-        mvpView.addTimeslot(struct);
+        mvpView.addTimeslot(timeSlot);
         mvpView.reloadTimeslot();
     }
 
@@ -113,18 +110,15 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
             public void onTimeSlotDragDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
                 if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getInstance(getContext()).getUserUid())) {
                     // host:
-                    WeekView.TimeSlotStruct struct = (WeekView.TimeSlotStruct) timeSlotView.getTag();
-                    struct.startTime = startTime;
-                    struct.endTime = endTime;
                     if (presenter.getView() != null) {
                         presenter.getView().reloadTimeslot();
                     }
 
-                    Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
+                    Timeslot calendarTimeSlot = (Timeslot) timeSlotView.getTimeslot();
                     Timeslot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
                     if (timeSlot != null) {
-                        timeSlot.setStartTime(timeSlotView.getStartTimeM());
-                        timeSlot.setEndTime(timeSlotView.getEndTimeM());
+                        timeSlot.setStartTime(timeSlotView.getNewStartTime());
+                        timeSlot.setEndTime(timeSlotView.getNewEndTime());
                     }
                 } else {
                     // do nothing
@@ -134,7 +128,7 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
     }
 
     private void onHostClickTimeslotView(TimeSlotView timeslotView){
-        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeslotView.getTag()).object;
+        Timeslot calendarTimeSlot = (Timeslot) timeslotView.getTimeslot();
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
         if (mvpView.isClickTSConfirm()) {
             // click timeslot then status become accepted and isconfirm = 1, from GroupDetailFragment
@@ -182,13 +176,6 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
     }
 
     ////    *****************************************************************************************
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
 
     public Context getContext() {
         return presenter.getContext();
@@ -208,16 +195,16 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         weekView.resetTimeSlots();
         if (eventDetailHostEvent.hasTimeslots()){
             for (Timeslot timeslot : eventDetailHostEvent.getTimeslot()){
-                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
-                struct.startTime = timeslot.getStartTime();
-                struct.endTime = timeslot.getEndTime();
-                struct.object = timeslot;
+//                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
+//                struct.startTime = timeslot.getStartTime();
+//                struct.endTime = timeslot.getEndTime();
+//                struct.object = timeslot;
                 if (timeslot.getStatus().equals(Timeslot.STATUS_CREATING)){
-                    struct.status = false;
+                    timeslot.setDisplayStatus(false);
                 }else if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
-                    struct.status = true;
+                    timeslot.setDisplayStatus(true);
                 }
-                weekView.addTimeSlot(struct);
+                weekView.addTimeSlot(timeslot);
             }
         }
         final WeekView wv = weekView;
@@ -237,12 +224,9 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         weekView.resetTimeSlots();
         if (eventDetailHostEvent.hasTimeslots()){
             for (Timeslot timeslot : eventDetailHostEvent.getTimeslot()){
-                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
-                struct.startTime = timeslot.getStartTime();
-                struct.endTime = timeslot.getEndTime();
-                struct.object = timeslot;
-                setTimeslotFromDetailFragment(timeslot, struct);
-                weekView.addTimeSlot(struct);
+
+                setTimeslotFromDetailFragment(timeslot);
+                weekView.addTimeSlot(timeslot);
             }
         }
         final WeekView wv = weekView;
@@ -254,20 +238,20 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         }, 100);
     }
 
-    private void setTimeslotFromDetailFragment(Timeslot timeslot, WeekView.TimeSlotStruct struct){
+    private void setTimeslotFromDetailFragment(Timeslot timeslot){
         if (EventUtil.isUserHostOfEvent(getContext(), eventDetailHostEvent)){
             // user is host
             if (timeslot.getIsConfirmed()==1){
-                struct.status = true;
+                timeslot.setDisplayStatus(true);
             }else if (timeslot.getIsConfirmed()==0){
-                struct.status = false;
+                timeslot.setDisplayStatus(false);
             }
         }else{
             // user is invitee
             if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
-                struct.status = false;
+                timeslot.setDisplayStatus(false);
             }else if (timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
-                struct.status = true;
+                timeslot.setDisplayStatus(true);
             }
         }
     }

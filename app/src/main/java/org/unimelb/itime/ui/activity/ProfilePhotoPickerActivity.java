@@ -93,7 +93,9 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
 
         // display photo on screen
         String url = SettingManager.getInstance(getApplicationContext()).getSetting().getUser().getPhoto();
-        setPhoto(url);
+        if (!url.equals("")) {
+            setPhoto(url);
+        }
     }
 
     private void initListener(){
