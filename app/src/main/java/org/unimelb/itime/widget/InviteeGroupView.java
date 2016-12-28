@@ -18,8 +18,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.SizeCollector;
-import org.unimelb.itime.vendor.listener.ITimeContactInterface;
+import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class InviteeGroupView extends LinearLayout {
     private int emailColor = R.color.blue;
     private OnItemClickListener onItemClickListener;
     private OnEditListener onEditListener;
-    private Map<ITimeContactInterface, View> inviteeMap;
+    private Map<String, View> inviteeMap;
 
     public InviteeGroupView(Context context, AttributeSet arrs) {
         super(context, arrs);
@@ -118,13 +119,20 @@ public class InviteeGroupView extends LinearLayout {
         this.addView(inputEditText);
     }
 
+    public void addInvitee(ITimeInviteeInterface invitee){
+        if(invitee.getUserStatus().equals(Invitee.USER_STATUS_ACTIVATED)){
+            addAvatarInvitee(invitee);
+        }else{
+            addEmailInvitee(invitee);
+        }
+    }
 
-    public void addEmailInvitee(ITimeContactInterface invitee){
-        if(inviteeMap.get(invitee)!=null){
+    public void addEmailInvitee(ITimeInviteeInterface invitee){
+        if(inviteeMap.containsKey(invitee.getUserUid())){
             return;
         }
         TextView emailTextView = new TextView(this.getContext());
-        emailTextView.setText(invitee.getContactUid());
+        emailTextView.setText(invitee.getName());
         if(squareHeight == 0){
             ListView.LayoutParams params = new ListView.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             emailTextView.setLayoutParams(params);
@@ -144,16 +152,17 @@ public class InviteeGroupView extends LinearLayout {
         emailTextView.setMaxLines(1);
         emailTextView.setOnClickListener(new TextOnClickListener());
         textFlowLayout.addView(emailTextView);
-        inviteeMap.put(invitee, emailTextView);
+        emailTextView.setTag(invitee);
+        inviteeMap.put(invitee.getUserUid(), emailTextView);
     }
 
 
-    public void addPhoneInvitee(ITimeContactInterface invitee){
-        if(inviteeMap.get(invitee)!=null){
+    public void addPhoneInvitee(ITimeInviteeInterface invitee){
+        if(inviteeMap.containsKey(invitee.getUserUid())){
             return;
         }
         TextView phoneTextView = new TextView(this.getContext());
-        phoneTextView.setText(invitee.getContactUid());
+        phoneTextView.setText(invitee.getName());
         if(squareHeight == 0){
             ListView.LayoutParams params = new ListView.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             phoneTextView.setLayoutParams(params);
@@ -173,11 +182,12 @@ public class InviteeGroupView extends LinearLayout {
         phoneTextView.setMaxLines(1);
         phoneTextView.setOnClickListener(new TextOnClickListener());
         textFlowLayout.addView(phoneTextView);
-        inviteeMap.put(invitee,phoneTextView);
+        phoneTextView.setTag(invitee);
+        inviteeMap.put(invitee.getUserUid(), phoneTextView);
     }
 
-    public void addAvatarInvitee(ITimeContactInterface invitee){
-        if(inviteeMap.get(invitee)!=null){
+    public void addAvatarInvitee(ITimeInviteeInterface invitee){
+        if(inviteeMap.containsKey(invitee.getUserUid())){
             return;
         }
         RoundImageView avatarImageView = new RoundImageView(this.getContext());
@@ -188,17 +198,18 @@ public class InviteeGroupView extends LinearLayout {
                 .into(avatarImageView);
         avatarImageView.setOnClickListener(new AvatarOnClickListener());
         avatarFlowLayout.addView(avatarImageView);
-        inviteeMap.put(invitee, avatarImageView);
+        avatarImageView.setTag(invitee);
+        inviteeMap.put(invitee.getUserUid(), avatarImageView);
     }
 
-    public void deleteInvitee(ITimeContactInterface invitee){
+    public void deleteInvitee(String userUid){
         View view = null;
-        view = inviteeMap.get(invitee);
+        view = inviteeMap.get(userUid);
         if(view != null) {
             avatarFlowLayout.removeView(view);
             textFlowLayout.removeView(view);
         }
-        inviteeMap.remove(invitee);
+        inviteeMap.remove(userUid);
     }
 
     public void setHintText(String hintStr){
@@ -218,23 +229,14 @@ public class InviteeGroupView extends LinearLayout {
         inputEditText.setText("");
     }
 
-    private ITimeContactInterface findInvitee(View v){
-        for(Map.Entry<ITimeContactInterface, View> entry:inviteeMap.entrySet()){
-            if(entry.getValue()==v){
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
     private class TextOnClickListener implements OnClickListener
     {
         @Override
         public void onClick(View view) {
 //            textFlowLayout.removeView(view);
             textFlowLayout.removeView(view);
-            ITimeContactInterface invitee = findInvitee(view);
-            inviteeMap.remove(invitee);
+            ITimeInviteeInterface invitee = (ITimeInviteeInterface) view.getTag();
+            //.remove(invitee);
             if(onItemClickListener!=null) {
                 onItemClickListener.onClick(view, invitee);
             }
@@ -246,7 +248,7 @@ public class InviteeGroupView extends LinearLayout {
         @Override
         public void onClick(View view) {
             avatarFlowLayout.removeView(view);
-            ITimeContactInterface invitee = findInvitee(view);
+            ITimeInviteeInterface invitee = (ITimeInviteeInterface) view.getTag();
             inviteeMap.remove(invitee);
             if(onItemClickListener!=null) {
                 onItemClickListener.onClick(view, invitee);
@@ -259,7 +261,7 @@ public class InviteeGroupView extends LinearLayout {
     }
 
     public interface OnItemClickListener {
-        void onClick(View view, ITimeContactInterface invitee);
+        void onClick(View view, ITimeInviteeInterface invitee);
     }
 
     private int dp2px(float dipValue){
@@ -278,7 +280,11 @@ public class InviteeGroupView extends LinearLayout {
         return inviteeMap.size();
     }
 
-    public List<ITimeContactInterface> getInviteeList(){
-        return new ArrayList<>(inviteeMap.keySet());
+    public List<ITimeInviteeInterface> getInviteeList(){
+        List<ITimeInviteeInterface> result = new ArrayList<>();
+        for(View v:inviteeMap.values()){
+            result.add((ITimeInviteeInterface) v.getTag());
+        }
+        return result;
     }
 }

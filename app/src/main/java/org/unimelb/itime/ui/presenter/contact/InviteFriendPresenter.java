@@ -163,4 +163,8 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
     public boolean isUniMelbEmail(String str) {
         return ContactCheckUtil.getInsstance().isUnimelbEmail(str);
     }
+
+    public void onDoneClicked(){
+        getView().onDoneClicked();
+    }
 }

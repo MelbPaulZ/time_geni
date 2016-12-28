@@ -7,6 +7,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.FriendRequest;
+import org.unimelb.itime.bean.FriendRequestResult;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
 import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
@@ -51,8 +52,8 @@ public class MainTabBarPresenter extends MvpBasePresenter<MainTabBarView>{
 
     public void getRequestCount(){
         FriendRequestApi requestApi = HttpUtil.createService(context, FriendRequestApi.class);
-        Observable<HttpResult<List<FriendRequest>>> observable = requestApi.list();
-        Subscriber<HttpResult<List<FriendRequest>>> subscriber = new Subscriber<HttpResult<List<FriendRequest>>>() {
+        Observable<HttpResult<FriendRequestResult>> observable = requestApi.list();
+        Subscriber<HttpResult<FriendRequestResult>> subscriber = new Subscriber<HttpResult<FriendRequestResult>>() {
             @Override
             public void onCompleted() {
                 Log.d(TAG, "onCompleted: ");
@@ -65,17 +66,23 @@ public class MainTabBarPresenter extends MvpBasePresenter<MainTabBarView>{
             }
 
             @Override
-            public void onNext(HttpResult<List<FriendRequest>> result) {
+            public void onNext(HttpResult<FriendRequestResult> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
 
                 }else {
                         int count = 0;
-                        for(FriendRequest request:result.getData()){
+                        for(FriendRequest request:result.getData().getReceive()){
                             if(!request.isRead()){
                                 count++;
                             }
                         }
+
+                    for(FriendRequest request:result.getData().getSend()){
+                        if(!request.isRead()){
+                            count++;
+                        }
+                    }
                     EventBus.getDefault().post(new MessageNewFriendRequest(count));
                     }
             }

@@ -46,37 +46,47 @@ public class FriendRequest implements Serializable {
     private String updatedAt;
     private String displayStatus;
 
-    @ToOne
+    @ToOne(joinProperty = "userUid")
     private User userDetail;
-    @Generated(hash = 1490846957)
-    private transient boolean userDetail__refreshed;
     /** Used for active entity operations. */
     @Generated(hash = 1817986260)
     private transient FriendRequestDao myDao;
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
+    @Generated(hash = 317222054)
+    private transient String userDetail__resolvedKey;
 
     /** To-one relationship, resolved on first access. */
-    @Generated(hash = 158590870)
+    @Generated(hash = 2123810054)
     public User getUserDetail() {
-        if (userDetail != null || !userDetail__refreshed) {
+        String __key = this.userUid;
+        if (userDetail__resolvedKey == null || userDetail__resolvedKey != __key) {
+            final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
             UserDao targetDao = daoSession.getUserDao();
-            targetDao.refresh(userDetail);
-            userDetail__refreshed = true;
+            User userDetailNew = targetDao.load(__key);
+            synchronized (this) {
+                userDetail = userDetailNew;
+                userDetail__resolvedKey = __key;
+            }
         }
         return userDetail;
     }
 
+    public User getUser(){
+        return userDetail;
+    }
+
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 180278300)
+    @Generated(hash = 660910200)
     public void setUserDetail(User userDetail) {
         synchronized (this) {
             this.userDetail = userDetail;
-            userDetail__refreshed = true;
+            userUid = userDetail == null ? null : userDetail.getUserUid();
+            userDetail__resolvedKey = userUid;
         }
     }
 
@@ -231,12 +241,6 @@ public class FriendRequest implements Serializable {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.delete(this);
-    }
-
-    /** To-one relationship, returned entity is not refreshed and may carry only the PK property. */
-    @Generated(hash = 1955325331)
-    public User peakUserDetail() {
-        return userDetail;
     }
 
     /** called by internal mechanisms, do not call yourself. */

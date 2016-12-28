@@ -3,6 +3,7 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="org.unimelb.itime.bean.FriendRequest"/>
         <variable
             name="viewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.RequestFriendItemViewModel"/>
@@ -38,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/nameTextView"
+            android:textColor="@color/black"
             android:textSize="@dimen/font_big"
             />
 
@@ -60,7 +62,7 @@
             android:layout_marginRight="20dp"
             android:id="@+id/acceptButton"
             android:layout_alignParentRight="true"
-            android:visibility="@{viewModel.requestFriend.accepted? View.GONE : View.VISIBLE}"
+            android:visibility="@{viewModel.displayStatus.equals(FriendRequest.DISPLAY_STATUS_ACCEPT)? View.VISIBLE : View.GONE}"
             android:onClick="@{()-> viewModel.accept()}"
             />
 
@@ -68,14 +70,27 @@
             android:layout_width="70dp"
             android:layout_height="35dp"
             android:gravity="center"
-            android:text="Added"
+            android:text="@string/Added"
             android:textColor="@color/normalGrey"
             android:layout_centerVertical="true"
             android:layout_centerInParent="true"
             android:layout_marginRight="20dp"
             android:id="@+id/addedTextView"
             android:layout_alignParentRight="true"
-            android:visibility="@{viewModel.requestFriend.accepted? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.displayStatus.equals(FriendRequest.DISPLAY_STATUS_ADDED)? View.VISIBLE : View.GONE}"
+            />
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="@string/Accepted"
+            android:textColor="@color/normalGrey"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:visibility="@{viewModel.displayStatus.equals(FriendRequest.DISPLAY_STATUS_ACCEPTED)? View.VISIBLE : View.GONE}"
             />
 
 

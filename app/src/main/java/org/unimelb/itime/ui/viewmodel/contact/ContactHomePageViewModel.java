@@ -151,8 +151,8 @@ public class ContactHomePageViewModel  extends BaseObservable {
 
     public void initData(){
         presenter.getFriends(new FriendsCallBack());
-        presenter.setRequestCountListener(new RequestCountListener());
-        presenter.getRequestCount();
+//        presenter.setRequestCountListener(new RequestCountListener());
+//        presenter.getRequestCount();
     }
 
     public void initSideBarListView(SideBarListView sideBarListView){
