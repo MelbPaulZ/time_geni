@@ -40,7 +40,7 @@ public interface EventApi {
             @Path("eventUid") String eventUid,
             @Body Event event,
             @Query("type") String type,
-            @Query("originStartTime") long originStartTime,
+            @Query("originalStartTime") long originalStartTime,
             @Query("syncToken") String syncToken );
 
     @POST("event/delete/{calendarUid}/{eventUid}")
@@ -48,7 +48,7 @@ public interface EventApi {
             @Path("calendarUid") String calendarUid,
             @Path("eventUid") String eventUid,
             @Query("type") String type,
-            @Query("originStartTime") long originStartTime,
+            @Query("originalStartTime") long originalStartTime,
             @Query("syncToken") String syncToken);
 
 
@@ -66,7 +66,7 @@ public interface EventApi {
             @Path("calendarUid") String calendarUid,
             @Path("eventUid") String eventUid,
             @Query("type") String type,
-            @Query("originStartTime") long originStartTime,
+            @Query("originalStartTime") long originalStartTime,
             @Query("syncToken") String syncToken);
 
 
@@ -75,7 +75,7 @@ public interface EventApi {
             @Path("calendarUid") String calendarUid,
             @Path("eventUid") String eventUid,
             @Query("type") String type,
-            @Query("originStartTime") long originStartTime,
+            @Query("originalStartTime") long originalStartTime,
             @Query("syncToken") String syncToken);
 
     @POST("event/timeslot/accept/{calendarUid}/{eventUid}")

@@ -14,12 +14,14 @@ import com.lzy.imagepicker.ui.ImageGridActivity;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileBinding;
+import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 
+import static org.unimelb.itime.dao.UserDao.Properties.Gender;
 import static org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity.CHOOSE_FROM_LIBRARY;
 
 /**
@@ -80,15 +82,28 @@ public class SettingMyProfileFragment extends BaseUiFragment<SettingCommonMvpVie
                 actionSheetDialog.show();
     }
 
+    private void gotoPhotoPicker(){
+        Intent intent = new Intent(getActivity(), ProfilePhotoPickerActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     public void onViewChange(int task) {
         if (task == MainSettingsViewModel.TASK_VIEW_AVATAR){
-            popupDialog();
+            gotoPhotoPicker();
         }else if (task == MainSettingsViewModel.TASK_TO_SETTING){
-            closeFragment(this, (SettingIndexFragment)getFragmentManager().findFragmentByTag(SettingIndexFragment.class.getSimpleName()));
+            getActivity().finish();
+            getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//            closeFragment(this, (SettingIndexFragment)getFragmentManager().findFragmentByTag(SettingIndexFragment.class.getSimpleName()));
         }else if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE_NAME){
             openFragment(this, (SettingMyProfileNameFragment)getFragmentManager().findFragmentByTag(SettingMyProfileNameFragment.class.getSimpleName()));
+        }else if (task == MainSettingsViewModel.TASK_TO_QR_CODE){
+
+        }else if (task == MainSettingsViewModel.TASK_TO_GENDER){
+            openFragment(this, (SettingProfileGenderFragment)getFragmentManager().findFragmentByTag(SettingProfileGenderFragment.class.getSimpleName()));
+        }else if (task == MainSettingsViewModel.TASK_TO_RESET_PASSWORD){
+            openFragment(this, (SettingProfileResetPasswordFragment)getFragmentManager().findFragmentByTag(SettingProfileResetPasswordFragment.class.getSimpleName()));
         }
     }
 }

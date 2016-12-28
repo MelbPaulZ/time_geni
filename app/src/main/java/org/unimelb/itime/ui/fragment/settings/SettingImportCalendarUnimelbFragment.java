@@ -21,7 +21,8 @@ import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
 
 
-public class SettingImportCalendarUnimelbFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>> {
+public class SettingImportCalendarUnimelbFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
+implements SettingCommonMvpView{
 
     private FragmentSettingImportUnimelbBinding binding;
 
@@ -43,5 +44,12 @@ public class SettingImportCalendarUnimelbFragment extends BaseUiFragment<Setting
     @Override
     public SettingCommonPresenter<SettingCommonMvpView> createPresenter() {
         return new SettingCommonPresenter<>(getContext());
+    }
+
+    @Override
+    public void onViewChange(int task) {
+        if (task == MainSettingsViewModel.TASK_TO_IMPORT_CALENDAR){
+            closeFragment(this, (SettingImportCalendarFragment)getFragmentManager().findFragmentByTag(SettingImportCalendarFragment.class.getSimpleName()));
+        }
     }
 }

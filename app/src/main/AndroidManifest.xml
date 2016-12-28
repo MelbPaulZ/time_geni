@@ -51,6 +51,22 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.SettingActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            </intent-filter>
+        </activity>
+        <!--****************************************************-->
+        <!--todo this is for music background .. need to delete -->
+        <service
+            android:name=".service.MusicService"
+            android:exported="true"
+            android:process=":remote">
+        </service>
+
         <activity android:name=".ui.activity.EventSearchActivity"
             android:launchMode="singleTask">
             <meta-data

@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -38,6 +40,8 @@ import org.unimelb.itime.ui.fragment.contact.ContactHomePageFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingIndexFragment;
+import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
+import org.unimelb.itime.ui.fragment.settings.SettingMyProfileNameFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
@@ -124,8 +128,9 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[0]);
         fragmentTransaction.add(R.id.main_fragment_container, tagFragments[1]);
-        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[2]);
-        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3]);
+        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[2], MainInboxFragment.class.getSimpleName());
+        fragmentTransaction.add(R.id.main_fragment_container, tagFragments[3], SettingIndexFragment.class.getSimpleName());
+
         fragmentTransaction.commit();
         showFragmentById(0);
         refreshTabStatus(0);
@@ -222,10 +227,15 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EventUtil.ACTIVITY_CREATE_EVENT ){
-            ((MainCalendarFragment)tagFragments[0]).reloadEvent();
-            ((MainCalendarFragment)tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+            if (resultCode == Activity.RESULT_OK) {
+                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
+                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+            }
         }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
-            ((MainCalendarFragment)tagFragments[0]).reloadEvent();
+            if (resultCode == Activity.RESULT_OK) {
+                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
+                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+            }
         }
     }
 

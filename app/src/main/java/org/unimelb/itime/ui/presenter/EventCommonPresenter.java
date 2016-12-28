@@ -85,7 +85,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
      * @param event an event set the start time and endtime
      * @param type in {this, following, all}
      */
-    public void updateEvent(Event event, String type, long originStartTime){
+    public void updateEvent(Event event, String type, long originalStartTime){
         if(getView() != null){
             getView().onTaskStart(TASK_EVENT_UPDATE);
         }
@@ -96,7 +96,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
                 event.getEventUid(),
                 event,
                 type ,
-                originStartTime,
+                originalStartTime,
                 syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
@@ -477,7 +477,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void quitEvent(Event event, String type, long originStartTime){
+    public void quitEvent(Event event, String type, long originalStartTime){
         if (getView()!=null){
             getView().onTaskStart(TASK_EVENT_REJECT);
         }
@@ -486,7 +486,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
                 event.getCalendarUid(),
                 event.getEventUid(),
                 type,
-                originStartTime,
+                originalStartTime,
                 syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override

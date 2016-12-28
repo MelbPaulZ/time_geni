@@ -8,6 +8,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.imagepicker.ImagePicker;
@@ -86,6 +87,23 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
                 imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
             }
         });
+
+        initListener();
+    }
+
+    private void initListener(){
+        TextView myProfileBtn = (TextView) findViewById(R.id.avatar_my_profile);
+        myProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toMainActivity();
+            }
+        });
+    }
+
+    private void toMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

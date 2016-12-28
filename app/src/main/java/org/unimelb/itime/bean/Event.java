@@ -29,7 +29,7 @@ import org.unimelb.itime.dao.EventDao;
  */
 
 @Entity(active =  true)
-public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable, RuleInterface{
+public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable, RuleInterface, ITimeComparable<Event>{
     public static final String STATUS_PENDING = "pending";
     public static final String STATUS_UPDATING = "updating";
     public static final String STATUS_CONFIRMED = "confirmed";
@@ -562,6 +562,11 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     public void setConfirmedCount(int confirmedCount) {
         this.confirmedCount = confirmedCount;
+    }
+
+    @Override
+    public boolean iTimeEquals(Event obj2) {
+        return this.getEventUid().equals(obj2.getEventUid());
     }
 
 

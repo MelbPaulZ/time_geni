@@ -18,6 +18,7 @@ import org.unimelb.itime.databinding.FragmentViewCalendarBinding;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
+import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarWeekFragment;
 import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.CommonPresenter;
@@ -31,7 +32,8 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, CommonPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
 
     private final static String TAG = "MainCalendarFragment";
-    private ViewInCalendarMonthDayFragment monthDayFragment;
+//    private ViewInCalendarMonthDayFragment monthDayFragment;
+    private ViewInCalendarWeekFragment weekFragment;
     private FragmentViewCalendarBinding binding;
     private MainCalendarViewModel mainCalendarViewModel;
 
@@ -54,7 +56,7 @@ public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView
         mainCalendarViewModel = new MainCalendarViewModel(getPresenter());
         binding.setCalenarVM(mainCalendarViewModel);
         initCalendars();
-        showCalendar(this.monthDayFragment);
+        showCalendar(this.weekFragment);
     }
 
 
@@ -66,12 +68,16 @@ public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView
 
 
     public void initCalendars(){
-        monthDayFragment = new ViewInCalendarMonthDayFragment();
-        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, monthDayFragment).commit();
+        weekFragment = new ViewInCalendarWeekFragment();
+        getFragmentManager().beginTransaction().add(R.id.calendar_framelayout, weekFragment).commit();
     }
 
-    public ViewInCalendarMonthDayFragment getMonthDayFrag(){
-        return this.monthDayFragment;
+//    public ViewInCalendarMonthDayFragment getMonthDayFrag(){
+//        return this.monthDayFragment;
+//    }
+
+    public ViewInCalendarWeekFragment getWeekViewFrag(){
+        return this.weekFragment;
     }
 
     @Subscribe

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="calendar"
+            type="org.unimelb.itime.bean.Calendar"/>
+        <import type="org.unimelb.itime.util.CalendarUtil"/>
+    </data>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="44dp">
+
+    <TextView
+        style="@style/itime_blacktitle_17sp"
+        android:text="@{calendar.summary}"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/blue_tick"
+        android:layout_marginRight="16dp"/>
+
+
+</RelativeLayout>
+</layout>

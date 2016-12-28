@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.event;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
 import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
+import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarWeekFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
@@ -154,9 +156,10 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
     }
     
 
-    private void toCalendar() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+    private void toCalendar(int resultCode) {
+        Intent intent = new Intent();
+        getActivity().setResult(resultCode, intent);
+        getActivity().finish();
     }
 
     @Override
@@ -177,9 +180,11 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
     public void viewInCalendar() {
 
         if (event.getStatus().equals("confirmed")){
+
             ViewMainCalendarFragment viewMainCalendarFragment = (ViewMainCalendarFragment) getFragmentManager().findFragmentByTag(ViewMainCalendarFragment.class.getSimpleName());
-            ViewInCalendarMonthDayFragment viewInCalendarMonthDayFragment = viewMainCalendarFragment.getMonthDayFrag();
-            viewInCalendarMonthDayFragment.scrollToWithOffset(event.getStartTime());
+            ViewInCalendarWeekFragment viewInCalendarWeekFragment = viewMainCalendarFragment.getWeekViewFrag();
+            viewInCalendarWeekFragment.scrollToWithOffset(event.getStartTime());
+            viewInCalendarWeekFragment.showAnim(event);
 
             openFragment(this,viewMainCalendarFragment);
         }else {
@@ -211,17 +216,19 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
         if (task == EventCommonPresenter.TASK_TIMESLOT_ACCEPT){
-            toCalendar();
+            toCalendar(Activity.RESULT_OK);
         }else if (task == EventCommonPresenter.TASK_EVENT_CONFIRM){
-            toCalendar();
+            toCalendar(Activity.RESULT_OK);
         }else if (task == EventCommonPresenter.TASK_TIMESLOT_REJECT){
-            toCalendar();
+            toCalendar(Activity.RESULT_OK);
         }else if (task == EventCommonPresenter.TASK_BACK){
-            toCalendar();
+            toCalendar(Activity.RESULT_CANCELED);
         }else if (task == EventCommonPresenter.TASK_EVENT_ACCEPT){
-            toCalendar();
+            toCalendar(Activity.RESULT_OK);
         }else if (task == EventCommonPresenter.TASK_EVENT_REJECT){
-            toCalendar();
+            toCalendar(Activity.RESULT_OK);
         }
     }
+
+
 }

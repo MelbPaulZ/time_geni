@@ -54,12 +54,33 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
         if (root == null) {
             root = inflater.inflate(R.layout.fragment_week_view, container, false);
         }
+        initViews();
         return root;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+    }
+
+    public void backToday() {
+        weekView.backToToday();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loadData(MessageEvent messageEvent) {
+        if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
+            weekView.setDayEventMap(eventManager.getEventsPackage());
+            weekView.reloadEvents();
+        }
+    }
+
+    public void scrollTo(Calendar calendar) {
+        weekView.scrollTo(calendar);
+    }
+
+    private void initViews(){
         eventManager = EventManager.getInstance(getContext());
         weekView = (WeekView) root.findViewById(R.id.week_view);
         weekView.setDayEventMap(eventManager.getEventsPackage());
@@ -149,22 +170,6 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
             }
 
         });
-    }
-
-    public void backToday() {
-        weekView.backToToday();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void loadData(MessageEvent messageEvent) {
-        if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
-            weekView.setDayEventMap(eventManager.getEventsPackage());
-            weekView.reloadEvents();
-        }
-    }
-
-    public void scrollTo(Calendar calendar) {
-        weekView.scrollTo(calendar);
     }
 
 

@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.ITimeComparable;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
@@ -21,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -138,6 +140,8 @@ public class EventManager {
 
         if (!rEUID.equals("") && !rEUID.equals(event.getEventUid())){
             if (this.specialEvent.containsKey(rEUID)){
+                ArrayList<Event> specialEvents = this.specialEvent.get(rEUID);
+                EventUtil.removeWhileLooping(specialEvents,event);
                 this.specialEvent.get(rEUID).add(event);
             }else{
                 ArrayList<Event> specialList = new ArrayList<>();

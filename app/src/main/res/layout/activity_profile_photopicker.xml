@@ -23,6 +23,7 @@
 
             <!--toolbar settings text-->
             <TextView
+                android:id="@+id/avatar_my_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_my_profile"

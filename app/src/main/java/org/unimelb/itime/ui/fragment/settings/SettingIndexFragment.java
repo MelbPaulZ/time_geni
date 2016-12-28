@@ -9,10 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.ui.ImageGridActivity;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,7 +22,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.LoginActivity;
-import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
+import org.unimelb.itime.ui.activity.SettingActivity;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
@@ -33,8 +30,6 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.AuthUtil;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
-
-import static org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity.CHOOSE_FROM_LIBRARY;
 
 /**
  * Created by Paul on 25/12/2016.
@@ -45,6 +40,7 @@ implements SettingCommonMvpView{
 
     private FragmentSettingBinding binding;
     private final String TAG = "SettingIndexFragment";
+
 
     @Override
     public SettingCommonPresenter<SettingCommonMvpView> createPresenter() {
@@ -64,6 +60,7 @@ implements SettingCommonMvpView{
         MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
+
 
     @Subscribe
     public void logout(MessageEvent messageEvent){
@@ -129,11 +126,37 @@ implements SettingCommonMvpView{
 
     @Override
     public void onViewChange(int task) {
+//        if (task == MainSettingsViewModel.TASK_LOGOUT){
+//            popupDialog();
+//        }else if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
+//            SettingMyProfileFragment myProfileFragment = (SettingMyProfileFragment) getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
+//            openFragment(this, myProfileFragment);
+//        }else if (task == MainSettingsViewModel.TASK_TO_SCAN_QR_CODE){
+//
+//        }else if (task == MainSettingsViewModel.TASK_TO_BLOCK_USER){
+//
+//        }else if (task == MainSettingsViewModel.TASK_TO_NOTICIFATION){
+//            openFragment(this, (SettingNotificationFragment)getFragmentManager().findFragmentByTag(SettingNotificationFragment.class.getSimpleName()));
+//        }else if (task == MainSettingsViewModel.TASK_TO_CALENDAR_PREFERENCE){
+//            openFragment(this, (SettingCalendarPreferenceFragment)getFragmentManager().findFragmentByTag(SettingCalendarPreferenceFragment.class.getSimpleName()));
+//        }else if (task == MainSettingsViewModel.TASK_TO_HELP_AND_FEEDBACK){
+//
+//        }else if (task == MainSettingsViewModel.TASK_TO_ABOUT){
+//            openFragment(this, (SettingAboutFragment)getFragmentManager().findFragmentByTag(SettingAboutFragment.class.getSimpleName()));
+//        }
         if (task == MainSettingsViewModel.TASK_LOGOUT){
             popupDialog();
-        }else if (task == MainSettingsViewModel.TASK_VIEW_MY_PROFILE){
-            SettingMyProfileFragment myProfileFragment = (SettingMyProfileFragment) getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
-            openFragment(this, myProfileFragment);
+        }else if (task == MainSettingsViewModel.TASK_TO_SCAN_QR_CODE ||
+                task == MainSettingsViewModel.TASK_TO_BLOCK_USER ||
+                task == MainSettingsViewModel.TASK_TO_HELP_AND_FEEDBACK){
+            Toast.makeText(getContext(), "todo",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Intent intent = new Intent(getActivity(), SettingActivity.class);
+            intent.putExtra(SettingActivity.TASK, task);
+            startActivityForResult(intent, task);
+            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
         }
     }
 
