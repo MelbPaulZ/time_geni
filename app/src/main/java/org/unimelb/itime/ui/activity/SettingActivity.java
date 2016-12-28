@@ -6,6 +6,7 @@ import android.os.Bundle;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.service.MusicService;
 import org.unimelb.itime.ui.fragment.settings.SettingAboutFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingCalendarPreferenceFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingDefaultCalendarFragment;
@@ -17,10 +18,6 @@ import org.unimelb.itime.ui.fragment.settings.SettingNotificationFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingProfileGenderFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingProfileResetPasswordFragment;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
-
-import static com.avos.avoscloud.LogUtil.log.show;
-import static com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.H;
-import static org.unimelb.itime.R.string.about;
 
 public class SettingActivity extends BaseActivity{
 
@@ -46,6 +43,13 @@ public class SettingActivity extends BaseActivity{
         setContentView(R.layout.activity_setting);
         initSettingFragments();
         show();
+
+        music();
+    }
+
+    private void music(){
+        Intent intent = new Intent(this,MusicService.class);
+        startService(intent);
     }
 
     private void show(){
@@ -108,5 +112,13 @@ public class SettingActivity extends BaseActivity{
 
     private void showFragment(BaseUiFragment fragment){
         getSupportFragmentManager().beginTransaction().show(fragment).commit();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        Intent intent = new Intent(this,MusicService.class);
+        stopService(intent);
+        super.onDestroy();
     }
 }
