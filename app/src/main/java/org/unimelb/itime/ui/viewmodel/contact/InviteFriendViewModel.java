@@ -456,10 +456,10 @@ public class InviteFriendViewModel extends BaseObservable {
     private Invitee unactivatedInvitee(String str, Event event) {
         Invitee invitee = new Invitee();
         invitee.setUserStatus(Invitee.USER_STATUS_UNACTIVATED);
-        invitee.setAliasName(str);
+        invitee.setUserId(str);
 
         //please replace these two with right value
-        invitee.setUserId(str);
+        invitee.setAliasName(str);
         invitee.setUserUid(str);
 
         return  invitee;

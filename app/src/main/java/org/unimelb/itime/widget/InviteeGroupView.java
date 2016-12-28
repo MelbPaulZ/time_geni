@@ -132,7 +132,7 @@ public class InviteeGroupView extends LinearLayout {
             return;
         }
         TextView emailTextView = new TextView(this.getContext());
-        emailTextView.setText(invitee.getName());
+        emailTextView.setText(invitee.getUserId());
         if(squareHeight == 0){
             ListView.LayoutParams params = new ListView.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             emailTextView.setLayoutParams(params);
@@ -162,7 +162,7 @@ public class InviteeGroupView extends LinearLayout {
             return;
         }
         TextView phoneTextView = new TextView(this.getContext());
-        phoneTextView.setText(invitee.getName());
+        phoneTextView.setText(invitee.getUserId());
         if(squareHeight == 0){
             ListView.LayoutParams params = new ListView.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             phoneTextView.setLayoutParams(params);
