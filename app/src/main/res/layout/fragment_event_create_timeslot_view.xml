@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar"
             android:layout_above="@+id/duration_part"
-            app:onWeekViewChange="@{timeslotVM.onWeekViewChange()}">
+            app:onWeekViewDayChange="@{timeslotVM.onWeekViewChange()}">
         </org.unimelb.itime.vendor.weekview.WeekView>
     </RelativeLayout>
 

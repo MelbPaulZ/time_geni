@@ -108,6 +108,7 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
         this.totalNum = i;
     }
 
+    @Override
     public String getTimeslotUid() {
         return timeslotUid;
     }
@@ -115,9 +116,6 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     public void setTimeslotUid(String timeslotUid) {
         this.timeslotUid = timeslotUid;
     }
-
-
-
 
     public String getEventUid() {
         return eventUid;

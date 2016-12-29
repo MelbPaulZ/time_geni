@@ -78,7 +78,11 @@ public class CalendarMonthDayFragment extends BaseUiFragment<EventCommonMvpView,
 
     private void initView(){
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
+        //Set the data source with format of ITimeEventPackageInterface
+        //ITimeEventPackageInterface is composed by two parts:
+        //  1: regular events. 2: repeated events.
         monthDayView.setDayEventMap(eventManager.getEventsPackage());
+        //If creating instance of event is needed, set the class.
         monthDayView.setEventClassName(Event.class);
         monthDayView.setOnHeaderListener(new MonthDayView.OnHeaderListener() {
             @Override

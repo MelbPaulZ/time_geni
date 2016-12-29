@@ -103,7 +103,7 @@
             android:id="@+id/edit_timeslot_weekview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:onWeekViewChange="@{timeSlotHostVM.onWeekViewChange()}"
+            app:onWeekViewDayChange="@{timeSlotHostVM.onWeekViewChange()}"
             app:onTimeSlotOuterListener="@{timeSlotHostVM.onWeekOuterListener()}">
         </org.unimelb.itime.vendor.weekview.WeekView>
     </LinearLayout>

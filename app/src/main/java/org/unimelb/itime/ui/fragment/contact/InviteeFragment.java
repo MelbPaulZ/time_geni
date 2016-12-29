@@ -276,7 +276,7 @@ public class InviteeFragment extends BaseUiFragment {
                         return contacts_list;
                     }
                 });
-                addPublicHeaderView();
+//                addPublicHeaderView();
 
             }
         }
@@ -531,7 +531,6 @@ public class InviteeFragment extends BaseUiFragment {
     public void setEvent(Event event){
         this.event = event;
     }
-
 
 
     /***********************************
