@@ -217,7 +217,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                     weekView.addTimeSlot(timeSlot);
                 }
             }
-//            weekView.reloadTimeSlots(false);
+            weekView.reloadTimeSlots(false);
         }
     }
 

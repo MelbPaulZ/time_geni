@@ -193,14 +193,8 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
         }else {
             final EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
             timeSlotFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event), this.adapterData);
-//            timeSlotFragment.getWeekView().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
-//                }
-//            },1000);
-            openFragment(this,timeSlotFragment);
             timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
+            openFragment(this,timeSlotFragment);
 
         }
     }
