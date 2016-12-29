@@ -84,7 +84,6 @@ public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMv
                     return null;
                 }else {
                     for(Contact contact:result.getData()) {
-                        dbManager.insertUser(contact.getUser());
                         dbManager.insertContact(contact);
                     }
                     return DBManager.getInstance(context).getAllContact();

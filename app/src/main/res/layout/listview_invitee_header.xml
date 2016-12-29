@@ -28,6 +28,9 @@
             android:padding="10dp"
             app:hintText="@string/search_hint"
             android:id="@+id/inviteeGroupView"
+            app:inviteeList = "@{viewModel.inviteeList}"
+            app:onInviteeClickListener = "@{viewModel.onInviteeGroupViewItemClickListener}"
+            app:onEditListener = "@{viewModel.onEditListener}"
             />
 
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout >
     <data>
+        <import type="android.view.View"/>
         <variable
             name="mainViewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel"/>
@@ -29,7 +30,8 @@
         app:image="@drawable/ic_new_contact"
         app:text="New Friends"
         android:onClick="@{mainViewModel.newFriendListener}"
-        app:badgeCount = "@{mainViewModel.requestCount}"/>
+        app:badgeCount = "@{mainViewModel.requestCount}"
+        android:visibility="@{mainViewModel.searching?View.GONE:View.VISIBLE}"/>
 
     <include layout="@layout/line"/>
     <TextView android:layout_height="wrap_content"
@@ -38,7 +40,8 @@
         android:textColor="@color/normalGrey"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="20dp"
+        android:visibility="@{mainViewModel.searching?View.GONE:View.VISIBLE}"/>
 
     <include layout="@layout/line"/>
 

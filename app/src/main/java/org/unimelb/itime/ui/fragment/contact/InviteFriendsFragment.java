@@ -52,13 +52,23 @@ public class InviteFriendsFragment  extends BaseUiFragment<InviteFriendMvpView, 
         return new InviteFriendPresenter(getActivity());
     }
 
+    @Override
     public void onStart(){
         super.onStart();
         viewModel.setHeaderView((LinearLayout) headerBinding.getRoot());
         viewModel.setSideBarListView(binding.friendsListView);
         inviteeGroupView = headerBinding.inviteeGroupView;
-        viewModel.setInviteeGroupView(inviteeGroupView);
+        viewModel.setEvent(event);
         viewModel.loadData();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle bundle){
+        super.onActivityCreated(bundle);
+//        presenter = createPresenter();
+        viewModel = new InviteFriendViewModel(presenter);
+        binding.setViewModel(viewModel);
+        headerBinding.setViewModel(viewModel);
     }
 
     public View onCreateView(LayoutInflater inflater,
@@ -67,24 +77,10 @@ public class InviteFriendsFragment  extends BaseUiFragment<InviteFriendMvpView, 
                 R.layout.fragment_invite_fridends, container, false);
         headerBinding = DataBindingUtil.inflate(inflater,
                 R.layout.listview_invitee_header, null, false);
-        presenter = createPresenter();
-        viewModel = new InviteFriendViewModel(presenter);
-        binding.setViewModel(viewModel);
-        headerBinding.setViewModel(viewModel);
         fm = getFragmentManager();
-        EventBus.getDefault().register(this);
         return binding.getRoot();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void removeContact(MessageRemoveContact msg){
-        viewModel.removeContact(msg.contact);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void addContact(MessageAddContact msg){
-        viewModel.addContact(msg.contact);
-    }
 
     public void gotoInviteMobileContacts(){
 
@@ -137,7 +133,8 @@ public class InviteFriendsFragment  extends BaseUiFragment<InviteFriendMvpView, 
     }
 
     //Write your code here
+    @Override
     public void onDoneClicked(){
-
+        System.out.println(viewModel.getInviteeList().size());
     }
 }

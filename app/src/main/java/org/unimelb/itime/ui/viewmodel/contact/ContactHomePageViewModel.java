@@ -33,7 +33,18 @@ public class ContactHomePageViewModel  extends BaseObservable {
     private ItemView itemView;
     private String title = "Contacts";
     private List<ITimeUser> friendList;
+    private boolean searching;
     private int requestCount=0;
+
+    @Bindable
+    public boolean getSearching() {
+        return searching;
+    }
+
+    public void setSearching(boolean searching) {
+        this.searching = searching;
+        notifyPropertyChanged(BR.searching);
+    }
 
     public ObservableList getItems() {
         return items;
@@ -184,6 +195,11 @@ public class ContactHomePageViewModel  extends BaseObservable {
         return new SearchBar.OnEditListener() {
                 @Override
                 public void onEditing(View view, String text) {
+                    if(text.equals("")){
+                        setSearching(false);
+                    }else{
+                        setSearching(true);
+                    }
                     updateListView(filterData(text));
                 }
             };

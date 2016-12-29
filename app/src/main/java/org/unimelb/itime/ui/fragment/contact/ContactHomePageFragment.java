@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.ContactHomePageBinding;
 import org.unimelb.itime.messageevent.MessageAddContact;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
@@ -29,7 +30,7 @@ import org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel;
  * Created by 37925 on 2016/12/8.
  */
 
-public class ContactHomePageFragment extends MvpFragment<ContactHomePageMvpView, ContactHomePagePresenter> implements ContactHomePageMvpView {
+public class ContactHomePageFragment extends BaseUiFragment<ContactHomePageMvpView, ContactHomePagePresenter> implements ContactHomePageMvpView {
     private ContactHomePageBinding binding;
     private android.support.v4.app.FragmentManager fm;
     private NewFriendFragment newFriendFragment;

@@ -2,6 +2,7 @@ package org.unimelb.itime.bean;
 
 import android.support.annotation.Nullable;
 
+import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -41,16 +42,16 @@ public class Contact implements ITimeContactInterface, Serializable {
     private String status;
     private int blockLevel;
 
-    @ToOne(joinProperty = "contactUid")
+    @Convert(converter = User.UserConverter.class , columnType = String.class)
     private User userDetail;
-    @Generated(hash = 317222054)
-    private transient String userDetail__resolvedKey;
-    /** Used for active entity operations. */
-    @Generated(hash = 2046468181)
-    private transient ContactDao myDao;
-    /** Used to resolve relations */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
+
+    public User getUserDetail() {
+        return userDetail;
+    }
+
+    public void setUserDetail(User userDetail) {
+        this.userDetail = userDetail;
+    }
 
 
 
@@ -72,8 +73,9 @@ public class Contact implements ITimeContactInterface, Serializable {
 //        this.blockLevel = blockLevel;
 //    }
 
-@Generated(hash = 283800893)
-public Contact(String userUid, String contactUid, int relationship, int ratingVisibility, int eventVisibility, String source, String aliasName, String aliasPhoto, int catchCount, long nextCatchupTime, long lastCatchupTime, String note, String status, int blockLevel) {
+@Generated(hash = 900700935)
+public Contact(String userUid, String contactUid, int relationship, int ratingVisibility, int eventVisibility, String source, String aliasName, String aliasPhoto, int catchCount, long nextCatchupTime, long lastCatchupTime, String note, String status, int blockLevel,
+        User userDetail) {
     this.userUid = userUid;
     this.contactUid = contactUid;
     this.relationship = relationship;
@@ -88,7 +90,10 @@ public Contact(String userUid, String contactUid, int relationship, int ratingVi
     this.note = note;
     this.status = status;
     this.blockLevel = blockLevel;
+    this.userDetail = userDetail;
 }
+
+    
 
     
 
@@ -252,79 +257,4 @@ public Contact(String userUid, String contactUid, int relationship, int ratingVi
         this.status = status;
     }
 
-    /** To-one relationship, resolved on first access. */
-    @Generated(hash = 1688336360)
-    public User getUserDetail() {
-        String __key = this.contactUid;
-        if (userDetail__resolvedKey == null || userDetail__resolvedKey != __key) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            UserDao targetDao = daoSession.getUserDao();
-            User userDetailNew = targetDao.load(__key);
-            synchronized (this) {
-                userDetail = userDetailNew;
-                userDetail__resolvedKey = __key;
-            }
-        }
-        return userDetail;
-    }
-
-    public User getUser(){
-        return userDetail;
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 1942392019)
-    public void refresh() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.refresh(this);
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 713229351)
-    public void update() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.update(this);
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 128553479)
-    public void delete() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.delete(this);
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1323659472)
-    public void setUserDetail(User userDetail) {
-        synchronized (this) {
-            this.userDetail = userDetail;
-            contactUid = userDetail == null ? null : userDetail.getUserUid();
-            userDetail__resolvedKey = contactUid;
-        }
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 2088270543)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getContactDao() : null;
-    }
 }
