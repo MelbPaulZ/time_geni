@@ -451,8 +451,10 @@ public class InviteFriendViewModel extends BaseObservable {
         invitee.setUserId(str);
 
         //please replace these two with right value
+        invitee.setEventUid(event.getEventUid());
+        invitee.setInviteeUid(AppUtil.generateUuid());
         invitee.setAliasName(str);
-        invitee.setUserUid(str);
+        invitee.setUserUid("-1");
 
         return  invitee;
     }
