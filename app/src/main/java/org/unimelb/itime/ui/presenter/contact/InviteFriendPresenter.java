@@ -156,7 +156,7 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
     }
 
     public void onBackPress() {
-        getView().getActivity().onBackPressed();
+        getView().onBackClicked();
     }
 
     public boolean isUniMelbEmail(String str) {
