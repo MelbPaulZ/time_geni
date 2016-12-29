@@ -304,7 +304,7 @@ public class InviteFriendViewModel extends BaseObservable {
                 BaseContact user = (BaseContact) viewModel.getContact();
                 if (viewModel.getSelected()) {
                     viewModel.setSelected(false);
-                    deleteInvitee(user.getContact().getContactUid());
+                    deleteInvitee(user.getContact());
 
                 } else {
                     viewModel.setSelected(true);
@@ -326,7 +326,7 @@ public class InviteFriendViewModel extends BaseObservable {
                     if(item.getContact()==user){
                         if (item.getSelected()) {
                             item.setSelected(false);
-                            deleteInvitee(user.getContact().getContactUid());
+                            deleteInvitee(user.getContact());
                         } else {
                             item.setSelected(true);
                             addInvitee(contactToInvitee(user.getContact(), event));
@@ -350,7 +350,7 @@ public class InviteFriendViewModel extends BaseObservable {
                         break;
                     }
                 }
-                deleteInvitee(invitee.getUserUid());
+                deleteInvitee(invitee);
             }
         };
     }
@@ -449,7 +449,7 @@ public class InviteFriendViewModel extends BaseObservable {
         Invitee invitee = new Invitee();
         invitee.setUserStatus(Invitee.USER_STATUS_UNACTIVATED);
         invitee.setUserId(str);
-
+        invitee.setInviteeUid(str);
         //please replace these two with right value
         invitee.setEventUid(event.getEventUid());
         invitee.setInviteeUid(AppUtil.generateUuid());
@@ -483,7 +483,7 @@ public class InviteFriendViewModel extends BaseObservable {
 
     public void addInvitee(ITimeInviteeInterface invitee){
         for(ITimeInviteeInterface i:inviteeList){
-            if (i.getUserUid().equals(invitee.getUserUid())){
+            if (i.getInviteeUid().equals(invitee.getInviteeUid())){
                 notifyPropertyChanged(BR.inviteeList);
                 return;
             }
@@ -493,9 +493,20 @@ public class InviteFriendViewModel extends BaseObservable {
         notifyPropertyChanged(BR.inviteeList);
     }
 
-    public void deleteInvitee(String uid){
+    public void deleteInvitee(Contact contact){
         for(ITimeInviteeInterface i:inviteeList){
-            if (i.getUserUid().equals(uid)){
+            if (i.getUserUid().equals(contact.getContactUid())){
+                inviteeList.remove(i);
+                break;
+            }
+        }
+        setCountStr(inviteeList.size());
+        notifyPropertyChanged(BR.inviteeList);
+    }
+
+    public void deleteInvitee(ITimeInviteeInterface invitee){
+        for(ITimeInviteeInterface i:inviteeList){
+            if (i.getInviteeUid().equals(invitee.getInviteeUid())){
                 inviteeList.remove(i);
                 break;
             }
