@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,6 +31,7 @@ import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
+import org.unimelb.itime.util.AppUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,16 +163,18 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
 
     @Override
     public void onTaskStart(int task) {
-
+        AppUtil.showProgressBar(getActivity(), "Waiting", "Uploading");
     }
 
     @Override
     public void onTaskError(int task, String errorMsg, int code) {
-
+        AppUtil.hideProgressBar();
+        Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
+        AppUtil.hideProgressBar();
         Intent intent = new Intent();
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();

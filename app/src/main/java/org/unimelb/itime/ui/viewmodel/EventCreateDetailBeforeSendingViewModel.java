@@ -337,12 +337,10 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                 newEvDtlEvent.setRecurringEventId(newEvDtlEvent.getEventUid());
                 newEvDtlEvent.setStatus("pending");
 
+                eventManager.setCurrentEvent(newEvDtlEvent);
+
                 presenter.insertEvent(newEvDtlEvent);
 
-                eventManager.setCurrentEvent(newEvDtlEvent);
-                if (mvpView!=null){
-                    mvpView.onClickSend();
-                }
             }
         };
     }

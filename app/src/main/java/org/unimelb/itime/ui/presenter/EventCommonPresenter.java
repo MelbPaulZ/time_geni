@@ -3,6 +3,9 @@ package org.unimelb.itime.ui.presenter;
 import android.content.Context;
 import android.util.Log;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.SaveCallback;
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -23,6 +26,7 @@ import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -412,41 +416,25 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
      * currently it will be uploaded to our server
      * @param event
      */
-    public void uploadImage(final Event event){
+    public void uploadImage(final Event event) {
         if (event.hasPhoto()){
-            for (PhotoUrl photoUrl : event.getPhoto()){
+            for (final PhotoUrl photoUrl : event.getPhoto()){
                 // create file
-                File file = new File(photoUrl.getLocalPath());
-                // create RequestBody instance from file
-                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                // MultipartBody.Part is used to send also the actual file name
-                MultipartBody.Part body = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
-                // generate photoUid part
-                RequestBody photoUidRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), photoUrl.getPhotoUid());
-                Observable<HttpResult<PhotoUrl>> observable = photoApi.uploadPhoto(photoUidRequestBody, body);
-                Subscriber<HttpResult<PhotoUrl>> subscriber = new Subscriber<HttpResult<PhotoUrl>>() {
-                    @Override
-                    public void onCompleted() {
+                String fileName = event.getEventUid() + "_" + photoUrl.getPhotoUid() + ".png";
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i(TAG, "onError: ");
-                    }
-
-                    @Override
-                    public void onNext(HttpResult<PhotoUrl> photoUrlHttpResult) {
-                        PhotoUrl photoUrl = photoUrlHttpResult.getData();
-                        for (PhotoUrl url : event.getPhoto()){
-                            if (photoUrl.getPhotoUid().equals(url.getPhotoUid())){
-                                url.setUrl(photoUrl.getUrl());
-                                updatePhotoToServer(event, url);
+                try {
+                    final AVFile file = AVFile.withAbsoluteLocalPath(fileName,photoUrl.getLocalPath());
+                    file.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(AVException e) {
+                            if (e==null){
+                                updatePhotoToServer(event, photoUrl.getPhotoUid(), file.getUrl());
                             }
                         }
-                    }
-                };
-                HttpUtil.subscribe(observable, subscriber);
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -454,10 +442,10 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
     /**
      * update the photo url to server
      * @param event
-     * @param photoUrl
+     * @param url
      */
-    private void updatePhotoToServer(Event event, PhotoUrl photoUrl){
-        Observable<HttpResult<Event>> observable = photoApi.updatePhoto(event.getCalendarUid(), event.getEventUid(), photoUrl.getPhotoUid(), photoUrl.getUrl());
+    private void updatePhotoToServer(Event event, String photoUid, String url){
+        Observable<HttpResult<Event>> observable = photoApi.updatePhoto(event.getCalendarUid(), event.getEventUid(), photoUid, url);
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
             public void onCompleted() {

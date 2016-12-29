@@ -11,6 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.SaveCallback;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageCropActivity;
@@ -19,11 +22,18 @@ import com.lzy.imagepicker.view.CropImageView;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.User;
+import org.unimelb.itime.managers.SettingManager;
+import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
+
+import static android.R.attr.data;
 
 public class ProfilePhotoPickerActivity extends AppCompatActivity {
     public static final int CHOOSE_FROM_LIBRARY = 0;
@@ -89,6 +99,12 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
         });
 
         initListener();
+
+        // display photo on screen
+        String url = SettingManager.getInstance(getApplicationContext()).getSetting().getUser().getPhoto();
+        if (!url.equals("")) {
+            setPhoto(url);
+        }
     }
 
     private void initListener(){
@@ -96,14 +112,37 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
         myProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toMainActivity();
+                toSettingActivity();
             }
         });
     }
 
-    private void toMainActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    private void toSettingActivity(){
+        finish();
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+    }
+
+    private void setPhoto(String url){
+        Picasso.with(ProfilePhotoPickerActivity.this).load(url).into((ImageView) findViewById(R.id.profile_image));
+    }
+
+    private void updatePhoto(String localPath) throws IOException {
+        String userUid = UserUtil.getInstance(getApplicationContext()).getUser().getUserUid();
+        final AVFile file = AVFile.withAbsoluteLocalPath("photo_"+userUid+".png", localPath);
+
+        file.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(AVException e) {
+                if (e==null) {
+                    SettingManager.getInstance(getApplicationContext()).getSetting().getUser().setPhoto(file.getUrl());
+                    // TODO: 28/12/2016 sync user to server
+                }else{
+                    Toast.makeText(getApplicationContext(), "fail", Toast.LENGTH_SHORT).show();
+                }
+
+                AppUtil.hideProgressBar();
+            }
+        });
     }
 
     @Override
@@ -116,6 +155,15 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                 for (int i = 0; i < images.size(); i++) {
                     Picasso.with(ProfilePhotoPickerActivity.this).load(new File(images.get(i).path)).into((ImageView) findViewById(R.id.profile_image));
+                    // todo update photo to server
+
+                    try {
+                        AppUtil.showProgressBar(this, "Waiting", "uploading photo");
+                        updatePhoto(images.get(i).path);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
                 }
             } else {

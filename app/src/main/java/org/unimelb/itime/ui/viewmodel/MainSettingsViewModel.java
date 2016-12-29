@@ -11,6 +11,8 @@ import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Calendar;
+import org.unimelb.itime.bean.Setting;
+import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.util.UserUtil;
@@ -28,6 +30,8 @@ public class MainSettingsViewModel extends BaseObservable{
     private static final String TAG = "MainSettingsViewModel";
     private SettingCommonPresenter presenter;
     private SettingCommonMvpView mvpView;
+    private Setting setting;
+
 
     private ObservableList<Calendar> calendars = new ObservableArrayList<>();
     private ItemView calendarItemView = ItemView.of(BR.calendar, R.layout.setting_default_calendar_listview);
@@ -57,15 +61,16 @@ public class MainSettingsViewModel extends BaseObservable{
         this.presenter = presenter;
         this.mvpView = (SettingCommonMvpView) presenter.getView();
 
+        if (setting == null){
+            this.setting = SettingManager.getInstance(getContext()).getSetting();
+        }
+
     }
 
     private Context getContext(){
         return presenter.getContext();
     }
 
-    public String getUsername(){
-            return UserUtil.getInstance(getContext()).getUser().getEmail();
-    }
 
 
     public View.OnClickListener onViewChange(final int task){
@@ -95,5 +100,15 @@ public class MainSettingsViewModel extends BaseObservable{
     public void setCalendars(ObservableList<Calendar> calendars) {
         this.calendars = calendars;
         notifyPropertyChanged(BR.calendars);
+    }
+
+    @Bindable
+    public Setting getSetting() {
+        return setting;
+    }
+
+    public void setSetting(Setting setting) {
+        this.setting = setting;
+        notifyPropertyChanged(BR.setting);
     }
 }
