@@ -31,8 +31,11 @@ import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
+import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -188,10 +191,17 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
 
             openFragment(this,viewMainCalendarFragment);
         }else {
-            EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
+            final EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
             timeSlotFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event), this.adapterData);
-
+//            timeSlotFragment.getWeekView().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
+//                }
+//            },1000);
             openFragment(this,timeSlotFragment);
+            timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
+
         }
     }
 

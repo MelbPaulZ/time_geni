@@ -533,7 +533,6 @@ public class InviteeFragment extends BaseUiFragment {
     }
 
 
-
     /***********************************
      * load contacts
      ***********************************************/

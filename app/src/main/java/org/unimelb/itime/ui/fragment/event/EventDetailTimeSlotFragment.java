@@ -56,32 +56,35 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_detail_timeslot_host_view, container, false);
+        init();
         return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        eventManager = EventManager.getInstance(getContext());
+
         viewModel = new EventDetailTimeSlotViewModel(presenter);
         if (event == null) {
             event = eventManager.copyCurrentEvent(eventManager.getCurrentEvent());
         }
         viewModel.setEventDetailHostEvent(event);
         binding.setTimeSlotHostVM(viewModel);
-
-        weekView = (WeekView) binding.getRoot().findViewById(R.id.edit_timeslot_weekview);
-
-        weekView.enableTimeSlot();
-        weekView.setEventClassName(Event.class);
-        weekView.setDayEventMap(eventManager.getEventsPackage());
-
         if (UserUtil.getInstance(getContext()).getUserUid().equals(event.getHostUserUid())) {
             // which means this is host event
         } else {
             // which means this is invitee event
             weekView.removeAllOptListener();
         }
+    }
+
+    private void init(){
+        eventManager = EventManager.getInstance(getContext());
+        weekView = (WeekView) binding.getRoot().findViewById(R.id.edit_timeslot_weekview);
+
+        weekView.enableTimeSlot();
+        weekView.setEventClassName(Event.class);
+        weekView.setDayEventMap(eventManager.getEventsPackage());
     }
 
     //
@@ -96,8 +99,6 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
         if (viewModel != null) {
             viewModel.setEventDetailHostEvent(event);
         }
-//        loginViewModel.initTimeSlots(weekView);
-
     }
 
 
@@ -220,7 +221,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                     weekView.addTimeSlot(timeSlot);
                 }
             }
-            weekView.reloadTimeSlots(false);
+//            weekView.reloadTimeSlots(false);
         }
     }
 
@@ -383,5 +384,9 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                 timeSlot.setStatus(Timeslot.STATUS_PENDING);
             }
         }
+    }
+
+    public WeekView getWeekView(){
+        return this.weekView;
     }
 }
