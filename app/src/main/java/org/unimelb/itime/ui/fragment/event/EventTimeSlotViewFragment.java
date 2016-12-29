@@ -39,8 +39,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static kotlin.text.Typography.times;
-
 
 /**
  * Created by Paul on 27/08/2016.

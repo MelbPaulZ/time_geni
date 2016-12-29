@@ -38,7 +38,7 @@ public class InviteeGroupView extends LinearLayout {
     private int AVATAR_WIDTH_DEFAULT = dp2px(50);
     private int AVATAR_HEIGHT_DEFAULT = dp2px(50);
     private int SQUARE_HEIGHT_DEFAULT = 0;
-    private List<ITimeInviteeInterface> inviteeList;
+    private List<? extends ITimeInviteeInterface> inviteeList;
 //    private final static int PHONE_COLOR_DEFAULT = Color.rgb(255,128,0);
 //    private final static int EMAIL_COLOR_DEFAULT = Color.rgb(50,205,50);
     private FlowLayout avatarFlowLayout;
@@ -85,7 +85,7 @@ public class InviteeGroupView extends LinearLayout {
         clearInput();
     }
 
-    public void setInviteeList(List<ITimeInviteeInterface> inviteeList) {
+    public void setInviteeList(List<? extends ITimeInviteeInterface> inviteeList) {
         if(inviteeList!=null) {
             if(this.inviteeList==null){
                 this.inviteeList = inviteeList;
@@ -93,18 +93,6 @@ public class InviteeGroupView extends LinearLayout {
             clearViews();
             for (ITimeInviteeInterface invitee : inviteeList) {
                 addInvitee(invitee);
-            }
-        }
-    }
-
-    private void addInviteeToList(ITimeInviteeInterface invitee){
-        this.inviteeList.add(invitee);
-    }
-
-    private void removeInviteeFromList(String uid){
-        for(ITimeInviteeInterface i:inviteeList){
-            if (i.getUserUid().equals(uid)){
-                inviteeList.remove(i);
             }
         }
     }

@@ -73,12 +73,14 @@ public class InviteFriendViewModel extends BaseObservable {
     }
 
     public void setEvent(Event event) {
-        this.event = event;
-        List<ITimeInviteeInterface> inviteeList = Collections.synchronizedList(new ArrayList<ITimeInviteeInterface>());
-        for(Invitee invitee: event.getInvitee()){
-            inviteeList.add(invitee);
+        if (event!=null) {
+            this.event = event;
+            List<ITimeInviteeInterface> inviteeList = Collections.synchronizedList(new ArrayList<ITimeInviteeInterface>());
+            for (Invitee invitee : event.getInvitee()) {
+                inviteeList.add(invitee);
+            }
+            setInviteeList(inviteeList);
         }
-        setInviteeList(inviteeList);
     }
 
     @Bindable
@@ -468,7 +470,7 @@ public class InviteFriendViewModel extends BaseObservable {
     }
 
     @Bindable
-    public List<ITimeInviteeInterface> getInviteeList() {
+    public List<? extends ITimeInviteeInterface> getInviteeList() {
         return inviteeList;
     }
 

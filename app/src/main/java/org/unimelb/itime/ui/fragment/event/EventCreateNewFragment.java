@@ -26,7 +26,6 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.contact.InviteFriendsFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
@@ -127,7 +126,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         openFragment(this, inviteeFragment);
 //
-//        InviteFriendsFragment inviteFriendsFragment = (InviteFriendsFragment)getFragmentManager().findFragmentByTag(InviteFriendsFragment.class.getSimpleName());
+//        InviteeFragment inviteFriendsFragment = (InviteeFragment)getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
 //        openFragment(this, inviteFriendsFragment);
     }
 

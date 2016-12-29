@@ -19,4 +19,6 @@ public interface InviteFriendMvpView  extends MvpView {
     void gotoInviteMobileContacts();
 
     void onDoneClicked();
+
+    void onBackClicked();
 }
