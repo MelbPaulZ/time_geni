@@ -14,6 +14,7 @@ import com.lzy.imagepicker.ui.ImageGridActivity;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileBinding;
+import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
@@ -31,6 +32,7 @@ import static org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity.CHOOSE_FR
 public class SettingMyProfileFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>> implements SettingCommonMvpView{
 
     private FragmentSettingMyProfileBinding binding;
+    private MainSettingsViewModel viewModel;
 
     @Nullable
     @Override
@@ -47,11 +49,21 @@ public class SettingMyProfileFragment extends BaseUiFragment<SettingCommonMvpVie
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
+        viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.setSetting(SettingManager.getInstance(getContext()).getSetting());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
 
     /**
