@@ -115,10 +115,12 @@ public class DBManager {
     }
 
     public void insertUser(User user){
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        UserDao userDao = daoSession.getUserDao();
-        userDao.insertOrReplace(user);
+        if(user!=null) {
+            DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+            DaoSession daoSession = daoMaster.newSession();
+            UserDao userDao = daoSession.getUserDao();
+            userDao.insertOrReplace(user);
+        }
     }
 
 
@@ -242,10 +244,14 @@ public class DBManager {
     }
 
     public void insertFriendRequest(FriendRequest request) {
+        if(request==null){
+            return;
+        }
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         FriendRequestDao friendRequestDao = daoSession.getFriendRequestDao();
         friendRequestDao.insertOrReplace(request);
+
     }
 
     public List<FriendRequest> getAllFriendRequest(){

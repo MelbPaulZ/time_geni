@@ -7,7 +7,9 @@
         <attr name="emailColor" format="color"/>
         <attr name="phoneColor" format="color"/>
         <attr name="hintText" format="string"/>
-
+        <attr name="inviteeList" format="reference"/>
+        <attr name="onInviteeClickListener" format="reference"/>
+        <attr name="onEditListener" format="reference"/>
     </declare-styleable>
     <declare-styleable name="BaseTitleBar">
         <attr name="title" format = "string"/>

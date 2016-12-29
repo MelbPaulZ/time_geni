@@ -140,11 +140,9 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
                     return null;
                 }else {
                     for(FriendRequest request:result.getData().getSend()) {
-                        dbManager.insertUser(request.getUser());
                         dbManager.insertFriendRequest(request);
                     }
                     for(FriendRequest request:result.getData().getReceive()) {
-                        dbManager.insertUser(request.getUser());
                         dbManager.insertFriendRequest(request);
                     }
                     return DBManager.getInstance(context).getAllFriendRequest();

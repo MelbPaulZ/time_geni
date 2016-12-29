@@ -25,7 +25,6 @@ import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
-import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;

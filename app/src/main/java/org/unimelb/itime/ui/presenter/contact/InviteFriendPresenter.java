@@ -59,7 +59,6 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
                     return null;
                 }else {
                     for(Contact contact:result.getData()) {
-                        dbManager.insertUser(contact.getUser());
                         dbManager.insertContact(contact);
                     }
                     return DBManager.getInstance(context).getAllContact();
@@ -157,7 +156,7 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
     }
 
     public void onBackPress() {
-        getView().getActivity().onBackPressed();
+        getView().onBackClicked();
     }
 
     public boolean isUniMelbEmail(String str) {
@@ -165,6 +164,9 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
     }
 
     public void onDoneClicked(){
-        getView().onDoneClicked();
+        if(getView() != null){
+            getView().onDoneClicked();
+        }
+
     }
 }

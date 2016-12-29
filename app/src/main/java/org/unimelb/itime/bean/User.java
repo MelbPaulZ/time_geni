@@ -1,12 +1,17 @@
 package org.unimelb.itime.bean;
 
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
+import org.greenrobot.greendao.converter.PropertyConverter;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 /**
  * Created by yinchuandong on 20/06/2016.
@@ -200,6 +205,21 @@ public User(String userUid, String userId, String personalAlias, String email,
     public void setSigninCount(int signinCount) {
         this.signinCount = signinCount;
     }
+
+    public static class UserConverter implements PropertyConverter<User , String> {
+        Gson gson = new Gson();
+        @Override
+        public User convertToEntityProperty(String databaseValue) {
+            Type listType = new TypeToken<User>() {}.getType();
+            return gson.fromJson(databaseValue, listType);
+        }
+
+        @Override
+        public String convertToDatabaseValue(User entityProperty) {
+            return gson.toJson(entityProperty);
+        }
+    }
+
 }
 
 

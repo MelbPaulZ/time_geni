@@ -36,11 +36,11 @@ public class BaseContact implements ITimeContactInterface, Serializable,Comparab
         }else{
             setPhoto(contact.getAliasPhoto());
         }
-        if(contact.getUserDetail().getUserId()!=null) {
+        if(contact.getUserDetail()!=null) {
             setContactId(contact.getUserDetail().getUserId());
         }
-        if(contact.getUserDetail().getUserUid()!=null) {
-            setContactUid(contact.getUserDetail().getUserUid());
+        if(contact.getUserDetail()!=null) {
+            setContactUid(contact.getContactUid());
         }
     }
 

@@ -4,7 +4,6 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -20,7 +19,6 @@ import org.unimelb.itime.bean.BaseContact;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.ContactFilterUtil;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
-import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 import org.unimelb.itime.widget.ContactListView;
 import org.unimelb.itime.widget.InviteeGroupView;
@@ -42,11 +40,11 @@ public class InviteFriendViewModel extends BaseObservable {
     private boolean showTitileBack = true;
     private boolean showTitleRight = true;
     private boolean searching = false;
-    private InviteeGroupView inviteeGroupView;
     private ListView sideBarListView;
     private ContactListView searchListView;
     private ObservableList iTimeFriendItems = new ObservableArrayList<>();
     private ObservableList<ListItemViewModel> searchItems;
+    private List<ITimeInviteeInterface> inviteeList;
     private List<BaseContact> friendList = new ArrayList<>();
     private List<BaseContact> searchList;
     private InviteFriendPresenter presenter;
@@ -75,9 +73,13 @@ public class InviteFriendViewModel extends BaseObservable {
     }
 
     public void setEvent(Event event) {
-        this.event = event;
-        for(Invitee invitee: event.getInvitee()){
-            inviteeGroupView.addInvitee(invitee);
+        if (event!=null) {
+            this.event = event;
+            List<ITimeInviteeInterface> inviteeList = Collections.synchronizedList(new ArrayList<ITimeInviteeInterface>());
+            for (Invitee invitee : event.getInvitee()) {
+                inviteeList.add(invitee);
+            }
+            setInviteeList(inviteeList);
         }
     }
 
@@ -192,11 +194,11 @@ public class InviteFriendViewModel extends BaseObservable {
         }
     }
 
-    public void setInviteeGroupView(InviteeGroupView inviteeGroupView) {
-        this.inviteeGroupView = inviteeGroupView;
-        inviteeGroupView.setOnEditListener(getOnEditListener());
-        inviteeGroupView.setOnItemClickListener(getOnInviteeGroupViewItemClickListener());
-    }
+//    public void setInviteeGroupView(InviteeGroupView inviteeGroupView) {
+//        this.inviteeGroupView = inviteeGroupView;
+////        inviteeGroupView.setOnEditListener(getOnEditListener());
+////        inviteeGroupView.setOnInviteeClickListener(getOnInviteeGroupViewItemClickListener());
+//    }
 
     public ListView getSideBarListView() {
         return sideBarListView;
@@ -204,7 +206,7 @@ public class InviteFriendViewModel extends BaseObservable {
 
     public void setSideBarListView(ListView sideBarListView) {
         this.sideBarListView = sideBarListView;
-        //this.sideBarListView.setOnItemClickListener(getOnItemClickListener());
+        //this.sideBarListView.setOnInviteeClickListener(getOnItemClickListener());
         adapter = new InviteFriendAdapter(presenter.getView().getActivity().getApplicationContext());
         adapter.setList(getITimeFriendItems());
         getSearchItems();
@@ -302,14 +304,12 @@ public class InviteFriendViewModel extends BaseObservable {
                 BaseContact user = (BaseContact) viewModel.getContact();
                 if (viewModel.getSelected()) {
                     viewModel.setSelected(false);
-                    inviteeGroupView.deleteInvitee(user.getContact().getContactUid());
-                    setCountStr(inviteeGroupView.countInvitee());
+                    deleteInvitee(user.getContact().getContactUid());
+
                 } else {
                     viewModel.setSelected(true);
-                    inviteeGroupView.addAvatarInvitee(contactToInvitee(user.getContact(), event));
-                    setCountStr(inviteeGroupView.countInvitee());
+                    addInvitee(contactToInvitee(user.getContact(), event));
                 }
-                inviteeGroupView.clearInput();
             }
         };
     }
@@ -326,17 +326,14 @@ public class InviteFriendViewModel extends BaseObservable {
                     if(item.getContact()==user){
                         if (item.getSelected()) {
                             item.setSelected(false);
-                            inviteeGroupView.deleteInvitee(user.getContact().getContactUid());
-                            setCountStr(inviteeGroupView.countInvitee());
+                            deleteInvitee(user.getContact().getContactUid());
                         } else {
                             item.setSelected(true);
-                            inviteeGroupView.addAvatarInvitee(contactToInvitee(user.getContact(), event));
-                            setCountStr(inviteeGroupView.countInvitee());
+                            addInvitee(contactToInvitee(user.getContact(), event));
                         }
                         break;
                     }
                 }
-                inviteeGroupView.clearInput();
             }
         };
     }
@@ -353,7 +350,7 @@ public class InviteFriendViewModel extends BaseObservable {
                         break;
                     }
                 }
-                setCountStr(inviteeGroupView.countInvitee());
+                deleteInvitee(invitee.getUserUid());
             }
         };
     }
@@ -386,12 +383,7 @@ public class InviteFriendViewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 if(getValidInput()) {
-                    if (presenter.isEmail(addButtonText)) {
-                        inviteeGroupView.addEmailInvitee(unactivatedInvitee(addButtonText, event));
-                    } else {
-                        inviteeGroupView.addPhoneInvitee(unactivatedInvitee(addButtonText, event));
-                    }
-                    inviteeGroupView.clearInput();
+                    addInvitee(unactivatedInvitee(addButtonText, event));
                 } else {
                     setShowAlertMsg(true);
                 }
@@ -475,5 +467,38 @@ public class InviteFriendViewModel extends BaseObservable {
             }
         }
         return AppUtil.generateUuid();
+    }
+
+    @Bindable
+    public List<? extends ITimeInviteeInterface> getInviteeList() {
+        return inviteeList;
+    }
+
+    public void setInviteeList(List<ITimeInviteeInterface> inviteeList) {
+        this.inviteeList = inviteeList;
+        notifyPropertyChanged(BR.inviteeList);
+    }
+
+    public void addInvitee(ITimeInviteeInterface invitee){
+        for(ITimeInviteeInterface i:inviteeList){
+            if (i.getUserUid().equals(invitee.getUserUid())){
+                notifyPropertyChanged(BR.inviteeList);
+                return;
+            }
+        }
+        inviteeList.add(invitee);
+        setCountStr(inviteeList.size());
+        notifyPropertyChanged(BR.inviteeList);
+    }
+
+    public void deleteInvitee(String uid){
+        for(ITimeInviteeInterface i:inviteeList){
+            if (i.getUserUid().equals(uid)){
+                inviteeList.remove(i);
+                break;
+            }
+        }
+        setCountStr(inviteeList.size());
+        notifyPropertyChanged(BR.inviteeList);
     }
 }

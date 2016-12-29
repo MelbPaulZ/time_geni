@@ -23,11 +23,9 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
-import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
@@ -38,8 +36,6 @@ import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.unimelb.itime.vendor.contact.widgets.SideBar.b;
 
 /**
  * Created by Paul on 28/08/2016.

@@ -24,6 +24,6 @@ public class ProfileActivityContact extends ContactBaseActivity {
         ITimeUser user = (ITimeUser) getIntent().getSerializableExtra(USER);
         fragment.setUser(user);
         fragment.setShowRightButton(true);
-        fragmentManager.beginTransaction().replace(R.id.contentFrameLayout, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.contentFrameLayout, fragment).addToBackStack(null).commit();
     }
 }

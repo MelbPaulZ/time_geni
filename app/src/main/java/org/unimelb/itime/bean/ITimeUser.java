@@ -12,6 +12,11 @@ public class ITimeUser extends BaseContact {
     private String phone="";
     private String email="";
     private boolean blocked=false;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
 
     public ITimeUser(Contact contact) {
         super(contact);
@@ -37,6 +42,7 @@ public class ITimeUser extends BaseContact {
     }
 
     public ITimeUser(User user){
+        this.user = user;
         if(user.getLocation()!=null){
             setLocation(user.getLocation());
         }
