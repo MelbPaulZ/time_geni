@@ -74,11 +74,13 @@ public class InviteFriendViewModel extends BaseObservable {
 
     public void setEvent(Event event) {
         this.event = event;
-        List<ITimeInviteeInterface> inviteeList = Collections.synchronizedList(new ArrayList<ITimeInviteeInterface>());
-        for(Invitee invitee: event.getInvitee()){
-            inviteeList.add(invitee);
+        if(event!=null) {
+            List<ITimeInviteeInterface> inviteeList = Collections.synchronizedList(new ArrayList<ITimeInviteeInterface>());
+            for (Invitee invitee : event.getInvitee()) {
+                inviteeList.add(invitee);
+            }
+            setInviteeList(inviteeList);
         }
-        setInviteeList(inviteeList);
     }
 
     @Bindable
