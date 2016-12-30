@@ -11,6 +11,8 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Contact;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentProfileBinding;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.ui.mvpview.contact.ProfileMvpView;
@@ -83,8 +85,21 @@ public class ProfileFragment extends BaseUiFragment<ProfileMvpView, ProfileFragm
         this.user = user;
     }
 
-    public void goToInviteFragment(ITimeUser user){
+    public void goToInviteFragment(ITimeUser iTimeUser){
+        Contact contact;
+        if(user.getContact()!=null){
+            User user = iTimeUser.getUser();
+            contact = new Contact();
+            contact.setContactUid(user.getUserUid());
+            contact.setAliasName(user.getPersonalAlias());
+            contact.setStatus(Contact.ACTIVATED);
+            contact.setUserDetail(user);
+            contact.setPhoto(user.getPhoto());
+        } else if(user.getContact()!=null){
+            contact = iTimeUser.getContact();
+        }
 
+        
     }
 
 

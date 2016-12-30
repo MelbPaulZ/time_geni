@@ -19,6 +19,7 @@ import org.unimelb.itime.bean.BaseContact;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.ContactFilterUtil;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
+import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 import org.unimelb.itime.widget.ContactListView;
 import org.unimelb.itime.widget.InviteeGroupView;

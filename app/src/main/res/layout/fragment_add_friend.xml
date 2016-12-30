@@ -117,7 +117,7 @@
             android:textColor="@color/red"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text="*Sorry, you can only invite iTime user with Melbourne\n University account at the moment."
+            android:text="*Sorry, currently iTime is only available to University of\n Melbourne E-mail Account."
             android:visibility="@{mainViewModel.showAlert?View.VISIBLE:View.GONE}"/>
 
 
