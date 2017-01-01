@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.base.C;
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
@@ -36,7 +37,7 @@ import me.fesky.library.widget.ios.ActionSheetDialog;
  * Created by Paul on 25/12/2016.
  */
 
-public class SettingIndexFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
+public class SettingIndexFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
 implements SettingCommonMvpView{
 
     private FragmentSettingBinding binding;
@@ -143,6 +144,11 @@ implements SettingCommonMvpView{
             getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
         }
+    }
+
+    @Override
+    public void onViewChange(int task, boolean isSave) {
+
     }
 
 }

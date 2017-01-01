@@ -9,4 +9,5 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 public interface SettingCommonMvpView extends MvpView {
 
     void onViewChange(int task);
+    void onViewChange(int task, boolean isSave);
 }

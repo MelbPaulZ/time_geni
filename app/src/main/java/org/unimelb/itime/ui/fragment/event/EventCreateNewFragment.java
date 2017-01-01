@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * Created by Paul on 23/08/2016.
  */
-public class EventCreateNewFragment extends BaseUiFragment<EventCreateDetailBeforeSendingMvpView, EventCommonPresenter<EventCreateDetailBeforeSendingMvpView>> implements EventCreateDetailBeforeSendingMvpView, TimePickerDialog.OnTimeSetListener{
+public class EventCreateNewFragment extends EventBaseFragment<EventCreateDetailBeforeSendingMvpView, EventCommonPresenter<EventCreateDetailBeforeSendingMvpView>> implements EventCreateDetailBeforeSendingMvpView, TimePickerDialog.OnTimeSetListener{
 
     private final static String TAG = "EventCreateNewFragment";
     private FragmentEventCreateNewBinding binding;

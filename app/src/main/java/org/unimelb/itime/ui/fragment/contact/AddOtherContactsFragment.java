@@ -20,7 +20,7 @@ import org.unimelb.itime.widget.SideBarListView;
  * Created by 37925 on 2016/12/15.
  */
 
-public class AddOtherContactsFragment extends BaseUiFragment<AddContactsMvpView, AddContactsPresenter> implements AddContactsMvpView {
+public class AddOtherContactsFragment extends BaseContactFragment<AddContactsMvpView, AddContactsPresenter> implements AddContactsMvpView {
     public static final int GMAIL = 1;
     public static final int FACEBOOK = 2;
 
@@ -59,4 +59,5 @@ public class AddOtherContactsFragment extends BaseUiFragment<AddContactsMvpView,
     public SideBarListView getSideBarListView() {
         return null;
     }
+
 }

@@ -13,23 +13,24 @@ import com.lzy.imagepicker.ui.ImageGridActivity;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileBinding;
 import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
+import org.unimelb.itime.ui.fragment.contact.MyQRCodeFragment;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 
-import static org.unimelb.itime.dao.UserDao.Properties.Gender;
 import static org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity.CHOOSE_FROM_LIBRARY;
 
 /**
  * Created by Paul on 26/12/2016.
  */
 
-public class SettingMyProfileFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>> implements SettingCommonMvpView{
+public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>> implements SettingCommonMvpView{
 
     private FragmentSettingMyProfileBinding binding;
     private MainSettingsViewModel viewModel;
@@ -51,8 +52,9 @@ public class SettingMyProfileFragment extends BaseUiFragment<SettingCommonMvpVie
         super.onActivityCreated(savedInstanceState);
         viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
-
     }
+
+
 
     @Override
     public void onStart() {
@@ -111,11 +113,17 @@ public class SettingMyProfileFragment extends BaseUiFragment<SettingCommonMvpVie
         }else if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE_NAME){
             openFragment(this, (SettingMyProfileNameFragment)getFragmentManager().findFragmentByTag(SettingMyProfileNameFragment.class.getSimpleName()));
         }else if (task == MainSettingsViewModel.TASK_TO_QR_CODE){
-
+            openFragment(this, (MyQRCodeFragment)getFragmentManager().findFragmentByTag(MyQRCodeFragment.class.getSimpleName()));
         }else if (task == MainSettingsViewModel.TASK_TO_GENDER){
             openFragment(this, (SettingProfileGenderFragment)getFragmentManager().findFragmentByTag(SettingProfileGenderFragment.class.getSimpleName()));
         }else if (task == MainSettingsViewModel.TASK_TO_RESET_PASSWORD){
             openFragment(this, (SettingProfileResetPasswordFragment)getFragmentManager().findFragmentByTag(SettingProfileResetPasswordFragment.class.getSimpleName()));
         }
     }
+
+    @Override
+    public void onViewChange(int task, boolean isSave) {
+
+    }
+
 }

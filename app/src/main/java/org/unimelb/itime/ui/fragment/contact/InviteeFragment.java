@@ -44,7 +44,7 @@ import java.util.List;
  * Created by 37925 on 2016/12/4.
  */
 
-public class InviteeFragment extends BaseUiFragment<InviteFriendMvpView, InviteFriendPresenter> implements InviteFriendMvpView {
+public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, InviteFriendPresenter> implements InviteFriendMvpView {
     private FragmentInviteFridendsBinding binding;
     private ListviewInviteeHeaderBinding headerBinding;
     private FragmentManager fm;
@@ -243,6 +243,11 @@ public class InviteeFragment extends BaseUiFragment<InviteFriendMvpView, InviteF
                 viewModel.addInvitee(result);
             }
         }
+    }
+
+    @Override
+    public void setData(Event event) {
+
     }
 }
 

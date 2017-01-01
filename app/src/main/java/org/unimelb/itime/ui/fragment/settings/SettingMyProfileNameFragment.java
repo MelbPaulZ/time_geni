@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileNameBinding;
 import org.unimelb.itime.ui.mvpview.SettingMyProfileMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
@@ -18,10 +19,18 @@ import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
  * Created by Paul on 26/12/2016.
  */
 
-public class SettingMyProfileNameFragment extends BaseUiFragment<SettingMyProfileMvpView, SettingCommonPresenter<SettingMyProfileMvpView>>
+public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingMyProfileMvpView, SettingCommonPresenter<SettingMyProfileMvpView>>
         implements SettingMyProfileMvpView{
 
     private FragmentSettingMyProfileNameBinding binding;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+
 
     @Nullable
     @Override
@@ -54,4 +63,15 @@ public class SettingMyProfileNameFragment extends BaseUiFragment<SettingMyProfil
             closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
         }
     }
+
+    @Override
+    public void onViewChange(int task, boolean isSave) {
+        if (isSave) {
+            if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
+                SettingMyProfileFragment settingMyProfileFragment = (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
+                closeFragment(this, settingMyProfileFragment, getSetting());
+            }
+        }
+    }
+
 }

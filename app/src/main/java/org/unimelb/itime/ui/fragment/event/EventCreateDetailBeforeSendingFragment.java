@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * Created by Paul on 31/08/2016.
  */
-public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<EventCreateDetailBeforeSendingMvpView, EventCommonPresenter<EventCreateDetailBeforeSendingMvpView>> implements EventCreateDetailBeforeSendingMvpView{
+public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<EventCreateDetailBeforeSendingMvpView, EventCommonPresenter<EventCreateDetailBeforeSendingMvpView>> implements EventCreateDetailBeforeSendingMvpView{
     private FragmentEventCreateBeforeSendingBinding binding;
     private EventCreateDetailBeforeSendingViewModel eventCreateDetailBeforeSendingViewModel;
     private Event event;

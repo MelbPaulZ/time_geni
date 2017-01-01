@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingGenderBinding;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
@@ -18,7 +19,7 @@ import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
  * Created by Paul on 27/12/2016.
  */
 
-public class SettingProfileGenderFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
+public class SettingProfileGenderFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
 implements SettingCommonMvpView{
 
     private FragmentSettingGenderBinding binding;
@@ -47,5 +48,10 @@ implements SettingCommonMvpView{
         if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
             closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
         }
+    }
+
+    @Override
+    public void onViewChange(int task, boolean isSave) {
+
     }
 }

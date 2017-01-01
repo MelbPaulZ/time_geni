@@ -136,6 +136,8 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
                 if (e==null) {
                     SettingManager.getInstance(getApplicationContext()).getSetting().getUser().setPhoto(file.getUrl());
                     // TODO: 28/12/2016 sync user to server
+
+
                 }else{
                     Toast.makeText(getApplicationContext(), "fail", Toast.LENGTH_SHORT).show();
                 }
@@ -156,6 +158,7 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
                 for (int i = 0; i < images.size(); i++) {
                     Picasso.with(ProfilePhotoPickerActivity.this).load(new File(images.get(i).path)).into((ImageView) findViewById(R.id.profile_image));
                     // todo update photo to server
+
 
                     try {
                         AppUtil.showProgressBar(this, "Waiting", "uploading photo");

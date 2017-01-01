@@ -38,7 +38,7 @@ import java.util.Map;
 /**
  * Created by Paul on 10/09/2016.
  */
-public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeSlotMvpVIew, TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew>>
+public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTimeSlotMvpVIew, TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew>>
         implements EventDetailTimeSlotMvpVIew {
     private FragmentEventDetailTimeslotHostViewBinding binding;
     private EventDetailTimeSlotViewModel viewModel;

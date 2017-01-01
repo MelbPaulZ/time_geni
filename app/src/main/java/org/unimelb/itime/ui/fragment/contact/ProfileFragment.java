@@ -26,7 +26,7 @@ import org.unimelb.itime.util.rulefactory.InviteeUtil;
  * Created by 37925 on 2016/12/9.
  */
 
-public class ProfileFragment extends BaseUiFragment<ProfileMvpView, ProfileFragmentPresenter> implements ProfileMvpView{
+public class ProfileFragment extends BaseContactFragment<ProfileMvpView, ProfileFragmentPresenter> implements ProfileMvpView{
     private FragmentProfileBinding binding;
     private ProfileFragmentViewModel viewModel;
     private View mainView;

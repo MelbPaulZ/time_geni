@@ -111,6 +111,11 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     }
 
     @Override
+    public void setData(Object o) {
+
+    }
+
+    @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();

@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingImportUnimelbBinding;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
@@ -21,7 +21,7 @@ import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
 
 
-public class SettingImportCalendarUnimelbFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
+public class SettingImportCalendarUnimelbFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
 implements SettingCommonMvpView{
 
     private FragmentSettingImportUnimelbBinding binding;
@@ -51,5 +51,10 @@ implements SettingCommonMvpView{
         if (task == MainSettingsViewModel.TASK_TO_IMPORT_CALENDAR){
             closeFragment(this, (SettingImportCalendarFragment)getFragmentManager().findFragmentByTag(SettingImportCalendarFragment.class.getSimpleName()));
         }
+    }
+
+    @Override
+    public void onViewChange(int task, boolean isSave) {
+
     }
 }

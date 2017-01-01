@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentLoginPickAvatarBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
@@ -18,7 +17,7 @@ import org.unimelb.itime.util.SoftKeyboardStateUtil;
  * Created by Paul on 19/12/2016.
  */
 
-public class LoginPickAvatarFragment extends LoginCommonFragment implements LoginMvpView{
+public class LoginPickAvatarFragment extends LoginBaseFragment implements LoginMvpView{
 
     private FragmentLoginPickAvatarBinding binding;
     @Nullable

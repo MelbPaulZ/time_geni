@@ -32,12 +32,13 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarMonthDayFragment extends BaseUiFragment<EventCommonMvpView, EventCommonPresenter<EventCommonMvpView>> implements EventCommonMvpView {
+public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommonMvpView, EventCommonPresenter<EventCommonMvpView>> implements EventCommonMvpView {
     private View root;
     private MonthDayView monthDayView;
     private EventCommonPresenter presenter;
@@ -64,6 +65,11 @@ public class CalendarMonthDayFragment extends BaseUiFragment<EventCommonMvpView,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void setData(Object o) {
+
     }
 
     @Override

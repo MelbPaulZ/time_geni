@@ -43,7 +43,7 @@ import java.util.Map;
 /**
  * Created by Paul on 4/09/2016.
  */
-public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView, EventCommonPresenter<EventDetailGroupMvpView>> implements EventDetailGroupMvpView {
+public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpView, EventCommonPresenter<EventDetailGroupMvpView>> implements EventDetailGroupMvpView {
     private org.unimelb.itime.databinding.FragmentEventDetailBinding binding;
     private EventDetailViewModel eventDetailForHostViewModel;
     private Event event;
@@ -182,7 +182,7 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
     @Override
     public void viewInCalendar() {
 
-        if (event.getStatus().equals("confirmed")){
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
 
             ViewMainCalendarFragment viewMainCalendarFragment = (ViewMainCalendarFragment) getFragmentManager().findFragmentByTag(ViewMainCalendarFragment.class.getSimpleName());
             ViewInCalendarWeekFragment viewInCalendarWeekFragment = viewMainCalendarFragment.getWeekViewFrag();

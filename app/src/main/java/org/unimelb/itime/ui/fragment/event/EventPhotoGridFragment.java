@@ -25,7 +25,7 @@ import java.util.List;
  * Created by Paul on 1/1/17.
  */
 
-public class EventPhotoGridFragment extends BaseUiFragment<EventDetailGroupMvpView, EventCommonPresenter<EventDetailGroupMvpView>>
+public class EventPhotoGridFragment extends EventBaseFragment<EventDetailGroupMvpView, EventCommonPresenter<EventDetailGroupMvpView>>
 implements EventDetailGroupMvpView{
 
     private FragmentPhotoGridviewBinding binding;

@@ -7,22 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
-
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingNotificationsBinding;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
-import org.unimelb.itime.ui.viewmodel.CommonViewModel;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
 /**
  * Created by Paul on 27/12/2016.
  */
 
-public class SettingNotificationFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
+public class SettingNotificationFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
 implements SettingCommonMvpView{
 
     private FragmentSettingNotificationsBinding binding;
@@ -54,4 +51,10 @@ implements SettingCommonMvpView{
             getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         }
     }
+
+    @Override
+    public void onViewChange(int task, boolean isSave) {
+
+    }
+
 }

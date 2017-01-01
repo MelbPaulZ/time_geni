@@ -23,7 +23,7 @@ import org.unimelb.itime.ui.viewmodel.contact.AddFriendsViewModel;
  * Created by 37925 on 2016/12/10.
  */
 
-public class AddFriendsFragment extends BaseUiFragment<AddFriendsMvpView, AddFriendsPresenter> implements AddFriendsMvpView{
+public class AddFriendsFragment extends BaseContactFragment<AddFriendsMvpView, AddFriendsPresenter> implements AddFriendsMvpView{
 
     android.support.v4.app.FragmentManager fm;
     FragmentAddFriendBinding binding;
@@ -122,4 +122,5 @@ public class AddFriendsFragment extends BaseUiFragment<AddFriendsMvpView, AddFri
     public AddFriendsPresenter createPresenter() {
         return new AddFriendsPresenter(getContext());
     }
+
 }

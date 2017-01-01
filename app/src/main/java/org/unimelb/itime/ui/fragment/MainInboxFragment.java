@@ -41,7 +41,7 @@ import java.util.List;
 /**
  * required login, need to extend BaseUiAuthFragment
  */
-public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView, SearchView.OnQueryTextListener{
+public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView, SearchView.OnQueryTextListener{
 
     private FragmentMainInboxBinding binding;
     private MainInboxPresenter presenter;
@@ -180,5 +180,10 @@ public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInbo
     public boolean onQueryTextChange(String constrains) {
         messageAdapter.getFilter().filter(constrains);
         return false;
+    }
+
+    @Override
+    public void setData(Object o) {
+
     }
 }

@@ -20,7 +20,7 @@ import org.unimelb.itime.ui.viewmodel.LoginViewModel;
  * Created by yinchuandong on 15/12/16.
  */
 
-public class LoginInputEmailFragment extends LoginCommonFragment implements LoginMvpView {
+public class LoginInputEmailFragment extends LoginBaseFragment implements LoginMvpView {
 
     private final static String TAG = "LoginIndexFragment";
 

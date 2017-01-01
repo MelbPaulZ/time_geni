@@ -392,6 +392,11 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                 Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void setData(Object o) {
+
+    }
+
     public class PlaceAutoCompleteAdapter
             extends ArrayAdapter<AutocompletePrediction> implements Filterable {
 

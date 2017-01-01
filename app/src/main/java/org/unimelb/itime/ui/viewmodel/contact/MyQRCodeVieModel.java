@@ -9,6 +9,7 @@ import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.ITimeUser;
+import org.unimelb.itime.ui.mvpview.contact.MyQRCodeMvpView;
 import org.unimelb.itime.ui.presenter.contact.MyQRCodePresenter;
 import org.unimelb.itime.widget.QRCode.encoding.EncodingUtils;
 import org.unimelb.itime.widget.ContactPopupWindow;
@@ -21,6 +22,7 @@ public class MyQRCodeVieModel extends BaseObservable {
     private MyQRCodePresenter presenter;
     private ITimeUser user;
     private ContactPopupWindow popupWindow;
+    private MyQRCodeMvpView mvpView;
 
     @Bindable
     public ITimeUser getUser() {
@@ -33,15 +35,19 @@ public class MyQRCodeVieModel extends BaseObservable {
         notifyPropertyChanged(BR.myQRCode);
     }
 
-    public MyQRCodeVieModel(MyQRCodePresenter presenter){
+    public MyQRCodeVieModel(MyQRCodePresenter<MyQRCodeMvpView> presenter){
         this.presenter = presenter;
+        mvpView = presenter.getView();
     }
 
     public View.OnClickListener getTitleBackListener(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.onBackPress();
+                if (mvpView!=null){
+                    mvpView.back();
+                }
+//                presenter.onBackPress();
             }
         };
     }
@@ -53,33 +59,37 @@ public class MyQRCodeVieModel extends BaseObservable {
                 if(popupWindow==null){
                     initPopupWindow();
                 }
-                popupWindow.showAtLocation(presenter.getView().getContentView(), Gravity.CENTER, 0, 0);
+                if (mvpView!=null) {
+                    popupWindow.showAtLocation(mvpView.getContentView(), Gravity.CENTER, 0, 0);
+                }
             }
         };
     }
 
     public void initPopupWindow(){
-        popupWindow = new ContactPopupWindow(presenter.getView().getActivity());
-        popupWindow.setFirstButtonText(
-                presenter.getView().getActivity().getResources().
-                        getText(R.string.save_to_album).toString());
-        popupWindow.setFirstButtonLisenter(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-                presenter.saveQRCode();
-            }
-        });
+        if (mvpView!=null) {
+            popupWindow = new ContactPopupWindow(mvpView.getActivity());
+            popupWindow.setFirstButtonText(
+                    mvpView.getActivity().getResources().
+                            getText(R.string.save_to_album).toString());
+            popupWindow.setFirstButtonLisenter(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    popupWindow.dismiss();
+                    mvpView.saveQRCode();
+                }
+            });
 
-        popupWindow.setSecondButtonText(presenter.getView().getActivity().getResources().
-                getText(R.string.scan_qr_code).toString());
-        popupWindow.setSecondButtonLisenter( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.getView().goToScanQRCode();
-                popupWindow.dismiss();
-            }
-        });
+            popupWindow.setSecondButtonText(mvpView.getActivity().getResources().
+                    getText(R.string.scan_qr_code).toString());
+            popupWindow.setSecondButtonLisenter(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mvpView.goToScanQRCode();
+                    popupWindow.dismiss();
+                }
+            });
+        }
     }
 
     @Bindable

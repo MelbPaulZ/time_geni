@@ -26,4 +26,9 @@ public class SubMonthViewFragment extends BaseUiAuthFragment{
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sub_month_view, container, false);
     }
+
+    @Override
+    public void setData(Object o) {
+
+    }
 }
