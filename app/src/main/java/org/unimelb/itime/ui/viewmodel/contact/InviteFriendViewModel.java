@@ -19,7 +19,6 @@ import org.unimelb.itime.bean.BaseContact;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.ContactFilterUtil;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
-import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 import org.unimelb.itime.widget.ContactListView;
 import org.unimelb.itime.widget.InviteeGroupView;
@@ -45,7 +44,7 @@ public class InviteFriendViewModel extends BaseObservable {
     private ContactListView searchListView;
     private ObservableList iTimeFriendItems = new ObservableArrayList<>();
     private ObservableList<ListItemViewModel> searchItems;
-    private List<ITimeInviteeInterface> inviteeList;
+    private List<Invitee> inviteeList;
     private List<BaseContact> friendList = new ArrayList<>();
     private List<BaseContact> searchList;
     private InviteFriendPresenter presenter;
@@ -56,6 +55,7 @@ public class InviteFriendViewModel extends BaseObservable {
     private Map<String, Integer> positionMap;
     private boolean showAlertMsg = false;
     private Event event;
+    private SearchContactCallback searchContactCallback = new SearchContactCallback();
 
     public LinearLayout getHeaderView() {
         return headerView;
@@ -76,10 +76,7 @@ public class InviteFriendViewModel extends BaseObservable {
     public void setEvent(Event event) {
         if (event!=null) {
             this.event = event;
-            List<ITimeInviteeInterface> inviteeList = Collections.synchronizedList(new ArrayList<ITimeInviteeInterface>());
-            for (Invitee invitee : event.getInvitee()) {
-                inviteeList.add(invitee);
-            }
+            inviteeList = event.getInvitee();
             setInviteeList(inviteeList);
         }
     }
@@ -177,6 +174,16 @@ public class InviteFriendViewModel extends BaseObservable {
             item.setContact(user);
             item.setMatchColor(presenter.getMatchColor());
             item.setOnClickListener(getFriendOnClickListener());
+            item.setShowDetail(false);
+            item.setSelected(false);
+            if(inviteeList!=null) {
+                for (Invitee invitee : inviteeList) {
+                    if (invitee.getUserUid().equals(user.getContactUid())) {
+                        item.setSelected(true);
+                        break;
+                    }
+                }
+            }
             iTimeFriendItems.add(item);
         }
     }
@@ -191,13 +198,14 @@ public class InviteFriendViewModel extends BaseObservable {
             item.setContact(user);
             item.setMatchColor(presenter.getMatchColor());
             item.setOnClickListener(getSearchOnClickListener());
+            item.setShowDetail(true);
             searchItems.add(item);
         }
     }
 
 //    public void setInviteeGroupView(InviteeGroupView inviteeGroupView) {
 //        this.inviteeGroupView = inviteeGroupView;
-////        inviteeGroupView.setOnEditListener(getOnEditListener());
+////        inviteeGroupView.setSearchListener(getOnEditListener());
 ////        inviteeGroupView.setOnInviteeClickListener(getOnInviteeGroupViewItemClickListener());
 //    }
 
@@ -384,12 +392,16 @@ public class InviteFriendViewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 if(getValidInput()) {
-                    addInvitee(unactivatedInvitee(addButtonText, event));
+                    addInvitee(addButtonText);
                 } else {
                     setShowAlertMsg(true);
                 }
             }
         };
+    }
+
+    public void addInvitee(String str){
+        presenter.searchContact(str, searchContactCallback);
     }
 
     private void updatePositionMap(ObservableList<ContactItem> list){
@@ -475,14 +487,14 @@ public class InviteFriendViewModel extends BaseObservable {
         return inviteeList;
     }
 
-    public void setInviteeList(List<ITimeInviteeInterface> inviteeList) {
+    public void setInviteeList(List<Invitee> inviteeList) {
         this.inviteeList = inviteeList;
         notifyPropertyChanged(BR.inviteeList);
     }
 
-    public void addInvitee(ITimeInviteeInterface invitee){
+    private void addInvitee(Invitee invitee){
         for(ITimeInviteeInterface i:inviteeList){
-            if (i.getInviteeUid().equals(invitee.getInviteeUid())){
+            if (i.getUserId().equals(invitee.getUserId())){
                 notifyPropertyChanged(BR.inviteeList);
                 return;
             }
@@ -492,7 +504,7 @@ public class InviteFriendViewModel extends BaseObservable {
         notifyPropertyChanged(BR.inviteeList);
     }
 
-    public void deleteInvitee(Contact contact){
+    private void deleteInvitee(Contact contact){
         for(ITimeInviteeInterface i:inviteeList){
             if (i.getUserUid().equals(contact.getContactUid())){
                 inviteeList.remove(i);
@@ -503,14 +515,38 @@ public class InviteFriendViewModel extends BaseObservable {
         notifyPropertyChanged(BR.inviteeList);
     }
 
-    public void deleteInvitee(ITimeInviteeInterface invitee){
+    private void deleteInvitee(ITimeInviteeInterface invitee){
         for(ITimeInviteeInterface i:inviteeList){
-            if (i.getInviteeUid().equals(invitee.getInviteeUid())){
+            if (i.getUserId().equals(invitee.getUserId())){
                 inviteeList.remove(i);
                 break;
             }
         }
         setCountStr(inviteeList.size());
         notifyPropertyChanged(BR.inviteeList);
+    }
+
+    public  class SearchContactCallback{
+        public void failed(){
+
+        }
+
+        public void success(Contact contact){
+            addInvitee(contactToInvitee(contact, event));
+        }
+
+        public void success(String contact){
+            addInvitee(unactivatedInvitee(contact, event));
+        }
+    }
+
+    public View.OnClickListener getScanQRCodeListener(){
+       return new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               presenter.getView().gotoScanQRCode();
+           }
+       };
+
     }
 }

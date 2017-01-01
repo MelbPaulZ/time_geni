@@ -41,7 +41,10 @@
             android:textSize="30sp"
             android:onClick="@{()->activity.toQRCode()}"/>
 
-
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:qrcode="@{activity.photo}"/>
 
 </LinearLayout>
     </ScrollView>

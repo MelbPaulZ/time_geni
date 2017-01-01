@@ -11,6 +11,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.databinding.FragmentAddFriendBinding;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.ui.mvpview.contact.AddFriendsMvpView;
@@ -43,21 +44,11 @@ public class AddFriendsFragment extends BaseUiFragment<AddFriendsMvpView, AddFri
         return binding.getRoot();
     }
 
-    public void goToProfileFragment(ITimeUser user, String show){
+    public void goToProfileFragment(Contact user){
         if(profileFragment == null) {
             profileFragment = new ProfileFragment();
         }
         profileFragment.setUser(user);
-        if(show.equals("email")){
-            profileFragment.setShowEmail(true);
-            profileFragment.setShowPhone(false);
-        }else{
-            profileFragment.setShowPhone(true);
-            profileFragment.setShowEmail(false);
-        }
-        profileFragment.setShowAdd(true);
-        profileFragment.setShowSend(false);
-        profileFragment.setShowRightButton(false);
 
         fm.beginTransaction()
                 .hide(this)

@@ -51,7 +51,7 @@ public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMv
         requestCountListener = listener;
     }
 
-    public void goToProfileFragment(ITimeUser user){
+    public void goToProfileFragment(Contact user){
         if(getView()!=null)
             getView().goToProfileFragment(user);
     }

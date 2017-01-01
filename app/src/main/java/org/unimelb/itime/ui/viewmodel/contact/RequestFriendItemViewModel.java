@@ -5,9 +5,11 @@ import android.databinding.Bindable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.widget.Toast;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.bean.RequestFriend;
 import org.unimelb.itime.ui.presenter.contact.NewFriendFragmentPresenter;
@@ -22,6 +24,22 @@ public class RequestFriendItemViewModel extends BaseObservable {
 
     private RequestFriend requestFriend;
     private NewFriendFragmentPresenter presenter;
+    private View.OnClickListener onClickListener;
+
+    @Bindable
+    public View.OnClickListener getOnClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.gotoProfile(requestFriend);
+            }
+        };
+    }
+
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+        notifyPropertyChanged(BR.onClickListener);
+    }
 
     @Bindable
     public String getDisplayStatus() {

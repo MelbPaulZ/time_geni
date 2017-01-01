@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.contact;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -34,6 +35,7 @@ import org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 import org.unimelb.itime.widget.InviteeGroupView;
+import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,9 +65,13 @@ public class InviteeFragment extends BaseUiFragment<InviteFriendMvpView, InviteF
     @Override
     public void onStart(){
         super.onStart();
-        viewModel.setHeaderView((LinearLayout) headerBinding.getRoot());
-        viewModel.setSideBarListView(binding.friendsListView);
-        inviteeGroupView = headerBinding.inviteeGroupView;
+        viewModel.setEvent(event);
+        viewModel.loadData();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
         viewModel.setEvent(event);
         viewModel.loadData();
     }
@@ -78,6 +84,9 @@ public class InviteeFragment extends BaseUiFragment<InviteFriendMvpView, InviteF
         viewModel = new InviteFriendViewModel(presenter);
         binding.setViewModel(viewModel);
         headerBinding.setViewModel(viewModel);
+        viewModel.setHeaderView((LinearLayout) headerBinding.getRoot());
+        viewModel.setSideBarListView(binding.friendsListView);
+        inviteeGroupView = headerBinding.inviteeGroupView;
     }
 
     public View onCreateView(LayoutInflater inflater,
@@ -216,6 +225,23 @@ public class InviteeFragment extends BaseUiFragment<InviteFriendMvpView, InviteF
         }else if (getFrom() instanceof EventDetailTimeSlotFragment){
             EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
             closeFragment(this, eventEditFragment);
+        }
+    }
+
+    public void gotoScanQRCode(){
+        startActivityForResult(new Intent(getActivity(), CaptureActivityContact.class), 0);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == getActivity().RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                String result = bundle.getString("result");
+                viewModel.addInvitee(result);
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.databinding.FragmentNewFriendBinding;
 import org.unimelb.itime.ui.mvpview.contact.NewFriendMvpView;
 import org.unimelb.itime.ui.presenter.contact.NewFriendFragmentPresenter;
@@ -23,6 +24,7 @@ public class NewFriendFragment extends MvpFragment<NewFriendMvpView, NewFriendFr
     private android.support.v4.app.FragmentManager fm;
     private NewFriendViewModel viewModel;
     private AddFriendsFragment addFriendsFragment;
+    private ProfileFragment profileFragment;
 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +47,18 @@ public class NewFriendFragment extends MvpFragment<NewFriendMvpView, NewFriendFr
         fm.beginTransaction()
                 .hide(this)
                 .replace(R.id.contentFrameLayout, addFriendsFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void goToProfileFragment(Contact contact){
+        if (profileFragment == null) {
+            profileFragment = new ProfileFragment();
+        }
+        profileFragment.setUser(contact);
+        fm.beginTransaction()
+                .hide(this)
+                .replace(R.id.contentFrameLayout, profileFragment)
                 .addToBackStack(null)
                 .commit();
     }

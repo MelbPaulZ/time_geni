@@ -62,11 +62,13 @@
                     android:textColor="@color/black"
                     />
 
-                <!--<TextView-->
-                    <!--android:text="@{viewModel.contactId}"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textColor="@color/black"/>-->
+                <TextView
+                    android:text="@{viewModel.contactId}"
+                    android:visibility="@{viewModel.showDetail?View.VISIBLE:View.GONE}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/normalGrey"
+                    />
             </LinearLayout>
 
             <ImageView

@@ -61,7 +61,7 @@ public class MyQRCodeFragment extends MvpFragment<MyQRCodeMvpView, MyQRCodePrese
         View view = binding.QRCodeView;
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
-        Bitmap bitmap = view.getDrawingCache();
+        Bitmap bitmap = convertViewToBitmap(view);
         if(bitmap != null) {
             try{
                 File extDir = Environment.getExternalStorageDirectory();
@@ -85,6 +85,13 @@ public class MyQRCodeFragment extends MvpFragment<MyQRCodeMvpView, MyQRCodePrese
         }else{
             Toast.makeText(getContext(), getString(R.string.save_qr_code_failed), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private Bitmap convertViewToBitmap(View view){
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        return view.getDrawingCache();
     }
 
     @Override

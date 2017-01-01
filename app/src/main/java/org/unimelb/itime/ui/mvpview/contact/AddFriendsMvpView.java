@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
 
 /**
@@ -21,5 +22,5 @@ public interface AddFriendsMvpView extends MvpView {
 
     void goToScanQRCode();
 
-    void goToProfileFragment(ITimeUser user, String show);
+    void goToProfileFragment(Contact user);
 }

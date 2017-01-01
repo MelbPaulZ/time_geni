@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.databinding.ContactHomePageBinding;
 import org.unimelb.itime.bean.ITimeUser;
 
@@ -19,7 +20,7 @@ public interface ContactHomePageMvpView extends MvpView {
 
     void goToAddFriendsFragment();
 
-    void goToProfileFragment(ITimeUser user);
+    void goToProfileFragment(Contact user);
 
     ContactHomePageBinding getBinding();
 }

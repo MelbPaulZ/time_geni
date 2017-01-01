@@ -23,6 +23,17 @@ public class ListItemViewModel extends BaseObservable implements ContactItem {
     private SpannableString contactId;
     private int matchColor;
     private View.OnClickListener onClickListener;
+    private boolean showDetail;
+
+    @Bindable
+    public boolean getShowDetail() {
+        return showDetail;
+    }
+
+    public void setShowDetail(boolean showDetail) {
+        this.showDetail = showDetail;
+        notifyPropertyChanged(BR.showDetail);
+    }
 
     @Bindable
     public View.OnClickListener getOnClickListener() {
@@ -46,7 +57,8 @@ public class ListItemViewModel extends BaseObservable implements ContactItem {
 
     @Bindable
     public SpannableString getName() {
-       return changeMatchColor(contact.getName(), contact.getMatchStr());
+//       return changeMatchColor(contact.getName(), contact.getMatchStr());
+        return changeMatchColor(contact.getName(), "");
     }
 
     public void setName(SpannableString name) {
@@ -56,7 +68,8 @@ public class ListItemViewModel extends BaseObservable implements ContactItem {
 
     @Bindable
     public SpannableString getContactId() {
-        return changeMatchColor(contact.getContactId(), contact.getMatchStr());
+//        return changeMatchColor(contact.getContactId(), contact.getMatchStr());
+        return changeMatchColor(contact.getContactId(), "");
     }
 
     public void setContactId(SpannableString contactId) {
