@@ -193,6 +193,8 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
         }else {
             final EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
             timeSlotFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event), this.adapterData);
+//            timeSlotFragment.getWeekView().setBackgroundColor(getResources().getColor(R.color.red));
+            timeSlotFragment.getWeekView().resetTimeSlots();
             timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
             openFragment(this,timeSlotFragment);
 
