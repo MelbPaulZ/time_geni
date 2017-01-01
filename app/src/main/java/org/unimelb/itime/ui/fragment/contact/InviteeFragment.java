@@ -205,14 +205,14 @@ public class InviteeFragment extends BaseUiFragment<InviteFriendMvpView, InviteF
             // TODO: 29/12/2016 reset all selection
             viewModel.setEvent(event);
             EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-            openFragment(this, eventCreateNewFragment);
+            closeFragment(this, eventCreateNewFragment);
         }else if (getFrom() instanceof EventTimeSlotViewFragment){
             EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-            openFragment(this, eventCreateNewFragment);
+            closeFragment(this, eventCreateNewFragment);
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
-            openFragment(this, (EventCreateDetailBeforeSendingFragment)getFrom());
+            closeFragment(this, (EventCreateDetailBeforeSendingFragment)getFrom());
         }else if (getFrom() instanceof EventEditFragment){
-            openFragment(this, (EventEditFragment)getFrom());
+            closeFragment(this, (EventEditFragment)getFrom());
         }else if (getFrom() instanceof EventDetailTimeSlotFragment){
             EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
             closeFragment(this, eventEditFragment);

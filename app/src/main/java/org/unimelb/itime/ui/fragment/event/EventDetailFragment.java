@@ -212,6 +212,18 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
         openFragment(this, inviteeTimeslotFragment);
     }
 
+    @Override
+    public void gotoGridView() {
+        EventPhotoGridFragment gridFragment = (EventPhotoGridFragment) getFragmentManager().findFragmentByTag(EventPhotoGridFragment.class.getSimpleName());
+        gridFragment.setEvent(event);
+        openFragment(this, gridFragment);
+    }
+
+    @Override
+    public void onClickPhotoGridBack() {
+
+    }
+
 
     @Override
     public void onTaskStart(int task) {

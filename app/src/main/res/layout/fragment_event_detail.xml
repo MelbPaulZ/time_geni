@@ -342,6 +342,7 @@
                     <RelativeLayout
                         android:id="@+id/event_detail_host_photo_RL"
                         android:layout_width="match_parent"
+                        android:onClick="@{hostDetailVM.gotoGridView}"
                         android:layout_height="60dp">
 
                         <TextView

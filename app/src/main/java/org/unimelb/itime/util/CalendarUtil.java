@@ -51,7 +51,20 @@ public class CalendarUtil {
                 return calendar.getSummary();
             }
         }
-        return "";
+
+        // find default calendar
+        Calendar defaultCalendar = null;
+        for (Calendar cal: CalendarUtil.getInstance(context).getCalendar()){
+            if (cal.getCalendarUid().equals(UserUtil.getInstance(context).getUserUid())){
+                defaultCalendar = cal;
+            }
+        }
+
+        if (defaultCalendar!=null){
+            return defaultCalendar.getSummary();
+        }else {
+            return "";
+        }
     }
 
     private void init(){

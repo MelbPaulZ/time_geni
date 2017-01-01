@@ -125,11 +125,11 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     @Override
     public void onClickBack() {
         if (getFrom() instanceof EventDetailFragment) {
-            openFragment(this, (EventDetailFragment) getFrom());
+            closeFragment(this, (EventDetailFragment) getFrom());
         } else if (getFrom() instanceof EventEditFragment) {
-            openFragment(this, (EventEditFragment) getFrom());
+            closeFragment(this, (EventEditFragment) getFrom());
         } else if (getFrom() instanceof InviteeFragment) {
-            openFragment(this, (InviteeFragment) getFrom());
+            closeFragment(this, (InviteeFragment) getFrom());
         }
     }
 

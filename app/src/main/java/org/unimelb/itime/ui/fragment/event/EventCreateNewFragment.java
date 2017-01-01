@@ -27,9 +27,9 @@ import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
-import org.unimelb.itime.ui.mvpview.EventCreateNewMvpView;
+import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
-import org.unimelb.itime.ui.viewmodel.EventCreateNewVIewModel;
+import org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel;
 import org.unimelb.itime.util.AppUtil;
 
 import java.util.ArrayList;
@@ -38,15 +38,15 @@ import java.util.List;
 /**
  * Created by Paul on 23/08/2016.
  */
-public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView, EventCommonPresenter<EventCreateNewMvpView>> implements EventCreateNewMvpView, TimePickerDialog.OnTimeSetListener{
+public class EventCreateNewFragment extends BaseUiFragment<EventCreateDetailBeforeSendingMvpView, EventCommonPresenter<EventCreateDetailBeforeSendingMvpView>> implements EventCreateDetailBeforeSendingMvpView, TimePickerDialog.OnTimeSetListener{
 
     private final static String TAG = "EventCreateNewFragment";
     private FragmentEventCreateNewBinding binding;
-    private EventCreateNewVIewModel viewModel;
+    private EventCreateDetailBeforeSendingViewModel viewModel;
     private Event event;
 
     @Override
-    public EventCommonPresenter<EventCreateNewMvpView> createPresenter() {
+    public EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> createPresenter() {
             return new EventCommonPresenter<>(getContext());
     }
 
@@ -61,7 +61,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         event = EventManager.getInstance(getContext()).getCurrentEvent();
-        viewModel = new EventCreateNewVIewModel(getPresenter());
+        viewModel = new EventCreateDetailBeforeSendingViewModel(getPresenter());
         binding.setEventVM(viewModel);
         onEnter(); // show key board
     }
@@ -98,7 +98,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
 
     public void setEvent(Event event){
         this.event = event;
-        viewModel.setEvent(event);
+        viewModel.setNewEvDtlEvent(event);
     }
 
     public void setPhotos(ArrayList<String> photos){
@@ -107,35 +107,39 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
 
 
     @Override
-    public void gotoWeekViewCalendar() {
+    public void onClickSend() {
+
+    }
+
+    @Override
+    public void onClickCancel() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         getActivity().setResult(Activity.RESULT_CANCELED, intent);
         getActivity().finish();
     }
 
     @Override
-    public void pickLocation() {
+    public void changeLocation() {
         EventLocationPickerFragment locationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
         locationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         openFragment(this, locationPickerFragment);
     }
 
     @Override
-    public void pickInvitee() {
+    public void pickInvitees() {
         InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
         inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         openFragment(this, inviteeFragment);
-//
-//        InviteeFragment inviteFriendsFragment = (InviteeFragment)getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-//        openFragment(this, inviteFriendsFragment);
     }
 
-
-    public void pickPhoto(String tag){
-        ((EventCreateActivity)getActivity()).checkPermission(tag);
+    public void pickPhoto(){
+        ((EventCreateActivity)getActivity()).checkPermission(getString(R.string.tag_create_event));
     }
 
+    @Override
+    public void onClickProposedTimeslots() {
 
+    }
 
 
     @Subscribe
@@ -143,7 +147,7 @@ public class EventCreateNewFragment extends BaseUiFragment<EventCreateNewMvpView
         if (messageLocation.tag.equals(this.getClassName())){
             event.setLocation(messageLocation.locationString);
             EventManager.getInstance(getContext()).getCurrentEvent().setLocation(messageLocation.locationString);
-            viewModel.setEvent(event);
+            viewModel.setNewEvDtlEvent(event);
         }
     }
 

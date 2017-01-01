@@ -21,6 +21,7 @@ import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
 import org.unimelb.itime.ui.fragment.event.EventDetailTimeSlotFragment;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
+import org.unimelb.itime.ui.fragment.event.EventPhotoGridFragment;
 import org.unimelb.itime.ui.fragment.event.InviteeTimeslotFragment;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class EventDetailActivity extends AppCompatActivity {
         fragmentList.add(new InviteeFragment());
         fragmentList.add(new InviteeTimeslotFragment());
         fragmentList.add(new ViewMainCalendarFragment());
+        fragmentList.add(new EventPhotoGridFragment());
         hideAllFragments();
     }
 

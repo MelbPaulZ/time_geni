@@ -8,6 +8,6 @@ public interface EventCreateDetailBeforeSendingMvpView extends EventCommonMvpVie
     void onClickCancel();
     void changeLocation();
     void pickInvitees();
-    void pickPhoto(String tag);
+    void pickPhoto();
     void onClickProposedTimeslots();
 }
