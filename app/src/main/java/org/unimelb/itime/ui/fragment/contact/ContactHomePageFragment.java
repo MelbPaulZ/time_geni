@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.databinding.ContactHomePageBinding;
 import org.unimelb.itime.messageevent.MessageAddContact;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
@@ -95,7 +96,7 @@ public class ContactHomePageFragment extends BaseUiFragment<ContactHomePageMvpVi
         startActivity(intent);
     }
 
-    public void goToProfileFragment(ITimeUser user) {
+    public void goToProfileFragment(Contact user) {
 //        if (profileFragment == null) {
 //            profileFragment = new ProfileFragment();
 //        }

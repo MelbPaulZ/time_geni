@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.ActivityContactMainBinding;
+import org.unimelb.itime.util.DefaultPhotoUtil;
+import org.unimelb.itime.widget.BaseTitleBar;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 
 public class ContactTestActivityContact extends ContactBaseActivity {
@@ -18,6 +21,10 @@ public class ContactTestActivityContact extends ContactBaseActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_contact_main);
         binding.setActivity(this);
+//        binding.mainLayout.addView(DefaultPhotoUtil.getInstance().get(getApplicationContext(),"Qiushuo huang"));
+//        binding.mainLayout.addView(DefaultPhotoUtil.getInstance().get(getApplicationContext(),"QIUSHUO"));
+//        binding.mainLayout.addView(DefaultPhotoUtil.getInstance().get(getApplicationContext(),"q"));
+//        binding.mainLayout.addView(DefaultPhotoUtil.getInstance().get(getApplicationContext(),"Qiushuo   huang"));
 //        initView();
     }
 
@@ -47,6 +54,11 @@ public class ContactTestActivityContact extends ContactBaseActivity {
 
             }
         }
+    }
+
+    public Bitmap getPhoto(){
+
+       return DefaultPhotoUtil.getInstance().getPhoto(getApplicationContext(),"Qiushuo zuang");
     }
 
     //生成二维码 可以设置Logo

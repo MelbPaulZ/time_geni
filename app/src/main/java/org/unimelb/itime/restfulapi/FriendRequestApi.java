@@ -31,7 +31,7 @@ public interface FriendRequestApi {
 //    freqUserUid: The user_uid which this user wants to send friend request to.
 //            source: Now only supports 'itime'. It may supports gmail/mobile/facebook in the future.
     @POST("contact/friend_request/send/{freqUserUid}/{source}")
-    Observable<HttpResult<FriendRequest>> send(@Path("freqUserUid") String freqUserUid, @Path("source") String source);
+    Observable<HttpResult<Void>> send(@Path("freqUserUid") String freqUserUid, @Path("source") String source);
 
 //    Description: Mark the already read requests as 'is_read = 1' in DB.
     @POST("contact/friend_request/read")

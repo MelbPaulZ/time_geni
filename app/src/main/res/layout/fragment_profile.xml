@@ -31,7 +31,7 @@
         android:layout_height="100dp"
         app:border_inside_color="@color/lightGrey"
         app:border_thickness="4dp"
-        app:avatar="@{viewModel.friend.photo}"
+        app:avatar="@{viewModel.friend.aliasPhoto}"
         android:layout_centerHorizontal="true"
         android:id="@+id/avatarView"/>
 

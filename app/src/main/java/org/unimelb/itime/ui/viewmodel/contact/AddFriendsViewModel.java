@@ -8,7 +8,9 @@ import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
 import android.view.View;
 
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.util.ContactCheckUtil;
 import org.unimelb.itime.ui.presenter.contact.AddFriendsPresenter;
 import org.unimelb.itime.widget.SearchBar;
@@ -26,6 +28,7 @@ public class AddFriendsViewModel extends BaseObservable {
     private boolean showTitleRight = false;
     private boolean showAlert = false;
     private String searchText = "";
+    private boolean showTitile = true;
     private SpannableStringBuilder inviteText;
 
     private String title = "Add Friends";
@@ -87,6 +90,7 @@ public class AddFriendsViewModel extends BaseObservable {
         setShowNotFound(false);
         setShowButtons(false);
         setShowAlert(false);
+        setShowTitile(false);
     }
 
     @Bindable
@@ -141,12 +145,10 @@ public class AddFriendsViewModel extends BaseObservable {
     }
 
     public void showButtons() {
-        this.showButtons = true;
-        this.showNotFound = false;
-        this.showSearch = false;
-        notifyPropertyChanged(BR.showSearch);
-        notifyPropertyChanged(BR.showNotFound);
-        notifyPropertyChanged(BR.showButtons);
+        setShowButtons(true);
+        setShowNotFound(false);
+        setShowSearch(false);
+        setShowTitile(true);
     }
 
     @Bindable
@@ -228,11 +230,20 @@ public class AddFriendsViewModel extends BaseObservable {
             @Override
             public void onEditing(View view, String text) {
                 if ("".equals(text)) {
-                    showButtons();
+                    //showButtons();
                 } else {
                     showSearch();
                 }
                 setSearchText(text);
+            }
+        };
+    }
+
+    public View.OnClickListener getCancelListener(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showButtons();
             }
         };
     }
@@ -242,17 +253,27 @@ public class AddFriendsViewModel extends BaseObservable {
     }
 
     public class SearchUserCallBack{
-        public void gotoProfile(ITimeUser u){
-            if(u==null){
+        public void gotoProfile(Contact contact){
+            if(contact==null){
                 showNotFound();
             }else{
-                if("".equals(u.getEmail())){
-                    presenter.goToProfile(u,"phone");
-                }else{
-                    presenter.goToProfile(u,"email");
-                }
+               presenter.goToProfile(contact);
             }
         }
     }
 
+    @Bindable
+    public boolean getShowTitle() {
+        return showTitile;
+    }
+
+    public void setShowTitile(boolean showTitile) {
+        this.showTitile = showTitile;
+        notifyPropertyChanged(BR.showTitle);
+    }
+
+    @Bindable
+    public boolean getShowCancel(){
+        return true;
+    }
 }

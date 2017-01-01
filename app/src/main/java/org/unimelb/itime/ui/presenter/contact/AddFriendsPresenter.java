@@ -5,7 +5,9 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.bean.ITimeUser;
@@ -34,6 +36,16 @@ public class AddFriendsPresenter extends MvpBasePresenter<AddFriendsMvpView> {
 
 
     public void findFriend(String searchStr, final AddFriendsViewModel.SearchUserCallBack callBack){
+        DBManager dbManager = DBManager.getInstance(context);
+        List<Contact> contacts = dbManager.getAllContact();
+        for(Contact contact:contacts){
+            if(contact.getUserDetail().getPhone().equals(searchStr)
+                    || contact.getUserDetail().getEmail().equals(searchStr)){
+                callBack.gotoProfile(contact);
+                return;
+            }
+        }
+
         Observable<HttpResult<List<User>>> observable = userApi.search(searchStr);
         Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
             @Override
@@ -57,9 +69,8 @@ public class AddFriendsPresenter extends MvpBasePresenter<AddFriendsMvpView> {
                     if(result.getData().isEmpty()){
                         callBack.gotoProfile(null);
                     }else {
-                        ITimeUser itimeUser = new ITimeUser(result.getData().get(0));
-                        Log.d(TAG, "onNext: " + result.getData().get(0).getUserId());
-                        callBack.gotoProfile(itimeUser);
+                        User user = result.getData().get(0);
+                        callBack.gotoProfile(new Contact(user));
                     }
                 }
             }
@@ -67,8 +78,8 @@ public class AddFriendsPresenter extends MvpBasePresenter<AddFriendsMvpView> {
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void goToProfile(ITimeUser user, String show){
-        getView().goToProfileFragment(user, show);
+    public void goToProfile(Contact user){
+        getView().goToProfileFragment(user);
     }
 
     public void goToQRCode(){

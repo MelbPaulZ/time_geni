@@ -7,15 +7,20 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
+import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.restfulapi.ContactApi;
+import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.bean.BaseContact;
 import org.unimelb.itime.bean.ITimeUser;
+import org.unimelb.itime.ui.viewmodel.contact.AddFriendsViewModel;
 import org.unimelb.itime.util.ContactCheckUtil;
 import org.unimelb.itime.ui.mvpview.contact.InviteFriendMvpView;
 import org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel;
 import org.unimelb.itime.util.HttpUtil;
+import org.unimelb.itime.util.rulefactory.InviteeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +38,12 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
     private static final String TAG = "Invitee Presenter";
     private Context context;
     private ContactApi contactApi;
+    private UserApi userApi;
 
     public InviteFriendPresenter (Context context){
         this.context = context;
         contactApi = HttpUtil.createService(context,ContactApi.class);
+        userApi = HttpUtil.createService(context, UserApi.class);
     }
 
 
@@ -142,6 +149,53 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
 //    public List<BaseContact> getSearchList(){
 //        return dao.getFriends();
 //    }
+
+    public void searchContact(String input, InviteFriendViewModel.SearchContactCallback callback){
+        DBManager dbManager = DBManager.getInstance(context);
+        List<Contact> contacts = dbManager.getAllContact();
+        for(Contact contact:contacts){
+            if(contact.getUserDetail().getPhone().equals(input)
+                    || contact.getUserDetail().getEmail().equals(input)){
+                callback.success(contact);
+                return;
+            }
+        }
+
+        findFriend(input, callback);
+    }
+
+    public void findFriend(final String searchStr, final InviteFriendViewModel.SearchContactCallback callback){
+        Observable<HttpResult<List<User>>> observable = userApi.search(searchStr);
+        Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(HttpResult<List<User>> result) {
+                Log.d(TAG, "onNext: " + result.getInfo());
+
+                if (result.getStatus()!=1){
+
+                }else {
+                    if(result.getData().isEmpty()){
+                        callback.success(searchStr);
+                    }else {
+                        User user = result.getData().get(0);
+                        callback.success(new Contact(user));
+                    }
+                }
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
 
     public int getMatchColor() {
         return context.getResources().getColor(R.color.matchColor);
