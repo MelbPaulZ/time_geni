@@ -33,7 +33,7 @@ implements SettingCommonMvpView{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
+//        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 
@@ -42,16 +42,12 @@ implements SettingCommonMvpView{
         return new SettingCommonPresenter<>(getContext());
     }
 
-    @Override
-    public void onViewChange(int task) {
-        if (task == MainSettingsViewModel.TASK_TO_CALENDAR_PREFERENCE){
-            closeFragment(this, (SettingCalendarPreferenceFragment)getFragmentManager().findFragmentByTag(SettingCalendarPreferenceFragment.class.getSimpleName()));
-        }
-    }
 
     @Override
     public void onViewChange(int task, boolean isSave) {
-
+        if (task == MainSettingsViewModel.TASK_TO_CALENDAR_PREFERENCE){
+            closeFragment(this, (SettingCalendarPreferenceFragment)getFragmentManager().findFragmentByTag(SettingCalendarPreferenceFragment.class.getSimpleName()));
+        }
     }
 
 }

@@ -35,7 +35,7 @@
                 android:textSize="17sp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="14dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING, false)}"
                 />
 
             <!--toolbar title-->

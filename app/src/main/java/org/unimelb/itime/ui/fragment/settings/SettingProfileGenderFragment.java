@@ -34,7 +34,7 @@ implements SettingCommonMvpView{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
+//        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 
@@ -44,14 +44,9 @@ implements SettingCommonMvpView{
     }
 
     @Override
-    public void onViewChange(int task) {
-        if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
-            closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
-        }
-    }
-
-    @Override
     public void onViewChange(int task, boolean isSave) {
-
+        if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
+            closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()), getSetting());
+        }
     }
 }

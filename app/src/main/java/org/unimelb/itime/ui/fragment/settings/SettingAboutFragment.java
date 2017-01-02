@@ -33,7 +33,6 @@ implements SettingCommonMvpView{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 
@@ -42,17 +41,13 @@ implements SettingCommonMvpView{
         return new SettingCommonPresenter<>(getContext());
     }
 
+
     @Override
-    public void onViewChange(int task) {
+    public void onViewChange(int task, boolean isSave) {
         if (task == MainSettingsViewModel.TASK_TO_SETTING){
             getActivity().finish();
             getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         }
-    }
-
-    @Override
-    public void onViewChange(int task, boolean isSave) {
-
     }
 
 }

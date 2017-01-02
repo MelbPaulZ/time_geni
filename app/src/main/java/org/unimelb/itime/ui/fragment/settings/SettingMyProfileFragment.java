@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,6 @@ import static org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity.CHOOSE_FR
 public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>> implements SettingCommonMvpView{
 
     private FragmentSettingMyProfileBinding binding;
-    private MainSettingsViewModel viewModel;
 
     @Nullable
     @Override
@@ -50,7 +50,6 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 
@@ -68,50 +67,25 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
     }
 
 
-    /**
-     * popup dialog for change avatar
-     */
-    private void popupDialog(){
-        ActionSheetDialog actionSheetDialog= new ActionSheetDialog(getActivity())
-                .builder()
-                .setCancelable(true)
-                .setCanceledOnTouchOutside(true)
-                .addSheetItem("Take Photo", ActionSheetDialog.SheetItemColor.Black,
-                        new ActionSheetDialog.OnSheetItemClickListener() {
-                            @Override
-                            public void onClick(int which) {
-                                ImagePicker.getInstance().takePicture(getActivity(),ImagePicker.REQUEST_CODE_TAKE);
-//                                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
-//                                                startActivityForResult(intent, TAKE_PHOTO);
-                            }
-                        })
-                .addSheetItem("Choose from Photos", ActionSheetDialog.SheetItemColor.Black,
-                        new ActionSheetDialog.OnSheetItemClickListener() {
-                            @Override
-                            public void onClick(int which) {
-                                Intent intent = new Intent(getActivity(), ImageGridActivity.class);
-                                startActivityForResult(intent, CHOOSE_FROM_LIBRARY);
-                            }
-                        });
-                actionSheetDialog.show();
-    }
-
     private void gotoPhotoPicker(){
         Intent intent = new Intent(getActivity(), ProfilePhotoPickerActivity.class);
         startActivity(intent);
     }
 
+    private void saveSetting(){
+        SettingManager.getInstance(getContext()).setSetting(getSetting());
+    }
 
     @Override
-    public void onViewChange(int task) {
+    public void onViewChange(int task, boolean isSave) {
         if (task == MainSettingsViewModel.TASK_VIEW_AVATAR){
             gotoPhotoPicker();
         }else if (task == MainSettingsViewModel.TASK_TO_SETTING){
+            saveSetting();
             getActivity().finish();
             getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-//            closeFragment(this, (SettingIndexFragment)getFragmentManager().findFragmentByTag(SettingIndexFragment.class.getSimpleName()));
         }else if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE_NAME){
-            openFragment(this, (SettingMyProfileNameFragment)getFragmentManager().findFragmentByTag(SettingMyProfileNameFragment.class.getSimpleName()));
+            openFragment(this, (SettingMyProfileNameFragment)getFragmentManager().findFragmentByTag(SettingMyProfileNameFragment.class.getSimpleName()), getSetting());
         }else if (task == MainSettingsViewModel.TASK_TO_QR_CODE){
             openFragment(this, (MyQRCodeFragment)getFragmentManager().findFragmentByTag(MyQRCodeFragment.class.getSimpleName()));
         }else if (task == MainSettingsViewModel.TASK_TO_GENDER){
@@ -119,11 +93,6 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
         }else if (task == MainSettingsViewModel.TASK_TO_RESET_PASSWORD){
             openFragment(this, (SettingProfileResetPasswordFragment)getFragmentManager().findFragmentByTag(SettingProfileResetPasswordFragment.class.getSimpleName()));
         }
-    }
-
-    @Override
-    public void onViewChange(int task, boolean isSave) {
-
     }
 
 }

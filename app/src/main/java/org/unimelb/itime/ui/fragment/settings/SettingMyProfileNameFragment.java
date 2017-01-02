@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.fragment.settings;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingMyP
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
+//        viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 
@@ -56,21 +57,19 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingMyP
 
     }
 
-
     @Override
-    public void onViewChange(int task) {
-        if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
-            closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
-        }
+    public void onEnter() {
+        super.onEnter();
+        viewModel.setSetting(getSetting());
     }
 
     @Override
     public void onViewChange(int task, boolean isSave) {
+        SettingMyProfileFragment settingMyProfileFragment = (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
         if (isSave) {
-            if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
-                SettingMyProfileFragment settingMyProfileFragment = (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
-                closeFragment(this, settingMyProfileFragment, getSetting());
-            }
+            closeFragment(this, settingMyProfileFragment, getSetting());
+        }else{
+            closeFragment(this, settingMyProfileFragment);
         }
     }
 

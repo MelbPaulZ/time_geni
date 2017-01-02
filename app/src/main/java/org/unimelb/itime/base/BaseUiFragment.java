@@ -67,7 +67,7 @@ public abstract class BaseUiFragment<T , V extends MvpView, P extends MvpPresent
 
 
 
-    public void openFragment(BaseUiFragment<T, V, P> from, BaseUiFragment<T, ? extends MvpView, ? extends MvpPresenter> to, T t){
+    public void openFragment(BaseUiFragment<T, V, P> from, BaseUiFragment<? , ? extends MvpView, ? extends MvpPresenter> to, T t){
         to.setFrom(from);
         from.onLeave();
         to.onEnter();
@@ -76,7 +76,7 @@ public abstract class BaseUiFragment<T , V extends MvpView, P extends MvpPresent
         getFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).hide(from).show(to).addToBackStack(null).commit();
     }
 
-    public void closeFragment(BaseUiFragment<T, V, P> from, BaseUiFragment<T, ? extends MvpView, ? extends MvpPresenter> to, T t){
+    public void closeFragment(BaseUiFragment<T, V, P> from, BaseUiFragment<? , ? extends MvpView, ? extends MvpPresenter> to, T t){
         to.setFrom(from);
         from.onLeave();
         to.onEnter();

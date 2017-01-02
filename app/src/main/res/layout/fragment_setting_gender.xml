@@ -32,7 +32,7 @@
                 android:textColor="@color/title_6D6D6D"
                 android:textSize="17sp"
                 android:layout_centerVertical="true"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE, false)}"
                 android:layout_marginLeft="14dp"
                 />
 
@@ -58,7 +58,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="44dp">
+            android:layout_height="44dp"
+            android:onClick="@{settingVM.chooseGender(0)}">
             <TextView
                 style="@style/itime_blacktitle_17sp"
                 android:text="@string/setting_male"/>
@@ -68,6 +69,7 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="16dp"
+                android:visibility="@{settingVM.getGenderVisibility(0, settingVM.setting)}"
                 android:background="@drawable/blue_tick"/>
 
             <TextView
@@ -76,7 +78,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="44dp">
+            android:layout_height="44dp"
+            android:onClick="@{settingVM.chooseGender(1)}">
             <TextView
                 style="@style/itime_blacktitle_17sp"
                 android:text="@string/setting_female"/>
@@ -86,6 +89,7 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="16dp"
+                android:visibility="@{settingVM.getGenderVisibility(1, settingVM.setting)}"
                 android:background="@drawable/blue_tick"/>
             <TextView
                 style="@style/itime_bottom_divider_line" />
@@ -93,7 +97,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="44dp">
+            android:layout_height="44dp"
+            android:onClick="@{settingVM.chooseGender(2)}">
             <TextView
                 style="@style/itime_blacktitle_17sp"
                 android:text="@string/setting_Undefined"/>
@@ -103,6 +108,7 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="16dp"
+                android:visibility="@{settingVM.getGenderVisibility(2, settingVM.setting)}"
                 android:background="@drawable/blue_tick"/>
             <TextView
                 style="@style/itime_bottom_divider_line" />

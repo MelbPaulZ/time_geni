@@ -59,9 +59,8 @@ implements SettingCommonMvpView{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
-        viewModel.setSetting(SettingManager.getInstance(getContext()).getSetting());
         binding.setSettingVM(viewModel);
+
     }
 
 
@@ -119,6 +118,9 @@ implements SettingCommonMvpView{
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+
+        // when setting activity finish, this will get called to update viewmodel data
+        viewModel.setSetting(SettingManager.getInstance(getContext()).getSetting());
     }
 
     @Override
@@ -129,7 +131,7 @@ implements SettingCommonMvpView{
 
 
     @Override
-    public void onViewChange(int task) {
+    public void onViewChange(int task, boolean isSave) {
         if (task == MainSettingsViewModel.TASK_LOGOUT){
             popupDialog();
         }else if (task == MainSettingsViewModel.TASK_TO_SCAN_QR_CODE ||
@@ -144,11 +146,6 @@ implements SettingCommonMvpView{
             getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
         }
-    }
-
-    @Override
-    public void onViewChange(int task, boolean isSave) {
-
     }
 
 }

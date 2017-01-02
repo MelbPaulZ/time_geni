@@ -34,7 +34,7 @@ implements SettingCommonMvpView{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
+//        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 
@@ -44,17 +44,12 @@ implements SettingCommonMvpView{
     }
 
     @Override
-    public void onViewChange(int task) {
+    public void onViewChange(int task, boolean isSave) {
         if (task == MainSettingsViewModel.TASK_TO_IMPORT_GOOGLE_CALENDAR){
 
         }else if (task == MainSettingsViewModel.TASK_TO_IMPORT_UNIMELB_CALENDAR){
             openFragment(this, (SettingImportCalendarUnimelbFragment)getFragmentManager().findFragmentByTag(SettingImportCalendarUnimelbFragment.class.getSimpleName()));
         }
-    }
-
-    @Override
-    public void onViewChange(int task, boolean isSave) {
-
     }
 
 }
