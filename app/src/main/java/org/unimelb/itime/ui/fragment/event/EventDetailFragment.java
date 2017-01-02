@@ -152,12 +152,10 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
         }
     }
 
-
     @Override
     public EventCommonPresenter<EventDetailGroupMvpView> createPresenter() {
         return new EventCommonPresenter<>(getContext());
     }
-    
 
     private void toCalendar(int resultCode) {
         Intent intent = new Intent();
@@ -193,11 +191,8 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
         }else {
             final EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
             timeSlotFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event), this.adapterData);
-//            timeSlotFragment.getWeekView().setBackgroundColor(getResources().getColor(R.color.red));
-            timeSlotFragment.getWeekView().resetTimeSlots();
             timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
             openFragment(this,timeSlotFragment);
-
         }
     }
 

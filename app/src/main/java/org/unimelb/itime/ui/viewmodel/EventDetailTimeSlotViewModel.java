@@ -229,14 +229,6 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
                 weekView.addTimeSlot(timeslot);
             }
         }
-//        final WeekView wv = weekView;
-//        weekView.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                wv.reloadTimeSlots(false);
-//            }
-//        }, 100);
-        weekView.reloadTimeSlots(false);
     }
 
     private void setTimeslotFromDetailFragment(Timeslot timeslot){
