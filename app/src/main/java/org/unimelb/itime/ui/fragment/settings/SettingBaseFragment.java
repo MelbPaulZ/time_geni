@@ -55,4 +55,8 @@ public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P ext
         this.setting = setting;
         viewModel.setSetting(setting);
     }
+
+    public void reloadSetting(){
+        setSetting(SettingManager.getInstance(getContext()).getSetting());
+    }
 }
