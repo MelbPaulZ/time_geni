@@ -169,7 +169,7 @@ public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, 
             if (event.getInvitee().size()>=1) {
                 EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFrom();
                 eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
-                eventTimeSlotViewFragment.resetCalendar(event);
+                eventTimeSlotViewFragment.resetCalendar(eventManager.copyCurrentEvent(event));
                 openFragment(this, (EventTimeSlotViewFragment) getFrom());
             }else{
                 EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());

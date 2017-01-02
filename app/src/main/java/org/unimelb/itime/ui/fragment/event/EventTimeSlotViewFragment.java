@@ -76,6 +76,10 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
 
     public void setEvent(Event event) {
+        if (this.event!=null) {
+            ArrayList<Timeslot> previousTimeslots = (ArrayList<Timeslot>) this.event.getTimeslot();
+            event.setTimeslot(previousTimeslots);
+        }
         this.event = event;
         viewModel.setEvent(event);
     }
@@ -192,13 +196,78 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         timeslot.setEndTime(endTime);
         timeslotWeekView.reloadTimeSlots(false);
 
-//        // update timeslot info
-//        Timeslot calendarTimeSlot = (Timeslot) ((WeekView.TimeSlotStruct) timeSlotView.getTag()).object;
-//        Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
-//        if (timeSlot != null) {
-//            timeSlot.setStartTime(timeSlotView.getStartTimeM());
-//            timeSlot.setEndTime(timeSlotView.getEndTimeM());
-//        }
+    }
+
+
+
+    // todo init
+    private void initTimeSlots(Event event) {
+        if (event.hasTimeslots()) {
+            for (Timeslot timeSlot : event.getTimeslot()) {
+                timeslotWeekView.addTimeSlot(timeSlot);
+            }
+        }
+        timeslotWeekView.reloadTimeSlots(false);
+    }
+
+//
+//    /**
+//     * need to check if fragment is doing creating task or editing task,
+//     * if doing editing task, do we still recommend?
+//     *
+//     * @param list
+//     */
+    @Override
+    public void onRecommend(List<Timeslot> list) {
+        if (!event.hasTimeslots()) {
+            event.setTimeslot(new ArrayList<Timeslot>());
+        }
+        for (Timeslot timeSlot : list) {
+            if (EventManager.getInstance(getContext()).isTimeslotExistInEvent(event, timeSlot)) {
+                // already exist, then do nothing
+            } else {
+                // have to do this
+                timeSlot.setEventUid(event.getEventUid());
+                timeSlot.setStatus(Timeslot.STATUS_CREATING);
+                // todo: need to check if this timeslot already exists in a map
+                event.getTimeslot().add(timeSlot);
+                timeslotWeekView.addTimeSlot(timeSlot);
+            }
+        }
+        timeslotWeekView.reloadTimeSlots(false);
+    }
+
+    //***************************************************************************************
+    @Override
+    public TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView> createPresenter() {
+        return new TimeslotCommonPresenter<>(getContext());
+    }
+
+    @Override
+    public void onClickDone() {
+        if (getFrom() instanceof InviteeFragment || getFrom() instanceof EventTimeSlotCreateFragment) {
+            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+            beforeSendingFragment.setEvent(event);
+            openFragment(this, beforeSendingFragment);
+        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
+            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFrom();
+            beforeSendingFragment.setEvent(event);
+            openFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
+        }
+    }
+
+    @Override
+    public void onClickBack() {
+        if (getFrom() instanceof InviteeFragment) {
+            openFragment(this, (InviteeFragment) getFrom());
+        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof InviteeFragment) {
+            InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+            openFragment(this, inviteeFragment);
+        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof EventCreateDetailBeforeSendingFragment) {
+            openFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
+        }else if (getFrom() instanceof EventTimeSlotCreateFragment){
+            openFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
+        }
     }
 
     public void initWheelPickers() {
@@ -257,75 +326,6 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
                 popupWindow.dismiss();
             }
         });
-    }
-
-
-    @Override
-    public void onClickDone() {
-        if (getFrom() instanceof InviteeFragment || getFrom() instanceof EventTimeSlotCreateFragment) {
-            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-            beforeSendingFragment.setEvent(event);
-            openFragment(this, beforeSendingFragment);
-        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFrom();
-            beforeSendingFragment.setEvent(event);
-            openFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
-        }
-    }
-
-    @Override
-    public void onClickBack() {
-        if (getFrom() instanceof InviteeFragment) {
-            openFragment(this, (InviteeFragment) getFrom());
-        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof InviteeFragment) {
-            InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-            openFragment(this, inviteeFragment);
-        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof EventCreateDetailBeforeSendingFragment) {
-            openFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
-        }else if (getFrom() instanceof EventTimeSlotCreateFragment){
-            openFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
-        }
-    }
-
-    // todo init
-    private void initTimeSlots(Event event) {
-        if (event.hasTimeslots()) {
-            for (Timeslot timeSlot : event.getTimeslot()) {
-                timeslotWeekView.addTimeSlot(timeSlot);
-            }
-        }
-    }
-
-//
-//    /**
-//     * need to check if fragment is doing creating task or editing task,
-//     * if doing editing task, do we still recommend?
-//     *
-//     * @param list
-//     */
-    @Override
-    public void onRecommend(List<Timeslot> list) {
-        if (!event.hasTimeslots()) {
-            event.setTimeslot(new ArrayList<Timeslot>());
-        }
-        for (Timeslot timeSlot : list) {
-            if (EventManager.getInstance(getContext()).isTimeslotExistInEvent(event, timeSlot)) {
-                // already exist, then do nothing
-            } else {
-                // have to do this
-                timeSlot.setEventUid(event.getEventUid());
-                timeSlot.setStatus(Timeslot.STATUS_CREATING);
-                // todo: need to check if this timeslot already exists in a map
-                event.getTimeslot().add(timeSlot);
-                timeslotWeekView.addTimeSlot(timeSlot);
-            }
-        }
-        timeslotWeekView.reloadTimeSlots(false);
-    }
-
-    @Override
-    public TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView> createPresenter() {
-        return new TimeslotCommonPresenter<>(getContext());
     }
 
 }
