@@ -147,7 +147,7 @@ public class CalendarWeekFragment extends BaseUiFragment<Object, EventCommonMvpV
                                             break;
                                         }
                                         case 1: {
-                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL, originEvent.getStartTime());
+                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_FOLLOWING, originEvent.getStartTime());
                                             break;
                                         }
                                         case 2: {

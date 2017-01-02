@@ -106,7 +106,6 @@ public class MainSettingsViewModel extends BaseObservable{
     private void updateUserGender(int index){
         String gender = getGenderStringList().get(index);
         getSetting().getUser().setGender(gender);
-        Log.i("123", "updateUserGender: " + gender);
         setSetting(setting);
     }
 

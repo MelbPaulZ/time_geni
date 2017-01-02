@@ -60,7 +60,6 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_create_timeslot_view, container, false);
-
         return binding.getRoot();
     }
 
@@ -248,8 +247,6 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
                 }
                 viewModel.setEvent(event);
                 timeslotWeekView.reloadTimeSlots(false); // for page refresh
-
-
             }
         });
 
