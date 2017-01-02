@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -75,7 +76,7 @@ public class WideArrowButton extends RelativeLayout {
         params.addRule(ALIGN_PARENT_LEFT);
         params.addRule(CENTER_VERTICAL);
         iconImageView.setLayoutParams(params);
-        iconImageView.setId(1);
+        iconImageView.setId(View.generateViewId());
         if(icon!=0) {
             iconImageView.setImageResource(icon);
         }

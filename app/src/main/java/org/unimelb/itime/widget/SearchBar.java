@@ -113,7 +113,7 @@ public class SearchBar extends LinearLayout {
 //                SizeUtil.dp2px(getContext(),10),
 //                SizeUtil.dp2px(getContext(),10),
 //                SizeUtil.dp2px(getContext(),10));
-        params.addRule(RelativeLayout.LEFT_OF, 1);
+        params.addRule(RelativeLayout.LEFT_OF, cancelButton.getId());
         RelativeLayout editTextLayout = new RelativeLayout(getContext());
         editTextLayout.setLayoutParams(params);
         editTextLayout.setBackground(getResources().getDrawable(R.drawable.corner_border));
@@ -129,7 +129,8 @@ public class SearchBar extends LinearLayout {
         ImageView icon = new ImageView(getContext());
         icon.setLayoutParams(iconParams);
         icon.setImageResource(R.drawable.icon_general_search);
-        icon.setId(2);
+        icon.setId(View.generateViewId());
+//        icon.setId(2);
 
         RelativeLayout.LayoutParams cleanIconParams = new RelativeLayout.LayoutParams(SizeUtil.dp2px(getContext(),15),
                 SizeUtil.dp2px(getContext(),15));
@@ -149,13 +150,14 @@ public class SearchBar extends LinearLayout {
             }
         });
         cleanIcon.setVisibility(GONE);
-        cleanIcon.setId(3);
+        cleanIcon.setId(View.generateViewId());
+//        cleanIcon.setId(3);
 
         inputText = new PureEditText(getContext());
         RelativeLayout.LayoutParams inputTextParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        inputTextParams.addRule(RelativeLayout.RIGHT_OF, 2);
-        inputTextParams.addRule(RelativeLayout.LEFT_OF, 3);
+        inputTextParams.addRule(RelativeLayout.RIGHT_OF, icon.getId());
+        inputTextParams.addRule(RelativeLayout.LEFT_OF, cleanIcon.getId());
         inputTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
         inputTextParams.setMargins(0,0, SizeUtil.dp2px(getContext(),10),0);
         inputText.setTextSize(inputFontSize);
@@ -213,7 +215,7 @@ public class SearchBar extends LinearLayout {
         cancelButton.setLayoutParams(cancelButtonParams);
         cancelButton.setText("Cancel");
         cancelButton.setTextColor(getResources().getColor(R.color.lightRed));
-        cancelButton.setId(1);
+        cancelButton.setId(View.generateViewId());
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
