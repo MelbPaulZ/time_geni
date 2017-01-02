@@ -39,7 +39,7 @@ public class DefaultPhotoUtil{
         return convertViewToBitmap(view);
     }
 
-    public View get(Context context, String name){
+    public View getView(Context context, String name){
         String text = getText(name.trim());
         if(text == null){
             return null;

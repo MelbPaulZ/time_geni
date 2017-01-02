@@ -39,7 +39,7 @@ import org.unimelb.itime.util.EventUtil;
 import java.util.List;
 
 /**
- * required login, need to extend BaseUiAuthFragment
+ * required signIn, need to extend BaseUiAuthFragment
  */
 public class MainInboxFragment extends BaseUiFragment<MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView, SearchView.OnQueryTextListener{
 

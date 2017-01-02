@@ -1,5 +1,5 @@
 <resources>
-    <string name="google_app_id">your app id</string>
+    <string name="serverClientId">354425670015-135aobr74423lftrohpoqb9kml25ip43.apps.googleusercontent.com</string>
     <string name="app_name">itime</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -57,7 +57,7 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_login">Sign in</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to signIn -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>

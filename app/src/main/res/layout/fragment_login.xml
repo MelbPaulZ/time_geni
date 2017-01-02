@@ -30,7 +30,7 @@
                 android:src="@drawable/icon_close"
                 android:onClick="@{loginVM.onSwitchFragment(loginVM.TO_INDEX_FRAG)}" />
 
-            <!--login logo-->
+            <!--signIn logo-->
             <ImageView
                 android:layout_width="56dp"
                 android:layout_height="56dp"
@@ -39,7 +39,7 @@
                 android:background="@drawable/icon_login"
                 android:visibility="@{loginVM.topIconVisibility}" />
 
-            <!--login title-->
+            <!--signIn title-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <!--login email editText-->
+                    <!--signIn email editText-->
                     <EditText
                         android:layout_width="221dp"
                         android:layout_height="34dp"
@@ -122,7 +122,7 @@
                     android:textColor="@color/color_b1cef9"
                     android:textSize="11sp" />
 
-                <!--login pasword editText-->
+                <!--signIn pasword editText-->
                 <EditText
                     android:layout_width="255dp"
                     android:layout_height="34dp"
@@ -141,7 +141,7 @@
                     android:textSize="14sp"
                     android:gravity="bottom"/>
 
-                <!--login password divider-->
+                <!--signIn password divider-->
                 <TextView
                     android:layout_width="275dp"
                     android:layout_height="1dp"
@@ -149,7 +149,7 @@
                     android:layout_marginTop="15dp"
                     android:background="@drawable/itime_header_divider_line" />
 
-                <!--login forget password-->
+                <!--signIn forget password-->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

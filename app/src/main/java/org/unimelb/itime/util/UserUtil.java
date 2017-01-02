@@ -41,7 +41,7 @@ public class UserUtil {
     }
 
 
-    /** save the user info into shared preference, which can be used to fast login
+    /** save the user info into shared preference, which can be used to fast signIn
      * **/
     public void login(UserLoginRes userLoginRes){
         SharedPreferences sp = AppUtil.getSharedPreferences(context);

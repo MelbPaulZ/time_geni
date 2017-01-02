@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "354425670015",
+    "firebase_url": "https://itime-abb00.firebaseio.com",
+    "project_id": "itime-abb00",
+    "storage_bucket": "itime-abb00.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354425670015:android:9587f5a46842c446",
+        "android_client_info": {
+          "package_name": "org.unimelb.itime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "354425670015-ba917r0htl4ocpi0hnhjsvetgk25h006.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.unimelb.itime",
+            "certificate_hash": "C853A36B73061CA0754D6E3292AD57CE13A92DBD"
+          }
+        },
+        {
+          "client_id": "354425670015-g7sc4n505f1i5f9p4lkgb6s8hln1d75l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB-RYjYIdkIi9BHtfY65bGOwwR4k_PGyo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "354425670015-g7sc4n505f1i5f9p4lkgb6s8hln1d75l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

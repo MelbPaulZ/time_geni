@@ -1,18 +1,21 @@
 package org.unimelb.itime.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Toast;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.databinding.ActivityContactMainBinding;
 import org.unimelb.itime.util.DefaultPhotoUtil;
-import org.unimelb.itime.widget.BaseTitleBar;
+import org.unimelb.itime.util.googleAuth.GoogleSignUtil;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 
-public class ContactTestActivityContact extends ContactBaseActivity {
+public class ContactTestActivityContact extends BaseActivity {
     ActivityContactMainBinding binding;
 
 
@@ -42,6 +45,16 @@ public class ContactTestActivityContact extends ContactBaseActivity {
 
     public void toQRCode() {
         startActivityForResult(new Intent(this, CaptureActivityContact.class), 0);
+    }
+
+    public View.OnClickListener getGoogleAuth(){
+        final Activity activity = this;
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GoogleSignUtil.getInstance().signIn(activity);
+            }
+        };
     }
 
     @Override

@@ -33,6 +33,12 @@
         android:textSize="30sp"
         android:onClick="@{()->activity.toInvitee()}"/>
 
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{activity.googleAuth}"/>
+
         <TextView
             android:text="QRCode"
             android:layout_width="match_parent"

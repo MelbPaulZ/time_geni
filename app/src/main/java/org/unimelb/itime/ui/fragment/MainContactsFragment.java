@@ -15,7 +15,7 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.ui.presenter.MainContactPresenter;
 
 /**
- * required login, need to extend BaseUiAuthFragment
+ * required signIn, need to extend BaseUiAuthFragment
  */
 public class MainContactsFragment<V,P> extends BaseUiFragment {
 

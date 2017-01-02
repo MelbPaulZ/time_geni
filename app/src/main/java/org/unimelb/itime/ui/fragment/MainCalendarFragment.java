@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import static org.unimelb.itime.R.string.calendar;
 
 /**
- * required login, need to extend BaseUiAuthFragment
+ * required signIn, need to extend BaseUiAuthFragment
  */
 public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, CommonPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
 

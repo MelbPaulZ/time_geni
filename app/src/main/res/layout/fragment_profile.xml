@@ -26,14 +26,35 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp">
 
-    <org.unimelb.itime.widget.RoundImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:border_inside_color="@color/lightGrey"
-        app:border_thickness="4dp"
-        app:avatar="@{viewModel.friend.aliasPhoto}"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/avatarView"/>
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/avatarView">
+            <org.unimelb.itime.widget.RoundImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:border_inside_color="@color/lightGrey"
+                app:border_thickness="4dp"
+                app:avatar="@{viewModel.friend.aliasPhoto}"
+                />
+            <RelativeLayout
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/background_block_icon"
+                android:visibility="@{viewModel.blocked?View.VISIBLE:View.GONE}">
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/lock_icon"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/block"/>
+            </RelativeLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -69,18 +90,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/nameLayout"/>
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/lock_icon"
-            android:id="@+id/block"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/nameLayout"
-            android:layout_toEndOf="@+id/nameLayout"
-            android:layout_marginLeft="6dp"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="7dp"
-            android:visibility="@{viewModel.blocked?View.VISIBLE:View.GONE}"/>
+
     </RelativeLayout>
 
 
@@ -155,7 +165,7 @@
         android:layout_marginTop="20dp"
         android:text="Request sent"
         android:textSize="@dimen/font_big"
-        android:textColor="@color/royalblue"
+        android:textColor="@color/blue"
         android:visibility="@{viewModel.showSent?View.VISIBLE:View.GONE}"
         android:gravity="center"
         android:layout_gravity="center_horizontal"

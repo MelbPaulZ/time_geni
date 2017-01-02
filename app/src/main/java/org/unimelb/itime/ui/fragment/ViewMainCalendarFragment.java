@@ -27,7 +27,7 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 /**
- * required login, need to extend BaseUiAuthFragment
+ * required signIn, need to extend BaseUiAuthFragment
  */
 public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, CommonPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
 
