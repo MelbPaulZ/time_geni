@@ -99,7 +99,7 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Message message = (Message) messageAdapter.getItem(i);
                 if (!message.getIsRead()){
-                    //read to read
+                    //unread to read
                     message.setRead(true);
                     message.update();
                     presenter.updateMessage(message);
@@ -107,7 +107,7 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
                     messageAdapter.notifyDataSetChanged();
 
                 }else{
-                    //unread to read
+                    //read to read
                 }
 
                 Event event = EventManager.getInstance(getContext()).findEventByUid(message.getEventUid());

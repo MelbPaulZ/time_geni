@@ -24,8 +24,8 @@ import static android.R.attr.data;
  */
 public abstract class BaseUiFragment<T , V extends MvpView, P extends MvpPresenter<V>> extends MvpFragment<V, P>{
 
-    private Fragment from;
-    private Fragment to;
+    private BaseUiFragment from;
+    private BaseUiFragment to;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public abstract class BaseUiFragment<T , V extends MvpView, P extends MvpPresent
     }
 
 
-    public Fragment getFrom() {
+    public BaseUiFragment getFrom() {
         return from;
     }
 
@@ -49,6 +49,7 @@ public abstract class BaseUiFragment<T , V extends MvpView, P extends MvpPresent
 
 
     public void openFragment(BaseUiFragment<T, V, P> from, BaseUiFragment<? ,? extends MvpView, ? extends MvpPresenter> to){
+        this.to = to;
         to.setFrom(from);
         from.onLeave();
         to.onEnter();
@@ -57,6 +58,7 @@ public abstract class BaseUiFragment<T , V extends MvpView, P extends MvpPresent
     }
 
     public void closeFragment(BaseUiFragment<T, V, P> from, BaseUiFragment<? , ? extends MvpView, ? extends MvpPresenter> to){
+        this.to = to;
         to.setFrom(from);
         from.onLeave();
         to.onEnter();
@@ -68,6 +70,7 @@ public abstract class BaseUiFragment<T , V extends MvpView, P extends MvpPresent
 
 
     public void openFragment(BaseUiFragment<T, V, P> from, BaseUiFragment<? , ? extends MvpView, ? extends MvpPresenter> to, T t){
+        this.to = to;
         to.setFrom(from);
         from.onLeave();
         to.onEnter();
@@ -77,6 +80,7 @@ public abstract class BaseUiFragment<T , V extends MvpView, P extends MvpPresent
     }
 
     public void closeFragment(BaseUiFragment<T, V, P> from, BaseUiFragment<? , ? extends MvpView, ? extends MvpPresenter> to, T t){
+        this.to = to;
         to.setFrom(from);
         from.onLeave();
         to.onEnter();
@@ -92,7 +96,7 @@ public abstract class BaseUiFragment<T , V extends MvpView, P extends MvpPresent
         this.to = to;
     }
 
-    public Fragment getTo(){
+    public BaseUiFragment getTo(){
         return to;
     }
 

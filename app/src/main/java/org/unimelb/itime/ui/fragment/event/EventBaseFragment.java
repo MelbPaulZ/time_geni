@@ -25,5 +25,4 @@ public abstract class EventBaseFragment<V extends MvpView, P extends MvpPresente
     public void setData(Event event) {
 
     }
-
 }

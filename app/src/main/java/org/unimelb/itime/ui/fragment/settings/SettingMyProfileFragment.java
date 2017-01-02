@@ -55,18 +55,6 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
 
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        viewModel.setSetting(SettingManager.getInstance(getContext()).getSetting());
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
     private void gotoPhotoPicker(){
         Intent intent = new Intent(getActivity(), ProfilePhotoPickerActivity.class);
         startActivity(intent);

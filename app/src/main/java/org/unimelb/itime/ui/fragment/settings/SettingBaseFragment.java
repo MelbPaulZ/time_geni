@@ -31,7 +31,7 @@ public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P ext
 
     private void initSetting(){
         if (setting == null){
-            setting = SettingManager.getInstance(getContext()).getSetting();
+            setting = SettingManager.getInstance(getContext()).copySetting();
         }
     }
 
@@ -39,20 +39,26 @@ public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P ext
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = new MainSettingsViewModel(getPresenter());
+        viewModel.setSetting(setting);
     }
 
     public Setting getSetting() {
         return setting;
     }
 
-    @Override
-    public void onEnter() {
-        super.onEnter();
-        viewModel.setSetting(setting);
-    }
+//    @Override
+//    public void onEnter() {
+//        super.onEnter();
+//        viewModel.setSetting(setting);
+//    }
 
     @Override
     public void setData(Setting setting) {
+        ((SettingBaseFragment)getTo()).setSetting(setting);
+    }
+
+    public void setSetting(Setting setting){
         this.setting = setting;
+        viewModel.setSetting(setting);
     }
 }

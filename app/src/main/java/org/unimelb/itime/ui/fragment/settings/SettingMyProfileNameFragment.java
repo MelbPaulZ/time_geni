@@ -12,6 +12,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileNameBinding;
+import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.mvpview.SettingMyProfileMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
@@ -25,13 +26,6 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingMyP
 
     private FragmentSettingMyProfileNameBinding binding;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-
 
     @Nullable
     @Override
@@ -43,7 +37,6 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingMyP
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 
@@ -60,14 +53,13 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingMyP
     @Override
     public void onEnter() {
         super.onEnter();
-        viewModel.setSetting(getSetting());
     }
 
     @Override
     public void onViewChange(int task, boolean isSave) {
         SettingMyProfileFragment settingMyProfileFragment = (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
         if (isSave) {
-            closeFragment(this, settingMyProfileFragment, getSetting());
+            closeFragment(this, settingMyProfileFragment, SettingManager.getInstance(getContext()).copySetting(getSetting()));
         }else{
             closeFragment(this, settingMyProfileFragment);
         }
