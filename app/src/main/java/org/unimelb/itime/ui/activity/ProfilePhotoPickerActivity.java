@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,7 +55,7 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
 
                 findViewById(R.id.profile_image).getLayoutParams().height = width;
 
-                Button btn = (Button) findViewById(R.id.choose);
+                RelativeLayout btn = (RelativeLayout) findViewById(R.id.choose);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
