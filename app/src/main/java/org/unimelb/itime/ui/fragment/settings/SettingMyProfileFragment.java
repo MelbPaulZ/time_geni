@@ -57,7 +57,13 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
 
     private void gotoPhotoPicker(){
         Intent intent = new Intent(getActivity(), ProfilePhotoPickerActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        reloadSetting(); // after photo picker activity, reload setting data from setting manager
     }
 
     private void saveSetting(){
