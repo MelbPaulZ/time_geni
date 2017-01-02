@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * Created by Paul on 31/08/2016.
  */
-public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<EventCreateDetailBeforeSendingMvpView, EventCommonPresenter<EventCreateDetailBeforeSendingMvpView>> implements EventCreateDetailBeforeSendingMvpView{
+public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<EventCreateDetailBeforeSendingMvpView, EventCommonPresenter<EventCreateDetailBeforeSendingMvpView>> implements EventCreateDetailBeforeSendingMvpView{
     private FragmentEventCreateBeforeSendingBinding binding;
     private EventCreateDetailBeforeSendingViewModel eventCreateDetailBeforeSendingViewModel;
     private Event event;
@@ -170,8 +170,8 @@ public class EventCreateDetailBeforeSendingFragment extends BaseUiFragment<Event
     }
 
     @Override
-    public void pickPhoto(String tag) {
-        ((EventCreateActivity)getActivity()).checkPermission(tag);
+    public void pickPhoto() {
+        ((EventCreateActivity)getActivity()).checkPermission(getString(R.string.tag_create_event_before_sending));
     }
 
     @Override

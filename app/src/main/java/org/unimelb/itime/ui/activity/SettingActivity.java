@@ -7,6 +7,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.service.MusicService;
+import org.unimelb.itime.ui.fragment.contact.MyQRCodeFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingAboutFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingCalendarPreferenceFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingDefaultCalendarFragment;
@@ -32,6 +33,7 @@ public class SettingActivity extends BaseActivity{
     private SettingProfileGenderFragment profileGenderFragment;
     private SettingProfileResetPasswordFragment resetPasswordFragment;
     private SettingImportCalendarFragment importCalendarFragment;
+    private MyQRCodeFragment myQRCodeFragment;
 
 
 
@@ -93,6 +95,8 @@ public class SettingActivity extends BaseActivity{
         profileGenderFragment = new SettingProfileGenderFragment();
         resetPasswordFragment = new SettingProfileResetPasswordFragment();
         importCalendarFragment = new SettingImportCalendarFragment();
+        myQRCodeFragment = new MyQRCodeFragment();
+
 
         hideFragment(myProfileFragment);
         hideFragment(myProfileNameFragment);
@@ -104,6 +108,7 @@ public class SettingActivity extends BaseActivity{
         hideFragment(profileGenderFragment);
         hideFragment(resetPasswordFragment);
         hideFragment(importCalendarFragment);
+        hideFragment(myQRCodeFragment);
     }
 
     private void hideFragment(BaseUiFragment fragment){

@@ -34,7 +34,7 @@
                 android:textSize="17sp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="14dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_CALENDAR_PREFERENCE)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_CALENDAR_PREFERENCE, false)}"
                 />
 
             <!--toolbar title-->

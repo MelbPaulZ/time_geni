@@ -44,7 +44,7 @@ import java.util.List;
  * Created by 37925 on 2016/12/4.
  */
 
-public class InviteeFragment extends BaseUiFragment<InviteFriendMvpView, InviteFriendPresenter> implements InviteFriendMvpView {
+public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, InviteFriendPresenter> implements InviteFriendMvpView {
     private FragmentInviteFridendsBinding binding;
     private ListviewInviteeHeaderBinding headerBinding;
     private FragmentManager fm;
@@ -169,7 +169,7 @@ public class InviteeFragment extends BaseUiFragment<InviteFriendMvpView, InviteF
             if (event.getInvitee().size()>=1) {
                 EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFrom();
                 eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
-                eventTimeSlotViewFragment.resetCalendar(event);
+                eventTimeSlotViewFragment.resetCalendar(eventManager.copyCurrentEvent(event));
                 openFragment(this, (EventTimeSlotViewFragment) getFrom());
             }else{
                 EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
@@ -214,14 +214,14 @@ public class InviteeFragment extends BaseUiFragment<InviteFriendMvpView, InviteF
             // TODO: 29/12/2016 reset all selection
             viewModel.setEvent(event);
             EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-            openFragment(this, eventCreateNewFragment);
+            closeFragment(this, eventCreateNewFragment);
         }else if (getFrom() instanceof EventTimeSlotViewFragment){
             EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-            openFragment(this, eventCreateNewFragment);
+            closeFragment(this, eventCreateNewFragment);
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
-            openFragment(this, (EventCreateDetailBeforeSendingFragment)getFrom());
+            closeFragment(this, (EventCreateDetailBeforeSendingFragment)getFrom());
         }else if (getFrom() instanceof EventEditFragment){
-            openFragment(this, (EventEditFragment)getFrom());
+            closeFragment(this, (EventEditFragment)getFrom());
         }else if (getFrom() instanceof EventDetailTimeSlotFragment){
             EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
             closeFragment(this, eventEditFragment);
@@ -243,6 +243,11 @@ public class InviteeFragment extends BaseUiFragment<InviteFriendMvpView, InviteF
                 viewModel.addInvitee(result);
             }
         }
+    }
+
+    @Override
+    public void setData(Event event) {
+
     }
 }
 

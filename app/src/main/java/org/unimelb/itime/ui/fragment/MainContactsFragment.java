@@ -33,4 +33,9 @@ public class MainContactsFragment<V,P> extends BaseUiFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main_contacts, container, false);
     }
+
+    @Override
+    public void setData(Object o) {
+
+    }
 }

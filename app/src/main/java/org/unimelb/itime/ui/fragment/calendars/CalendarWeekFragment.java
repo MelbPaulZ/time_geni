@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, EventCommonPresenter<EventCommonMvpView>> implements EventCommonMvpView {
+public class CalendarWeekFragment extends BaseUiFragment<Object, EventCommonMvpView, EventCommonPresenter<EventCommonMvpView>> implements EventCommonMvpView {
 
     private View root;
     private WeekView weekView;
@@ -147,7 +147,7 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
                                             break;
                                         }
                                         case 1: {
-                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL, originEvent.getStartTime());
+                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_FOLLOWING, originEvent.getStartTime());
                                             break;
                                         }
                                         case 2: {
@@ -232,5 +232,10 @@ public class CalendarWeekFragment extends BaseUiFragment<EventCommonMvpView, Eve
         if (task == EventCommonPresenter.TASK_EVENT_UPDATE) {
             AppUtil.hideProgressBar();
         }
+    }
+
+    @Override
+    public void setData(Object o) {
+
     }
 }

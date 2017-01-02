@@ -2,6 +2,8 @@ package org.unimelb.itime.managers;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+
 import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.util.CalendarUtil;
@@ -55,6 +57,25 @@ public class SettingManager {
 
     public void setSetting(Setting setting) {
         instance.setting = setting;
+    }
+
+    /**
+     *
+     * @param setting input setting and copy another one
+     * @return
+     */
+    public Setting copySetting(Setting setting){
+        Gson gson = new Gson();
+        String str = gson.toJson(setting);
+        return gson.fromJson(str, Setting.class);
+    }
+
+    /**
+     *  this method is called for getting a copy of setting
+     * @return
+     */
+    public Setting copySetting(){
+        return copySetting(this.setting);
     }
 
 }

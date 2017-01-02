@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Created by Paul on 4/09/2016.
  */
-public class InviteeTimeslotFragment extends BaseUiFragment {
+public class InviteeTimeslotFragment extends EventBaseFragment {
     private FragmentSelectedInviteeBinding binding;
     private TimeslotInviteeResponseViewModel viewModel;
     private TimeslotCommonPresenter<TimeslotCommonMvpView> presenter;

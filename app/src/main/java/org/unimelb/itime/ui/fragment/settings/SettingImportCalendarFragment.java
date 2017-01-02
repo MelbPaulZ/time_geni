@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingImportCalendarBinding;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
@@ -18,7 +19,7 @@ import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
  * Created by Paul on 27/12/2016.
  */
 
-public class SettingImportCalendarFragment extends BaseUiFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
+public class SettingImportCalendarFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
 implements SettingCommonMvpView{
 
 
@@ -33,7 +34,7 @@ implements SettingCommonMvpView{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
+//        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 
@@ -43,11 +44,12 @@ implements SettingCommonMvpView{
     }
 
     @Override
-    public void onViewChange(int task) {
+    public void onViewChange(int task, boolean isSave) {
         if (task == MainSettingsViewModel.TASK_TO_IMPORT_GOOGLE_CALENDAR){
 
         }else if (task == MainSettingsViewModel.TASK_TO_IMPORT_UNIMELB_CALENDAR){
             openFragment(this, (SettingImportCalendarUnimelbFragment)getFragmentManager().findFragmentByTag(SettingImportCalendarUnimelbFragment.class.getSimpleName()));
         }
     }
+
 }

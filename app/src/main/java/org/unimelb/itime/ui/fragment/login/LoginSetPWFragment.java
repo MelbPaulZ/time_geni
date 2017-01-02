@@ -21,7 +21,7 @@ import org.unimelb.itime.ui.viewmodel.LoginViewModel;
  * Created by Paul on 19/12/2016.
  */
 
-public class LoginSetPWFragment extends LoginCommonFragment implements LoginMvpView{
+public class LoginSetPWFragment extends LoginBaseFragment implements LoginMvpView{
 
     private FragmentLoginSetPasswordBinding binding;
     private Dialog pwTooSimpleDialog;

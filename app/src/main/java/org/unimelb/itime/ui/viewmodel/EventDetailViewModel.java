@@ -7,6 +7,7 @@ import android.databinding.BindingAdapter;
 import android.databinding.ObservableBoolean;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,8 +16,10 @@ import com.android.databinding.library.baseAdapters.BR;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
+import org.unimelb.itime.adapter.PhotoAdapter;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
@@ -27,10 +30,11 @@ import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.unimelb.itime.R.string.event;
+
 import static org.unimelb.itime.util.EventUtil.getSelfInInvitees;
 
 /**
@@ -86,6 +90,17 @@ public class EventDetailViewModel extends CommonViewModel {
             public void onClick(View view) {
                 if (mvpView!=null){
                     mvpView.viewInCalendar();
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener gotoGridView(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mvpView!=null){
+                    mvpView.gotoGridView();
                 }
             }
         };
@@ -308,6 +323,17 @@ public class EventDetailViewModel extends CommonViewModel {
         };
     }
 
+    public View.OnClickListener onClickPhotoGridBack(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mvpView!=null){
+                    mvpView.onClickPhotoGridBack();
+                }
+            }
+        };
+    }
+
 
 
 //    ***************************************************************
@@ -484,5 +510,19 @@ public class EventDetailViewModel extends CommonViewModel {
 
     public void setRightBtnText(String rightBtnText) {
         this.rightBtnText = rightBtnText;
+    }
+
+    // set grid view data binding
+    @BindingAdapter("app:event")
+    public static void setGradView(GridView gridView, Event event){
+
+        List<String> urls = new ArrayList<>();
+        if (event!=null) {
+            for (PhotoUrl photoUrl : event.getPhoto()) {
+                urls.add(photoUrl.getUrl());
+            }
+            PhotoAdapter adapter = new PhotoAdapter(gridView.getContext(), R.id.gridview_photo, urls);
+            gridView.setAdapter(adapter);
+        }
     }
 }

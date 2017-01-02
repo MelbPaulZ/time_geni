@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,7 +27,7 @@ public class WideBadgeArrowButton extends WideArrowButton {
     }
 
     private void initBadgeView(){
-        getArrowView().setId(2);
+        getArrowView().setId(View.generateViewId());
         badgeView = new TextView(getContext());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(SizeUtil.dp2px(getContext(),20),
                 SizeUtil.dp2px(getContext(),20));

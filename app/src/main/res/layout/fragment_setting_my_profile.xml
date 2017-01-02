@@ -33,7 +33,7 @@
                 android:padding="10dp"
                 android:textColor="@color/title_6D6D6D"
                 android:textSize="17sp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING, false)}"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="14dp"
                 />
@@ -69,7 +69,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="84dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_VIEW_AVATAR)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_VIEW_AVATAR, true)}"
                 android:layout_marginLeft="16dp">
 
                 <TextView
@@ -97,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE_NAME)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE_NAME, true)}"
                 >
 
                 <TextView
@@ -151,7 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_RESET_PASSWORD)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_RESET_PASSWORD, true)}"
                 >
                 <TextView
                     style="@style/itime_blacktitle_17sp"
@@ -170,7 +170,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_QR_CODE)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_QR_CODE, true)}"
                 >
                 <TextView
                     style="@style/itime_blacktitle_17sp"
@@ -205,13 +205,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_GENDER)}">
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_GENDER, true)}">
                 <TextView
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/setting_gender"/>
 
                 <ImageView
                     style="@style/image_right_arrow" />
+
+                <TextView
+                    style="@style/itime_subtitle_15sp"
+                    android:text="@{settingVM.setting.user.gender}"/>
 
                 <TextView
                     style="@style/itime_bottom_divider_line" />
@@ -223,7 +227,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_REGION)}">
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_REGION, true)}">
                 <TextView
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/region"/>

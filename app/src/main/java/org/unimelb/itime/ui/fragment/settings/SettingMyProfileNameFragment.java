@@ -3,13 +3,16 @@ package org.unimelb.itime.ui.fragment.settings;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileNameBinding;
+import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.mvpview.SettingMyProfileMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
@@ -18,10 +21,11 @@ import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
  * Created by Paul on 26/12/2016.
  */
 
-public class SettingMyProfileNameFragment extends BaseUiFragment<SettingMyProfileMvpView, SettingCommonPresenter<SettingMyProfileMvpView>>
+public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingMyProfileMvpView, SettingCommonPresenter<SettingMyProfileMvpView>>
         implements SettingMyProfileMvpView{
 
     private FragmentSettingMyProfileNameBinding binding;
+
 
     @Nullable
     @Override
@@ -33,7 +37,6 @@ public class SettingMyProfileNameFragment extends BaseUiFragment<SettingMyProfil
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 
@@ -47,11 +50,19 @@ public class SettingMyProfileNameFragment extends BaseUiFragment<SettingMyProfil
 
     }
 
+    @Override
+    public void onEnter() {
+        super.onEnter();
+    }
 
     @Override
-    public void onViewChange(int task) {
-        if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
-            closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
+    public void onViewChange(int task, boolean isSave) {
+        SettingMyProfileFragment settingMyProfileFragment = (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
+        if (isSave) {
+            closeFragment(this, settingMyProfileFragment, SettingManager.getInstance(getContext()).copySetting(getSetting()));
+        }else{
+            closeFragment(this, settingMyProfileFragment);
         }
     }
+
 }

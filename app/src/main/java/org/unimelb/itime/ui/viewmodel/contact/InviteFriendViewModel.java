@@ -78,6 +78,10 @@ public class InviteFriendViewModel extends BaseObservable {
             this.event = event;
             inviteeList = event.getInvitee();
             setInviteeList(inviteeList);
+            generateITimeListView(friendList);
+        }else{
+            inviteeList = new ArrayList<>();
+            setInviteeList(inviteeList);
         }
     }
 
@@ -464,8 +468,10 @@ public class InviteFriendViewModel extends BaseObservable {
         invitee.setUserId(str);
         invitee.setInviteeUid(str);
         //please replace these two with right value
+        invitee.setEventUid(event.getEventUid());
+        invitee.setInviteeUid(AppUtil.generateUuid());
         invitee.setAliasName(str);
-        invitee.setUserUid(str);
+        invitee.setUserUid("-1");
 
         return  invitee;
     }

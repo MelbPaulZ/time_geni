@@ -8,17 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentLoginFindFriendBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
-import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
  * Created by Paul on 20/12/2016.
  */
 
-public class LoginFindFriendFragment extends LoginCommonFragment implements LoginMvpView{
+public class LoginFindFriendFragment extends LoginBaseFragment implements LoginMvpView{
 
     private FragmentLoginFindFriendBinding binding;
 

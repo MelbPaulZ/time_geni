@@ -150,10 +150,10 @@ public class InviteeGroupView extends LinearLayout {
     }
 
     public void addEmailInvitee(ITimeInviteeInterface invitee){
-        if(inviteeMap.containsKey(invitee.getUserId())){
-            textFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
-            return;
-        }
+//        if(inviteeMap.containsKey(invitee.getUserId())){
+//            textFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
+//            return;
+//        }
         TextView emailTextView = new TextView(this.getContext());
         emailTextView.setText(invitee.getUserId());
         if(squareHeight == 0){
@@ -183,10 +183,10 @@ public class InviteeGroupView extends LinearLayout {
 
 
     public void addPhoneInvitee(ITimeInviteeInterface invitee){
-        if(inviteeMap.containsKey(invitee.getUserId())){
-            textFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
-            return;
-        }
+//        if(inviteeMap.containsKey(invitee.getUserId())){
+//            textFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
+//            return;
+//        }
         TextView phoneTextView = new TextView(this.getContext());
         phoneTextView.setText(invitee.getUserId());
         if(squareHeight == 0){
@@ -215,10 +215,10 @@ public class InviteeGroupView extends LinearLayout {
     }
 
     public void addAvatarInvitee(ITimeInviteeInterface invitee){
-        if(inviteeMap.containsKey(invitee.getUserId())){
-            avatarFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
-            return;
-        }
+//        if(inviteeMap.containsKey(invitee.getUserId())){
+//            avatarFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
+//            return;
+//        }
         RoundImageView avatarImageView = new RoundImageView(this.getContext());
         Picasso.with(this.getContext())
                 .load(invitee.getPhoto())

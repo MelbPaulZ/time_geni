@@ -40,7 +40,7 @@ import java.util.List;
 /**
  * Created by Paul on 28/08/2016.
  */
-public class EventEditFragment extends BaseUiFragment<EventEditMvpView, EventCommonPresenter<EventEditMvpView>> implements EventEditMvpView {
+public class EventEditFragment extends EventBaseFragment<EventEditMvpView, EventCommonPresenter<EventEditMvpView>> implements EventEditMvpView {
 
     private static final String TAG = "EdifFragment";
     private FragmentEventEditDetailBinding binding;

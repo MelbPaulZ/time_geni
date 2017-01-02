@@ -34,6 +34,11 @@ public class SearchBar extends LinearLayout {
     private boolean onEditing;
     private boolean showCancel = false;
     private OnClickListener cancelListener;
+    private int cancelButtonId = View.generateViewId();
+    private int iconId = View.generateViewId();
+    private int cleanIconId = View.generateViewId();
+
+
 
     public void setShowCancel(boolean show){
         showCancel = show;
@@ -113,7 +118,7 @@ public class SearchBar extends LinearLayout {
 //                SizeUtil.dp2px(getContext(),10),
 //                SizeUtil.dp2px(getContext(),10),
 //                SizeUtil.dp2px(getContext(),10));
-        params.addRule(RelativeLayout.LEFT_OF, 1);
+        params.addRule(RelativeLayout.LEFT_OF, cancelButtonId);
         RelativeLayout editTextLayout = new RelativeLayout(getContext());
         editTextLayout.setLayoutParams(params);
         editTextLayout.setBackground(getResources().getDrawable(R.drawable.corner_border));
@@ -129,7 +134,8 @@ public class SearchBar extends LinearLayout {
         ImageView icon = new ImageView(getContext());
         icon.setLayoutParams(iconParams);
         icon.setImageResource(R.drawable.icon_general_search);
-        icon.setId(2);
+        icon.setId(iconId);
+//        icon.setId(2);
 
         RelativeLayout.LayoutParams cleanIconParams = new RelativeLayout.LayoutParams(SizeUtil.dp2px(getContext(),15),
                 SizeUtil.dp2px(getContext(),15));
@@ -149,13 +155,14 @@ public class SearchBar extends LinearLayout {
             }
         });
         cleanIcon.setVisibility(GONE);
-        cleanIcon.setId(3);
+        cleanIcon.setId(cleanIconId);
+//        cleanIcon.setId(3);
 
         inputText = new PureEditText(getContext());
         RelativeLayout.LayoutParams inputTextParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        inputTextParams.addRule(RelativeLayout.RIGHT_OF, 2);
-        inputTextParams.addRule(RelativeLayout.LEFT_OF, 3);
+        inputTextParams.addRule(RelativeLayout.RIGHT_OF, iconId);
+        inputTextParams.addRule(RelativeLayout.LEFT_OF, cleanIconId);
         inputTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
         inputTextParams.setMargins(0,0, SizeUtil.dp2px(getContext(),10),0);
         inputText.setTextSize(inputFontSize);
@@ -213,7 +220,7 @@ public class SearchBar extends LinearLayout {
         cancelButton.setLayoutParams(cancelButtonParams);
         cancelButton.setText("Cancel");
         cancelButton.setTextColor(getResources().getColor(R.color.lightRed));
-        cancelButton.setId(1);
+        cancelButton.setId(cancelButtonId);
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

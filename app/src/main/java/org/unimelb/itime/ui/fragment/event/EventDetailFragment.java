@@ -43,7 +43,7 @@ import java.util.Map;
 /**
  * Created by Paul on 4/09/2016.
  */
-public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView, EventCommonPresenter<EventDetailGroupMvpView>> implements EventDetailGroupMvpView {
+public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpView, EventCommonPresenter<EventDetailGroupMvpView>> implements EventDetailGroupMvpView {
     private org.unimelb.itime.databinding.FragmentEventDetailBinding binding;
     private EventDetailViewModel eventDetailForHostViewModel;
     private Event event;
@@ -152,12 +152,10 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
         }
     }
 
-
     @Override
     public EventCommonPresenter<EventDetailGroupMvpView> createPresenter() {
         return new EventCommonPresenter<>(getContext());
     }
-    
 
     private void toCalendar(int resultCode) {
         Intent intent = new Intent();
@@ -182,7 +180,7 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
     @Override
     public void viewInCalendar() {
 
-        if (event.getStatus().equals("confirmed")){
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
 
             ViewMainCalendarFragment viewMainCalendarFragment = (ViewMainCalendarFragment) getFragmentManager().findFragmentByTag(ViewMainCalendarFragment.class.getSimpleName());
             ViewInCalendarWeekFragment viewInCalendarWeekFragment = viewMainCalendarFragment.getWeekViewFrag();
@@ -193,15 +191,8 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
         }else {
             final EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
             timeSlotFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event), this.adapterData);
-//            timeSlotFragment.getWeekView().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
-//                }
-//            },1000);
-            openFragment(this,timeSlotFragment);
             timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
-
+            openFragment(this,timeSlotFragment);
         }
     }
 
@@ -210,6 +201,18 @@ public class EventDetailFragment extends BaseUiFragment<EventDetailGroupMvpView,
         InviteeTimeslotFragment inviteeTimeslotFragment = (InviteeTimeslotFragment) getFragmentManager().findFragmentByTag(InviteeTimeslotFragment.class.getSimpleName());
         inviteeTimeslotFragment.setData(this.event, adapterData.get(timeSlot.getTimeslotUid()),timeSlot);
         openFragment(this, inviteeTimeslotFragment);
+    }
+
+    @Override
+    public void gotoGridView() {
+        EventPhotoGridFragment gridFragment = (EventPhotoGridFragment) getFragmentManager().findFragmentByTag(EventPhotoGridFragment.class.getSimpleName());
+        gridFragment.setEvent(event);
+        openFragment(this, gridFragment);
+    }
+
+    @Override
+    public void onClickPhotoGridBack() {
+
     }
 
 

@@ -348,6 +348,7 @@
     <string name="setting_save">Save</string>
     <string name="setting_male">Male</string>
     <string name="setting_female">Female</string>
+    <string name="setting_undefined">Undefined</string>
     <string name="setting_Undefined">Undefined</string>
     <string name="setting_calendar_preference">Calendar Preferences</string>
     <string name="setting_calendars">Calendars</string>

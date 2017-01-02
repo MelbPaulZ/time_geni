@@ -38,7 +38,7 @@ import java.util.Map;
 /**
  * Created by Paul on 10/09/2016.
  */
-public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeSlotMvpVIew, TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew>>
+public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTimeSlotMvpVIew, TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew>>
         implements EventDetailTimeSlotMvpVIew {
     private FragmentEventDetailTimeslotHostViewBinding binding;
     private EventDetailTimeSlotViewModel viewModel;
@@ -125,11 +125,11 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
     @Override
     public void onClickBack() {
         if (getFrom() instanceof EventDetailFragment) {
-            openFragment(this, (EventDetailFragment) getFrom());
+            closeFragment(this, (EventDetailFragment) getFrom());
         } else if (getFrom() instanceof EventEditFragment) {
-            openFragment(this, (EventEditFragment) getFrom());
+            closeFragment(this, (EventEditFragment) getFrom());
         } else if (getFrom() instanceof InviteeFragment) {
-            openFragment(this, (InviteeFragment) getFrom());
+            closeFragment(this, (InviteeFragment) getFrom());
         }
     }
 
@@ -217,7 +217,7 @@ public class EventDetailTimeSlotFragment extends BaseUiFragment<EventDetailTimeS
                     weekView.addTimeSlot(timeSlot);
                 }
             }
-//            weekView.reloadTimeSlots(false);
+            weekView.reloadTimeSlots(false);
         }
     }
 

@@ -38,7 +38,7 @@ import static org.unimelb.itime.R.string.calendar;
 /**
  * required signIn, need to extend BaseUiAuthFragment
  */
-public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, CommonPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
+public class MainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvpView, CommonPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
 
     private final static String TAG = "MainCalendarFragment";
     private CalendarMonthDayFragment monthDayFragment;
@@ -217,4 +217,9 @@ public class MainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, Co
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
+    @Override
+    public void setData(Object o) {
+
+    }
 }
