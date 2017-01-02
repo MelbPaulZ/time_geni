@@ -289,7 +289,12 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(this.ruleInterface.getStartTime());
         setCalToDayBegin(cal);
-        long differM = compareDateM - cal.getTimeInMillis();
+
+        Calendar calComp = Calendar.getInstance();
+        calComp.setTimeInMillis(compareDateM);
+        setCalToDayBegin(calComp);
+
+        long differM = calComp.getTimeInMillis() - cal.getTimeInMillis();
 
         return (int) (differM/dayLongM);
     }
@@ -430,7 +435,7 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
                 case DAILY: {
                     //compute first available date
                     int remains = dayDiffer % interval;
-                    cal.add(Calendar.DATE, remains);
+                    cal.add(Calendar.DATE, remains == 0 ? remains : interval - remains);
 
                     long currentAvailableDate = cal.getTimeInMillis();
 
@@ -449,7 +454,7 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
                 case WEEKLY:{
                     //compute first available date
                     int remains = dayDiffer % (interval * 7);
-                    cal.add(Calendar.DATE, remains);
+                    cal.add(Calendar.DATE, remains == 0 ? remains : (interval * 7) - remains);
 
                     long currentAvailableDate = cal.getTimeInMillis();
                     while((hasUntil ? currentAvailableDate < until.getTime() : true)
@@ -461,6 +466,7 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
                         cal.add(Calendar.DATE, interval * 7);
                         currentAvailableDate = cal.getTimeInMillis();
                     }
+                    break;
                 }
                 case MONTHLY:{
                     //compute first available date
@@ -490,6 +496,7 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
                         cal.add(Calendar.MONTH, interval);
                         currentAvailableDate = cal.getTimeInMillis();
                     }
+                    break;
                 }
                 case YEARLY:{
                     //compute first available date
@@ -523,6 +530,7 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
                         cal.add(Calendar.YEAR, interval);
                         currentAvailableDate = cal.getTimeInMillis();
                     }
+                    break;
                 }
 
                 default:
