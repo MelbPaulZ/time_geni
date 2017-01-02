@@ -5,6 +5,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
+import android.util.Log;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
@@ -32,9 +33,11 @@ public class MainSettingsViewModel extends BaseObservable{
     private SettingCommonMvpView mvpView;
     private Setting setting;
 
-
     private ObservableList<Calendar> calendars = new ObservableArrayList<>();
     private ItemView calendarItemView = ItemView.of(BR.calendar, R.layout.setting_default_calendar_listview);
+
+    public final static boolean SAVE = true;
+    public final static boolean NOT_SAVE = false;
 
     public final static int TASK_LOGOUT = 1;
     public final static int TASK_VIEW_AVATAR = 2;
@@ -56,6 +59,7 @@ public class MainSettingsViewModel extends BaseObservable{
     public final static int TASK_TO_IMPORT_GOOGLE_CALENDAR = 18;
     public final static int TASK_TO_IMPORT_CALENDAR = 19;
 
+    private int genderTickVisibility = View.GONE;
 
     public MainSettingsViewModel(SettingCommonPresenter presenter){
         this.presenter = presenter;
@@ -73,14 +77,41 @@ public class MainSettingsViewModel extends BaseObservable{
 
 
 
-    public View.OnClickListener onViewChange(final int task){
+    public View.OnClickListener onViewChange(final int task, final boolean isSave){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mvpView.onViewChange(task);
+                mvpView.onViewChange(task, isSave);
             }
         };
     }
+
+    public View.OnClickListener chooseGender(final int index){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUserGender(index);
+            }
+        };
+    }
+
+    private List<String> getGenderStringList(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add(getContext().getString(R.string.setting_male));
+        list.add(getContext().getString(R.string.setting_female));
+        list.add(getContext().getString(R.string.setting_undefined));
+        return list;
+    }
+
+    private void updateUserGender(int index){
+        String gender = getGenderStringList().get(index);
+        getSetting().getUser().setGender(gender);
+        Log.i("123", "updateUserGender: " + gender);
+        setSetting(setting);
+    }
+
+
+
 
     @Bindable
     public ItemView getCalendarItemView() {
@@ -111,4 +142,15 @@ public class MainSettingsViewModel extends BaseObservable{
         this.setting = setting;
         notifyPropertyChanged(BR.setting);
     }
+
+
+    public int getGenderVisibility(int from, Setting setting){
+        String gender = setting.getUser().getGender();
+        if (from == getGenderStringList().indexOf(gender)){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+    }
+
 }

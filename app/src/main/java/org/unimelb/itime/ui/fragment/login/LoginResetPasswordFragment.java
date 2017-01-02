@@ -3,7 +3,6 @@ package org.unimelb.itime.ui.fragment.login;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +12,11 @@ import org.unimelb.itime.databinding.FragmentLoginResetPasswordBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
-import static org.unimelb.itime.R.string.login;
-
 /**
  * Created by Paul on 20/12/2016.
  */
 
-public class LoginResetPasswordFragment extends LoginCommonFragment implements LoginMvpView {
+public class LoginResetPasswordFragment extends LoginBaseFragment implements LoginMvpView {
     private static final String TAG = "LoginResetPWFrag";
     private FragmentLoginResetPasswordBinding binding;
 

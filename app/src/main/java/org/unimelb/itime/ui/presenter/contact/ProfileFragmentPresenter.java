@@ -56,7 +56,7 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
         getView().getActivity().onBackPressed();
     }
 
-    public void blockUser(final ITimeUser user, final ProfileFragmentViewModel.BlockCallBack callBack){
+    public void blockUser(final Contact user, final ProfileFragmentViewModel.BlockCallBack callBack){
         Observable<HttpResult<Block>> observable = userApi.block(Integer.parseInt(user.getContactUid()));
         Subscriber<HttpResult<Block>> subscriber = new Subscriber<HttpResult<Block>>() {
             @Override
@@ -75,9 +75,9 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
                 if (result.getStatus()!=1){
                     callBack.fail();
                 }else {
-                    user.getContact().setBlockLevel(result.getData().getBlockLevel());
-                    dbManager.updateContact(user.getContact());
-                    EventBus.getDefault().post(new MessageRemoveContact(user.getContact()));
+                    user.setBlockLevel(result.getData().getBlockLevel());
+                    dbManager.updateContact(user);
+                    EventBus.getDefault().post(new MessageRemoveContact(user));
                     callBack.success();
                 }
             }
@@ -85,7 +85,7 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void unblockUser(final ITimeUser user, final ProfileFragmentViewModel.UnblockCallBack callBack){
+    public void unblockUser(final Contact user, final ProfileFragmentViewModel.UnblockCallBack callBack){
         Observable<HttpResult<Block>> observable = userApi.unblock(Integer.parseInt(user.getContactUid()));
         Subscriber<HttpResult<Block>> subscriber = new Subscriber<HttpResult<Block>>() {
             @Override
@@ -104,9 +104,9 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
                 if (result.getStatus()!=1){
                     callBack.fail();
                 }else {
-                    user.getContact().setBlockLevel(result.getData().getBlockLevel());
-                    dbManager.updateContact(user.getContact());
-                    EventBus.getDefault().post(new MessageAddContact(user.getContact()));
+                    user.setBlockLevel(result.getData().getBlockLevel());
+                    dbManager.updateContact(user);
+                    EventBus.getDefault().post(new MessageAddContact(user));
                     callBack.success();
                 }
             }
@@ -114,7 +114,7 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void deleteUser(final ITimeUser user, final ProfileFragmentViewModel.DeleteCallBack callBack){
+    public void deleteUser(final Contact user, final ProfileFragmentViewModel.DeleteCallBack callBack){
         Observable<HttpResult<Contact>> observable = contactApi.delete(user.getContactUid());
         Subscriber<HttpResult<Contact>> subscriber = new Subscriber<HttpResult<Contact>>() {
             @Override
@@ -133,8 +133,9 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
                 if (result.getStatus()!=1){
                     callBack.fail();
                 }else {
-                    user.getContact().setStatus(result.getData().getStatus());
-                    dbManager.updateContact(user.getContact());
+                    user.setStatus(result.getData().getStatus());
+                    user.setRelationship(user.getRelationship()-1);
+                    dbManager.updateContact(user);
                     EventBus.getDefault().post(new MessageRemoveContact(result.getData()));
                     callBack.success();
                 }
@@ -143,9 +144,9 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void addUser(ITimeUser user, final ProfileFragmentViewModel.AddCallBack callBack){
-        Observable<HttpResult<FriendRequest>> observable = requestApi.send(user.getContactUid(), FriendRequest.SOURCE_ITIME);
-        Subscriber<HttpResult<FriendRequest>> subscriber = new Subscriber<HttpResult<FriendRequest>>() {
+    public void addUser(Contact user, final ProfileFragmentViewModel.AddCallBack callBack){
+        Observable<HttpResult<Void>> observable = requestApi.send(user.getContactUid(), FriendRequest.SOURCE_ITIME);
+        Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
             @Override
             public void onCompleted() {
                 Log.d(TAG, "onCompleted: ");
@@ -157,7 +158,7 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
             }
 
             @Override
-            public void onNext(HttpResult<FriendRequest> result) {
+            public void onNext(HttpResult<Void> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
                     callBack.fail();
@@ -169,7 +170,7 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void inviteUser(ITimeUser user){
+    public void inviteUser(Contact user){
         getView().goToInviteFragment(user);
     }
 }

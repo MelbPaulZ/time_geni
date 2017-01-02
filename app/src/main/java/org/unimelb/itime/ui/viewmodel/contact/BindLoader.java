@@ -20,7 +20,7 @@ public class BindLoader extends BaseObservable {
 
     @BindingAdapter("bind:searchListener")
     public static void initSearchBar(SearchBar searchBar, SearchBar.OnEditListener listener){
-        searchBar.setOnEditListener(listener);
+        searchBar.setSearchListener(listener);
     }
 
     @BindingAdapter("bind:img")

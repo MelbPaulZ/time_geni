@@ -148,8 +148,8 @@ public class InviteeGroupView extends LinearLayout {
     }
 
     public void addEmailInvitee(ITimeInviteeInterface invitee){
-        if(inviteeMap.containsKey(invitee.getInviteeUid())){
-            textFlowLayout.addView(inviteeMap.get(invitee.getInviteeUid()));
+        if(inviteeMap.containsKey(invitee.getUserId())){
+            textFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
             return;
         }
         TextView emailTextView = new TextView(this.getContext());
@@ -174,14 +174,14 @@ public class InviteeGroupView extends LinearLayout {
         emailTextView.setOnClickListener(new InviteeOnClickListener());
         textFlowLayout.addView(emailTextView);
         emailTextView.setTag(invitee);
-        inviteeMap.put(invitee.getInviteeUid(), emailTextView);
+        inviteeMap.put(invitee.getUserId(), emailTextView);
         //addInviteeToList(invitee);
     }
 
 
     public void addPhoneInvitee(ITimeInviteeInterface invitee){
-        if(inviteeMap.containsKey(invitee.getInviteeUid())){
-            textFlowLayout.addView(inviteeMap.get(invitee.getInviteeUid()));
+        if(inviteeMap.containsKey(invitee.getUserId())){
+            textFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
             return;
         }
         TextView phoneTextView = new TextView(this.getContext());
@@ -206,13 +206,13 @@ public class InviteeGroupView extends LinearLayout {
         phoneTextView.setOnClickListener(new InviteeOnClickListener());
         textFlowLayout.addView(phoneTextView);
         phoneTextView.setTag(invitee);
-        inviteeMap.put(invitee.getInviteeUid(), phoneTextView);
+        inviteeMap.put(invitee.getUserId(), phoneTextView);
         //addInviteeToList(invitee);
     }
 
     public void addAvatarInvitee(ITimeInviteeInterface invitee){
-        if(inviteeMap.containsKey(invitee.getInviteeUid())){
-            avatarFlowLayout.addView(inviteeMap.get(invitee.getInviteeUid()));
+        if(inviteeMap.containsKey(invitee.getUserId())){
+            avatarFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
             return;
         }
         RoundImageView avatarImageView = new RoundImageView(this.getContext());
@@ -224,13 +224,13 @@ public class InviteeGroupView extends LinearLayout {
         avatarImageView.setOnClickListener(new InviteeOnClickListener());
         avatarFlowLayout.addView(avatarImageView);
         avatarImageView.setTag(invitee);
-        inviteeMap.put(invitee.getInviteeUid(), avatarImageView);
+        inviteeMap.put(invitee.getUserId(), avatarImageView);
         //addInviteeToList(invitee);
     }
 
-    public void deleteInvitee(String userUid){
+    public void deleteInvitee(String userId){
         View view = null;
-        view = inviteeMap.get(userUid);
+        view = inviteeMap.get(userId);
         if(view != null) {
             avatarFlowLayout.removeView(view);
             textFlowLayout.removeView(view);
@@ -259,7 +259,7 @@ public class InviteeGroupView extends LinearLayout {
         @Override
         public void onClick(View view) {
             ITimeInviteeInterface invitee = (ITimeInviteeInterface) view.getTag();
-            deleteInvitee(invitee.getInviteeUid());
+            deleteInvitee(invitee.getUserId());
             if(onInviteeClickListener !=null) {
                 onInviteeClickListener.onClick(view, invitee);
             }

@@ -31,4 +31,10 @@
         <attr name="border_inside_color" format="color" />
         <attr name="border_outside_color" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="SearchBar">
+        <attr name="showCancel" format="boolean"/>
+        <attr name="cancelListener" format="reference"/>
+        <attr name="searchListener" format="reference"/>
+    </declare-styleable>
 </resources>

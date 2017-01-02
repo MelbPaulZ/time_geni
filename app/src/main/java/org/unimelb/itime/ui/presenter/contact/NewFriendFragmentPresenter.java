@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.presenter.contact;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -190,5 +191,16 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
         HttpUtil.subscribe(dbObservable, subscriber);
     }
 
+    public void gotoProfile(RequestFriend requestFriend){
+        if(requestFriend.getDisplayStatus().equals(FriendRequest.DISPLAY_STATUS_ACCEPT)){
+            Contact contact = new Contact(requestFriend.getUser());
+            contact.setStatus(FriendRequest.DISPLAY_STATUS_ACCEPT);
+            getView().goToProfileFragment(contact);
+        }else{
+            Contact contact = DBManager.getInstance(context).searchContact(requestFriend.getUser().getUserUid());
+            System.out.println(contact.getStatus());
+            getView().goToProfileFragment(contact);
+        }
+    }
 
 }

@@ -90,6 +90,7 @@
                 android:layout_height="wrap_content"
                 app:image="@drawable/qr_code_icon"
                 app:text="@string/invite_friend_through_qr_code"
+                android:onClick="@{viewModel.scanQRCodeListener}"
                 />
             <include layout="@layout/line"/>
 

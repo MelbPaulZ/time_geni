@@ -9,4 +9,6 @@ public interface EventDetailGroupMvpView extends EventCommonMvpView{
     void toEditEvent();
     void viewInCalendar();
     void viewInviteeResponse(Timeslot timeSlot);
+    void gotoGridView();
+    void onClickPhotoGridBack();
 }

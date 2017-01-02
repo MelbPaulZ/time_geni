@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import android.widget.Toast;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentMyQrCodeBinding;
 import org.unimelb.itime.bean.ITimeUser;
+import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 import org.unimelb.itime.ui.mvpview.contact.MyQRCodeMvpView;
 import org.unimelb.itime.ui.presenter.contact.MyQRCodePresenter;
@@ -24,11 +27,13 @@ import org.unimelb.itime.util.UserUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import static org.unimelb.itime.ui.presenter.contact.ContextPresenter.getContext;
+
 /**
  * Created by 37925 on 2016/12/18.
  */
 
-public class MyQRCodeFragment extends MvpFragment<MyQRCodeMvpView, MyQRCodePresenter> implements MyQRCodeMvpView {
+public class MyQRCodeFragment extends BaseUiFragment<Object,MyQRCodeMvpView, MyQRCodePresenter<MyQRCodeMvpView>> implements MyQRCodeMvpView {
 
     public static int SCAN_QR_CODE = 1;
     public static String PREVIEW = "preview";
@@ -41,10 +46,14 @@ public class MyQRCodeFragment extends MvpFragment<MyQRCodeMvpView, MyQRCodePrese
                              ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_my_qr_code, container, false);
-        presenter = createPresenter();
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         viewModel = new MyQRCodeVieModel(presenter);
         binding.setViewModel(viewModel);
-        return binding.getRoot();
     }
 
     public void setPreview(int preview){
@@ -61,7 +70,7 @@ public class MyQRCodeFragment extends MvpFragment<MyQRCodeMvpView, MyQRCodePrese
         View view = binding.QRCodeView;
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
-        Bitmap bitmap = view.getDrawingCache();
+        Bitmap bitmap = convertViewToBitmap(view);
         if(bitmap != null) {
             try{
                 File extDir = Environment.getExternalStorageDirectory();
@@ -88,8 +97,24 @@ public class MyQRCodeFragment extends MvpFragment<MyQRCodeMvpView, MyQRCodePrese
     }
 
     @Override
-    public MyQRCodePresenter createPresenter() {
-        return new MyQRCodePresenter();
+    public void back() {
+        if (getFrom() instanceof SettingMyProfileFragment){
+            closeFragment(this, (SettingMyProfileFragment)getFrom());
+        }else{
+            getActivity().onBackPressed();
+        }
+    }
+
+    private Bitmap convertViewToBitmap(View view){
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        return view.getDrawingCache();
+    }
+
+    @Override
+    public MyQRCodePresenter<MyQRCodeMvpView> createPresenter() {
+        return new MyQRCodePresenter<>();
     }
 
     @Override
@@ -101,11 +126,18 @@ public class MyQRCodeFragment extends MvpFragment<MyQRCodeMvpView, MyQRCodePrese
     public void goToScanQRCode() {
         if(preview == SCAN_QR_CODE){
             getActivity().onBackPressed();
+//            closeFragment(this, (SettingMyProfileFragment)getFrom());
         }else{
             Intent intent = new Intent();
             intent.setClass(getActivity(), CaptureActivityContact.class);
             intent.putExtra(CaptureActivityContact.PREVIEW, CaptureActivityContact.MY_QR_CODE);
             startActivity(intent);
         }
+    }
+
+
+    @Override
+    public void setData(Object o) {
+
     }
 }

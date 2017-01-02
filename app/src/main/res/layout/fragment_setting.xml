@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE)}"
+            android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE, true)}"
             android:background="@drawable/background_top_bottom_divider">
             <!--Avatar-->
             <ImageView
@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_marginTop="20dp"
-            android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SCAN_QR_CODE)}"
+            android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SCAN_QR_CODE, true)}"
             android:background="@drawable/background_top_bottom_divider">
 
             <TextView
@@ -117,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:paddingLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_BLOCK_USER)}">
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_BLOCK_USER, true)}">
 
                 <TextView
                     style="@style/itime_blacktitle_17sp"
@@ -134,7 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:paddingLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_NOTICIFATION)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_NOTICIFATION, true)}"
                 >
 
                 <TextView
@@ -151,7 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:paddingLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_CALENDAR_PREFERENCE)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_CALENDAR_PREFERENCE, true)}"
                 >
 
                 <TextView
@@ -175,7 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:paddingLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_HELP_AND_FEEDBACK)}">
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_HELP_AND_FEEDBACK, true)}">
 
                 <TextView
                     style="@style/itime_blacktitle_17sp"
@@ -191,7 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:paddingLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_ABOUT)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_ABOUT, true)}"
                 >
 
                 <TextView
@@ -216,7 +216,7 @@
                 android:gravity="center"
                 android:text="@string/logout"
                 android:textColor="@color/black"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_LOGOUT)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_LOGOUT, true)}"
                 android:textSize="17sp" />
         </LinearLayout>
 

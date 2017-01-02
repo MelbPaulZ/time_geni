@@ -21,4 +21,6 @@ public interface InviteFriendMvpView  extends MvpView {
     void onDoneClicked();
 
     void onBackClicked();
+
+    void gotoScanQRCode();
 }

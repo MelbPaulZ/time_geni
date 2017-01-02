@@ -43,7 +43,7 @@ public final class CameraConfigurationManager {
     private static final String TAG = "CameraConfiguration";
 
     private static final int MIN_PREVIEW_PIXELS = 480 * 320;
-    private static final double MAX_ASPECT_DISTORTION = 0.15;
+    private static final double MAX_ASPECT_DISTORTION = 0.5;
 
     private final Context context;
 

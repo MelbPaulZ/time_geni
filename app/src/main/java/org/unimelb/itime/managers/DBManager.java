@@ -57,7 +57,7 @@ public class DBManager {
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDaoDao = daoSession.getEventDao();
-        eventDaoDao.insert(event);
+        eventDaoDao.insertOrReplace(event);
     }
 
     public synchronized void insertMessage(Message message) {
@@ -112,6 +112,21 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
         contactDao.update(contact);
+    }
+
+    public Contact searchContact(String contactUid){
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        ContactDao contactDao = daoSession.getContactDao();
+        QueryBuilder<Contact> qb = contactDao.queryBuilder();
+        qb.where(
+                ContactDao.Properties.ContactUid.eq(contactUid));
+        List<Contact> list = qb.list();
+        if(list.isEmpty()){
+            return null;
+        }else {
+            return list.get(0);
+        }
     }
 
     public void insertUser(User user){
@@ -195,7 +210,7 @@ public class DBManager {
         QueryBuilder<Contact> qb = contactDao.queryBuilder();
         qb.where(
                  qb.and(ContactDao.Properties.Status.eq(Contact.ACTIVATED),
-                         ContactDao.Properties.BlockLevel.eq(0)));
+                         ContactDao.Properties.BlockLevel.eq(0))).orderAsc(ContactDao.Properties.AliasName);
         List<Contact> list = qb.list();
         return list;
     }

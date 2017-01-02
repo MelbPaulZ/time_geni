@@ -176,8 +176,8 @@ public class ContactHomePageViewModel  extends BaseObservable {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ListItemViewModel viewModel = (ListItemViewModel) adapterView.getAdapter().getItem(i);
-                ITimeUser user = (ITimeUser) viewModel.getContact();
-                presenter.getView().goToProfileFragment(user);
+                Contact contact = viewModel.getContact().getContact();
+                presenter.getView().goToProfileFragment(contact);
             }
         };
     }

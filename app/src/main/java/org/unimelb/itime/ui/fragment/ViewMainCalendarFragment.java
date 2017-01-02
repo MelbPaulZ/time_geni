@@ -29,7 +29,7 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 /**
  * required login, need to extend BaseUiAuthFragment
  */
-public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView, CommonPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
+public class ViewMainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvpView, CommonPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
 
     private final static String TAG = "MainCalendarFragment";
 //    private ViewInCalendarMonthDayFragment monthDayFragment;
@@ -118,5 +118,10 @@ public class ViewMainCalendarFragment extends BaseUiFragment<MainCalendarMvpView
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void setData(Object o) {
+
     }
 }

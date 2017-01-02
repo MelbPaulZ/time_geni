@@ -17,4 +17,6 @@ public interface MyQRCodeMvpView extends MvpView {
     void goToScanQRCode();
 
     void saveQRCode();
+
+    void back();
 }

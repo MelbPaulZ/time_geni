@@ -32,6 +32,12 @@ public class SearchBar extends LinearLayout {
     private int inputFontSize = SizeCollector.FONT_SMALL;
     private OnEditListener onEditListener;
     private boolean onEditing;
+    private boolean showCancel = false;
+    private OnClickListener cancelListener;
+
+    public void setShowCancel(boolean show){
+        showCancel = show;
+    }
 
     public boolean isOnEditing(){
         return !inputText.getText().toString().equals("");
@@ -165,7 +171,9 @@ public class SearchBar extends LinearLayout {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(onEditListener!=null) {
                     if(isOnEditing()){
-                        cancelButton.setVisibility(VISIBLE);
+                        if(showCancel) {
+                            cancelButton.setVisibility(VISIBLE);
+                        }
                         cleanIcon.setVisibility(VISIBLE);
                     }else{
                         cancelButton.setVisibility(GONE);
@@ -211,6 +219,9 @@ public class SearchBar extends LinearLayout {
             public void onClick(View view) {
                 hideInputView();
                 inputText.setText("");
+                if(cancelListener!=null) {
+                    cancelListener.onClick(view);
+                }
             }
         });
         cancelButton.setVisibility(GONE);
@@ -249,8 +260,12 @@ public class SearchBar extends LinearLayout {
         hideKeyboard();
     }
 
-    public void setOnEditListener(OnEditListener listener){
+    public void setSearchListener(OnEditListener listener){
         this.onEditListener = listener;
+    }
+
+    public void setCancelListener(OnClickListener listener){
+        cancelListener = listener;
     }
 
     public interface OnEditListener{

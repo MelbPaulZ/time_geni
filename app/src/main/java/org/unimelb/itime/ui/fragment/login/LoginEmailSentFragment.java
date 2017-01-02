@@ -16,7 +16,7 @@ import org.unimelb.itime.ui.viewmodel.LoginViewModel;
  * Created by Paul on 20/12/2016.
  */
 
-public class LoginEmailSentFragment extends LoginCommonFragment implements LoginMvpView {
+public class LoginEmailSentFragment extends LoginBaseFragment implements LoginMvpView {
 
     private FragmentLoginEmailSentBinding binding;
 

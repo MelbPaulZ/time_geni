@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TimePicker;
 
 import com.android.databinding.library.baseAdapters.BR;
@@ -239,7 +240,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    mvpView.pickPhoto(getContext().getString(R.string.tag_create_event_before_sending));
+                    mvpView.pickPhoto();
                 }
             }
         };
@@ -328,14 +329,17 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
 
                 // todo: need to check whether host is in invitees
                 if (newEvDtlEvent.getInvitee().size()>1){
-                    newEvDtlEvent.setEventType("group");
+                    newEvDtlEvent.setEventType(Event.TYPE_GROUP);
+                    newEvDtlEvent.setStatus(Event.STATUS_PENDING);
+                }else{
+                    newEvDtlEvent.setEventType(Event.TYPE_SOLO);
+                    newEvDtlEvent.setStatus(Event.STATUS_CONFIRMED);
                 }
 
                 // todo: delete it after finishing calendar
                 newEvDtlEvent.setCalendarUid(userUtil.getUserUid());
                 newEvDtlEvent.setRecurringEventUid(newEvDtlEvent.getEventUid());
                 newEvDtlEvent.setRecurringEventId(newEvDtlEvent.getEventUid());
-                newEvDtlEvent.setStatus("pending");
 
                 eventManager.setCurrentEvent(newEvDtlEvent);
 
@@ -442,6 +446,11 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = (int) height;
         view.setLayoutParams(layoutParams);
+    }
+
+    @BindingAdapter("bind:checked")
+    public static void setCheck(Switch view, boolean isCheck){
+        view.setChecked(isCheck);
     }
 
     @Bindable

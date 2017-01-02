@@ -30,7 +30,7 @@ import java.util.List;
  * Created by Paul on 18/11/16.
  * This fragment is used when create a new timeSlot, then this fragment will jump up.
  */
-public class EventTimeSlotCreateFragment extends BaseUiFragment<TimeslotCreateMvpView, TimeslotCommonPresenter<TimeslotCreateMvpView>>
+public class EventTimeSlotCreateFragment extends EventBaseFragment<TimeslotCreateMvpView, TimeslotCommonPresenter<TimeslotCreateMvpView>>
         implements TimeslotCreateMvpView {
     private TimeslotCreateViewModel viewModel;
     private TimeSlotView timeSlotView;

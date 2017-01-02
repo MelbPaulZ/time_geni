@@ -43,7 +43,7 @@ import java.util.List;
 /**
  * Created by Paul on 27/08/2016.
  */
-public class EventTimeSlotViewFragment extends BaseUiFragment<EventCreateNewTimeSlotMvpView, TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView>>
+public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewTimeSlotMvpView, TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView>>
         implements EventCreateNewTimeSlotMvpView {
 
     private FragmentEventCreateTimeslotViewBinding binding;

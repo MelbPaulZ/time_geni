@@ -3,7 +3,6 @@ package org.unimelb.itime.ui.fragment.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 
 import com.avos.avoscloud.AVException;
@@ -26,7 +25,7 @@ import org.unimelb.itime.util.UserUtil;
  * Created by Paul on 20/12/2016.
  */
 
-public class LoginCommonFragment extends BaseUiFragment<LoginMvpView, LoginPresenter> {
+public class LoginBaseFragment extends BaseUiFragment<LoginUser,LoginMvpView, LoginPresenter> {
     protected SoftKeyboardStateUtil softKeyboardStateUtil;
     protected LoginViewModel loginViewModel;
     protected LoginUser loginUser;
@@ -62,7 +61,7 @@ public class LoginCommonFragment extends BaseUiFragment<LoginMvpView, LoginPrese
         });
     }
 
-    protected  void addFragmentToManager(LoginCommonFragment fragment){
+    protected  void addFragmentToManager(LoginBaseFragment fragment){
         if (!fragment.isAdded()){
             getFragmentManager().beginTransaction().add(R.id.login_framelayout,fragment,fragment.getClassName());
         }
@@ -100,4 +99,8 @@ public class LoginCommonFragment extends BaseUiFragment<LoginMvpView, LoginPrese
         getActivity().finish();
     }
 
+    @Override
+    public void setData(LoginUser loginUser) {
+
+    }
 }

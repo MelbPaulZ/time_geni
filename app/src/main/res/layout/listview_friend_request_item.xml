@@ -12,8 +12,15 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="">
+        >
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:onClick="@{viewModel.onClickListener}"
+            android:layout_centerVertical="true"
+            >
         <org.unimelb.itime.widget.RoundImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -49,7 +56,14 @@
             <!--android:layout_height="wrap_content"-->
             <!--android:id="@+id/contactTextView" />-->
         </LinearLayout>
+    </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/rightPart">
         <TextView
             android:layout_width="70dp"
             android:layout_height="35dp"
@@ -92,7 +106,7 @@
             android:layout_alignParentRight="true"
             android:visibility="@{viewModel.displayStatus.equals(FriendRequest.DISPLAY_STATUS_ACCEPTED)? View.VISIBLE : View.GONE}"
             />
-
+        </RelativeLayout>
 
     </RelativeLayout>
 </layout>

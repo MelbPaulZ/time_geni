@@ -2,21 +2,14 @@ package org.unimelb.itime.ui.fragment.login;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVInstallation;
-import com.avos.avoscloud.PushService;
-import com.avos.avoscloud.SaveCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
@@ -24,18 +17,15 @@ import org.unimelb.itime.databinding.FragmentLoginBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
-import org.unimelb.itime.service.RemoteService;
-import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.util.AuthUtil;
-import org.unimelb.itime.util.UserUtil;
 
 /**
  * Created by Paul on 20/12/2016.
  */
 
-public class LoginFragment extends LoginCommonFragment implements LoginMvpView {
+public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
     private FragmentLoginBinding binding;
     private AlertDialog loginFailDialog;
     private final static String TAG = "LoginFragment";

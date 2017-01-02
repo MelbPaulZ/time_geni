@@ -24,22 +24,23 @@ import org.unimelb.itime.dao.UserDao;
 public class Contact implements ITimeContactInterface, Serializable {
     public static final String DELETED = "deleted";
     public static final String ACTIVATED = "activated";
+    public static final String UNACTIVATED = "unactivated";
 
 
-    private String userUid;
+    private String userUid="";
     @Id
-    private String contactUid;
+    private String contactUid="";
     private int relationship;
     private int ratingVisibility;
     private int eventVisibility;
-    private String source;
-    private String aliasName;
-    private String aliasPhoto;
+    private String source="";
+    private String aliasName="";
+    private String aliasPhoto="";
     private int catchCount;
     private long nextCatchupTime;
     private long lastCatchupTime;
-    private String note;
-    private String status;
+    private String note="";
+    private String status="";
     private int blockLevel;
 
     @Convert(converter = User.UserConverter.class , columnType = String.class)
@@ -53,7 +54,15 @@ public class Contact implements ITimeContactInterface, Serializable {
         this.userDetail = userDetail;
     }
 
-
+    public Contact(User user){
+        userDetail = user;
+        aliasName = user.getPersonalAlias();
+        aliasPhoto = user.getPhoto();
+        status = ACTIVATED;
+        contactUid = user.getUserUid();
+        userUid = "";
+        blockLevel = 0;
+    }
 
 //@Generated(hash = 283800893)
 //    public Contact(String userUid, String contactUid, int relationship, int ratingVisibility, int eventVisibility, String source, String aliasName, String aliasPhoto, int catchCount, long nextCatchupTime, long lastCatchupTime, String note, String status, int blockLevel) {

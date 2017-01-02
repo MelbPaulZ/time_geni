@@ -20,25 +20,28 @@ import java.lang.reflect.Type;
 @Entity
 public class User implements Serializable {
 
-    @Id
-    private String userUid;
+    public  final static String MALE = "male";
+    public final static String FEMALE = "female";
 
-    private String userId;
-    private String personalAlias;
-    private String email;
-    private String phone;
-    private String photo;
-    private String source;
-    private String deviceToken;
-    private String deviceId;
-    private String averageRatingValue;
-    private String timezone;
-    private String lastSigninTime;
+    @Id
+    private String userUid="";
+
+    private String userId="";
+    private String personalAlias="";
+    private String email="";
+    private String phone="";
+    private String photo="";
+    private String source="";
+    private String deviceToken="";
+    private String deviceId="";
+    private String averageRatingValue="";
+    private String timezone="";
+    private String lastSigninTime="";
     private int signinCount;
-    private String createdAt;
-    private String updatedAt;
-    private String gender;
-    private String location;
+    private String createdAt="";
+    private String updatedAt="";
+    private String gender="";
+    private String location="";
 
 @Generated(hash = 1717660507)
 public User(String userUid, String userId, String personalAlias, String email,

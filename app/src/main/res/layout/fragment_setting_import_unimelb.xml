@@ -33,7 +33,7 @@
                 android:textSize="17sp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="14dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_IMPORT_CALENDAR)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_IMPORT_CALENDAR, false)}"
                 />
 
             <!--toolbar title-->
@@ -57,7 +57,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="10dp"
                 android:layout_centerVertical="true"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_IMPORT_CALENDAR)}"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_IMPORT_CALENDAR, true)}"
                 />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
