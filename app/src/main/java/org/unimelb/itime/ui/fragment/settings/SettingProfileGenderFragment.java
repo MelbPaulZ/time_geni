@@ -34,7 +34,6 @@ implements SettingCommonMvpView{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
     }
 

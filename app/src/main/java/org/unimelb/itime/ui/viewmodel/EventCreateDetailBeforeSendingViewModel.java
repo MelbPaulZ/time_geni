@@ -327,7 +327,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                     newEvDtlEvent.setPhoto(new ArrayList<PhotoUrl>());
                 }
 
-                // todo: need to check whether host is in invitees
                 if (newEvDtlEvent.getInvitee().size()>1){
                     newEvDtlEvent.setEventType(Event.TYPE_GROUP);
                     newEvDtlEvent.setStatus(Event.STATUS_PENDING);
@@ -336,10 +335,9 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                     newEvDtlEvent.setStatus(Event.STATUS_CONFIRMED);
                 }
 
-                // todo: delete it after finishing calendar
                 newEvDtlEvent.setCalendarUid(userUtil.getUserUid());
-                newEvDtlEvent.setRecurringEventUid(newEvDtlEvent.getEventUid());
-                newEvDtlEvent.setRecurringEventId(newEvDtlEvent.getEventUid());
+                newEvDtlEvent.setRecurringEventUid("");
+                newEvDtlEvent.setRecurringEventId("");
 
                 eventManager.setCurrentEvent(newEvDtlEvent);
 

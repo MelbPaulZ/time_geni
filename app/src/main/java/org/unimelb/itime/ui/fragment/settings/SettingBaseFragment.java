@@ -46,12 +46,6 @@ public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P ext
         return setting;
     }
 
-//    @Override
-//    public void onEnter() {
-//        super.onEnter();
-//        viewModel.setSetting(setting);
-//    }
-
     @Override
     public void setData(Setting setting) {
         ((SettingBaseFragment)getTo()).setSetting(setting);

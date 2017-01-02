@@ -2,8 +2,6 @@ package org.unimelb.itime.util.rulefactory;
 
 import android.util.Log;
 
-import org.antlr.v4.tool.Rule;
-import org.unimelb.itime.base.C;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

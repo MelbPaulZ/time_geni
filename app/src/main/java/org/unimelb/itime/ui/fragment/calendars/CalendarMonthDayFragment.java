@@ -152,7 +152,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
                                             presenter.updateEvent(event, EventCommonPresenter.UPDATE_THIS, originEvent.getStartTime());
                                             break;
                                         }case 1:{
-                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL, originEvent.getStartTime());
+                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_FOLLOWING, originEvent.getStartTime());
                                             break;
                                         }case 2:{
                                             break;
