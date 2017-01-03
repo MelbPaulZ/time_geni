@@ -36,6 +36,7 @@ import java.util.Map;
 
 
 import static org.unimelb.itime.util.EventUtil.getSelfInInvitees;
+import static org.unimelb.itime.util.EventUtil.isUserHostOfEvent;
 
 /**
  * Created by Paul on 4/09/2016.
@@ -49,7 +50,8 @@ public class EventDetailViewModel extends CommonViewModel {
     private Context context;
     private ObservableBoolean isLeftBtnSelected = new ObservableBoolean(false), isRightBtnSelected = new ObservableBoolean(false);
     private String leftBtnText = "" , rightBtnText = "";
-    private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeVisibility, soloInvisible;
+    private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeConfirmVisibility,
+    inviteeUnconfirmVisibility, soloInvisible;
 
 
 
@@ -179,12 +181,11 @@ public class EventDetailViewModel extends CommonViewModel {
         };
     }
 
-    // this is for invitee click accept
-    public View.OnClickListener onClickInviteeLeftBtn() {
+
+    public View.OnClickListener acceptEvent(){
         return new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-//                setIsLeftBtnSelected(true);
+            public void onClick(View v) {
                 Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
                 if (evDtlHostEvent.getStatus().equals(Event.STATUS_CONFIRMED)){
                     // todo implement update only this
@@ -192,10 +193,65 @@ public class EventDetailViewModel extends CommonViewModel {
                 }else {
                     presenter.acceptTimeslots(evDtlHostEvent);
                 }
-
             }
         };
     }
+
+
+    public View.OnClickListener quitEvent(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
+                if (EventUtil.isEventConfirmed(context, evDtlHostEvent)) {
+                    presenter.quitEvent(evDtlHostEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                }else {
+                    presenter.rejectTimeslots(evDtlHostEvent);
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener rejectAll(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
+                inflater = LayoutInflater.from(context);
+                View root = inflater.inflate(R.layout.event_detail_reject_alert_view, null);
+
+                TextView button_cancel = (TextView) root.findViewById(R.id.alert_message_cancel_button);
+                button_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                TextView button_reject = (TextView) root.findViewById(R.id.alert_message_reject_button);
+                button_reject.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CharSequence msg = "send reject message";
+                        Toast.makeText(presenter.getContext(), msg, Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
+
+                        Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
+                        if (EventUtil.isEventConfirmed(context, evDtlHostEvent)) {
+                            presenter.quitEvent(evDtlHostEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                        }else {
+                            presenter.rejectTimeslots(evDtlHostEvent);
+                        }
+
+                    }
+                });
+                alertDialog.setView(root);
+                alertDialog.show();
+            }
+        };
+    }
+
+
 
 
     private void resetState(){
@@ -216,7 +272,8 @@ public class EventDetailViewModel extends CommonViewModel {
                 setIsLeftBtnSelected(false);
                 setLeftBtnText(context.getString(R.string.accept));
             }
-        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_PENDING) || evDtlHostEvent.getStatus().equals(Event.STATUS_UPDATING)){
+        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_PENDING) ||
+                evDtlHostEvent.getStatus().equals(Event.STATUS_UPDATING)){
             if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
                 setIsLeftBtnSelected(true);
                 setLeftBtnText(context.getString(R.string.accepted));
@@ -229,18 +286,25 @@ public class EventDetailViewModel extends CommonViewModel {
 
 
     public boolean getLeftBtnClickable(Event event){
-        Invitee me = EventUtil.getSelfInInvitees(context, event);
-        if (event.getStatus().equals(Event.STATUS_PENDING) && TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
-            // event not confirm and invitee select at least one timeslot
-            return true;
-        }else if ( (event.getStatus().equals(Event.STATUS_CONFIRMED))||(event.getStatus().equals(Event.STATUS_UPDATING))
-                &&
-                me.getStatus().equals(Invitee.STATUS_NEEDSACTION)){
-            return true;
+        Invitee me = EventUtil.getSelfInInvitees(context, evDtlHostEvent);
+        if (evDtlHostEvent.getStatus().equals(Event.STATUS_CONFIRMED)){
+            // event has been confirmed by host
+            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+                return false;
+            }else{
+                return true;
+            }
+        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_PENDING) ||
+                evDtlHostEvent.getStatus().equals(Event.STATUS_UPDATING)){
+            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+                return false;
+            }else{
+                return true;
+            }
         }
-        else{
-            return false;
-        }
+
+        // TODO: 3/1/17 cancelled panduan
+        return true;
     }
 
 
@@ -270,13 +334,22 @@ public class EventDetailViewModel extends CommonViewModel {
 
 
     public boolean getRightBtnClickable(Event event){
-        Invitee invitee = getSelfInInvitees(getContext(), event);
-        if (invitee.getStatus().equals(Invitee.STATUS_NEEDSACTION)
-                && TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
+        Invitee me = EventUtil.getSelfInInvitees(context, evDtlHostEvent);
+        if (evDtlHostEvent.getStatus().equals(Event.STATUS_CONFIRMED)){
+            // event has been confirmed by host
+            if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
                 return false;
-        }else if ( invitee.getStatus().equals(Invitee.STATUS_DECLINED) ){
-            return false;
+            }else{
+                return true;
+            }
+        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_PENDING) || evDtlHostEvent.getStatus().equals(Event.STATUS_UPDATING)){
+            if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
+                return false;
+            }else{
+                return true;
+            }
         }
+        // TODO: 3/1/17 cancelled panduan
         return true;
     }
 
@@ -444,21 +517,42 @@ public class EventDetailViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.hostUnconfirmVisibility);
     }
 
-
-    @Bindable
-    public int getInviteeVisibility() {
-        if (EventUtil.isGroupEvent(context, evDtlHostEvent) &&
-                !EventUtil.isUserHostOfEvent(context, evDtlHostEvent)){
+    //***********************************************************
+    public int confirmVisibility(Event event){
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
             return View.VISIBLE;
-        }else {
+        }else{
             return View.GONE;
         }
     }
 
-    public void setInviteeVisibility(int inviteeVisibility) {
-        this.inviteeVisibility = inviteeVisibility;
-        notifyPropertyChanged(BR.inviteeVisibility);
+    public int unconfirmVisibility(Event event){
+        if (event.getStatus().equals(Event.STATUS_PENDING) ||
+                event.getStatus().equals(Event.STATUS_UPDATING)){
+            if (!isUserHostOfEvent(context, event)){
+                return View.VISIBLE;
+            }else{
+                return View.GONE;
+            }
+        }else{
+            return View.GONE;
+        }
     }
+
+    public int unconfirmHostVisibility(Event event){
+        if (event.getStatus().equals(Event.STATUS_PENDING) ||
+                event.getStatus().equals(Event.STATUS_UPDATING) ||
+                isUserHostOfEvent(context, event)){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+    }
+
+
+
+    //***********************************************************
+
 
     @Bindable
     public int getSoloInvisible() {
