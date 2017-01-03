@@ -164,6 +164,7 @@
     <string name="event_second_proposed_time">EventSecondProposedTime</string>
     <string name="event_third_proposed_time">EventThirdProposedTime</string>
     <string name="event_calendar_type">EventCalendarType</string>
+    <string name="event_default_end_repeate">Never</string>
     <string name="next">next</string>
     <string name="back">Back</string>
     <string name="delete_event">Delete Event</string>
