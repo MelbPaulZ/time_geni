@@ -79,18 +79,10 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
-                // for test.... because always on error
-//                if (getView() != null) {
-//                    getView().onLoginSucceed();
-//                }
             }
 
             @Override
             public void onNext(HttpResult<UserLoginRes> result) {
-                if(result.getStatus() != 1){
-                    throw new RuntimeException(result.getInfo());
-                }
-                Log.d(TAG, "onNext: " + result.getData().getToken());
                 if (result.getStatus()!=1){
                     Toast.makeText(context, "username or password error",Toast.LENGTH_SHORT);
                 }else {
@@ -248,6 +240,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
         Subscriber<HttpResult<User>> subscriber = new Subscriber<HttpResult<User>>() {
             @Override
             public void onCompleted() {
+                if (getView()!=null){
+                    getView().onLoginSucceed(task);
+                }
             }
 
             @Override
@@ -277,6 +272,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
      * @param bitmap the default avatar that given to user
      */
     public void uploadImageToLeanCloud(final LoginUser loginUser, Bitmap bitmap){
+        if (getView()!=null){
+            getView().onLoginStart();
+        }
         String fileName = loginUser.getEmail() + "_" + "avatar.png";
         final AVFile file = new AVFile(fileName, convertBitmapToByte(bitmap));
         file.saveInBackground(new SaveCallback() {

@@ -16,6 +16,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginPickAvatarBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 import static android.R.id.empty;
@@ -47,11 +48,12 @@ public class LoginPickAvatarFragment extends LoginBaseFragment implements LoginM
 
     @Override
     public void onLoginStart() {
-
+        AppUtil.showProgressBar(getContext(), "Signing Up", "Waiting");
     }
 
     @Override
     public void onLoginSucceed(int task) {
+        AppUtil.hideProgressBar();
         onPageChange(task);
     }
 
