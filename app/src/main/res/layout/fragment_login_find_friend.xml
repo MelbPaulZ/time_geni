@@ -56,7 +56,7 @@
         android:layout_height="65dp"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="23dp"
         android:background="@drawable/selector_signup_btn_bg"
         android:text="@string/login_find_friend_button1"
         android:textSize="14sp"
@@ -70,13 +70,24 @@
         android:layout_height="65dp"
         android:layout_marginLeft="62dp"
         android:layout_marginRight="62dp"
-        android:layout_marginBottom="73dp"
         android:gravity="center"
         android:layout_gravity="center_horizontal"
         android:text="@string/login_find_friend_button2"
         android:onClick="@{loginVM.addFromGmail}"
         android:textColor="@color/white"
         android:background="@drawable/background_round_radius_able_red"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="@string/login_find_friend_skip"
+        android:textSize="14sp"
+        android:layout_marginTop="10dp"
+        android:onClick="@{loginVM.toCalendar()}"
+        android:textColor="@color/color_64AFF2"
         />
 
 </LinearLayout>

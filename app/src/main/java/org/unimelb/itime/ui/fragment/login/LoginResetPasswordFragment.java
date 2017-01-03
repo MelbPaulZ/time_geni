@@ -52,7 +52,7 @@ public class LoginResetPasswordFragment extends LoginBaseFragment implements Log
 
 
     @Override
-    public void invalidPopup() {
+    public void invalidPopup(int reason) {
 
     }
 

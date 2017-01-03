@@ -50,7 +50,7 @@ public class LoginEmailSentFragment extends LoginBaseFragment implements LoginMv
 
 
     @Override
-    public void invalidPopup() {
+    public void invalidPopup(int reason) {
 
     }
 

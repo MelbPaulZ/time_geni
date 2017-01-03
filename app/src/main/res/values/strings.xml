@@ -29,6 +29,7 @@
     <string name="login_find_friend_subtitle">You can add your friends from phone contacts and socials networks.</string>
     <string name="login_find_friend_button1">ADD FROM CONTACT</string>
     <string name="login_find_friend_button2">ADD FROM GMAIL</string>
+    <string name="login_find_friend_skip">SKIP</string>
     <string name="login_title">Log In</string>
     <string name="login_input_password_hint">Password</string>
     <string name="login_forget_password">Forget Your Password?</string>
