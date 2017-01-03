@@ -6,17 +6,22 @@ import android.databinding.BindingAdapter;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 
+import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
+import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created by Paul on 18/10/16.
@@ -66,6 +71,31 @@ public class CommonViewModel extends AndroidViewModel {
                 }
             }else{
                 imageView.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @BindingAdapter({"bind:urls", "bind:index"})
+    public static void setImageResource(ImageView imageView, List<Invitee> urls, int index){
+        int size = urls.size();
+        if (index >= size){
+            imageView.setVisibility(View.GONE);
+            return;
+        }
+
+        imageView.setVisibility(View.VISIBLE);
+        imageView.getLayoutParams().width = DensityUtil.dip2px(imageView.getContext(),50);
+
+        if (index < 2){
+            Invitee invitee = urls.get(index);
+            EventUtil.bindUrlHelper(imageView.getContext(),invitee.getPhoto(),imageView,new CircleTransform());
+        }else{
+            if (size > 3){
+                imageView.getLayoutParams().width = DensityUtil.dip2px(imageView.getContext(),20);
+                EventUtil.bindUrlHelper(imageView.getContext(), R.drawable.ic_three_dot,imageView);
+            }else{
+                Invitee invitee = urls.get(index);
+                EventUtil.bindUrlHelper(imageView.getContext(),invitee.getPhoto(),imageView,new CircleTransform());
             }
         }
     }

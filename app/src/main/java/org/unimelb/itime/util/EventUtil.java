@@ -622,6 +622,10 @@ public class EventUtil {
         }
     }
 
+    public static void bindUrlHelper(Context context, int res, ImageView view) {
+        Picasso.with(context).load(res).into(view);
+    }
+
     public static String getHostPhotoUrl(Event event){
         for(Invitee invitee :event.getInvitee() ){
             if (invitee.getUserUid().equals(event.getHostUserUid())){
