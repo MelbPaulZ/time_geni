@@ -78,4 +78,7 @@ public class SettingManager {
         return copySetting(this.setting);
     }
 
+    public void clear(){
+        instance = null;
+    }
 }
