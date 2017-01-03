@@ -507,21 +507,21 @@
 
                         <ImageView
                             android:id="@+id/edit_photo1"
-                            imageResource="@{eventEditVM.eventEditViewEvent}"
+                            loadRemoteImg="@{eventEditVM.eventEditViewEvent}"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginRight="@dimen/padding_10" />
 
                         <ImageView
                             android:id="@+id/edit_photo2"
-                            imageResource="@{eventEditVM.eventEditViewEvent}"
+                            loadRemoteImg="@{eventEditVM.eventEditViewEvent}"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_marginRight="@dimen/padding_10" />
 
                         <ImageView
                             android:id="@+id/edit_photo3"
-                            imageResource="@{eventEditVM.eventEditViewEvent}"
+                            loadRemoteImg="@{eventEditVM.eventEditViewEvent}"
                             android:layout_width="50dp"
                             android:layout_height="50dp" />
                     </LinearLayout>

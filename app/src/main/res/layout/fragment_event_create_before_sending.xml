@@ -523,20 +523,20 @@
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
                                     android:layout_marginRight="@dimen/padding_10"
-                                    imageResource="@{newEventDetailVM.newEvDtlEvent}" />
+                                    loadLocalImg="@{newEventDetailVM.newEvDtlEvent}" />
 
                                 <ImageView
                                     android:id="@+id/before_sending_photo2"
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
                                     android:layout_marginRight="@dimen/padding_10"
-                                    imageResource="@{newEventDetailVM.newEvDtlEvent}" />
+                                    loadLocalImg="@{newEventDetailVM.newEvDtlEvent}" />
 
                                 <ImageView
                                     android:id="@+id/before_sending_photo3"
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
-                                    imageResource="@{newEventDetailVM.newEvDtlEvent}" />
+                                    loadLocalImg="@{newEventDetailVM.newEvDtlEvent}" />
                             </LinearLayout>
                         </HorizontalScrollView>
 

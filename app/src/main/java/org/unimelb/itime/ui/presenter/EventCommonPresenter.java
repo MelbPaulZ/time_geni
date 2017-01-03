@@ -138,15 +138,19 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
      */
     public void synchronizeLocal(List<Event> events){
         for (Event ev: events){
-            Event oldEvent = eventManager.findEventByUid(ev.getEventUid());
-            if (oldEvent!=null) {
-                eventManager.updateEvent(oldEvent, ev);
-            }else{
-                eventManager.addEvent(ev);
-                DBManager.getInstance(context).insertEvent(ev);
-            }
+            synchronizeLocal(ev);
         }
         Log.i(TAG, "APPP: synchronizeLocal: "+"call");
+    }
+
+    private void synchronizeLocal(Event ev){
+        Event oldEvent = eventManager.findEventByUid(ev.getEventUid());
+        if (oldEvent!=null) {
+            eventManager.updateEvent(oldEvent, ev);
+        }else{
+            eventManager.addEvent(ev);
+            DBManager.getInstance(context).insertEvent(ev);
+        }
     }
 
 
@@ -460,6 +464,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
                 Log.i(TAG, "onNext: ");
+                synchronizeLocal(eventHttpResult.getData());
             }
         };
         HttpUtil.subscribe(observable, subscriber);

@@ -614,6 +614,19 @@ public class EventUtil {
         return null;
     }
 
+    public static List<Invitee> removeSelfInInvitees(Context context, List<Invitee> invitees){
+        if(context == null){
+            return null;
+        }
+        List<Invitee> rst = new ArrayList<>();
+        for(Invitee invitee: invitees){
+            if (!invitee.getUserUid().equals(UserUtil.getInstance(context).getUserUid())){
+                rst.add(invitee);
+            }
+        }
+        return rst;
+    }
+
     public static <T extends Transformation> void bindUrlHelper(Context context, String url, ImageView view, T transformer) {
         if (url != null && !url.equals("")) {
             Picasso.with(context).load(url).transform(transformer).into(view);
