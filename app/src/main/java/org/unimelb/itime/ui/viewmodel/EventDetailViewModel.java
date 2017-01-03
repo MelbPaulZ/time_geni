@@ -282,6 +282,10 @@ public class EventDetailViewModel extends CommonViewModel {
                 setIsLeftBtnSelected(false);
                 setLeftBtnText(context.getString(R.string.accept));
             }
+        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_CANCELLED) &&
+                isCancelledEventConfirmed(evDtlHostEvent)){
+            setIsLeftBtnSelected(false);
+            setLeftBtnText(context.getString(R.string.accept));
         }
     }
 
@@ -330,6 +334,10 @@ public class EventDetailViewModel extends CommonViewModel {
                 setIsRightBtnSelected(false);
                 setRightBtnText(context.getString(R.string.reject_all));
             }
+        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_CANCELLED) &&
+                isCancelledEventConfirmed(evDtlHostEvent)){
+            setIsRightBtnSelected(true);
+            setRightBtnText(context.getString(R.string.quitted));
         }
     }
 
@@ -441,6 +449,7 @@ public class EventDetailViewModel extends CommonViewModel {
         return count + "";
     }
 
+
     public int confirmTimeVisibility(Event event){
         if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
             return View.VISIBLE;
@@ -522,7 +531,8 @@ public class EventDetailViewModel extends CommonViewModel {
 
     //***********************************************************
     public int confirmVisibility(Event event){
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED) ||
+                (event.getStatus().equals(Event.STATUS_CANCELLED) && isCancelledEventConfirmed(event))){
             return View.VISIBLE;
         }else{
             return View.GONE;
@@ -542,12 +552,23 @@ public class EventDetailViewModel extends CommonViewModel {
         }
     }
 
+    private boolean isCancelledEventConfirmed(Event event){
+        if (event.getConfirmedCount()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public int unconfirmHostVisibility(Event event){
         if ((event.getStatus().equals(Event.STATUS_PENDING) ||
                 event.getStatus().equals(Event.STATUS_UPDATING) )&&
                 isUserHostOfEvent(context, event)){
             return View.VISIBLE;
-        }else{
+        }else if ((event.getStatus().equals(Event.STATUS_CANCELLED) && !isCancelledEventConfirmed(event))){
+            return View.VISIBLE;
+        }
+        else{
             return View.GONE;
         }
     }

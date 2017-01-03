@@ -110,7 +110,8 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
                     //read to read
                 }
 
-                Event event = EventManager.getInstance(getContext()).findEventByUid(message.getEventUid());
+//                Event event = EventManager.getInstance(getContext()).findEventByUid(message.getEventUid());
+                Event event = DBManager.getInstance(getContext()).getEvent(message.getEventUid());
                 if (event==null){
                     Toast.makeText(getContext(), "cannot find event, please try later", Toast.LENGTH_SHORT).show();
                 }else {
@@ -127,6 +128,7 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
                 // TODO: 8/12/2016 message delete ask chuandong about server
                 presenter.deleteMessage(msg);
                 msg.delete();
+                EventBus.getDefault().post(new MessageInboxMessage(DBManager.getInstance(getContext()).getAllMessages()));
                 messageAdapter.setMessageList(DBManager.getInstance(getContext()).getAllMessages());
                 return false;
             }
