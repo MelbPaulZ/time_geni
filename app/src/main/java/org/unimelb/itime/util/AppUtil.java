@@ -39,7 +39,9 @@ public class AppUtil {
     }
 
     public static void showProgressBar(Context context,String title, String subtitle){
-        pgBar = ProgressDialog.show(context, title, subtitle);
+        if (pgBar==null || !pgBar.isShowing()){
+            pgBar = ProgressDialog.show(context, title, subtitle);
+        }
     }
 
     public static void hideProgressBar(){
