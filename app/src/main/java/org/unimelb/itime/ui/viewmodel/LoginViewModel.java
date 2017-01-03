@@ -240,6 +240,7 @@ public class LoginViewModel extends AndroidViewModel{
             @Override
             public void onClick(View v) {
                 loginUser.setEmail("");
+                setLoginUser(loginUser);
             }
         };
     }
@@ -249,6 +250,7 @@ public class LoginViewModel extends AndroidViewModel{
             @Override
             public void onClick(View v) {
                 loginUser.setEmail("");
+                setLoginUser(loginUser);
             }
         };
     }
