@@ -17,6 +17,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.base.C;
 import org.unimelb.itime.bean.Setting;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentSettingBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
@@ -30,6 +31,7 @@ import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.AuthUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 
@@ -82,6 +84,12 @@ implements SettingCommonMvpView{
     }
 
     private void clearAccount(){
+        UserUtil user = UserUtil.getInstance(getContext());
+        user.logout();
+
+        SettingManager stManager = SettingManager.getInstance(getContext());
+        stManager.clear();
+
         AuthUtil.clearJwtToken(getContext());
         SharedPreferences sp = AppUtil.getTokenSaver(getContext());
         SharedPreferences.Editor editor = sp.edit();
