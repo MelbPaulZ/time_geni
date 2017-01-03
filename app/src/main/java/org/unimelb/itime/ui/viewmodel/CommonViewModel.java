@@ -86,7 +86,11 @@ public class CommonViewModel extends AndroidViewModel {
                         .centerCrop()
                         .into(imageView);
             }else{
-                imageView.setVisibility(View.GONE);
+                try {
+                    bindLocalImg(imageView,event);
+                }catch (Exception e){
+                    imageView.setVisibility(View.GONE);
+                }
             }
         }
     }
