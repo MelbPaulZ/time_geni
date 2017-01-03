@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import static org.unimelb.itime.R.id.choose;
 import static org.unimelb.itime.util.EventUtil.getSelfInInvitees;
 import static org.unimelb.itime.util.EventUtil.isUserHostOfEvent;
 
@@ -335,15 +336,17 @@ public class EventDetailViewModel extends CommonViewModel {
 
     public boolean getRightBtnClickable(Event event){
         Invitee me = EventUtil.getSelfInInvitees(context, evDtlHostEvent);
-        if (evDtlHostEvent.getStatus().equals(Event.STATUS_CONFIRMED)){
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
             // event has been confirmed by host
             if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
                 return false;
             }else{
                 return true;
             }
-        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_PENDING) || evDtlHostEvent.getStatus().equals(Event.STATUS_UPDATING)){
+        }else if (event.getStatus().equals(Event.STATUS_PENDING) || event.getStatus().equals(Event.STATUS_UPDATING)){
             if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
+                return false;
+            }else if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
                 return false;
             }else{
                 return true;

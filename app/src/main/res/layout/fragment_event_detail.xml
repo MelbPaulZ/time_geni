@@ -608,6 +608,7 @@
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:background="@color/color_f9f9f9"
+            android:clickable="true"
             android:visibility="@{hostDetailVM.confirmVisibility(hostDetailVM.evDtlHostEvent)}">
 
             <!--  left button-->
@@ -656,6 +657,7 @@
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:background="@color/color_f9f9f9"
+            android:clickable="true"
             android:visibility="@{hostDetailVM.unconfirmVisibility(hostDetailVM.evDtlHostEvent)}">
 
             <!--  left button-->
