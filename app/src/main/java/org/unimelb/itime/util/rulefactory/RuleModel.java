@@ -566,8 +566,8 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
             String rRule = "RRULE:";
             rRule += ("FREQ=" + frequencyEnum.getValue())
                     + (until == null ? "":(";UNTIL=" + format.format(until)
-                    + ";")) + (";INTERVAL=" + interval);
-//                    + ";")) + (interval == 1 ? "": ";INTERVAL=" + interval);
+//                    + ";")) + (";INTERVAL=" + interval);
+                    )) + (interval == 1 ? "": ";INTERVAL=" + interval);
             result.add(rRule);
         }
 
