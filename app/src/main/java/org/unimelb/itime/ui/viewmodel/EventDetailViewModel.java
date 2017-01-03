@@ -540,8 +540,8 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
     public int unconfirmHostVisibility(Event event){
-        if (event.getStatus().equals(Event.STATUS_PENDING) ||
-                event.getStatus().equals(Event.STATUS_UPDATING) ||
+        if ((event.getStatus().equals(Event.STATUS_PENDING) ||
+                event.getStatus().equals(Event.STATUS_UPDATING) )&&
                 isUserHostOfEvent(context, event)){
             return View.VISIBLE;
         }else{
