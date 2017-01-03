@@ -87,7 +87,6 @@
             android:text="@string/delete_event"
             android:textColor="@color/color_F45B69"
             android:textSize="17sp"
-            android:layout_marginTop="25dp"
             android:onClick="@{eventEditVM.onClickDelete()}"
             android:textAlignment="center"
             android:gravity="center"
