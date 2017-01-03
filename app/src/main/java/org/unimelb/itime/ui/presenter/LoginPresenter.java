@@ -1,12 +1,19 @@
 package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.SaveCallback;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.JwtToken;
+import org.unimelb.itime.bean.LoginUser;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.dao.UserDao;
 import org.unimelb.itime.restfulapi.PasswordApi;
@@ -15,10 +22,13 @@ import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.UserUtil;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -233,11 +243,11 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
     }
 
     public void signUp(final int task, final HashMap<String, Object> params){
+
         Observable<HttpResult<User>> observable = userApi.signup(params);
         Subscriber<HttpResult<User>> subscriber = new Subscriber<HttpResult<User>>() {
             @Override
             public void onCompleted() {
-
             }
 
             @Override
@@ -254,12 +264,68 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
                 }
                 if (getView()!=null){
                     loginByEmail( LoginViewModel.TO_FIND_FRIEND_FRAG,(String)params.get("email"), (String)params.get("password"));
-
-//                    getView().onLoginSucceed(task);
                 }
             }
         };
         HttpUtil.subscribe(observable, subscriber);
+    }
+
+
+    /**
+     *
+     * @param loginUser the user to be signed up
+     * @param bitmap the default avatar that given to user
+     */
+    public void uploadImageToLeanCloud(final LoginUser loginUser, Bitmap bitmap){
+        String fileName = loginUser.getEmail() + "_" + "avatar.png";
+        final AVFile file = new AVFile(fileName, convertBitmapToByte(bitmap));
+        file.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(AVException e) {
+                loginUser.setPhoto(file.getUrl());
+                signUp(LoginViewModel.TO_FIND_FRIEND_FRAG, loginUser);
+            }
+        });
+    }
+
+    private void signUp(int task, LoginUser loginUser){
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userId", loginUser.getEmail()); // might need to change later
+        hashMap.put("password", loginUser.getPassword());
+        hashMap.put("email", loginUser.getEmail());
+        hashMap.put("personalAlias", loginUser.getPersonalAlias());
+        hashMap.put("phone", loginUser.getPhone());
+        hashMap.put("photo", loginUser.getPhoto());
+        hashMap.put("source", LoginUser.SOURCE_EMAIL);
+        signUp(task, hashMap);
+    }
+
+    /**
+     *
+     * @param loginUser
+     * @param localPath the photo that user picked for them
+     */
+    public void uploadImageToLeanCloud(final LoginUser loginUser, String localPath){
+        String fileName = loginUser.getEmail() + "_" + "avatar.png";
+        try {
+            final AVFile file = AVFile.withAbsoluteLocalPath(fileName, localPath);
+            file.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(AVException e) {
+                    loginUser.setPhoto(file.getUrl());
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private byte[] convertBitmapToByte(Bitmap bmp){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 
 }
