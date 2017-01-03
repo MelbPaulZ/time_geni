@@ -40,8 +40,8 @@ public class CommonViewModel extends AndroidViewModel {
     }
 
 
-    @BindingAdapter("imageResource")
-    public static void setImageResource(ImageView imageView, Event event){
+    @BindingAdapter("loadRemoteImg")
+    public static void bindLocalImg(ImageView imageView, Event event){
         LinearLayout parent = (LinearLayout) imageView.getParent();
         int position = parent.indexOfChild(imageView); // get the position
         if (event==null){
@@ -49,22 +49,15 @@ public class CommonViewModel extends AndroidViewModel {
         }else{
             // event has url
             if (event.hasPhoto() && event.getPhoto().size()>= position+1){
-                imageView.setVisibility(View.VISIBLE);
                 if (event.getPhoto().get(position).getUrl()!=null
-                        && event.getPhoto().get(position).getUrl().length()>0) {
-//                File f = new File(event.getPhoto().get(position).getLocalPath());
+                        &&
+                        !event.getPhoto().get(position).getUrl().equals("")
+                        ) {
+                    imageView.setVisibility(View.VISIBLE);
                     int size = DensityUtil.dip2px(imageView.getContext(), 40);
                     Picasso.with(imageView.getContext())
                             .load(event.getPhoto().get(position).getUrl())
-                            .resize(size, size)
-                            .centerCrop()
-                            .into(imageView);
-                }else{
-                    // event haven't get url yet
-                    File f = new File(event.getPhoto().get(position).getLocalPath());
-                    int size = DensityUtil.dip2px(imageView.getContext(), 40);
-                    Picasso.with(imageView.getContext())
-                            .load(f)
+                            .placeholder(R.drawable.invitee_selected_default_picture)
                             .resize(size, size)
                             .centerCrop()
                             .into(imageView);
@@ -75,8 +68,36 @@ public class CommonViewModel extends AndroidViewModel {
         }
     }
 
+    @BindingAdapter("loadLocalImg")
+    public static void bindRemoteImg(ImageView imageView, Event event){
+        LinearLayout parent = (LinearLayout) imageView.getParent();
+        int position = parent.indexOfChild(imageView); // get the position
+        if (event==null){
+
+        }else{
+            // event has url
+            if (event.hasPhoto() && event.getPhoto().size()>= position+1){
+                imageView.setVisibility(View.VISIBLE);
+                File f = new File(event.getPhoto().get(position).getLocalPath());
+                int size = DensityUtil.dip2px(imageView.getContext(), 40);
+                Picasso.with(imageView.getContext())
+                        .load(f)
+                        .resize(size, size)
+                        .centerCrop()
+                        .into(imageView);
+            }else{
+                imageView.setVisibility(View.GONE);
+            }
+        }
+    }
+
     @BindingAdapter({"bind:urls", "bind:index"})
-    public static void setImageResource(ImageView imageView, List<Invitee> urls, int index){
+    public static void setImageResource(ImageView imageView, List<Invitee> orgUrls, int index){
+        List<Invitee> urls = EventUtil.removeSelfInInvitees(imageView.getContext(), orgUrls);
+        if (urls == null){
+            return;
+        }
+
         int size = urls.size();
         if (index >= size){
             imageView.setVisibility(View.GONE);
