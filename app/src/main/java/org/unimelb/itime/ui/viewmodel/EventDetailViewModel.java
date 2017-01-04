@@ -531,6 +531,9 @@ public class EventDetailViewModel extends CommonViewModel {
 
     //***********************************************************
     public int confirmVisibility(Event event){
+        if (event.getEventType().equals(Event.TYPE_SOLO)){
+            return View.GONE;
+        }
         if (event.getStatus().equals(Event.STATUS_CONFIRMED) ||
                 (event.getStatus().equals(Event.STATUS_CANCELLED) && isCancelledEventConfirmed(event))){
             return View.VISIBLE;
