@@ -45,6 +45,14 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     private Event event;
     private EventCreateDetailBeforeSendingFragment self;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (event==null){
+            event = EventManager.getInstance(getContext()).getCurrentEvent();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -177,8 +185,9 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     @Override
     public void onClickProposedTimeslots() {
         EventTimeSlotViewFragment timeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+        timeSlotViewFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
         openFragment(this, timeSlotViewFragment);
-        timeSlotViewFragment.setTo(this);
+        timeSlotViewFragment.setTo(this); // this need to be set manully,coz has to be distinguish with others
     }
 
     @Override
