@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 
 
+import me.fesky.library.widget.ios.ActionSheetDialog;
+
 import static org.unimelb.itime.R.id.choose;
 import static org.unimelb.itime.util.EventUtil.getSelfInInvitees;
 import static org.unimelb.itime.util.EventUtil.isUserHostOfEvent;
@@ -205,12 +207,41 @@ public class EventDetailViewModel extends CommonViewModel {
             public void onClick(View v) {
                 Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
                 if (EventUtil.isEventConfirmed(context, evDtlHostEvent)) {
-                    presenter.quitEvent(evDtlHostEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                    // TODO: 4/1/17 repeat event popup window
+                    if (evDtlHostEvent.getRecurrence().length==0) {
+                        // non-repeat event quit
+                        presenter.quitEvent(evDtlHostEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                    }else{
+                        // repeat event quit
+                        popupRepeatQuit(orgEvent);
+                    }
                 }else {
                     presenter.rejectTimeslots(evDtlHostEvent);
                 }
             }
         };
+    }
+
+    private void popupRepeatQuit(final Event orgEvent){
+        ActionSheetDialog actionSheetDialog= new ActionSheetDialog(getContext())
+                .builder()
+                .setCancelable(true)
+                .setCanceledOnTouchOutside(true)
+                .addSheetItem(getContext().getString(R.string.event_quit_repeat_text1), ActionSheetDialog.SheetItemColor.Black,
+                        new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                presenter.quitEvent(evDtlHostEvent, EventCommonPresenter.UPDATE_THIS, orgEvent.getStartTime());
+                            }
+                        })
+                .addSheetItem(getContext().getString(R.string.event_quit_repeat_text2), ActionSheetDialog.SheetItemColor.Black,
+                        new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int i) {
+                                presenter.quitEvent(evDtlHostEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                            }
+                        });
+        actionSheetDialog.show();
     }
 
     public View.OnClickListener rejectAll(){
