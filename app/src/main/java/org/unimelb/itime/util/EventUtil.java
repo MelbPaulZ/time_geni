@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -126,7 +127,8 @@ public class EventUtil {
         DateFormat df = new SimpleDateFormat("HH:mm a");
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime);
-        String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
+        String dayOfWeek =  calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, context.getResources().getConfiguration().locale);
+        dayOfWeek = dayOfWeek.toUpperCase();
         String day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
         String month = String.format("%02d",calendar.get(Calendar.MONTH) + 1);
         String startTimeStr = df.format(calendar.getTime());
