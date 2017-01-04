@@ -10,6 +10,6 @@ public interface LoginMvpView extends MvpView{
     void onLoginStart();
     void onLoginSucceed(int task);
     void onLoginFail(int task, String errorMsg);
-    void invalidPopup();
+    void invalidPopup(int reason);
     void onPageChange(int task);
 }

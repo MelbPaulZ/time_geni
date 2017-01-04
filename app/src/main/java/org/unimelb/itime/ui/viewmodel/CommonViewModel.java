@@ -6,17 +6,22 @@ import android.databinding.BindingAdapter;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 
+import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
+import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created by Paul on 18/10/16.
@@ -35,8 +40,36 @@ public class CommonViewModel extends AndroidViewModel {
     }
 
 
-    @BindingAdapter("imageResource")
-    public static void setImageResource(ImageView imageView, Event event){
+    @BindingAdapter("loadRemoteImg")
+    public static void bindLocalImg(ImageView imageView, Event event){
+        LinearLayout parent = (LinearLayout) imageView.getParent();
+        int position = parent.indexOfChild(imageView); // get the position
+        if (event==null){
+
+        }else{
+            // event has url
+            if (event.hasPhoto() && event.getPhoto().size()>= position+1){
+                if (event.getPhoto().get(position).getUrl()!=null
+                        &&
+                        !event.getPhoto().get(position).getUrl().equals("")
+                        ) {
+                    imageView.setVisibility(View.VISIBLE);
+                    int size = DensityUtil.dip2px(imageView.getContext(), 40);
+                    Picasso.with(imageView.getContext())
+                            .load(event.getPhoto().get(position).getUrl())
+                            .placeholder(R.drawable.invitee_selected_default_picture)
+                            .resize(size, size)
+                            .centerCrop()
+                            .into(imageView);
+                }
+            }else{
+                imageView.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @BindingAdapter("loadLocalImg")
+    public static void bindRemoteImg(ImageView imageView, Event event){
         LinearLayout parent = (LinearLayout) imageView.getParent();
         int position = parent.indexOfChild(imageView); // get the position
         if (event==null){
@@ -45,27 +78,49 @@ public class CommonViewModel extends AndroidViewModel {
             // event has url
             if (event.hasPhoto() && event.getPhoto().size()>= position+1){
                 imageView.setVisibility(View.VISIBLE);
-                if (event.getPhoto().get(position).getUrl()!=null
-                        && event.getPhoto().get(position).getUrl().length()>0) {
-//                File f = new File(event.getPhoto().get(position).getLocalPath());
-                    int size = DensityUtil.dip2px(imageView.getContext(), 40);
-                    Picasso.with(imageView.getContext())
-                            .load(event.getPhoto().get(position).getUrl())
-                            .resize(size, size)
-                            .centerCrop()
-                            .into(imageView);
-                }else{
-                    // event haven't get url yet
-                    File f = new File(event.getPhoto().get(position).getLocalPath());
-                    int size = DensityUtil.dip2px(imageView.getContext(), 40);
-                    Picasso.with(imageView.getContext())
-                            .load(f)
-                            .resize(size, size)
-                            .centerCrop()
-                            .into(imageView);
-                }
+                File f = new File(event.getPhoto().get(position).getLocalPath());
+                int size = DensityUtil.dip2px(imageView.getContext(), 40);
+                Picasso.with(imageView.getContext())
+                        .load(f)
+                        .resize(size, size)
+                        .centerCrop()
+                        .into(imageView);
             }else{
-                imageView.setVisibility(View.GONE);
+                try {
+                    bindLocalImg(imageView,event);
+                }catch (Exception e){
+                    imageView.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
+    @BindingAdapter({"bind:urls", "bind:index"})
+    public static void setImageResource(ImageView imageView, List<Invitee> orgUrls, int index){
+        List<Invitee> urls = EventUtil.removeSelfInInvitees(imageView.getContext(), orgUrls);
+        if (urls == null){
+            return;
+        }
+
+        int size = urls.size();
+        if (index >= size){
+            imageView.setVisibility(View.GONE);
+            return;
+        }
+
+        imageView.setVisibility(View.VISIBLE);
+        imageView.getLayoutParams().width = DensityUtil.dip2px(imageView.getContext(),50);
+
+        if (index < 2){
+            Invitee invitee = urls.get(index);
+            EventUtil.bindUrlHelper(imageView.getContext(),invitee.getPhoto(),imageView,new CircleTransform());
+        }else{
+            if (size > 3){
+                imageView.getLayoutParams().width = DensityUtil.dip2px(imageView.getContext(),20);
+                EventUtil.bindUrlHelper(imageView.getContext(), R.drawable.ic_three_dot,imageView);
+            }else{
+                Invitee invitee = urls.get(index);
+                EventUtil.bindUrlHelper(imageView.getContext(),invitee.getPhoto(),imageView,new CircleTransform());
             }
         }
     }

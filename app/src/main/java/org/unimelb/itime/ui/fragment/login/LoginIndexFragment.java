@@ -58,7 +58,7 @@ public class LoginIndexFragment extends LoginBaseFragment implements LoginMvpVie
 
 
     @Override
-    public void invalidPopup() {
+    public void invalidPopup(int reason) {
 
     }
 

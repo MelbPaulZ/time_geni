@@ -81,7 +81,7 @@ public class LoginSetPWFragment extends LoginBaseFragment implements LoginMvpVie
 
 
     @Override
-    public void invalidPopup() {
+    public void invalidPopup(int reason) {
         pwTooSimpleDialog.show();
 //        TextView incorrectPWTV = (TextView) pwTooSimpleDialog.findViewById(android.R.id.message);
 //        incorrectPWTV.setGravity(Gravity.CENTER);

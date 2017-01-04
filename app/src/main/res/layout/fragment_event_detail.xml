@@ -84,10 +84,10 @@
                     android:id="@+id/event_detail_first_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/round_corner_gray"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp">
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/round_corner_gray">
 
                     <ImageView
                         android:id="@+id/host_photo"
@@ -110,9 +110,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{EventUtil.getHostName(hostDetailVM.evDtlHostEvent)}"
-                            android:visibility="@{EventUtil.isUserHostOfEvent(context, hostDetailVM.evDtlHostEvent)? View.GONE: View.VISIBLE}"
                             android:textColor="@{hostDetailVM.getMessageStatusColor(hostDetailVM.evDtlHostEvent)}"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="@{EventUtil.isUserHostOfEvent(context, hostDetailVM.evDtlHostEvent)? View.GONE: View.VISIBLE}" />
 
                         <TextView
                             android:id="@+id/event_status"
@@ -250,27 +250,27 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:visibility="@{hostDetailVM.timeslotListVisibility(hostDetailVM.evDtlHostEvent)}"
                         android:layout_marginBottom="@dimen/padding_5"
                         android:layout_marginLeft="7dp"
                         android:gravity="bottom"
                         android:text="@{hostDetailVM.evDtlHostEvent.invitee.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
                         android:textColor="@color/gray_b2b2b2"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:visibility="@{hostDetailVM.timeslotListVisibility(hostDetailVM.evDtlHostEvent)}" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#ffffff"
                         android:layout_marginTop="5dp"
+                        android:background="#ffffff"
                         android:orientation="vertical">
 
                         <org.unimelb.itime.widget.NonScrollListView
                             android:id="@+id/event_detail_timeslot_listview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="@{hostDetailVM.timeslotListVisibility(hostDetailVM.evDtlHostEvent)}"
-                            android:divider="#00000000"/>
+                            android:divider="#00000000"
+                            android:visibility="@{hostDetailVM.timeslotListVisibility(hostDetailVM.evDtlHostEvent)}" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -299,36 +299,36 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="@{hostDetailVM.soloInvisible}"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="@{hostDetailVM.soloInvisible}">
+
                         <LinearLayout
                             android:id="@+id/invitees_status_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="2dp"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:gravity="center_vertical">
-                        </LinearLayout>
+                            android:paddingBottom="2dp"
+                            android:paddingTop="5dp"></LinearLayout>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_alignParentBottom="true"
                             android:layout_marginTop="@dimen/padding_5"
-                            android:background="@color/gray_b2b2b2"/>
+                            android:background="@color/gray_b2b2b2" />
 
                         <HorizontalScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <LinearLayout
                                 android:id="@+id/invitees_status_img"
-                                android:padding="5dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                                android:gravity="center_vertical">
-                            </LinearLayout>
+                                android:padding="5dp"></LinearLayout>
                         </HorizontalScrollView>
 
                         <TextView
@@ -336,14 +336,14 @@
                             android:layout_height="1dp"
                             android:layout_alignParentBottom="true"
                             android:layout_marginTop="@dimen/padding_5"
-                            android:background="@color/gray_b2b2b2"/>
+                            android:background="@color/gray_b2b2b2" />
                     </LinearLayout>
 
                     <RelativeLayout
                         android:id="@+id/event_detail_host_photo_RL"
                         android:layout_width="match_parent"
-                        android:onClick="@{hostDetailVM.gotoGridView}"
-                        android:layout_height="60dp">
+                        android:layout_height="60dp"
+                        android:onClick="@{hostDetailVM.gotoGridView}">
 
                         <TextView
                             android:id="@+id/event_detail_host_photo"
@@ -364,7 +364,7 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo1"
-                                imageResource="@{hostDetailVM.evDtlHostEvent}"
+                                loadRemoteImg="@{hostDetailVM.evDtlHostEvent}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"
@@ -372,7 +372,7 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo2"
-                                imageResource="@{hostDetailVM.evDtlHostEvent}"
+                                loadRemoteImg="@{hostDetailVM.evDtlHostEvent}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"
@@ -380,10 +380,10 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo3"
-                                imageResource="@{hostDetailVM.evDtlHostEvent}"
+                                loadRemoteImg="@{hostDetailVM.evDtlHostEvent}"
                                 android:layout_width="50dp"
-                                android:layout_gravity="center"
-                                android:layout_height="50dp" />
+                                android:layout_height="50dp"
+                                android:layout_gravity="center" />
                         </LinearLayout>
 
                         <TextView
@@ -477,14 +477,16 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="60dp">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
-                            android:textSize="17sp"
+                            android:text="@string/Messages"
                             android:textColor="@color/color_333333"
-                            android:text="@string/Messages"/>
+                            android:textSize="17sp" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -509,6 +511,197 @@
         </ScrollView>
 
 
+        <!--Host event accept show-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_f9f9f9"
+            android:visibility="@{hostDetailVM.hostConfirmVisibility}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_round_radius_able_blue"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/accepted"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="17sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="55dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:onClick="@{hostDetailVM.onClickHostQuit(hostDetailVM.evDtlHostEvent)}"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="@string/quit"
+                android:textAlignment="center"
+                android:textColor="@color/color_F45B69"
+                android:textSize="17sp" />
+
+        </RelativeLayout>
+
+
+        <!--Invitee Unresponse && response-->
+        <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@color/color_f9f9f9"-->
+        <!--android:visibility="@{hostDetailVM.inviteeVisibility}">-->
+
+        <!--&lt;!&ndash;  left button&ndash;&gt;-->
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:layout_marginLeft="40dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:background="@drawable/selector_event_detail_btn_bg_left"-->
+        <!--android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"-->
+        <!--android:onClick="@{hostDetailVM.onClickInviteeLeftBtn()}"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:text="@{hostDetailVM.leftBtnText}"-->
+        <!--android:selected="@{hostDetailVM.isLeftBtnSelected}"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="@drawable/selector_event_detail_btn_text_left"-->
+        <!--android:textSize="17sp"-->
+        <!--/>-->
+        <!--&lt;!&ndash;right button&ndash;&gt;-->
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:layout_marginRight="40dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:clickable="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"-->
+        <!--android:onClick="@{hostDetailVM.onInviteeClickRightBtn()}"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:text="@{hostDetailVM.rightBtnText}"-->
+        <!--android:selected="@{hostDetailVM.isRightBtnSelected}"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="@drawable/selector_event_detail_btn_text_right"-->
+        <!--android:background="@drawable/selector_event_detail_btn_bg_right"-->
+        <!--android:textSize="17sp" />-->
+        <!--</RelativeLayout>-->
+
+        <!--confirm-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_f9f9f9"
+            android:clickable="true"
+            android:visibility="@{hostDetailVM.confirmVisibility(hostDetailVM.evDtlHostEvent)}">
+
+            <!--  left button-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/selector_event_detail_btn_bg_left"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textAlignment="center"
+                android:textColor="@drawable/selector_event_detail_btn_text_left"
+                android:textSize="17sp"
+                android:text="@{hostDetailVM.leftBtnText}"
+                android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
+                android:selected="@{hostDetailVM.isLeftBtnSelected}"
+                android:onClick="@{hostDetailVM.acceptEvent()}"
+                />
+            <!--right button-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/selector_event_detail_btn_bg_right"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textAlignment="center"
+                android:textColor="@drawable/selector_event_detail_btn_text_right"
+                android:textSize="17sp"
+                android:text="@{hostDetailVM.rightBtnText}"
+                android:clickable="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
+                android:selected="@{hostDetailVM.isRightBtnSelected}"
+                android:onClick="@{hostDetailVM.quitEvent()}"/>
+        </RelativeLayout>
+
+        <!--unconfirm-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_f9f9f9"
+            android:clickable="true"
+            android:visibility="@{hostDetailVM.unconfirmVisibility(hostDetailVM.evDtlHostEvent)}">
+
+            <!--  left button-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/selector_event_detail_btn_bg_left"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textAlignment="center"
+                android:textColor="@drawable/selector_event_detail_btn_text_left"
+                android:textSize="17sp"
+                android:text="@{hostDetailVM.leftBtnText}"
+                android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
+                android:selected="@{hostDetailVM.isLeftBtnSelected}"
+                android:onClick="@{hostDetailVM.acceptEvent()}"
+                />
+            <!--right button-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/selector_event_detail_btn_bg_right"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textAlignment="center"
+                android:textColor="@drawable/selector_event_detail_btn_text_right"
+                android:textSize="17sp"
+                android:text="@{hostDetailVM.rightBtnText}"
+                android:clickable="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
+                android:selected="@{hostDetailVM.isRightBtnSelected}"
+                android:onClick="@{hostDetailVM.rejectAll()}"
+                />
+        </RelativeLayout>
+
+
         <!-- Host event Unconfirmed show-->
         <LinearLayout
             android:layout_width="match_parent"
@@ -518,7 +711,7 @@
             android:gravity="center"
             android:paddingLeft="@dimen/padding_10"
             android:paddingRight="@dimen/padding_10"
-            android:visibility="@{hostDetailVM.hostUnconfirmVisibility}">
+            android:visibility="@{hostDetailVM.unconfirmHostVisibility(hostDetailVM.evDtlHostEvent)}">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -533,96 +726,6 @@
 
         </LinearLayout>
 
-        <!--Host event accept show-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/color_f9f9f9"
-            android:visibility="@{hostDetailVM.hostConfirmVisibility}">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/background_round_radius_able_blue"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/accepted"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="17sp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="55dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:onClick="@{hostDetailVM.onClickHostQuit(hostDetailVM.evDtlHostEvent)}"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:text="@string/quit"
-                android:textAlignment="center"
-                android:textColor="@color/color_F45B69"
-                android:textSize="17sp"
-                />
-
-        </RelativeLayout>
-
-
-        <!--Invitee Unresponse && response-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/color_f9f9f9"
-            android:visibility="@{hostDetailVM.inviteeVisibility}">
-
-            <!--  left button-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/selector_event_detail_btn_bg_left"
-                android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
-                android:onClick="@{hostDetailVM.onClickInviteeLeftBtn()}"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@{hostDetailVM.leftBtnText}"
-                android:selected="@{hostDetailVM.isLeftBtnSelected}"
-                android:textAlignment="center"
-                android:textColor="@drawable/selector_event_detail_btn_text_left"
-                android:textSize="17sp"
-                />
-            <!--right button-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginTop="10dp"
-                android:clickable="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
-                android:onClick="@{hostDetailVM.onInviteeClickRightBtn()}"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@{hostDetailVM.rightBtnText}"
-                android:selected="@{hostDetailVM.isRightBtnSelected}"
-                android:textAlignment="center"
-                android:textColor="@drawable/selector_event_detail_btn_text_right"
-                android:background="@drawable/selector_event_detail_btn_bg_right"
-                android:textSize="17sp" />
-        </RelativeLayout>
 
     </RelativeLayout>
 </layout>

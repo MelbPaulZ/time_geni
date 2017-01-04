@@ -84,7 +84,7 @@ public class LoginInputEmailFragment extends LoginBaseFragment implements LoginM
 
 
     @Override
-    public void invalidPopup() {
+    public void invalidPopup(int reason) {
         unsupportEmailDialog.show();
 
     }

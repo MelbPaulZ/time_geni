@@ -56,7 +56,7 @@ public class UserUtil {
      *
      */
     public void logout(){
-
+        instance = null;
     }
 
     public String getUserUid(){

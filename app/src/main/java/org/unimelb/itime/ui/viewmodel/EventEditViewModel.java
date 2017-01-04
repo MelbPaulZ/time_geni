@@ -219,6 +219,7 @@ public class EventEditViewModel extends CommonViewModel {
                     button_change_all.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
                             changeAllEvent(eventEditViewEvent);
                             alertDialog.dismiss();
                         }
@@ -228,6 +229,7 @@ public class EventEditViewModel extends CommonViewModel {
                     button_only_this.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
                             changeOnlyThisEvent(eventEditViewEvent);
                             alertDialog.dismiss();
 

@@ -110,7 +110,7 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
     }
 
     @Override
-    public void invalidPopup() {
+    public void invalidPopup(int reason) {
         loginFailDialog.show();
         TextView msg = (TextView) loginFailDialog.findViewById(android.R.id.message);
         msg.setGravity(Gravity.CENTER);

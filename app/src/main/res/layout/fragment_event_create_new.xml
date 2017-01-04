@@ -184,7 +184,7 @@
                             android:layout_weight="1"
                             android:gravity="right"
                             android:paddingRight="@dimen/padding_10"
-                            android:text="@{EventUtil.getRepeatEndString(context, eventVM.newEvDtlEvent)}"
+                            android:text="@{EventUtil.getRepeatEndString(context, eventVM.newEvDtlEvent), default=`never`}"
                             android:textColor="@color/text_disable"
                             android:textSize="16dp" />
 
@@ -475,20 +475,20 @@
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
                                         android:layout_marginRight="@dimen/padding_10"
-                                        app:imageResource="@{eventVM.newEvDtlEvent}" />
+                                        app:loadLocalImg="@{eventVM.newEvDtlEvent}" />
 
                                     <ImageView
                                         android:id="@+id/photo2"
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
                                         android:layout_marginRight="@dimen/padding_10"
-                                        app:imageResource="@{eventVM.newEvDtlEvent}" />
+                                        app:loadLocalImg="@{eventVM.newEvDtlEvent}" />
 
                                     <ImageView
                                         android:id="@+id/photo3"
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
-                                        app:imageResource="@{eventVM.newEvDtlEvent}" />
+                                        app:loadLocalImg="@{eventVM.newEvDtlEvent}" />
                                 </LinearLayout>
                             </HorizontalScrollView>
 

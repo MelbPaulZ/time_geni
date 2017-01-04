@@ -22,6 +22,7 @@ import org.unimelb.itime.util.rulefactory.FrequencyEnum;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class EventUtil {
             String year = calendar.get(Calendar.YEAR) + "";
             return dayOfWeek + " ," + month + " " + day + ", " + year;
         }else{
-            return "";
+            return context.getResources().getString(R.string.event_default_end_repeate);
         }
     }
 
@@ -122,24 +123,19 @@ public class EventUtil {
 
 
     public static String getSuggestTimeStringFromLong(Context context, Long startTime, Long endtime) {
+        DateFormat df = new SimpleDateFormat("HH:mm a");
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime);
         String dayOfWeek = getDayOfWeekAbbr(context, calendar.get(Calendar.DAY_OF_WEEK));
-        String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-        String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
-        String startTimeHour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-        String startMinute = calendar.get(Calendar.MINUTE) < 10 ? "0" + String.valueOf(calendar.get(Calendar.MINUTE)) : String.valueOf(calendar.get(Calendar.MINUTE));
-        String startAmOrPm = calendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
+        String day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+        String month = String.format("%02d",calendar.get(Calendar.MONTH) + 1);
+        String startTimeStr = df.format(calendar.getTime());
 
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.setTimeInMillis(endtime);
-        String endTimeHour = String.valueOf(endCalendar.get(Calendar.HOUR_OF_DAY));
-        String endTimeMinute = endCalendar.get(Calendar.MINUTE) < 10 ? "0" + String.valueOf(endCalendar.get(Calendar.MINUTE)) : String.valueOf(endCalendar.get(Calendar.MINUTE));
-        String endAmOrPm = endCalendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
+        String endTimeStr = df.format(endCalendar.getTime());
 
-        return dayOfWeek + " " + day + "/" + month + " " + startTimeHour + ":" + startMinute +
-                " " + startAmOrPm + " - " + endTimeHour + ":" + endTimeMinute + endAmOrPm;
-
+        return dayOfWeek + " " + day + "/" + month + " " + startTimeStr + " - " + endTimeStr;
     }
 
     public static String getSlotStringFromLong(Context context, Long startTime, Long endtime) {
@@ -618,12 +614,29 @@ public class EventUtil {
         return null;
     }
 
+    public static List<Invitee> removeSelfInInvitees(Context context, List<Invitee> invitees){
+        if(context == null){
+            return null;
+        }
+        List<Invitee> rst = new ArrayList<>();
+        for(Invitee invitee: invitees){
+            if (!invitee.getUserUid().equals(UserUtil.getInstance(context).getUserUid())){
+                rst.add(invitee);
+            }
+        }
+        return rst;
+    }
+
     public static <T extends Transformation> void bindUrlHelper(Context context, String url, ImageView view, T transformer) {
         if (url != null && !url.equals("")) {
             Picasso.with(context).load(url).transform(transformer).into(view);
         } else {
             Picasso.with(context).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(transformer).into(view);
         }
+    }
+
+    public static void bindUrlHelper(Context context, int res, ImageView view) {
+        Picasso.with(context).load(res).into(view);
     }
 
     public static String getHostPhotoUrl(Event event){
