@@ -32,6 +32,7 @@ import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.contact.InviteFriendMvpView;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
 import org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.listener.ITimeContactInterface;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 import org.unimelb.itime.widget.InviteeGroupView;
@@ -153,7 +154,7 @@ public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, 
     //Write your code here
     @Override
     public void onDoneClicked(){
-        event.setInvitee((List<Invitee>) viewModel.getInviteeList());
+        event.setInvitee((List<Invitee>) viewModel.getSelectedist());
         if(getFrom() instanceof EventCreateNewFragment){
             if (event.getInvitee().size()>=1) {
                 // pick at least one invitee

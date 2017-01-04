@@ -12,18 +12,23 @@
     android:layout_height="match_parent">
     <org.unimelb.itime.widget.PlusTitleBar
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/title_height"
         app:title="@{mainViewModel.title}"
         app:showLeft="@{mainViewModel.showTitileBack}"
         app:showRight="@{mainViewModel.showTitleRight}"
         app:titleRightListener="@{mainViewModel.titleRightListener}"
         android:id="@+id/titleBar"
         />
+    <include layout="@layout/line"/>
+
     <org.unimelb.itime.widget.SearchBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/searchBar"
         app:searchListener = "@{mainViewModel.onEditListener}"/>
+
+    <include layout="@layout/line"/>
+
     <org.unimelb.itime.widget.WideBadgeArrowButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,16 +39,18 @@
         android:visibility="@{mainViewModel.searching?View.GONE:View.VISIBLE}"/>
 
     <include layout="@layout/line"/>
-    <TextView android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="iTime Friends"
-        android:textColor="@color/normalGrey"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="20dp"
-        android:visibility="@{mainViewModel.searching?View.GONE:View.VISIBLE}"/>
 
-    <include layout="@layout/line"/>
+    <!--<include layout="@layout/line"/>-->
+    <!--<TextView android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:text="iTime Friends"-->
+        <!--android:textColor="@color/normalGrey"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginBottom="5dp"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:visibility="@{mainViewModel.searching?View.GONE:View.VISIBLE}"/>-->
+
+    <!--<include layout="@layout/line"/>-->
 
     <org.unimelb.itime.widget.SideBarListView
         android:layout_width="match_parent"

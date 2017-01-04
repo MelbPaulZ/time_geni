@@ -46,6 +46,10 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
         userApi = HttpUtil.createService(context, UserApi.class);
     }
 
+    public Context getContext(){
+        return context;
+    }
+
 
     public void getFriends(final InviteFriendViewModel.FriendCallBack callBack){
         DBManager dbManager = DBManager.getInstance(context);
@@ -62,7 +66,6 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
             public List<Contact> call(HttpResult<List<Contact>> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
-                    System.out.println("wrong");
                     return null;
                 }else {
                     for(Contact contact:result.getData()) {

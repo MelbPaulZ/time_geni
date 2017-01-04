@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.base.C;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingBinding;
 import org.unimelb.itime.managers.DBManager;
@@ -24,12 +25,14 @@ import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.LoginActivity;
+import org.unimelb.itime.ui.activity.ProfileActivityContact;
 import org.unimelb.itime.ui.activity.SettingActivity;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.AuthUtil;
+import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 
@@ -134,7 +137,12 @@ implements SettingCommonMvpView{
     public void onViewChange(int task, boolean isSave) {
         if (task == MainSettingsViewModel.TASK_LOGOUT){
             popupDialog();
-        }else if (task == MainSettingsViewModel.TASK_TO_SCAN_QR_CODE ||
+        }else if (task == MainSettingsViewModel.TASK_TO_SCAN_QR_CODE ){
+            Intent intent = new Intent(getActivity(), CaptureActivityContact.class);
+            intent.putExtra(SettingActivity.TASK, task);
+            startActivityForResult(intent, task);
+            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }else if(
                 task == MainSettingsViewModel.TASK_TO_BLOCK_USER ||
                 task == MainSettingsViewModel.TASK_TO_HELP_AND_FEEDBACK){
             Toast.makeText(getContext(), "todo",Toast.LENGTH_SHORT).show();
@@ -147,5 +155,38 @@ implements SettingCommonMvpView{
 
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == getActivity().RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                String result = bundle.getString("result");
+                presenter.findFriend(result,new FindFriendCallBack());
+            }
+        }
+    }
+
+    public void gotoProfile(Contact contact){
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), ProfileActivityContact.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ProfileActivityContact.USER,contact);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    public class FindFriendCallBack{
+        public void success(Contact contact){
+            gotoProfile(contact);
+        }
+
+        public void failed(){
+            Toast.makeText(getContext(), "Can't find this user!", Toast.LENGTH_SHORT);
+        }
+    }
+
 
 }

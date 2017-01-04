@@ -21,15 +21,24 @@ import org.unimelb.itime.util.SizeUtil;
  */
 
 public class ContactDialog extends PopupWindow {
-    Context context;
-    LinearLayout dialogLayout;
-    RelativeLayout mainView;
-    TextView doButton;
-    TextView title;
-    TextView explain;
+    private Context context;
+    private LinearLayout dialogLayout;
+    private RelativeLayout mainView;
+    private TextView rightButton;
+    private TextView leftButton;
+    private TextView title;
+    private TextView explain;
+    private int textColor = R.color.textBlue;
+    private int titleFontSize = 17;
+    private int msgFontSize = 10;
+    private int selectFontSize = 17;
+
 
     public ContactDialog(Context context){
         this.context = context;
+        titleFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_big));
+        msgFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_tiny));
+        selectFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_big));
         initDialog();
         this.setContentView(mainView);
         this.setBackgroundDrawable(new ColorDrawable(0xb0000000));
@@ -67,17 +76,19 @@ public class ContactDialog extends PopupWindow {
         mainView.addView(dialogLayout);
 
         title = new TextView(context);
-        title.setTextSize(20);
+        title.setTextSize(titleFontSize);
         LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         titleParams.setMargins(0, SizeUtil.dp2px(context, 20), 0, SizeUtil.dp2px(context, 5));
         titleParams.gravity= Gravity.CENTER_HORIZONTAL;
         title.setTextColor(Color.BLACK);
         title.setLayoutParams(titleParams);
+        title.getPaint().setFakeBoldText(true);
         dialogLayout.addView(title);
 
         explain = new TextView(context);
-        explain.setTextSize(12);
+        explain.setTextSize(msgFontSize);
+        explain.setTextColor(context.getResources().getColor(R.color.grey_five));
         LinearLayout.LayoutParams explainParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         explainParams.setMargins(SizeUtil.dp2px(context, 20),0, SizeUtil.dp2px(context, 20), SizeUtil.dp2px(context, 15));
@@ -99,15 +110,16 @@ public class ContactDialog extends PopupWindow {
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         dialogLayout.addView(buttonLayout);
 
-        TextView cancelButton = new TextView(context);
+        leftButton = new TextView(context);
         LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(
                 SizeUtil.dp2px(context, 150), SizeUtil.dp2px(context, 50));
-        cancelButton.setLayoutParams(cancelParams);
-        cancelButton.setText("Cancel");
-        cancelButton.setGravity(Gravity.CENTER);
-        cancelButton.setTextSize(20);
-        buttonLayout.addView(cancelButton);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        leftButton.setLayoutParams(cancelParams);
+        leftButton.setText("Cancel");
+        leftButton.setGravity(Gravity.CENTER);
+        leftButton.setTextSize(selectFontSize);
+        buttonLayout.addView(leftButton);
+        leftButton.setTextColor(context.getResources().getColor(textColor));
+        leftButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //销毁弹出框
                 dismiss();
@@ -122,15 +134,16 @@ public class ContactDialog extends PopupWindow {
         verticalDivider.setBackgroundColor(Color.BLACK);
         buttonLayout.addView(verticalDivider);
 
-        doButton = new TextView(context);
+        rightButton = new TextView(context);
         LinearLayout.LayoutParams doParams = new LinearLayout.LayoutParams(
                 SizeUtil.dp2px(context, 149), SizeUtil.dp2px(context, 50));
-        doButton.setLayoutParams(doParams);
-        doButton.setText("Cancel");
-        doButton.setGravity(Gravity.CENTER);
-        doButton.setTextSize(20);
-        doButton.setTextColor(context.getResources().getColor(R.color.lightRed));
-        buttonLayout.addView(doButton);
+        rightButton.setLayoutParams(doParams);
+        rightButton.setText("Cancel");
+        rightButton.setGravity(Gravity.CENTER);
+        rightButton.setTextSize(selectFontSize);
+        rightButton.setTextColor(context.getResources().getColor(textColor));
+        rightButton.getPaint().setFakeBoldText(true);
+        buttonLayout.addView(rightButton);
     }
 
     public void setTitle(String str){
@@ -141,12 +154,20 @@ public class ContactDialog extends PopupWindow {
         explain.setText(str);
     }
 
-    public void setDoOnClickListener(View.OnClickListener listener){
-        doButton.setOnClickListener(listener);
+    public void setRightOnClickListener(View.OnClickListener listener){
+        rightButton.setOnClickListener(listener);
     }
 
-    public void setDoText(String str){
-        doButton.setText(str);
+    public void setLeftOnClickListener(View.OnClickListener listener){
+        leftButton.setOnClickListener(listener);
+    }
+
+    public void setRightText(String str){
+        rightButton.setText(str);
+    }
+
+    public void setLeftText(String str){
+        rightButton.setText(str);
     }
 
 }

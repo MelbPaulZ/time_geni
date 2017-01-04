@@ -11,9 +11,9 @@ import android.view.ViewGroup;
  */
 public class FlowLayout extends ViewGroup {
     // Horizontal space between child views.
-    private int horizontalSpace = 10;
+    private int horizontalSpace = 24;
     // Vertical space between child views.
-    private int verticalSpace = 10;
+    private int verticalSpace = 14;
     private int mHeight;
 
     public FlowLayout(Context context) {
@@ -24,7 +24,6 @@ public class FlowLayout extends ViewGroup {
         super(context, attrs);
     }
 
-    //
     public void setSpace(int horizontalSpcace, int verticalSpace){
         this.horizontalSpace = horizontalSpcace;
         this.verticalSpace = verticalSpace;

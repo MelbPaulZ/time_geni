@@ -21,8 +21,8 @@ public class DotTitleBar extends BaseTitleBar {
     private void initDotView(){
         ImageView view = new ImageView(getContext());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                SizeUtil.dp2px(getContext(),25),
-                SizeUtil.dp2px(getContext(),25));
+                SizeUtil.dp2px(getContext(),16),
+                SizeUtil.dp2px(getContext(),16));
         params.addRule(CENTER_HORIZONTAL);
         params.addRule(CENTER_IN_PARENT);
         params.addRule(ALIGN_PARENT_RIGHT);

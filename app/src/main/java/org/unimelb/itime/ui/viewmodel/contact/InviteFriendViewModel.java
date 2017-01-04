@@ -14,11 +14,13 @@ import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.ListviewInviteeFriendItemBinding;
 import org.unimelb.itime.bean.BaseContact;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.ContactFilterUtil;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 import org.unimelb.itime.widget.ContactListView;
 import org.unimelb.itime.widget.InviteeGroupView;
@@ -56,6 +58,7 @@ public class InviteFriendViewModel extends BaseObservable {
     private boolean showAlertMsg = false;
     private Event event;
     private SearchContactCallback searchContactCallback = new SearchContactCallback();
+    private Invitee inviteeSelf;
 
     public LinearLayout getHeaderView() {
         return headerView;
@@ -77,8 +80,16 @@ public class InviteFriendViewModel extends BaseObservable {
         if (event!=null) {
             this.event = event;
             inviteeList = event.getInvitee();
+            User userSelf = UserUtil.getInstance(presenter.getContext()).getUser();
+            for(Invitee invitee : inviteeList){
+                if(invitee.getUserId().equals(userSelf.getUserId())){
+                    inviteeSelf = invitee;
+                    inviteeList.remove(invitee);
+                    break;
+                }
+            }
             setInviteeList(inviteeList);
-            generateITimeListView(friendList);
+            setFriendList(friendList);
         }else{
             inviteeList = new ArrayList<>();
             setInviteeList(inviteeList);
@@ -276,7 +287,7 @@ public class InviteFriendViewModel extends BaseObservable {
     }
 
     public void setCountStr(int count) {
-        this.countStr = count + " people accepted";
+        this.countStr = count + " people selected";
         notifyPropertyChanged(BR.countStr);
     }
 
@@ -490,6 +501,13 @@ public class InviteFriendViewModel extends BaseObservable {
 
     @Bindable
     public List<? extends ITimeInviteeInterface> getInviteeList() {
+        return inviteeList;
+    }
+
+    public List<? extends ITimeInviteeInterface> getSelectedist() {
+        if(inviteeSelf != null && !inviteeList.contains(inviteeSelf)){
+            inviteeList.add(inviteeSelf);
+        }
         return inviteeList;
     }
 

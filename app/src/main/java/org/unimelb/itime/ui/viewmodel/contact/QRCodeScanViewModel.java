@@ -40,7 +40,7 @@ public class QRCodeScanViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                activity.goToPhotos();
             }
         };
     }

@@ -12,7 +12,7 @@
     android:orientation="vertical">
     <org.unimelb.itime.widget.ScanQRCodeTitleBar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/title_height"
         app:title="@{viewModel.title}"
         android:id="@+id/titleBar"
         app:titleBackListener="@{viewModel.titleBackListener}"
@@ -67,7 +67,7 @@
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/orange"
+            android:textColor="@color/lightOrange"
             android:layout_centerHorizontal="true"
             android:text="@string/my_qr_code_title"
             android:textSize="@dimen/font_small"

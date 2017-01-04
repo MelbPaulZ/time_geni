@@ -25,7 +25,8 @@ public class WideArrowButton extends RelativeLayout {
     private ImageView arrowImageView;
     private String text;
     private int icon;
-    private static int FONT_SIZE = SizeCollector.FONT_BIG;
+    private int FONT_SIZE = SizeUtil.px2dp(getContext(), getContext().getResources().getDimension(R.dimen.font_big));
+    private int textColor = R.color.grey_one;
 
 
     public WideArrowButton(Context context, AttributeSet attrs) {
@@ -67,12 +68,12 @@ public class WideArrowButton extends RelativeLayout {
 
     private void initIcon(){
         iconImageView = new ImageView(getContext());
-        RelativeLayout.LayoutParams params = new LayoutParams(SizeUtil.dp2px(getContext(),40),
-                SizeUtil.dp2px(getContext(),40));
-        params.setMargins(SizeUtil.dp2px(getContext(),30),
-                SizeUtil.dp2px(getContext(),10),
-                SizeUtil.dp2px(getContext(),20),
-                SizeUtil.dp2px(getContext(),10));
+        RelativeLayout.LayoutParams params = new LayoutParams(SizeUtil.dp2px(getContext(),37),
+                SizeUtil.dp2px(getContext(),37));
+        params.setMargins(SizeUtil.dp2px(getContext(),15),
+                SizeUtil.dp2px(getContext(),9),
+                SizeUtil.dp2px(getContext(),11),
+                SizeUtil.dp2px(getContext(),9));
         params.addRule(ALIGN_PARENT_LEFT);
         params.addRule(CENTER_VERTICAL);
         iconImageView.setLayoutParams(params);
@@ -85,13 +86,14 @@ public class WideArrowButton extends RelativeLayout {
 
     private void initArrow(){
         arrowImageView = new ImageView(getContext());
-        RelativeLayout.LayoutParams params = new LayoutParams(SizeUtil.dp2px(getContext(),25),
-                SizeUtil.dp2px(getContext(),25));
-        params.setMargins(0, 0, SizeUtil.dp2px(getContext(),30), 0);
+        RelativeLayout.LayoutParams params = new LayoutParams(SizeUtil.dp2px(getContext(),8),
+                SizeUtil.dp2px(getContext(),13.5));
+        params.setMargins(0, 0, SizeUtil.dp2px(getContext(),12.5), 0);
         params.addRule(ALIGN_PARENT_RIGHT);
         params.addRule(CENTER_VERTICAL);
         arrowImageView.setLayoutParams(params);
         arrowImageView.setImageResource(R.drawable.arrow_icon);
+        arrowImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         this.addView(arrowImageView);
     }
 
@@ -105,6 +107,7 @@ public class WideArrowButton extends RelativeLayout {
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setSingleLine(true);
         textView.setTextSize(FONT_SIZE);
+        textView.setTextColor(getResources().getColor(textColor));
         textView.setText(text);
         this.addView(textView);
     }
