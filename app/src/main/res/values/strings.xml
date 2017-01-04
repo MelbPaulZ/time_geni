@@ -311,7 +311,7 @@
     <!--Contact Part-->
     <string name="my_qr_code_explain">Scan the QR code to add me on iTime</string>
     <string name="my_qr_code_title">My QR Code</string>
-    <string name="save_to_album">Save to album</string>
+    <string name="save_to_album">Save Photo</string>
     <string name="scan_qr_code">Scan QR code</string>
     <string name="qr_code">QR Code</string>
     <string name="scan_qr_code_explain">Align QR code within frame to scan</string>
@@ -325,11 +325,15 @@
     <string name="delete_fail">Delete failed, please check your network</string>
     <string name="add_fail">Add failed, please check your network</string>
     <string name="accept_fail">Accpt failed, please check your network</string>
-    <string name="album">Album</string>
-    <string name="search_hint">Type in E-mail</string>
+    <string name="album">Photo</string>
+    <string name="search_hint">Type in Email</string>
     <string name="save_qr_code_success">Save qr code success</string>
     <string name="save_qr_code_failed">Save qr code failed</string>
     <string name="Added">Added</string>
+    <string name="invite_to_an_event">Invite to an event</string>
+    <string name="add_to_contact">Add to contact</string>
+    <string name="request_sent">Request sent</string>
+    <string name="Accept">Accept</string>
 
 
     <!--setting-->

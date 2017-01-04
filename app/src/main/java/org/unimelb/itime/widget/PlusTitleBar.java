@@ -22,16 +22,17 @@ public class PlusTitleBar extends BaseTitleBar{
     private void initPlusTextView(){
         ImageView plusTextView = new ImageView(getContext());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                SizeUtil.dp2px(getContext(),25),
-                SizeUtil.dp2px(getContext(),25));
+                SizeUtil.dp2px(getContext(),16),
+                SizeUtil.dp2px(getContext(),16));
         params.addRule(CENTER_HORIZONTAL);
         params.addRule(CENTER_IN_PARENT);
         params.addRule(ALIGN_PARENT_RIGHT);
         params.setMargins(SizeUtil.dp2px(getContext(), 10),
                 0,
-                SizeUtil.dp2px(getContext(), 20),
+                SizeUtil.dp2px(getContext(), 10),
                 0);
         plusTextView.setLayoutParams(params);
+        plusTextView.setScaleType(ImageView.ScaleType.FIT_XY);
         plusTextView.setImageResource(R.drawable.icon_plus);
         rightView = plusTextView;
         this.addView(rightView);

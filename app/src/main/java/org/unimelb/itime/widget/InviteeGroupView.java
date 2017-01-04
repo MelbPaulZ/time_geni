@@ -9,6 +9,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Size;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -21,6 +23,7 @@ import com.squareup.picasso.Picasso;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.SizeCollector;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.util.SizeUtil;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
@@ -36,8 +39,8 @@ import java.util.Map;
 
 public class InviteeGroupView extends LinearLayout {
 
-    private int AVATAR_WIDTH_DEFAULT = dp2px(50);
-    private int AVATAR_HEIGHT_DEFAULT = dp2px(50);
+    private int AVATAR_WIDTH_DEFAULT = dp2px(44);
+    private int AVATAR_HEIGHT_DEFAULT = dp2px(44);
     private int SQUARE_HEIGHT_DEFAULT = 0;
     private List<? extends ITimeInviteeInterface> inviteeList;
 //    private final static int PHONE_COLOR_DEFAULT = Color.rgb(255,128,0);
@@ -45,13 +48,13 @@ public class InviteeGroupView extends LinearLayout {
     private FlowLayout avatarFlowLayout;
     private FlowLayout textFlowLayout;
     private PureEditText inputEditText;
-    private static int INPUT_FONT_SIZE = 15;
-    private static int ITEM_FONT_SIZE = 10;
+    private float INPUT_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_normal));
+    private float ITEM_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_tiny));
     private int avatarWidth;
     private int avatarHeight;
     private int squareHeight;
-    private int phoneColor = R.color.blue;
-    private int emailColor = R.color.blue;
+    private int phoneColor = R.color.lightBlue;
+    private int emailColor = R.color.lightBlue;
     private OnItemClickListener onInviteeClickListener;
     private OnEditListener onEditListener;
     private Map<String, View> inviteeMap;
@@ -87,35 +90,59 @@ public class InviteeGroupView extends LinearLayout {
         clearInput();
     }
 
+    private void hideFlowLayouts(){
+        avatarFlowLayout.setVisibility(GONE);
+        textFlowLayout.setVisibility(GONE);
+    }
+
+    private void showFlowLayouts(){
+        avatarFlowLayout.setVisibility(VISIBLE);
+        textFlowLayout.setVisibility(VISIBLE);
+    }
+
+
     public void setInviteeList(List<? extends ITimeInviteeInterface> inviteeList) {
         if(inviteeList!=null) {
             if(this.inviteeList==null){
                 this.inviteeList = inviteeList;
             }
+            if(inviteeList.isEmpty()){
+                hideFlowLayouts();
+            }else{
+                showFlowLayouts();
+            }
             clearViews();
             for (ITimeInviteeInterface invitee : inviteeList) {
                 addInvitee(invitee);
             }
+        }else{
+            hideFlowLayouts();
         }
     }
 
     private void initAvatarFlowLayout (){
         avatarFlowLayout = new FlowLayout(this.getContext());
-        ListView.LayoutParams params = new ListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, dp2px(15),0,0);
+        params.gravity = Gravity.CENTER_HORIZONTAL;
         avatarFlowLayout.setLayoutParams(params);
+        avatarFlowLayout.setSpace(6,14);
         this.addView(avatarFlowLayout);
     }
 
     private void initTextFlowLayout(){
         textFlowLayout = new FlowLayout(this.getContext());
-        ListView.LayoutParams params = new ListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER_HORIZONTAL;
         textFlowLayout.setLayoutParams(params);
+        textFlowLayout.setSpace(24, 14);
         this.addView(textFlowLayout);
     }
 
     private void initInputEditText(String hint){
         inputEditText = new PureEditText(this.getContext());
-        ListView.LayoutParams params = new ListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         inputEditText.setLayoutParams(params);
         inputEditText.setSingleLine(true);
         inputEditText.setHintTextColor(getResources().getColor(R.color.normalGrey));
@@ -142,6 +169,7 @@ public class InviteeGroupView extends LinearLayout {
     }
 
     public void addInvitee(ITimeInviteeInterface invitee){
+
         if(invitee.getUserStatus().equals(Invitee.USER_STATUS_ACTIVATED)){
             addAvatarInvitee(invitee);
         }else{
@@ -157,15 +185,15 @@ public class InviteeGroupView extends LinearLayout {
         TextView emailTextView = new TextView(this.getContext());
         emailTextView.setText(invitee.getUserId());
         if(squareHeight == 0){
-            ListView.LayoutParams params = new ListView.LayoutParams(SizeUtil.dp2px(getContext(), 102), SizeUtil.dp2px(getContext(), 22));
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SizeUtil.dp2px(getContext(), 120), ViewGroup.LayoutParams.WRAP_CONTENT);
             emailTextView.setLayoutParams(params);
         }else{
-            ListView.LayoutParams params = new ListView.LayoutParams(SizeUtil.dp2px(getContext(), 102), squareHeight);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SizeUtil.dp2px(getContext(), 120), squareHeight);
             emailTextView.setLayoutParams(params);
         }
 
         GradientDrawable drawable = new GradientDrawable();
-        drawable.setCornerRadius(dp2px(5));
+        drawable.setCornerRadius(dp2px(2.5));
         drawable.setColor(getResources().getColor(emailColor));
         emailTextView.setBackground(drawable);
         emailTextView.setPadding(dp2px(12),dp2px(5),dp2px(12),dp2px(5));
@@ -291,13 +319,13 @@ public class InviteeGroupView extends LinearLayout {
         void onClick(View view, ITimeInviteeInterface invitee);
     }
 
-    private int dp2px(float dipValue){
+    private int dp2px(double dipValue){
         Context context = getContext();
         float scale=context.getResources().getDisplayMetrics().densityDpi;
         return (int)(dipValue*(scale/160)+0.5f);
     }
 
-    private int px2dp(float pxValue){
+    private int px2dp(double pxValue){
         Context context = getContext();
         float scale = context.getResources().getDisplayMetrics().densityDpi;
         return (int)((pxValue*160)/scale+0.5f);

@@ -25,6 +25,7 @@
             android:layout_height="50dp"
             android:layout_width="match_parent"
             android:text="First"
+            android:textColor="@color/textBlue"
             android:gravity="center"
             />
 
@@ -35,7 +36,8 @@
             android:layout_width="match_parent"
             android:textSize="@dimen/font_big"
             android:layout_height="50dp"
-            android:text="First"
+            android:text="Second"
+            android:textColor="@color/textBlue"
             android:gravity="center"
             />
 
@@ -43,12 +45,14 @@
             android:id="@+id/cancelButton"
             android:background="@drawable/corner_border"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:textSize="@dimen/font_big"
             android:layout_height="50dp"
             android:text="Cacncel"
+            android:textStyle="bold"
             android:gravity="center"
-            android:textColor="@color/lightRed"
+            android:textColor="@color/textBlue"
             />
     </LinearLayout>
 </RelativeLayout>

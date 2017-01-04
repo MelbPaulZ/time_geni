@@ -29,7 +29,7 @@ public class SearchBar extends LinearLayout {
     private PureEditText inputText;
     private TextView cancelButton;
     private ImageView cleanIcon;
-    private int inputFontSize = SizeCollector.FONT_SMALL;
+    private int inputFontSize = 12;
     private OnEditListener onEditListener;
     private boolean onEditing;
     private boolean showCancel = false;
@@ -52,10 +52,10 @@ public class SearchBar extends LinearLayout {
         super(context, attrs);
 
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+                SizeUtil.dp2px(getContext(), 45));
         this.setOrientation(LinearLayout.HORIZONTAL);
         this.setLayoutParams(params);
-        this.setBackground(getResources().getDrawable(R.color.lightGrey));
+        this.setBackground(getResources().getDrawable(R.color.grey_two));
         this.initSearchButton();
         this.initInputView();
         this.hideInputView();
@@ -103,6 +103,7 @@ public class SearchBar extends LinearLayout {
         TextView search = new TextView(getContext());
         search.setLayoutParams(textParams);
         search.setText("Search");
+        search.setTextSize(inputFontSize);
 
         linearLayout.addView(icon);
         linearLayout.addView(search);
@@ -219,7 +220,7 @@ public class SearchBar extends LinearLayout {
                 SizeUtil.dp2px(getContext(),10));
         cancelButton.setLayoutParams(cancelButtonParams);
         cancelButton.setText("Cancel");
-        cancelButton.setTextColor(getResources().getColor(R.color.lightRed));
+        cancelButton.setTextColor(getResources().getColor(R.color.red_alert));
         cancelButton.setId(cancelButtonId);
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override

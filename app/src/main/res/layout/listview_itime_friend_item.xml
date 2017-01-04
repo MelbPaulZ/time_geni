@@ -13,36 +13,37 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
+            android:orientation="horizontal"
             android:id="@+id/firstLetterLayout"
-            android:background="@color/lightGrey"
+            android:background="@color/grey_two"
             android:visibility="@{viewModel.showFirstLetter?View.VISIBLE:View.GONE}">
             <TextView
+                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:textSize="@dimen/font_big"
+                android:textSize="@dimen/font_normal"
                 android:textColor="@color/black"
                 android:text="@{viewModel.contact.sortLetters}"
                 />
-        </FrameLayout>
+        </LinearLayout>
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/white">
             <org.unimelb.itime.widget.RoundImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
                 app:smallAvatar="@{viewModel.contact.photo}"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginBottom="11dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -53,13 +54,13 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:orientation="vertical"
-                android:layout_toRightOf="@+id/avatarView"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/avatarView">
             <TextView
                 android:text="@{viewModel.name}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/grey_one"
                 android:textSize="@dimen/font_big"
                 />
 
@@ -76,8 +77,7 @@
                 android:src="@{viewModel.selected?@drawable/icon_event_row_selected:@drawable/icon_event_row_unselected}"
                 android:visibility="@{viewModel.checkable?View.VISIBLE:View.GONE}"
                 android:layout_centerVertical="true"
-                android:layout_centerInParent="true"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="16dp"
                 android:id="@+id/selectImageView"
                 android:layout_alignParentRight="true"
                 />

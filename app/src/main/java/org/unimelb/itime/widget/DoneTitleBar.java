@@ -34,9 +34,10 @@ public class DoneTitleBar extends BaseTitleBar{
                 SizeUtil.dp2px(getContext(), 10),
                 SizeUtil.dp2px(getContext(), 10));
         doneTextView.setLayoutParams(params);
-        doneTextView.setTextColor(getResources().getColor(R.color.orange));
+        doneTextView.setTextColor(getResources().getColor(R.color.textBlue));
         doneTextView.setTextSize(getFontSize());
         doneTextView.setText("Done");
+        doneTextView.getPaint().setFakeBoldText(true);
         rightView = doneTextView;
         setShowRight(getShowRight());
         this.addView(rightView);

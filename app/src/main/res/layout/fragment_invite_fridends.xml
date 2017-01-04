@@ -10,16 +10,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/white">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/white">
+        >
 
         <org.unimelb.itime.widget.DoneTitleBar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/title_height"
             app:title="@{viewModel.title}"
             app:showLeft="@{viewModel.showTitleBack}"
             app:showRight="@{viewModel.showTitleRight}"
@@ -35,22 +36,22 @@
             android:id="@+id/friendsListView"
             />
 
-        <include layout="@layout/line" />
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="@{viewModel.searching?View.VISIBLE:View.GONE}"
             android:onClick="@{viewModel.addButtonListener}">
-
+            <include layout="@layout/line" />
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
                 android:src="@{viewModel.validInput?@drawable/blue_plus_icon:@drawable/grey_plus_icon}"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginBottom="11dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -61,19 +62,24 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:orientation="vertical"
-                android:layout_toRightOf="@+id/avatarView"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/avatarView">
 
                 <TextView
                     android:text="Add Invitee"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_big"
+                    android:textColor="@color/grey_four"/>
 
                 <TextView
                     android:text="@{viewModel.addButtonText}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@{viewModel.validInput?@color/blue:@color/normalGrey}"
+                    android:textSize="@dimen/font_normal"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="@{viewModel.validInput?@color/lightBlue:@color/grey_four}"
                     android:id="@+id/contactTextView" />
             </LinearLayout>
             <include layout="@layout/line"/>
@@ -81,10 +87,11 @@
     </LinearLayout>
         <TextView
             android:layout_marginTop="20dp"
-            android:layout_width="400dp"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:text= "*Sorry, currently iTime is only available to University of\n Melbourne E-mail Account."
-            android:textColor="@color/red"
+            android:text= "*Sorry, currently Timegenii is only available to University of Melbourne Email Account."
+            android:textColor="@color/red_alert"
+            android:textSize="@dimen/font_normal"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:visibility="@{viewModel.showAlertMsg?View.VISIBLE:View.GONE}"/>

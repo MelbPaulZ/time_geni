@@ -276,8 +276,8 @@ public class ProfileFragmentViewModel extends BaseObservable {
         deleteDialog.setTitle("Delete this contact?");
         deleteDialog.setExplain("Invitation from this contact will not be shown in your calendar,"
                 +" but will be shown in your message box");
-        deleteDialog.setDoText("Delete");
-        deleteDialog.setDoOnClickListener(new View.OnClickListener() {
+        deleteDialog.setRightText("Delete");
+        deleteDialog.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 deleteFriend();
@@ -290,8 +290,8 @@ public class ProfileFragmentViewModel extends BaseObservable {
         blockDialog = new ContactDialog(presenter.getView().getActivity());
         blockDialog.setTitle("Block this contact?");
         blockDialog.setExplain("Block this contact from sending you invitations");
-        blockDialog.setDoText("Block");
-        blockDialog.setDoOnClickListener(new View.OnClickListener() {
+        blockDialog.setRightText("Block");
+        blockDialog.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 blockFriend();

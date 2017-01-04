@@ -9,12 +9,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orange">
+    android:background="@color/lightOrange">
 
     <org.unimelb.itime.widget.BlackDotTitleBar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:title="@string/my_qr_code_title"
+        android:layout_height="@dimen/title_height"
+        app:title="@{viewModel.title}"
         app:showLeft="true"
         app:showRight="true"
         app:titleBackListener = "@{viewModel.titleBackListener}"
@@ -47,11 +47,9 @@
             android:orientation="horizontal"
             >
             <org.unimelb.itime.widget.RoundImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="57dp"
+                android:layout_height="57dp"
                 app:img="@{viewModel.user.photo}"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:id="@+id/avatarView"/>
@@ -66,14 +64,15 @@
                     android:text="@{viewModel.user.name}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/font_big"
+                    android:textSize="@dimen/font_huge"
                     android:id="@+id/nameTextView"
+                    android:textColor="@color/grey_one"
                     android:layout_alignParentLeft="true"
                     />
                 <ImageView
                     android:layout_marginLeft="5dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:visibility="@{viewModel.user.sex.equals(``)?View.VISIBLE:View.GONE}"
                     android:src="@{viewModel.user.sex.equals(`male`)?@drawable/male_icon:@drawable/female_icon}"
                     android:layout_gravity="center_vertical"
@@ -82,10 +81,10 @@
 
                 <TextView
                     android:text="@{viewModel.user.location}"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/orange"
+                    android:textColor="@color/lightOrange"
                     android:textSize="@dimen/font_small"
                     android:id="@+id/contactTextView"
                     android:layout_alignParentLeft="true"
@@ -99,13 +98,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="22.5dp">
         <ImageView
             android:layout_width="300dp"
             android:layout_height="300dp"
             app:qrcode="@{viewModel.myQRCode}"
-            android:src="@color/blue"
-
             />
             <RelativeLayout
                 android:layout_width="58dp"
@@ -121,12 +118,12 @@
         </RelativeLayout>
         <TextView
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/my_qr_code_explain"
-            android:textColor="@color/normalGrey"
+            android:textColor="@color/grey_one"
             android:textSize="@dimen/font_small"/>
     </LinearLayout>
     </RelativeLayout>
