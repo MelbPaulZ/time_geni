@@ -18,10 +18,17 @@ package org.unimelb.itime.widget.QRCode;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -31,13 +38,31 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageCropActivity;
+import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.imagepicker.view.CropImageView;
+import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.ActivityQrCodeScanBinding;
 import org.unimelb.itime.ui.activity.ContactBaseActivity;
 import org.unimelb.itime.ui.activity.MyQRCodeActivityContact;
+import org.unimelb.itime.ui.activity.PicassoImageLoader;
+import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.widget.QRCode.camera.CameraManager;
 import org.unimelb.itime.widget.QRCode.decode.DecodeThread;
 import org.unimelb.itime.widget.QRCode.utils.BeepManager;
@@ -45,8 +70,11 @@ import org.unimelb.itime.widget.QRCode.utils.CaptureActivityHandler;
 import org.unimelb.itime.widget.QRCode.utils.InactivityTimer;
 import org.unimelb.itime.ui.viewmodel.contact.QRCodeScanViewModel;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * This activity opens the camera and does the actual scanning on a background
@@ -62,10 +90,16 @@ public final class CaptureActivityContact extends ContactBaseActivity implements
     private static final String TAG = CaptureActivityContact.class.getSimpleName();
     public static final int MY_QR_CODE = 1;
     public static final String PREVIEW = "preview";
+    public static final int CHOOSE_FROM_LIBRARY = 0;
+    public static final int REQUEST_CODE = 1000;
+    String photo_path;
+
+    private Bitmap scanBitmap;
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
     private InactivityTimer inactivityTimer;
     private BeepManager beepManager;
+    private ImagePicker imagePicker;
 
     private int preview;
     private SurfaceView scanPreview = null;
@@ -95,6 +129,14 @@ public final class CaptureActivityContact extends ContactBaseActivity implements
         binding.setViewModel(viewModel);
         binding.executePendingBindings();
         setContentView(binding.getRoot());
+
+        imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
+        imagePicker.setMultiMode(false);
+        imagePicker.setShowCamera(false);
+        imagePicker.setCrop(false);        //允许裁剪（单选才有效）
+//        imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
+//        imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
 
         scanPreview = binding.capturePreview;
         scanContainer = binding.captureContainer;
@@ -139,6 +181,95 @@ public final class CaptureActivityContact extends ContactBaseActivity implements
             intent.putExtra(MyQRCodeActivityContact.PREVIEW, MyQRCodeActivityContact.SCAN_QR_CODE);
             startActivity(intent);
         }
+    }
+
+    public void goToPhotos(){
+//        Intent innerIntent = new Intent(Intent.ACTION_GET_CONTENT); //"android.intent.action.GET_CONTENT"
+//        innerIntent.setType("image/*");
+//        Intent wrapperIntent = Intent.createChooser(innerIntent, "选择二维码图片");
+//        this.startActivityForResult(wrapperIntent, REQUEST_CODE);
+        Intent intent = new Intent(this, ImageGridActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+            switch (requestCode) {
+                case REQUEST_CODE:
+                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                    photo_path = images.get(0).path;
+                    new Thread(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                            Result result = scanningImage(photo_path);
+                            // String result = decode(photo_path);
+                            if (result == null) {
+                                Looper.prepare();
+                                Toast.makeText(getApplicationContext(), "图片格式有误", Toast.LENGTH_SHORT)
+                                        .show();
+                                Looper.loop();
+                            } else {
+                                Log.i("123result", result.toString());
+                                String recode = result.toString();
+                                Intent data = new Intent();
+                                data.putExtra("result", recode);
+                                setResult(RESULT_OK, data);
+                                CaptureActivityContact.this.finish();
+                            }
+                        }
+                    }).start();
+                    break;
+            }
+        }
+    }
+
+    protected Result scanningImage(String path) {
+        if (TextUtils.isEmpty(path)) {
+
+            return null;
+
+        }
+        // DecodeHintType 和EncodeHintType
+        Hashtable<DecodeHintType, String> hints = new Hashtable<DecodeHintType, String>();
+        hints.put(DecodeHintType.CHARACTER_SET, "utf-8"); // 设置二维码内容的编码
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true; // 先获取原大小
+        scanBitmap = BitmapFactory.decodeFile(path, options);
+        options.inJustDecodeBounds = false; // 获取新的大小
+
+        int sampleSize = (int) (options.outHeight / (float) 200);
+
+        if (sampleSize <= 0)
+            sampleSize = 1;
+        options.inSampleSize = sampleSize;
+        scanBitmap = BitmapFactory.decodeFile(path, options);
+
+        int width = scanBitmap.getWidth();
+        int height = scanBitmap.getHeight();
+        int[] pixels = new int[width * height];
+        scanBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+
+        RGBLuminanceSource source = new RGBLuminanceSource(width,height,pixels);
+
+        BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
+        QRCodeReader reader = new QRCodeReader();
+        try {
+            return reader.decode(bitmap1, hints);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (ChecksumException e) {
+            e.printStackTrace();
+        } catch (FormatException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
     }
 
     @Override

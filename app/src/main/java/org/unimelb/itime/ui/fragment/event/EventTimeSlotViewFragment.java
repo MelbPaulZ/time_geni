@@ -76,12 +76,9 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
 
     public void setEvent(Event event) {
-        if (this.event!=null) {
-            ArrayList<Timeslot> previousTimeslots = (ArrayList<Timeslot>) this.event.getTimeslot();
-            event.setTimeslot(previousTimeslots);
-        }
         this.event = event;
         viewModel.setEvent(event);
+        resetCalendar(event); // try
     }
 
     public void resetCalendar(Event event) {
@@ -128,6 +125,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         }
         timeslotWeekView.reloadTimeSlots(false);
     }
+
 
     public void createTimeSlot(TimeSlotView timeSlotView) {
         Timeslot timeSlot = new Timeslot();
@@ -205,11 +203,21 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
     }
 
+    private boolean getTimeSlotIsSelected(Timeslot timeslot){
+        if (timeslot.getStatus().equals(Timeslot.STATUS_CREATING)){
+            return false;
+        }else if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
+            return true;
+        }
+
+        return false;
+    }
+
     // todo init
     private void initTimeSlots(Event event) {
         if (event.hasTimeslots()) {
             for (Timeslot timeSlot : event.getTimeslot()) {
-                timeslotWeekView.addTimeSlot(timeSlot);
+                timeslotWeekView.addTimeSlot(timeSlot,getTimeSlotIsSelected(timeSlot));
             }
         }
         timeslotWeekView.reloadTimeSlots(false);
@@ -234,11 +242,11 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
                 // have to do this
                 timeSlot.setEventUid(event.getEventUid());
                 timeSlot.setStatus(Timeslot.STATUS_CREATING);
-                // todo: need to check if this timeslot already exists in a map
                 event.getTimeslot().add(timeSlot);
                 timeslotWeekView.addTimeSlot(timeSlot);
             }
         }
+        viewModel.setEvent(event);
         timeslotWeekView.reloadTimeSlots(false);
     }
 

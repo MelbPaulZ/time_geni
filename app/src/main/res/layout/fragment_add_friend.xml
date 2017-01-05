@@ -14,7 +14,7 @@
     android:background="@color/white">
     <org.unimelb.itime.widget.PlusTitleBar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/title_height"
         app:title="@{mainViewModel.title}"
         app:titleBackListener = "@{mainViewModel.titleBackListener}"
         app:showLeft="@{mainViewModel.showTitileBack}"
@@ -70,13 +70,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <org.unimelb.itime.widget.WideArrowButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:image="@drawable/searching_icon"
-        app:text="@{mainViewModel.searchText}"
-        android:id="@+id/searchButton"
-        android:onClick="@{mainViewModel.searchButtonListener}"
-        android:visibility="@{mainViewModel.showSearch?View.VISIBLE:View.GONE}" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:image="@drawable/searching_icon"
+            app:text="@{mainViewModel.searchText}"
+            android:id="@+id/searchButton"
+            android:onClick="@{mainViewModel.searchButtonListener}"
+            android:visibility="@{mainViewModel.showSearch?View.VISIBLE:View.GONE}" />
         <include layout="@layout/line"/>
     </LinearLayout>
 
@@ -113,14 +113,16 @@
             android:layout_gravity="center_horizontal"
             android:visibility="@{mainViewModel.isUnimelb?View.GONE:View.VISIBLE}"
             android:onClick="@{()-> mainViewModel.setShowAlert(true)}"/>
-        
+
         <TextView
-            android:layout_width="340dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/red"
+            android:text= "*Sorry, currently Timegenii is only available to University of Melbourne Email Account."
+            android:textColor="@color/red_alert"
+            android:textSize="@dimen/font_normal"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text="*Sorry, currently iTime is only available to University of\n Melbourne E-mail Account."
             android:visibility="@{mainViewModel.showAlert?View.VISIBLE:View.GONE}"/>
 
 

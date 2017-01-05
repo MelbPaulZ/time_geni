@@ -124,7 +124,7 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
     @Override
     public void onResume() {
         super.onResume();
-        scrollTo(CalendarManager.getInstance().getCurrentShowCalendar());
+//        scrollTo(CalendarManager.getInstance().getCurrentShowCalendar());
 
     }
 

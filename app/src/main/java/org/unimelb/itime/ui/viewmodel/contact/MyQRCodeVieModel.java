@@ -25,6 +25,11 @@ public class MyQRCodeVieModel extends BaseObservable {
     private MyQRCodeMvpView mvpView;
 
     @Bindable
+    public String getTitle(){
+        return mvpView.getActivity().getResources().getString(R.string.my_qr_code_title);
+    }
+
+    @Bindable
     public ITimeUser getUser() {
         return user;
     }

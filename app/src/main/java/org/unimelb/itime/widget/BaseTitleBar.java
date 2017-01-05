@@ -3,6 +3,7 @@ package org.unimelb.itime.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Size;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,16 @@ import org.unimelb.itime.util.SizeUtil;
 
 public class BaseTitleBar  extends RelativeLayout {
     private LinearLayout backLayout;
-    private int fontSize = SizeCollector.FONT_EXTR;
+    private int fontSize = SizeUtil.px2dp(getContext(), getContext().getResources().getDimension(R.dimen.font_big));
     private String title;
-    private TextView titleTextView;
-    private View.OnClickListener backOnClickListener;
+    protected TextView titleTextView;
+    protected View.OnClickListener backOnClickListener;
     protected View rightView;
     protected View.OnClickListener rightOnClickListener;
+    protected ImageView backIcon;
+    protected TextView backText;
+
+    protected View leftView;
     private boolean showLeft = true;
     private boolean showRight = true;
 
@@ -40,9 +45,6 @@ public class BaseTitleBar  extends RelativeLayout {
         title = array.getString(R.styleable.BaseTitleBar_title);
         showRight = array.getBoolean(R.styleable.BaseTitleBar_showRight, true);
         showLeft = array.getBoolean(R.styleable.BaseTitleBar_showLeft, true);
-        this.setLayoutParams(new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
         this.setBackground(getResources().getDrawable(R.color.white));
         initBackLayout();
         initTileTextView();
@@ -57,24 +59,25 @@ public class BaseTitleBar  extends RelativeLayout {
         backLayout.setLayoutParams(backLayoutParams);
         backLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        ImageView backIcon = new ImageView(getContext());
+        backIcon = new ImageView(getContext());
         LinearLayout.LayoutParams backIconParams = new LinearLayout.LayoutParams(
-                SizeUtil.dp2px(getContext(),25),
-                SizeUtil.dp2px(getContext(),25));
-        backIconParams.setMargins(SizeUtil.dp2px(getContext(),10),
-                SizeUtil.dp2px(getContext(),10),
-                SizeUtil.dp2px(getContext(),10),
-                SizeUtil.dp2px(getContext(),10));
+                SizeUtil.dp2px(getContext(),12.5),
+                SizeUtil.dp2px(getContext(),21));
+        backIconParams.setMargins(SizeUtil.dp2px(getContext(),8),
+                0,
+                SizeUtil.dp2px(getContext(),6),
+                0);
         backIcon.setLayoutParams(backIconParams);
+        backIcon.setScaleType(ImageView.ScaleType.FIT_XY);
         backIcon.setImageResource(R.drawable.icon_general_arrow_back);
 
-        TextView backText = new TextView(getContext());
+        backText = new TextView(getContext());
         LinearLayout.LayoutParams backTextParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         backTextParams.gravity = Gravity.CENTER_VERTICAL;
         backText.setLayoutParams(backTextParams);
-        backText.setTextColor(getResources().getColor(R.color.normalGrey));
+        backText.setTextColor(getResources().getColor(R.color.grey_one));
         backText.setTextSize(fontSize);
         backText.setText("Back");
         backLayout.addView(backIcon);
@@ -92,9 +95,10 @@ public class BaseTitleBar  extends RelativeLayout {
         params.addRule(CENTER_HORIZONTAL);
         params.addRule(CENTER_IN_PARENT);
         titleTextView.setLayoutParams(params);
-        titleTextView.setTextColor(getResources().getColor(R.color.normalGrey));
         titleTextView.setText(title);
         titleTextView.setTextSize(fontSize);
+        titleTextView.getPaint().setFakeBoldText(true);
+        titleTextView.setTextColor(getResources().getColor(R.color.grey_one));
         this.addView(titleTextView);
     }
 
@@ -138,5 +142,13 @@ public class BaseTitleBar  extends RelativeLayout {
                 rightView.setVisibility(GONE);
             }
         }
+    }
+
+    public View getRightView(){
+        return  rightView;
+    }
+
+    public View getLeftView(){
+        return leftView;
     }
 }

@@ -70,16 +70,16 @@ public class MyQRCodeFragment extends BaseUiFragment<Object,MyQRCodeMvpView, MyQ
         View view = binding.QRCodeView;
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
-        Bitmap bitmap = convertViewToBitmap(view);
+        Bitmap bitmap = view.getDrawingCache();
         if(bitmap != null) {
             try{
                 File extDir = Environment.getExternalStorageDirectory();
-                String filename = "my qr code.png";
-                File foler = new File(extDir, "iTime");
-                if(!foler.exists()){
-                    foler.mkdir();
+                String filename = "qr_" + System.currentTimeMillis()+".png";
+                File folder = new File(extDir, "Timegenii");
+                if(!folder.exists()){
+                    folder.mkdir();
                 }
-                File file = new File(foler.getPath(), filename);
+                File file = new File(folder.getPath(), filename);
                 if(!file.exists()) {
                     file.createNewFile();
                 }
@@ -103,13 +103,6 @@ public class MyQRCodeFragment extends BaseUiFragment<Object,MyQRCodeMvpView, MyQ
         }else{
             getActivity().onBackPressed();
         }
-    }
-
-    private Bitmap convertViewToBitmap(View view){
-        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.buildDrawingCache();
-        return view.getDrawingCache();
     }
 
     @Override

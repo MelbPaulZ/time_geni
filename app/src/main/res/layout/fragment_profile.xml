@@ -13,7 +13,7 @@
     android:background="@android:color/white">
     <org.unimelb.itime.widget.DotTitleBar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/title_height"
         android:id="@+id/titleBar"
         app:title="@{viewModel.title}"
         app:showLeft="@{viewModel.showTitileBack}"
@@ -27,29 +27,29 @@
         android:layout_marginTop="50dp">
 
         <RelativeLayout
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_centerHorizontal="true"
             android:id="@+id/avatarView">
             <org.unimelb.itime.widget.RoundImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 app:border_inside_color="@color/lightGrey"
                 app:border_thickness="4dp"
                 app:avatar="@{viewModel.friend.aliasPhoto}"
                 />
             <RelativeLayout
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="7dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/background_block_icon"
                 android:visibility="@{viewModel.blocked?View.VISIBLE:View.GONE}">
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:src="@drawable/lock_icon"
                     android:layout_centerInParent="true"
                     android:id="@+id/block"/>
@@ -68,13 +68,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="@dimen/font_extra_plus"
                 android:text="@{viewModel.name}"
+                android:textColor="@color/grey_one"
                 android:id="@+id/nameTextView"/>
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="4dp"
                 android:src='@{viewModel.isMale? @drawable/male_icon : @drawable/female_icon}'
                 android:visibility="@{viewModel.showGender?View.VISIBLE:View.GONE}"
                 android:id="@+id/sexIcon"
@@ -83,8 +84,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12dp"
-            android:textColor="@color/orange"
+            android:textSize="@dimen/font_small"
+            android:textColor="@color/lightOrange"
             android:text="@{viewModel.location}"
             android:id="@+id/addressTextView"
             android:layout_centerHorizontal="true"
@@ -118,16 +119,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
                 android:id="@+id/EmailLayout"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:visibility="@{viewModel.showEmail?View.VISIBLE:View.GONE}">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{viewModel.email}"
             android:layout_gravity="center_horizontal"
-            android:textSize="16dp"
+            android:textSize="@dimen/font_big"
             android:gravity="center"
             android:id="@+id/emailTextView"
+            android:textColor="@color/grey_one"
             android:layout_marginBottom="10dp"/>
         <FrameLayout
             android:layout_width="match_parent"
@@ -140,18 +142,18 @@
 
     <org.unimelb.itime.widget.OrangeButton
         android:layout_width="260dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="40dp"
-        android:text="Invite to an event"
+        android:layout_height="53dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/invite_to_an_event"
         android:textSize="@dimen/font_big"
         android:layout_gravity="center_horizontal"
         android:onClick="@{viewModel.invitenListener}"
         android:id="@+id/inviteButton"/>
     <org.unimelb.itime.widget.BlueButton
         android:layout_width="260dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:text="Add to contact"
+        android:layout_height="53dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/add_to_contact"
         android:textSize="@dimen/font_big"
         android:visibility="@{viewModel.showAdd?View.VISIBLE:View.GONE}"
         android:gravity="center"
@@ -160,15 +162,26 @@
         android:id="@+id/addButton"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Request sent"
+        android:layout_width="260dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/request_sent"
         android:textSize="@dimen/font_big"
-        android:textColor="@color/blue"
+        android:textColor="@color/lightBlue"
         android:visibility="@{viewModel.showSent?View.VISIBLE:View.GONE}"
         android:gravity="center"
         android:layout_gravity="center_horizontal"
         />
+
+    <org.unimelb.itime.widget.BlueButton
+        android:layout_width="260dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/Accept"
+        android:textSize="@dimen/font_big"
+        android:visibility="@{viewModel.showAccept?View.VISIBLE:View.GONE}"
+        android:gravity="center"
+        android:onClick="@{viewModel.addListener}"
+        android:layout_gravity="center_horizontal"/>
 </LinearLayout>
 </layout>

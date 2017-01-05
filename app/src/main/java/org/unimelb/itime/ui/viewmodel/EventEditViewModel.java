@@ -33,7 +33,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import me.fesky.library.widget.ios.ActionSheetDialog;
 import me.tatarka.bindingcollectionadapter.ItemView;
+
+import static org.unimelb.itime.R.string.repeat;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -415,14 +418,39 @@ public class EventEditViewModel extends CommonViewModel {
                 Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
                 if (EventUtil.isEventRepeat(eventEditViewEvent)) {
                     // repeat event delete
-                    // todo implement delete this one
-                    presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                    if (eventEditViewEvent.getRecurrence().length==0) {
+                        presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                    }else{
+                        repeatDeletePopup(orgEvent);
+                    }
                 }else{
                     // none repeat event delete
                     presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
                 }
             }
         };
+    }
+
+    private void repeatDeletePopup(final Event orgEvent){
+        ActionSheetDialog actionSheetDialog= new ActionSheetDialog(getContext())
+                .builder()
+                .setCancelable(true)
+                .setCanceledOnTouchOutside(true)
+                .addSheetItem(getContext().getString(R.string.event_delete_repeat_text1), ActionSheetDialog.SheetItemColor.Black,
+                        new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_THIS, orgEvent.getStartTime());
+                            }
+                        })
+                .addSheetItem(getContext().getString(R.string.event_delete_repeat_text2), ActionSheetDialog.SheetItemColor.Black,
+                        new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int i) {
+                                presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_FOLLOWING, orgEvent.getStartTime());
+                            }
+                        });
+        actionSheetDialog.show();
     }
 
     public View.OnClickListener pickPhoto(){

@@ -1,7 +1,5 @@
 package org.unimelb.itime.bean;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
 import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 
 import java.io.Serializable;
@@ -58,8 +56,6 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     public String getStatus() {
         return this.status;
     }
-
-    @Override
     public int getAcceptedNum() {
         return acceptedNum;
     }

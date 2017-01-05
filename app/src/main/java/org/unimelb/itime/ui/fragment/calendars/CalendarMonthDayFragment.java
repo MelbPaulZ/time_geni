@@ -213,7 +213,8 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
     @Override
     public void onResume() {
         super.onResume();
-        scrollTo(CalendarManager.getInstance().getCurrentShowCalendar());
+        // to check
+//        scrollTo(CalendarManager.getInstance().getCurrentShowCalendar());
 
     }
 
