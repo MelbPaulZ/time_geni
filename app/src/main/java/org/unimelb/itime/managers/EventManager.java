@@ -12,7 +12,9 @@ import org.unimelb.itime.bean.ITimeComparable;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -526,6 +528,19 @@ public class EventManager {
             }
         }
         return null;
+    }
+
+
+    public void initNewEvent(Calendar startTimeCalendar){
+        // initial default values for new event
+        Event event = new Event();
+        setCurrentEvent(event);
+        event.setEventUid(AppUtil.generateUuid());
+        event.setHostUserUid(UserUtil.getInstance(context).getUserUid());
+        long endTime = startTimeCalendar.getTimeInMillis() + 3600 * 1000;
+        event.setStartTime(startTimeCalendar.getTimeInMillis());
+        event.setEndTime(endTime);
+        setCurrentEvent(event);
     }
 
 

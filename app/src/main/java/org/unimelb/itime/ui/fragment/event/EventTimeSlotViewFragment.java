@@ -76,27 +76,32 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
 
     public void setEvent(Event event) {
-        if (this.event!=null) {
-            ArrayList<Timeslot> previousTimeslots = (ArrayList<Timeslot>) this.event.getTimeslot();
-            event.setTimeslot(previousTimeslots);
-        }
         this.event = event;
         viewModel.setEvent(event);
+        resetCalendar(event); // try
     }
 
     public void resetCalendar(Event event) {
         timeslotWeekView.resetTimeSlots();
         initTimeSlots(event);
+//        scrollToFstTimeSlot(event);
+    }
+
+    private void scrollToFstTimeSlot(Event event){
+        List<Timeslot> slots = event.getTimeslot();
+        if (slots.size() > 0){
+            timeslotWeekView.scrollToWithOffset(slots.get(0).getStartTime());
+        }
     }
 
     private void changeTimeSlots(TimeSlotView timeSlotView) {
         // change status of view and struct
         boolean newStatus = !timeSlotView.isSelect();
         Timeslot timeSlot = (Timeslot) timeSlotView.getTimeslot();
-        timeSlotView.setStatus(newStatus);
+        timeSlotView.setIsSelected(newStatus);
         // change event attributes
         if (timeSlot != null) {
-            timeSlot.setDisplayStatus(newStatus);
+//            timeSlot.setDisplayStatus(newStatus);
 
             if (timeSlot.getStatus().equals(Timeslot.STATUS_CREATING)) {
                 timeSlot.setStatus(Timeslot.STATUS_PENDING);
@@ -120,6 +125,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         }
         timeslotWeekView.reloadTimeSlots(false);
     }
+
 
     public void createTimeSlot(TimeSlotView timeSlotView) {
         Timeslot timeSlot = new Timeslot();
@@ -188,7 +194,6 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         });
     }
 
-
     private void timeslotDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
         // update timeslot info
         Timeslot timeslot = (Timeslot) timeSlotView.getTimeslot();
@@ -198,13 +203,21 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
     }
 
+    private boolean getTimeSlotIsSelected(Timeslot timeslot){
+        if (timeslot.getStatus().equals(Timeslot.STATUS_CREATING)){
+            return false;
+        }else if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
+            return true;
+        }
 
+        return false;
+    }
 
     // todo init
     private void initTimeSlots(Event event) {
         if (event.hasTimeslots()) {
             for (Timeslot timeSlot : event.getTimeslot()) {
-                timeslotWeekView.addTimeSlot(timeSlot);
+                timeslotWeekView.addTimeSlot(timeSlot,getTimeSlotIsSelected(timeSlot));
             }
         }
         timeslotWeekView.reloadTimeSlots(false);
@@ -229,11 +242,11 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
                 // have to do this
                 timeSlot.setEventUid(event.getEventUid());
                 timeSlot.setStatus(Timeslot.STATUS_CREATING);
-                // todo: need to check if this timeslot already exists in a map
                 event.getTimeslot().add(timeSlot);
                 timeslotWeekView.addTimeSlot(timeSlot);
             }
         }
+        viewModel.setEvent(event);
         timeslotWeekView.reloadTimeSlots(false);
     }
 
@@ -252,7 +265,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
             EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFrom();
             beforeSendingFragment.setEvent(event);
-            openFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
+            openFragment(this, getFrom());
         }
     }
 

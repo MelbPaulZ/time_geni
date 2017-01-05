@@ -1,6 +1,8 @@
 package org.unimelb.itime.ui.fragment.contact;
 
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,12 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.bean.Contact;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.databinding.FragmentProfileBinding;
 import org.unimelb.itime.ui.mvpview.contact.ProfileMvpView;
 import org.unimelb.itime.ui.presenter.contact.ProfileFragmentPresenter;
 import org.unimelb.itime.ui.viewmodel.contact.ProfileFragmentViewModel;
+import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.activity.EventCreateActivity;
+import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.rulefactory.InviteeUtil;
+
+import java.util.Calendar;
 
 /**
  * Created by 37925 on 2016/12/9.
@@ -89,7 +99,13 @@ public class ProfileFragment extends BaseContactFragment<ProfileMvpView, Profile
     }
 
     public void goToInviteFragment(Contact contact){
-        
+        Intent intent = new Intent(getActivity(), EventCreateActivity.class);
+        intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_INVITE_OTHER_CREATE_EVENT);
+        Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
+        EventManager.getInstance(getContext()).initNewEvent(Calendar.getInstance());
+        Event event = EventManager.getInstance(getContext()).getCurrentEvent();
+        event.addInvitee(InviteeUtil.getInstance().contactToInvitee(contact, event));
+        startActivityForResult(intent, EventUtil.ACTIVITY_CREATE_EVENT,bundleAnimation);
     }
 
     public void init(Contact contact){

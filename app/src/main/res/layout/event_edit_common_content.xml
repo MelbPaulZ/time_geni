@@ -5,7 +5,7 @@
         <import type="org.unimelb.itime.util.TimeSlotUtil"/>
         <import type="android.view.View"/>
         <import type="org.unimelb.itime.util.CalendarUtil"/>
-        <import type="org.unimelb.itime.ui.viewmodel.EventEditViewModel.PickerTask"/>
+        <import type="org.unimelb.itime.ui.viewmodel.EventCommonViewModel.PickerTask"/>
         <variable
             name="eventEditVM"
             type="org.unimelb.itime.ui.viewmodel.EventEditViewModel"/>
@@ -120,7 +120,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/table_row_border"
-                android:onClick="@{eventEditVM.onChangeTime(PickerTask.END_REPEAT)}"
+                android:onClick="@{eventEditVM.onChangeDate(PickerTask.END_REPEAT)}"
                 android:orientation="horizontal"
                 android:visibility="@{EventUtil.isEventRepeat(eventEditVM.eventEditViewEvent) ? View.VISIBLE : View.GONE}">
 
@@ -292,61 +292,60 @@
                 android:checked="@{eventEditVM.isAllDayEvent}" />
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/table_row_border"
-            android:onClick="@{eventEditVM.onChangeTime(PickerTask.START_TIME)}"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:visibility="@{eventEditVM.startTimeVisibility}">
-
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Starts"
-                android:textColor="@color/text_enable"
-                android:textSize="16dp" />
+                style="@style/itime_blacktitle_17sp"
+                android:text="Starts" />
 
             <TextView
                 android:id="@+id/create_event_start_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/padding_10"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="@{EventUtil.parseTimeToString(context, eventEditVM.eventEditViewEvent.startTime)}"
-                android:textColor="@color/text_enable"
-                android:textSize="16dp" />
-        </LinearLayout>
+                style="@style/itime_select_time_16sp"
+                android:onClick="@{eventEditVM.onChangeTime(PickerTask.START_TIME)}"
+                android:text="@{EventUtil.getSelectTimeStringFromLong(context, eventEditVM.eventEditViewEvent.startTime)}"
+                android:textColor="@color/text_enable" />
 
-        <LinearLayout
+            <TextView
+                style="@style/itime_select_date_16sp"
+                android:onClick="@{eventEditVM.onChangeDate(PickerTask.START_TIME)}"
+                android:text="@{EventUtil.getSelectDateStringFromLong(context, eventEditVM.eventEditViewEvent.startTime)}"
+                android:layout_toLeftOf="@+id/create_event_start_time"
+                android:layout_marginRight="15dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/table_row_border"
-            android:onClick="@{eventEditVM.onChangeTime(PickerTask.END_TIME)}"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:visibility="@{eventEditVM.endTimeVisibility}">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ends"
-                android:textColor="@color/text_enable"
-                android:textSize="16dp" />
+                style="@style/itime_blacktitle_17sp"
+                android:text="Ends" />
 
             <TextView
                 android:id="@+id/create_event_end_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/padding_10"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="@{EventUtil.parseTimeToString(context, eventEditVM.eventEditViewEvent.endTime)}"
-                android:textColor="@color/text_enable"
-                android:textSize="16dp" />
-        </LinearLayout>
+                style="@style/itime_select_time_16sp"
+                android:onClick="@{eventEditVM.onChangeTime(PickerTask.END_TIME)}"
+                android:text="@{EventUtil.getSelectTimeStringFromLong(context, eventEditVM.eventEditViewEvent.endTime)}"
+                android:textColor="@color/text_enable" />
+
+            <TextView
+                style="@style/itime_select_date_16sp"
+                android:onClick="@{eventEditVM.onChangeDate(PickerTask.END_TIME)}"
+                android:text="@{EventUtil.getSelectDateStringFromLong(context, eventEditVM.eventEditViewEvent.endTime)}"
+                android:layout_toLeftOf="@+id/create_event_end_time"
+                android:layout_marginRight="15dp"
+                />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -396,7 +395,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="@string/calendar_type"
+                    android:text="@string/calendar"
                     android:textColor="@color/text_enable"
                     android:textSize="17dp" />
 

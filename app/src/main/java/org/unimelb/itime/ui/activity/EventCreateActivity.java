@@ -11,8 +11,6 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -22,11 +20,11 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
-import org.unimelb.itime.ui.fragment.event.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.event.EventTimeSlotCreateFragment;
 import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
@@ -35,9 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class EventCreateActivity extends AppCompatActivity implements PlaceSelectionListener {
+public class EventCreateActivity extends BaseActivity implements PlaceSelectionListener {
     private String TAG = "EventCreateActivity";
-
+    private String TASK = "task";
     private List<BaseUiFragment> fragmentList = new ArrayList<>();
     private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
@@ -50,33 +48,50 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_create);
         initFragments();
-        Log.i(TAG, "onCreate: "+ System.currentTimeMillis());
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume: " + System.currentTimeMillis());
-    }
 
     public void initFragments(){
-        fragmentList.add(new EventCreateNewFragment());
-
-        hideAllFragments();
-        getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
-        initRestFragments();
+        Intent intent = getIntent();
+        int task = intent.getIntExtra(TASK, -100);
+        if (task!=-100){
+            showFirstFragment(task);
+        }
     }
 
-    private void initRestFragments(){
+    private void showFirstFragment(int task){
+//        if (task == BaseActivity.TASK_SELF_CREATE_EVENT){
+//            EventCreateNewFragment createNewFragment = new EventCreateNewFragment();
+//            fragmentList.add(createNewFragment);
+//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, createNewFragment, createNewFragment.getClassName()).show(fragmentList.get(0)).commit();
+//            initRestFragments(task);
+//        }else if (task == BaseActivity.TASK_INVITE_OTHER_CREATE_EVENT){
+            EventCreateDetailBeforeSendingFragment beforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
+            fragmentList.add(beforeSendingFragment);
+            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, beforeSendingFragment, beforeSendingFragment.getClassName()).show(beforeSendingFragment).commit();
+            initRestFragments(task);
+//        }
+    }
+
+    private void initRestFragments(final int task){
         new Thread(){
             @Override
             public void run() {
                 super.run();
+//                if (task == BaseActivity.TASK_SELF_CREATE_EVENT) {
+//                    fragmentList.add(new InviteeFragment());
+//                    fragmentList.add(new EventTimeSlotViewFragment());
+//                    fragmentList.add(new EventCreateDetailBeforeSendingFragment());
+//                    fragmentList.add(new EventLocationPickerFragment());
+//                    fragmentList.add(new EventTimeSlotCreateFragment());
+//                }else{
+//                    fragmentList.add(new EventCreateNewFragment());
                 fragmentList.add(new InviteeFragment());
                 fragmentList.add(new EventTimeSlotViewFragment());
                 fragmentList.add(new EventCreateDetailBeforeSendingFragment());
                 fragmentList.add(new EventLocationPickerFragment());
                 fragmentList.add(new EventTimeSlotCreateFragment());
+//                }
                 handler.sendEmptyMessage(0);
             }
         }.start();
@@ -137,13 +152,13 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
             case ACTIVITY_PHOTOPICKER: {
                 if (resultCode == Activity.RESULT_OK) {
                     ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-                    if (tag==getString(R.string.tag_create_event)){
-                        EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getSupportFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-                        eventCreateNewFragment.setPhotos(result);
-                    }else if (tag== getString(R.string.tag_create_event_before_sending)){
+//                    if (tag==getString(R.string.tag_create_event)){
+//                        EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getSupportFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
+//                        eventCreateNewFragment.setPhotos(result);
+//                    }else if (tag== getString(R.string.tag_create_event_before_sending)){
                         EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getSupportFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
                         eventCreateDetailBeforeSendingFragment.setPhotos(result);
-                    }
+//                    }
                 }
             }
         }
@@ -161,7 +176,6 @@ public class EventCreateActivity extends AppCompatActivity implements PlaceSelec
 
     @Subscribe
     public void gotoUrl(MessageUrl messageUrl) {
-        Log.i("get subscribe", messageUrl.url);
         Uri uri;
         if (messageUrl.url.startsWith("http")) {
             uri = Uri.parse(messageUrl.url);

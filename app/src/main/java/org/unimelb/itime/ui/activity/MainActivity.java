@@ -29,6 +29,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.ActivityMainBinding;
@@ -197,30 +198,20 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     public void startEventCreateActivity(){
         Intent intent = new Intent(this,EventCreateActivity.class);
+        intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_SELF_CREATE_EVENT);
         Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
         Calendar calendar = Calendar.getInstance();
-        initNewEvent(calendar);
+        EventManager.getInstance(getApplicationContext()).initNewEvent(calendar);
         startActivityForResult(intent, EventUtil.ACTIVITY_CREATE_EVENT,bundleAnimation);
     }
     public void startEventCreateActivity(Calendar startTime){
         Intent intent = new Intent(this, EventCreateActivity.class);
+        intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_SELF_CREATE_EVENT);
         Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
-        initNewEvent(startTime);
+        EventManager.getInstance(getApplicationContext()).initNewEvent(startTime);
         startActivityForResult(intent, EventUtil.ACTIVITY_CREATE_EVENT,bundleAnimation);
     }
 
-
-    public void initNewEvent(Calendar startTimeCalendar){
-        // initial default values for new event
-        Event event = eventManager.getNewEvent();
-        eventManager.setCurrentEvent(event);
-        event.setEventUid(AppUtil.generateUuid());
-        event.setHostUserUid(UserUtil.getInstance(getApplicationContext()).getUserUid());
-        long endTime = startTimeCalendar.getTimeInMillis() + 3600 * 1000;
-        event.setStartTime(startTimeCalendar.getTimeInMillis());
-        event.setEndTime(endTime);
-        eventManager.setCurrentEvent(event);
-    }
 
 
     @Override

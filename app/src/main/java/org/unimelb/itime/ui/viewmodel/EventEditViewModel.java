@@ -33,12 +33,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import me.fesky.library.widget.ios.ActionSheetDialog;
 import me.tatarka.bindingcollectionadapter.ItemView;
+
+import static org.unimelb.itime.R.string.repeat;
 
 /**
  * Created by Paul on 28/08/2016.
  */
-public class EventEditViewModel extends CommonViewModel {
+public class EventEditViewModel extends EventCommonViewModel {
 
     private Event eventEditViewEvent;
     private EventCommonPresenter<EventEditMvpView> presenter;
@@ -48,18 +51,10 @@ public class EventEditViewModel extends CommonViewModel {
     private PickerTask currentTask;
     private int startTimeVisibility, endTimeVisibility;
 
-    private DatePickerDialog datePickerDialog;
-    private DatePickerDialog.OnDateSetListener dateSetListener;
-    private TimePickerDialog timePickerDialog;
-    private TimePickerDialog.OnTimeSetListener timeSetListener;
-    private int editYear, editMonth, editDay, editHour, editMinute;
 
     private List<Timeslot> timeslotList = new ArrayList<>();
     private ItemView itemView = ItemView.of(BR.timeslot, R.layout.timeslot_listview_show);
 
-    public enum PickerTask{
-        START_TIME, END_TIME, END_REPEAT
-    }
     private EventManager eventManager;
     private boolean isEndTimeChanged = false;
 
@@ -80,15 +75,20 @@ public class EventEditViewModel extends CommonViewModel {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 switch (currentTask){
                     case END_TIME:
-                        onEndDateSelected(year, monthOfYear, dayOfMonth);
+                        eventEditViewEvent.setEndTime(updateYearMonthDay(eventEditViewEvent.getEndTime(), year, monthOfYear, dayOfMonth).getTimeInMillis());
+                        isEndTimeChanged = true;
                         break;
                     case START_TIME:
-                        onStartDateSelected(year, monthOfYear, dayOfMonth);
+                        eventEditViewEvent.setStartTime(updateYearMonthDay(eventEditViewEvent.getStartTime(), year, monthOfYear, dayOfMonth).getTimeInMillis());
+                        if (!isEndTimeChanged){
+                            eventEditViewEvent.setEndTime(eventEditViewEvent.getStartTime() + 60 * 60 * 1000);
+                        }
                         break;
                     case END_REPEAT:
                         onEndRepeatSelected(year, monthOfYear, dayOfMonth);
                         break;
                 }
+                notifyPropertyChanged(BR.eventEditViewEvent);
             }
         };
 
@@ -97,14 +97,29 @@ public class EventEditViewModel extends CommonViewModel {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 switch (currentTask){
                     case END_TIME:
-                        onEndTimeSelected(hourOfDay, minute);
+                        eventEditViewEvent.setEndTime(updateHourMin(eventEditViewEvent.getEndTime(),hourOfDay, minute).getTimeInMillis());
+                        isEndTimeChanged = true;
                         break;
                     case START_TIME:
-                        onStartTimeSelected(hourOfDay, minute);
+                        eventEditViewEvent.setStartTime(updateHourMin(eventEditViewEvent.getStartTime(), hourOfDay, minute).getTimeInMillis());
+                        if (!isEndTimeChanged){
+                            eventEditViewEvent.setEndTime(eventEditViewEvent.getStartTime() + 60 * 60 * 1000);
+                        }
                         break;
                 }
+                notifyPropertyChanged(BR.eventEditViewEvent);
             }
         };
+    }
+
+
+
+    private void onEndRepeatSelected(int year, int monthOfYear, int dayOfMonth){
+        Calendar c = Calendar.getInstance();
+        c.set(year, monthOfYear, dayOfMonth);
+        eventEditViewEvent.getRule().setUntil(c.getTime());
+        eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence());
+        notifyPropertyChanged(BR.eventEditViewEvent);
     }
 
     /**
@@ -122,59 +137,6 @@ public class EventEditViewModel extends CommonViewModel {
                 }
             }
         };
-    }
-
-
-    private void onEndDateSelected(int year, int monthOfYear, int dayOfMonth){
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(eventEditViewEvent.getEndTime());
-        timePickerDialog = new TimePickerDialog(getContext(),
-                AlertDialog.THEME_HOLO_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
-        timePickerDialog.show();
-        editYear = year;
-        editMonth = monthOfYear;
-        editDay = dayOfMonth;
-    }
-
-    private void onStartDateSelected(int year, int monthOfYear, int dayOfMonth){
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(eventEditViewEvent.getStartTime());
-        timePickerDialog = new TimePickerDialog(getContext(),
-                AlertDialog.THEME_HOLO_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
-        timePickerDialog.show();
-        editYear = year;
-        editMonth = monthOfYear;
-        editDay = dayOfMonth;
-    }
-
-    private void onEndRepeatSelected(int year, int monthOfYear, int dayOfMonth){
-        Calendar c = Calendar.getInstance();
-        c.set(year, monthOfYear, dayOfMonth);
-        eventEditViewEvent.getRule().setUntil(c.getTime());
-        eventEditViewEvent.setRecurrence(eventEditViewEvent.getRule().getRecurrence());
-        notifyPropertyChanged(BR.eventEditViewEvent);
-    }
-
-    private void onEndTimeSelected(int hour, int minute){
-        Calendar c = Calendar.getInstance();
-        editHour = hour;
-        editMinute = minute;
-        c.set(editYear, editMonth, editDay, editHour, editMinute);
-        eventEditViewEvent.setEndTime(c.getTimeInMillis());
-        isEndTimeChanged = true;
-        notifyPropertyChanged(BR.eventEditViewEvent);
-    }
-
-    private void onStartTimeSelected(int hour, int minute){
-        Calendar c = Calendar.getInstance();
-        editHour = hour;
-        editMinute = minute;
-        c.set(editYear, editMonth, editDay, editHour, editMinute);
-        eventEditViewEvent.setStartTime(c.getTimeInMillis());
-        if (!isEndTimeChanged){
-            eventEditViewEvent.setEndTime(c.getTimeInMillis() + 60 * 60 * 1000);
-        }
-        notifyPropertyChanged(BR.eventEditViewEvent);
     }
 
 
@@ -383,7 +345,7 @@ public class EventEditViewModel extends CommonViewModel {
             public void onClick(View view) {
                 final CharSequence[] calendarType;
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
-                builder.setTitle(getContext().getString(R.string.choose_alert_time));
+                builder.setTitle(getContext().getString(R.string.calendar));
                 calendarType = EventUtil.getCalendarTypes(getContext());
                 builder.setItems(calendarType, new DialogInterface.OnClickListener() {
                     @Override
@@ -415,14 +377,39 @@ public class EventEditViewModel extends CommonViewModel {
                 Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
                 if (EventUtil.isEventRepeat(eventEditViewEvent)) {
                     // repeat event delete
-                    // todo implement delete this one
-                    presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                    if (eventEditViewEvent.getRecurrence().length==0) {
+                        presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                    }else{
+                        repeatDeletePopup(orgEvent);
+                    }
                 }else{
                     // none repeat event delete
                     presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
                 }
             }
         };
+    }
+
+    private void repeatDeletePopup(final Event orgEvent){
+        ActionSheetDialog actionSheetDialog= new ActionSheetDialog(getContext())
+                .builder()
+                .setCancelable(true)
+                .setCanceledOnTouchOutside(true)
+                .addSheetItem(getContext().getString(R.string.event_delete_repeat_text1), ActionSheetDialog.SheetItemColor.Black,
+                        new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_THIS, orgEvent.getStartTime());
+                            }
+                        })
+                .addSheetItem(getContext().getString(R.string.event_delete_repeat_text2), ActionSheetDialog.SheetItemColor.Black,
+                        new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int i) {
+                                presenter.deleteEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_FOLLOWING, orgEvent.getStartTime());
+                            }
+                        });
+        actionSheetDialog.show();
     }
 
     public View.OnClickListener pickPhoto(){
@@ -473,8 +460,27 @@ public class EventEditViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.editEventIsRepeat);
     }
 
-    // TODO: 11/12/2016 implement starttime, endtime, endRepeat change
     public View.OnClickListener onChangeTime(final PickerTask task){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentTask = task;
+                Calendar c = Calendar.getInstance();
+                switch (currentTask){
+                    case END_TIME:
+                        c.setTimeInMillis(eventEditViewEvent.getEndTime());
+                        break;
+                    case START_TIME:
+                        c.setTimeInMillis(eventEditViewEvent.getStartTime());
+                }
+                timePickerDialog = new TimePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, timeSetListener,
+                        c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+                timePickerDialog.show();
+            }
+        };
+    }
+
+    public View.OnClickListener onChangeDate(final PickerTask task){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -483,7 +489,7 @@ public class EventEditViewModel extends CommonViewModel {
                 switch (currentTask){
                     case END_REPEAT:
                         if (eventEditViewEvent.getRule().getUntil()!=null){
-                           c.setTime(eventEditViewEvent.getRule().getUntil());
+                            c.setTime(eventEditViewEvent.getRule().getUntil());
                         }
                         break;
                     case END_TIME:

@@ -18,7 +18,9 @@ import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.timeslot.TimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
+import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
+import java.sql.Wrapper;
 import java.util.Calendar;
 
 /**
@@ -195,16 +197,12 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         weekView.resetTimeSlots();
         if (eventDetailHostEvent.hasTimeslots()){
             for (Timeslot timeslot : eventDetailHostEvent.getTimeslot()){
-//                WeekView.TimeSlotStruct struct = new WeekView.TimeSlotStruct();
-//                struct.startTime = timeslot.getStartTime();
-//                struct.endTime = timeslot.getEndTime();
-//                struct.object = timeslot;
+
                 if (timeslot.getStatus().equals(Timeslot.STATUS_CREATING)){
-                    timeslot.setDisplayStatus(false);
+                    weekView.addTimeSlot(timeslot,false);
                 }else if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
-                    timeslot.setDisplayStatus(true);
+                    weekView.addTimeSlot(timeslot,true);
                 }
-                weekView.addTimeSlot(timeslot);
             }
         }
         final WeekView wv = weekView;
@@ -224,30 +222,30 @@ public class EventDetailTimeSlotViewModel extends BaseObservable {
         weekView.resetTimeSlots();
         if (eventDetailHostEvent.hasTimeslots()){
             for (Timeslot timeslot : eventDetailHostEvent.getTimeslot()){
-
-                setTimeslotFromDetailFragment(timeslot);
-                weekView.addTimeSlot(timeslot);
+                weekView.addTimeSlot(timeslot,getTimeslotIsSelected(timeslot));
             }
         }
         weekView.reloadTimeSlots(false);
     }
 
-    private void setTimeslotFromDetailFragment(Timeslot timeslot){
+    private boolean getTimeslotIsSelected(Timeslot timeslot){
         if (EventUtil.isUserHostOfEvent(getContext(), eventDetailHostEvent)){
             // user is host
             if (timeslot.getIsConfirmed()==1){
-                timeslot.setDisplayStatus(true);
+                return true;
             }else if (timeslot.getIsConfirmed()==0){
-                timeslot.setDisplayStatus(false);
+                return false;
             }
         }else{
             // user is invitee
             if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
-                timeslot.setDisplayStatus(false);
+                return false;
             }else if (timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
-                timeslot.setDisplayStatus(true);
+                return true;
             }
         }
+
+        return false;
     }
 
 
