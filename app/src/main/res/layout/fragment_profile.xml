@@ -181,7 +181,19 @@
         android:textSize="@dimen/font_big"
         android:visibility="@{viewModel.showAccept?View.VISIBLE:View.GONE}"
         android:gravity="center"
-        android:onClick="@{viewModel.addListener}"
+        android:onClick="@{viewModel.acceptListener}"
         android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="260dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/Accepted"
+        android:textSize="@dimen/font_big"
+        android:textColor="@color/lightBlue"
+        android:visibility="@{viewModel.showAccepted?View.VISIBLE:View.GONE}"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        />
 </LinearLayout>
 </layout>

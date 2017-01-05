@@ -106,7 +106,7 @@ public class RequestFriendItemViewModel extends BaseObservable {
         }
 
         public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.accept_fail),Toast.LENGTH_SHORT);
+            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.accept_fail),Toast.LENGTH_SHORT).show();
         }
     }
 }

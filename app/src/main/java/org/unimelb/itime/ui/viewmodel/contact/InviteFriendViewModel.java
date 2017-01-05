@@ -568,7 +568,9 @@ public class InviteFriendViewModel extends BaseObservable {
        return new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               presenter.getView().gotoScanQRCode();
+               if(presenter.getView()!=null) {
+                   presenter.getView().gotoScanQRCode();
+               }
            }
        };
 

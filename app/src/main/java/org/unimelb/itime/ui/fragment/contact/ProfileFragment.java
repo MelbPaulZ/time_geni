@@ -7,20 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
-
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.FriendRequest;
-import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentProfileBinding;
-import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.ui.mvpview.contact.ProfileMvpView;
 import org.unimelb.itime.ui.presenter.contact.ProfileFragmentPresenter;
 import org.unimelb.itime.ui.viewmodel.contact.ProfileFragmentViewModel;
-import org.unimelb.itime.util.rulefactory.InviteeUtil;
 
 /**
  * Created by 37925 on 2016/12/9.
@@ -36,9 +29,17 @@ public class ProfileFragment extends BaseContactFragment<ProfileMvpView, Profile
     private boolean showPhone = true;
     private boolean showRightButton = true;
     private Contact user;
+    private FriendRequest request;
 
     public View getContentView(){
         return getView();
+    }
+
+    public void setRequest(FriendRequest request){
+        this.request = request;
+        if(viewModel!=null){
+            viewModel.setRequest(request);
+        }
     }
 
     @Override
@@ -51,6 +52,7 @@ public class ProfileFragment extends BaseContactFragment<ProfileMvpView, Profile
         presenter = createPresenter();
         viewModel = new ProfileFragmentViewModel(presenter);
         viewModel.setFriend(user);
+        viewModel.setRequest(request);
 
         binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_profile, container, false);

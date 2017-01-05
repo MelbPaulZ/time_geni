@@ -80,7 +80,7 @@ public class FriendRequest implements Serializable {
 
     @Generated(hash = 1050218959)
     public FriendRequest(String source, String note, String status, String freqUid, String userUid, String freqUserUid, String userId, int isRead, String createdAt, String updatedAt, String displayStatus,
-            User userDetail) {
+                         User userDetail) {
         this.source = source;
         this.note = note;
         this.status = status;
