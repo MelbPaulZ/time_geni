@@ -11,8 +11,6 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -27,7 +25,6 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
-import org.unimelb.itime.ui.fragment.event.EventCreateNewFragment;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.event.EventTimeSlotCreateFragment;
 import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
@@ -63,17 +60,17 @@ public class EventCreateActivity extends BaseActivity implements PlaceSelectionL
     }
 
     private void showFirstFragment(int task){
-        if (task == BaseActivity.TASK_SELF_CREATE_EVENT){
-            EventCreateNewFragment createNewFragment = new EventCreateNewFragment();
-            fragmentList.add(createNewFragment);
-            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, createNewFragment, createNewFragment.getClassName()).show(fragmentList.get(0)).commit();
-            initRestFragments(task);
-        }else if (task == BaseActivity.TASK_INVITE_OTHER_CREATE_EVENT){
+//        if (task == BaseActivity.TASK_SELF_CREATE_EVENT){
+//            EventCreateNewFragment createNewFragment = new EventCreateNewFragment();
+//            fragmentList.add(createNewFragment);
+//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, createNewFragment, createNewFragment.getClassName()).show(fragmentList.get(0)).commit();
+//            initRestFragments(task);
+//        }else if (task == BaseActivity.TASK_INVITE_OTHER_CREATE_EVENT){
             EventCreateDetailBeforeSendingFragment beforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
             fragmentList.add(beforeSendingFragment);
             getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, beforeSendingFragment, beforeSendingFragment.getClassName()).show(beforeSendingFragment).commit();
             initRestFragments(task);
-        }
+//        }
     }
 
     private void initRestFragments(final int task){
@@ -81,19 +78,20 @@ public class EventCreateActivity extends BaseActivity implements PlaceSelectionL
             @Override
             public void run() {
                 super.run();
-                if (task == BaseActivity.TASK_SELF_CREATE_EVENT) {
-                    fragmentList.add(new InviteeFragment());
-                    fragmentList.add(new EventTimeSlotViewFragment());
-                    fragmentList.add(new EventCreateDetailBeforeSendingFragment());
-                    fragmentList.add(new EventLocationPickerFragment());
-                    fragmentList.add(new EventTimeSlotCreateFragment());
-                }else{
-                    fragmentList.add(new EventCreateNewFragment());
-                    fragmentList.add(new EventTimeSlotViewFragment());
-                    fragmentList.add(new EventCreateDetailBeforeSendingFragment());
-                    fragmentList.add(new EventLocationPickerFragment());
-                    fragmentList.add(new EventTimeSlotCreateFragment());
-                }
+//                if (task == BaseActivity.TASK_SELF_CREATE_EVENT) {
+//                    fragmentList.add(new InviteeFragment());
+//                    fragmentList.add(new EventTimeSlotViewFragment());
+//                    fragmentList.add(new EventCreateDetailBeforeSendingFragment());
+//                    fragmentList.add(new EventLocationPickerFragment());
+//                    fragmentList.add(new EventTimeSlotCreateFragment());
+//                }else{
+//                    fragmentList.add(new EventCreateNewFragment());
+                fragmentList.add(new InviteeFragment());
+                fragmentList.add(new EventTimeSlotViewFragment());
+                fragmentList.add(new EventCreateDetailBeforeSendingFragment());
+                fragmentList.add(new EventLocationPickerFragment());
+                fragmentList.add(new EventTimeSlotCreateFragment());
+//                }
                 handler.sendEmptyMessage(0);
             }
         }.start();
@@ -154,13 +152,13 @@ public class EventCreateActivity extends BaseActivity implements PlaceSelectionL
             case ACTIVITY_PHOTOPICKER: {
                 if (resultCode == Activity.RESULT_OK) {
                     ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-                    if (tag==getString(R.string.tag_create_event)){
-                        EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getSupportFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-                        eventCreateNewFragment.setPhotos(result);
-                    }else if (tag== getString(R.string.tag_create_event_before_sending)){
+//                    if (tag==getString(R.string.tag_create_event)){
+//                        EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getSupportFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
+//                        eventCreateNewFragment.setPhotos(result);
+//                    }else if (tag== getString(R.string.tag_create_event_before_sending)){
                         EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getSupportFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
                         eventCreateDetailBeforeSendingFragment.setPhotos(result);
-                    }
+//                    }
                 }
             }
         }
