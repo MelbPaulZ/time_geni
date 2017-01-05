@@ -69,6 +69,26 @@
         <item name="android:layout_centerVertical">true</item>
     </style>
 
+    <!--choose start/end/endrepeat time-->
+    <style name="itime_select_time_16sp">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:textColor">@color/text_enable</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <!--choose start/end/endrepeat date-->
+    <style name="itime_select_date_16sp">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_enable</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
 
     <!--the bottom gray divider line-->
     <style name="itime_bottom_divider_line">

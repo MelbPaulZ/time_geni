@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * Created by Paul on 31/08/2016.
  */
-public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
+public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewModel {
     private Event newEvDtlEvent;
     private ObservableField<Boolean> evDtlIsEventRepeat ;
     private EventCreateDetailBeforeSendingViewModel viewModel;
@@ -47,14 +47,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
     private ObservableField<Boolean> isAllDay;
     private PickerTask currentTask;
     private int startVisibility, endVisibility;
-    private DatePickerDialog datePickerDialog;
-    private DatePickerDialog.OnDateSetListener dateSetListener;
-    private TimePickerDialog timePickerDialog;
-    private TimePickerDialog.OnTimeSetListener timeSetListener;
-    private int editYear, editMonth, editDay, editHour, editMinute;
-    public enum PickerTask{
-        START_TIME, END_TIME, END_REPEAT
-    }
 
     private UserUtil userUtil;
     private CalendarUtil calendarUtil;
@@ -67,7 +59,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         newEvDtlEvent = eventManager.getCurrentEvent();
         evDtlIsEventRepeat = new ObservableField<>(false);
         isEndRepeatChange = new ObservableField<>(false);
-        this.viewModel = this;
         isAllDay = new ObservableField<>(false);
         mvpView = presenter.getView();
         initDialog();
@@ -81,15 +72,20 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 switch (currentTask){
                     case END_TIME:
-                        onEndDateSelected(year, monthOfYear, dayOfMonth);
+                        newEvDtlEvent.setEndTime(updateYearMonthDay(newEvDtlEvent.getEndTime(), year, monthOfYear, dayOfMonth).getTimeInMillis());
+                        isEndTimeChange = true;
                         break;
                     case START_TIME:
-                        onStartDateSelected(year, monthOfYear, dayOfMonth);
+                        newEvDtlEvent.setStartTime(updateYearMonthDay(newEvDtlEvent.getStartTime(), year, monthOfYear, dayOfMonth).getTimeInMillis());
+                        if (!isEndTimeChange){
+                            newEvDtlEvent.setEndTime(newEvDtlEvent.getStartTime() + 60 * 60 * 1000);
+                        }
                         break;
                     case END_REPEAT:
                         onEndRepeatSelected(year, monthOfYear, dayOfMonth);
                         break;
                 }
+                notifyPropertyChanged(BR.newEvDtlEvent);
             }
         };
 
@@ -98,38 +94,22 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 switch (currentTask){
                     case END_TIME:
-                        onEndTimeSelected(hourOfDay, minute);
+                        newEvDtlEvent.setEndTime(updateHourMin(newEvDtlEvent.getEndTime(), hourOfDay, minute).getTimeInMillis());
+                        isEndTimeChange = true;
                         break;
                     case START_TIME:
-                        onStartTimeSelected(hourOfDay, minute);
+                        newEvDtlEvent.setStartTime(updateHourMin(newEvDtlEvent.getStartTime(), hourOfDay, minute).getTimeInMillis());
+                        if (!isEndTimeChange){
+                            newEvDtlEvent.setEndTime(newEvDtlEvent.getStartTime() + 60 * 60 * 1000);
+                        }
                         break;
                 }
+                notifyPropertyChanged(BR.newEvDtlEvent);
             }
         };
     }
 
 
-    private void onEndDateSelected(int year, int monthOfYear, int dayOfMonth){
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(newEvDtlEvent.getEndTime());
-        timePickerDialog = new TimePickerDialog(getContext(),
-                AlertDialog.THEME_HOLO_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
-        timePickerDialog.show();
-        editYear = year;
-        editMonth = monthOfYear;
-        editDay = dayOfMonth;
-    }
-
-    private void onStartDateSelected(int year, int monthOfYear, int dayOfMonth){
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(newEvDtlEvent.getStartTime());
-        timePickerDialog = new TimePickerDialog(getContext(),
-                AlertDialog.THEME_HOLO_LIGHT, timeSetListener, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
-        timePickerDialog.show();
-        editYear = year;
-        editMonth = monthOfYear;
-        editDay = dayOfMonth;
-    }
 
     private void onEndRepeatSelected(int year, int monthOfYear, int dayOfMonth){
         Calendar c = Calendar.getInstance();
@@ -139,27 +119,6 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.newEvDtlEvent);
     }
 
-    private void onEndTimeSelected(int hour, int minute){
-        Calendar c = Calendar.getInstance();
-        editHour = hour;
-        editMinute = minute;
-        c.set(editYear, editMonth, editDay, editHour, editMinute);
-        newEvDtlEvent.setEndTime(c.getTimeInMillis());
-        isEndTimeChange = true;
-        notifyPropertyChanged(BR.newEvDtlEvent);
-    }
-
-    private void onStartTimeSelected(int hour, int minute){
-        Calendar c = Calendar.getInstance();
-        editHour = hour;
-        editMinute = minute;
-        c.set(editYear, editMonth, editDay, editHour, editMinute);
-        newEvDtlEvent.setStartTime(c.getTimeInMillis());
-        if (!isEndTimeChange){
-            newEvDtlEvent.setEndTime(c.getTimeInMillis() + 60 * 60 * 1000);
-        }
-        notifyPropertyChanged(BR.newEvDtlEvent);
-    }
 
     @Bindable
     public boolean getIsAllDay() {
@@ -347,8 +306,29 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
         };
     }
 
-    // TODO: 11/12/2016 implement starttime, endtime, endRepeat change
     public View.OnClickListener onChangeTime(final PickerTask task){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentTask = task;
+                Calendar c = Calendar.getInstance();
+                switch (currentTask){
+                    case END_TIME:
+                        c.setTimeInMillis(newEvDtlEvent.getEndTime());
+                        break;
+                    case START_TIME:
+                        c.setTimeInMillis(newEvDtlEvent.getStartTime());
+                }
+                timePickerDialog = new TimePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, timeSetListener,
+                        c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+                timePickerDialog.show();
+            }
+        };
+    }
+
+
+
+    public View.OnClickListener onChangeDate(final PickerTask task){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -365,6 +345,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
                         break;
                     case START_TIME:
                         c.setTimeInMillis(newEvDtlEvent.getStartTime());
+                        break;
                 }
                 datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, dateSetListener,
                         c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -379,7 +360,7 @@ public class EventCreateDetailBeforeSendingViewModel extends CommonViewModel {
             public void onClick(View view) {
                     final CharSequence types[] = EventUtil.getCalendarTypes(getContext());
                     AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
-                    builder.setTitle("Choose a calendar type");
+                    builder.setTitle("Choose a calendar");
                     builder.setItems(types, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {

@@ -7,7 +7,7 @@
         <import type="org.unimelb.itime.util.EventUtil"/>
         <import type="org.unimelb.itime.util.TimeSlotUtil"/>
         <import type="android.view.View"/>
-        <import type="org.unimelb.itime.ui.viewmodel.EventEditViewModel.PickerTask"/>
+        <import type="org.unimelb.itime.ui.viewmodel.EventCommonViewModel.PickerTask"/>
         <variable
             name="eventEditVM"
             type="org.unimelb.itime.ui.viewmodel.EventEditViewModel" />
@@ -67,18 +67,6 @@
         <include layout="@layout/event_edit_common_content"
             bind:eventEditVM="@{eventEditVM}"
             />
-
-        <!--<Button-->
-            <!--android:id="@+id/edit_event_delete_btn"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:background="@drawable/background_round_radius_red"-->
-            <!--android:text="@string/delete_event"-->
-            <!--android:textAlignment="center"-->
-            <!--android:layout_marginLeft="@dimen/padding_10"-->
-            <!--android:layout_marginRight="@dimen/padding_10"-->
-            <!--android:onClick="@{eventEditVM.onClickDelete()}"-->
-            <!--android:textColor="@color/white" />-->
 
         <TextView
             android:layout_width="match_parent"
