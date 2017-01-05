@@ -150,7 +150,12 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
     }
 
     public void setUntil(Date until) {
-        this.until = until;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(until);
+        cal.set(Calendar.HOUR_OF_DAY,23);
+        cal.set(Calendar.MINUTE,59);
+        cal.set(Calendar.SECOND,59);
+        this.until = new Date(cal.getTimeInMillis());
     }
 
     public int getInterval() {

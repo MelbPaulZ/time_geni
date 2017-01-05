@@ -174,12 +174,20 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
         weekView.reloadTimeSlots(false);
     }
 
+    private void scrollToFstTimeSlot(Event event){
+        List<Timeslot> slots = event.getTimeslot();
+        if (slots.size() > 0){
+            weekView.scrollToWithOffset(slots.get(0).getStartTime() - 30 * 60 * 1000);
+        }
+    }
+
     @Override
     public void onEnter() {
         super.onEnter();
 
         if (getFrom() instanceof EventDetailFragment) {
             initTimeslotsFromDetailFragment(weekView);
+            scrollToFstTimeSlot(event);
             weekView.removeAllOptListener();
         } else if (getFrom() instanceof InviteeFragment) {
             initTimeslotsFromInviteeFragment(weekView);
@@ -366,8 +374,8 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
     private void changeTimeSlotView(TimeSlotView timeSlotView) {
         // if clicked -> unclicked; if unclicked -> clicked
         boolean newStatus = !timeSlotView.isSelect();
-        timeSlotView.setStatus(newStatus);
-        timeSlotView.getTimeslot().setDisplayStatus(newStatus);
+        timeSlotView.setIsSelected(newStatus);
+//        timeSlotView.getTimeslot().setDisplayStatus(newStatus);
     }
 
     private void changeTimeslotCreateAndPending(TimeSlotView timeSlotView){

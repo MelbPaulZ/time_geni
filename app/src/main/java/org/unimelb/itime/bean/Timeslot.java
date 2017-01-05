@@ -1,7 +1,5 @@
 package org.unimelb.itime.bean;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
 import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 
 import java.io.Serializable;
@@ -29,25 +27,6 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     private int isSystemSuggested; //
     private String inviteeUid = "";
 
-//    private transient boolean isSelected = false;
-    private transient boolean isSelected = false;
-
-/*"status": "pending",
-          "rate": 1,
-          "timeslotUid": "1",
-          "eventUid": "1",
-          "startTime": 1480225682797,
-          "endTime": 1480229282797,
-          "acceptedNum": 1,
-          "rejectedNum": 0,
-          "pendingNum": 2,
-          "totalNum": 3,
-          "isConfirmed": 0,
-          "isSystemSuggested": 0,
-          "inviteeUid": "2",
-          "userUid": 2
-    * */
-    
     @Override
     public void setStartTime(long l) {
         this.startTime = l;
@@ -77,19 +56,6 @@ public class Timeslot implements ITimeTimeSlotInterface,Serializable {
     public String getStatus() {
         return this.status;
     }
-
-    @Override
-    public void setDisplayStatus(boolean b) {
-        this.isSelected = b;
-    }
-
-
-    @Override
-    public boolean getDisplayStatus() {
-        return this.isSelected;
-    }
-
-    @Override
     public int getAcceptedNum() {
         return acceptedNum;
     }

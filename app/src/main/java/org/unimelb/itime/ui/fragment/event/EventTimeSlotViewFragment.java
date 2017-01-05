@@ -84,16 +84,24 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
     public void resetCalendar(Event event) {
         timeslotWeekView.resetTimeSlots();
         initTimeSlots(event);
+//        scrollToFstTimeSlot(event);
+    }
+
+    private void scrollToFstTimeSlot(Event event){
+        List<Timeslot> slots = event.getTimeslot();
+        if (slots.size() > 0){
+            timeslotWeekView.scrollToWithOffset(slots.get(0).getStartTime());
+        }
     }
 
     private void changeTimeSlots(TimeSlotView timeSlotView) {
         // change status of view and struct
         boolean newStatus = !timeSlotView.isSelect();
         Timeslot timeSlot = (Timeslot) timeSlotView.getTimeslot();
-        timeSlotView.setStatus(newStatus);
+        timeSlotView.setIsSelected(newStatus);
         // change event attributes
         if (timeSlot != null) {
-            timeSlot.setDisplayStatus(newStatus);
+//            timeSlot.setDisplayStatus(newStatus);
 
             if (timeSlot.getStatus().equals(Timeslot.STATUS_CREATING)) {
                 timeSlot.setStatus(Timeslot.STATUS_PENDING);
@@ -186,7 +194,6 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         });
     }
 
-
     private void timeslotDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
         // update timeslot info
         Timeslot timeslot = (Timeslot) timeSlotView.getTimeslot();
@@ -196,21 +203,21 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
     }
 
-    private void setTimeslotIsSelected(Timeslot timeslot){
+    private boolean getTimeSlotIsSelected(Timeslot timeslot){
         if (timeslot.getStatus().equals(Timeslot.STATUS_CREATING)){
-            timeslot.setDisplayStatus(false);
+            return false;
         }else if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
-            timeslot.setDisplayStatus(true);
+            return true;
         }
-    }
 
+        return false;
+    }
 
     // todo init
     private void initTimeSlots(Event event) {
         if (event.hasTimeslots()) {
             for (Timeslot timeSlot : event.getTimeslot()) {
-                setTimeslotIsSelected(timeSlot);
-                timeslotWeekView.addTimeSlot(timeSlot);
+                timeslotWeekView.addTimeSlot(timeSlot,getTimeSlotIsSelected(timeSlot));
             }
         }
         timeslotWeekView.reloadTimeSlots(false);
