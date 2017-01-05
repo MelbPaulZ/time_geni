@@ -69,7 +69,7 @@ public class EventTimeSlotCreateFragment extends EventBaseFragment<TimeslotCreat
 
     @Override
     public void onClickCancel() {
-        openFragment(this, (EventTimeSlotViewFragment)getFrom());
+        closeFragment(this, (EventTimeSlotViewFragment)getFrom());
     }
 
     @Override

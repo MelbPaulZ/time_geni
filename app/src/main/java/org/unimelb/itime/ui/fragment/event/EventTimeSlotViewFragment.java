@@ -258,21 +258,21 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
             EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFrom();
             beforeSendingFragment.setEvent(event);
-            openFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
+            openFragment(this, getFrom());
         }
     }
 
     @Override
     public void onClickBack() {
         if (getFrom() instanceof InviteeFragment) {
-            openFragment(this, (InviteeFragment) getFrom());
+            closeFragment(this, getFrom());
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof InviteeFragment) {
             InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-            openFragment(this, inviteeFragment);
+            closeFragment(this, inviteeFragment);
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof EventCreateDetailBeforeSendingFragment) {
-            openFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
+            closeFragment(this, getFrom());
         }else if (getFrom() instanceof EventTimeSlotCreateFragment){
-            openFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
+            closeFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
         }
     }
 
