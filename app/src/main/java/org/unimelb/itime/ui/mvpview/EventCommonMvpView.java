@@ -10,7 +10,7 @@ import java.util.List;
  * Created by yuhaoliu on 9/12/2016.
  */
 
-public interface EventCommonMvpView extends MvpView {
+public interface EventCommonMvpView extends ItimeCommonMvpView {
 
     void onTaskStart(int task);
     void onTaskError(int task, String errorMsg, int code);

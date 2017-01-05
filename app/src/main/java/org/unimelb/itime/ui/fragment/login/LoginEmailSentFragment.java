@@ -67,4 +67,5 @@ public class LoginEmailSentFragment extends LoginBaseFragment implements LoginMv
             }
         }
     }
+
 }

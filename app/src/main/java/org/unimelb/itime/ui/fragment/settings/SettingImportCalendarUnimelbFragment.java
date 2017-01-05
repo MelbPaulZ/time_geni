@@ -53,4 +53,19 @@ implements SettingCommonMvpView{
             closeFragment(this, (SettingImportCalendarFragment)getFragmentManager().findFragmentByTag(SettingImportCalendarFragment.class.getSimpleName()));
         }
     }
+
+    @Override
+    public void setLeftTitleStringToVM() {
+        viewModel.setLeftTitleStr(getString(R.string.back));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        viewModel.setTitleStr(getString(R.string.setting_import_calendar));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        viewModel.setRightTitleStr(getString(R.string.done));
+    }
 }

@@ -99,4 +99,19 @@ implements EventDetailGroupMvpView{
     public void onTaskComplete(int task, List<Event> dataList) {
 
     }
+
+    @Override
+    public void setLeftTitleStringToVM() {
+        viewModel.setLeftBtnText(getString(R.string.back));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        viewModel.setTitleStr(getString(R.string.photo));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+
+    }
 }

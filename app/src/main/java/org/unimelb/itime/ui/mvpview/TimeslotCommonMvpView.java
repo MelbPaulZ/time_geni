@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Paul on 20/12/2016.
  */
 
-public interface TimeslotCommonMvpView extends MvpView {
+public interface TimeslotCommonMvpView extends ItimeCommonMvpView {
 
     void onRecommend(List<Timeslot> timeslotList);
 

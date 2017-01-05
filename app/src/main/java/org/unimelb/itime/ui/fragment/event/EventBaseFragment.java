@@ -14,15 +14,31 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.fragment.contact.BaseContactFragment;
+import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
+
+import static com.wx.wheelview.widget.WheelView.Skin.Common;
 
 /**
  * provide some common methods and initialise parameters
  */
-public abstract class EventBaseFragment<V extends MvpView, P extends MvpPresenter<V>> extends BaseUiFragment<Event, V, P> {
+public abstract class EventBaseFragment<V extends MvpView, P extends MvpPresenter<V>> extends BaseUiFragment<Event, V, P> implements EventCommonMvpView{
 
     @Override
     public void setData(Event event) {
 
     }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setLeftTitleStringToVM();
+        setTitleStringToVM();
+        setRightTitleStringToVM();
+    }
+
+    public abstract void setLeftTitleStringToVM();
+    public abstract void setTitleStringToVM();
+    public abstract void setRightTitleStringToVM();
 }

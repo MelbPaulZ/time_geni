@@ -24,7 +24,7 @@ import java.util.Calendar;
 /**
  * Created by Paul on 27/08/2016.
  */
-public class EventCreateTimeslotViewModel extends BaseObservable {
+public class EventCreateTimeslotViewModel extends CommonViewModel {
 
     private String titleString;
     private TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView> presenter;

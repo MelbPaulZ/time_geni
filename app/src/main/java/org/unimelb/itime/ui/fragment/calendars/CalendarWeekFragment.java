@@ -238,4 +238,5 @@ public class CalendarWeekFragment extends BaseUiFragment<Object, EventCommonMvpV
     public void setData(Object o) {
 
     }
+
 }

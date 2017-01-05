@@ -8,7 +8,7 @@ import org.unimelb.itime.bean.Contact;
  * Created by Paul on 25/12/2016.
  */
 
-public interface SettingCommonMvpView extends MvpView {
+public interface SettingCommonMvpView extends ItimeCommonMvpView {
 
     void onViewChange(int task, boolean isSave);
 }

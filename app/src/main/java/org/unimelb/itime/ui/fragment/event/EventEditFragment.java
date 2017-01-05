@@ -215,4 +215,19 @@ public class EventEditFragment extends EventBaseFragment<EventEditMvpView, Event
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
     }
+
+    @Override
+    public void setLeftTitleStringToVM() {
+        eventEditViewModel.setLeftTitleStr(getString(R.string.cancel));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        eventEditViewModel.setTitleStr(getString(R.string.edit_event));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        eventEditViewModel.setRightTitleStr(getString(R.string.done));
+    }
 }

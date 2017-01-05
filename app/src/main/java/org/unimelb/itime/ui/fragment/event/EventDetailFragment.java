@@ -244,4 +244,20 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
     }
 
 
+    @Override
+    public void setLeftTitleStringToVM() {
+        eventDetailForHostViewModel.setLeftBtnText(getString(R.string.back));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        String title = EventUtil.isUserHostOfEvent(getContext(), event)?
+                getString(R.string.event_details) : getString(R.string.new_invitation);
+        eventDetailForHostViewModel.setTitleStr(title);
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        eventDetailForHostViewModel.setRightTitleStr(getString(R.string.edit));
+    }
 }

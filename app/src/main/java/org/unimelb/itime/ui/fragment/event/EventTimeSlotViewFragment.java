@@ -258,6 +258,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
     @Override
     public void onClickDone() {
+        TimeSlotUtil.sortTimeslot(event.getTimeslot());
         if (getFrom() instanceof InviteeFragment || getFrom() instanceof EventTimeSlotCreateFragment) {
             EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
             beforeSendingFragment.setEvent(event);
@@ -341,4 +342,33 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         });
     }
 
+    @Override
+    public void setLeftTitleStringToVM() {
+        viewModel.setLeftTitleStr(getString(R.string.back));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        viewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public void onTaskStart(int task) {
+
+    }
+
+    @Override
+    public void onTaskError(int task, String errorMsg, int code) {
+
+    }
+
+    @Override
+    public void onTaskComplete(int task, List<Event> dataList) {
+
+    }
 }

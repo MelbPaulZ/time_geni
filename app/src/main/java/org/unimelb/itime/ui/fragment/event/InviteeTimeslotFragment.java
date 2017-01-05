@@ -17,6 +17,7 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentSelectedInviteeBinding;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.TimeslotCommonMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.TimeslotInviteeResponseViewModel;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * Created by Paul on 4/09/2016.
  */
-public class InviteeTimeslotFragment extends EventBaseFragment {
+public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeCommonMvpView {
     private FragmentSelectedInviteeBinding binding;
     private TimeslotInviteeResponseViewModel viewModel;
     private TimeslotCommonPresenter<TimeslotCommonMvpView> presenter;
@@ -91,5 +92,40 @@ public class InviteeTimeslotFragment extends EventBaseFragment {
 
     public void setTime(long time){
         this.time = time;
+    }
+
+    @Override
+    public void setData(Object o) {
+
+    }
+
+    @Override
+    public void setLeftTitleStringToVM() {
+        viewModel.setLeftTitleStr(getString(R.string.back));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        viewModel.setTitleStr(getString(R.string.invitee));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        viewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public void onTaskStart(int task) {
+
+    }
+
+    @Override
+    public void onTaskError(int task, String errorMsg, int code) {
+
+    }
+
+    @Override
+    public void onTaskComplete(int task, List<Event> dataList) {
+
     }
 }
