@@ -16,6 +16,9 @@ import org.unimelb.itime.widget.TimeGeniiDialog;
 import org.unimelb.itime.ui.presenter.contact.ProfileFragmentPresenter;
 import org.unimelb.itime.widget.TimeGeniiPopupWindow;
 
+import me.fesky.library.widget.ios.ActionSheetDialog;
+import me.fesky.library.widget.ios.AlertDialog;
+
 
 /**
  * Created by 37925 on 2016/12/9.
@@ -24,7 +27,8 @@ import org.unimelb.itime.widget.TimeGeniiPopupWindow;
 public class ProfileFragmentViewModel extends BaseObservable {
     private TimeGeniiDialog blockDialog;
     private TimeGeniiDialog deleteDialog;
-    private TimeGeniiPopupWindow popupWindow;
+//    private TimeGeniiPopupWindow popupWindow;
+    private ActionSheetDialog popupWindow;
     private Contact friend;
     private FriendRequest request;
     private boolean showTitileBack = true;
@@ -239,7 +243,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
                 if(popupWindow==null){
                     initPopupWindow();
                 }
-                popupWindow.showAtLocation(presenter.getView().getContentView(), Gravity.CENTER, 0, 0);
+                popupWindow.show();
             }
         };
     }
@@ -253,13 +257,65 @@ public class ProfileFragmentViewModel extends BaseObservable {
         };
     }
 
+//    private void initPopupWindow(){
+//        popupWindow = new TimeGeniiPopupWindow(presenter.getContext(), presenter.getView().getContentView());
+//        if(getBlocked()) {
+//            popupWindow.addSheetItem(presenter.getContext().getString(R.string.unblock_contact),
+//                    presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+//                        @Override
+//                        public void onClick() {
+//                            if(!getBlocked()) {
+//                                if (blockDialog == null) {
+//                                    initBlockDialog();
+//                                }
+//                                blockDialog.show();
+//                            }else{
+//                                unblockFriend();
+//                            }
+//                        }
+//                    });
+//        }else{
+//            popupWindow.addSheetItem(presenter.getContext().getString(R.string.block_contact),
+//                    presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+//                        @Override
+//                        public void onClick() {
+//                            if(!getBlocked()) {
+//                                if (blockDialog == null) {
+//                                    initBlockDialog();
+//                                }
+//                                blockDialog.show();
+//                            }else{
+//                                unblockFriend();
+//                            }
+//                        }
+//                    });
+//        }
+//
+//        popupWindow.addSheetItem(presenter.getContext().getString(R.string.delete_contact),
+//                presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+//                    @Override
+//                    public void onClick() {
+//                        if(deleteDialog==null){
+//                            initDeleteDialog();
+//                        }
+//                        deleteDialog.show();
+//                    }
+//                });
+//    }
+
     private void initPopupWindow(){
-        popupWindow = new TimeGeniiPopupWindow(presenter.getContext(), presenter.getView().getContentView());
+        if(presenter.getView()==null){
+            return;
+        }
+        popupWindow= new ActionSheetDialog(presenter.getView().getActivity())
+                .builder()
+                .setCancelable(true)
+                .setCanceledOnTouchOutside(true);
         if(getBlocked()) {
             popupWindow.addSheetItem(presenter.getContext().getString(R.string.unblock_contact),
-                    presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+                    null, new ActionSheetDialog.OnSheetItemClickListener() {
                         @Override
-                        public void onClick() {
+                        public void onClick(int i) {
                             if(!getBlocked()) {
                                 if (blockDialog == null) {
                                     initBlockDialog();
@@ -272,9 +328,9 @@ public class ProfileFragmentViewModel extends BaseObservable {
                     });
         }else{
             popupWindow.addSheetItem(presenter.getContext().getString(R.string.block_contact),
-                    presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+                    null, new ActionSheetDialog.OnSheetItemClickListener() {
                         @Override
-                        public void onClick() {
+                        public void onClick(int i) {
                             if(!getBlocked()) {
                                 if (blockDialog == null) {
                                     initBlockDialog();
@@ -288,9 +344,9 @@ public class ProfileFragmentViewModel extends BaseObservable {
         }
 
         popupWindow.addSheetItem(presenter.getContext().getString(R.string.delete_contact),
-                presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+               null, new ActionSheetDialog.OnSheetItemClickListener() {
                     @Override
-                    public void onClick() {
+                    public void onClick(int i) {
                         if(deleteDialog==null){
                             initDeleteDialog();
                         }

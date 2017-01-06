@@ -115,7 +115,7 @@ implements SettingCommonMvpView{
                 .builder()
                 .setCancelable(true)
                 .setCanceledOnTouchOutside(true)
-                .addSheetItem("Log Out", ActionSheetDialog.SheetItemColor.Black,
+                .addSheetItem("Log Out", null,
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {

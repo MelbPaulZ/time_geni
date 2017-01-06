@@ -13,6 +13,8 @@ import org.unimelb.itime.ui.presenter.contact.MyQRCodePresenter;
 import org.unimelb.itime.widget.QRCode.encoding.EncodingUtils;
 import org.unimelb.itime.widget.TimeGeniiPopupWindow;
 
+import me.fesky.library.widget.ios.ActionSheetDialog;
+
 /**
  * Created by 37925 on 2016/12/18.
  */
@@ -20,7 +22,7 @@ import org.unimelb.itime.widget.TimeGeniiPopupWindow;
 public class MyQRCodeVieModel extends BaseObservable {
     private MyQRCodePresenter presenter;
     private ITimeUser user;
-    private TimeGeniiPopupWindow popupWindow;
+    private ActionSheetDialog popupWindow;
     private MyQRCodeMvpView mvpView;
 
     @Bindable
@@ -73,20 +75,23 @@ public class MyQRCodeVieModel extends BaseObservable {
 
     public void initPopupWindow(){
         if (mvpView!=null) {
-            popupWindow = new TimeGeniiPopupWindow(mvpView.getActivity(), mvpView.getContentView())
+            popupWindow = new ActionSheetDialog(mvpView.getActivity())
+                    .builder()
+                    .setCancelable(true)
+                    .setCanceledOnTouchOutside(true)
                     .addSheetItem(mvpView.getActivity().getResources().getText(R.string.save_to_album).toString(),
-                            mvpView.getActivity().getResources().getColor(R.color.textBlue),
-                            new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+                            null,
+                            new ActionSheetDialog.OnSheetItemClickListener() {
                                 @Override
-                                public void onClick() {
+                                public void onClick(int i) {
                                     mvpView.saveQRCode();
                                 }
                             })
                     .addSheetItem(mvpView.getActivity().getResources().getText(R.string.scan_qr_code).toString(),
-                            mvpView.getActivity().getResources().getColor(R.color.textBlue),
-                            new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+                            null,
+                            new ActionSheetDialog.OnSheetItemClickListener() {
                                 @Override
-                                public void onClick() {
+                                public void onClick(int i) {
                                     mvpView.goToScanQRCode();
                                 }
                             });
