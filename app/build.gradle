@@ -15,12 +15,12 @@ android {
         versionCode 1
         versionName "1.0"
 
-        multiDexEnabled true
+//        multiDexEnabled true
         // Unit test
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     dexOptions{
-        javaMaxHeapSize "8g"
+//        javaMaxHeapSize "8g"
     }
 
     signingConfigs {
@@ -40,6 +40,7 @@ android {
         debug {
             signingConfig signingConfigs.debug
             debuggable true
+            minifyEnabled true
         }
         release {
             minifyEnabled false
