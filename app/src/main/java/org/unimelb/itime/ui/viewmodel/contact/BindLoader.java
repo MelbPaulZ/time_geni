@@ -1,10 +1,13 @@
 package org.unimelb.itime.ui.viewmodel.contact;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.squareup.picasso.Picasso;
 
@@ -68,5 +71,10 @@ public class BindLoader extends BaseObservable {
     @BindingAdapter("bind:badgeCount")
     public static void setBadgeCount(WideBadgeArrowButton view, int count){
         view.setBadgeCount(count);
+    }
+
+    @BindingAdapter("bind:onItemClickListener")
+    public static void setOnItemClickListener(ListView view, AdapterView.OnItemClickListener listener){
+        view.setOnItemClickListener(listener);
     }
 }

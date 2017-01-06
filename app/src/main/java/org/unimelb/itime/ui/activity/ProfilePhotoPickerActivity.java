@@ -43,7 +43,7 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
     public static final int CHOOSE_FROM_LIBRARY = 0;
     private ImagePicker imagePicker;
     private ActivityProfilePhotopickerBinding binding;
-    private TimeGeniiPopupWindow popupWindow;
+    private ActionSheetDialog popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,20 +93,23 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
 
     private void initPopupWindow(){
         popupWindow =
-        new TimeGeniiPopupWindow(getApplicationContext(), binding.getRoot())
-                .addSheetItem("Take Photo", getResources().getColor(R.color.textBlue),
-                        new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+        new ActionSheetDialog(getApplicationContext())
+                .builder()
+                .setCancelable(true)
+                .setCanceledOnTouchOutside(true)
+                .addSheetItem("Take Photo", null,
+                        new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
-                            public void onClick() {
+                            public void onClick(int i) {
                                 ImagePicker.getInstance().takePicture(ProfilePhotoPickerActivity.this,ImagePicker.REQUEST_CODE_TAKE);
 //                                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
 //                                                startActivityForResult(intent, TAKE_PHOTO);
                             }
                         })
-                .addSheetItem("Choose from Photos", getResources().getColor(R.color.textBlue),
-                        new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+                .addSheetItem("Choose from Photos", null,
+                        new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
-                            public void onClick() {
+                            public void onClick(int i) {
                                 Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
                                 startActivityForResult(intent, CHOOSE_FROM_LIBRARY);
                             }

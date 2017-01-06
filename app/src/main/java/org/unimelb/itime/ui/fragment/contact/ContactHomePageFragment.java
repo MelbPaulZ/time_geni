@@ -45,7 +45,7 @@ public class ContactHomePageFragment extends BaseContactFragment<ContactHomePage
                 R.layout.contact_home_page, container, false);
         initMainView();
         fm = getFragmentManager();
-        viewModel.initSideBarListView(binding.sortListView);
+        //viewModel.initSideBarListView(binding.sortListView);
 
         EventBus.getDefault().register(this);
         return binding.getRoot();

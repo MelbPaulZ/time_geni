@@ -52,7 +52,7 @@ public class ContactTestActivityContact extends BaseActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GoogleSignUtil.getInstance().signIn(activity);
+                GoogleSignUtil.getInstance().signIn(activity, 1234);
             }
         };
     }
@@ -60,11 +60,19 @@ public class ContactTestActivityContact extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        System.out.println(requestCode);
         if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
             if (bundle != null) {
                 String result = bundle.getString("result");
 
+            }
+        }
+        if(resultCode == 1211){
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                String result = bundle.getString("authCode");
+                System.out.println("get auth code:"+result);
             }
         }
     }
