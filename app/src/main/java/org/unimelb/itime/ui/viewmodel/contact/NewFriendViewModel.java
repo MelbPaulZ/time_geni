@@ -122,7 +122,7 @@ public class NewFriendViewModel extends BaseObservable {
         }
 
         public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.add_fail), Toast.LENGTH_SHORT);
+            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.add_fail), Toast.LENGTH_SHORT).show();
         }
     }
 }

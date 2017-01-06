@@ -9,6 +9,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Block;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.FriendRequest;
+import org.unimelb.itime.bean.RequestFriend;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.messageevent.MessageAddContact;
 import org.unimelb.itime.messageevent.MessageRemoveContact;
@@ -19,7 +20,10 @@ import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.ui.mvpview.contact.ProfileMvpView;
 import org.unimelb.itime.ui.viewmodel.contact.ProfileFragmentViewModel;
+import org.unimelb.itime.ui.viewmodel.contact.RequestFriendItemViewModel;
 import org.unimelb.itime.util.HttpUtil;
+
+import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -54,6 +58,36 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
 
     public void onBackPressed(){
         getView().getActivity().onBackPressed();
+    }
+
+    public void acceptRequest(final FriendRequest request, final ProfileFragmentViewModel.AcceptCallBack callBack){
+        Observable<HttpResult<List<FriendRequest>>> observable = requestApi.confirm(request.getFreqUid());
+        Subscriber<HttpResult<List<FriendRequest>>> subscriber = new Subscriber<HttpResult<List<FriendRequest>>>() {
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(HttpResult<List<FriendRequest>> result) {
+                Log.d(TAG, "onNext: " + result.getInfo());
+                if (result.getStatus()!=1){
+                    callBack.fail();
+                }else {
+                    FriendRequest resultRequest = result.getData().get(0);
+                    resultRequest.setUserDetail(request.getUserDetail());
+                    dbManager.insertFriendRequest(resultRequest);
+                    callBack.success();
+                }
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
     }
 
     public void blockUser(final Contact user, final ProfileFragmentViewModel.BlockCallBack callBack){

@@ -84,6 +84,8 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
                 if (result.getStatus()!=1){
                     callBack.fail();
                 }else {
+                    FriendRequest resultRequest = result.getData().get(0);
+                    resultRequest.setUserDetail(request.getRequest().getUserDetail());
                     dbManager.insertFriendRequest(result.getData().get(0));
                     callBack.accept();
                 }
@@ -195,11 +197,10 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
         if(requestFriend.getDisplayStatus().equals(FriendRequest.DISPLAY_STATUS_ACCEPT)){
             Contact contact = new Contact(requestFriend.getUser());
             contact.setStatus(FriendRequest.DISPLAY_STATUS_ACCEPT);
-            getView().goToProfileFragment(contact);
+            getView().goToProfileFragment(contact,requestFriend.getRequest() );
         }else{
             Contact contact = DBManager.getInstance(context).searchContact(requestFriend.getUser().getUserUid());
-            System.out.println(contact.getStatus());
-            getView().goToProfileFragment(contact);
+            getView().goToProfileFragment(contact, requestFriend.getRequest());
         }
     }
 
