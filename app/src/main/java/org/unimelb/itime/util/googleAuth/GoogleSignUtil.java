@@ -9,7 +9,8 @@ import android.content.Intent;
 
 public class GoogleSignUtil {
     private static GoogleSignUtil instance=null;
-    private String authCode = null;
+    public static final int RESULT_SUCCESS = 1211;
+    public static final int RESULT_FAILED = 1212;
 
     private GoogleSignUtil(){}
 
@@ -20,13 +21,9 @@ public class GoogleSignUtil {
         return instance;
     }
 
-    public void setAuthCode(String authCode) {
-        this.authCode = authCode;
-    }
-
-    public void signIn(Activity activity){
+    public void signIn(Activity activity, int requestCode){
         Intent intent = new Intent();
         intent.setClass(activity, GoogleAuthActivity.class);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, requestCode);
     }
 }

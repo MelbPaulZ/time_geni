@@ -264,7 +264,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
                                 if (blockDialog == null) {
                                     initBlockDialog();
                                 }
-                                blockDialog.showAtLocation(presenter.getView().getContentView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                                blockDialog.show();
                             }else{
                                 unblockFriend();
                             }
@@ -279,7 +279,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
                                 if (blockDialog == null) {
                                     initBlockDialog();
                                 }
-                                blockDialog.showAtLocation(presenter.getView().getContentView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                                blockDialog.show();
                             }else{
                                 unblockFriend();
                             }
@@ -294,38 +294,42 @@ public class ProfileFragmentViewModel extends BaseObservable {
                         if(deleteDialog==null){
                             initDeleteDialog();
                         }
-                        deleteDialog.showAtLocation(presenter.getView().getContentView(), Gravity.BOTTOM| Gravity.CENTER_HORIZONTAL, 0, 0);
+                        deleteDialog.show();
                     }
                 });
     }
 
     private void initDeleteDialog(){
-        deleteDialog = new TimeGeniiDialog(presenter.getView().getActivity());
-        deleteDialog.setTitle("Delete this contact?");
-        deleteDialog.setExplain("Invitation from this contact will not be shown in your calendar,"
-                +" but will be shown in your message box");
-        deleteDialog.setRightText("Delete");
-        deleteDialog.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteFriend();
-                deleteDialog.dismiss();
-            }
-        });
+        if(presenter.getView()==null){
+            return;
+        }
+        deleteDialog = new TimeGeniiDialog(presenter.getView().getActivity(), presenter.getView().getContentView())
+                .setTitle("Delete this contact?")
+                .setExplain("Invitation from this contact will not be shown in your calendar,"
+                    +" but will be shown in your message box")
+                .setRightText("Delete")
+                .setRightOnClickListener(new TimeGeniiDialog.OnButtonClickListener() {
+                    @Override
+                    public void onClick() {
+                        deleteFriend();
+                    }
+                });
     }
 
     private void initBlockDialog(){
-        blockDialog = new TimeGeniiDialog(presenter.getView().getActivity());
-        blockDialog.setTitle("Block this contact?");
-        blockDialog.setExplain("Block this contact from sending you invitations");
-        blockDialog.setRightText("Block");
-        blockDialog.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                blockFriend();
-                blockDialog.dismiss();
-            }
-        });
+        if(presenter.getView()==null){
+            return;
+        }
+        blockDialog = new TimeGeniiDialog(presenter.getView().getActivity(), presenter.getView().getContentView())
+                .setTitle("Block this contact?")
+                .setExplain("Block this contact from sending you invitations")
+                .setRightText("Block")
+                .setRightOnClickListener(new TimeGeniiDialog.OnButtonClickListener() {
+                    @Override
+                    public void onClick() {
+                        blockFriend();
+                    }
+                });
     }
 
     private void unblockFriend(){

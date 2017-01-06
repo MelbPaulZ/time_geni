@@ -183,7 +183,7 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
                     if(unreadIds.size()!=0) {
                         String[] array = new String[unreadIds.size()];
                         array = unreadIds.toArray(array);
-                        //setRead(array);
+                        setRead(array);
                     }
                     EventBus.getDefault().post(new MessageNewFriendRequest(0));
                     callBack.success(result);

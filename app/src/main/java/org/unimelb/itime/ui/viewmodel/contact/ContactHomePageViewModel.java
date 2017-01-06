@@ -29,6 +29,7 @@ public class ContactHomePageViewModel  extends BaseObservable {
     private boolean showTitileBack = false;
     private boolean showTitleRight = true;
     private ObservableList<ListItemViewModel> items = new ObservableArrayList<>();
+    private ObservableList<ListItemViewModel> searchItems =  new ObservableArrayList<>();
     private ItemView view;
     private ItemView itemView;
     private String title = "Contacts";
@@ -46,8 +47,14 @@ public class ContactHomePageViewModel  extends BaseObservable {
         notifyPropertyChanged(BR.searching);
     }
 
+    @Bindable
     public ObservableList getItems() {
         return items;
+    }
+
+    @Bindable
+    public ObservableList getSearchItems() {
+        return searchItems;
     }
 
     public void setFriendList(List<ITimeUser> list){
@@ -55,6 +62,7 @@ public class ContactHomePageViewModel  extends BaseObservable {
         updateListView(list);
     }
 
+    @Bindable
     public ItemView getItemView(){
         if(itemView==null){
             itemView = ItemView.of(BR.viewModel, R.layout.listview_itime_friend_item);
@@ -90,24 +98,31 @@ public class ContactHomePageViewModel  extends BaseObservable {
     }
 
     private void updateListView(List<ITimeUser> list){
-        generateListView(list);
-        presenter.getSideBarListView().updateList();
+        generateListView(items,list);
+        setItems(items);
     }
 
-    public void generateListView(List<ITimeUser> list){
-        items.clear();
+    private void updateSearchListView(List<ITimeUser> list){
+        generateListView(searchItems,list);
+    }
+
+    public void generateListView(ObservableList target, List<ITimeUser> list){
+        target.clear();
         for(int i=0;i<list.size();i++){
             ITimeUser user = list.get(i);
             ListItemViewModel item = new ListItemViewModel();
             item.setCheckable(false);
             item.setContact(user);
             item.setMatchColor(presenter.getMatchColor());
-            items.add(item);
+            item.setShowDetail(getSearching());
+            item.setShowFirstLetter(false);
+            target.add(item);
         }
     }
 
     public void setItems(ObservableList items) {
         this.items = items;
+        notifyPropertyChanged(BR.items);
     }
 
     public ItemView getView() {
@@ -156,20 +171,16 @@ public class ContactHomePageViewModel  extends BaseObservable {
 
     public void loadData(){
         presenter.getFriends(new FriendsCallBack());
-//        presenter.setRequestCountListener(new RequestCountListener());
-//        presenter.getRequestCount();
     }
 
     public void initData(){
         presenter.getFriends(new FriendsCallBack());
-//        presenter.setRequestCountListener(new RequestCountListener());
-//        presenter.getRequestCount();
     }
 
-    public void initSideBarListView(SideBarListView sideBarListView){
-        sideBarListView.setData(getItems(), getItemView());
-        sideBarListView.setOnItemClickListener(getOnItemClickListener());
-    }
+//    public void initSideBarListView(SideBarListView sideBarListView){
+//        sideBarListView.setData(getItems(), getItemView());
+//        sideBarListView.setOnItemClickListener(getOnItemClickListener());
+//    }
 
     public AdapterView.OnItemClickListener getOnItemClickListener(){
         return new AdapterView.OnItemClickListener() {
@@ -200,7 +211,7 @@ public class ContactHomePageViewModel  extends BaseObservable {
                     }else{
                         setSearching(true);
                     }
-                    updateListView(filterData(text));
+                    updateSearchListView(filterData(text));
                 }
             };
     }
@@ -247,4 +258,5 @@ public class ContactHomePageViewModel  extends BaseObservable {
             setRequestCount(count);
         }
     }
+
 }

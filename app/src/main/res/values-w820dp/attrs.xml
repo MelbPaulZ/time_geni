@@ -19,6 +19,9 @@
 
     <declare-styleable name="SortListView">
         <attr name="showSideBar" format = "boolean"/>
+        <attr name="items" format="reference"/>
+        <attr name="itemView" format="reference"/>
+        <attr name="onItemClickListener" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="WideArrowButton">

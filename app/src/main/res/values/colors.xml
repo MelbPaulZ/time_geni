@@ -367,7 +367,7 @@
     <color name="darkBlue">#5394D0</color>
     <color name="lightRed">#CC3399</color>
     <color name="badgeRed">#FF2211</color>
-    <color name="halfTransparent">#33000000</color>
+    <color name="halfTransparent">#55000000</color>
     <color name="transparent">#00000000</color>
     <color name="grey_one">#6D6D6D</color>
     <color name="grey_two">#EFEFF4</color>
