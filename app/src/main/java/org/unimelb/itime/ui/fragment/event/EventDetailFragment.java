@@ -246,7 +246,7 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
 
     @Override
     public void setLeftTitleStringToVM() {
-        eventDetailForHostViewModel.setLeftBtnText(getString(R.string.back));
+        eventDetailForHostViewModel.setLeftTitleStr(getString(R.string.back));
     }
 
     @Override

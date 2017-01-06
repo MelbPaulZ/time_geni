@@ -31,13 +31,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/back"
+                    android:text="@{vm.leftTitleStr}"
                     android:textColor="@color/title_6D6D6D"
                     android:textSize="17sp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="14dp"
                     android:onClick="@{vm.onClickPhotoGridBack()}"
                     />
+
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
