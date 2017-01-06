@@ -124,6 +124,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
             presenter.getTimeSlots(event, calendar.getTimeInMillis());
         }
         timeslotWeekView.reloadTimeSlots(false);
+
     }
 
 

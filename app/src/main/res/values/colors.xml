@@ -322,6 +322,7 @@
     <color name="red_9E5259">#9E5259</color>
     <color name="title_6D6D6D">#6D6D6D</color>
     <color name="gray_9b9b9b">#9B9B9B</color>
+    <color name="alpha_gray_9b9b9b">#999B9B9B</color>
     <color name="color_06457F">#06457F</color>
     <color name="color_000000">#000000</color>
     <color name="color_FF9600">#FF9600</color>

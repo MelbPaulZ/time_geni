@@ -12,15 +12,13 @@ import android.widget.TextView;
 import com.android.databinding.library.baseAdapters.BR;
 
 
+import org.dmfs.rfc5545.DateTime;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.util.EventUtil;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 
 /**
@@ -91,7 +89,7 @@ public class InboxViewModel extends CommonViewModel {
 
     @BindingAdapter({"bind:dotVisible"})
     public static void setDotVisible(ImageView view, Message message) {
-        if (message.isRead()) {
+        if (message.isHasBadge()) {
             Log.i("reddot", "setDotVisible: + gone");
             view.setVisibility(View.GONE);
         } else {
@@ -122,8 +120,10 @@ public class InboxViewModel extends CommonViewModel {
             // all gray for deleted tag
             view.setBackgroundResource(R.drawable.inbox_host_tag_gray);
         }
-    }
 
+        //alpha
+        view.getBackground().setAlpha(message.isRead()?155:255);
+    }
 
     // for the tag3 visibility
     @BindingAdapter({"bind:visible"})
@@ -186,65 +186,20 @@ public class InboxViewModel extends CommonViewModel {
      * @return
      */
     private String getDatesRelationType(Calendar todayM, Calendar comparedTime){
-
         Calendar todayMCalendar = EventUtil.getBeginOfDayCalendar(todayM);
         Calendar currentDayMCalendar = EventUtil.getBeginOfDayCalendar(comparedTime);
 
         long delta = currentDayMCalendar.getTimeInMillis() - todayMCalendar.getTimeInMillis();
         long oneDay = 24 * 60 * 60 * 1000;
         if (delta==0){
-            int hour = comparedTime.get(Calendar.HOUR_OF_DAY);
-            int min = comparedTime.get(Calendar.MINUTE);
-            String h = hour<10? "0"+hour : ""+ hour;
-            String m = min<10? "0"+min : "" + min;
-            return h + ":" +  m;
+            return String.format("%1$tH:%1$tM",comparedTime);
         }else if (delta == oneDay){
             return presenter.getContext().getString(R.string.Yesterday);
         }else{
-            int day = comparedTime.get(Calendar.DAY_OF_MONTH);
-            int month = comparedTime.get(Calendar.MONTH) + 1;
-            return month + "-" + day;
+            return String.format("%1$td/%1$tm/%1$tY", comparedTime);
         }
-
-
-//        // -2 no relation, 1 tomorrow, 0 today, -1 yesterday
-//        int type = -2;
-//        int dayM = 24 * 60 * 60 * 1000;
-//        long diff = (currentDayMCalendar.getTimeInMillis() - todayMCalendar.getTimeInMillis());
-//        if (diff >0 && diff <= dayM){
-//            type = 1;
-//        }else if(diff < 0 && diff >= -dayM){
-//            type = -1;
-//        }else if (diff == 0){
-//            type = 0;
-//        }
-//
-//        switch (type){
-//            case 1:
-//                mention = "Tomorrow";
-//                break;
-//            case 0:
-//                mention = "Today";
-//                break;
-//            case -1:
-//                mention = "Yesterday";
-//                break;
-//            default:
-//                mention = "";
-//                break;
-//        }
-//
-//        return mention;
     }
 
-//    @Bindable
-//    public int getTag3Visible() {
-//        return tag3Visible;
-//    }
-//
-//    public void setTag3Visible(int tag3Visible) {
-//        this.tag3Visible = tag3Visible;
-//        notifyPropertyChanged(BR.tag3Visible);
-//    }
+
 
 }
