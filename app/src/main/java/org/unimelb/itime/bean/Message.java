@@ -59,9 +59,9 @@ public class Message implements Comparable<Message>{
     int type;
     int deleteLevel;
 
-
     boolean isRead;
     boolean hasBadge;
+
     /** Used for active entity operations. */
     @Generated(hash = 859287859)
     private transient MessageDao myDao;
