@@ -122,7 +122,7 @@ public class InboxViewModel extends CommonViewModel {
         }
 
         //alpha
-        view.getBackground().setAlpha(message.isRead()?125:255);
+        view.getBackground().setAlpha(message.isRead()?155:255);
     }
 
     // for the tag3 visibility
