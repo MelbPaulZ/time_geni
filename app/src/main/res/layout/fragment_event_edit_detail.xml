@@ -40,7 +40,7 @@
                     android:textSize="17dp"
                     android:textColor="@color/page_title_color"
                     android:onClick="@{eventEditVM.cancelEdit()}"
-                    android:text="@string/cancel" />
+                    android:text="@{eventEditVM.leftTitleStr}" />
 
                 <TextView
                     android:id="@+id/toolbar_title"
@@ -49,7 +49,7 @@
                     android:layout_gravity="center"
                     android:textSize="17dp"
                     android:textColor="@color/page_title_color"
-                    android:text="@string/edit_event" />
+                    android:text="@{eventEditVM.titleStr}" />
 
                 <Button
                     android:id="@+id/edit_event_done_button"
@@ -60,7 +60,7 @@
                     android:textSize="17dp"
                     android:onClick="@{eventEditVM.finishEdit()}"
                     android:textColor="@color/page_title_color"
-                    android:text="@string/done" />
+                    android:text="@{eventEditVM.rightTitleStr}" />
             </android.support.v7.widget.Toolbar>
         </LinearLayout>
 

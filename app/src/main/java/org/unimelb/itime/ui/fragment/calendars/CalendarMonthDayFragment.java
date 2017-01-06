@@ -254,5 +254,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
             AppUtil.hideProgressBar();
         }
     }
+
 }
 

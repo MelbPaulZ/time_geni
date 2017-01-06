@@ -27,7 +27,7 @@ import me.tatarka.bindingcollectionadapter.ItemView;
  * Created by yuhaoliu on 5/12/2016.
  */
 
-public class MainSettingsViewModel extends BaseObservable{
+public class MainSettingsViewModel extends CommonViewModel{
     private static final String TAG = "MainSettingsViewModel";
     private SettingCommonPresenter presenter;
     private SettingCommonMvpView mvpView;
@@ -54,7 +54,7 @@ public class MainSettingsViewModel extends BaseObservable{
     public final static int TASK_TO_CALENDAR_PREFERENCE = 13;
     public final static int TASK_TO_HELP_AND_FEEDBACK = 14;
     public final static int TASK_TO_ABOUT = 15;
-    public final static int TASK_TO_DEFAULT_CALENDAR = 16;
+    public final static int TASK_TO_DEFAULT_ALERT = 16;
     public final static int TASK_TO_IMPORT_UNIMELB_CALENDAR = 17;
     public final static int TASK_TO_IMPORT_GOOGLE_CALENDAR = 18;
     public final static int TASK_TO_IMPORT_CALENDAR = 19;

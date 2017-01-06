@@ -72,7 +72,6 @@ public class EventEditFragment extends EventBaseFragment<EventEditMvpView, Event
         }
         eventEditViewModel.setEventEditViewEvent(event);
         binding.setEventEditVM(eventEditViewModel);
-//        setProposedTimeSlots(event);
     }
 
 
@@ -101,17 +100,6 @@ public class EventEditFragment extends EventBaseFragment<EventEditMvpView, Event
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
-//    public void setProposedTimeSlots(Event event){
-////        if (event.hasTimeslots()){
-////            ArrayList<String> timeslotArrayList = new ArrayList<>();
-////            for (Timeslot timeSlot: event.getTimeslot()){
-////                timeslotArrayList.add(EventUtil.getSuggestTimeStringFromLong(getContext(), timeSlot.getStartTime(), timeSlot.getEndTime()));
-////            }
-////            ArrayAdapter stringAdapter = new ArrayAdapter(getContext(), R.layout.timeslot_listview_show, R.id.timeslot_listview_text, timeslotArrayList);
-////            binding.eventEditListview.setAdapter(stringAdapter);
-////        }
-//    }
-
     public void setEvent(Event event){
         this.event = event;
         if (eventEditViewModel!=null){
@@ -125,8 +113,8 @@ public class EventEditFragment extends EventBaseFragment<EventEditMvpView, Event
 
     @Override
     public void toHostEventDetail() {
-        EventDetailFragment hostFragment = (EventDetailFragment) getFragmentManager().findFragmentByTag(EventDetailFragment.class.getSimpleName());
-        openFragment(this, hostFragment);
+        EventDetailFragment detailFragment = (EventDetailFragment) getFragmentManager().findFragmentByTag(EventDetailFragment.class.getSimpleName());
+        closeFragment(this, detailFragment);
     }
 
     @Override
@@ -226,5 +214,20 @@ public class EventEditFragment extends EventBaseFragment<EventEditMvpView, Event
         Intent intent = new Intent();
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
+    }
+
+    @Override
+    public void setLeftTitleStringToVM() {
+        eventEditViewModel.setLeftTitleStr(getString(R.string.cancel));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        eventEditViewModel.setTitleStr(getString(R.string.edit_event));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        eventEditViewModel.setRightTitleStr(getString(R.string.done));
     }
 }

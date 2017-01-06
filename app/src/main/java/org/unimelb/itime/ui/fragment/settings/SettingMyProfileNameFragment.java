@@ -3,26 +3,22 @@ package org.unimelb.itime.ui.fragment.settings;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileNameBinding;
 import org.unimelb.itime.managers.SettingManager;
-import org.unimelb.itime.ui.mvpview.SettingMyProfileMvpView;
+import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
-import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
 /**
  * Created by Paul on 26/12/2016.
  */
 
-public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingMyProfileMvpView, SettingCommonPresenter<SettingMyProfileMvpView>>
-        implements SettingMyProfileMvpView{
+public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
+        implements SettingCommonMvpView{
 
     private FragmentSettingMyProfileNameBinding binding;
 
@@ -41,13 +37,8 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingMyP
     }
 
     @Override
-    public SettingCommonPresenter<SettingMyProfileMvpView> createPresenter() {
+    public SettingCommonPresenter<SettingCommonMvpView> createPresenter() {
         return new SettingCommonPresenter<>(getContext());
-    }
-
-    @Override
-    public void changeAdatar() {
-
     }
 
     @Override
@@ -65,4 +56,18 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingMyP
         }
     }
 
+    @Override
+    public void setLeftTitleStringToVM() {
+        viewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        viewModel.setTitleStr(getString(R.string.name));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        viewModel.setRightTitleStr(getString(R.string.setting_save));
+    }
 }

@@ -77,33 +77,13 @@
                 <TextView
                     style="@style/itime_bottom_divider_line" />
             </RelativeLayout>
-
-            <!--&lt;!&ndash;Default Calendar&ndash;&gt;-->
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="44dp"-->
-                <!--android:layout_marginLeft="16dp"-->
-                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_DEFAULT_CALENDAR)}">-->
-                <!--<TextView-->
-                    <!--style="@style/itime_blacktitle_17sp"-->
-                    <!--android:text="@string/setting_default_calendar"/>-->
-
-                <!--<ImageView-->
-                    <!--style="@style/image_right_arrow" />-->
-
-                <!--<TextView-->
-                    <!--style="@style/itime_subtitle_15sp"-->
-                    <!--android:text="work"-->
-                    <!--/>-->
-
-                <!--<TextView-->
-                    <!--style="@style/itime_bottom_divider_line" />-->
-            <!--</RelativeLayout>-->
+            
 
             <!--Default alert-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
+                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_DEFAULT_ALERT, true)}"
                 android:layout_marginLeft="16dp">
                 <TextView
                     style="@style/itime_blacktitle_17sp"

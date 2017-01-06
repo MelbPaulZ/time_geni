@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment.contact;
+package org.unimelb.itime.widget;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -20,7 +20,7 @@ import org.unimelb.itime.util.SizeUtil;
  * Created by 37925 on 2016/12/11.
  */
 
-public class ContactDialog extends PopupWindow {
+public class TimeGeniiDialog extends PopupWindow {
     private Context context;
     private LinearLayout dialogLayout;
     private RelativeLayout mainView;
@@ -34,7 +34,7 @@ public class ContactDialog extends PopupWindow {
     private int selectFontSize = 17;
 
 
-    public ContactDialog(Context context){
+    public TimeGeniiDialog(Context context){
         this.context = context;
         titleFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_big));
         msgFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_tiny));

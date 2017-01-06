@@ -48,4 +48,19 @@ implements SettingCommonMvpView{
             closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()), getSetting());
         }
     }
+
+    @Override
+    public void setLeftTitleStringToVM() {
+        viewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        viewModel.setTitleStr(getString(R.string.setting_gender));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+
+    }
 }

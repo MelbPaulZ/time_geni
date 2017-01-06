@@ -12,9 +12,9 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.bean.User;
-import org.unimelb.itime.ui.fragment.contact.ContactDialog;
+import org.unimelb.itime.widget.TimeGeniiDialog;
 import org.unimelb.itime.ui.presenter.contact.ProfileFragmentPresenter;
-import org.unimelb.itime.widget.ContactPopupWindow;
+import org.unimelb.itime.widget.TimeGeniiPopupWindow;
 
 
 /**
@@ -22,10 +22,11 @@ import org.unimelb.itime.widget.ContactPopupWindow;
  */
 
 public class ProfileFragmentViewModel extends BaseObservable {
-    private ContactDialog blockDialog;
-    private ContactDialog deleteDialog;
-    private ContactPopupWindow popupWindow;
+    private TimeGeniiDialog blockDialog;
+    private TimeGeniiDialog deleteDialog;
+    private TimeGeniiPopupWindow popupWindow;
     private Contact friend;
+    private FriendRequest request;
     private boolean showTitileBack = true;
     private boolean showTitleRight = true;
     private boolean showGender = true;
@@ -34,6 +35,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
     private boolean showEmail = true;
     private boolean showPhone = true;
     private boolean showAccept = false;
+    private boolean showAccepted = false;
     private ProfileFragmentPresenter presenter;
     private String title = "Profile";
 
@@ -90,6 +92,16 @@ public class ProfileFragmentViewModel extends BaseObservable {
     }
 
     @Bindable
+    public View.OnClickListener getAcceptListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.acceptRequest(request, new AcceptCallBack());
+            }
+        };
+    }
+
+    @Bindable
     public boolean getShowEmail() {
         return showEmail;
     }
@@ -132,6 +144,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
             setShowPhone(true);
             setShowSent(false);
             setShowAccept(false);
+            setShowAccepted(false);
         }else if(friend.getStatus().equals(FriendRequest.DISPLAY_STATUS_ACCEPT)){
             setShowTitleRight(false);
             setShowSent(false);
@@ -139,6 +152,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
             setShowEmail(true);
             setShowPhone(true);
             setShowAccept(true);
+            setShowAccepted(false);
             if(friend.getUserDetail().getPhone().equals("")){
                 setShowPhone(false);
             }
@@ -152,6 +166,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
             setShowAdd(true);
             setShowEmail(true);
             setShowPhone(true);
+            setShowAccepted(false);
             if(friend.getUserDetail().getPhone().equals("")){
                 setShowPhone(false);
             }
@@ -160,6 +175,8 @@ public class ProfileFragmentViewModel extends BaseObservable {
             }
         }
     }
+
+
 
     @Bindable
     public boolean getShowGender(){
@@ -237,42 +254,53 @@ public class ProfileFragmentViewModel extends BaseObservable {
     }
 
     private void initPopupWindow(){
-        popupWindow = new ContactPopupWindow(presenter.getView().getActivity());
+        popupWindow = new TimeGeniiPopupWindow(presenter.getContext(), presenter.getView().getContentView());
         if(getBlocked()) {
-            popupWindow.setFirstButtonText(presenter.getContext().getString(R.string.unblock_contact));
+            popupWindow.addSheetItem(presenter.getContext().getString(R.string.unblock_contact),
+                    presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+                        @Override
+                        public void onClick() {
+                            if(!getBlocked()) {
+                                if (blockDialog == null) {
+                                    initBlockDialog();
+                                }
+                                blockDialog.showAtLocation(presenter.getView().getContentView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                            }else{
+                                unblockFriend();
+                            }
+                        }
+                    });
         }else{
-            popupWindow.setFirstButtonText(presenter.getContext().getString(R.string.block_contact));
+            popupWindow.addSheetItem(presenter.getContext().getString(R.string.block_contact),
+                    presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+                        @Override
+                        public void onClick() {
+                            if(!getBlocked()) {
+                                if (blockDialog == null) {
+                                    initBlockDialog();
+                                }
+                                blockDialog.showAtLocation(presenter.getView().getContentView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                            }else{
+                                unblockFriend();
+                            }
+                        }
+                    });
         }
-        popupWindow.setFirstButtonLisenter(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!getBlocked()) {
-                    if (blockDialog == null) {
-                        initBlockDialog();
-                    }
-                    blockDialog.showAtLocation(presenter.getView().getContentView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-                }else{
-                    unblockFriend();
-                }
-                popupWindow.dismiss();
-            }
-        });
 
-        popupWindow.setSecondButtonText(presenter.getContext().getString(R.string.delete_contact));
-        popupWindow.setSecondButtonLisenter( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-                if(deleteDialog==null){
-                    initDeleteDialog();
-                }
-                deleteDialog.showAtLocation(presenter.getView().getContentView(), Gravity.BOTTOM| Gravity.CENTER_HORIZONTAL, 0, 0);
-            }
-        });
+        popupWindow.addSheetItem(presenter.getContext().getString(R.string.delete_contact),
+                presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+                    @Override
+                    public void onClick() {
+                        if(deleteDialog==null){
+                            initDeleteDialog();
+                        }
+                        deleteDialog.showAtLocation(presenter.getView().getContentView(), Gravity.BOTTOM| Gravity.CENTER_HORIZONTAL, 0, 0);
+                    }
+                });
     }
 
     private void initDeleteDialog(){
-        deleteDialog = new ContactDialog(presenter.getView().getActivity());
+        deleteDialog = new TimeGeniiDialog(presenter.getView().getActivity());
         deleteDialog.setTitle("Delete this contact?");
         deleteDialog.setExplain("Invitation from this contact will not be shown in your calendar,"
                 +" but will be shown in your message box");
@@ -287,7 +315,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
     }
 
     private void initBlockDialog(){
-        blockDialog = new ContactDialog(presenter.getView().getActivity());
+        blockDialog = new TimeGeniiDialog(presenter.getView().getActivity());
         blockDialog.setTitle("Block this contact?");
         blockDialog.setExplain("Block this contact from sending you invitations");
         blockDialog.setRightText("Block");
@@ -316,21 +344,22 @@ public class ProfileFragmentViewModel extends BaseObservable {
         public void success(){
             friend.setBlockLevel(1);
             notifyPropertyChanged(BR.blocked);
-            popupWindow.setFirstButtonText(presenter.getContext().getString(R.string.unblock_contact));
+            initPopupWindow();
         }
 
         public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.block_fail), Toast.LENGTH_SHORT);
+            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.block_fail), Toast.LENGTH_SHORT).show();
         }
     }
 
     public class DeleteCallBack{
         public void success(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.delete_success), Toast.LENGTH_SHORT);
+            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.delete_success), Toast.LENGTH_SHORT).show();
+            presenter.onBackPressed();
         }
 
         public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.delete_fail), Toast.LENGTH_SHORT);
+            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.delete_fail), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -338,11 +367,11 @@ public class ProfileFragmentViewModel extends BaseObservable {
         public void success(){
             friend.setBlockLevel(0);
             notifyPropertyChanged(BR.blocked);
-            popupWindow.setFirstButtonText(presenter.getContext().getString(R.string.block_contact));
+            initPopupWindow();
         }
 
         public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.unblock_fail), Toast.LENGTH_SHORT);
+            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.unblock_fail), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -353,7 +382,18 @@ public class ProfileFragmentViewModel extends BaseObservable {
         }
 
         public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.add_fail), Toast.LENGTH_SHORT);
+            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.add_fail), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public class AcceptCallBack{
+        public void success(){
+            setShowAccept(false);
+            setShowAccepted(true);
+        }
+
+        public void fail(){
+            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.accept_fail), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -365,5 +405,19 @@ public class ProfileFragmentViewModel extends BaseObservable {
     public void setShowAccept(boolean showAccept) {
         this.showAccept = showAccept;
         notifyPropertyChanged(BR.showAccept);
+    }
+
+    @Bindable
+    public boolean getShowAccepted() {
+        return showAccepted;
+    }
+
+    public void setShowAccepted(boolean showAccepted) {
+        this.showAccepted = showAccepted;
+        notifyPropertyChanged(BR.showAccepted);
+    }
+
+    public void setRequest(FriendRequest request){
+        this.request = request;
     }
 }

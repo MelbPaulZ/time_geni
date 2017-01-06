@@ -44,7 +44,7 @@
                     android:background="@null"
                     android:gravity="center_vertical|left"
                     android:onClick="@{hostDetailVM.onClickBack()}"
-                    android:text="@string/back"
+                    android:text="@{hostDetailVM.leftTitleStr}"
                     android:textColor="@color/page_title_color" />
 
                 <TextView
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/event_details"
+                    android:text="@{hostDetailVM.titleStr}"
                     android:textSize="18sp" />
 
                 <Button
@@ -62,7 +62,7 @@
                     android:layout_gravity="right"
                     android:background="@null"
                     android:onClick="@{hostDetailVM.onClickEdit()}"
-                    android:text="@string/edit"
+                    android:text="@{hostDetailVM.rightTitleStr}"
                     android:textColor="@color/page_title_color"
                     android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance(context).getUserUid())? View.VISIBLE : View.INVISIBLE}" />
             </android.support.v7.widget.Toolbar>
@@ -199,6 +199,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:visibility="@{hostDetailVM.getLocationVisibility(hostDetailVM.evDtlHostEvent)}"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -220,6 +221,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:visibility="@{hostDetailVM.getNoteVisibility(hostDetailVM.evDtlHostEvent)}"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -309,7 +311,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:paddingBottom="2dp"
-                            android:paddingTop="5dp"></LinearLayout>
+                            android:paddingTop="5dp"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -328,7 +330,7 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                                android:padding="5dp"></LinearLayout>
+                                android:padding="5dp"/>
                         </HorizontalScrollView>
 
                         <TextView

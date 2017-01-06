@@ -7,6 +7,9 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -95,6 +98,17 @@ public class TimeSlotUtil {
             return latestTimeSlot;
         }
         return null;
+    }
+
+
+    // this method is to sort timeslots by ascending order
+    public static void sortTimeslot(List<Timeslot> timeslots){
+        Collections.sort(timeslots, new Comparator<Timeslot>() {
+            @Override
+            public int compare(Timeslot lhs, Timeslot rhs) {
+                return (int) (lhs.getStartTime() - rhs.getStartTime());
+            }
+        });
     }
 
 }

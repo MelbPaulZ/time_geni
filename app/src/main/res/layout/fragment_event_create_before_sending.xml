@@ -36,7 +36,7 @@
                     android:gravity="center_vertical|left"
                     android:onClick="@{newEventDetailVM.onClickCancel()}"
                     android:textColor="@color/page_title_color"
-                    android:text="@string/cancel" />
+                    android:text="@{newEventDetailVM.leftTitleStr}" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
                     android:layout_gravity="center"
                     android:textSize="@dimen/page_text_size"
                     android:textColor="@color/page_title_color"
-                    android:text="@string/new_event" />
+                    android:text="@{newEventDetailVM.titleStr}" />
 
                 <Button
                     android:id="@+id/event_detail_before_sending_send_btn"
@@ -54,7 +54,7 @@
                     android:background="@null"
                     android:onClick="@{newEventDetailVM.onClickSend()}"
                     android:textColor="@color/page_title_color"
-                    android:text="@string/send" />
+                    android:text="@{newEventDetailVM.rightTitleStr}" />
             </android.support.v7.widget.Toolbar>
         </LinearLayout>
 

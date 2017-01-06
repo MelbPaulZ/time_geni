@@ -3,8 +3,6 @@ package org.unimelb.itime.ui.presenter;
 import android.content.Context;
 import android.util.Log;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
-
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.DBManager;
@@ -12,8 +10,6 @@ import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.fragment.settings.SettingIndexFragment;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
-import org.unimelb.itime.ui.mvpview.SettingMyProfileMvpView;
-import org.unimelb.itime.ui.viewmodel.contact.AddFriendsViewModel;
 import org.unimelb.itime.util.HttpUtil;
 
 import java.util.List;

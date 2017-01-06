@@ -30,6 +30,7 @@ import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     private FragmentEventCreateBeforeSendingBinding binding;
     private EventCreateDetailBeforeSendingViewModel eventCreateDetailBeforeSendingViewModel;
     private Event event;
-    private EventCreateDetailBeforeSendingFragment self;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,6 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_event_create_before_sending, container, false);
-        self = this;
         return binding.getRoot();
     }
 
@@ -204,7 +203,7 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
 
     @Override
     public void onTaskStart(int task) {
-
+        AppUtil.showProgressBar(getContext(), "Waiting", "Please waiting");
     }
 
     @Override
@@ -214,6 +213,22 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
 
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
+        AppUtil.hideProgressBar();
         onClickSend();
+    }
+
+    @Override
+    public void setLeftTitleStringToVM() {
+        eventCreateDetailBeforeSendingViewModel.setLeftTitleStr(getContext().getString(R.string.cancel));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        eventCreateDetailBeforeSendingViewModel.setTitleStr(getContext().getString(R.string.new_event));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        eventCreateDetailBeforeSendingViewModel.setRightTitleStr(getContext().getString(R.string.send));
     }
 }

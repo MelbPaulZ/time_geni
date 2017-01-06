@@ -10,7 +10,7 @@ import org.unimelb.itime.service.MusicService;
 import org.unimelb.itime.ui.fragment.contact.MyQRCodeFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingAboutFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingCalendarPreferenceFragment;
-import org.unimelb.itime.ui.fragment.settings.SettingDefaultCalendarFragment;
+import org.unimelb.itime.ui.fragment.settings.SettingDefaultAlertFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingImportCalendarFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingImportCalendarUnimelbFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
@@ -27,7 +27,7 @@ public class SettingActivity extends BaseActivity{
     private SettingMyProfileNameFragment myProfileNameFragment;
     private SettingAboutFragment aboutFragment;
     private SettingCalendarPreferenceFragment calendarPreferenceFragment;
-    private SettingDefaultCalendarFragment defaultCalendarFragment;
+    private SettingDefaultAlertFragment defaultCalendarFragment;
     private SettingImportCalendarUnimelbFragment importCalendarUnimelbFragment;
     private SettingNotificationFragment notificationFragment;
     private SettingProfileGenderFragment profileGenderFragment;
@@ -89,7 +89,7 @@ public class SettingActivity extends BaseActivity{
         myProfileNameFragment = new SettingMyProfileNameFragment();
         aboutFragment = new SettingAboutFragment();
         calendarPreferenceFragment = new SettingCalendarPreferenceFragment();
-        defaultCalendarFragment = new SettingDefaultCalendarFragment();
+        defaultCalendarFragment = new SettingDefaultAlertFragment();
         importCalendarUnimelbFragment = new SettingImportCalendarUnimelbFragment();
         notificationFragment = new SettingNotificationFragment();
         profileGenderFragment = new SettingProfileGenderFragment();

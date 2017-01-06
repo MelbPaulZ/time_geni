@@ -10,6 +10,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
+import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.databinding.FragmentNewFriendBinding;
 import org.unimelb.itime.ui.mvpview.contact.NewFriendMvpView;
 import org.unimelb.itime.ui.presenter.contact.NewFriendFragmentPresenter;
@@ -51,11 +52,12 @@ public class NewFriendFragment extends MvpFragment<NewFriendMvpView, NewFriendFr
                 .commit();
     }
 
-    public void goToProfileFragment(Contact contact){
+    public void goToProfileFragment(Contact contact, FriendRequest request){
         if (profileFragment == null) {
             profileFragment = new ProfileFragment();
         }
         profileFragment.setUser(contact);
+        profileFragment.setRequest(request);
         fm.beginTransaction()
                 .hide(this)
                 .replace(R.id.contentFrameLayout, profileFragment)

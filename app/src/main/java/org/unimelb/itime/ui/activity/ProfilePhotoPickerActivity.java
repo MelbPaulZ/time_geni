@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.activity;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -24,9 +25,11 @@ import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.databinding.ActivityProfilePhotopickerBinding;
 import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.UserUtil;
+import org.unimelb.itime.widget.TimeGeniiPopupWindow;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,13 +42,15 @@ import static android.R.attr.data;
 public class ProfilePhotoPickerActivity extends AppCompatActivity {
     public static final int CHOOSE_FROM_LIBRARY = 0;
     private ImagePicker imagePicker;
+    private ActivityProfilePhotopickerBinding binding;
+    private TimeGeniiPopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_photopicker);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_profile_photopicker);
 
-        final RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.gallery);
+        final RelativeLayout mainLayout = binding.gallery;
         ViewTreeObserver vto = mainLayout.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -53,35 +58,13 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
                 int width  = mainLayout.getMeasuredWidth();
                 int height = mainLayout.getMeasuredHeight();
 
-                findViewById(R.id.profile_image).getLayoutParams().height = width;
-
-                RelativeLayout btn = (RelativeLayout) findViewById(R.id.choose);
+                binding.profileImage.getLayoutParams().height = width;
+                initPopupWindow();
+                RelativeLayout btn = binding.choose;
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        new ActionSheetDialog(ProfilePhotoPickerActivity.this)
-                                .builder()
-                                .setCancelable(true)
-                                .setCanceledOnTouchOutside(true)
-                                .addSheetItem("Take Photo", ActionSheetDialog.SheetItemColor.Black,
-                                        new ActionSheetDialog.OnSheetItemClickListener() {
-                                            @Override
-                                            public void onClick(int which) {
-                                                ImagePicker.getInstance().takePicture(ProfilePhotoPickerActivity.this,ImagePicker.REQUEST_CODE_TAKE);
-//                                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
-//                                                startActivityForResult(intent, TAKE_PHOTO);
-                                            }
-                                        })
-                                .addSheetItem("Choose from Photos", ActionSheetDialog.SheetItemColor.Black,
-                                        new ActionSheetDialog.OnSheetItemClickListener() {
-                                            @Override
-                                            public void onClick(int which) {
-                                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
-                                                startActivityForResult(intent, CHOOSE_FROM_LIBRARY);
-                                            }
-                                        })
-                                .show();
+                        popupWindow.show();
                     }
                 });
 
@@ -108,8 +91,30 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
         }
     }
 
+    private void initPopupWindow(){
+        popupWindow =
+        new TimeGeniiPopupWindow(getApplicationContext(), binding.getRoot())
+                .addSheetItem("Take Photo", getResources().getColor(R.color.textBlue),
+                        new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick() {
+                                ImagePicker.getInstance().takePicture(ProfilePhotoPickerActivity.this,ImagePicker.REQUEST_CODE_TAKE);
+//                                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
+//                                                startActivityForResult(intent, TAKE_PHOTO);
+                            }
+                        })
+                .addSheetItem("Choose from Photos", getResources().getColor(R.color.textBlue),
+                        new TimeGeniiPopupWindow.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick() {
+                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
+                                startActivityForResult(intent, CHOOSE_FROM_LIBRARY);
+                            }
+                        });
+    }
+
     private void initListener(){
-        TextView myProfileBtn = (TextView) findViewById(R.id.avatar_my_profile);
+        TextView myProfileBtn = binding.avatarMyProfile;
         myProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +129,7 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
     }
 
     private void setPhoto(String url){
-        Picasso.with(ProfilePhotoPickerActivity.this).load(url).into((ImageView) findViewById(R.id.profile_image));
+        Picasso.with(ProfilePhotoPickerActivity.this).load(url).into(binding.profileImage);
     }
 
     private void updatePhoto(String localPath) throws IOException {
@@ -157,7 +162,7 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
             if (data != null && (requestCode == CHOOSE_FROM_LIBRARY || requestCode == ImagePicker.REQUEST_CODE_CROP)) {
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                 for (int i = 0; i < images.size(); i++) {
-                    Picasso.with(ProfilePhotoPickerActivity.this).load(new File(images.get(i).path)).into((ImageView) findViewById(R.id.profile_image));
+                    Picasso.with(ProfilePhotoPickerActivity.this).load(new File(images.get(i).path)).into(binding.profileImage);
                     // todo update photo to server
 
 

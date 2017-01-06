@@ -1,7 +1,6 @@
 package org.unimelb.itime.adapter;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
