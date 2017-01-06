@@ -32,16 +32,18 @@ public class TimeGeniiDialog extends PopupWindow {
     private int titleFontSize = 17;
     private int msgFontSize = 10;
     private int selectFontSize = 17;
+    private View contentView;
 
 
-    public TimeGeniiDialog(Context context){
+    public TimeGeniiDialog(Context context, View contentView){
         this.context = context;
+        this.contentView = contentView;
         titleFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_big));
         msgFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_tiny));
         selectFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_big));
         initDialog();
         this.setContentView(mainView);
-        this.setBackgroundDrawable(new ColorDrawable(0xb0000000));
+        this.setBackgroundDrawable(new ColorDrawable(0x50000000));
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setFocusable(true);
@@ -58,6 +60,10 @@ public class TimeGeniiDialog extends PopupWindow {
                 return true;
             }
         });
+    }
+
+    public void show(){
+        this.showAtLocation(contentView, Gravity.BOTTOM| Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
     private void initDialog(){
@@ -112,7 +118,7 @@ public class TimeGeniiDialog extends PopupWindow {
 
         leftButton = new TextView(context);
         LinearLayout.LayoutParams cancelParams = new LinearLayout.LayoutParams(
-                SizeUtil.dp2px(context, 150), SizeUtil.dp2px(context, 50));
+                SizeUtil.dp2px(context, 148), SizeUtil.dp2px(context, 50));
         leftButton.setLayoutParams(cancelParams);
         leftButton.setText("Cancel");
         leftButton.setGravity(Gravity.CENTER);
@@ -136,7 +142,7 @@ public class TimeGeniiDialog extends PopupWindow {
 
         rightButton = new TextView(context);
         LinearLayout.LayoutParams doParams = new LinearLayout.LayoutParams(
-                SizeUtil.dp2px(context, 149), SizeUtil.dp2px(context, 50));
+                SizeUtil.dp2px(context, 151), SizeUtil.dp2px(context, 50));
         rightButton.setLayoutParams(doParams);
         rightButton.setText("Cancel");
         rightButton.setGravity(Gravity.CENTER);
@@ -146,28 +152,52 @@ public class TimeGeniiDialog extends PopupWindow {
         buttonLayout.addView(rightButton);
     }
 
-    public void setTitle(String str){
+    public TimeGeniiDialog setTitle(String str){
         title.setText(str);
+        return this;
     }
 
-    public void setExplain(String str){
+    public TimeGeniiDialog setExplain(String str){
         explain.setText(str);
+        return this;
     }
 
-    public void setRightOnClickListener(View.OnClickListener listener){
-        rightButton.setOnClickListener(listener);
+    public TimeGeniiDialog setRightOnClickListener(final OnButtonClickListener listener){
+        rightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick();
+                TimeGeniiDialog.this.dismiss();
+            }
+        });
+        return this;
     }
 
-    public void setLeftOnClickListener(View.OnClickListener listener){
-        leftButton.setOnClickListener(listener);
+    public TimeGeniiDialog setLeftOnClickListener(final OnButtonClickListener listener){
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick();
+                TimeGeniiDialog.this.dismiss();
+            }
+        });
+        return this;
     }
 
-    public void setRightText(String str){
+    public TimeGeniiDialog setRightText(String str){
         rightButton.setText(str);
+        return this;
     }
 
-    public void setLeftText(String str){
+    public TimeGeniiDialog setLeftText(String str){
         rightButton.setText(str);
+        return this;
+    }
+
+    public static class OnButtonClickListener{
+        public void onClick(){
+
+        }
     }
 
 }

@@ -18,8 +18,15 @@ import com.google.android.gms.common.api.Scope;
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
+import org.unimelb.itime.bean.RequestReadBody;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.restfulapi.BindApi;
+import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
+import org.unimelb.itime.util.HttpUtil;
+
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by Qiushuo Huang on 2017/1/2.
@@ -28,9 +35,12 @@ import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
 public class GoogleAuthActivity extends BaseActivity{
     private static final String TAG = "Google Auth";
     private static final int RC_SIGN_IN = 9001;
+    private BindApi bindApi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bindApi = HttpUtil.createService(getApplicationContext(), BindApi.class);
         Scope s1 = new Scope("https://apps-apis.google.com/a/feeds/groups/");
         Scope s2 = new Scope("https://apps-apis.google.com/a/feeds/alias/");
         Scope s3 = new Scope("https://apps-apis.google.com/a/feeds/user/");
@@ -72,21 +82,47 @@ public class GoogleAuthActivity extends BaseActivity{
             GoogleSignInAccount acct = result.getSignInAccount();
             Log.d(TAG, "email:" + acct.getEmail());
             Log.d(TAG, "authcode:" + acct.getServerAuthCode());
-            GoogleSignUtil.getInstance().setAuthCode(acct.getServerAuthCode());
-            this.onBackPressed();
-//            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-//            updateUI(true);
+            bind(acct.getServerAuthCode());
         } else {
-            // Signed out, show unauthenticated UI.
-//            updateUI(false);
+            setResult(GoogleSignUtil.RESULT_FAILED,getIntent());
+            finish();
         }
+
+    }
+
+    private void bind(String authCode){
+        Observable<HttpResult<Void>> observable = bindApi.bindGoogle(authCode);
+        Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "onCompleted: ");
+                GoogleAuthActivity.this.finish();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError: " + e.getMessage());
+            }
+
+            @Override
+            public void onNext(HttpResult<Void> result) {
+                Log.d(TAG, "onNext: " + result.getInfo()+"   status:"+result.getStatus());
+                Intent intent = new Intent();
+                intent.putExtra("authCode", result.getInfo());
+                if (result.getStatus()==1){
+                    GoogleAuthActivity.this.setResult(GoogleSignUtil.RESULT_SUCCESS,intent);
+                }else {
+                    GoogleAuthActivity.this.setResult(GoogleSignUtil.RESULT_FAILED,intent);
+                }}
+        };
+        HttpUtil.subscribe(observable, subscriber);
     }
 
     private GoogleApiClient.OnConnectionFailedListener getFailedListener(){
         return new GoogleApiClient.OnConnectionFailedListener() {
             @Override
             public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                Toast.makeText(getApplicationContext(),connectionResult.getErrorMessage(), Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(),connectionResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         };
     }

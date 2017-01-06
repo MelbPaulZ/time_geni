@@ -8,7 +8,8 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
         <org.unimelb.itime.widget.PlusTitleBar
             android:layout_width="match_parent"
             android:layout_height="@dimen/title_height"
@@ -18,15 +19,13 @@
             app:showRight="@{viewModel.showTitleRight}"
             app:titleBackListener="@{viewModel.titleBackListener}"
             app:titleRightListener="@{viewModel.titleRightListener}"/>
+        <include layout="@layout/line"/>
         <org.unimelb.itime.widget.SearchBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:searchListener = "@{viewModel.onEditListener}"
             android:id="@+id/searchBar"/>
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white">
+        <include layout="@layout/line"/>
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -34,6 +33,5 @@
                 app:items="@{viewModel.items}"
                 app:itemView="@{viewModel.itemView}"
                 android:id="@+id/listView"/>
-        </FrameLayout>
     </LinearLayout>
 </layout>

@@ -50,10 +50,28 @@ public class SideBarListView extends FrameLayout {
         init();
     }
 
+    public void setShowSideBar(boolean showSideBar){
+        if(showSideBar){
+            sideBar.setVisibility(VISIBLE);
+        }else{
+            sideBar.setVisibility(GONE);
+        }
+    }
+
     public void setData(ObservableList list, ItemView itemView){
-        items = list;
+
+        viewModel.setItemView(itemView);
+    }
+
+    public void setItems(ObservableList list){
+        if(items==null) {
+            items = list;
+            viewModel.setItems(items);
+        }
         updateList();
-        viewModel.setItems(items);
+    }
+
+    public void setItemView(ItemView itemView){
         viewModel.setItemView(itemView);
     }
 
