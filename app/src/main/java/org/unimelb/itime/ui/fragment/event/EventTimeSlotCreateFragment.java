@@ -14,6 +14,7 @@ import com.aigestudio.wheelpicker.WheelPicker;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.TimeslotCreateConfirmBinding;
 import org.unimelb.itime.databinding.TimeslotCreatePickerBinding;
@@ -69,7 +70,7 @@ public class EventTimeSlotCreateFragment extends EventBaseFragment<TimeslotCreat
 
     @Override
     public void onClickCancel() {
-        openFragment(this, (EventTimeSlotViewFragment)getFrom());
+        closeFragment(this, (EventTimeSlotViewFragment)getFrom());
     }
 
     @Override
@@ -148,6 +149,36 @@ public class EventTimeSlotCreateFragment extends EventBaseFragment<TimeslotCreat
 
     @Override
     public void onRecommend(List<Timeslot> timeslotList) {
+
+    }
+
+    @Override
+    public void setLeftTitleStringToVM() {
+        viewModel.setLeftTitleStr(getString(R.string.cancel));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        viewModel.setTitleStr(getString(R.string.new_timeslot));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        viewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public void onTaskStart(int task) {
+
+    }
+
+    @Override
+    public void onTaskError(int task, String errorMsg, int code) {
+
+    }
+
+    @Override
+    public void onTaskComplete(int task, List<Event> dataList) {
 
     }
 }

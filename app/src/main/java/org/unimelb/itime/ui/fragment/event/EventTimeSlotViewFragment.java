@@ -258,6 +258,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
     @Override
     public void onClickDone() {
+        TimeSlotUtil.sortTimeslot(event.getTimeslot());
         if (getFrom() instanceof InviteeFragment || getFrom() instanceof EventTimeSlotCreateFragment) {
             EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
             beforeSendingFragment.setEvent(event);
@@ -272,14 +273,14 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
     @Override
     public void onClickBack() {
         if (getFrom() instanceof InviteeFragment) {
-            openFragment(this, (InviteeFragment) getFrom());
+            closeFragment(this, getFrom());
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof InviteeFragment) {
             InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-            openFragment(this, inviteeFragment);
+            closeFragment(this, inviteeFragment);
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof EventCreateDetailBeforeSendingFragment) {
-            openFragment(this, (EventCreateDetailBeforeSendingFragment) getFrom());
+            closeFragment(this, getFrom());
         }else if (getFrom() instanceof EventTimeSlotCreateFragment){
-            openFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
+            closeFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
         }
     }
 
@@ -341,4 +342,33 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         });
     }
 
+    @Override
+    public void setLeftTitleStringToVM() {
+        viewModel.setLeftTitleStr(getString(R.string.back));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        viewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public void onTaskStart(int task) {
+
+    }
+
+    @Override
+    public void onTaskError(int task, String errorMsg, int code) {
+
+    }
+
+    @Override
+    public void onTaskComplete(int task, List<Event> dataList) {
+
+    }
 }

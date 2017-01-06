@@ -3,19 +3,14 @@ package org.unimelb.itime.base;
 import android.support.multidex.MultiDexApplication;
 
 import com.avos.avoscloud.AVAnalytics;
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
-import com.avos.avoscloud.SaveCallback;
 
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
 import org.unimelb.itime.util.GreenDaoUtil;
 
 /**
  * Created by yinchuandong on 18/08/2016.
  */
-public class ITimeApplication extends MultiDexApplication{
+public class ITimeApplication extends MultiDexApplication {
 
     private final static String TAG = "ITimeApplication";
 

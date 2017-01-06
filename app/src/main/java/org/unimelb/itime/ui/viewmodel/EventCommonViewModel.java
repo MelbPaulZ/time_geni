@@ -9,6 +9,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
+import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 
 import java.util.Calendar;
 

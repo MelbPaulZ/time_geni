@@ -89,4 +89,18 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
         }
     }
 
+    @Override
+    public void setLeftTitleStringToVM() {
+        viewModel.setLeftTitleStr(getString(R.string.action_settings));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        viewModel.setTitleStr(getString(R.string.setting_my_profile));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+
+    }
 }

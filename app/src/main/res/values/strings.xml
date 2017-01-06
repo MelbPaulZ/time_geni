@@ -185,6 +185,7 @@
     <string name="description">Note</string>
     <string name="photo">Photo</string>
     <string name="event_details">Event Details</string>
+    <string name="new_invitation">New Invitation</string>
     <string name="reason">Reason...</string>
     <string name="please_enter_the_reason_of_rejecting_this_event">Please enter the reason of rejecting this event</string>
     <string name="reject_this_event">Reject This Event</string>

@@ -135,12 +135,13 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
 
     @Override
     public void onClickDone(Event event) {
+        TimeSlotUtil.sortTimeslot(event.getTimeslot());
         if (getFrom() instanceof EventEditFragment) {
             ((EventEditFragment) getFrom()).setEvent(event);
-            openFragment(this, (EventEditFragment) getFrom());
+            openFragment(this, getFrom());
         } else if (getFrom() instanceof EventDetailFragment) {
             ((EventDetailFragment) getFrom()).setEvent(event);
-            openFragment(this, (EventDetailFragment) getFrom());
+            openFragment(this, getFrom());
         } else if (getFrom() instanceof InviteeFragment) {
             EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
             eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
@@ -392,5 +393,35 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
 
     public WeekView getWeekView(){
         return this.weekView;
+    }
+
+    @Override
+    public void setLeftTitleStringToVM() {
+        viewModel.setLeftTitleStr(getString(R.string.back));
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+        viewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public void onTaskStart(int task) {
+
+    }
+
+    @Override
+    public void onTaskError(int task, String errorMsg, int code) {
+
+    }
+
+    @Override
+    public void onTaskComplete(int task, List<Event> dataList) {
+
     }
 }

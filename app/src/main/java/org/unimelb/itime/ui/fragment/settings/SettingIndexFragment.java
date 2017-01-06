@@ -186,6 +186,21 @@ implements SettingCommonMvpView{
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
+    @Override
+    public void setLeftTitleStringToVM() {
+
+    }
+
+    @Override
+    public void setTitleStringToVM() {
+        viewModel.setTitleStr(getString(R.string.tab_setting));
+    }
+
+    @Override
+    public void setRightTitleStringToVM() {
+
+    }
+
     public class FindFriendCallBack{
         public void success(Contact contact){
             gotoProfile(contact);

@@ -45,7 +45,7 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/detail_timeslot_back_arrow"
                         android:onClick="@{timeSlotHostVM.onBack()}"
-                        android:text="@string/back" />
+                        android:text="@{timeSlotHostVM.leftTitleStr}" />
 
                     <TextView
                         android:id="@+id/detail_timeslot_toolbar_title"
@@ -80,7 +80,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/padding_10"
                         android:onClick="@{timeSlotHostVM.onDone()}"
-                        android:text="@string/done" />
+                        android:text="@{timeSlotHostVM.rightTitleStr}" />
                 </RelativeLayout>
 
                 <RelativeLayout

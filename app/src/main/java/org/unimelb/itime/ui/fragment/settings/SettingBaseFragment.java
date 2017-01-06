@@ -59,4 +59,8 @@ public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P ext
     public void reloadSetting(){
         setSetting(SettingManager.getInstance(getContext()).getSetting());
     }
+
+    public abstract void setLeftTitleStringToVM();
+    public abstract void setTitleStringToVM();
+    public abstract void setRightTitleStringToVM();
 }

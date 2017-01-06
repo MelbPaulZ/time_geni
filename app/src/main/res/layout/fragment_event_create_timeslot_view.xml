@@ -43,7 +43,7 @@
                         android:layout_marginLeft="@dimen/padding_5"
                         android:textSize="17dp"
                         android:onClick="@{timeslotVM.onClickBack}"
-                        android:text="@string/back" />
+                        android:text="@{timeslotVM.leftTitleStr}" />
 
                     <TextView
                         android:id="@+id/toolbar_title"
@@ -85,7 +85,7 @@
                         android:layout_marginRight="@dimen/padding_10"
                         android:textSize="17dp"
                         android:onClick="@{timeslotVM.onClickDone}"
-                        android:text="@string/done"/>
+                        android:text="@{timeslotVM.rightTitleStr}"/>
                 </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 

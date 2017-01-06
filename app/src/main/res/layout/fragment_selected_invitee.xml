@@ -44,7 +44,7 @@
                         android:layout_marginLeft="8dp"
                         android:textSize="15sp"
                         android:layout_height="wrap_content"
-                        android:text="@string/back" />
+                        android:text="@{vm.leftTitleStr}" />
                 </LinearLayout>
 
                 <LinearLayout

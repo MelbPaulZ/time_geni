@@ -57,7 +57,6 @@ public class EventDetailViewModel extends CommonViewModel {
     inviteeUnconfirmVisibility, soloInvisible;
 
 
-
     public void setEvAdapterEvent(Map<String, List<EventUtil.StatusKeyStruct>> adapterData){
         this.adapterData = adapterData;
     }
@@ -607,7 +606,21 @@ public class EventDetailViewModel extends CommonViewModel {
         }
     }
 
+    public int getLocationVisibility(Event event){
+        if (!event.getLocation().equals("")){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+    }
 
+    public int getNoteVisibility(Event event){
+        if (!event.getDescription().equals("")){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+    }
 
     //***********************************************************
 

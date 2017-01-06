@@ -58,7 +58,7 @@ public class LoginEmailSentFragment extends LoginBaseFragment implements LoginMv
     public void onPageChange(int task) {
         switch(task){
             case LoginViewModel.TO_INDEX_FRAG: {
-                openFragment(this, (LoginIndexFragment) getFragmentManager().findFragmentByTag(LoginIndexFragment.class.getSimpleName()));
+                closeFragment(this, (LoginIndexFragment) getFragmentManager().findFragmentByTag(LoginIndexFragment.class.getSimpleName()));
                 break;
             }
             case LoginViewModel.TO_RESET_PASSWORD_FRAG:{
@@ -67,4 +67,5 @@ public class LoginEmailSentFragment extends LoginBaseFragment implements LoginMv
             }
         }
     }
+
 }
