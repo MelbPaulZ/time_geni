@@ -93,7 +93,7 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
 
     private void initPopupWindow(){
         popupWindow =
-        new ActionSheetDialog(getApplicationContext())
+        new ActionSheetDialog(ProfilePhotoPickerActivity.this)
                 .builder()
                 .setCancelable(true)
                 .setCanceledOnTouchOutside(true)
