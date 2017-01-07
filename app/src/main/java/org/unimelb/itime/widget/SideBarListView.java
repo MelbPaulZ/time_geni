@@ -60,15 +60,16 @@ public class SideBarListView extends FrameLayout {
 
     public void setData(ObservableList list, ItemView itemView){
 
+        items = list;
         viewModel.setItemView(itemView);
+        viewModel.setItems(items);
     }
 
     public void setItems(ObservableList list){
-        if(items==null) {
-            items = list;
-            viewModel.setItems(items);
-        }
-        updateList();
+        items = list;
+        sort(items);
+        updatePositionMap(items);
+        viewModel.setItems(items);
     }
 
     public void setItemView(ItemView itemView){

@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.unimelb.itime.R;
@@ -38,9 +40,11 @@ public class ContactTestActivityContact extends BaseActivity {
     }
 
     public void toInvitee() {
-        Intent intent = new Intent();
-        intent.setClass(this, InviteFriendsActivityContact.class);
-        startActivity(intent);
+//        Intent intent = new Intent();
+//        intent.setClass(this, InviteFriendsActivityContact.class);
+//        startActivity(intent);
+        new AlertDialog.Builder(this).setTitle("Title").setMessage("this is a message").setPositiveButton("确定", null)
+        .setNegativeButton("取消", null).show();
     }
 
     public void toQRCode() {

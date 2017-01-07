@@ -87,7 +87,7 @@
     </LinearLayout>
         <TextView
             android:layout_marginTop="20dp"
-            android:layout_width="360dp"
+            android:layout_width="29dp"
             android:layout_height="wrap_content"
             android:text= "*Sorry, currently Timegenii is only available to University of Melbourne Email Account."
             android:textColor="@color/red_alert"

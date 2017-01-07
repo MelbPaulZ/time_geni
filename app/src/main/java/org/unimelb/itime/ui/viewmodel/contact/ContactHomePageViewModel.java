@@ -36,6 +36,7 @@ public class ContactHomePageViewModel  extends BaseObservable {
     private List<ITimeUser> friendList;
     private boolean searching;
     private int requestCount=0;
+    private SideBarListView sideBarListView;
 
     @Bindable
     public boolean getSearching() {
@@ -99,7 +100,7 @@ public class ContactHomePageViewModel  extends BaseObservable {
 
     private void updateListView(List<ITimeUser> list){
         generateListView(items,list);
-        setItems(items);
+        sideBarListView.updateList();
     }
 
     private void updateSearchListView(List<ITimeUser> list){
@@ -177,10 +178,11 @@ public class ContactHomePageViewModel  extends BaseObservable {
         presenter.getFriends(new FriendsCallBack());
     }
 
-//    public void initSideBarListView(SideBarListView sideBarListView){
-//        sideBarListView.setData(getItems(), getItemView());
-//        sideBarListView.setOnItemClickListener(getOnItemClickListener());
-//    }
+    public void initSideBarListView(SideBarListView sideBarListView){
+        this.sideBarListView = sideBarListView;
+        sideBarListView.setData(getItems(), getItemView());
+        sideBarListView.setOnItemClickListener(getOnItemClickListener());
+    }
 
     public AdapterView.OnItemClickListener getOnItemClickListener(){
         return new AdapterView.OnItemClickListener() {

@@ -70,7 +70,7 @@ public class WideArrowButton extends RelativeLayout {
         iconImageView = new ImageView(getContext());
         RelativeLayout.LayoutParams params = new LayoutParams(SizeUtil.dp2px(getContext(),37),
                 SizeUtil.dp2px(getContext(),37));
-        params.setMargins(SizeUtil.dp2px(getContext(),15),
+        params.setMargins(SizeUtil.dp2px(getContext(),17),
                 SizeUtil.dp2px(getContext(),9),
                 SizeUtil.dp2px(getContext(),11),
                 SizeUtil.dp2px(getContext(),9));
