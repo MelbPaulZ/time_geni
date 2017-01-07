@@ -25,8 +25,8 @@ import me.fesky.library.widget.ios.AlertDialog;
  */
 
 public class ProfileFragmentViewModel extends BaseObservable {
-    private TimeGeniiDialog blockDialog;
-    private TimeGeniiDialog deleteDialog;
+    private AlertDialog blockDialog;
+    private AlertDialog deleteDialog;
 //    private TimeGeniiPopupWindow popupWindow;
     private ActionSheetDialog popupWindow;
     private Contact friend;
@@ -195,7 +195,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
 
     @Bindable
     public String getName(){
-        return friend.getName();
+        return friend.getAliasName();
     }
     @Bindable
     public String getLocation(){
@@ -359,31 +359,43 @@ public class ProfileFragmentViewModel extends BaseObservable {
         if(presenter.getView()==null){
             return;
         }
-        deleteDialog = new TimeGeniiDialog(presenter.getView().getActivity(), presenter.getView().getContentView())
+        deleteDialog = new AlertDialog(presenter.getView().getActivity())
+                .builder()
                 .setTitle("Delete this contact?")
-                .setExplain("Invitation from this contact will not be shown in your calendar,"
-                    +" but will be shown in your message box")
-                .setRightText("Delete")
-                .setRightOnClickListener(new TimeGeniiDialog.OnButtonClickListener() {
+                .setMsg("Invitation from this contact will not be shown in your calendar,"
+                        +" but will be shown in your message box")
+                .setPositiveButton("Delete", new View.OnClickListener() {
                     @Override
-                    public void onClick() {
+                    public void onClick(View view) {
                         deleteFriend();
                     }
-                });
+                })
+               .setNegativeButton("Cancel", new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+
+                   }
+               });
     }
 
     private void initBlockDialog(){
         if(presenter.getView()==null){
             return;
         }
-        blockDialog = new TimeGeniiDialog(presenter.getView().getActivity(), presenter.getView().getContentView())
+        blockDialog = new AlertDialog(presenter.getView().getActivity())
+                .builder()
                 .setTitle("Block this contact?")
-                .setExplain("Block this contact from sending you invitations")
-                .setRightText("Block")
-                .setRightOnClickListener(new TimeGeniiDialog.OnButtonClickListener() {
+                .setMsg("Block this contact from sending you invitations")
+                .setPositiveButton("Block", new View.OnClickListener() {
                     @Override
-                    public void onClick() {
+                    public void onClick(View view) {
                         blockFriend();
+                    }
+                })
+                .setNegativeButton("Cancel", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
                     }
                 });
     }

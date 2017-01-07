@@ -57,9 +57,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/sortListView"
         android:visibility="@{mainViewModel.searching?View.GONE:View.VISIBLE}"
-        app:items="@{mainViewModel.items}"
-        app:itemView="@{mainViewModel.itemView}"
-        app:onItemClickListener = "@{mainViewModel.onItemClickListener}"
         />
 
     <ListView

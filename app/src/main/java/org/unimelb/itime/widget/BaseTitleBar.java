@@ -54,7 +54,7 @@ public class BaseTitleBar  extends RelativeLayout {
         backLayout = new LinearLayout(getContext());
         RelativeLayout.LayoutParams backLayoutParams =  new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.MATCH_PARENT);
         backLayoutParams.addRule(CENTER_VERTICAL);
         backLayout.setLayoutParams(backLayoutParams);
         backLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -67,9 +67,11 @@ public class BaseTitleBar  extends RelativeLayout {
                 0,
                 SizeUtil.dp2px(getContext(),6),
                 0);
+        backIconParams.gravity = Gravity.CENTER_VERTICAL;
         backIcon.setLayoutParams(backIconParams);
         backIcon.setScaleType(ImageView.ScaleType.FIT_XY);
         backIcon.setImageResource(R.drawable.icon_general_arrow_back);
+
 
         backText = new TextView(getContext());
         LinearLayout.LayoutParams backTextParams = new LinearLayout.LayoutParams(

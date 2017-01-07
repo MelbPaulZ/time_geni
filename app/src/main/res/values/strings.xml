@@ -310,7 +310,7 @@
     <string name="try_again">Try Again</string>
 
     <!--Contact Part-->
-    <string name="my_qr_code_explain">Scan the QR code to add me on iTime</string>
+    <string name="my_qr_code_explain">Scan the QR code to add me on Timegenii</string>
     <string name="my_qr_code_title">My QR Code</string>
     <string name="save_to_album">Save Photo</string>
     <string name="scan_qr_code">Scan QR code</string>

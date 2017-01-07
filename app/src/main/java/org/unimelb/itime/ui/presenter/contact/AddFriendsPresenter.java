@@ -37,6 +37,7 @@ public class AddFriendsPresenter extends MvpBasePresenter<AddFriendsMvpView> {
 
     public void findFriend(String searchStr, final AddFriendsViewModel.SearchUserCallBack callBack){
         DBManager dbManager = DBManager.getInstance(context);
+        searchStr = searchStr.trim();
         List<Contact> contacts = dbManager.getAllContact();
         for(Contact contact:contacts){
             if(contact.getUserDetail().getPhone().equals(searchStr)

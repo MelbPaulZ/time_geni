@@ -59,7 +59,7 @@
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
             android:textSize="@dimen/font_small"
-            android:text="@string/my_qr_code_explain"
+            android:text="@string/scan_qr_code_explain"
             android:layout_below="@+id/capture_crop_view"
             android:id="@+id/scan_explain"/>
         

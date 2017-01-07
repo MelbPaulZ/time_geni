@@ -11,8 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:orientation="vertical">
 
         <!-- as a placeholder for content fragments -->
         <FrameLayout
@@ -29,8 +28,7 @@
             android:id="@+id/main_tab_ll"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white">
+            android:layout_alignParentBottom="true">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
