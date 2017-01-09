@@ -63,4 +63,11 @@ public interface UserApi {
     @POST("user/signup")
     Observable<HttpResult<User>> signup(@Body HashMap<String, Object> params);
 
+    @POST("user/update")
+    Observable<HttpResult<User>> update(@Body User user);
+
+    @POST("user/validate")
+    Observable<HttpResult<User>> validate(@Body User user);
+
+
 }

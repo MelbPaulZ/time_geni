@@ -203,11 +203,9 @@ public class EventEditViewModel extends EventCommonViewModel {
                     EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
                     eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
 
-                    // if solo, need to manually set status confirmed, otherwise server do it
+                    // if solo, need to manually set status confirmed
                     if (eventEditViewEvent.getEventType().equals(Event.TYPE_SOLO)){
                         eventEditViewEvent.setStatus(Event.STATUS_CONFIRMED);
-                    }else {
-                        eventEditViewEvent.setStatus(Event.STATUS_PENDING);
                     }
 
                     Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();

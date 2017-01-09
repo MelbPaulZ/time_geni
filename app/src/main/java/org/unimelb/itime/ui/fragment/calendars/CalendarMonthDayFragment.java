@@ -119,7 +119,8 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
 
             @Override
             public void onEventClick(DayDraggableEventView dayDraggableEventView) {
-                EventUtil.startEditEventActivity(getContext(), getActivity(), dayDraggableEventView.getEvent());
+                Event event = EventManager.getInstance(getContext()).findEventByUid(dayDraggableEventView.getEvent().getEventUid());
+                EventUtil.startEditEventActivity(getContext(), getActivity(), event);
             }
 
             @Override

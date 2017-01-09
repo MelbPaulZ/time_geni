@@ -38,6 +38,7 @@ import java.util.Map;
 import me.fesky.library.widget.ios.ActionSheetDialog;
 
 import static org.unimelb.itime.R.id.choose;
+import static org.unimelb.itime.R.id.time;
 import static org.unimelb.itime.util.EventUtil.getSelfInInvitees;
 import static org.unimelb.itime.util.EventUtil.isUserHostOfEvent;
 
@@ -413,16 +414,32 @@ public class EventDetailViewModel extends CommonViewModel {
                     }
                 }else {
                     // can choose any number of timeslots
-                    if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)) {
-                        timeslot.setStatus(Timeslot.STATUS_ACCEPTED);
-                    } else if (timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED)) {
-                        timeslot.setStatus(Timeslot.STATUS_PENDING);
+                    if (evDtlHostEvent.getStatus().equals(Event.STATUS_CANCELLED)){
+                        rejectedAcceptedSwitch(timeslot);
+                    }else{
+                        pendingAcceptedSwitch(timeslot);
                     }
                 }
                 setEvDtlHostEvent(evDtlHostEvent);
                 // here show let the editEventFragment know the event is change
             }
         };
+    }
+
+    private void pendingAcceptedSwitch(Timeslot timeslot){
+        if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)) {
+            timeslot.setStatus(Timeslot.STATUS_ACCEPTED);
+        } else if (timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED)) {
+            timeslot.setStatus(Timeslot.STATUS_PENDING);
+        }
+    }
+
+    private void rejectedAcceptedSwitch(Timeslot timeslot){
+        if (timeslot.getStatus().equals(Timeslot.STATUS_REJECTED)){
+            timeslot.setStatus(Timeslot.STATUS_ACCEPTED);
+        }else if (timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
+            timeslot.setStatus(Timeslot.STATUS_REJECTED);
+        }
     }
 
 
