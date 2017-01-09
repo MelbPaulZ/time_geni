@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -208,7 +209,8 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
 
     @Override
     public void onTaskError(int task, String errorMsg, int code) {
-
+        AppUtil.hideProgressBar();
+        showDialog("Error", errorMsg);
     }
 
     @Override
