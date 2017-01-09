@@ -1,9 +1,14 @@
 package org.unimelb.itime.ui.fragment.login;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVInstallation;
@@ -29,6 +34,7 @@ public class LoginBaseFragment extends BaseUiFragment<LoginUser,LoginMvpView, Lo
     protected SoftKeyboardStateUtil softKeyboardStateUtil;
     protected LoginViewModel loginViewModel;
     protected LoginUser loginUser;
+    protected AlertDialog dialog;
     @Override
     public LoginPresenter createPresenter() {
         return new LoginPresenter(getContext());
@@ -102,5 +108,27 @@ public class LoginBaseFragment extends BaseUiFragment<LoginUser,LoginMvpView, Lo
     @Override
     public void setData(LoginUser loginUser) {
 
+    }
+
+    protected void showDialog(String title, String msg){
+        TextView unsupportedEmailTitle = new TextView(getContext());
+        unsupportedEmailTitle.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        unsupportedEmailTitle.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM);
+        unsupportedEmailTitle.setText(title);
+        unsupportedEmailTitle.setTextSize(18);
+        unsupportedEmailTitle.setPadding(0,50,0,0);
+        unsupportedEmailTitle.setTextColor(getResources().getColor(R.color.black));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                .setCustomTitle(unsupportedEmailTitle)
+                .setMessage(msg)
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        dialog = builder.create();
+        dialog.show();
     }
 }

@@ -17,6 +17,7 @@ import org.unimelb.itime.databinding.FragmentLoginBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
+import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.util.AuthUtil;
@@ -41,7 +42,6 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setLoginVM(loginViewModel);
-        initViews();
         loginViewModel.setLoginUser(loginUser);
 
         String synToken = AuthUtil.getJwtToken(getContext());
@@ -66,29 +66,6 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
         }.start();
     }
 
-    /** init unsupported warning dialog
-     */
-    private void initViews(){
-        TextView title = new TextView(getContext());
-        title.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        title.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM);
-        title.setText(getString(R.string.login_fail_alert_title));
-        title.setTextSize(18);
-        title.setPadding(0,50,0,0);
-        title.setTextColor(getResources().getColor(R.color.black));
-        String message = getString(R.string.login_fail_alert_msg);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                .setCustomTitle(title)
-                .setMessage(message)
-                .setCancelable(true)
-                .setPositiveButton(getString(R.string.login_fail_alert_btn), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        loginFailDialog = builder.create();
-    }
 
     @Override
     public void onLoginStart() {
@@ -109,13 +86,7 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
 
     }
 
-    @Override
-    public void invalidPopup(int reason) {
-        loginFailDialog.show();
-        TextView msg = (TextView) loginFailDialog.findViewById(android.R.id.message);
-        msg.setGravity(Gravity.CENTER);
-        msg.setTextSize(13);
-    }
+
 
     @Override
     public void onPageChange(int task) {
@@ -133,5 +104,10 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
                 break;
             }
         }
+    }
+
+    @Override
+    public void showErrorDialog(ValidateRes res) {
+        showDialog(res.getTitle(), res.getContent());
     }
 }
