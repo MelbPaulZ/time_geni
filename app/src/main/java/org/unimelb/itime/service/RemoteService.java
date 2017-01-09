@@ -318,7 +318,7 @@ public class RemoteService extends Service{
                 editor.apply();
                 EventBus.getDefault().post(new MessageInboxMessage(messages));
             }else{
-//                Toast.makeText(getApplicationContext(), "Message cannot find correspond event, dropped." ,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Message cannot find correspond event, dropped." ,Toast.LENGTH_LONG).show();
             }
 
             valid =false;

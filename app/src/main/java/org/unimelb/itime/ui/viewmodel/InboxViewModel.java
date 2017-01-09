@@ -90,11 +90,9 @@ public class InboxViewModel extends CommonViewModel {
     @BindingAdapter({"bind:dotVisible"})
     public static void setDotVisible(ImageView view, Message message) {
         if (message.isHasBadge()) {
-            Log.i("reddot", "setDotVisible: + gone");
-            view.setVisibility(View.GONE);
-        } else {
-            Log.i("reddot", "setDotVisible: + visible");
             view.setVisibility(View.VISIBLE);
+        } else {
+            view.setVisibility(View.GONE);
         }
     }
 
