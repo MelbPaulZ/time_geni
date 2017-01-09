@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
+import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.EventSearchActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
@@ -63,6 +64,9 @@ public class MainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvp
     }
 
     public void scrollToWithOffset(long eventStartTime){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(eventStartTime);
+        CalendarManager.getInstance().setCurrentShowCalendar(c);
         if (monthDayFragment!=null && monthDayFragment.isAdded()){
             monthDayFragment.scrollToWithOffset(eventStartTime);
         }
@@ -70,10 +74,7 @@ public class MainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvp
             weekFragment.scrollToWithOffset(eventStartTime);
         }
         if (agendaFragment!=null && agendaFragment.isAdded()){
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(eventStartTime);
-            Log.i(TAG, "scrollToWithOffset: " + calendar.get(Calendar.DATE));
-            agendaFragment.scrollTo(calendar);
+            agendaFragment.scrollTo(c);
         }
 
     }
