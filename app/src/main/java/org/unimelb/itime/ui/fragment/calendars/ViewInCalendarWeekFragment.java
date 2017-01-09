@@ -22,10 +22,6 @@ import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.AppUtil;
-import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
-import org.unimelb.itime.vendor.dayview.MonthDayView;
-import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.weekview.WeekView;
 

@@ -15,10 +15,10 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
+import org.unimelb.itime.vendor.dayview.TimeSlotController;
 import org.unimelb.itime.vendor.helper.MyCalendar;
-import org.unimelb.itime.vendor.timeslot.TimeSlotView;
+import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
-import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
 import java.sql.Wrapper;
 import java.util.Calendar;
@@ -58,7 +58,7 @@ public class EventDetailTimeSlotViewModel extends CommonViewModel {
         };
     }
 
-    private void createTimeslotInStatus(TimeSlotView timeSlotView, String status) {
+    private void createTimeslotInStatus(DraggableTimeSlotView timeSlotView, String status) {
         Timeslot timeSlot = new Timeslot();
         timeSlot.setTimeslotUid(AppUtil.generateUuid());
         timeSlot.setEventUid(eventDetailHostEvent.getEventUid());
@@ -74,10 +74,10 @@ public class EventDetailTimeSlotViewModel extends CommonViewModel {
 
 
 
-    public FlexibleLenViewBody.OnTimeSlotListener onWeekOuterListener() {
-        return new FlexibleLenViewBody.OnTimeSlotListener() {
+    public TimeSlotController.OnTimeSlotListener onWeekOuterListener() {
+        return new TimeSlotController.OnTimeSlotListener() {
             @Override
-            public void onTimeSlotCreate(TimeSlotView timeSlotView) {
+            public void onTimeSlotCreate(DraggableTimeSlotView timeSlotView) {
                 if (mvpView.isClickTSConfirm() && EventUtil.isUserHostOfEvent(getContext(),eventDetailHostEvent)) {
                     // is host and create timeslot as confirmed
                     createTimeslotInStatus(timeSlotView, Timeslot.STATUS_ACCEPTED);
@@ -89,7 +89,7 @@ public class EventDetailTimeSlotViewModel extends CommonViewModel {
 
             // TODO: 11/12/2016 check this method, see if it is right
             @Override
-            public void onTimeSlotClick(TimeSlotView timeSlotView) {
+            public void onTimeSlotClick(DraggableTimeSlotView timeSlotView) {
                 if (EventUtil.isUserHostOfEvent(getContext(), eventDetailHostEvent)) {
                     onHostClickTimeslotView(timeSlotView);
                 }else{
@@ -99,17 +99,17 @@ public class EventDetailTimeSlotViewModel extends CommonViewModel {
             }
 
             @Override
-            public void onTimeSlotDragStart(TimeSlotView timeSlotView) {
+            public void onTimeSlotDragStart(DraggableTimeSlotView timeSlotView) {
 
             }
 
             @Override
-            public void onTimeSlotDragging(TimeSlotView timeSlotView, int i, int i1) {
+            public void onTimeSlotDragging(DraggableTimeSlotView timeSlotView, int i, int i1) {
 
             }
 
             @Override
-            public void onTimeSlotDragDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
+            public void onTimeSlotDragDrop(DraggableTimeSlotView timeSlotView, long startTime, long endTime) {
                 if (eventDetailHostEvent.getHostUserUid().equals(UserUtil.getInstance(getContext()).getUserUid())) {
                     // host:
                     if (presenter.getView() != null) {
@@ -129,7 +129,7 @@ public class EventDetailTimeSlotViewModel extends CommonViewModel {
         };
     }
 
-    private void onHostClickTimeslotView(TimeSlotView timeslotView){
+    private void onHostClickTimeslotView(DraggableTimeSlotView timeslotView){
         Timeslot calendarTimeSlot = (Timeslot) timeslotView.getTimeslot();
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(eventDetailHostEvent, calendarTimeSlot);
         if (mvpView.isClickTSConfirm()) {

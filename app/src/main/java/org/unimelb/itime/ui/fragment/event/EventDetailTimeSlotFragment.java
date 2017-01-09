@@ -28,7 +28,7 @@ import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
-import org.unimelb.itime.vendor.timeslot.TimeSlotView;
+import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.ArrayList;
@@ -244,7 +244,7 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
 
 
     @Override
-    public void popupTimeSlotWindow(final TimeSlotView timeSlotView) {
+    public void popupTimeSlotWindow(final DraggableTimeSlotView timeSlotView) {
         final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
         LayoutInflater inflater = LayoutInflater.from(presenter.getContext());
         View root = inflater.inflate(R.layout.fragment_timeslot_attendee_response, null);
@@ -310,7 +310,7 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
     }
 
     @Override
-    public void onClickTimeSlotView(TimeSlotView timeSlotView) {
+    public void onClickTimeSlotView(DraggableTimeSlotView timeSlotView) {
         if (getFrom() instanceof EventDetailFragment) {
             // change status of view and struct
             if (EventUtil.isUserHostOfEvent(getContext(), event)) {
@@ -345,7 +345,7 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
         }
     }
 
-    private void hostClickTimeSlot(TimeSlotView timeSlotView) {
+    private void hostClickTimeSlot(DraggableTimeSlotView timeSlotView) {
         Timeslot calendarTimeSlot = (Timeslot) timeSlotView.getTimeslot();
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot != null) {
@@ -358,7 +358,7 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
     }
 
 
-    private void changeEventAttributes(TimeSlotView timeSlotView) {
+    private void changeEventAttributes(DraggableTimeSlotView timeSlotView) {
         Timeslot calendarTimeSlot = (Timeslot) timeSlotView.getTimeslot();
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot != null) {
@@ -372,14 +372,14 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
         }
     }
 
-    private void changeTimeSlotView(TimeSlotView timeSlotView) {
+    private void changeTimeSlotView(DraggableTimeSlotView timeSlotView) {
         // if clicked -> unclicked; if unclicked -> clicked
         boolean newStatus = !timeSlotView.isSelect();
         timeSlotView.setIsSelected(newStatus);
 //        timeSlotView.getTimeslot().setDisplayStatus(newStatus);
     }
 
-    private void changeTimeslotCreateAndPending(TimeSlotView timeSlotView){
+    private void changeTimeslotCreateAndPending(DraggableTimeSlotView timeSlotView){
         Timeslot calendarTimeSlot = (Timeslot) timeSlotView.getTimeslot();
         Timeslot timeSlot = TimeSlotUtil.getTimeSlot(event, calendarTimeSlot);
         if (timeSlot!=null){

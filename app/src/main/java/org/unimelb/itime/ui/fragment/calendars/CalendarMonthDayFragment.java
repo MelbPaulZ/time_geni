@@ -25,10 +25,10 @@ import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
+import org.unimelb.itime.vendor.dayview.EventController;
 import org.unimelb.itime.vendor.dayview.MonthDayView;
-import org.unimelb.itime.vendor.eventview.DayDraggableEventView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
+import org.unimelb.itime.vendor.unitviews.DraggableEventView;
 
 import java.util.Calendar;
 import java.util.List;
@@ -93,15 +93,14 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
         monthDayView.setOnHeaderListener(new MonthDayView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
-                Log.i("Header", "monthDayView: " + myCalendar.getCalendar().getTime());
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
                 eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });
-        monthDayView.setOnBodyOuterListener(new FlexibleLenViewBody.OnBodyListener() {
+        monthDayView.setOnBodyOuterListener(new EventController.OnEventListener(){
             @Override
-            public boolean isDraggable(DayDraggableEventView dayDraggableEventView) {
+            public boolean isDraggable(DraggableEventView dayDraggableEventView) {
                 Event event = (Event) dayDraggableEventView.getEvent();
                 if (event.getEventType().equals("solo")){
                     return true;
@@ -111,30 +110,30 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
             }
 
             @Override
-            public void onEventCreate(DayDraggableEventView dayDraggableEventView) {
+            public void onEventCreate(DraggableEventView dayDraggableEventView) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
                 ((MainActivity)getActivity()).startEventCreateActivity(calendar);
             }
 
             @Override
-            public void onEventClick(DayDraggableEventView dayDraggableEventView) {
+            public void onEventClick(DraggableEventView dayDraggableEventView) {
                 Event event = EventManager.getInstance(getContext()).findEventByUid(dayDraggableEventView.getEvent().getEventUid());
                 EventUtil.startEditEventActivity(getContext(), getActivity(), event);
             }
 
             @Override
-            public void onEventDragStart(DayDraggableEventView dayDraggableEventView) {
+            public void onEventDragStart(DraggableEventView dayDraggableEventView) {
 
             }
 
             @Override
-            public void onEventDragging(DayDraggableEventView dayDraggableEventView, int i, int i1) {
+            public void onEventDragging(DraggableEventView dayDraggableEventView, int i, int i1) {
 
             }
 
             @Override
-            public void onEventDragDrop(final DayDraggableEventView dayDraggableEventView) {
+            public void onEventDragDrop(final DraggableEventView dayDraggableEventView) {
 
                 final Event originEvent = (Event) dayDraggableEventView.getEvent();
                 final Event event = eventManager.copyCurrentEvent(originEvent);

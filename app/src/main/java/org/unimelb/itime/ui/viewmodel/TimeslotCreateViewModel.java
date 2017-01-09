@@ -9,8 +9,7 @@ import org.unimelb.itime.ui.mvpview.TimeslotCreateMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.MyCalendar;
-import org.unimelb.itime.vendor.timeslot.TimeSlotView;
-import org.unimelb.itime.vendor.weekview.WeekView;
+import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 
 import java.util.Calendar;
 
@@ -18,7 +17,7 @@ import java.util.Calendar;
  * Created by Paul on 20/11/16.
  */
 public class TimeslotCreateViewModel extends CommonViewModel {
-    private TimeSlotView newTimeSlotView;
+    private DraggableTimeSlotView newTimeSlotView;
     private TimeslotCommonPresenter<TimeslotCreateMvpView> presenter;
     private TimeslotCreateMvpView mvpView;
     public final int STARTTIME = 1000;
@@ -79,11 +78,11 @@ public class TimeslotCreateViewModel extends CommonViewModel {
 
 
     @Bindable
-    public TimeSlotView getNewTimeSlotView() {
+    public DraggableTimeSlotView getNewTimeSlotView() {
         return newTimeSlotView;
     }
 
-    public void setNewTimeSlotView(TimeSlotView newTimeSlotView) {
+    public void setNewTimeSlotView(DraggableTimeSlotView newTimeSlotView) {
         this.newTimeSlotView = newTimeSlotView;
         notifyPropertyChanged(BR.newTimeSlotView);
     }
