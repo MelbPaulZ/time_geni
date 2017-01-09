@@ -16,7 +16,6 @@ import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
-import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
