@@ -113,7 +113,8 @@ public class CalendarWeekFragment extends BaseUiFragment<Object, EventCommonMvpV
 
             @Override
             public void onEventClick(DayDraggableEventView dayDraggableEventView) {
-                EventUtil.startEditEventActivity(getContext(), getActivity(), dayDraggableEventView.getEvent());
+                Event event = EventManager.getInstance(getContext()).findEventByUid(dayDraggableEventView.getEvent().getEventUid());
+                EventUtil.startEditEventActivity(getContext(), getActivity(), event);
             }
 
             @Override

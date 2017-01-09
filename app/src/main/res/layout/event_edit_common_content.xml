@@ -376,13 +376,6 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true" />
 
-                <ImageView
-                    android:id="@+id/edit_event_alert_time_arrow"
-                    android:layout_width="10dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/icon_general_arrow_right" />
             </RelativeLayout>
 
             <RelativeLayout
