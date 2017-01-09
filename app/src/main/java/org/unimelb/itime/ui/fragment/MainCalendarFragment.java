@@ -72,7 +72,6 @@ public class MainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvp
         if (agendaFragment!=null && agendaFragment.isAdded()){
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(eventStartTime);
-            Log.i(TAG, "scrollToWithOffset: " + calendar.get(Calendar.DATE));
             agendaFragment.scrollTo(calendar);
         }
 

@@ -83,7 +83,6 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     public void onResume() {
         super.onResume();
         scrollTo(CalendarManager.getInstance().getCurrentShowCalendar());
-
     }
 
 
