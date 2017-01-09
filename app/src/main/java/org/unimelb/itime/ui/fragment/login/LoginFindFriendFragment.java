@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginFindFriendBinding;
+import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
@@ -53,12 +54,12 @@ public class LoginFindFriendFragment extends LoginBaseFragment implements LoginM
 
 
     @Override
-    public void invalidPopup(int reason) {
+    public void onPageChange(int task) {
 
     }
 
     @Override
-    public void onPageChange(int task) {
+    public void showErrorDialog(ValidateRes res) {
 
     }
 }

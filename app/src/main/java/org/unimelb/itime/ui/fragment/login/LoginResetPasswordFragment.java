@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginResetPasswordBinding;
+import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
@@ -51,10 +52,6 @@ public class LoginResetPasswordFragment extends LoginBaseFragment implements Log
     }
 
 
-    @Override
-    public void invalidPopup(int reason) {
-
-    }
 
     @Override
     public void onPageChange(int task) {
@@ -72,5 +69,10 @@ public class LoginResetPasswordFragment extends LoginBaseFragment implements Log
                 break;
             }
         }
+    }
+
+    @Override
+    public void showErrorDialog(ValidateRes res) {
+        showDialog(res.getTitle(), res.getContent());
     }
 }
