@@ -21,10 +21,12 @@
 
                 <!--toolbar back arrow-->
                 <ImageView
-                    android:layout_width="11dp"
-                    android:layout_height="18dp"
+                    android:layout_width="31dp"
+                    android:layout_height="48dp"
+                    android:padding="10dp"
                     android:src="@drawable/icon_back_arrow"
                     android:layout_centerVertical="true"
+                    android:onClick="@{vm.onClickPhotoGridBack()}"
                     />
 
                 <!--toolbar settings text-->

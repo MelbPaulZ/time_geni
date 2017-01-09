@@ -213,7 +213,7 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
 
     @Override
     public void onClickPhotoGridBack() {
-
+        closeFragment(this, getFrom());
     }
 
 

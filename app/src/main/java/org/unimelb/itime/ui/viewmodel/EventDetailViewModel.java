@@ -5,6 +5,7 @@ import android.content.Context;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableBoolean;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridView;
@@ -313,8 +314,7 @@ public class EventDetailViewModel extends CommonViewModel {
                 setIsLeftBtnSelected(false);
                 setLeftBtnText(context.getString(R.string.accept));
             }
-        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_CANCELLED) &&
-                isCancelledEventConfirmed(evDtlHostEvent)){
+        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_CANCELLED)){
             setIsLeftBtnSelected(false);
             setLeftBtnText(context.getString(R.string.accept));
         }
@@ -323,19 +323,23 @@ public class EventDetailViewModel extends CommonViewModel {
 
     public boolean getLeftBtnClickable(Event event){
         Invitee me = EventUtil.getSelfInInvitees(context, evDtlHostEvent);
-        if (evDtlHostEvent.getStatus().equals(Event.STATUS_CONFIRMED)){
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
             // event has been confirmed by host
             if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
                 return false;
             }else{
                 return true;
             }
-        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_PENDING) ||
-                evDtlHostEvent.getStatus().equals(Event.STATUS_UPDATING)){
+        }else if (event.getStatus().equals(Event.STATUS_PENDING) ||
+                event.getStatus().equals(Event.STATUS_UPDATING)){
             if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
                 return false;
-            }else{
-                return true;
+            }else if (me.getStatus().equals(Invitee.STATUS_NEEDSACTION)){
+                if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
+                    return true;
+                }else {
+                    return false;
+                }
             }
         }
 
@@ -365,8 +369,7 @@ public class EventDetailViewModel extends CommonViewModel {
                 setIsRightBtnSelected(false);
                 setRightBtnText(context.getString(R.string.reject_all));
             }
-        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_CANCELLED) &&
-                isCancelledEventConfirmed(evDtlHostEvent)){
+        }else if (evDtlHostEvent.getStatus().equals(Event.STATUS_CANCELLED)){
             setIsRightBtnSelected(true);
             setRightBtnText(context.getString(R.string.quitted));
         }
@@ -591,13 +594,16 @@ public class EventDetailViewModel extends CommonViewModel {
 
     public int unconfirmVisibility(Event event){
         if (event.getStatus().equals(Event.STATUS_PENDING) ||
-                event.getStatus().equals(Event.STATUS_UPDATING)){
+                event.getStatus().equals(Event.STATUS_UPDATING) ||
+                event.getStatus().equals(Event.STATUS_CANCELLED)){
             if (!isUserHostOfEvent(context, event)){
+                Log.i("debug", "unconfirmVisibility: 2");
                 return View.VISIBLE;
             }else{
                 return View.GONE;
             }
         }else{
+            Log.i("debug", "unconfirmVisibility: 1");
             return View.GONE;
         }
     }
@@ -616,7 +622,11 @@ public class EventDetailViewModel extends CommonViewModel {
                 isUserHostOfEvent(context, event)){
             return View.VISIBLE;
         }else if ((event.getStatus().equals(Event.STATUS_CANCELLED) && !isCancelledEventConfirmed(event))){
-            return View.VISIBLE;
+            if (isUserHostOfEvent(context, event)) {
+                return View.VISIBLE;
+            }else{
+                return View.GONE;
+            }
         }
         else{
             return View.GONE;

@@ -677,7 +677,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_left"
                 android:textSize="17sp"
                 android:text="@{hostDetailVM.leftBtnText}"
-                android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
+                android:enabled="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
                 android:selected="@{hostDetailVM.isLeftBtnSelected}"
                 android:onClick="@{hostDetailVM.acceptEvent()}"
                 />
