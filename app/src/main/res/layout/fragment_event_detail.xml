@@ -9,6 +9,7 @@
         <import type="org.unimelb.itime.util.TimeSlotUtil" />
 
         <import type="org.unimelb.itime.util.UserUtil" />
+        <import type="org.unimelb.itime.util.CalendarUtil"/>
 
         <import type="android.view.View" />
 
@@ -466,7 +467,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="@dimen/padding_5"
                             android:layout_toLeftOf="@+id/event_detail_calendar_arrow"
-                            android:text="@string/work" />
+                            android:text="@{CalendarUtil.getInstance(context).getCalendarName(hostDetailVM.evDtlHostEvent)}" />
 
                         <TextView
                             android:layout_width="match_parent"
