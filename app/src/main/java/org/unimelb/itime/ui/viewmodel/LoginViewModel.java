@@ -115,7 +115,7 @@ public class LoginViewModel extends AndroidViewModel{
     public void signup(){
         if (loginUser.getPhoto().length()==0){
             presenter.uploadImageToLeanCloud(loginUser,
-                    DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getEmail()));
+                    DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getPersonalAlias()));
         }else{
             presenter.uploadImageToLeanCloud(loginUser, loginUser.getPhoto());
         }
