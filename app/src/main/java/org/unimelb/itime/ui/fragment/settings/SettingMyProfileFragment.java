@@ -19,9 +19,11 @@ import org.unimelb.itime.databinding.FragmentSettingMyProfileBinding;
 import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
 import org.unimelb.itime.ui.fragment.contact.MyQRCodeFragment;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 
@@ -91,16 +93,31 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftTitleStr(getString(R.string.action_settings));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
     }
 
     @Override
     public void setTitleStringToVM() {
-        viewModel.setTitleStr(getString(R.string.setting_my_profile));
+        toolbarViewModel.setTitleStr(getString(R.string.setting_my_profile));
     }
 
     @Override
     public void setRightTitleStringToVM() {
+
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel() {
+        return new ToolbarViewModel<>(this);
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
 
     }
 }

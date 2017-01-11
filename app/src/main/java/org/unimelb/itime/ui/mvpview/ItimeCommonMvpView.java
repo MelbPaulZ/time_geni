@@ -7,5 +7,6 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
  */
 
 public interface ItimeCommonMvpView extends MvpView {
-
+    void onBack();
+    void onNext();
 }

@@ -25,8 +25,10 @@ import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
@@ -70,6 +72,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         timeslotWeekView = (WeekView) binding.getRoot().findViewById(R.id.timeslot_week_view);
         viewModel = new EventCreateTimeslotViewModel(getPresenter());
         binding.setTimeslotVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
         inflater = LayoutInflater.from(getContext());
     }
 
@@ -345,7 +348,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
     }
 
     @Override
@@ -355,7 +358,12 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
     @Override
     public void setRightTitleStringToVM() {
-        viewModel.setRightTitleStr(getString(R.string.done));
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
+        return new ToolbarViewModel<>(this);
     }
 
     @Override
@@ -370,6 +378,16 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
+
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
 
     }
 }

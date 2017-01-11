@@ -16,8 +16,10 @@ import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentPhotoGridviewBinding;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 
 import java.util.List;
 
@@ -44,6 +46,7 @@ implements EventDetailGroupMvpView{
         super.onActivityCreated(savedInstanceState);
         viewModel = new EventDetailViewModel(getPresenter());
         binding.setVm(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
@@ -102,16 +105,31 @@ implements EventDetailGroupMvpView{
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftBtnText(getString(R.string.back));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
     }
 
     @Override
     public void setTitleStringToVM() {
-        viewModel.setTitleStr(getString(R.string.photo));
+        toolbarViewModel.setTitleStr(getString(R.string.photo));
     }
 
     @Override
     public void setRightTitleStringToVM() {
+
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
+        return new ToolbarViewModel<>(this);
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
 
     }
 }

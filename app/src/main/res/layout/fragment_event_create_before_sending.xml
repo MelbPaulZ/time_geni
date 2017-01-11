@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
         <import type="org.unimelb.itime.util.EventUtil"/>
@@ -9,6 +10,9 @@
         <variable
             name="newEventDetailVM"
             type="org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel" />
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 
 
@@ -22,40 +26,42 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+            <include layout="@layout/toolbar_common"
+                bind:vm="@{toolbarVM}"/>
+            <!--<android.support.v7.widget.Toolbar-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?attr/actionBarSize"-->
+                <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
 
-                <Button
-                    android:id="@+id/event_detail_before_sending_cancel_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:background="@null"
-                    android:gravity="center_vertical|left"
-                    android:onClick="@{newEventDetailVM.onClickCancel()}"
-                    android:textColor="@color/page_title_color"
-                    android:text="@{newEventDetailVM.leftTitleStr}" />
+                <!--<Button-->
+                    <!--android:id="@+id/event_detail_before_sending_cancel_btn"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="left"-->
+                    <!--android:background="@null"-->
+                    <!--android:gravity="center_vertical|left"-->
+                    <!--android:onClick="@{newEventDetailVM.onClickCancel()}"-->
+                    <!--android:textColor="@color/page_title_color"-->
+                    <!--android:text="@{newEventDetailVM.leftTitleStr}" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textSize="@dimen/page_text_size"
-                    android:textColor="@color/page_title_color"
-                    android:text="@{newEventDetailVM.titleStr}" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:textSize="@dimen/page_text_size"-->
+                    <!--android:textColor="@color/page_title_color"-->
+                    <!--android:text="@{newEventDetailVM.titleStr}" />-->
 
-                <Button
-                    android:id="@+id/event_detail_before_sending_send_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:background="@null"
-                    android:onClick="@{newEventDetailVM.onClickSend()}"
-                    android:textColor="@color/page_title_color"
-                    android:text="@{newEventDetailVM.rightTitleStr}" />
-            </android.support.v7.widget.Toolbar>
+                <!--<Button-->
+                    <!--android:id="@+id/event_detail_before_sending_send_btn"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:background="@null"-->
+                    <!--android:onClick="@{newEventDetailVM.onClickSend()}"-->
+                    <!--android:textColor="@color/page_title_color"-->
+                    <!--android:text="@{newEventDetailVM.rightTitleStr}" />-->
+            <!--</android.support.v7.widget.Toolbar>-->
         </LinearLayout>
 
         <ScrollView

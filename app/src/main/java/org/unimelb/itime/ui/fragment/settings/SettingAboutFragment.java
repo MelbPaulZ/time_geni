@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingAboutBinding;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 
 /**
  * Created by Paul on 27/12/2016.
@@ -52,16 +54,31 @@ implements SettingCommonMvpView{
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftTitleStr(getString(R.string.action_settings));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
     }
 
     @Override
     public void setTitleStringToVM() {
-        viewModel.setTitleStr(getString(R.string.about));
+        toolbarViewModel.setTitleStr(getString(R.string.about));
     }
 
     @Override
     public void setRightTitleStringToVM() {
+
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel() {
+        return new ToolbarViewModel<>(this);
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
 
     }
 }

@@ -20,6 +20,8 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.ui.fragment.contact.BaseContactFragment;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 import static com.wx.wheelview.widget.WheelView.Skin.Common;
@@ -31,6 +33,14 @@ import static org.unimelb.itime.R.id.dialog;
 public abstract class EventBaseFragment<V extends MvpView, P extends MvpPresenter<V>> extends BaseUiFragment<Event, V, P> implements EventCommonMvpView{
 
     private AlertDialog dialog;
+    protected ToolbarViewModel<?  extends ItimeCommonMvpView> toolbarViewModel;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        toolbarViewModel = getToolbarViewModel();
+    }
+
     @Override
     public void setData(Event event) {
 
@@ -70,4 +80,5 @@ public abstract class EventBaseFragment<V extends MvpView, P extends MvpPresente
     public abstract void setLeftTitleStringToVM();
     public abstract void setTitleStringToVM();
     public abstract void setRightTitleStringToVM();
+    public abstract ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel();
 }

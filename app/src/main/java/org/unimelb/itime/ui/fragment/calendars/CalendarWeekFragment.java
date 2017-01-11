@@ -239,4 +239,13 @@ public class CalendarWeekFragment extends BaseUiFragment<Object, EventCommonMvpV
 
     }
 
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
+
+    }
 }

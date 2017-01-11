@@ -28,9 +28,12 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
+import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateDetailBeforeSendingViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 
@@ -66,6 +69,7 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
         super.onActivityCreated(savedInstanceState);
         eventCreateDetailBeforeSendingViewModel = new EventCreateDetailBeforeSendingViewModel(getPresenter());
         binding.setNewEventDetailVM(eventCreateDetailBeforeSendingViewModel);
+        binding.setToolbarVM(toolbarViewModel);
         if (event!=null){
             eventCreateDetailBeforeSendingViewModel.setNewEvDtlEvent(event);
         }
@@ -149,20 +153,6 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     }
 
     @Override
-    public void onClickSend() {
-        Intent intent = new Intent();
-        getActivity().setResult(Activity.RESULT_OK, intent);
-        getActivity().finish();
-    }
-
-    @Override
-    public void onClickCancel() {
-        Intent intent = new Intent();
-        getActivity().setResult(Activity.RESULT_CANCELED, intent);
-        getActivity().finish();
-    }
-
-    @Override
     public void changeLocation() {
         EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
         eventLocationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
@@ -216,21 +206,46 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
         AppUtil.hideProgressBar();
-        onClickSend();
+        finishCreateEvent();
     }
 
     @Override
     public void setLeftTitleStringToVM() {
-        eventCreateDetailBeforeSendingViewModel.setLeftTitleStr(getContext().getString(R.string.cancel));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.cancel));
     }
 
     @Override
     public void setTitleStringToVM() {
-        eventCreateDetailBeforeSendingViewModel.setTitleStr(getContext().getString(R.string.new_event));
+        toolbarViewModel.setTitleStr(getContext().getString(R.string.new_event));
     }
 
     @Override
     public void setRightTitleStringToVM() {
-        eventCreateDetailBeforeSendingViewModel.setRightTitleStr(getContext().getString(R.string.send));
+        toolbarViewModel.setRightTitleStr(getContext().getString(R.string.send));
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
+        return new ToolbarViewModel<>(this);
+    }
+
+
+    @Override
+    public void onBack() {
+        Intent intent = new Intent();
+        getActivity().setResult(Activity.RESULT_CANCELED, intent);
+        getActivity().finish();
+    }
+
+    @Override
+    public void onNext() {
+        eventCreateDetailBeforeSendingViewModel.clickSend();
+
+    }
+
+    private void finishCreateEvent(){
+        Intent intent = new Intent();
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        getActivity().finish();
     }
 }

@@ -1,10 +1,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="vm"
             type="org.unimelb.itime.ui.viewmodel.TimeslotInviteeResponseViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 
     <LinearLayout
@@ -12,69 +16,71 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        <include layout="@layout/toolbar_common"
+            bind:vm="@{toolbarVM}"/>
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical">-->
 
-                <LinearLayout
-                    android:id="@+id/back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_alignParentLeft="true">
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/back"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:layout_alignParentLeft="true">-->
 
-                    <ImageView
-                        android:id="@+id/invitee_view_back_arrow"
-                        android:layout_width="15dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/padding_5"
-                        android:background="@drawable/icon_general_back" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/invitee_view_back_arrow"-->
+                        <!--android:layout_width="15dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:layout_marginLeft="@dimen/padding_5"-->
+                        <!--android:background="@drawable/icon_general_back" />-->
 
-                    <TextView
-                        android:id="@+id/invitee_view_back_btn"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:textSize="15sp"
-                        android:layout_height="wrap_content"
-                        android:text="@{vm.leftTitleStr}" />
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:id="@+id/invitee_view_back_btn"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_marginLeft="8dp"-->
+                        <!--android:textSize="15sp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@{vm.leftTitleStr}" />-->
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_centerInParent="true"
-                    android:gravity="center_vertical">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_centerInParent="true"-->
+                    <!--android:gravity="center_vertical">-->
 
-                    <TextView
-                        android:id="@+id/invitee_view_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:textAlignment="center"
-                        android:text="@{vm.getTimeTitle(vm.responseTimeslot)}"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
+                    <!--<TextView-->
+                        <!--android:id="@+id/invitee_view_title"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_centerInParent="true"-->
+                        <!--android:textAlignment="center"-->
+                        <!--android:text="@{vm.getTimeTitle(vm.responseTimeslot)}"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:textSize="14sp" />-->
 
-                    <TextView
-                        android:id="@+id/invitee_view_subtitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="@{vm.getSubTimeTitle(vm.responseTimeslot)}"
-                        android:textAlignment="center"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </RelativeLayout>
-        </android.support.v7.widget.Toolbar>
+                    <!--<TextView-->
+                        <!--android:id="@+id/invitee_view_subtitle"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:text="@{vm.getSubTimeTitle(vm.responseTimeslot)}"-->
+                        <!--android:textAlignment="center"-->
+                        <!--android:textSize="12sp" />-->
+                <!--</LinearLayout>-->
+            <!--</RelativeLayout>-->
+        <!--</android.support.v7.widget.Toolbar>-->
 
         <ListView
             android:id="@+id/listView"

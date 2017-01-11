@@ -139,7 +139,7 @@ public class EventUtil {
     }
 
     public static String getSuggestTimeStringFromLong(Context context, Long startTime, Long endtime) {
-        DateFormat df = new SimpleDateFormat("HH:mm a");
+        DateFormat df = new SimpleDateFormat("HH:mm");
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(startTime);
         String dayOfWeek =  calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, context.getResources().getConfiguration().locale);

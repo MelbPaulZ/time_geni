@@ -1,17 +1,12 @@
 package org.unimelb.itime.ui.viewmodel;
 
-import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-
 import com.squareup.picasso.Picasso;
-
 import org.unimelb.itime.BR;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
@@ -21,7 +16,6 @@ import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
-
 import java.io.File;
 import java.util.List;
 
@@ -30,8 +24,6 @@ import java.util.List;
  */
 public abstract class CommonViewModel extends AndroidViewModel {
     private EventCommonMvpView mvpView;
-    private String leftTitleStr, titleStr, rightTitleStr;
-
 
     public CommonViewModel(){
 
@@ -135,36 +127,5 @@ public abstract class CommonViewModel extends AndroidViewModel {
         }else{
             view.setVisibility(View.GONE);
         }
-    }
-
-
-    @Bindable
-    public String getLeftTitleStr() {
-        return leftTitleStr;
-    }
-
-    public void setLeftTitleStr(String leftTitleStr) {
-        this.leftTitleStr = leftTitleStr;
-        notifyPropertyChanged(BR.leftTitleStr);
-    }
-
-    @Bindable
-    public String getTitleStr() {
-        return titleStr;
-    }
-
-    public void setTitleStr(String titleStr) {
-        this.titleStr = titleStr;
-        notifyPropertyChanged(BR.titleStr);
-    }
-
-    @Bindable
-    public String getRightTitleStr() {
-        return rightTitleStr;
-    }
-
-    public void setRightTitleStr(String rightTitleStr) {
-        this.rightTitleStr = rightTitleStr;
-        notifyPropertyChanged(BR.rightTitleStr);
     }
 }

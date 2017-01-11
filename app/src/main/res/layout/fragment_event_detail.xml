@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -12,7 +13,9 @@
         <import type="org.unimelb.itime.util.CalendarUtil"/>
 
         <import type="android.view.View" />
-
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
         <variable
             name="hostDetailVM"
             type="org.unimelb.itime.ui.viewmodel.EventDetailViewModel" />
@@ -30,43 +33,45 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/my_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+            <include layout="@layout/toolbar_common"
+                bind:vm="@{toolbarVM}" />
+            <!--<android.support.v7.widget.Toolbar-->
+                <!--android:id="@+id/my_toolbar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?attr/actionBarSize"-->
+                <!--android:background="?attr/colorPrimary"-->
+                <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
 
-                <Button
-                    android:id="@+id/event_detail_host_back_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:background="@null"
-                    android:gravity="center_vertical|left"
-                    android:onClick="@{hostDetailVM.onClickBack()}"
-                    android:text="@{hostDetailVM.leftTitleStr}"
-                    android:textColor="@color/page_title_color" />
+                <!--<Button-->
+                    <!--android:id="@+id/event_detail_host_back_btn"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="left"-->
+                    <!--android:background="@null"-->
+                    <!--android:gravity="center_vertical|left"-->
+                    <!--android:onClick="@{hostDetailVM.onClickBack()}"-->
+                    <!--android:text="@{hostDetailVM.leftTitleStr}"-->
+                    <!--android:textColor="@color/page_title_color" />-->
 
-                <TextView
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@{hostDetailVM.titleStr}"
-                    android:textSize="18sp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/toolbar_title"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:text="@{hostDetailVM.titleStr}"-->
+                    <!--android:textSize="18sp" />-->
 
-                <Button
-                    android:id="@+id/event_detail_host_edit_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:background="@null"
-                    android:onClick="@{hostDetailVM.onClickEdit()}"
-                    android:text="@{hostDetailVM.rightTitleStr}"
-                    android:textColor="@color/page_title_color"
-                    android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance(context).getUserUid())? View.VISIBLE : View.INVISIBLE}" />
-            </android.support.v7.widget.Toolbar>
+                <!--<Button-->
+                    <!--android:id="@+id/event_detail_host_edit_btn"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="right"-->
+                    <!--android:background="@null"-->
+                    <!--android:onClick="@{hostDetailVM.onClickEdit()}"-->
+                    <!--android:text="@{hostDetailVM.rightTitleStr}"-->
+                    <!--android:textColor="@color/page_title_color"-->
+                    <!--android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance(context).getUserUid())? View.VISIBLE : View.INVISIBLE}" />-->
+            <!--</android.support.v7.widget.Toolbar>-->
         </LinearLayout>
 
         <ScrollView

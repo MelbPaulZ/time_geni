@@ -18,9 +18,11 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.TimeslotCreateConfirmBinding;
 import org.unimelb.itime.databinding.TimeslotCreatePickerBinding;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.TimeslotCreateMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.TimeslotCreateViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 
@@ -55,6 +57,7 @@ public class EventTimeSlotCreateFragment extends EventBaseFragment<TimeslotCreat
         viewModel = new TimeslotCreateViewModel(getPresenter());
         binding.setVm(viewModel);
         pickerBinding.setVm(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     public void setTimeSlotView(DraggableTimeSlotView timeSlotView){
@@ -154,17 +157,22 @@ public class EventTimeSlotCreateFragment extends EventBaseFragment<TimeslotCreat
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftTitleStr(getString(R.string.cancel));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.cancel));
     }
 
     @Override
     public void setTitleStringToVM() {
-        viewModel.setTitleStr(getString(R.string.new_timeslot));
+        toolbarViewModel.setTitleStr(getString(R.string.new_timeslot));
     }
 
     @Override
     public void setRightTitleStringToVM() {
-        viewModel.setRightTitleStr(getString(R.string.done));
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
+        return new ToolbarViewModel<>(this);
     }
 
     @Override
@@ -179,6 +187,16 @@ public class EventTimeSlotCreateFragment extends EventBaseFragment<TimeslotCreat
 
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
+
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
 
     }
 }
