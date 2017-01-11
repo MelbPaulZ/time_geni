@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginSetPasswordBinding;
+import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
@@ -79,14 +80,6 @@ public class LoginSetPWFragment extends LoginBaseFragment implements LoginMvpVie
 
     }
 
-
-    @Override
-    public void invalidPopup(int reason) {
-        pwTooSimpleDialog.show();
-//        TextView incorrectPWTV = (TextView) pwTooSimpleDialog.findViewById(android.R.id.message);
-//        incorrectPWTV.setGravity(Gravity.CENTER);
-    }
-
     @Override
     public void onPageChange(int task) {
         switch (task){
@@ -101,5 +94,10 @@ public class LoginSetPWFragment extends LoginBaseFragment implements LoginMvpVie
                 break;
             }
         }
+    }
+
+    @Override
+    public void showErrorDialog(ValidateRes res) {
+        showDialog(res.getTitle(), res.getContent());
     }
 }

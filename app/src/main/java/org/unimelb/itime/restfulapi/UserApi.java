@@ -5,6 +5,7 @@ import org.unimelb.itime.bean.JwtToken;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
+import org.unimelb.itime.restfulresponse.ValidateRes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -62,5 +63,12 @@ public interface UserApi {
 
     @POST("user/signup")
     Observable<HttpResult<User>> signup(@Body HashMap<String, Object> params);
+
+    @POST("user/update")
+    Observable<HttpResult<User>> update(@Body User user);
+
+    @POST("user/validate")
+    Observable<HttpResult<ValidateRes>> validate(@Body HashMap<String, String> params);
+
 
 }

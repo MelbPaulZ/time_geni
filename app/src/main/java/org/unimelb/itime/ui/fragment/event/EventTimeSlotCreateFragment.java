@@ -22,7 +22,7 @@ import org.unimelb.itime.ui.mvpview.TimeslotCreateMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.TimeslotCreateViewModel;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.timeslot.TimeSlotView;
+import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 
 import java.util.Calendar;
 import java.util.List;
@@ -34,7 +34,7 @@ import java.util.List;
 public class EventTimeSlotCreateFragment extends EventBaseFragment<TimeslotCreateMvpView, TimeslotCommonPresenter<TimeslotCreateMvpView>>
         implements TimeslotCreateMvpView {
     private TimeslotCreateViewModel viewModel;
-    private TimeSlotView timeSlotView;
+    private DraggableTimeSlotView timeSlotView;
     private TimeslotCreateConfirmBinding binding;
     private TimeslotCreatePickerBinding pickerBinding;
     private WheelPicker yearPicker, monthPicker, dayPicker, hourPicker, minutePicker;
@@ -57,7 +57,7 @@ public class EventTimeSlotCreateFragment extends EventBaseFragment<TimeslotCreat
         pickerBinding.setVm(viewModel);
     }
 
-    public void setTimeSlotView(TimeSlotView timeSlotView){
+    public void setTimeSlotView(DraggableTimeSlotView timeSlotView){
         this.timeSlotView = timeSlotView;
         viewModel.setNewTimeSlotView(timeSlotView);
     }

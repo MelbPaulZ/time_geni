@@ -181,16 +181,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="250dp"
                 android:layout_height="65dp"
-                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="36dp"
-                android:layout_marginLeft="62dp"
-                android:layout_marginRight="62dp"
                 android:background="@drawable/selector_signup_btn_bg"
                 android:gravity="center"
                 android:onClick="@{loginVM.onClickLogin}"

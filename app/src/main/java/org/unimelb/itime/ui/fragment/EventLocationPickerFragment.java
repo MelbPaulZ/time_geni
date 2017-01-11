@@ -166,6 +166,13 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
         initListeners();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
+    }
+
 
     public void initListeners() {
         TextView backBtn = (TextView) root.findViewById(R.id.location_picker_back_btn);

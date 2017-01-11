@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 
@@ -39,7 +40,6 @@ import java.util.List;
 public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewModel {
     private Event newEvDtlEvent;
     private ObservableField<Boolean> evDtlIsEventRepeat ;
-    private EventCreateDetailBeforeSendingViewModel viewModel;
     private CharSequence alertTimes[] = null;
     private EventCreateDetailBeforeSendingMvpView mvpView;
     private EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> presenter;
@@ -293,8 +293,10 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
                     newEvDtlEvent.setEventType(Event.TYPE_SOLO);
                     newEvDtlEvent.setStatus(Event.STATUS_CONFIRMED);
                 }
-
-                newEvDtlEvent.setCalendarUid(userUtil.getUserUid());
+                if (newEvDtlEvent.getCalendarUid()=="") {
+                    newEvDtlEvent.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(0).getCalendarUid());
+                    Toast.makeText(getContext(), "auto set Uid", Toast.LENGTH_SHORT).show();
+                }
                 newEvDtlEvent.setRecurringEventUid("");
                 newEvDtlEvent.setRecurringEventId("");
 
@@ -365,7 +367,7 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             newEvDtlEvent.setCalendarUid(calendarUtil.getCalendar().get(i).getCalendarUid());
-                            viewModel.setNewEvDtlEvent(newEvDtlEvent);
+                            setNewEvDtlEvent(newEvDtlEvent);
                         }
                     });
                     builder.show();

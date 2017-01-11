@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -212,7 +213,7 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
 
     @Override
     public void onClickPhotoGridBack() {
-
+        closeFragment(this, getFrom());
     }
 
 
@@ -223,7 +224,7 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
 
     @Override
     public void onTaskError(int task, String errorMsg, int code) {
-
+        Log.i("TAG", "onTaskError: " + errorMsg);
     }
 
     @Override

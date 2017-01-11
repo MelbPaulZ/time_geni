@@ -10,26 +10,22 @@ import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.SaveCallback;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.JwtToken;
 import org.unimelb.itime.bean.LoginUser;
-import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.User;
-import org.unimelb.itime.dao.UserDao;
 import org.unimelb.itime.restfulapi.PasswordApi;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
+import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.UserUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -281,12 +277,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             @Override
             public void done(AVException e) {
                 loginUser.setPhoto(file.getUrl());
-                signUp(LoginViewModel.TO_FIND_FRIEND_FRAG, loginUser);
+                prepareSignup(LoginViewModel.TO_FIND_FRIEND_FRAG, loginUser);
             }
         });
     }
 
-    private void signUp(int task, LoginUser loginUser){
+    private void prepareSignup(int task, LoginUser loginUser){
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("userId", loginUser.getEmail()); // might need to change later
         hashMap.put("password", loginUser.getPassword());
@@ -311,6 +307,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
                 @Override
                 public void done(AVException e) {
                     loginUser.setPhoto(file.getUrl());
+                    prepareSignup(LoginViewModel.TO_FIND_FRIEND_FRAG, loginUser);
                 }
             });
 
@@ -324,6 +321,36 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
         bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         return byteArray;
+    }
+
+    public void validate(final int task, HashMap<String, String> params){
+        Subscriber<HttpResult<ValidateRes>> subscriber = new Subscriber<HttpResult<ValidateRes>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(HttpResult<ValidateRes> validateResHttpResult) {
+                if (validateResHttpResult.getStatus()==1){
+                    if (getView()!=null){
+                        getView().onLoginSucceed(task);
+                    }
+                    // validate
+                }else{
+                    // invalidate
+                    if (getView()!=null){
+                        getView().showErrorDialog(validateResHttpResult.getData());
+                    }
+                }
+            }
+        };
+        HttpUtil.subscribe(userApi.validate(params), subscriber);
     }
 
 }

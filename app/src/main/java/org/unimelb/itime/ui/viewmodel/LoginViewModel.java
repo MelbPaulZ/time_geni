@@ -16,6 +16,7 @@ import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.util.DefaultPhotoUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import me.tatarka.bindingcollectionadapter.ItemView;
 
@@ -48,6 +49,7 @@ public class LoginViewModel extends AndroidViewModel{
     public final static int TO_SET_PASSWORD_FRAG = 8;
     public final static int TO_TERM_AGREEMENT_FRAG = 9;
     public final static int TO_CALENDAR = 10;
+    public final static int SIGN_UP = 11;
 
     public final static int INVALID_EMAIL_ALREADY_REGISTER = 0;
     public final static int INVALID_UNSUPPORTED_EMAIL = 1;
@@ -99,9 +101,9 @@ public class LoginViewModel extends AndroidViewModel{
                         presenter.sendResetLink(task, loginUser.getEmail());
                         break;
                     case TO_FIND_FRIEND_FRAG:
-                        if (isAliasValidation()){
-                            signUp(loginUser);
-                        }
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("personalAlias", loginUser.getPersonalAlias());
+                        presenter.validate(SIGN_UP, params);
                         break;
                     default:
                         mvpView.onPageChange(task);
@@ -110,32 +112,40 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-
-    private void signUp(LoginUser loginUser){
+    public void signup(){
         if (loginUser.getPhoto().length()==0){
             presenter.uploadImageToLeanCloud(loginUser,
-                    DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getEmail()));
+                    DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getPersonalAlias()));
         }else{
             presenter.uploadImageToLeanCloud(loginUser, loginUser.getPhoto());
         }
     }
 
-    private boolean isAliasValidation(){
-        if (loginUser.getPersonalAlias().isEmpty()){
-            mvpView.invalidPopup(INVALID_ALIAS_EMPTY);
-            return false;
-        }else if (!isAlphaNumeric(loginUser.getPersonalAlias())){
-            mvpView.invalidPopup(INVALID_ALIAS_SPECIAL_SINGAL);
-            return false;
-        }else{
-            return true;
-        }
-    }
+//    private void signUp(LoginUser loginUser){
+//        if (loginUser.getPhoto().length()==0){
+//            presenter.uploadImageToLeanCloud(loginUser,
+//                    DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getEmail()));
+//        }else{
+//            presenter.uploadImageToLeanCloud(loginUser, loginUser.getPhoto());
+//        }
+//    }
 
-    private boolean isAlphaNumeric(String s){
-        String pattern= "^[a-zA-Z0-9]*$";
-        return s.matches(pattern);
-    }
+//    private boolean isAliasValidation(){
+//        if (loginUser.getPersonalAlias().isEmpty()){
+//            mvpView.invalidPopup(INVALID_ALIAS_EMPTY);
+//            return false;
+//        }else if (!isAlphaNumeric(loginUser.getPersonalAlias())){
+//            mvpView.invalidPopup(INVALID_ALIAS_SPECIAL_SINGAL);
+//            return false;
+//        }else{
+//            return true;
+//        }
+//    }
+
+//    private boolean isAlphaNumeric(String s){
+//        String pattern= "^[a-zA-Z0-9]*$";
+//        return s.matches(pattern);
+//    }
 
 
 
@@ -153,11 +163,16 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isEmailValid()){
-                    mvpView.onPageChange(task);
-                }else{
-                    mvpView.invalidPopup(INVALID_UNSUPPORTED_EMAIL);
-                }
+                // validate Email
+                HashMap<String, String> params = new HashMap<>();
+                params.put("userId", loginUser.getEmail()); // use userId to check the validation
+                presenter.validate(task, params);
+
+//                if (isEmailValid()){
+//                    mvpView.onPageChange(task);
+//                }else{
+//                    mvpView.invalidPopup(INVALID_UNSUPPORTED_EMAIL);
+//                }
             }
         };
     }
@@ -191,13 +206,17 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (loginUser.getPassword().length()<8){
-                    mvpView.invalidPopup(INVALID_PASSWORD_TOO_SIMPLE);
-                }else if (loginUser.getPassword().length()>16){
-                    mvpView.invalidPopup(INVALID_PASSWORD_TOO_LONG);
-                }else{
-                    mvpView.onPageChange(TO_PICK_AVATAR_FRAG);
-                }
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("password", loginUser.getPassword());
+                presenter.validate(TO_PICK_AVATAR_FRAG, params);
+//                if (loginUser.getPassword().length()<8){
+//                    mvpView.invalidPopup(INVALID_PASSWORD_TOO_SIMPLE);
+//                }else if (loginUser.getPassword().length()>16){
+//                    mvpView.invalidPopup(INVALID_PASSWORD_TOO_LONG);
+//                }else{
+//                    mvpView.onPageChange(TO_PICK_AVATAR_FRAG);
+//                }
             }
         };
     }

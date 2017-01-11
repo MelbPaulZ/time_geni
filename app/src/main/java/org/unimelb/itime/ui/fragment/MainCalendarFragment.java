@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
+import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.EventSearchActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
@@ -32,6 +34,7 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static org.unimelb.itime.R.string.calendar;
 
@@ -61,12 +64,19 @@ public class MainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvp
     }
 
     public void scrollToWithOffset(long eventStartTime){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(eventStartTime);
+        CalendarManager.getInstance().setCurrentShowCalendar(c);
         if (monthDayFragment!=null && monthDayFragment.isAdded()){
             monthDayFragment.scrollToWithOffset(eventStartTime);
         }
         if (weekFragment!=null && weekFragment.isAdded()){
             weekFragment.scrollToWithOffset(eventStartTime);
         }
+        if (agendaFragment!=null && agendaFragment.isAdded()){
+            agendaFragment.scrollTo(c);
+        }
+
     }
 
     @Override

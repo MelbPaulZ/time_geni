@@ -9,6 +9,7 @@
         <import type="org.unimelb.itime.util.TimeSlotUtil" />
 
         <import type="org.unimelb.itime.util.UserUtil" />
+        <import type="org.unimelb.itime.util.CalendarUtil"/>
 
         <import type="android.view.View" />
 
@@ -466,7 +467,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="@dimen/padding_5"
                             android:layout_toLeftOf="@+id/event_detail_calendar_arrow"
-                            android:text="@string/work" />
+                            android:text="@{CalendarUtil.getInstance(context).getCalendarName(hostDetailVM.evDtlHostEvent)}" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -628,7 +629,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_left"
                 android:textSize="17sp"
                 android:text="@{hostDetailVM.leftBtnText}"
-                android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
+                android:enabled="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
                 android:selected="@{hostDetailVM.isLeftBtnSelected}"
                 android:onClick="@{hostDetailVM.acceptEvent()}"
                 />
@@ -648,7 +649,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_right"
                 android:textSize="17sp"
                 android:text="@{hostDetailVM.rightBtnText}"
-                android:clickable="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
+                android:enabled="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
                 android:selected="@{hostDetailVM.isRightBtnSelected}"
                 android:onClick="@{hostDetailVM.quitEvent()}"/>
         </RelativeLayout>
@@ -677,7 +678,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_left"
                 android:textSize="17sp"
                 android:text="@{hostDetailVM.leftBtnText}"
-                android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
+                android:enabled="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
                 android:selected="@{hostDetailVM.isLeftBtnSelected}"
                 android:onClick="@{hostDetailVM.acceptEvent()}"
                 />
@@ -697,7 +698,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_right"
                 android:textSize="17sp"
                 android:text="@{hostDetailVM.rightBtnText}"
-                android:clickable="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
+                android:enabled="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
                 android:selected="@{hostDetailVM.isRightBtnSelected}"
                 android:onClick="@{hostDetailVM.rejectAll()}"
                 />

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginInputEmailBinding;
+import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
@@ -40,32 +41,8 @@ public class LoginInputEmailFragment extends LoginBaseFragment implements LoginM
         super.onActivityCreated(savedInstanceState);
         binding.setLoginVM(loginViewModel);
 //        loginViewModel.setLoginUser(loginUser); // this is for init the loginUser
-        initViews();
     }
 
-    /** init unsupported warning dialog
-     */
-    private void initViews(){
-        TextView unsupportedEmailTitle = new TextView(getContext());
-        unsupportedEmailTitle.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        unsupportedEmailTitle.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM);
-        unsupportedEmailTitle.setText(getString(R.string.unsupported_email));
-        unsupportedEmailTitle.setTextSize(18);
-        unsupportedEmailTitle.setPadding(0,50,0,0);
-        unsupportedEmailTitle.setTextColor(getResources().getColor(R.color.black));
-        String message = "iTime doesn't support your university at the moment, but a wider support is coming. Thank you for your patient.";
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                .setCustomTitle(unsupportedEmailTitle)
-                .setMessage(message)
-                .setCancelable(true)
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        unsupportEmailDialog = builder.create();
-    }
 
     @Override
     public void onLoginStart() {
@@ -74,7 +51,7 @@ public class LoginInputEmailFragment extends LoginBaseFragment implements LoginM
 
     @Override
     public void onLoginSucceed(int task) {
-
+        onPageChange(task);
     }
 
     @Override
@@ -82,12 +59,6 @@ public class LoginInputEmailFragment extends LoginBaseFragment implements LoginM
 
     }
 
-
-    @Override
-    public void invalidPopup(int reason) {
-        unsupportEmailDialog.show();
-
-    }
 
     @Override
     public void onPageChange(int task) {
@@ -106,5 +77,10 @@ public class LoginInputEmailFragment extends LoginBaseFragment implements LoginM
                 // todo implement agreement
             }
         }
+    }
+
+    @Override
+    public void showErrorDialog(ValidateRes res) {
+        showDialog(res.getTitle(), res.getContent());
     }
 }

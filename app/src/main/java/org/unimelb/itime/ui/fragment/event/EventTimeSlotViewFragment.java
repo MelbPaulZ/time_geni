@@ -31,8 +31,8 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
-import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
-import org.unimelb.itime.vendor.timeslot.TimeSlotView;
+import org.unimelb.itime.vendor.dayview.TimeSlotController;
+import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
 import java.util.ArrayList;
@@ -94,7 +94,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         }
     }
 
-    private void changeTimeSlots(TimeSlotView timeSlotView) {
+    private void changeTimeSlots(DraggableTimeSlotView timeSlotView) {
         // change status of view and struct
         boolean newStatus = !timeSlotView.isSelect();
         Timeslot timeSlot = (Timeslot) timeSlotView.getTimeslot();
@@ -128,7 +128,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
     }
 
 
-    public void createTimeSlot(TimeSlotView timeSlotView) {
+    public void createTimeSlot(DraggableTimeSlotView timeSlotView) {
         Timeslot timeSlot = new Timeslot();
         timeSlot.setTimeslotUid(AppUtil.generateUuid());
         timeSlot.setEventUid(event.getEventUid());
@@ -155,9 +155,9 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         //Enable function of creating time block
         timeslotWeekView.enableTimeSlot();
         timeslotWeekView.setDayEventMap(EventManager.getInstance(getContext()).getEventsPackage());
-        timeslotWeekView.setOnTimeSlotOuterListener(new FlexibleLenViewBody.OnTimeSlotListener() {
+        timeslotWeekView.setOnTimeSlotOuterListener(new TimeSlotController.OnTimeSlotListener() {
             @Override
-            public void onTimeSlotCreate(TimeSlotView timeSlotView) {
+            public void onTimeSlotCreate(DraggableTimeSlotView timeSlotView) {
                 // popup timeslot create page
                 EventTimeSlotCreateFragment eventTimeSlotCreateFragment = (EventTimeSlotCreateFragment) getFragmentManager().findFragmentByTag(EventTimeSlotCreateFragment.class.getSimpleName());
                 eventTimeSlotCreateFragment.setTimeSlotView(timeSlotView);
@@ -165,7 +165,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
             }
 
             @Override
-            public void onTimeSlotClick(TimeSlotView timeSlotView) {
+            public void onTimeSlotClick(DraggableTimeSlotView timeSlotView) {
                 if (TimeSlotUtil.getPendingTimeSlots(getContext(), event.getTimeslot()).size() >= 7) {
                     if (timeSlotView.isSelect()) {
                         changeTimeSlots(timeSlotView);
@@ -178,24 +178,24 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
             }
 
             @Override
-            public void onTimeSlotDragStart(TimeSlotView timeSlotView) {
+            public void onTimeSlotDragStart(DraggableTimeSlotView timeSlotView) {
 
             }
 
             @Override
-            public void onTimeSlotDragging(TimeSlotView timeSlotView, int i, int i1) {
+            public void onTimeSlotDragging(DraggableTimeSlotView timeSlotView, int i, int i1) {
 
             }
 
             @Override
-            public void onTimeSlotDragDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
+            public void onTimeSlotDragDrop(DraggableTimeSlotView timeSlotView, long startTime, long endTime) {
                 timeslotDrop(timeSlotView, startTime, endTime);
             }
 
         });
     }
 
-    private void timeslotDrop(TimeSlotView timeSlotView, long startTime, long endTime) {
+    private void timeslotDrop(DraggableTimeSlotView timeSlotView, long startTime, long endTime) {
         // update timeslot info
         Timeslot timeslot = (Timeslot) timeSlotView.getTimeslot();
         timeslot.setStartTime(startTime);

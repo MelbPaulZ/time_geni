@@ -93,10 +93,11 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         if(getView() != null){
             getView().onTaskStart(TASK_EVENT_UPDATE);
         }
-
+        // orgCalendarUid to get the previous org event in server link
+        String orgCalendarUid = EventManager.getInstance(context).getCurrentEvent().getCalendarUid();
         String syncToken = AppUtil.getEventSyncToken(context);
         Observable<HttpResult<List<Event>>> observable = eventApi.update(
-                event.getCalendarUid(),
+                orgCalendarUid,
                 event.getEventUid(),
                 event,
                 type ,

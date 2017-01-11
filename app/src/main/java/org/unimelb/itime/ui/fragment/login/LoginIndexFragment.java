@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginIndexBinding;
+import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
@@ -58,11 +59,6 @@ public class LoginIndexFragment extends LoginBaseFragment implements LoginMvpVie
 
 
     @Override
-    public void invalidPopup(int reason) {
-
-    }
-
-    @Override
     public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
@@ -74,6 +70,11 @@ public class LoginIndexFragment extends LoginBaseFragment implements LoginMvpVie
                 break;
             }
         }
+    }
+
+    @Override
+    public void showErrorDialog(ValidateRes res) {
+
     }
 
 }
