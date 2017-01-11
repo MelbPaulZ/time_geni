@@ -39,9 +39,6 @@ public abstract class EventBaseFragment<V extends MvpView, P extends MvpPresente
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         toolbarViewModel = getToolbarViewModel();
-        setLeftTitleStringToVM();
-        setTitleStringToVM();
-        setRightTitleStringToVM();
     }
 
     @Override
@@ -49,7 +46,13 @@ public abstract class EventBaseFragment<V extends MvpView, P extends MvpPresente
 
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        setLeftTitleStringToVM();
+        setTitleStringToVM();
+        setRightTitleStringToVM();
+    }
 
     protected void showDialog(String title, String msg){
         TextView unsupportedEmailTitle = new TextView(getContext());

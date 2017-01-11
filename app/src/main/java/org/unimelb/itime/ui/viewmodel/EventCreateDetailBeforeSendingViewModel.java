@@ -10,6 +10,7 @@ import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -52,6 +53,7 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
     private CalendarUtil calendarUtil;
     private EventManager eventManager;
     private boolean isEndTimeChange = false;
+    private long evStartTime, evEndTime;
 
     public EventCreateDetailBeforeSendingViewModel(EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> presenter) {
         this.presenter = presenter;
@@ -118,33 +120,35 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
         notifyPropertyChanged(BR.newEvDtlEvent);
     }
 
-
-    @Bindable
-    public boolean getIsAllDay() {
-        return isAllDay.get();
+    public Switch.OnCheckedChangeListener eventAlldayChange(final Event event){
+        return new Switch.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    setEventToAlldayEvent(event);
+                }else{
+                    setAlldayEventToNotAllday(event);
+                }
+            }
+        };
     }
 
-
-    public void setIsAllDay(ObservableField<Boolean> isAllDay) {
-        this.isAllDay.set(isAllDay.get());
-        if (this.isAllDay.get()) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(newEvDtlEvent.getStartTime());
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            newEvDtlEvent.setStartTime(calendar.getTimeInMillis());
-            newEvDtlEvent.setEndTime(newEvDtlEvent.getStartTime() + 3600 * 1000 * 24);
-            setNewEvDtlEvent(newEvDtlEvent);
-        } else {
-            Calendar calendar = Calendar.getInstance();
-            newEvDtlEvent.setStartTime(calendar.getTimeInMillis());
-            newEvDtlEvent.setEndTime(calendar.getTimeInMillis() + 3600 * 1000);
-            setNewEvDtlEvent(newEvDtlEvent);
-        }
-        notifyPropertyChanged(BR.isAllDay);
+    private void setEventToAlldayEvent(Event event){
+        evStartTime = event.getStartTime();
+        evEndTime = event.getEndTime();
+        long beginOfStartDay = EventUtil.getDayBeginMilliseconds(event.getStartTime());
+        long endOfEndDay = EventUtil.getDayEndMilliseconds(event.getEndTime());
+        event.setStartTime(beginOfStartDay);
+        event.setEndTime(endOfEndDay);
+        notifyPropertyChanged(BR.newEvDtlEvent);
     }
+
+    private void setAlldayEventToNotAllday(Event event){
+        event.setStartTime(evStartTime);
+        event.setEndTime(evEndTime);
+        notifyPropertyChanged(BR.newEvDtlEvent);
+    }
+
 
 
     public View.OnClickListener chooseRepeat() {
@@ -296,11 +300,8 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
         }
         newEvDtlEvent.setRecurringEventUid("");
         newEvDtlEvent.setRecurringEventId("");
-
         eventManager.setCurrentEvent(newEvDtlEvent);
-
         presenter.insertEvent(newEvDtlEvent);
-
     }
 
     public View.OnClickListener onChangeTime(final PickerTask task) {

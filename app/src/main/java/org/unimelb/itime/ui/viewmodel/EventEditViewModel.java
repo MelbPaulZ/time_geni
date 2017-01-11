@@ -10,8 +10,10 @@ import android.databinding.ObservableField;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -47,10 +49,9 @@ public class EventEditViewModel extends EventCommonViewModel {
     private EventCommonPresenter<EventEditMvpView> presenter;
     private ObservableField<Boolean> editEventIsRepeat = new ObservableField<>();
     private EventEditMvpView mvpView;
-    private ObservableField<Boolean> isAllDayEvent= new ObservableField<>();
     private PickerTask currentTask;
     private int startTimeVisibility, endTimeVisibility;
-
+    private long evStartTime, evEndTime;
 
     private List<Timeslot> timeslotList = new ArrayList<>();
     private ItemView itemView = ItemView.of(BR.timeslot, R.layout.timeslot_listview_show);
@@ -64,7 +65,6 @@ public class EventEditViewModel extends EventCommonViewModel {
         eventManager = EventManager.getInstance(getContext());
         mvpView = presenter.getView();
         editEventIsRepeat = new ObservableField<>(false); // TODO: 11/12/2016 change this and isAlldayEvent later.... needs to be bind with event
-        isAllDayEvent = new ObservableField<>(false);
         initDialog();
     }
 
@@ -274,6 +274,35 @@ public class EventEditViewModel extends EventCommonViewModel {
 //        };
 //    }
 
+    public Switch.OnCheckedChangeListener eventAlldayChange(final Event event){
+        return new Switch.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    setEventToAlldayEvent(event);
+                }else{
+                    setAlldayEventToNotAllday(event);
+                }
+            }
+        };
+    }
+
+    private void setEventToAlldayEvent(Event event){
+        evStartTime = event.getStartTime();
+        evEndTime = event.getEndTime();
+        long beginOfStartDay = EventUtil.getDayBeginMilliseconds(event.getStartTime());
+        long endOfEndDay = EventUtil.getDayEndMilliseconds(event.getEndTime());
+        event.setStartTime(beginOfStartDay);
+        event.setEndTime(endOfEndDay);
+        notifyPropertyChanged(BR.newEvDtlEvent);
+    }
+
+    private void setAlldayEventToNotAllday(Event event){
+        event.setStartTime(evStartTime);
+        event.setEndTime(evEndTime);
+        notifyPropertyChanged(BR.newEvDtlEvent);
+    }
+
     // TODO: test this change all
     private void changeAllEvent(Event event){
         Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
@@ -368,32 +397,6 @@ public class EventEditViewModel extends EventCommonViewModel {
         };
     }
 
-    @Bindable
-    public boolean getIsAllDayEvent() {
-        return isAllDayEvent.get();
-    }
-
-
-    public void setIsAllDayEvent(ObservableField<Boolean> isAllDayEvent) {
-        this.isAllDayEvent.set(isAllDayEvent.get());
-        if (this.isAllDayEvent.get()){
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(eventEditViewEvent.getStartTime());
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            eventEditViewEvent.setStartTime(calendar.getTimeInMillis());
-            eventEditViewEvent.setEndTime(eventEditViewEvent.getStartTime() + 3600 * 1000 * 24);
-            setEventEditViewEvent(eventEditViewEvent);
-        }else{
-            Calendar calendar = Calendar.getInstance();
-            eventEditViewEvent.setStartTime(calendar.getTimeInMillis());
-            eventEditViewEvent.setEndTime(calendar.getTimeInMillis() + 3600 * 1000);
-            setEventEditViewEvent(eventEditViewEvent);
-        }
-        notifyPropertyChanged(BR.isAllDayEvent);
-    }
 
     public View.OnClickListener onChooseCalendarType(){
         return new View.OnClickListener() {

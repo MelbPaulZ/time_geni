@@ -314,7 +314,8 @@
                         <Switch
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{newEventDetailVM.isAllDay}"
+                            android:checked="false"
+                            android:onCheckChange="@{newEventDetailVM.eventAlldayChange(newEventDetailVM.newEvDtlEvent)}"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"/>
                     </RelativeLayout>
