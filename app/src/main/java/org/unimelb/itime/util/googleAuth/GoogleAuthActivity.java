@@ -36,6 +36,8 @@ public class GoogleAuthActivity extends BaseActivity{
     private static final String TAG = "Google Auth";
     private static final int RC_SIGN_IN = 9001;
     private BindApi bindApi;
+    private GoogleApiClient mGoogleApiClient;
+    private GoogleSignInOptions gso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +50,14 @@ public class GoogleAuthActivity extends BaseActivity{
         Scope s5 = new Scope("https://www.google.com/m8/feeds/user/");
         Scope s6 = new Scope("https://www.googleapis.com/auth/userinfo.profile");
         Scope s7 = new Scope("https://www.googleapis.com/auth/calendar");
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.serverClientId))
                 .requestScopes(s1, s2, s3,s4,s5,s6,s7)
                 .requestServerAuthCode(getString(R.string.serverClientId),false)
                 .requestEmail()
                 .build();
 
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, getFailedListener())
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
@@ -125,5 +127,11 @@ public class GoogleAuthActivity extends BaseActivity{
                 Toast.makeText(getApplicationContext(),connectionResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         };
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mGoogleApiClient.disconnect();
     }
 }

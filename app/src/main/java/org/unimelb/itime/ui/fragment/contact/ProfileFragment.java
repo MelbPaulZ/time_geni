@@ -5,16 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.databinding.FragmentProfileBinding;
+import org.unimelb.itime.messageevent.MessageAddContact;
+import org.unimelb.itime.messageevent.MessageEditContact;
 import org.unimelb.itime.ui.mvpview.contact.ProfileMvpView;
 import org.unimelb.itime.ui.presenter.contact.ProfileFragmentPresenter;
 import org.unimelb.itime.ui.viewmodel.contact.ProfileFragmentViewModel;
@@ -32,14 +38,11 @@ import java.util.Calendar;
 public class ProfileFragment extends BaseContactFragment<ProfileMvpView, ProfileFragmentPresenter> implements ProfileMvpView{
     private FragmentProfileBinding binding;
     private ProfileFragmentViewModel viewModel;
+    private EditAliasFragment editAliasFragment;
     private View mainView;
-    private boolean showAdd = false;
-    private boolean showSend = false;
-    private boolean showEmail = true;
-    private boolean showPhone = true;
-    private boolean showRightButton = true;
     private Contact user;
     private FriendRequest request;
+    private FragmentManager fm;
 
     public View getContentView(){
         return getView();
@@ -57,13 +60,19 @@ public class ProfileFragment extends BaseContactFragment<ProfileMvpView, Profile
         return new ProfileFragmentPresenter(getActivity());
     }
 
+    @Override
+    public void onCreate(Bundle bundle){
+        super.onCreate(bundle);
+        EventBus.getDefault().register(this);
+    }
+
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         presenter = createPresenter();
         viewModel = new ProfileFragmentViewModel(presenter);
         viewModel.setFriend(user);
         viewModel.setRequest(request);
-
+        fm = getFragmentManager();
         binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_profile, container, false);
         binding.setViewModel(viewModel);
@@ -71,24 +80,12 @@ public class ProfileFragment extends BaseContactFragment<ProfileMvpView, Profile
         return mainView;
     }
 
-    private void setShowAdd(boolean showAdd) {
-        this.showAdd = showAdd;
-    }
-
-    private void setShowSend(boolean showSend) {
-        this.showSend = showSend;
-    }
-
-    private void setShowEmail(boolean showEmail) {
-        this.showEmail = showEmail;
-    }
-
-    private void setShowPhone(boolean showPhone) {
-        this.showPhone = showPhone;
-    }
-
-    private void setShowRightButton(boolean showRightButton) {
-        this.showRightButton = showRightButton;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void editContact(MessageEditContact msg){
+        this.user = msg.contact;
+        if(viewModel != null){
+            viewModel.setFriend(user);
+        }
     }
 
     public void setUser(Contact user) {
@@ -108,14 +105,26 @@ public class ProfileFragment extends BaseContactFragment<ProfileMvpView, Profile
         startActivityForResult(intent, EventUtil.ACTIVITY_CREATE_EVENT,bundleAnimation);
     }
 
-    public void init(Contact contact){
-
+    @Override
+    public void goToEditAlias(Contact contact) {
+        if(editAliasFragment == null) {
+            editAliasFragment = new EditAliasFragment();
+        }
+        editAliasFragment.setContact(user);
+        fm.beginTransaction()
+                .hide(this)
+                .replace(R.id.contentFrameLayout, editAliasFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     public Context getContext(){
         return getActivity();
     }
 
-
-
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

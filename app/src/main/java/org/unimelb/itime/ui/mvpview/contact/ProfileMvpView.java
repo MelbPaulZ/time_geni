@@ -15,5 +15,8 @@ public interface ProfileMvpView extends MvpView {
     Activity getActivity();
 
     View getContentView();
+
     void goToInviteFragment(Contact user);
+
+    void goToEditAlias(Contact contact);
 }

@@ -33,9 +33,9 @@ public class PlusTitleBar extends BaseTitleBar{
                 0);
         plusTextView.setLayoutParams(params);
         plusTextView.setScaleType(ImageView.ScaleType.FIT_XY);
-        plusTextView.setImageResource(R.drawable.icon_plus);
+        plusTextView.setImageResource(R.drawable.icon_plus_bold);
         rightView = plusTextView;
-        this.addView(rightView);
+        setRightView(rightView);
     }
 
 }

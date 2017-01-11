@@ -17,6 +17,7 @@ import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.databinding.ContactHomePageBinding;
 import org.unimelb.itime.messageevent.MessageAddContact;
+import org.unimelb.itime.messageevent.MessageEditContact;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
 import org.unimelb.itime.messageevent.MessageRemoveContact;
 import org.unimelb.itime.ui.activity.AddFriendActivityContact;
@@ -65,6 +66,11 @@ public class ContactHomePageFragment extends BaseContactFragment<ContactHomePage
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setRequestCount(MessageNewFriendRequest msg){
         viewModel.setRequestCount(msg.count);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void editContact(MessageEditContact msg){
+        viewModel.loadData();
     }
 
     @Override

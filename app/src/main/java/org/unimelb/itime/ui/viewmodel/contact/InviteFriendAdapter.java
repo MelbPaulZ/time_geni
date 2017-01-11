@@ -54,6 +54,7 @@ public class InviteFriendAdapter extends BaseAdapter {
             binding = (ViewDataBinding) convertView.getTag();
         }
         binding.setVariable(BR.viewModel, getItem(position));
+        binding.executePendingBindings();
         return binding.getRoot();
     }
 }

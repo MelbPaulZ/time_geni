@@ -35,6 +35,6 @@ public class BlackDotTitleBar extends BlackTitleBar {
         view.setImageResource(R.drawable.ic_ham_white);
         rightView = view;
         setShowRight(getShowRight());
-        this.addView(rightView);
+        setRightView(rightView);
     }
 }

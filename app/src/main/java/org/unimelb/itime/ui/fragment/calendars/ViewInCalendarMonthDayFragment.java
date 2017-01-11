@@ -12,7 +12,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
@@ -72,7 +71,7 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
         monthDayView.setOnHeaderListener(new MonthDayView.OnHeaderListener() {
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
-                eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
+                eventManager.syncRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });

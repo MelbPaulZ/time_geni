@@ -8,6 +8,7 @@ import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.ITimeUser;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.contact.MyQRCodeMvpView;
 import org.unimelb.itime.ui.presenter.contact.MyQRCodePresenter;
 import org.unimelb.itime.widget.QRCode.encoding.EncodingUtils;
@@ -31,6 +32,14 @@ public class MyQRCodeVieModel extends BaseObservable {
     }
 
     @Bindable
+    public boolean getShowGender(){
+        if(user.getSex().equals(User.MALE)||user.getSex().equals(User.FEMALE)){
+            return true;
+        }
+        return false;
+    }
+
+    @Bindable
     public ITimeUser getUser() {
         return user;
     }
@@ -39,6 +48,7 @@ public class MyQRCodeVieModel extends BaseObservable {
         this.user = user;
         notifyPropertyChanged(BR.user);
         notifyPropertyChanged(BR.myQRCode);
+        notifyPropertyChanged(BR.showGender);
     }
 
     public MyQRCodeVieModel(MyQRCodePresenter<MyQRCodeMvpView> presenter){
