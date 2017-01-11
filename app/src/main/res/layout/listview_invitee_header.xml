@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="135dp"
-            android:background="@drawable/corner_border"
+            android:background="@drawable/invitee_group_background"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
