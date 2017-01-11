@@ -40,6 +40,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
     private boolean showAccept = false;
     private boolean showAccepted = false;
     private boolean showEdit = false;
+    private boolean showRealName = false;
     private ProfileFragmentPresenter presenter;
     private String title = "Profile";
 
@@ -59,6 +60,16 @@ public class ProfileFragmentViewModel extends BaseObservable {
     public void setShowTitileBack(boolean showTitileBack) {
         this.showTitileBack = showTitileBack;
         notifyPropertyChanged(BR.showTitileBack);
+    }
+
+    @Bindable
+    public boolean getShowRealName() {
+        return showRealName;
+    }
+
+    public void setShowRealName(boolean showRealName) {
+        this.showRealName = showRealName;
+        notifyPropertyChanged(BR.showRealName);
     }
 
     @Bindable
@@ -140,6 +151,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
         notifyPropertyChanged(BR.name);
         notifyPropertyChanged(BR.blocked);
         notifyPropertyChanged(BR.showGender);
+        notifyPropertyChanged(BR.realName);
 
         if(friend.getRelationship()>0 && friend.getStatus().equals(Contact.ACTIVATED)){
             setShowTitleRight(true);
@@ -150,6 +162,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
             setShowAccept(false);
             setShowAccepted(false);
             setShowEdit(true);
+            setShowRealName(true);
         }else if(friend.getStatus().equals(FriendRequest.DISPLAY_STATUS_ACCEPT)){
             setShowTitleRight(false);
             setShowSent(false);
@@ -165,6 +178,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
                 setShowEmail(false);
             }
             setShowEdit(false);
+            setShowRealName(false);
         }else{
             setShowAccept(false);
             setShowTitleRight(false);
@@ -180,6 +194,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
                 setShowEmail(false);
             }
             setShowEdit(false);
+            setShowRealName(false);
         }
     }
 
@@ -195,7 +210,11 @@ public class ProfileFragmentViewModel extends BaseObservable {
 
     @Bindable
     public boolean getShowGender(){
-        return !"".equals(friend.getUserDetail().getGender());
+        if(friend.getUserDetail().getGender().equals(User.MALE)
+                ||friend.getUserDetail().getGender().equals(User.FEMALE)){
+            return true;
+        }
+        return false;
     }
 
 
@@ -208,6 +227,12 @@ public class ProfileFragmentViewModel extends BaseObservable {
     public String getName(){
         return friend.getAliasName();
     }
+
+    @Bindable
+    public String getRealName(){
+        return friend.getUserDetail().getPersonalAlias();
+    }
+
     @Bindable
     public String getLocation(){
         return friend.getUserDetail().getLocation();

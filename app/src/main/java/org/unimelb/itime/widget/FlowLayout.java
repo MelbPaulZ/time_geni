@@ -18,6 +18,7 @@ public class FlowLayout extends ViewGroup {
 
     public FlowLayout(Context context) {
         super(context);
+
     }
 
     public FlowLayout(Context context, AttributeSet attrs) {

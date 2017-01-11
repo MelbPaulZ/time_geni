@@ -43,8 +43,8 @@
                 android:layout_height="25dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="3dp"
-                android:layout_marginTop="3dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="1dp"
                 android:background="@drawable/background_block_icon"
                 android:visibility="@{viewModel.blocked?View.VISIBLE:View.GONE}">
                 <ImageView
@@ -126,18 +126,30 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
                 android:id="@+id/EmailLayout"
-        android:layout_marginTop="40dp"
-        android:visibility="@{viewModel.showEmail?View.VISIBLE:View.GONE}">
+        android:layout_marginTop="40dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.email}"
-            android:layout_gravity="center_horizontal"
+            android:text="@{`Name: `+ viewModel.realName}"
             android:textSize="@dimen/font_big"
-            android:gravity="center"
+            android:textColor="@color/grey_one"
+            android:layout_marginBottom="10dp"
+            android:visibility="@{viewModel.showRealName?View.VISIBLE:View.GONE}"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{`Email: `+ viewModel.email}"
+            android:textSize="@dimen/font_big"
             android:id="@+id/emailTextView"
             android:textColor="@color/grey_one"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:visibility="@{viewModel.showEmail?View.VISIBLE:View.GONE}"/>
+        </LinearLayout>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
