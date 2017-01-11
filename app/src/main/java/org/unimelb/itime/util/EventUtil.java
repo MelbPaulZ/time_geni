@@ -49,7 +49,7 @@ public class EventUtil {
     public final static int REPEAT_EVERY_TWOWEEKS = 3;
     public final static int REPEAT_EVERY_MONTH = 4;
     public final static int REPEAT_EVERY_YEAR = 5;
-
+    public final static long allDayMilliseconds = 24 * 60 * 60 * 1000;
 
 
     public static String parseTimeToString(Context context, long time) {
@@ -563,6 +563,18 @@ public class EventUtil {
         return calendar;
     }
 
+    public static long getDayBeginMilliseconds(long startTime){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(startTime);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+
+        return calendar.getTimeInMillis();
+    }
+
     public static Calendar parseTimeStringToCalendar(String timeString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date d = null;
@@ -799,6 +811,17 @@ public class EventUtil {
        return getTimeslotFromStatus(event, Timeslot.STATUS_PENDING);
     }
 
+    public static <T extends ITimeComparable> T getItemInList(List<T> list, T obj){
+        for (T item:list
+                ) {
+            if (item.iTimeEquals(obj)){
+                return item;
+            }
+        }
+
+        return null;
+    }
+
     public static <T extends ITimeComparable> void removeWhileLooping(ArrayList<T> list, T rmObj){
         Iterator<T> i = list.iterator();
         while (i.hasNext()) {
@@ -810,6 +833,11 @@ public class EventUtil {
         }
     }
 
+    public static boolean isAllDayEvent(ITimeEventInterface event) {
+        long duration = event.getEndTime() - event.getStartTime();
+        boolean isAllDay = duration >= allDayMilliseconds;
 
+        return isAllDay;
+    }
 
 }

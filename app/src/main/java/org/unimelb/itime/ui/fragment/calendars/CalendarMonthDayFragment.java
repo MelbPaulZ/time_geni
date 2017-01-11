@@ -32,7 +32,6 @@ import org.unimelb.itime.vendor.unitviews.DraggableEventView;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -94,7 +93,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
-                eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
+                eventManager.syncRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });

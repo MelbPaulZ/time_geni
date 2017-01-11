@@ -4,11 +4,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,9 +28,7 @@ import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.unitviews.DraggableEventView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
@@ -88,7 +84,7 @@ public class CalendarWeekFragment extends BaseUiFragment<Object, EventCommonMvpV
             @Override
             public void onMonthChanged(MyCalendar myCalendar) {
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
-                eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
+                eventManager.syncRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });

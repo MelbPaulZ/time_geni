@@ -63,7 +63,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
             public void onMonthChanged(MyCalendar myCalendar) {
                 Log.i("Header", "monthAgendaView: ");
                 CalendarManager.getInstance().setCurrentShowCalendar(myCalendar.getCalendar());
-                eventManager.refreshRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
+                eventManager.syncRepeatedEvent(myCalendar.getCalendar().getTimeInMillis());
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
 

@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.ITimeComparable;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
@@ -24,7 +23,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +35,7 @@ public class EventManager {
 
     private Event currentEvent = new Event();
 
+    private List<ITimeEventInterface> allDayEventList = new ArrayList<>();
     private Map<Long, List<ITimeEventInterface>> regularEventMap = new HashMap<>();
 
     private ArrayList<Event> orgRepeatedEventList = new ArrayList<>();
@@ -57,19 +56,19 @@ public class EventManager {
     private Calendar nowRepeatedEndAt = Calendar.getInstance();
     private Calendar nowRepeatedStartAt = Calendar.getInstance();
 
-    private Calendar calendar = Calendar.getInstance();
     private Context context;
 
     public EventManager(Context context){
         this.context = context;
-        setToBeginOfDay(nowRepeatedStartAt);
-        setToBeginOfDay(nowRepeatedEndAt);
+        nowRepeatedStartAt = EventUtil.getBeginOfDayCalendar(nowRepeatedStartAt);
+        nowRepeatedEndAt = EventUtil.getBeginOfDayCalendar(nowRepeatedEndAt);
 
         nowRepeatedStartAt.add(Calendar.DATE, -defaultRepeatedRange);
         nowRepeatedEndAt.add(Calendar.DATE, defaultRepeatedRange);
 
         eventsPackage.setRepeatedEventMap(repeatedEventMap);
         eventsPackage.setRegularEventMap(regularEventMap);
+        eventsPackage.setAllDayEventList(allDayEventList);
     }
 
     public static EventManager getInstance(Context context){
@@ -80,41 +79,124 @@ public class EventManager {
         return instance;
     }
 
+    public EventsPackage getEventsPackage(){
+        return eventsPackage;
+    }
+
     public List<Event> getOrgRepeatedEventList(){
         return this.orgRepeatedEventList;
     }
 
+    public Map<String, ArrayList<Event>> getSpecialEventMap(){
+        return  this.specialEvent;
+    }
+
+    public List<ITimeEventInterface> getAllEvents(){
+        ArrayList<ITimeEventInterface> allEvents = new ArrayList<>();
+        for (Map.Entry<Long, List<ITimeEventInterface>> entry: regularEventMap.entrySet()){
+            allEvents.addAll(entry.getValue());
+        }
+        allEvents.addAll(orgRepeatedEventList);
+        allEvents.addAll(allDayEventList);
+
+        return allEvents;
+    }
+
+    public Event findEventByUid(String eventUid){
+
+        Event event = DBManager.getInstance(context).getEvent(eventUid);
+        if (event==null){
+            return null;
+        }
+
+        Long key = EventUtil.getDayBeginMilliseconds(event.getStartTime());
+
+        if (EventUtil.isAllDayEvent(event)){
+            List<Event> allDayEventList = new ArrayList(this.allDayEventList);
+
+           return EventUtil.getItemInList(allDayEventList, event);
+        }
+
+        if (event.getRecurrence().length!=0){
+            // repeat event
+            for (Event ev : orgRepeatedEventList){
+                if (ev.getEventUid().equals(eventUid)){
+                    return ev;
+                }
+            }
+        }else {
+            // non-repeat event
+            if (regularEventMap.containsKey(key)) {
+                for (ITimeEventInterface iTimeEventInterface : regularEventMap.get(key)) {
+                    if ((iTimeEventInterface).getEventUid().equals(eventUid)) {
+                        return (Event) iTimeEventInterface;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public void syncRepeatedEvent(long currentDate){
+        boolean reachPreFlg = currentDate < this.getLoadPreFlag();
+        boolean reachFurFlg = currentDate > this.getLoadFurFlag();
+        if (reachPreFlg || reachFurFlg){
+            //load more pre
+            if (reachPreFlg){
+                Calendar tempStart = Calendar.getInstance();
+                tempStart.setTimeInMillis(nowRepeatedStartAt.getTimeInMillis());
+                tempStart.add(Calendar.DATE,-defaultRepeatedRange);
+                for (Event event:orgRepeatedEventList
+                        ) {
+                    this.addRepeatedEvent(event, tempStart.getTimeInMillis(), nowRepeatedStartAt.getTimeInMillis());
+                }
+                nowRepeatedStartAt.setTimeInMillis(tempStart.getTimeInMillis());
+            }
+            //load more future
+            if (reachFurFlg){
+                Calendar tempEnd = Calendar.getInstance();
+                tempEnd.setTimeInMillis(nowRepeatedEndAt.getTimeInMillis());
+                tempEnd.add(Calendar.DATE,defaultRepeatedRange);
+                for (Event event:orgRepeatedEventList
+                        ) {
+                    this.addRepeatedEvent(event, nowRepeatedEndAt.getTimeInMillis(), tempEnd.getTimeInMillis());
+                }
+                nowRepeatedEndAt.setTimeInMillis(tempEnd.getTimeInMillis());
+            }
+            EventBus.getDefault().post(new MessageEventRefresh());
+        }
+    }
+
+    public void loadDB(){
+        List<Event> list = DBManager.getInstance(context).getAllEvents();
+        for (Event ev: list) {
+            if (ev.getShowLevel() > 0){
+                addEvent(ev);
+            }
+        }
+    }
 
     public void clearManager(){
         this.instance = null;
     }
 
-
-    private Calendar setToBeginOfDay(Calendar cal){
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        return cal;
-    }
-
-    public EventsPackage getEventsPackage(){
-        return eventsPackage;
-    }
-
     public void addEvent(Event event){
         //check if special event
-        checkSpecialEvent(event);
+        handleSpecialEvent(event);
 
         //if should show
         if (event.getShowLevel() <= 0) {
             return;
         }
 
+        if (EventUtil.isAllDayEvent(event)){
+            allDayEventList.add(event);
+            return;
+        }
+
         if (event.getRecurrence().length == 0) {
             Long startTime = event.getStartTime();
-            Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
+            Long dayBeginMilliseconds = EventUtil.getDayBeginMilliseconds(startTime);
 
             if (regularEventMap.containsKey(dayBeginMilliseconds)) {
                 regularEventMap.get(dayBeginMilliseconds).add(event);
@@ -133,11 +215,94 @@ public class EventManager {
         }
     }
 
-    public Map<String, ArrayList<Event>> getSpecialEventMap(){
-        return  this.specialEvent;
+    // repeat event update need to change
+    public synchronized void updateEvent(Event oldEvent, Event newEvent){
+        setCurrentEvent(newEvent);
+
+        if (EventUtil.isAllDayEvent(oldEvent)){
+            updateAllDayEvent(oldEvent, newEvent);
+            return;
+        }
+
+        //if old not repeated
+        if (oldEvent.getRecurrence().length == 0){
+            this.updateRegularEvent(oldEvent, newEvent);
+        }else{
+            //if old is repeated
+           this.updateRepeatedEvent(oldEvent, newEvent);
+        }
+
+        // here update DB
+        Event dbOldEvent = DBManager.getInstance(context).getEvent(oldEvent.getEventUid());
+        dbOldEvent.delete();
+        DBManager.getInstance(context).insertEvent(newEvent);
     }
 
-    private void checkSpecialEvent(Event event){
+    private void updateRegularEvent(Event oldEvent, Event newEvent){
+        long oldBeginTime = EventUtil.getDayBeginMilliseconds(oldEvent.getStartTime());
+
+        if (this.regularEventMap.containsKey(oldBeginTime)){
+            Event old = null;
+
+            for (ITimeEventInterface iTimeEventInterface : regularEventMap.get(oldBeginTime)){
+                if ((iTimeEventInterface).getEventUid().equals(oldEvent.getEventUid())){
+                    old = (Event) iTimeEventInterface;
+                }
+            }
+
+            if (old != null){
+                regularEventMap.get(oldBeginTime).remove(old);
+                //update deleted level
+                //show -> hide
+                if (oldEvent.getShowLevel() == 1 && newEvent.getShowLevel() != 1){
+                    //deleted
+                }else{
+                    //not deleted
+                    this.addEvent(newEvent);
+                }
+            }else {
+//                    throw new RuntimeException("old event cannot be find in regularEventMap");
+            }
+        }
+    }
+
+    private void updateRepeatedEvent(Event oldEvent, Event newEvent){
+        this.removeRepeatedEvent(oldEvent);
+        this.orgRepeatedEventList.remove(oldEvent);
+        this.addEvent(newEvent);
+    }
+
+    private void updateAllDayEvent(Event oldEvent, Event newEvent){
+        this.allDayEventList.remove(EventUtil.getItemInList(new ArrayList(this.allDayEventList), oldEvent));
+        this.addEvent(newEvent);
+    }
+
+    public synchronized void updateDB(List<Event> events){
+        List<? extends ITimeEventInterface> orgITimeInterfaces = getAllEvents();
+        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
+
+        for (Event event:events) {
+            Event orgOld = null;
+
+            for (Event orgEvent:orgEvents) {
+                if (orgEvent.getEventUid().equals(event.getEventUid())){
+                    orgOld = orgEvent;
+                    // find event in event manager, and then update
+                    updateEvent(orgOld,event);
+                    break;
+                }
+            }
+
+            if (orgOld == null){
+                // if cannot find event, then insert it in DB and eventmanager
+                DBManager.getInstance(context).insertEvent(event);
+                addEvent(event);
+            }
+        }
+    }
+
+
+    private void handleSpecialEvent(Event event){
         String rEUID = event.getRecurringEventUid();
 
         if (!rEUID.equals("") && !rEUID.equals(event.getEventUid())){
@@ -169,7 +334,7 @@ public class EventManager {
         return false;
     }
 
-    private synchronized void addRepeatedEvent(Event event, long rangeStart, long rangeEnd){
+    private void addRepeatedEvent(Event event, long rangeStart, long rangeEnd){
         RuleModel rule = RuleFactory.getInstance().getRuleModel(event);
         event.setRule(rule);
 
@@ -214,7 +379,7 @@ public class EventManager {
 
             //if should show
             Long startTime = dup_event.getStartTime();
-            Long dayBeginMilliseconds = getDayBeginMilliseconds(startTime);
+            Long dayBeginMilliseconds = EventUtil.getDayBeginMilliseconds(startTime);
 
             EventTracer tracer = new EventTracer(this.repeatedEventMap, dup_event, dayBeginMilliseconds);
 
@@ -236,33 +401,14 @@ public class EventManager {
         }
     }
 
-    public void refreshRepeatedEvent(long currentDate){
-        boolean reachPreFlg = currentDate < this.getLoadPreFlag();
-        boolean reachFurFlg = currentDate > this.getLoadFurFlag();
-        if (reachPreFlg || reachFurFlg){
-            //load more pre
-            if (reachPreFlg){
-                Calendar tempStart = Calendar.getInstance();
-                tempStart.setTimeInMillis(nowRepeatedStartAt.getTimeInMillis());
-                tempStart.add(Calendar.DATE,-defaultRepeatedRange);
-                for (Event event:orgRepeatedEventList
-                        ) {
-                    this.addRepeatedEvent(event, tempStart.getTimeInMillis(), nowRepeatedStartAt.getTimeInMillis());
-                }
-                nowRepeatedStartAt.setTimeInMillis(tempStart.getTimeInMillis());
+    private void removeRepeatedEvent(Event event){
+        List<EventTracer> tracers = uidTracerMap.get(event.getEventUid());
+        if (tracers != null){
+            for (EventTracer tracer:tracers
+                    ) {
+                tracer.removeSelfFromRepeatedEventMap();
             }
-            //load more future
-            if (reachFurFlg){
-                Calendar tempEnd = Calendar.getInstance();
-                tempEnd.setTimeInMillis(nowRepeatedEndAt.getTimeInMillis());
-                tempEnd.add(Calendar.DATE,defaultRepeatedRange);
-                for (Event event:orgRepeatedEventList
-                        ) {
-                    this.addRepeatedEvent(event, nowRepeatedEndAt.getTimeInMillis(), tempEnd.getTimeInMillis());
-                }
-                nowRepeatedEndAt.setTimeInMillis(tempEnd.getTimeInMillis());
-            }
-            EventBus.getDefault().post(new MessageEventRefresh());
+            uidTracerMap.remove(event.getEventUid());
         }
     }
 
@@ -280,130 +426,95 @@ public class EventManager {
         return cal.getTimeInMillis();
     }
 
-    public void removeRepeatedEvent(Event event){
-        List<EventTracer> tracers = uidTracerMap.get(event.getEventUid());
-        if (tracers != null){
-            for (EventTracer tracer:tracers
-                    ) {
-                tracer.removeSelfFromRepeatedEventMap();
-            }
-            uidTracerMap.remove(event.getEventUid());
-        }
-    }
-
-    private long getDayBeginMilliseconds(long startTime){
-        calendar.setTimeInMillis(startTime);
-
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.SECOND,0);
-        calendar.set(Calendar.MILLISECOND,0);
-
-        return calendar.getTimeInMillis();
-    }
-
-    // repeat event update need to change
-    public synchronized void updateEvent(Event oldEvent, Event newEvent){
-        long oldBeginTime = this.getDayBeginMilliseconds(oldEvent.getStartTime());
-
-        setCurrentEvent(newEvent);
-        //if old not repeated
-        if (oldEvent.getRecurrence().length == 0){
-            if (this.regularEventMap.containsKey(oldBeginTime)){
-                Event old = null;
-
-                for (ITimeEventInterface iTimeEventInterface : regularEventMap.get(oldBeginTime)){
-                    if ( ((Event)iTimeEventInterface).getEventUid().equals(oldEvent.getEventUid())){
-                        old = (Event) iTimeEventInterface;
-                    }
-                }
-
-                if (old != null){
-                    regularEventMap.get(oldBeginTime).remove(old);
-                    //update deleted level
-                    //show -> hide
-                    if (oldEvent.getShowLevel() == 1 && newEvent.getShowLevel() != 1){
-                        //deleted
-                    }else{
-                        //not deleted
-                        this.addEvent(newEvent);
-                    }
-                }else {
-//                    throw new RuntimeException("old event cannot be find in regularEventMap");
-                }
-            }
-        }else{
-            //if old is repeated
-            this.removeRepeatedEvent(oldEvent);
-            this.orgRepeatedEventList.remove(oldEvent);
-            this.addEvent(newEvent);
-        }
-        // here update DB
-        Event dbOldEvent = DBManager.getInstance(context).getEvent(oldEvent.getEventUid());
-        dbOldEvent.delete();
-        DBManager.getInstance(context).insertEvent(newEvent);
-    }
-
-    public synchronized void updateDB(List<Event> events){
-        List<? extends ITimeEventInterface> orgITimeInterfaces = getAllEvents();
-        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
-
-        for (Event event:events) {
-            Event orgOld = null;
-
-            for (Event orgEvent:orgEvents) {
-                if (orgEvent.getEventUid().equals(event.getEventUid())){
-                    orgOld = orgEvent;
-                    // find event in event manager, and then update
-                    updateEvent(orgOld,event);
-                    break;
-                }
-            }
-
-            if (orgOld == null){
-                // if cannot find event, then insert it in DB and eventmanager
-                DBManager.getInstance(context).insertEvent(event);
-                addEvent(event);
-            }
-        }
-    }
-
-    public List<ITimeEventInterface> getAllEvents(){
-        ArrayList<ITimeEventInterface> allEvents = new ArrayList<>();
-        for (Map.Entry<Long, List<ITimeEventInterface>> entry: regularEventMap.entrySet()){
-            allEvents.addAll(entry.getValue());
-        }
-        allEvents.addAll(orgRepeatedEventList);
-        return allEvents;
-    }
-
-    public Event findEventByUid(String eventUid){
-
-        Event event = DBManager.getInstance(context).getEvent(eventUid);
-        if (event==null){
-            return null;
-        }
-        Long key = getDayBeginMilliseconds(event.getStartTime());
-        if (event.getRecurrence().length!=0){
-            // repeat event
-            for (Event ev : orgRepeatedEventList){
-                if (ev.getEventUid().equals(eventUid)){
-                    return ev;
-                }
-            }
-        }else {
-            // non-repeat event
-            if (regularEventMap.containsKey(key)) {
-                for (ITimeEventInterface iTimeEventInterface : regularEventMap.get(key)) {
-                    if (((Event) iTimeEventInterface).getEventUid().equals(eventUid)) {
-                        return (Event) iTimeEventInterface;
-                    }
-                }
+    private Event findOrgByUUID(String UUID){
+        for (Event orgE:orgRepeatedEventList
+                ) {
+            if (orgE.getEventUid().equals(UUID)){
+                return orgE;
             }
         }
         return null;
     }
 
+    private void refreshRepeatedEvent(Event event){
+        this.removeRepeatedEvent(event);
+        this.orgRepeatedEventList.remove(event);
+        this.addEvent(event);
+    }
+
+    private class EventsPackage implements ITimeEventPackageInterface {
+        private List<ITimeEventInterface> allDayEventList;
+        private Map<Long, List<ITimeEventInterface>> regularEventMap;
+        private Map<Long, List<ITimeEventInterface>> repeatedEventMap;
+
+        void setAllDayEventList(List<ITimeEventInterface> allDayEventList) {
+            this.allDayEventList = allDayEventList;
+        }
+
+        void setRegularEventMap(Map<Long, List<ITimeEventInterface>> regularEventMap) {
+            this.regularEventMap = regularEventMap;
+        }
+
+        void setRepeatedEventMap(Map<Long, List<ITimeEventInterface>> repeatedEventMap) {
+            this.repeatedEventMap = repeatedEventMap;
+        }
+
+        public void clearPackage(){
+            this.regularEventMap.clear();
+            //** here need to handle the linked effect.
+//            this.repeatedMap.clear();
+        }
+
+        @Override
+        public Map<Long, List<ITimeEventInterface>> getRegularEventDayMap() {
+            return regularEventMap;
+        }
+
+        @Override
+        public Map<Long,List<ITimeEventInterface>> getRepeatedEventDayMap() {
+            return repeatedEventMap;
+        }
+
+        @Override
+        public List<ITimeEventInterface> getAllDayEvents() {
+            return allDayEventList;
+        }
+    }
+
+    private class EventTracer{
+        private Map<Long, List<ITimeEventInterface>> repeatedEventMap;
+        private ITimeEventInterface event;
+        private long belongToDayOfBegin;
+
+        EventTracer(Map<Long, List<ITimeEventInterface>> repeatedEventMap
+                , ITimeEventInterface event,long belongToDayOfBegin){
+            this.repeatedEventMap = repeatedEventMap;
+            this.event = event;
+            this.belongToDayOfBegin = belongToDayOfBegin;
+        }
+
+        void removeSelfFromRepeatedEventMap(){
+            repeatedEventMap.get(belongToDayOfBegin).remove(event);
+        }
+    }
+
+
+    /********************************** Paul Paul 改 *********************************************/
+
+    // paul paul 改！
+    public void initNewEvent(Calendar startTimeCalendar){
+        // initial default values for new event
+        Event event = new Event();
+        setCurrentEvent(event);
+        event.setEventUid(AppUtil.generateUuid());
+        event.setHostUserUid(UserUtil.getInstance(context).getUserUid());
+        long endTime = startTimeCalendar.getTimeInMillis() + 3600 * 1000;
+        event.setStartTime(startTimeCalendar.getTimeInMillis());
+        event.setEndTime(endTime);
+        setCurrentEvent(event);
+    }
+
+    // paul paul 改！
     public Event copyCurrentEvent(Event event){
         Gson gson = new Gson();
 
@@ -417,10 +528,6 @@ public class EventManager {
         return copyEvent;
     }
 
-
-    public Event getNewEvent(){
-        return new Event();
-    }
 
     public Event getCurrentEvent() {
         return currentEvent;
@@ -457,91 +564,8 @@ public class EventManager {
     }
 
 
-    public void loadDB(){
-        List<Event> list = DBManager.getInstance(context).getAllEvents();
-        for (Event ev: list) {
-            if (ev.getShowLevel() > 0){
-                addEvent(ev);
-            }
-        }
-    }
-
-    private void refreshRepeatedEvent(Event event){
-        this.removeRepeatedEvent(event);
-        this.orgRepeatedEventList.remove(event);
-        this.addEvent(event);
-    }
-
-
-    public class EventsPackage implements ITimeEventPackageInterface {
-
-        private Map<Long, List<ITimeEventInterface>> regularEventMap;
-        private Map<Long, List<ITimeEventInterface>> repeatedEventMap;
-
-        public void setRegularEventMap(Map<Long, List<ITimeEventInterface>> regularEventMap) {
-            this.regularEventMap = regularEventMap;
-        }
-
-        public void setRepeatedEventMap(Map<Long, List<ITimeEventInterface>> repeatedEventMap) {
-            this.repeatedEventMap = repeatedEventMap;
-        }
-
-        public void clearPackage(){
-            this.regularEventMap.clear();
-            //** here need to handle the linked effect.
-//            this.repeatedMap.clear();
-        }
-
-        @Override
-        public Map<Long, List<ITimeEventInterface>> getRegularEventDayMap() {
-            return regularEventMap;
-        }
-
-        @Override
-        public Map<Long,List<ITimeEventInterface>> getRepeatedEventDayMap() {
-            return repeatedEventMap;
-        }
-    }
-
-    public class EventTracer{
-        private Map<Long, List<ITimeEventInterface>> repeatedEventMap;
-        private ITimeEventInterface event;
-        private long belongToDayOfBegin;
-
-        public EventTracer(Map<Long, List<ITimeEventInterface>> repeatedEventMap
-                , ITimeEventInterface event,long belongToDayOfBegin){
-            this.repeatedEventMap = repeatedEventMap;
-            this.event = event;
-            this.belongToDayOfBegin = belongToDayOfBegin;
-        }
-
-        public void removeSelfFromRepeatedEventMap(){
-            repeatedEventMap.get(belongToDayOfBegin).remove(event);
-        }
-    }
-
-    public Event findOrgByUUID(String UUID){
-        for (Event orgE:orgRepeatedEventList
-             ) {
-            if (orgE.getEventUid().equals(UUID)){
-                return orgE;
-            }
-        }
-        return null;
-    }
-
-
-    public void initNewEvent(Calendar startTimeCalendar){
-        // initial default values for new event
-        Event event = new Event();
-        setCurrentEvent(event);
-        event.setEventUid(AppUtil.generateUuid());
-        event.setHostUserUid(UserUtil.getInstance(context).getUserUid());
-        long endTime = startTimeCalendar.getTimeInMillis() + 3600 * 1000;
-        event.setStartTime(startTimeCalendar.getTimeInMillis());
-        event.setEndTime(endTime);
-        setCurrentEvent(event);
-    }
-
-
+    // paul paul 改！
+//    public Event getNewEvent(){
+//        return new Event();
+//    }
 }
