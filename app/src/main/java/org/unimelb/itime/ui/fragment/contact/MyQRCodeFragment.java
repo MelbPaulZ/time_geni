@@ -11,23 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
-
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.databinding.FragmentMyQrCodeBinding;
 import org.unimelb.itime.bean.ITimeUser;
-import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
-import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
+import org.unimelb.itime.databinding.FragmentMyQrCodeBinding;
 import org.unimelb.itime.ui.mvpview.contact.MyQRCodeMvpView;
 import org.unimelb.itime.ui.presenter.contact.MyQRCodePresenter;
 import org.unimelb.itime.ui.viewmodel.contact.MyQRCodeVieModel;
 import org.unimelb.itime.util.UserUtil;
+import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 
 import java.io.File;
 import java.io.FileOutputStream;
-
-import static org.unimelb.itime.ui.presenter.contact.ContextPresenter.getContext;
 
 /**
  * Created by 37925 on 2016/12/18.
@@ -98,11 +93,11 @@ public class MyQRCodeFragment extends BaseUiFragment<Object,MyQRCodeMvpView, MyQ
 
     @Override
     public void back() {
-        if (getFrom() instanceof SettingMyProfileFragment){
-            closeFragment(this, (SettingMyProfileFragment)getFrom());
-        }else{
-            getActivity().onBackPressed();
-        }
+//        if (getFrom() instanceof SettingMyProfileFragment){
+//            closeFragment(this, (SettingMyProfileFragment)getFrom());
+//        }else{
+//            getActivity().onBackPressed();
+//        }
     }
 
     @Override

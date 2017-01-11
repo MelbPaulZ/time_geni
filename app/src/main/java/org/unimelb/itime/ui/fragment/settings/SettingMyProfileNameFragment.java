@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileNameBinding;
-import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
@@ -51,12 +50,12 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingCom
 
     @Override
     public void onViewChange(int task, boolean isSave) {
-        SettingMyProfileFragment settingMyProfileFragment = (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
-        if (isSave) {
-            closeFragment(this, settingMyProfileFragment, SettingManager.getInstance(getContext()).copySetting(getSetting()));
-        }else{
-            closeFragment(this, settingMyProfileFragment);
-        }
+//        SettingMyProfileFragment settingMyProfileFragment = (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
+//        if (isSave) {
+//            closeFragment(this, settingMyProfileFragment, SettingManager.getInstance(getContext()).copySetting(getSetting()));
+//        }else{
+//            closeFragment(this, settingMyProfileFragment);
+//        }
     }
 
     @Override
@@ -81,14 +80,14 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingCom
 
     @Override
     public void onBack() {
-        closeFragment(this,
-                (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
+//        closeFragment(this,
+//                (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
     }
 
     @Override
     public void onNext() {
-        closeFragment(this,
-                (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()),
-                SettingManager.getInstance(getContext()).copySetting(getSetting()));
+//        closeFragment(this,
+//                (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()),
+//                SettingManager.getInstance(getContext()).copySetting(getSetting()));
     }
 }

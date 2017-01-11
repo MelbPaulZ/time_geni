@@ -1,260 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/tools">
+
     <data>
+
         <variable
-            name="settingVM"
-            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
+            name="contentVM"
+            type="org.unimelb.itime.ui.viewmodel.UserProfileViewModel" />
+
         <variable
             name="toolbarVM"
-            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel" />
     </data>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <include layout="@layout/toolbar_common"
-        bind:vm="@{toolbarVM}"/>
-    <!--&lt;!&ndash;toolbar&ndash;&gt;-->
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--style="@style/itime_toolbar">-->
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-
-            <!--&lt;!&ndash;toolbar back arrow&ndash;&gt;-->
-            <!--<ImageView-->
-                <!--android:layout_width="11dp"-->
-                <!--android:layout_height="18dp"-->
-                <!--android:src="@drawable/icon_back_arrow"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar settings text&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/title_activity_settings"-->
-                <!--android:padding="10dp"-->
-                <!--android:textColor="@color/title_6D6D6D"-->
-                <!--android:textSize="17sp"-->
-                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING, false)}"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginLeft="14dp"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar title&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/setting_my_profile"-->
-                <!--android:textSize="17sp"-->
-                <!--android:textColor="@color/black"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--/>-->
-        <!--</RelativeLayout>-->
-    <!--</android.support.v7.widget.Toolbar>-->
-
-    <!--gray BackGround-->
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/color_fafafa">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <!--First part-->
+        <include
+            layout="@layout/toolbar_common"
+            bind:vm="@{toolbarVM}" />
+
+        <!--gray BackGround-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/background_top_bottom_divider">
-
-            <!--Profile photo part-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="84dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_VIEW_AVATAR, true)}"
-                android:layout_marginLeft="16dp">
-
-                <TextView
-                    style="@style/itime_blacktitle_17sp"
-                    android:text="@string/profile_photo"/>
-
-                <ImageView
-                    style="@style/image_right_arrow" />
-                
-                <ImageView
-                    android:layout_width="62dp"
-                    android:layout_height="62dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="33dp"
-                    app:url="@{settingVM.setting.user.photo}"
-                    android:layout_alignParentEnd="true"
-                    />
-
-                <TextView
-                    style="@style/itime_bottom_divider_line" />
-            </RelativeLayout>
-
-            <!--Name part-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE_NAME, true)}"
-                >
-
-                <TextView
-                    style="@style/itime_blacktitle_17sp"
-                    android:text="@string/name"/>
-
-                <ImageView
-                    style="@style/image_right_arrow" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="32dp"
-                    android:layout_centerVertical="true"
-                    android:text="@{settingVM.setting.user.personalAlias}"
-                    android:textSize="15sp"
-                    android:textColor="@color/color_757575"
-                    />
-
-                <ImageView
-                    style="@style/itime_bottom_divider_line" />
-
-            </RelativeLayout>
-
-            <!--Email part-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="16dp">
-                <TextView
-                    style="@style/itime_blacktitle_17sp"
-                    android:text="@string/email"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:text="@{settingVM.setting.user.email}"
-                    />
-
-                <ImageView
-                    style="@style/itime_bottom_divider_line" />
-
-            </RelativeLayout>
-
-            <!--Reset Password part-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_RESET_PASSWORD, true)}"
-                >
-                <TextView
-                    style="@style/itime_blacktitle_17sp"
-                    android:text="@string/setting_reset_password"/>
-
-                <ImageView
-                    style="@style/image_right_arrow" />
-
-                <TextView
-                    style="@style/itime_bottom_divider_line" />
-
-            </RelativeLayout>
-            
-            <!--qr code part-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_QR_CODE, true)}"
-                >
-                <TextView
-                    style="@style/itime_blacktitle_17sp"
-                    android:text="@string/my_qr_code"/>
-
-                <ImageView
-                    style="@style/image_right_arrow" />
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginRight="33dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/icon_qr_code"
-                    />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-
-        <!--Second Part-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/background_top_bottom_divider"
+            android:background="@color/color_fafafa"
             android:orientation="vertical">
-            <!--gender part-->
-            <RelativeLayout
+
+            <!--First part-->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_GENDER, true)}">
-                <TextView
-                    style="@style/itime_blacktitle_17sp"
-                    android:text="@string/setting_gender"/>
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_top_bottom_divider"
+                android:orientation="vertical">
 
-                <ImageView
-                    style="@style/image_right_arrow" />
+                <!--Profile photo part-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="84dp"
+                    android:layout_marginLeft="16dp"
+                    android:onClick="@{contentVM.onAvatarClicked()}">
 
-                <TextView
-                    style="@style/itime_subtitle_15sp"
-                    android:text="@{settingVM.setting.user.gender}"/>
+                    <TextView
+                        style="@style/itime_blacktitle_17sp"
+                        android:text="@string/profile_photo" />
 
-                <TextView
-                    style="@style/itime_bottom_divider_line" />
+                    <ImageView style="@style/image_right_arrow" />
 
-            </RelativeLayout>
+                    <ImageView
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="33dp"
+                        app:url="@{contentVM.user.photo}" />
 
-            <!--Region part-->
-            <RelativeLayout
+                    <TextView style="@style/itime_bottom_divider_line" />
+                </RelativeLayout>
+
+                <!--Name part-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="16dp"
+                    android:onClick="@{contentVM.onNameClicked()}">
+
+                    <TextView
+                        style="@style/itime_blacktitle_17sp"
+                        android:text="@string/name" />
+
+                    <ImageView style="@style/image_right_arrow" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="32dp"
+                        android:text="@{contentVM.user.personalAlias}"
+                        android:textColor="@color/color_757575"
+                        android:textSize="15sp" />
+
+                    <ImageView style="@style/itime_bottom_divider_line" />
+
+                </RelativeLayout>
+
+                <!--Email part-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="16dp">
+
+                    <TextView
+                        style="@style/itime_blacktitle_17sp"
+                        android:text="@string/email" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:text="@{contentVM.user.email}" />
+
+                    <ImageView style="@style/itime_bottom_divider_line" />
+
+                </RelativeLayout>
+
+                <!--Reset Password part-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="16dp"
+                    android:onClick="@{contentVM.onResetPasswordClicked()}">
+
+                    <TextView
+                        style="@style/itime_blacktitle_17sp"
+                        android:text="@string/setting_reset_password" />
+
+                    <ImageView style="@style/image_right_arrow" />
+
+                    <TextView style="@style/itime_bottom_divider_line" />
+
+                </RelativeLayout>
+
+                <!--qr code part-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="16dp"
+                    android:onClick="@{contentVM.onMyQrCodeClicked()}">
+
+                    <TextView
+                        style="@style/itime_blacktitle_17sp"
+                        android:text="@string/my_qr_code" />
+
+                    <ImageView style="@style/image_right_arrow" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="33dp"
+                        android:src="@drawable/icon_qr_code" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+            <!--Second Part-->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="16dp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_REGION, true)}">
-                <TextView
-                    style="@style/itime_blacktitle_17sp"
-                    android:text="@string/region"/>
-                
-                <ImageView
-                    style="@style/image_right_arrow" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/background_top_bottom_divider"
+                android:orientation="vertical">
+                <!--gender part-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="16dp"
+                    android:onClick="@{contentVM.onGenderClicked()}">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="33dp"
-                    android:layout_centerVertical="true"
-                    android:text="Melbourne, Ausralia"
-                    android:textSize="15sp"
-                    android:textColor="@color/color_757575"/>
-            </RelativeLayout>
-            
+                    <TextView
+                        style="@style/itime_blacktitle_17sp"
+                        android:text="@string/setting_gender" />
+
+                    <ImageView style="@style/image_right_arrow" />
+
+                    <TextView
+                        style="@style/itime_subtitle_15sp"
+                        android:text="@{contentVM.user.gender}" />
+
+                    <TextView style="@style/itime_bottom_divider_line" />
+
+                </RelativeLayout>
+
+                <!--Region part-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="16dp"
+                    android:onClick="@{contentVM.onRegionClicked()}">
+
+                    <TextView
+                        style="@style/itime_blacktitle_17sp"
+                        android:text="@string/region" />
+
+                    <ImageView style="@style/image_right_arrow" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="33dp"
+                        android:text="Melbourne, Ausralia"
+                        android:textColor="@color/color_757575"
+                        android:textSize="15sp" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
         </LinearLayout>
-
 
     </LinearLayout>
-
-</LinearLayout>
 </layout>

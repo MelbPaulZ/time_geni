@@ -1,12 +1,10 @@
 package org.unimelb.itime.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
-import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.service.MusicService;
 import org.unimelb.itime.ui.fragment.contact.MyQRCodeFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingAboutFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingCalendarPreferenceFragment;
@@ -18,7 +16,6 @@ import org.unimelb.itime.ui.fragment.settings.SettingMyProfileNameFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingNotificationFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingProfileGenderFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingProfileResetPasswordFragment;
-import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
 public class SettingActivity extends BaseActivity{
 
@@ -35,7 +32,13 @@ public class SettingActivity extends BaseActivity{
     private SettingImportCalendarFragment importCalendarFragment;
     private MyQRCodeFragment myQRCodeFragment;
 
+    private FragmentManager fragmentManager;
 
+
+
+    public void forward(){
+
+    }
 
 
 
@@ -43,87 +46,90 @@ public class SettingActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        initSettingFragments();
-        show();
 
-//        music();
-    }
+        fragmentManager = getSupportFragmentManager();
 
-    private void music(){
-        Intent intent = new Intent(this,MusicService.class);
-        startService(intent);
-    }
-
-    private void show(){
-        Intent intent = getIntent();
-        int task = intent.getIntExtra(TASK,-100);
-        if (task!=-100){
-            showOnTask(task);
-        }
-    }
-
-    private void showOnTask(int task){
-        switch (task){
-            case MainSettingsViewModel.TASK_TO_MY_PROFILE:
-                showFragment(myProfileFragment);
-                break;
-            case MainSettingsViewModel.TASK_TO_SCAN_QR_CODE:
-                break;
-            case MainSettingsViewModel.TASK_TO_BLOCK_USER:
-                break;
-            case MainSettingsViewModel.TASK_TO_NOTICIFATION:
-                showFragment(notificationFragment);
-                break;
-            case MainSettingsViewModel.TASK_TO_CALENDAR_PREFERENCE:
-                showFragment(calendarPreferenceFragment);
-                break;
-            case MainSettingsViewModel.TASK_TO_HELP_AND_FEEDBACK:
-                break;
-            case MainSettingsViewModel.TASK_TO_ABOUT:
-                showFragment(aboutFragment);
-        }
-    }
-
-    private void initSettingFragments(){
         myProfileFragment = new SettingMyProfileFragment();
-        myProfileNameFragment = new SettingMyProfileNameFragment();
-        aboutFragment = new SettingAboutFragment();
-        calendarPreferenceFragment = new SettingCalendarPreferenceFragment();
-        defaultCalendarFragment = new SettingDefaultAlertFragment();
-        importCalendarUnimelbFragment = new SettingImportCalendarUnimelbFragment();
-        notificationFragment = new SettingNotificationFragment();
-        profileGenderFragment = new SettingProfileGenderFragment();
-        resetPasswordFragment = new SettingProfileResetPasswordFragment();
-        importCalendarFragment = new SettingImportCalendarFragment();
-        myQRCodeFragment = new MyQRCodeFragment();
+
+        fragmentManager.beginTransaction().
+                replace(R.id.setting_activity_framelayout, myProfileFragment)
+                .commit();
 
 
-        hideFragment(myProfileFragment);
-        hideFragment(myProfileNameFragment);
-        hideFragment(aboutFragment);
-        hideFragment(calendarPreferenceFragment);
-        hideFragment(defaultCalendarFragment);
-        hideFragment(importCalendarUnimelbFragment);
-        hideFragment(notificationFragment);
-        hideFragment(profileGenderFragment);
-        hideFragment(resetPasswordFragment);
-        hideFragment(importCalendarFragment);
-        hideFragment(myQRCodeFragment);
+
+//        initSettingFragments();
+//        show();
+
     }
 
-    private void hideFragment(BaseUiFragment fragment){
-        getSupportFragmentManager().beginTransaction().add(R.id.setting_activity_framelayout, fragment, fragment.getClassName()).hide(fragment).commit();
-    }
+//    private void show(){
+//        Intent intent = getIntent();
+//        int task = intent.getIntExtra(TASK,-100);
+//        if (task!=-100){
+//            showOnTask(task);
+//        }
+//    }
 
-    private void showFragment(BaseUiFragment fragment){
-        getSupportFragmentManager().beginTransaction().show(fragment).commit();
-    }
+//    private void showOnTask(int task){
+//        switch (task){
+//            case MainSettingsViewModel.TASK_TO_MY_PROFILE:
+//                showFragment(myProfileFragment);
+//                break;
+//            case MainSettingsViewModel.TASK_TO_SCAN_QR_CODE:
+//                break;
+//            case MainSettingsViewModel.TASK_TO_BLOCK_USER:
+//                break;
+//            case MainSettingsViewModel.TASK_TO_NOTICIFATION:
+//                showFragment(notificationFragment);
+//                break;
+//            case MainSettingsViewModel.TASK_TO_CALENDAR_PREFERENCE:
+//                showFragment(calendarPreferenceFragment);
+//                break;
+//            case MainSettingsViewModel.TASK_TO_HELP_AND_FEEDBACK:
+//                break;
+//            case MainSettingsViewModel.TASK_TO_ABOUT:
+//                showFragment(aboutFragment);
+//        }
+//    }
+//
+//    private void initSettingFragments(){
+//        myProfileFragment = new SettingMyProfileFragment();
+//        myProfileNameFragment = new SettingMyProfileNameFragment();
+//        aboutFragment = new SettingAboutFragment();
+//        calendarPreferenceFragment = new SettingCalendarPreferenceFragment();
+//        defaultCalendarFragment = new SettingDefaultAlertFragment();
+//        importCalendarUnimelbFragment = new SettingImportCalendarUnimelbFragment();
+//        notificationFragment = new SettingNotificationFragment();
+//        profileGenderFragment = new SettingProfileGenderFragment();
+//        resetPasswordFragment = new SettingProfileResetPasswordFragment();
+//        importCalendarFragment = new SettingImportCalendarFragment();
+//        myQRCodeFragment = new MyQRCodeFragment();
+//
+//
+//        hideFragment(myProfileFragment);
+//        hideFragment(myProfileNameFragment);
+//        hideFragment(aboutFragment);
+//        hideFragment(calendarPreferenceFragment);
+//        hideFragment(defaultCalendarFragment);
+//        hideFragment(importCalendarUnimelbFragment);
+//        hideFragment(notificationFragment);
+//        hideFragment(profileGenderFragment);
+//        hideFragment(resetPasswordFragment);
+//        hideFragment(importCalendarFragment);
+//        hideFragment(myQRCodeFragment);
+//    }
+//
+//    private void hideFragment(BaseUiFragment fragment){
+//        getSupportFragmentManager().beginTransaction().add(R.id.setting_activity_framelayout, fragment, fragment.getClassName()).hide(fragment).commit();
+//    }
+//
+//    private void showFragment(BaseUiFragment fragment){
+//        getSupportFragmentManager().beginTransaction().show(fragment).commit();
+//    }
 
 
     @Override
     protected void onDestroy() {
-//        Intent intent = new Intent(this,MusicService.class);
-//        stopService(intent);
         super.onDestroy();
     }
 }

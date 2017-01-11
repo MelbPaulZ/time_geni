@@ -46,7 +46,7 @@ implements SettingCommonMvpView{
     @Override
     public void onViewChange(int task, boolean isSave) {
         if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE){
-            closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()), getSetting());
+//            closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()), getSetting());
         }
     }
 
@@ -72,12 +72,12 @@ implements SettingCommonMvpView{
 
     @Override
     public void onBack() {
-        closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
+//        closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
     }
 
     @Override
     public void onNext() {
-        closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()), getSetting());
+//        closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()), getSetting());
 
     }
 }
