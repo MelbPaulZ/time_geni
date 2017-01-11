@@ -46,7 +46,6 @@ public abstract class EventBaseFragment<V extends MvpView, P extends MvpPresente
 
     }
 
-
     @Override
     public void onStart() {
         super.onStart();

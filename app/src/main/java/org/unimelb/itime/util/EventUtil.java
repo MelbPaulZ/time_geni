@@ -575,6 +575,18 @@ public class EventUtil {
         return calendar.getTimeInMillis();
     }
 
+    public static long getDayEndMilliseconds(long endTime){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(endTime);
+
+        calendar.set(Calendar.HOUR_OF_DAY,23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar.getTimeInMillis();
+    }
+
     public static Calendar parseTimeStringToCalendar(String timeString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date d = null;
@@ -834,8 +846,14 @@ public class EventUtil {
     }
 
     public static boolean isAllDayEvent(ITimeEventInterface event) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(event.getStartTime());
+        int hour = cal.get(Calendar.HOUR);
+        int minutes = cal.get(Calendar.MINUTE);
         long duration = event.getEndTime() - event.getStartTime();
-        boolean isAllDay = duration >= allDayMilliseconds;
+        boolean isAllDay = hour == 0
+                && minutes == 0
+                && duration >= (allDayMilliseconds * 0.9);
 
         return isAllDay;
     }

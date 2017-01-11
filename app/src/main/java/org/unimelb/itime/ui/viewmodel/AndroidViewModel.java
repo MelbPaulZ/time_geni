@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Switch;
 
 import static org.unimelb.itime.R.dimen.hide;
 
@@ -36,6 +37,10 @@ public class AndroidViewModel extends BaseObservable {
         view.setSelected(isSelected);
     }
 
+    @BindingAdapter("android:onCheckChange")
+    public static void setOnSwitchChangeListener(Switch view, Switch.OnCheckedChangeListener listener){
+        view.setOnCheckedChangeListener(listener);
+    }
 
     public void showKeyBoard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
