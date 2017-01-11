@@ -28,11 +28,12 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="7dp"
             android:paddingRight="10dp"
+            android:animateLayoutChanges="true"
             android:paddingLeft="10dp">
         <org.unimelb.itime.widget.InviteeGroupView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:animateLayoutChanges="true"
             app:hintText="@string/search_hint"
             android:id="@+id/inviteeGroupView"
             app:inviteeList = "@{viewModel.inviteeList}"
