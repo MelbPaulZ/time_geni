@@ -20,13 +20,18 @@ import org.unimelb.itime.util.SizeUtil;
 
 public class WideArrowButton extends RelativeLayout {
 
+    private int IMG_W = SizeUtil.dp2px(getContext(),37);
+    private int IMG_H = SizeUtil.dp2px(getContext(),37);
     private ImageView iconImageView;
     private TextView textView;
     private ImageView arrowImageView;
     private String text;
+    private int iconWidth;
+    private int iconHeight;
     private int icon;
     private int FONT_SIZE = SizeUtil.px2dp(getContext(), getContext().getResources().getDimension(R.dimen.font_big));
     private int textColor = R.color.grey_one;
+    private RelativeLayout contentView;
 
 
     public WideArrowButton(Context context, AttributeSet attrs) {
@@ -35,6 +40,13 @@ public class WideArrowButton extends RelativeLayout {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.WideArrowButton);
         text = array.getString(R.styleable.WideArrowButton_text);
         icon = array.getResourceId(R.styleable.WideArrowButton_image,0);
+        iconWidth = array.getDimensionPixelSize(R.styleable.WideArrowButton_imageWidth, IMG_W);
+        iconHeight = array.getDimensionPixelSize(R.styleable.WideArrowButton_imageHeight, IMG_H);
+
+        contentView = new RelativeLayout(context);
+        RelativeLayout.LayoutParams params = new LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, SizeUtil.dp2px(getContext(),55.5));
+        contentView.setLayoutParams(params);
+        this.addView(contentView);
         initArrow();
         initIcon();
         initText();
@@ -68,8 +80,8 @@ public class WideArrowButton extends RelativeLayout {
 
     private void initIcon(){
         iconImageView = new ImageView(getContext());
-        RelativeLayout.LayoutParams params = new LayoutParams(SizeUtil.dp2px(getContext(),37),
-                SizeUtil.dp2px(getContext(),37));
+        RelativeLayout.LayoutParams params = new LayoutParams(iconWidth,
+                iconHeight);
         params.setMargins(SizeUtil.dp2px(getContext(),17),
                 SizeUtil.dp2px(getContext(),9),
                 SizeUtil.dp2px(getContext(),11),
@@ -81,7 +93,7 @@ public class WideArrowButton extends RelativeLayout {
         if(icon!=0) {
             iconImageView.setImageResource(icon);
         }
-        this.addView(iconImageView);
+        contentView.addView(iconImageView);
     }
 
     private void initArrow(){
@@ -94,7 +106,7 @@ public class WideArrowButton extends RelativeLayout {
         arrowImageView.setLayoutParams(params);
         arrowImageView.setImageResource(R.drawable.arrow_icon);
         arrowImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        this.addView(arrowImageView);
+        contentView.addView(arrowImageView);
     }
 
     private void initText(){
@@ -109,6 +121,6 @@ public class WideArrowButton extends RelativeLayout {
         textView.setTextSize(FONT_SIZE);
         textView.setTextColor(getResources().getColor(textColor));
         textView.setText(text);
-        this.addView(textView);
+        contentView.addView(textView);
     }
 }

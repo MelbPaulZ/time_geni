@@ -48,7 +48,6 @@ public class InviteFriendViewModel extends BaseObservable {
     private ObservableList<ListItemViewModel> searchItems;
     private List<Invitee> inviteeList;
     private List<BaseContact> friendList = new ArrayList<>();
-    private List<BaseContact> searchList;
     private InviteFriendPresenter presenter;
     private LinearLayout headerView;
     private boolean validInput = false;
@@ -70,6 +69,7 @@ public class InviteFriendViewModel extends BaseObservable {
 
     public InviteFriendViewModel(InviteFriendPresenter presenter){
         this.presenter = presenter;
+        setCountStr(0);
     }
 
     public Event getEvent() {
@@ -213,6 +213,7 @@ public class InviteFriendViewModel extends BaseObservable {
             item.setContact(user);
             item.setMatchColor(presenter.getMatchColor());
             item.setOnClickListener(getSearchOnClickListener());
+            item.setShowFirstLetter(false);
             item.setShowDetail(true);
             searchItems.add(item);
         }

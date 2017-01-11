@@ -30,8 +30,10 @@ public class BaseTitleBar  extends RelativeLayout {
     protected View.OnClickListener rightOnClickListener;
     protected ImageView backIcon;
     protected TextView backText;
-
+    private RelativeLayout contentView;
     protected View leftView;
+    private RelativeLayout leftButton;
+    private RelativeLayout rightButton;
     private boolean showLeft = true;
     private boolean showRight = true;
 
@@ -46,8 +48,33 @@ public class BaseTitleBar  extends RelativeLayout {
         showRight = array.getBoolean(R.styleable.BaseTitleBar_showRight, true);
         showLeft = array.getBoolean(R.styleable.BaseTitleBar_showLeft, true);
         this.setBackground(getResources().getDrawable(R.color.white));
+
+        initContentView();
         initBackLayout();
         initTileTextView();
+    }
+
+    public void initContentView(){
+        contentView = new RelativeLayout(getContext());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                SizeUtil.dp2px(getContext(), 44));
+        contentView.setLayoutParams(params);
+
+        rightButton = new RelativeLayout(getContext());
+        RelativeLayout.LayoutParams rightParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                SizeUtil.dp2px(getContext(), 44));
+        rightParams.addRule(ALIGN_PARENT_RIGHT);
+        rightButton.setLayoutParams(rightParams);
+
+        leftButton = new RelativeLayout(getContext());
+        RelativeLayout.LayoutParams leftParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                SizeUtil.dp2px(getContext(), 44));
+        leftParams.addRule(ALIGN_PARENT_LEFT);
+        leftButton.setLayoutParams(leftParams);
+
+        this.addView(contentView);
+        contentView.addView(rightButton);
+        contentView.addView(leftButton);
     }
 
     public void initBackLayout(){
@@ -86,7 +113,7 @@ public class BaseTitleBar  extends RelativeLayout {
         backLayout.addView(backText);
 
         setShowLeft(showLeft);
-        this.addView(backLayout);
+        leftButton.addView(backLayout);
     }
 
     private void initTileTextView(){
@@ -101,7 +128,7 @@ public class BaseTitleBar  extends RelativeLayout {
         titleTextView.setTextSize(fontSize);
         titleTextView.getPaint().setFakeBoldText(true);
         titleTextView.setTextColor(getResources().getColor(R.color.grey_one));
-        this.addView(titleTextView);
+        contentView.addView(titleTextView);
     }
 
     public void setTitle(String title){
@@ -109,11 +136,11 @@ public class BaseTitleBar  extends RelativeLayout {
     }
 
     public void setBackOnClickListener(View.OnClickListener listener){
-        backLayout.setOnClickListener(listener);
+        leftButton.setOnClickListener(listener);
     }
 
     public void setRightOnClickListener(View.OnClickListener listener){
-        rightView.setOnClickListener(listener);
+        rightButton.setOnClickListener(listener);
     }
 
     public boolean getShowLeft() {
@@ -122,11 +149,11 @@ public class BaseTitleBar  extends RelativeLayout {
 
     public void setShowLeft(boolean showLeft) {
         this.showLeft = showLeft;
-        if(backLayout!=null){
+        if(leftButton!=null){
             if(showLeft){
-                backLayout.setVisibility(VISIBLE);
+                leftButton.setVisibility(VISIBLE);
             }else{
-                backLayout.setVisibility(GONE);
+                leftButton.setVisibility(GONE);
             }
         }
     }
@@ -137,11 +164,11 @@ public class BaseTitleBar  extends RelativeLayout {
 
     public void setShowRight(boolean showRight) {
         this.showRight = showRight;
-        if(rightView!=null){
+        if(rightButton!=null){
             if(showRight){
-                rightView.setVisibility(VISIBLE);
+                rightButton.setVisibility(VISIBLE);
             }else{
-                rightView.setVisibility(GONE);
+                rightButton.setVisibility(GONE);
             }
         }
     }
@@ -152,5 +179,13 @@ public class BaseTitleBar  extends RelativeLayout {
 
     public View getLeftView(){
         return leftView;
+    }
+
+    public void setRightView(View rightView){
+        rightButton.addView(rightView);
+    }
+
+    public void setLeftView(View leftView){
+        leftButton.addView(leftView);
     }
 }

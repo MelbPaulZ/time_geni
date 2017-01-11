@@ -205,6 +205,14 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
     }
 
     public void inviteUser(Contact user){
-        getView().goToInviteFragment(user);
+        if(getView()!=null) {
+            getView().goToInviteFragment(user);
+        }
+    }
+
+    public void gotoEditAlias(Contact contact) {
+        if(getView()!=null){
+            getView().goToEditAlias(contact);
+        }
     }
 }

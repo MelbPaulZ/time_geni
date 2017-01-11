@@ -18,16 +18,20 @@
         android:background="@color/grey_three"
         android:orientation="vertical">
 
-        <org.unimelb.itime.widget.InviteeGroupView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="135dp"
             android:background="@drawable/corner_border"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="7dp"
             android:paddingRight="10dp"
-            android:paddingLeft="10dp"
+            android:paddingLeft="10dp">
+        <org.unimelb.itime.widget.InviteeGroupView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
             app:hintText="@string/search_hint"
             android:id="@+id/inviteeGroupView"
@@ -35,29 +39,27 @@
             app:onInviteeClickListener = "@{viewModel.onInviteeGroupViewItemClickListener}"
             app:onEditListener = "@{viewModel.onEditListener}"
             />
-
+        </FrameLayout>
         <TextView android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="@dimen/font_tiny"
             android:textColor="@color/grey_four"
             android:text="@{viewModel.countStr}"
-            android:visibility="@{viewModel.inviteeList.empty?View.GONE:View.VISIBLE}"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="9dp"
 
             android:layout_marginBottom="7dp"/>
     </LinearLayout>
 
-    <include layout="@layout/line"/>
+
 
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
         android:id="@+id/inviteAndFriendsLayout"
         android:visibility="@{viewModel.searching?View.GONE:View.VISIBLE}">
-
+        <include layout="@layout/line"/>
         <LinearLayout android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="vertical"

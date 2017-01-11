@@ -38,6 +38,6 @@ public class ScanQRCodeTitleBar extends BlackTitleBar {
         doneTextView.setText(getContext().getString(R.string.album));
         rightView = doneTextView;
         setShowRight(getShowRight());
-        this.addView(rightView);
+        setRightView(rightView);
     }
 }
