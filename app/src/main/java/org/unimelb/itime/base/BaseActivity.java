@@ -33,6 +33,11 @@ public class BaseActivity extends AppCompatActivity{
         return R.id.setting_activity_framelayout;
     }
 
+
+    public void openFragment(Fragment fragment) {
+        openFragment(fragment, null);
+    }
+
     public void openFragment(Fragment fragment, Bundle bundle){
         fragmentManager = getSupportFragmentManager();
         fragment.setArguments(bundle);

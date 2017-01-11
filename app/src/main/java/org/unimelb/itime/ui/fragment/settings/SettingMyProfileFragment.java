@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.fragment.settings;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileBinding;
 import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
+import org.unimelb.itime.ui.fragment.contact.MyQRCodeFragment;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.UserMvpView;
 import org.unimelb.itime.ui.presenter.UserPresenter;
@@ -23,7 +25,6 @@ import org.unimelb.itime.ui.viewmodel.UserProfileViewModel;
  * Created by Paul on 26/12/2016.
  */
 
-//public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>> implements SettingCommonMvpView{
 public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, UserPresenter<UserMvpView>> implements UserMvpView{
 
     private FragmentSettingMyProfileBinding binding;
@@ -38,7 +39,7 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
         return binding.getRoot();
     }
 
-
+    @NonNull
     @Override
     public UserPresenter<UserMvpView> createPresenter() {
         return new UserPresenter<>(getContext());
@@ -64,6 +65,7 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
     @Override
     public void toEditNamePage() {
 
+        getBaseActivity().openFragment(new SettingMyProfileNameFragment());
     }
 
     @Override
@@ -73,12 +75,12 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
 
     @Override
     public void toEditPasswordPage() {
-
+        getBaseActivity().openFragment(new SettingProfileResetPasswordFragment());
     }
 
     @Override
     public void toEditMyQrCodePage() {
-
+        getBaseActivity().openFragment(new MyQRCodeFragment());
     }
 
     @Override
@@ -106,70 +108,13 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
 
     }
 
-
-//    private void gotoPhotoPicker(){
-//        Intent intent = new Intent(getActivity(), ProfilePhotoPickerActivity.class);
-//        startActivityForResult(intent, 1);
-//    }
-//
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        reloadSetting(); // after photo picker activity, reload setting data from setting manager
     }
 
-//
-//    private void saveSetting(){
-//        SettingManager.getInstance(getContext()).setSetting(getSetting());
-//    }
-
-//    @Override
-//    public void onViewChange(int task, boolean isSave) {
-
-//        SettingMyProfileNameFragment fragment = new SettingMyProfileNameFragment();
-//        getFragmentManager().beginTransaction()
-//                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-//                .replace(R.id.setting_activity_framelayout, fragment)
-//                .commit();
-
-//        if (task == MainSettingsViewModel.TASK_VIEW_AVATAR){
-//            gotoPhotoPicker();
-//        }else if (task == MainSettingsViewModel.TASK_TO_SETTING){
-//
-//        }else if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE_NAME){
-//            openFragment(this, (SettingMyProfileNameFragment)getFragmentManager().findFragmentByTag(SettingMyProfileNameFragment.class.getSimpleName()), getSetting());
-//        }else if (task == MainSettingsViewModel.TASK_TO_QR_CODE){
-//            openFragment(this, (MyQRCodeFragment)getFragmentManager().findFragmentByTag(MyQRCodeFragment.class.getSimpleName()));
-//        }else if (task == MainSettingsViewModel.TASK_TO_GENDER){
-//            openFragment(this, (SettingProfileGenderFragment)getFragmentManager().findFragmentByTag(SettingProfileGenderFragment.class.getSimpleName()));
-//        }else if (task == MainSettingsViewModel.TASK_TO_RESET_PASSWORD){
-//            openFragment(this, (SettingProfileResetPasswordFragment)getFragmentManager().findFragmentByTag(SettingProfileResetPasswordFragment.class.getSimpleName()));
-//        }
-//    }
-
-//    @Override
-//    public void setLeftTitleStringToVM() {
-//        toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
-//    }
-
-//    @Override
-//    public void setTitleStringToVM() {
-//        toolbarViewModel.setTitleStr(getString(R.string.setting_my_profile));
-//    }
-//
-//    @Override
-//    public void setRightTitleStringToVM() {
-//
-//    }
-//
-//    @Override
-//    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel() {
-//        return new ToolbarViewModel<>(this);
-//    }
-//
     @Override
     public void onBack() {
-//        saveSetting();
         getActivity().finish();
         getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
