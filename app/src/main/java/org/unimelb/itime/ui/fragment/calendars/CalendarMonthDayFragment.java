@@ -254,5 +254,14 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
         }
     }
 
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
+
+    }
 }
 

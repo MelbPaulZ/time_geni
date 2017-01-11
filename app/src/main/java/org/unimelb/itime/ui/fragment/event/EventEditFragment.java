@@ -29,8 +29,10 @@ import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 
@@ -72,6 +74,7 @@ public class EventEditFragment extends EventBaseFragment<EventEditMvpView, Event
         }
         eventEditViewModel.setEventEditViewEvent(event);
         binding.setEventEditVM(eventEditViewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
 
@@ -218,16 +221,31 @@ public class EventEditFragment extends EventBaseFragment<EventEditMvpView, Event
 
     @Override
     public void setLeftTitleStringToVM() {
-        eventEditViewModel.setLeftTitleStr(getString(R.string.cancel));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.cancel));
     }
 
     @Override
     public void setTitleStringToVM() {
-        eventEditViewModel.setTitleStr(getString(R.string.edit_event));
+        toolbarViewModel.setTitleStr(getString(R.string.edit_event));
     }
 
     @Override
     public void setRightTitleStringToVM() {
-        eventEditViewModel.setRightTitleStr(getString(R.string.done));
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
+        return new ToolbarViewModel<>(this);
+    }
+
+    @Override
+    public void onBack() {
+        eventEditViewModel.onBack();
+    }
+
+    @Override
+    public void onNext() {
+        eventEditViewModel.onBack();
     }
 }

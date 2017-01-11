@@ -28,9 +28,11 @@ import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.LoginActivity;
 import org.unimelb.itime.ui.activity.ProfileActivityContact;
 import org.unimelb.itime.ui.activity.SettingActivity;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
@@ -193,11 +195,26 @@ implements SettingCommonMvpView{
 
     @Override
     public void setTitleStringToVM() {
-        viewModel.setTitleStr(getString(R.string.tab_setting));
+        toolbarViewModel.setTitleStr(getString(R.string.tab_setting));
     }
 
     @Override
     public void setRightTitleStringToVM() {
+
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel() {
+        return new ToolbarViewModel<>(this);
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
 
     }
 

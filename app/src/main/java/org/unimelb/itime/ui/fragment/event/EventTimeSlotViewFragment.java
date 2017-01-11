@@ -25,8 +25,10 @@ import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
@@ -70,6 +72,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         timeslotWeekView = (WeekView) binding.getRoot().findViewById(R.id.timeslot_week_view);
         viewModel = new EventCreateTimeslotViewModel(getPresenter());
         binding.setTimeslotVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
         inflater = LayoutInflater.from(getContext());
     }
 
@@ -143,7 +146,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
     }
 
     private void initListeners() {
-        durationRelativeLayout = (RelativeLayout) getActivity().findViewById(R.id.duration_relative_layout);
+        durationRelativeLayout = (RelativeLayout) getActivity().findViewById(R.id.duration_part);
         durationRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -257,33 +260,33 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         return new TimeslotCommonPresenter<>(getContext());
     }
 
-    @Override
-    public void onClickDone() {
-        TimeSlotUtil.sortTimeslot(event.getTimeslot());
-        if (getFrom() instanceof InviteeFragment || getFrom() instanceof EventTimeSlotCreateFragment) {
-            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-            beforeSendingFragment.setEvent(event);
-            openFragment(this, beforeSendingFragment);
-        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFrom();
-            beforeSendingFragment.setEvent(event);
-            openFragment(this, getFrom());
-        }
-    }
-
-    @Override
-    public void onClickBack() {
-        if (getFrom() instanceof InviteeFragment) {
-            closeFragment(this, getFrom());
-        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof InviteeFragment) {
-            InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-            closeFragment(this, inviteeFragment);
-        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof EventCreateDetailBeforeSendingFragment) {
-            closeFragment(this, getFrom());
-        }else if (getFrom() instanceof EventTimeSlotCreateFragment){
-            closeFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
-        }
-    }
+//    @Override
+//    public void onClickDone() {
+//        TimeSlotUtil.sortTimeslot(event.getTimeslot());
+//        if (getFrom() instanceof InviteeFragment || getFrom() instanceof EventTimeSlotCreateFragment) {
+//            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+//            beforeSendingFragment.setEvent(event);
+//            openFragment(this, beforeSendingFragment);
+//        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
+//            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFrom();
+//            beforeSendingFragment.setEvent(event);
+//            openFragment(this, getFrom());
+//        }
+//    }
+//
+//    @Override
+//    public void onClickBack() {
+//        if (getFrom() instanceof InviteeFragment) {
+//            closeFragment(this, getFrom());
+//        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof InviteeFragment) {
+//            InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+//            closeFragment(this, inviteeFragment);
+//        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof EventCreateDetailBeforeSendingFragment) {
+//            closeFragment(this, getFrom());
+//        }else if (getFrom() instanceof EventTimeSlotCreateFragment){
+//            closeFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
+//        }
+//    }
 
     public void initWheelPickers() {
         View root = inflater.inflate(R.layout.timeslot_duration_picker, null);
@@ -313,11 +316,10 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
         final PopupWindow popupWindow = new PopupWindow(root, ViewGroup.LayoutParams.MATCH_PARENT, 1200);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.AnimationPopup);
-        popupWindow.showAtLocation(binding.getRoot().findViewById(R.id.bottom_bar), Gravity.BOTTOM, 0, -600);
+        popupWindow.showAtLocation(binding.getRoot().findViewById(R.id.duration_part), Gravity.BOTTOM, 0, -600);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-
                 viewModel.setDurationTimeString(EventUtil.getDurationTimes().get(timePosition));
                 viewModel.setIsChangeDuration(true);
                 timeslotWeekView.updateTimeSlotsDuration(EventUtil.getDurationInMintues(timePosition) * 60 * 1000, false); // ? animate?
@@ -345,7 +347,7 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
     }
 
     @Override
@@ -355,7 +357,12 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
 
     @Override
     public void setRightTitleStringToVM() {
-        viewModel.setRightTitleStr(getString(R.string.done));
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
+        return new ToolbarViewModel<>(this);
     }
 
     @Override
@@ -371,5 +378,33 @@ public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewT
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
 
+    }
+
+    @Override
+    public void onBack() {
+        if (getFrom() instanceof InviteeFragment) {
+            closeFragment(this, getFrom());
+        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof InviteeFragment) {
+            InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+            closeFragment(this, inviteeFragment);
+        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment && getTo() instanceof EventCreateDetailBeforeSendingFragment) {
+            closeFragment(this, getFrom());
+        }else if (getFrom() instanceof EventTimeSlotCreateFragment){
+            closeFragment(this, (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName()));
+        }
+    }
+
+    @Override
+    public void onNext() {
+        TimeSlotUtil.sortTimeslot(event.getTimeslot());
+        if (getFrom() instanceof InviteeFragment || getFrom() instanceof EventTimeSlotCreateFragment) {
+            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+            beforeSendingFragment.setEvent(event);
+            openFragment(this, beforeSendingFragment);
+        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
+            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFrom();
+            beforeSendingFragment.setEvent(event);
+            openFragment(this, getFrom());
+        }
     }
 }

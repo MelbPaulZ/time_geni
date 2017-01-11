@@ -9,6 +9,5 @@ import java.util.List;
  * Created by Paul on 27/08/2016.
  */
 public interface EventCreateNewTimeSlotMvpView extends TimeslotCommonMvpView{
-    void onClickDone();
-    void onClickBack();
+
 }

@@ -27,8 +27,10 @@ import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
 import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
 import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarWeekFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
@@ -69,6 +71,7 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
         eventDetailForHostViewModel.setEvDtlHostEvent(event);
         eventDetailForHostViewModel.setEvAdapterEvent(adapterData);
         binding.setHostDetailVM(eventDetailForHostViewModel);
+        binding.setToolbarVM(toolbarViewModel);
         setProposedTimeSlots(event);
 
         //doing
@@ -163,19 +166,6 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
         getActivity().finish();
     }
 
-    @Override
-    public void toEditEvent() {
-        EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-        Event cpyEvent = EventManager.getInstance(getContext()).copyCurrentEvent(event);
-        for (Timeslot timeslot: cpyEvent.getTimeslot()){
-            timeslot.setStatus(Timeslot.STATUS_PENDING);
-        }
-        eventEditFragment.setEvent(cpyEvent);
-
-        EventManager.getInstance(getContext()).setCurrentEvent(event);
-
-        openFragment(this, eventEditFragment);
-    }
 
     @Override
     public void viewInCalendar() {
@@ -210,10 +200,6 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
         openFragment(this, gridFragment);
     }
 
-    @Override
-    public void onClickPhotoGridBack() {
-        closeFragment(this, getFrom());
-    }
 
 
     @Override
@@ -246,18 +232,42 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
 
     @Override
     public void setLeftTitleStringToVM() {
-        eventDetailForHostViewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
     }
 
     @Override
     public void setTitleStringToVM() {
         String title = EventUtil.isUserHostOfEvent(getContext(), event)?
                 getString(R.string.event_details) : getString(R.string.new_invitation);
-        eventDetailForHostViewModel.setTitleStr(title);
+        toolbarViewModel.setTitleStr(title);
     }
 
     @Override
     public void setRightTitleStringToVM() {
-        eventDetailForHostViewModel.setRightTitleStr(getString(R.string.edit));
+        toolbarViewModel.setRightTitleStr(getString(R.string.edit));
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
+        return new ToolbarViewModel<>(this);
+    }
+
+    @Override
+    public void onBack() {
+        toCalendar(EventCommonPresenter.TASK_BACK);
+    }
+
+    @Override
+    public void onNext() {
+        EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+        Event cpyEvent = EventManager.getInstance(getContext()).copyCurrentEvent(event);
+        for (Timeslot timeslot: cpyEvent.getTimeslot()){
+            timeslot.setStatus(Timeslot.STATUS_PENDING);
+        }
+        eventEditFragment.setEvent(cpyEvent);
+
+        EventManager.getInstance(getContext()).setCurrentEvent(event);
+
+        openFragment(this, eventEditFragment);
     }
 }

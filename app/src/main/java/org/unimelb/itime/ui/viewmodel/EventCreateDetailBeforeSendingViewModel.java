@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewModel {
     private Event newEvDtlEvent;
-    private ObservableField<Boolean> evDtlIsEventRepeat ;
+    private ObservableField<Boolean> evDtlIsEventRepeat;
     private CharSequence alertTimes[] = null;
     private EventCreateDetailBeforeSendingMvpView mvpView;
     private EventCommonPresenter<EventCreateDetailBeforeSendingMvpView> presenter;
@@ -66,18 +66,18 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
         calendarUtil = CalendarUtil.getInstance(getContext());
     }
 
-    private void initDialog(){
+    private void initDialog() {
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                switch (currentTask){
+                switch (currentTask) {
                     case END_TIME:
                         newEvDtlEvent.setEndTime(updateYearMonthDay(newEvDtlEvent.getEndTime(), year, monthOfYear, dayOfMonth).getTimeInMillis());
                         isEndTimeChange = true;
                         break;
                     case START_TIME:
                         newEvDtlEvent.setStartTime(updateYearMonthDay(newEvDtlEvent.getStartTime(), year, monthOfYear, dayOfMonth).getTimeInMillis());
-                        if (!isEndTimeChange){
+                        if (!isEndTimeChange) {
                             newEvDtlEvent.setEndTime(newEvDtlEvent.getStartTime() + 60 * 60 * 1000);
                         }
                         break;
@@ -92,14 +92,14 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
         timeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                switch (currentTask){
+                switch (currentTask) {
                     case END_TIME:
                         newEvDtlEvent.setEndTime(updateHourMin(newEvDtlEvent.getEndTime(), hourOfDay, minute).getTimeInMillis());
                         isEndTimeChange = true;
                         break;
                     case START_TIME:
                         newEvDtlEvent.setStartTime(updateHourMin(newEvDtlEvent.getStartTime(), hourOfDay, minute).getTimeInMillis());
-                        if (!isEndTimeChange){
+                        if (!isEndTimeChange) {
                             newEvDtlEvent.setEndTime(newEvDtlEvent.getStartTime() + 60 * 60 * 1000);
                         }
                         break;
@@ -110,8 +110,7 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
     }
 
 
-
-    private void onEndRepeatSelected(int year, int monthOfYear, int dayOfMonth){
+    private void onEndRepeatSelected(int year, int monthOfYear, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
         c.set(year, monthOfYear, dayOfMonth);
         newEvDtlEvent.getRule().setUntil(c.getTime());
@@ -128,7 +127,7 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
 
     public void setIsAllDay(ObservableField<Boolean> isAllDay) {
         this.isAllDay.set(isAllDay.get());
-        if (this.isAllDay.get()){
+        if (this.isAllDay.get()) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(newEvDtlEvent.getStartTime());
             calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -138,7 +137,7 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
             newEvDtlEvent.setStartTime(calendar.getTimeInMillis());
             newEvDtlEvent.setEndTime(newEvDtlEvent.getStartTime() + 3600 * 1000 * 24);
             setNewEvDtlEvent(newEvDtlEvent);
-        }else{
+        } else {
             Calendar calendar = Calendar.getInstance();
             newEvDtlEvent.setStartTime(calendar.getTimeInMillis());
             newEvDtlEvent.setEndTime(calendar.getTimeInMillis() + 3600 * 1000);
@@ -170,11 +169,11 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
         };
     }
 
-    public String getRepeatString(Event event){
+    public String getRepeatString(Event event) {
         return EventUtil.getRepeatString(getContext(), event);
     }
 
-    public View.OnClickListener pickAlertTime(){
+    public View.OnClickListener pickAlertTime() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,11 +193,11 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
     }
 
 
-    public View.OnClickListener pickPhoto(){
+    public View.OnClickListener pickPhoto() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mvpView!=null){
+                if (mvpView != null) {
                     mvpView.pickPhoto();
                 }
             }
@@ -206,22 +205,22 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
     }
 
 
-    public View.OnClickListener onClickProposedTimeslots(){
+    public View.OnClickListener onClickProposedTimeslots() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mvpView!=null){
+                if (mvpView != null) {
                     mvpView.onClickProposedTimeslots();
                 }
             }
         };
     }
 
-    public View.OnClickListener pickInvitees(){
-        return new View.OnClickListener(){
+    public View.OnClickListener pickInvitees() {
+        return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mvpView!=null){
+                if (mvpView != null) {
                     mvpView.pickInvitees();
                 }
             }
@@ -230,91 +229,87 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
 
     /**
      * check the focus of email edit text
+     *
      * @return
      */
-    public View.OnFocusChangeListener onEditFocusChange(){
+    public View.OnFocusChangeListener onEditFocusChange() {
         return new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     showKeyBoard(view);
-                }else{
+                } else {
                     closeKeyBoard(view);
                 }
             }
         };
     }
 
-    public void setPhotos(ArrayList<String> photos){
+    public void setPhotos(ArrayList<String> photos) {
         newEvDtlEvent.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
         setNewEvDtlEvent(newEvDtlEvent);
     }
 
     @Bindable
-    public Context getContext(){
+    public Context getContext() {
         return presenter.getContext();
     }
 
-    public View.OnClickListener onClickSend(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (newEvDtlEvent.getTitle().equals("")){
-                    newEvDtlEvent.setTitle(getContext().getString(R.string.new_event));
-                }
+    public void clickSend() {
+        if (newEvDtlEvent.getTitle().equals("")) {
+            newEvDtlEvent.setTitle(getContext().getString(R.string.new_event));
+        }
 
-                // pending Timeslots filtered out timeslots which not is not chosed by host
-                List<Timeslot> pendingTimeslots = new ArrayList<>();
-                for (Timeslot timeSlot : newEvDtlEvent.getTimeslot()){
-                    if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)){
-                        pendingTimeslots.add(timeSlot);
-                    }
-                }
-
-                // set event start time and end time, using the latest timeslot
-                Timeslot displayTimeslot = TimeSlotUtil.getLatestTimeSlot(pendingTimeslots);
-                if (displayTimeslot!=null) {
-                    newEvDtlEvent.setStartTime(displayTimeslot.getStartTime());
-                    newEvDtlEvent.setEndTime(displayTimeslot.getEndTime());
-                }
-
-                newEvDtlEvent.setRecurrence(newEvDtlEvent.getRule().getRecurrence());
-                newEvDtlEvent.setTimeslot(pendingTimeslots);
-                newEvDtlEvent.setHostUserUid(UserUtil.getInstance(getContext()).getUserUid());
-                EventUtil.addSelfInInvitee(getContext(), newEvDtlEvent);
-                if(!newEvDtlEvent.hasPhoto()){
-                    newEvDtlEvent.setPhoto(new ArrayList<PhotoUrl>());
-                }
-
-                if (newEvDtlEvent.getInvitee().size()>1){
-                    newEvDtlEvent.setEventType(Event.TYPE_GROUP);
-                    newEvDtlEvent.setStatus(Event.STATUS_PENDING);
-                }else{
-                    newEvDtlEvent.setEventType(Event.TYPE_SOLO);
-                    newEvDtlEvent.setStatus(Event.STATUS_CONFIRMED);
-                }
-                if (newEvDtlEvent.getCalendarUid()=="") {
-                    newEvDtlEvent.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(0).getCalendarUid());
-                    Toast.makeText(getContext(), "auto set Uid", Toast.LENGTH_SHORT).show();
-                }
-                newEvDtlEvent.setRecurringEventUid("");
-                newEvDtlEvent.setRecurringEventId("");
-
-                eventManager.setCurrentEvent(newEvDtlEvent);
-
-                presenter.insertEvent(newEvDtlEvent);
-
+        // pending Timeslots filtered out timeslots which not is not chosed by host
+        List<Timeslot> pendingTimeslots = new ArrayList<>();
+        for (Timeslot timeSlot : newEvDtlEvent.getTimeslot()) {
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)) {
+                pendingTimeslots.add(timeSlot);
             }
-        };
+        }
+
+        // set event start time and end time, using the latest timeslot
+        Timeslot displayTimeslot = TimeSlotUtil.getLatestTimeSlot(pendingTimeslots);
+        if (displayTimeslot != null) {
+            newEvDtlEvent.setStartTime(displayTimeslot.getStartTime());
+            newEvDtlEvent.setEndTime(displayTimeslot.getEndTime());
+        }
+
+        newEvDtlEvent.setRecurrence(newEvDtlEvent.getRule().getRecurrence());
+        newEvDtlEvent.setTimeslot(pendingTimeslots);
+        newEvDtlEvent.setHostUserUid(UserUtil.getInstance(getContext()).getUserUid());
+        EventUtil.addSelfInInvitee(getContext(), newEvDtlEvent);
+        if (!newEvDtlEvent.hasPhoto()) {
+            newEvDtlEvent.setPhoto(new ArrayList<PhotoUrl>());
+        }
+
+        if (newEvDtlEvent.getInvitee().size() > 1) {
+            newEvDtlEvent.setEventType(Event.TYPE_GROUP);
+            newEvDtlEvent.setStatus(Event.STATUS_PENDING);
+        } else {
+            newEvDtlEvent.setEventType(Event.TYPE_SOLO);
+            newEvDtlEvent.setStatus(Event.STATUS_CONFIRMED);
+        }
+        if (newEvDtlEvent.getCalendarUid() == "") {
+            newEvDtlEvent.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(0).getCalendarUid());
+            Toast.makeText(getContext(), "auto set Uid", Toast.LENGTH_SHORT).show();
+        }
+        newEvDtlEvent.setRecurringEventUid("");
+        newEvDtlEvent.setRecurringEventId("");
+
+        eventManager.setCurrentEvent(newEvDtlEvent);
+
+        presenter.insertEvent(newEvDtlEvent);
+
     }
 
-    public View.OnClickListener onChangeTime(final PickerTask task){
+    public View.OnClickListener onChangeTime(final PickerTask task) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 currentTask = task;
                 Calendar c = Calendar.getInstance();
-                switch (currentTask){
+                switch (currentTask) {
                     case END_TIME:
                         c.setTimeInMillis(newEvDtlEvent.getEndTime());
                         break;
@@ -329,16 +324,15 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
     }
 
 
-
-    public View.OnClickListener onChangeDate(final PickerTask task){
+    public View.OnClickListener onChangeDate(final PickerTask task) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 currentTask = task;
                 Calendar c = Calendar.getInstance();
-                switch (currentTask){
+                switch (currentTask) {
                     case END_REPEAT:
-                        if (newEvDtlEvent.getRule().getUntil()!=null){
+                        if (newEvDtlEvent.getRule().getUntil() != null) {
                             c.setTime(newEvDtlEvent.getRule().getUntil());
                         }
                         break;
@@ -356,41 +350,31 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
         };
     }
 
-    public View.OnClickListener onClickCalendarType(){
+    public View.OnClickListener onClickCalendarType() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    final CharSequence types[] = EventUtil.getCalendarTypes(getContext());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
-                    builder.setTitle("Choose a calendar");
-                    builder.setItems(types, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int i) {
-                            newEvDtlEvent.setCalendarUid(calendarUtil.getCalendar().get(i).getCalendarUid());
-                            setNewEvDtlEvent(newEvDtlEvent);
-                        }
-                    });
-                    builder.show();
-                }
-        };
-    }
-
-    public View.OnClickListener onClickCancel(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mvpView!=null){
-                    mvpView.onClickCancel();
-                }
+                final CharSequence types[] = EventUtil.getCalendarTypes(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
+                builder.setTitle("Choose a calendar");
+                builder.setItems(types, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        newEvDtlEvent.setCalendarUid(calendarUtil.getCalendar().get(i).getCalendarUid());
+                        setNewEvDtlEvent(newEvDtlEvent);
+                    }
+                });
+                builder.show();
             }
         };
     }
 
-    public View.OnClickListener changeLocation(){
+
+    public View.OnClickListener changeLocation() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mvpView!=null){
+                if (mvpView != null) {
                     mvpView.changeLocation();
                 }
             }
@@ -430,7 +414,7 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
     }
 
     @BindingAdapter("bind:checked")
-    public static void setCheck(Switch view, boolean isCheck){
+    public static void setCheck(Switch view, boolean isCheck) {
         view.setChecked(isCheck);
     }
 
@@ -446,10 +430,10 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
 
     @Bindable
     public int getStartVisibility() {
-        if (!EventUtil.hasOtherInviteeExceptSelf(getContext(), newEvDtlEvent)){
-            startVisibility =  View.VISIBLE;
-        }else{
-            startVisibility =  View.GONE;
+        if (!EventUtil.hasOtherInviteeExceptSelf(getContext(), newEvDtlEvent)) {
+            startVisibility = View.VISIBLE;
+        } else {
+            startVisibility = View.GONE;
         }
         return startVisibility;
     }

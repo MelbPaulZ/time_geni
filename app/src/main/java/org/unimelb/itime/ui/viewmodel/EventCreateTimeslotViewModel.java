@@ -46,27 +46,6 @@ public class EventCreateTimeslotViewModel extends CommonViewModel {
     }
 
 
-    public View.OnClickListener onClickBack(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mvpView!=null){
-                    mvpView.onClickBack();
-                }
-            }
-        };
-    }
-
-    public View.OnClickListener onClickDone(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mvpView!=null){
-                    mvpView.onClickDone();
-                }
-            }
-        };
-    }
 
     public WeekView.OnHeaderListener onWeekViewChange(){
        return new WeekView.OnHeaderListener() {

@@ -19,9 +19,11 @@ import org.unimelb.itime.databinding.FragmentSettingMyProfileBinding;
 import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
 import org.unimelb.itime.ui.fragment.contact.MyQRCodeFragment;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 
@@ -51,6 +53,7 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setSettingVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
 
@@ -75,9 +78,7 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
         if (task == MainSettingsViewModel.TASK_VIEW_AVATAR){
             gotoPhotoPicker();
         }else if (task == MainSettingsViewModel.TASK_TO_SETTING){
-            saveSetting();
-            getActivity().finish();
-            getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
         }else if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE_NAME){
             openFragment(this, (SettingMyProfileNameFragment)getFragmentManager().findFragmentByTag(SettingMyProfileNameFragment.class.getSimpleName()), getSetting());
         }else if (task == MainSettingsViewModel.TASK_TO_QR_CODE){
@@ -91,16 +92,33 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftTitleStr(getString(R.string.action_settings));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
     }
 
     @Override
     public void setTitleStringToVM() {
-        viewModel.setTitleStr(getString(R.string.setting_my_profile));
+        toolbarViewModel.setTitleStr(getString(R.string.setting_my_profile));
     }
 
     @Override
     public void setRightTitleStringToVM() {
+
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel() {
+        return new ToolbarViewModel<>(this);
+    }
+
+    @Override
+    public void onBack() {
+        saveSetting();
+        getActivity().finish();
+        getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+    }
+
+    @Override
+    public void onNext() {
 
     }
 }

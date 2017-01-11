@@ -11,9 +11,11 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingResetPassowrdBinding;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 
 /**
  * Created by Paul on 27/12/2016.
@@ -36,6 +38,7 @@ implements SettingCommonMvpView{
         super.onActivityCreated(savedInstanceState);
 //        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
@@ -53,16 +56,31 @@ implements SettingCommonMvpView{
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
     }
 
     @Override
     public void setTitleStringToVM() {
-        viewModel.setTitleStr(getString(R.string.setting_reset_password));
+        toolbarViewModel.setTitleStr(getString(R.string.setting_reset_password));
     }
 
     @Override
     public void setRightTitleStringToVM() {
-        viewModel.setRightTitleStr(getString(R.string.done));
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel() {
+        return new ToolbarViewModel<>(this);
+    }
+
+    @Override
+    public void onBack() {
+        closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
+    }
+
+    @Override
+    public void onNext() {
+
     }
 }

@@ -23,8 +23,10 @@ import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailTimeSlotViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -66,6 +68,7 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
         }
         viewModel.setEventDetailHostEvent(event);
         binding.setTimeSlotHostVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
         if (UserUtil.getInstance(getContext()).getUserUid().equals(event.getHostUserUid())) {
             // which means this is host event
         } else {
@@ -397,7 +400,7 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
     }
 
     @Override
@@ -407,7 +410,12 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
 
     @Override
     public void setRightTitleStringToVM() {
-        viewModel.setRightTitleStr(getString(R.string.done));
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
+        return new ToolbarViewModel<>(this);
     }
 
     @Override
@@ -423,5 +431,15 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
 
+    }
+
+    @Override
+    public void onBack() {
+        viewModel.onClickBack();
+    }
+
+    @Override
+    public void onNext() {
+        viewModel.onClickDone();
     }
 }

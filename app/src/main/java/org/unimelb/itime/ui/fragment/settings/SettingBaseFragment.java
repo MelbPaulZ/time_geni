@@ -10,18 +10,21 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.managers.SettingManager;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 
 /**
  * Created by Paul on 1/1/17.
  */
 
-public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P extends SettingCommonPresenter<V>> extends BaseUiFragment<Setting, V, P>  {
+public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P extends SettingCommonPresenter<V>> extends BaseUiFragment<Setting, V, P> {
 
     private Setting setting;
     protected MainSettingsViewModel viewModel;
+    protected ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,10 @@ public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P ext
         super.onActivityCreated(savedInstanceState);
         viewModel = new MainSettingsViewModel(getPresenter());
         viewModel.setSetting(setting);
+        toolbarViewModel = getToolBarViewModel();
+        setLeftTitleStringToVM();
+        setTitleStringToVM();
+        setRightTitleStringToVM();
     }
 
     public Setting getSetting() {
@@ -63,4 +70,5 @@ public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P ext
     public abstract void setLeftTitleStringToVM();
     public abstract void setTitleStringToVM();
     public abstract void setRightTitleStringToVM();
+    public abstract ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel();
 }

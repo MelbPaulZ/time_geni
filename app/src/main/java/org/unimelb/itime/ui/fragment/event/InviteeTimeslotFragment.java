@@ -21,6 +21,7 @@ import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.TimeslotCommonMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.TimeslotInviteeResponseViewModel;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.EventUtil;
 
 import java.util.List;
@@ -68,6 +69,7 @@ public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeC
         super.onActivityCreated(savedInstanceState);
         viewModel = new TimeslotInviteeResponseViewModel(presenter);
         binding.setVm(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
         initListener();
     }
 
@@ -79,14 +81,15 @@ public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeC
 
     }
 
+    // TODO: 11/1/17 implement after change all toolbar
     public void initListener(){
-        LinearLayout backBtn = (LinearLayout) root.findViewById(R.id.back);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                closeFragment(self, getFrom());
-            }
-        });
+//        LinearLayout backBtn = (LinearLayout) root.findViewById(R.id.back);
+//        backBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                closeFragment(self, getFrom());
+//            }
+//        });
     }
 
     public void setTime(long time){
@@ -100,17 +103,22 @@ public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeC
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
     }
 
     @Override
     public void setTitleStringToVM() {
-        viewModel.setTitleStr(getString(R.string.invitee));
+        toolbarViewModel.setTitleStr(getString(R.string.invitee));
     }
 
     @Override
     public void setRightTitleStringToVM() {
-        viewModel.setRightTitleStr(getString(R.string.done));
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
+        return new ToolbarViewModel<>(this);
     }
 
     @Override
@@ -125,6 +133,16 @@ public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeC
 
     @Override
     public void onTaskComplete(int task, List<Event> dataList) {
+
+    }
+
+    @Override
+    public void onBack() {
+        closeFragment(self, getFrom());
+    }
+
+    @Override
+    public void onNext() {
 
     }
 }

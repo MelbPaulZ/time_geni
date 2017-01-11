@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileNameBinding;
 import org.unimelb.itime.managers.SettingManager;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 
 /**
  * Created by Paul on 26/12/2016.
@@ -34,6 +36,7 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingCom
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setSettingVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
@@ -58,16 +61,34 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingCom
 
     @Override
     public void setLeftTitleStringToVM() {
-        viewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
     }
 
     @Override
     public void setTitleStringToVM() {
-        viewModel.setTitleStr(getString(R.string.name));
+        toolbarViewModel.setTitleStr(getString(R.string.name));
     }
 
     @Override
     public void setRightTitleStringToVM() {
-        viewModel.setRightTitleStr(getString(R.string.setting_save));
+        toolbarViewModel.setRightTitleStr(getString(R.string.setting_save));
+    }
+
+    @Override
+    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel() {
+        return new ToolbarViewModel<>(this);
+    }
+
+    @Override
+    public void onBack() {
+        closeFragment(this,
+                (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
+    }
+
+    @Override
+    public void onNext() {
+        closeFragment(this,
+                (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()),
+                SettingManager.getInstance(getContext()).copySetting(getSetting()));
     }
 }
