@@ -99,25 +99,39 @@ public class ContactHomePageViewModel  extends BaseObservable {
     }
 
     private void updateListView(List<ITimeUser> list){
-        generateListView(items,list);
+        generateListView(list);
         sideBarListView.updateList();
     }
 
     private void updateSearchListView(List<ITimeUser> list){
-        generateListView(searchItems,list);
+        generateSearchListView(list);
     }
 
-    public void generateListView(ObservableList target, List<ITimeUser> list){
-        target.clear();
+    public void generateListView(List<ITimeUser> list){
+        items.clear();
         for(int i=0;i<list.size();i++){
             ITimeUser user = list.get(i);
             ListItemViewModel item = new ListItemViewModel();
             item.setCheckable(false);
             item.setContact(user);
             item.setMatchColor(presenter.getMatchColor());
-            item.setShowDetail(getSearching());
+            item.setShowDetail(false);
             item.setShowFirstLetter(false);
-            target.add(item);
+            items.add(item);
+        }
+    }
+
+    public void generateSearchListView(List<ITimeUser> list){
+        searchItems.clear();
+        for(int i=0;i<list.size();i++){
+            ITimeUser user = list.get(i);
+            ListItemViewModel item = new ListItemViewModel();
+            item.setCheckable(false);
+            item.setContact(user);
+            item.setMatchColor(presenter.getMatchColor());
+            item.setShowDetail(true);
+            item.setShowFirstLetter(false);
+            searchItems.add(item);
         }
     }
 

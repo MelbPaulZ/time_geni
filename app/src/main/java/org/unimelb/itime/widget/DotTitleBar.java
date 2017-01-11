@@ -34,6 +34,6 @@ public class DotTitleBar extends BaseTitleBar {
         view.setImageResource(R.drawable.hamburger);
         rightView = view;
         setShowRight(getShowRight());
-        this.addView(rightView);
+        setRightView(rightView);
     }
 }

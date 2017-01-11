@@ -13,11 +13,12 @@ public class FlowLayout extends ViewGroup {
     // Horizontal space between child views.
     private int horizontalSpace = 24;
     // Vertical space between child views.
-    private int verticalSpace = 14;
+    private int verticalSpace = 20;
     private int mHeight;
 
     public FlowLayout(Context context) {
         super(context);
+
     }
 
     public FlowLayout(Context context, AttributeSet attrs) {

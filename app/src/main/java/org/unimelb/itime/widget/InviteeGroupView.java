@@ -178,17 +178,17 @@ public class InviteeGroupView extends LinearLayout {
     }
 
     public void addEmailInvitee(ITimeInviteeInterface invitee){
-//        if(inviteeMap.containsKey(invitee.getUserId())){
-//            textFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
-//            return;
-//        }
+        if(inviteeMap.containsKey(invitee.getUserId())){
+            textFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
+            return;
+        }
         TextView emailTextView = new TextView(this.getContext());
         emailTextView.setText(invitee.getUserId());
         if(squareHeight == 0){
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SizeUtil.dp2px(getContext(), 120), ViewGroup.LayoutParams.WRAP_CONTENT);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SizeUtil.dp2px(getContext(), 115), ViewGroup.LayoutParams.WRAP_CONTENT);
             emailTextView.setLayoutParams(params);
         }else{
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SizeUtil.dp2px(getContext(), 120), squareHeight);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SizeUtil.dp2px(getContext(), 115), squareHeight);
             emailTextView.setLayoutParams(params);
         }
 
@@ -203,6 +203,8 @@ public class InviteeGroupView extends LinearLayout {
         emailTextView.setTextSize(ITEM_FONT_SIZE);
         emailTextView.setMaxLines(1);
         emailTextView.setOnClickListener(new InviteeOnClickListener());
+        emailTextView.setMaxWidth(SizeUtil.dp2px(getContext(), 115));
+        emailTextView.setMinWidth(SizeUtil.dp2px(getContext(), 115));
         textFlowLayout.addView(emailTextView);
         emailTextView.setTag(invitee);
         inviteeMap.put(invitee.getUserId(), emailTextView);
@@ -243,10 +245,10 @@ public class InviteeGroupView extends LinearLayout {
     }
 
     public void addAvatarInvitee(ITimeInviteeInterface invitee){
-//        if(inviteeMap.containsKey(invitee.getUserId())){
-//            avatarFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
-//            return;
-//        }
+        if(inviteeMap.containsKey(invitee.getUserId())){
+            avatarFlowLayout.addView(inviteeMap.get(invitee.getUserId()));
+            return;
+        }
         RoundImageView avatarImageView = new RoundImageView(this.getContext());
         Picasso.with(this.getContext())
                 .load(invitee.getPhoto())

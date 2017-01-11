@@ -376,6 +376,7 @@
     <color name="grey_four">#949494</color>
     <color name = "grey_five">#4A4A4A</color>
     <color name="normalGrey">#9B9B9B</color>
+    <color name="grey_six">#B9B9B9</color>
 
     <color name="red_alert">#F45B69</color>
 

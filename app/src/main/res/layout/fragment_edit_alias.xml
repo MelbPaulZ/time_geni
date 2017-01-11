@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="org.unimelb.itime.ui.viewmodel.contact.EditContactViewModel"/>
+    </data>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <org.unimelb.itime.widget.DoneTitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@{viewModel.title}"
+        app:backOnClickListener="@{viewModel.backOnClickListener}"
+        app:rightOnClickListener="@{viewModel.rightOnClickListener}"/>
+
+    <include layout="@layout/line"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+        <org.unimelb.itime.widget.PureEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_big"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="21dp"
+            android:layout_marginRight="60dp"
+            android:layout_alignParentLeft="true"
+            android:text="@={viewModel.alias}"
+            android:singleLine="true"/>
+
+        <ImageView
+            android:layout_width="14.5dp"
+            android:layout_height="14.5dp"
+            android:src="@drawable/invitee_selected_emotionstore_progresscancelbtn"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="19dp"
+            android:layout_alignParentRight="true"
+            android:onClick="@{viewModel.cleanListener}"/>
+    </RelativeLayout>
+    <include layout="@layout/line"/>
+</LinearLayout>
+</layout>

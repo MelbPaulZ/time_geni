@@ -40,6 +40,6 @@ public class DoneTitleBar extends BaseTitleBar{
         doneTextView.getPaint().setFakeBoldText(true);
         rightView = doneTextView;
         setShowRight(getShowRight());
-        this.addView(rightView);
+        setRightView(rightView);
     }
 }

@@ -27,7 +27,6 @@ import me.fesky.library.widget.ios.AlertDialog;
 public class ProfileFragmentViewModel extends BaseObservable {
     private AlertDialog blockDialog;
     private AlertDialog deleteDialog;
-//    private TimeGeniiPopupWindow popupWindow;
     private ActionSheetDialog popupWindow;
     private Contact friend;
     private FriendRequest request;
@@ -40,6 +39,8 @@ public class ProfileFragmentViewModel extends BaseObservable {
     private boolean showPhone = true;
     private boolean showAccept = false;
     private boolean showAccepted = false;
+    private boolean showEdit = false;
+    private boolean showRealName = false;
     private ProfileFragmentPresenter presenter;
     private String title = "Profile";
 
@@ -59,6 +60,16 @@ public class ProfileFragmentViewModel extends BaseObservable {
     public void setShowTitileBack(boolean showTitileBack) {
         this.showTitileBack = showTitileBack;
         notifyPropertyChanged(BR.showTitileBack);
+    }
+
+    @Bindable
+    public boolean getShowRealName() {
+        return showRealName;
+    }
+
+    public void setShowRealName(boolean showRealName) {
+        this.showRealName = showRealName;
+        notifyPropertyChanged(BR.showRealName);
     }
 
     @Bindable
@@ -140,6 +151,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
         notifyPropertyChanged(BR.name);
         notifyPropertyChanged(BR.blocked);
         notifyPropertyChanged(BR.showGender);
+        notifyPropertyChanged(BR.realName);
 
         if(friend.getRelationship()>0 && friend.getStatus().equals(Contact.ACTIVATED)){
             setShowTitleRight(true);
@@ -149,6 +161,8 @@ public class ProfileFragmentViewModel extends BaseObservable {
             setShowSent(false);
             setShowAccept(false);
             setShowAccepted(false);
+            setShowEdit(true);
+            setShowRealName(true);
         }else if(friend.getStatus().equals(FriendRequest.DISPLAY_STATUS_ACCEPT)){
             setShowTitleRight(false);
             setShowSent(false);
@@ -163,6 +177,8 @@ public class ProfileFragmentViewModel extends BaseObservable {
             if(friend.getUserDetail().getEmail().equals("")){
                 setShowEmail(false);
             }
+            setShowEdit(false);
+            setShowRealName(false);
         }else{
             setShowAccept(false);
             setShowTitleRight(false);
@@ -177,14 +193,28 @@ public class ProfileFragmentViewModel extends BaseObservable {
             if(friend.getUserDetail().getEmail().equals("")){
                 setShowEmail(false);
             }
+            setShowEdit(false);
+            setShowRealName(false);
         }
     }
 
+    public View.OnClickListener getEditAliasListener(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.gotoEditAlias(friend);
+            }
+        };
+    }
 
 
     @Bindable
     public boolean getShowGender(){
-        return !"".equals(friend.getUserDetail().getGender());
+        if(friend.getUserDetail().getGender().equals(User.MALE)
+                ||friend.getUserDetail().getGender().equals(User.FEMALE)){
+            return true;
+        }
+        return false;
     }
 
 
@@ -197,6 +227,12 @@ public class ProfileFragmentViewModel extends BaseObservable {
     public String getName(){
         return friend.getAliasName();
     }
+
+    @Bindable
+    public String getRealName(){
+        return friend.getUserDetail().getPersonalAlias();
+    }
+
     @Bindable
     public String getLocation(){
         return friend.getUserDetail().getLocation();
@@ -400,6 +436,8 @@ public class ProfileFragmentViewModel extends BaseObservable {
                 });
     }
 
+
+
     private void unblockFriend(){
         presenter.unblockUser(friend, new UnblockCallBack());
     }
@@ -492,4 +530,16 @@ public class ProfileFragmentViewModel extends BaseObservable {
     public void setRequest(FriendRequest request){
         this.request = request;
     }
+
+    @Bindable
+    public boolean getShowEdit() {
+        return showEdit;
+    }
+
+    public void setShowEdit(boolean showEdit) {
+        this.showEdit = showEdit;
+        notifyPropertyChanged(BR.showEdit);
+    }
+
+
 }

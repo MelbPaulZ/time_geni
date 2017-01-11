@@ -72,7 +72,6 @@ public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeC
     }
 
     public void setData(Event event, List<EventUtil.StatusKeyStruct> data, Timeslot timeslot){
-//        this.event = event;
         this.timeslot = timeslot;
         this.adapter.setInvitees(data, event);
         this.adapter.notifyDataSetChanged();
@@ -85,7 +84,7 @@ public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeC
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFragment(self, (EventDetailFragment)getFrom());
+                closeFragment(self, getFrom());
             }
         });
     }

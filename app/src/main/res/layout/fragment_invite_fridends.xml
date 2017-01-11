@@ -38,12 +38,17 @@
 
 
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:visibility="@{viewModel.searching?View.VISIBLE:View.GONE}"
             android:onClick="@{viewModel.addButtonListener}">
             <include layout="@layout/line" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
             <ImageView
                 android:layout_width="37dp"
                 android:layout_height="37dp"
@@ -82,12 +87,13 @@
                     android:textColor="@{viewModel.validInput?@color/lightBlue:@color/grey_four}"
                     android:id="@+id/contactTextView" />
             </LinearLayout>
-            <include layout="@layout/line"/>
         </RelativeLayout>
+            <include layout="@layout/line"/>
+        </LinearLayout>
     </LinearLayout>
         <TextView
             android:layout_marginTop="20dp"
-            android:layout_width="29dp"
+            android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:text= "*Sorry, currently Timegenii is only available to University of Melbourne Email Account."
             android:textColor="@color/red_alert"
