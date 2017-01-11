@@ -4,11 +4,8 @@ package org.unimelb.itime.ui.fragment.settings;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
-import com.hannesdorfmann.mosby.mvp.MvpView;
-
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.bean.Setting;
+import org.unimelb.itime.bean.SettingWrapper;
 import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
@@ -20,9 +17,9 @@ import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
  * Created by Paul on 1/1/17.
  */
 
-public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P extends SettingCommonPresenter<V>> extends BaseUiFragment<Setting, V, P> {
+public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P extends SettingCommonPresenter<V>> extends BaseUiFragment<SettingWrapper, V, P> {
 
-    private Setting setting;
+    private SettingWrapper setting;
     protected MainSettingsViewModel viewModel;
     protected ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
@@ -49,16 +46,16 @@ public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P ext
         setRightTitleStringToVM();
     }
 
-    public Setting getSetting() {
+    public SettingWrapper getSetting() {
         return setting;
     }
 
     @Override
-    public void setData(Setting setting) {
+    public void setData(SettingWrapper setting) {
         ((SettingBaseFragment)getTo()).setSetting(setting);
     }
 
-    public void setSetting(Setting setting){
+    public void setSetting(SettingWrapper setting){
         this.setting = setting;
         viewModel.setSetting(setting);
     }

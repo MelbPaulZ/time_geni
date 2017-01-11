@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingAboutBinding;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;

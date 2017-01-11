@@ -4,8 +4,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
-import org.unimelb.itime.bean.Setting;
-import org.unimelb.itime.bean.User;
+import org.unimelb.itime.bean.SettingWrapper;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.UserUtil;
 
@@ -16,7 +15,7 @@ import org.unimelb.itime.util.UserUtil;
 public class SettingManager {
     private static SettingManager instance;
     private Context context;
-    private Setting setting;
+    private SettingWrapper setting;
 
     private SettingManager(Context context){
         this.context = context;
@@ -33,7 +32,7 @@ public class SettingManager {
 
     private void init(){
         if (instance.setting==null){
-            instance.setting = new Setting();
+            instance.setting = new SettingWrapper();
         }
         if (!instance.setting.hasUser()){
             instance.setting.setUser(UserUtil.getInstance(context).getUser());
@@ -51,11 +50,11 @@ public class SettingManager {
         return instance.context;
     }
 
-    public Setting getSetting() {
+    public SettingWrapper getSetting() {
         return instance.setting;
     }
 
-    public void setSetting(Setting setting) {
+    public void setSetting(SettingWrapper setting) {
         instance.setting = setting;
     }
 
@@ -64,17 +63,17 @@ public class SettingManager {
      * @param setting input setting and copy another one
      * @return
      */
-    public Setting copySetting(Setting setting){
+    public SettingWrapper copySetting(SettingWrapper setting){
         Gson gson = new Gson();
         String str = gson.toJson(setting);
-        return gson.fromJson(str, Setting.class);
+        return gson.fromJson(str, SettingWrapper.class);
     }
 
     /**
      *  this method is called for getting a copy of setting
      * @return
      */
-    public Setting copySetting(){
+    public SettingWrapper copySetting(){
         return copySetting(this.setting);
     }
 

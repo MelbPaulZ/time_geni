@@ -8,7 +8,7 @@ import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.bean.Message;
-import org.unimelb.itime.bean.Setting;
+import org.unimelb.itime.bean.SettingWrapper;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
@@ -47,10 +47,10 @@ public class DBManager {
         return mInstance;
     }
 
-    public synchronized void insertSetting(Setting setting){
+    public synchronized void insertSetting(SettingWrapper setting){
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
-        // TODO: 28/12/2016 insert Setting to db 
+        // TODO: 28/12/2016 insert SettingWrapper to db
     }
 
     public synchronized void insertEvent(Event event) {

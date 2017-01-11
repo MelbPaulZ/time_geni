@@ -1,18 +1,16 @@
 package org.unimelb.itime.ui.viewmodel;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
-import android.util.Log;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Calendar;
-import org.unimelb.itime.bean.Setting;
+import org.unimelb.itime.bean.SettingWrapper;
 import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
@@ -30,7 +28,7 @@ public class MainSettingsViewModel extends CommonViewModel{
     private static final String TAG = "MainSettingsViewModel";
     private SettingCommonPresenter presenter;
     private SettingCommonMvpView mvpView;
-    private Setting setting;
+    private SettingWrapper setting;
 
     private ObservableList<Calendar> calendars = new ObservableArrayList<>();
     private ItemView calendarItemView = ItemView.of(BR.calendar, R.layout.setting_default_calendar_listview);
@@ -132,17 +130,17 @@ public class MainSettingsViewModel extends CommonViewModel{
     }
 
     @Bindable
-    public Setting getSetting() {
+    public SettingWrapper getSetting() {
         return setting;
     }
 
-    public void setSetting(Setting setting) {
+    public void setSetting(SettingWrapper setting) {
         this.setting = setting;
         notifyPropertyChanged(BR.setting);
     }
 
 
-    public int getGenderVisibility(int from, Setting setting){
+    public int getGenderVisibility(int from, SettingWrapper setting){
         String gender = setting.getUser().getGender();
         if (from == getGenderStringList().indexOf(gender)){
             return View.VISIBLE;

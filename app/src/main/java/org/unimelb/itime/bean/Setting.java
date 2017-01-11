@@ -1,44 +1,74 @@
 package org.unimelb.itime.bean;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-
-import java.util.List;
-
-import static android.R.attr.id;
-
 /**
- * Created by Paul on 28/12/2016.
+ * Created by yinchuandong on 11/1/17.
  */
-
 
 public class Setting {
 
-    private User user;
-    private List<Calendar> calendars;
+    boolean enableNotification =  true;
+    boolean showPreviewText = true;
+    boolean appAlertSound = true;
+    boolean systemVibrate = true;
+    boolean enableFriendRequestEmail = true;
+    boolean enableEventInvitationEmail = true;
+    boolean enableEventConfirmEmail = true;
 
 
-    public User getUser() {
-        return user;
+
+    public boolean isEnableNotification() {
+        return enableNotification;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setEnableNotification(boolean enableNotification) {
+        this.enableNotification = enableNotification;
     }
 
-    public boolean hasUser(){
-        return user!=null;
+    public boolean isShowPreviewText() {
+        return showPreviewText;
     }
 
-    public List<Calendar> getCalendars() {
-        return calendars;
+    public void setShowPreviewText(boolean showPreviewText) {
+        this.showPreviewText = showPreviewText;
     }
 
-    public void setCalendars(List<Calendar> calendars) {
-        this.calendars = calendars;
+    public boolean isAppAlertSound() {
+        return appAlertSound;
     }
 
-    public boolean hasCalendar(){
-        return calendars!=null;
+    public void setAppAlertSound(boolean appAlertSound) {
+        this.appAlertSound = appAlertSound;
+    }
+
+    public boolean isSystemVibrate() {
+        return systemVibrate;
+    }
+
+    public void setSystemVibrate(boolean systemVibrate) {
+        this.systemVibrate = systemVibrate;
+    }
+
+    public boolean isEnableFriendRequestEmail() {
+        return enableFriendRequestEmail;
+    }
+
+    public void setEnableFriendRequestEmail(boolean enableFriendRequestEmail) {
+        this.enableFriendRequestEmail = enableFriendRequestEmail;
+    }
+
+    public boolean isEnableEventInvitationEmail() {
+        return enableEventInvitationEmail;
+    }
+
+    public void setEnableEventInvitationEmail(boolean enableEventInvitationEmail) {
+        this.enableEventInvitationEmail = enableEventInvitationEmail;
+    }
+
+    public boolean isEnableEventConfirmEmail() {
+        return enableEventConfirmEmail;
+    }
+
+    public void setEnableEventConfirmEmail(boolean enableEventConfirmEmail) {
+        this.enableEventConfirmEmail = enableEventConfirmEmail;
     }
 }

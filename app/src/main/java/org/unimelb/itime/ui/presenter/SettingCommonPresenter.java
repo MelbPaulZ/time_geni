@@ -23,7 +23,7 @@ import rx.Subscriber;
 
 public class SettingCommonPresenter<T extends SettingCommonMvpView> extends CommonPresenter<T> {
 
-    private static final String TAG = "Setting";
+    private static final String TAG = "SettingWrapper";
     private UserApi userApi;
 
     public SettingCommonPresenter(Context context) {
@@ -73,6 +73,11 @@ public class SettingCommonPresenter<T extends SettingCommonMvpView> extends Comm
             }
         };
         HttpUtil.subscribe(observable, subscriber);
+    }
+
+
+    public void update(){
+        
     }
 
 }

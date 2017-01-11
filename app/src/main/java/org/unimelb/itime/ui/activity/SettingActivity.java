@@ -46,7 +46,7 @@ public class SettingActivity extends BaseActivity{
         initSettingFragments();
         show();
 
-        music();
+//        music();
     }
 
     private void music(){
@@ -122,8 +122,8 @@ public class SettingActivity extends BaseActivity{
 
     @Override
     protected void onDestroy() {
-        Intent intent = new Intent(this,MusicService.class);
-        stopService(intent);
+//        Intent intent = new Intent(this,MusicService.class);
+//        stopService(intent);
         super.onDestroy();
     }
 }

@@ -4,17 +4,11 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.ui.ImageGridActivity;
-
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileBinding;
 import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
@@ -24,10 +18,6 @@ import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
-
-import me.fesky.library.widget.ios.ActionSheetDialog;
-
-import static org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity.CHOOSE_FROM_LIBRARY;
 
 /**
  * Created by Paul on 26/12/2016.
