@@ -435,11 +435,11 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
 
     @Override
     public void onBack() {
-
+        viewModel.onClickBack();
     }
 
     @Override
     public void onNext() {
-
+        viewModel.onClickDone();
     }
 }

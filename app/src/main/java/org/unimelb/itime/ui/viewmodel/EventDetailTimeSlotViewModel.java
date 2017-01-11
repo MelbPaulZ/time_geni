@@ -148,34 +148,18 @@ public class EventDetailTimeSlotViewModel extends CommonViewModel {
     }
 
 
-
-    public View.OnClickListener onBack() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mvpView != null) {
-                    mvpView.onClickBack();
-                }
-            }
-        };
+    public void onClickBack(){
+        if (mvpView != null) {
+            mvpView.onClickBack();
+        }
     }
 
-    public View.OnClickListener onDone() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //if from editTimeSlotFragment
-//                if (mvpView.isFromEditFragment() || mvpView.isFromInviteeFragment()) {
-//                    List<Timeslot> timeslotList = EventUtil.getTimeslotFromStatus(eventDetailHostEvent, getContext().getString(R.string.pending));
-//                    eventDetailHostEvent.setTimeslot(timeslotList);
-//                }
-
-                if (mvpView != null) {
-                    mvpView.onClickDone(eventDetailHostEvent);
-                }
-            }
-        };
+    public void onClickDone(){
+        if (mvpView != null) {
+            mvpView.onClickDone(eventDetailHostEvent);
+        }
     }
+
 
     ////    *****************************************************************************************
 

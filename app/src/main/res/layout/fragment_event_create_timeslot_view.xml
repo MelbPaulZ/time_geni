@@ -16,7 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include layout="@layout/toolbar_common"
+        <include
+            android:id="@+id/toolbar_timeslot"
+            layout="@layout/toolbar_common"
             bind:vm="@{toolbarVM}"/>
         <!--<android.support.v7.widget.Toolbar-->
             <!--android:id="@+id/toolbar"-->
@@ -94,52 +96,38 @@
                 <!--</RelativeLayout>-->
         <!--</android.support.v7.widget.Toolbar>-->
 
+
+        <org.unimelb.itime.vendor.weekview.WeekView
+            android:id="@+id/timeslot_week_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar_timeslot"
+            android:layout_above="@+id/duration_part"
+            app:onWeekViewDayChange="@{timeslotVM.onWeekViewChange()}">
+        </org.unimelb.itime.vendor.weekview.WeekView>
+
         <RelativeLayout
             android:id="@+id/duration_part"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             >
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/bottom_bar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:elevation="4dp"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-                <RelativeLayout
-                    android:id="@+id/duration_relative_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/duration"
-                        android:textSize="18sp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{timeslotVM.durationTimeString}"
-                        android:textSize="18sp"
-                        android:layout_marginRight="@dimen/padding_10"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"/>
-                </RelativeLayout>
-            </android.support.v7.widget.Toolbar>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/duration"
+                android:textSize="18sp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{timeslotVM.durationTimeString}"
+                android:textSize="18sp"
+                android:layout_marginRight="@dimen/padding_10"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
         </RelativeLayout>
-
-        <org.unimelb.itime.vendor.weekview.WeekView
-            android:id="@+id/timeslot_week_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar"
-            android:layout_above="@+id/duration_part"
-            app:onWeekViewDayChange="@{timeslotVM.onWeekViewChange()}">
-        </org.unimelb.itime.vendor.weekview.WeekView>
     </RelativeLayout>
 
 </layout>

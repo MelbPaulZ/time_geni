@@ -79,17 +79,6 @@ public class EventDetailViewModel extends CommonViewModel {
         return presenter.getContext();
     }
 
-    public View.OnClickListener onClickEdit() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mvpView!=null){
-                    mvpView.toEditEvent();
-                }
-            }
-        };
-    }
-
     public View.OnClickListener onClickViewInCalendar() {
         return new View.OnClickListener() {
             @Override
@@ -135,16 +124,16 @@ public class EventDetailViewModel extends CommonViewModel {
         };
     }
 
-    public View.OnClickListener onClickBack() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mvpView!=null){
-                    mvpView.onTaskComplete(EventCommonPresenter.TASK_BACK, null);
-                }
-            }
-        };
-    }
+//    public View.OnClickListener onClickBack() {
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(mvpView!=null){
+//                    mvpView.onTaskComplete(EventCommonPresenter.TASK_BACK, null);
+//                }
+//            }
+//        };
+//    }
 
     public View.OnClickListener onInviteeClickRightBtn() {
         return new View.OnClickListener() {
@@ -452,17 +441,6 @@ public class EventDetailViewModel extends CommonViewModel {
             public void onClick(View view) {
                 if (mvpView!=null){
                     mvpView.viewInviteeResponse(timeslot);
-                }
-            }
-        };
-    }
-
-    public View.OnClickListener onClickPhotoGridBack(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mvpView!=null){
-                    mvpView.onClickPhotoGridBack();
                 }
             }
         };

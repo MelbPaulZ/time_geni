@@ -37,6 +37,7 @@ implements SettingCommonMvpView{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setSettingVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
@@ -76,7 +77,8 @@ implements SettingCommonMvpView{
 
     @Override
     public void onBack() {
-
+        getActivity().finish();
+        getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
     @Override

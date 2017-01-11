@@ -62,10 +62,6 @@ implements EventDetailGroupMvpView{
 
     }
 
-    @Override
-    public void toEditEvent() {
-
-    }
 
     @Override
     public void viewInCalendar() {
@@ -82,11 +78,6 @@ implements EventDetailGroupMvpView{
 
     }
 
-    @Override
-    public void onClickPhotoGridBack() {
-        EventDetailFragment eventDetailFragment = (EventDetailFragment) getFragmentManager().findFragmentByTag(EventDetailFragment.class.getSimpleName());
-        closeFragment(this, eventDetailFragment);
-    }
 
     @Override
     public void onTaskStart(int task) {
@@ -125,7 +116,8 @@ implements EventDetailGroupMvpView{
 
     @Override
     public void onBack() {
-
+        EventDetailFragment eventDetailFragment = (EventDetailFragment) getFragmentManager().findFragmentByTag(EventDetailFragment.class.getSimpleName());
+        closeFragment(this, eventDetailFragment);
     }
 
     @Override

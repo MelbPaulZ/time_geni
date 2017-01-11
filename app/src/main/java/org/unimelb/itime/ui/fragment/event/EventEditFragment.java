@@ -241,11 +241,11 @@ public class EventEditFragment extends EventBaseFragment<EventEditMvpView, Event
 
     @Override
     public void onBack() {
-
+        eventEditViewModel.onBack();
     }
 
     @Override
     public void onNext() {
-
+        eventEditViewModel.onBack();
     }
 }

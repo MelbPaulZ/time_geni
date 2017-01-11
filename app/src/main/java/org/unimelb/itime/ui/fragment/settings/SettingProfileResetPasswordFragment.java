@@ -38,6 +38,7 @@ implements SettingCommonMvpView{
         super.onActivityCreated(savedInstanceState);
 //        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
@@ -75,7 +76,7 @@ implements SettingCommonMvpView{
 
     @Override
     public void onBack() {
-
+        closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
     }
 
     @Override

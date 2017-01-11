@@ -158,63 +158,121 @@ public class EventEditViewModel extends EventCommonViewModel {
         };
     }
 
-    // click done btn
-    public View.OnClickListener finishEdit(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // popup alertDialog to choose whether change all or just one
-                List<Timeslot> timeslots = EventUtil.getTimeslotFromPending(getContext(), eventEditViewEvent);
-                eventEditViewEvent.setTimeslot(timeslots);
-
-                if (eventManager.getCurrentEvent().getRecurrence().length>0){
-                    // the event is repeat event
-                    final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
-
-                    LayoutInflater inflater = LayoutInflater.from(getContext());
-                    View root = inflater.inflate(R.layout.repeat_event_change_alert_view, null);
-                    alertDialog.setView(root);
-                    alertDialog.setTitle(getContext().getString(R.string.change_all_repeat_or_just_this_event));
-                    alertDialog.show();
-
-                    TextView button_change_all = (TextView) root.findViewById(R.id.alert_message_change_all_button);
-                    button_change_all.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
-                            changeAllEvent(eventEditViewEvent);
-                            alertDialog.dismiss();
-                        }
-                    });
-
-                    TextView button_only_this = (TextView) root.findViewById(R.id.alert_message_only_this_event_button);
-                    button_only_this.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
-                            changeOnlyThisEvent(eventEditViewEvent);
-                            alertDialog.dismiss();
-
-                        }
-                    });
-
-                }else {
-                    // set event type
-                    EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
-                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
-
-                    // if solo, need to manually set status confirmed
-                    if (eventEditViewEvent.getEventType().equals(Event.TYPE_SOLO)){
-                        eventEditViewEvent.setStatus(Event.STATUS_CONFIRMED);
-                    }
-
-                    Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
-                    presenter.updateEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
-                    // this if might change later, because the host can be kicked??????
-                }
-            }
-        };
+    public void onBack(){
+        if (mvpView!=null){
+            mvpView.toHostEventDetail();
+        }
     }
+
+    public void onNext(){
+        // popup alertDialog to choose whether change all or just one
+        List<Timeslot> timeslots = EventUtil.getTimeslotFromPending(getContext(), eventEditViewEvent);
+        eventEditViewEvent.setTimeslot(timeslots);
+
+        if (eventManager.getCurrentEvent().getRecurrence().length>0){
+            // the event is repeat event
+            final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
+
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            View root = inflater.inflate(R.layout.repeat_event_change_alert_view, null);
+            alertDialog.setView(root);
+            alertDialog.setTitle(getContext().getString(R.string.change_all_repeat_or_just_this_event));
+            alertDialog.show();
+
+            TextView button_change_all = (TextView) root.findViewById(R.id.alert_message_change_all_button);
+            button_change_all.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
+                    changeAllEvent(eventEditViewEvent);
+                    alertDialog.dismiss();
+                }
+            });
+
+            TextView button_only_this = (TextView) root.findViewById(R.id.alert_message_only_this_event_button);
+            button_only_this.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
+                    changeOnlyThisEvent(eventEditViewEvent);
+                    alertDialog.dismiss();
+
+                }
+            });
+
+        }else {
+            // set event type
+            EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
+            eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
+
+            // if solo, need to manually set status confirmed
+            if (eventEditViewEvent.getEventType().equals(Event.TYPE_SOLO)){
+                eventEditViewEvent.setStatus(Event.STATUS_CONFIRMED);
+            }
+
+            Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
+            presenter.updateEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+            // this if might change later, because the host can be kicked??????
+        }
+    }
+
+//    // click done btn
+//    public View.OnClickListener finishEdit(){
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // popup alertDialog to choose whether change all or just one
+//                List<Timeslot> timeslots = EventUtil.getTimeslotFromPending(getContext(), eventEditViewEvent);
+//                eventEditViewEvent.setTimeslot(timeslots);
+//
+//                if (eventManager.getCurrentEvent().getRecurrence().length>0){
+//                    // the event is repeat event
+//                    final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();
+//
+//                    LayoutInflater inflater = LayoutInflater.from(getContext());
+//                    View root = inflater.inflate(R.layout.repeat_event_change_alert_view, null);
+//                    alertDialog.setView(root);
+//                    alertDialog.setTitle(getContext().getString(R.string.change_all_repeat_or_just_this_event));
+//                    alertDialog.show();
+//
+//                    TextView button_change_all = (TextView) root.findViewById(R.id.alert_message_change_all_button);
+//                    button_change_all.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
+//                            changeAllEvent(eventEditViewEvent);
+//                            alertDialog.dismiss();
+//                        }
+//                    });
+//
+//                    TextView button_only_this = (TextView) root.findViewById(R.id.alert_message_only_this_event_button);
+//                    button_only_this.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
+//                            changeOnlyThisEvent(eventEditViewEvent);
+//                            alertDialog.dismiss();
+//
+//                        }
+//                    });
+//
+//                }else {
+//                    // set event type
+//                    EventUtil.addSelfInInvitee(getContext(), eventEditViewEvent);
+//                    eventEditViewEvent.setEventType(EventUtil.getEventType(eventEditViewEvent, UserUtil.getInstance(getContext()).getUserUid()));
+//
+//                    // if solo, need to manually set status confirmed
+//                    if (eventEditViewEvent.getEventType().equals(Event.TYPE_SOLO)){
+//                        eventEditViewEvent.setStatus(Event.STATUS_CONFIRMED);
+//                    }
+//
+//                    Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
+//                    presenter.updateEvent(eventEditViewEvent, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+//                    // this if might change later, because the host can be kicked??????
+//                }
+//            }
+//        };
+//    }
 
     // TODO: test this change all
     private void changeAllEvent(Event event){

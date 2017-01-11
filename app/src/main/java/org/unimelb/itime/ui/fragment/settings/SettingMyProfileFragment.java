@@ -53,6 +53,7 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setSettingVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
 
@@ -77,9 +78,7 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
         if (task == MainSettingsViewModel.TASK_VIEW_AVATAR){
             gotoPhotoPicker();
         }else if (task == MainSettingsViewModel.TASK_TO_SETTING){
-            saveSetting();
-            getActivity().finish();
-            getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
         }else if (task == MainSettingsViewModel.TASK_TO_MY_PROFILE_NAME){
             openFragment(this, (SettingMyProfileNameFragment)getFragmentManager().findFragmentByTag(SettingMyProfileNameFragment.class.getSimpleName()), getSetting());
         }else if (task == MainSettingsViewModel.TASK_TO_QR_CODE){
@@ -113,7 +112,9 @@ public class SettingMyProfileFragment extends SettingBaseFragment<SettingCommonM
 
     @Override
     public void onBack() {
-
+        saveSetting();
+        getActivity().finish();
+        getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
     @Override

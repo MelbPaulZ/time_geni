@@ -36,6 +36,7 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingCom
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setSettingVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
@@ -80,11 +81,14 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingCom
 
     @Override
     public void onBack() {
-
+        closeFragment(this,
+                (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
     }
 
     @Override
     public void onNext() {
-
+        closeFragment(this,
+                (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()),
+                SettingManager.getInstance(getContext()).copySetting(getSetting()));
     }
 }

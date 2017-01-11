@@ -37,6 +37,7 @@ implements SettingCommonMvpView{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setSettingVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
@@ -73,11 +74,12 @@ implements SettingCommonMvpView{
 
     @Override
     public void onBack() {
-
+        closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
     }
 
     @Override
     public void onNext() {
+        closeFragment(this, (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()), getSetting());
 
     }
 }

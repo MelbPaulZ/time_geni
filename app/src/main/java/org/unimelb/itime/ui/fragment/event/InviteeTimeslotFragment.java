@@ -138,7 +138,7 @@ public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeC
 
     @Override
     public void onBack() {
-
+        closeFragment(self, getFrom());
     }
 
     @Override

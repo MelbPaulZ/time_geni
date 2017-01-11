@@ -1,15 +1,10 @@
 package org.unimelb.itime.ui.viewmodel;
 
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.view.View;
-
-import com.hannesdorfmann.mosby.mvp.MvpView;
-
-import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
-import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
+
+
 
 /**
  * Created by Paul on 11/1/17.

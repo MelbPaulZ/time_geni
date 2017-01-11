@@ -36,6 +36,7 @@ implements SettingCommonMvpView{
         super.onActivityCreated(savedInstanceState);
 //        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
@@ -77,11 +78,12 @@ implements SettingCommonMvpView{
 
     @Override
     public void onBack() {
-
+        getActivity().finish();
+        getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
     @Override
     public void onNext() {
-
+        openFragment(this, (SettingDefaultAlertFragment)getFragmentManager().findFragmentByTag(SettingDefaultAlertFragment.class.getSimpleName()));
     }
 }

@@ -40,6 +40,7 @@ implements SettingCommonMvpView{
         super.onActivityCreated(savedInstanceState);
 //        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
         binding.setSettingVM(viewModel);
+        binding.setToolbarVM(toolbarViewModel);
 
     }
 
@@ -78,6 +79,7 @@ implements SettingCommonMvpView{
 
     @Override
     public void onBack() {
+        closeFragment(this, (SettingImportCalendarFragment)getFragmentManager().findFragmentByTag(SettingImportCalendarFragment.class.getSimpleName()));
 
     }
 

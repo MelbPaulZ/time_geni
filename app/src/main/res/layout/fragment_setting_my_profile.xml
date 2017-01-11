@@ -1,54 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
     <data>
         <variable
             name="settingVM"
             type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--toolbar-->
-    <android.support.v7.widget.Toolbar
-        style="@style/itime_toolbar">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <include layout="@layout/toolbar_common"
+        bind:vm="@{toolbarVM}"/>
+    <!--&lt;!&ndash;toolbar&ndash;&gt;-->
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--style="@style/itime_toolbar">-->
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
-            <!--toolbar back arrow-->
-            <ImageView
-                android:layout_width="11dp"
-                android:layout_height="18dp"
-                android:src="@drawable/icon_back_arrow"
-                android:layout_centerVertical="true"
-                />
+            <!--&lt;!&ndash;toolbar back arrow&ndash;&gt;-->
+            <!--<ImageView-->
+                <!--android:layout_width="11dp"-->
+                <!--android:layout_height="18dp"-->
+                <!--android:src="@drawable/icon_back_arrow"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--/>-->
 
-            <!--toolbar settings text-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_activity_settings"
-                android:padding="10dp"
-                android:textColor="@color/title_6D6D6D"
-                android:textSize="17sp"
-                android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING, false)}"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                />
+            <!--&lt;!&ndash;toolbar settings text&ndash;&gt;-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/title_activity_settings"-->
+                <!--android:padding="10dp"-->
+                <!--android:textColor="@color/title_6D6D6D"-->
+                <!--android:textSize="17sp"-->
+                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING, false)}"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginLeft="14dp"-->
+                <!--/>-->
 
-            <!--toolbar title-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setting_my_profile"
-                android:textSize="17sp"
-                android:textColor="@color/black"
-                android:layout_centerInParent="true"
-                />
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+            <!--&lt;!&ndash;toolbar title&ndash;&gt;-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/setting_my_profile"-->
+                <!--android:textSize="17sp"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--/>-->
+        <!--</RelativeLayout>-->
+    <!--</android.support.v7.widget.Toolbar>-->
 
     <!--gray BackGround-->
     <LinearLayout
@@ -62,7 +68,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="15dp"
             android:background="@drawable/background_top_bottom_divider">
 
             <!--Profile photo part-->

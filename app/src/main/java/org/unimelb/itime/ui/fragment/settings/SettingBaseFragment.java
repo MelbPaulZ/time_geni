@@ -44,6 +44,9 @@ public abstract class SettingBaseFragment< V extends SettingCommonMvpView, P ext
         viewModel = new MainSettingsViewModel(getPresenter());
         viewModel.setSetting(setting);
         toolbarViewModel = getToolBarViewModel();
+        setLeftTitleStringToVM();
+        setTitleStringToVM();
+        setRightTitleStringToVM();
     }
 
     public Setting getSetting() {

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
     <data>
         <variable
             name="settingVM"
             type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,18 +16,20 @@
     android:background="@color/color_fafafa"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        style="@style/itime_toolbar">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textAlignment="center"
-            android:text="@string/title_activity_settings"
-            android:textSize="17sp"
-            android:textColor="@color/black"
-            />
-    </android.support.v7.widget.Toolbar>
+    <include layout="@layout/toolbar_common"
+        bind:vm="@{toolbarVM}"/>
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--style="@style/itime_toolbar">-->
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:textAlignment="center"-->
+            <!--android:text="@string/title_activity_settings"-->
+            <!--android:textSize="17sp"-->
+            <!--android:textColor="@color/black"-->
+            <!--/>-->
+    <!--</android.support.v7.widget.Toolbar>-->
 
     <ScrollView
         android:layout_width="match_parent"

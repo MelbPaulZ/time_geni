@@ -192,11 +192,13 @@ public class EventTimeSlotCreateFragment extends EventBaseFragment<TimeslotCreat
 
     @Override
     public void onBack() {
-
+        closeFragment(this, getFrom());
     }
 
     @Override
     public void onNext() {
-
+        openFragment(this, getFrom());
+        // // TODO: 20/11/16 use event bus instead of calling another fragment method
+        ((EventTimeSlotViewFragment)getFrom()).createTimeSlot(this.timeSlotView);
     }
 }
