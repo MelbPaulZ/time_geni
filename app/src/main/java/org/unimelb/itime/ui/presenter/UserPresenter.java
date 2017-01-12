@@ -15,4 +15,8 @@ public class UserPresenter<V extends TaskBasedMvpView<User>> extends MvpBasePres
 
     public UserPresenter(Context context){
     }
+
+    public void update(User user){
+
+    }
 }
