@@ -6,10 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
@@ -21,100 +20,37 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.messageevent.MessageUrl;
-import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
-import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.event.EventTimeSlotCreateFragment;
-import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
+import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class EventCreateActivity extends BaseActivity implements PlaceSelectionListener {
     private String TAG = "EventCreateActivity";
-    private String TASK = "task";
-    private List<BaseUiFragment> fragmentList = new ArrayList<>();
     private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
     private final int ACTIVITY_PHOTOPICKER = 2;
-    private String tag = ""; // this is for identifying which request is it
 
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_create);
-        initFragments();
+
+        fragmentManager = getSupportFragmentManager();
+        EventEditFragment fragment = new EventEditFragment();
+        fragmentManager.beginTransaction().replace(getFragmentContainerId(), fragment).commit();
     }
 
-
-    public void initFragments(){
-        Intent intent = getIntent();
-        int task = intent.getIntExtra(TASK, -100);
-        if (task!=-100){
-            showFirstFragment(task);
-        }
+    @Override
+    protected int getFragmentContainerId() {
+        return R.id.create_event_fragment;
     }
 
-    private void showFirstFragment(int task){
-//        if (task == BaseActivity.TASK_SELF_CREATE_EVENT){
-//            EventCreateNewFragment createNewFragment = new EventCreateNewFragment();
-//            fragmentList.add(createNewFragment);
-//            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, createNewFragment, createNewFragment.getClassName()).show(fragmentList.get(0)).commit();
-//            initRestFragments(task);
-//        }else if (task == BaseActivity.TASK_INVITE_OTHER_CREATE_EVENT){
-            EventCreateDetailBeforeSendingFragment beforeSendingFragment = new EventCreateDetailBeforeSendingFragment();
-            fragmentList.add(beforeSendingFragment);
-            getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, beforeSendingFragment, beforeSendingFragment.getClassName()).show(beforeSendingFragment).commit();
-            initRestFragments(task);
-//        }
-    }
-
-    private void initRestFragments(final int task){
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-//                if (task == BaseActivity.TASK_SELF_CREATE_EVENT) {
-//                    fragmentList.add(new InviteeFragment());
-//                    fragmentList.add(new EventTimeSlotViewFragment());
-//                    fragmentList.add(new EventCreateDetailBeforeSendingFragment());
-//                    fragmentList.add(new EventLocationPickerFragment());
-//                    fragmentList.add(new EventTimeSlotCreateFragment());
-//                }else{
-//                    fragmentList.add(new EventCreateNewFragment());
-                fragmentList.add(new InviteeFragment());
-                fragmentList.add(new EventTimeSlotViewFragment());
-                fragmentList.add(new EventCreateDetailBeforeSendingFragment());
-                fragmentList.add(new EventLocationPickerFragment());
-                fragmentList.add(new EventTimeSlotCreateFragment());
-//                }
-                handler.sendEmptyMessage(0);
-            }
-        }.start();
-    }
-
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            hideAllFragments();
-        }
-    };
-
-    public void hideAllFragments(){
-        for (BaseUiFragment fragment: fragmentList){
-            if (!fragment.isAdded()) {
-                getSupportFragmentManager().beginTransaction().add(R.id.create_event_fragment, fragment, fragment.getClassName()).hide(fragment).commit();
-            }
-        }
-
-    }
     public void checkPermission(String tag){
-        this.tag = tag;
        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
             || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
            ActivityCompat.requestPermissions(this,

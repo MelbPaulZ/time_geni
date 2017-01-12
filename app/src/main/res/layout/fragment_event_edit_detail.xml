@@ -4,10 +4,6 @@
     xmlns:bind="http://schemas.android.com/tools">
 
     <data>
-        <import type="org.unimelb.itime.util.EventUtil"/>
-        <import type="org.unimelb.itime.util.TimeSlotUtil"/>
-        <import type="android.view.View"/>
-        <import type="org.unimelb.itime.ui.viewmodel.EventCommonViewModel.PickerTask"/>
         <variable
             name="eventEditVM"
             type="org.unimelb.itime.ui.viewmodel.EventEditViewModel" />
@@ -22,52 +18,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <include layout="@layout/toolbar_common"
-                bind:vm="@{toolbarVM}"/>
-            <!--<android.support.v7.widget.Toolbar-->
-                <!--android:id="@+id/my_toolbar"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="?attr/actionBarSize"-->
-                <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
-
-                <!--<Button-->
-                    <!--android:id="@+id/edit_event_cancel_button"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="left"-->
-                    <!--android:background="@null"-->
-                    <!--android:gravity="center_vertical|left"-->
-                    <!--android:textSize="17dp"-->
-                    <!--android:textColor="@color/page_title_color"-->
-                    <!--android:onClick="@{eventEditVM.cancelEdit()}"-->
-                    <!--android:text="@{eventEditVM.leftTitleStr}" />-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/toolbar_title"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:textSize="17dp"-->
-                    <!--android:textColor="@color/page_title_color"-->
-                    <!--android:text="@{eventEditVM.titleStr}" />-->
-
-                <!--<Button-->
-                    <!--android:id="@+id/edit_event_done_button"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="right"-->
-                    <!--android:background="@null"-->
-                    <!--android:textSize="17dp"-->
-                    <!--android:onClick="@{eventEditVM.finishEdit()}"-->
-                    <!--android:textColor="@color/page_title_color"-->
-                    <!--android:text="@{eventEditVM.rightTitleStr}" />-->
-            <!--</android.support.v7.widget.Toolbar>-->
-        </LinearLayout>
+        <include layout="@layout/toolbar_common"
+            bind:vm="@{toolbarVM}"/>
 
         <include layout="@layout/event_edit_common_content"
             bind:eventEditVM="@{eventEditVM}"

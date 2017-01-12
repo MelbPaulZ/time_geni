@@ -18,7 +18,6 @@ import com.wx.wheelview.adapter.ArrayWheelAdapter;
 import com.wx.wheelview.widget.WheelView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
@@ -44,6 +43,7 @@ import java.util.List;
 
 /**
  * Created by Paul on 27/08/2016.
+ * timeslot: weekview
  */
 public class EventTimeSlotViewFragment extends EventBaseFragment<EventCreateNewTimeSlotMvpView, TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView>>
         implements EventCreateNewTimeSlotMvpView {

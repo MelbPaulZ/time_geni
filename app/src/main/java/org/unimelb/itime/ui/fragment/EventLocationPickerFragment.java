@@ -51,10 +51,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
-import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.EventUtil;
 
@@ -192,9 +191,9 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                 if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
                     closeFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
                 }
-                if (getFrom() instanceof EventEditFragment) {
-                    closeFragment(self, (EventEditFragment) getFrom());
-                }
+//                if (getFrom() instanceof EventEditFragment) {
+//                    closeFragment(self, (EventEditFragment) getFrom());
+//                }
             }
         });
 
@@ -231,10 +230,11 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                 if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
                     ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                     openFragment(self, getFrom());
-                } else if (getFrom() instanceof EventEditFragment) {
-                    ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                    openFragment(self, getFrom());
                 }
+//                else if (getFrom() instanceof EventEditFragment) {
+//                    ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
+//                    openFragment(self, getFrom());
+//                }
             }
         });
 
@@ -311,9 +311,10 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
 
                         if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
                             EventBus.getDefault().post(new MessageLocation(EventCreateDetailBeforeSendingFragment.class.getSimpleName(), place));
-                        } else if (getFrom() instanceof EventEditFragment) {
-                            EventBus.getDefault().post(new MessageLocation(EventEditFragment.class.getSimpleName(), place));
                         }
+//                        else if (getFrom() instanceof EventEditFragment) {
+//                            EventBus.getDefault().post(new MessageLocation(EventEditFragment.class.getSimpleName(), place));
+//                        }
                         mAutocompleteView.setText(place);
                         mAutocompleteView.setAdapter(mAdapter);
                         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener); // change listener
@@ -348,10 +349,11 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
                 if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
                     ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                     openFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
-                } else if (getFrom() instanceof EventEditFragment) {
-                    ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                    openFragment(self, ((EventEditFragment) getFrom()));
                 }
+//                else if (getFrom() instanceof EventEditFragment) {
+//                    ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
+//                    openFragment(self, ((EventEditFragment) getFrom()));
+//                }
             } else {
                 Toast.makeText(getContext(), "network error, cannot find current location", Toast.LENGTH_SHORT).show();
             }
@@ -398,10 +400,11 @@ public class EventLocationPickerFragment extends BaseUiFragment implements Googl
             if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
                 ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
                 openFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
-            } else if (getFrom() instanceof EventEditFragment) {
-                ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-                openFragment(self, ((EventEditFragment) getFrom()));
             }
+//            else if (getFrom() instanceof EventEditFragment) {
+//                ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
+//                openFragment(self, ((EventEditFragment) getFrom()));
+//            }
         }
     };
 

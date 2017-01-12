@@ -6,14 +6,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.InviteeResponseAdapter;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentSelectedInviteeBinding;
@@ -28,6 +26,7 @@ import java.util.List;
 
 /**
  * Created by Paul on 4/09/2016.
+ * show the response of each invitee to each timeslot
  */
 public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeCommonMvpView {
     private FragmentSelectedInviteeBinding binding;
