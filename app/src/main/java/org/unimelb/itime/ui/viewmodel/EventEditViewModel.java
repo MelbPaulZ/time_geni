@@ -41,6 +41,9 @@ import me.tatarka.bindingcollectionadapter.ItemView;
  */
 public class EventEditViewModel extends EventCommonViewModel {
 
+    public final static int TASK_CREATE = 0;
+    public final static int TASK_EDIT = 0;
+
     private Event event;
     private EventPresenter<? extends TaskBasedMvpView<List<Event>>> presenter;
     private ObservableField<Boolean> editEventIsRepeat = new ObservableField<>();
@@ -174,8 +177,8 @@ public class EventEditViewModel extends EventCommonViewModel {
             alertDialog.setTitle(getContext().getString(R.string.change_all_repeat_or_just_this_event));
             alertDialog.show();
 
-            TextView button_change_all = (TextView) root.findViewById(R.id.alert_message_change_all_button);
-            button_change_all.setOnClickListener(new View.OnClickListener() {
+            TextView changeAllBtn = (TextView) root.findViewById(R.id.alert_message_change_all_button);
+            changeAllBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     event.setEventType(EventUtil.getEventType(event, UserUtil.getInstance(getContext()).getUserUid()));
@@ -184,8 +187,8 @@ public class EventEditViewModel extends EventCommonViewModel {
                 }
             });
 
-            TextView button_only_this = (TextView) root.findViewById(R.id.alert_message_only_this_event_button);
-            button_only_this.setOnClickListener(new View.OnClickListener() {
+            TextView changeOnlyBtn = (TextView) root.findViewById(R.id.alert_message_only_this_event_button);
+            changeOnlyBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     event.setEventType(EventUtil.getEventType(event, UserUtil.getInstance(getContext()).getUserUid()));
