@@ -24,8 +24,7 @@ import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
-import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
+import org.unimelb.itime.ui.fragment.LocationPickerFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
@@ -151,7 +150,7 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
 
     @Override
     public void changeLocation() {
-        EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
+        LocationPickerFragment locationPickerFragment = (LocationPickerFragment) getFragmentManager().findFragmentByTag(LocationPickerFragment.class.getSimpleName());
 //        eventLocationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
 //        openFragment(this, eventLocationPickerFragment);
     }
@@ -159,9 +158,9 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
 
     @Override
     public void pickInvitees() {
-        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        openFragment(this, inviteeFragment);
+//        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+//        inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
+//        openFragment(this, inviteeFragment);
     }
 
     @Override

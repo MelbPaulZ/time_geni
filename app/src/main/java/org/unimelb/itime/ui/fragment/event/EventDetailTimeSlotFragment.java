@@ -20,7 +20,6 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailTimeslotHostViewBinding;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
@@ -125,13 +124,13 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
 
     @Override
     public void onClickBack() {
-        if (getFrom() instanceof EventDetailFragment) {
-            closeFragment(this, (EventDetailFragment) getFrom());
+//        if (getFrom() instanceof EventDetailFragment) {
+//            closeFragment(this, (EventDetailFragment) getFrom());
 //        } else if (getFrom() instanceof EventEditFragment) {
 //            closeFragment(this, (EventEditFragment) getFrom());
-        } else if (getFrom() instanceof InviteeFragment) {
-            closeFragment(this, (InviteeFragment) getFrom());
-        }
+//        } else if (getFrom() instanceof InviteeFragment) {
+//            closeFragment(this, (InviteeFragment) getFrom());
+//        }
     }
 
     @Override
@@ -233,13 +232,13 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
 
     @Override
     public boolean isClickTSConfirm() {
-        if (getFrom() instanceof EventDetailFragment) {
-            return true;
+//        if (getFrom() instanceof EventDetailFragment) {
+//            return true;
 //        } else if (getFrom() instanceof EventEditFragment) {
 //            return false;
-        } else if (getFrom() instanceof InviteeFragment) {
-            return false;
-        }
+//        } else if (getFrom() instanceof InviteeFragment) {
+//            return false;
+//        }
         return false;
     }
 

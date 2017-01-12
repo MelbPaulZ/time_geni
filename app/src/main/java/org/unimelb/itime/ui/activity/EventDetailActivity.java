@@ -15,13 +15,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
-import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
-import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
-import org.unimelb.itime.ui.fragment.event.EventDetailTimeSlotFragment;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
-import org.unimelb.itime.ui.fragment.event.EventPhotoGridFragment;
-import org.unimelb.itime.ui.fragment.event.InviteeTimeslotFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +39,15 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     public void initFragments() {
-        fragmentList.add(new EventDetailFragment());
+//        fragmentList.add(new EventDetailFragment());
 //        fragmentList.add(new EventEditFragment());
-        fragmentList.add(new EventDetailTimeSlotFragment());
+//        fragmentList.add(new EventDetailTimeSlotFragment());
 //        fragmentList.add(new EventLocationPickerFragment());
-        fragmentList.add(new InviteeFragment());
-        fragmentList.add(new InviteeTimeslotFragment());
-        fragmentList.add(new ViewMainCalendarFragment());
-        fragmentList.add(new EventPhotoGridFragment());
-        hideAllFragments();
+//        fragmentList.add(new InviteeFragment());
+//        fragmentList.add(new InviteeTimeslotFragment());
+//        fragmentList.add(new ViewMainCalendarFragment());
+//        fragmentList.add(new EventPhotoGridFragment());
+//        hideAllFragments();
     }
 
     public void hideAllFragments() {

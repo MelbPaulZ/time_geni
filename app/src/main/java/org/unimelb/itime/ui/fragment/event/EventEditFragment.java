@@ -22,7 +22,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
-import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
+import org.unimelb.itime.ui.fragment.LocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
@@ -102,10 +102,11 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void toLocationPage() {
-        EventLocationPickerFragment fragment = new EventLocationPickerFragment();
+        LocationPickerFragment fragment = new LocationPickerFragment();
         fragment.setTargetFragment(this, 1000);
         Bundle data = new Bundle();
-        data.putParcelable("event", this.event);
+        data.putString(LocationPickerFragment.DATA_LOCATION, event.getLocation());
+        data.putParcelable(DATA_EVENT, event);
         getBaseActivity().openFragment(fragment, data);
     }
 
@@ -129,6 +130,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     @Override
     public void toInviteePickerPage(Event event) {
         InviteeFragment inviteeFragment = new InviteeFragment();
+        inviteeFragment.setTargetFragment(this, 1000);
         inviteeFragment.setEvent(eventManager.copyCurrentEvent(event));
         getBaseActivity().openFragment(inviteeFragment);
 
@@ -201,9 +203,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult: " + requestCode + "/" + requestCode);
-        Bundle bundle = data.getBundleExtra("old_data");
-        Event event = (Event) bundle.get("event");
-        this.event = event;
         if(resultCode == 1){
             String location = data.getStringExtra("location");
             this.event.setLocation(location);

@@ -11,14 +11,12 @@ import android.widget.LinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.databinding.FragmentInviteFridendsBinding;
 import org.unimelb.itime.databinding.ListviewInviteeHeaderBinding;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
-import org.unimelb.itime.ui.fragment.event.EventDetailTimeSlotFragment;
 import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.contact.InviteFriendMvpView;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
@@ -32,7 +30,11 @@ import java.util.List;
  * Created by 37925 on 2016/12/4.
  */
 
-public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, InviteFriendPresenter> implements InviteFriendMvpView {
+public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, InviteFriendPresenter> implements InviteFriendMvpView {
+
+    public final static String DATA_INVITEE = "invitee";
+    public final static String DATA_EVENT = "event";
+
     private FragmentInviteFridendsBinding binding;
     private ListviewInviteeHeaderBinding headerBinding;
     private FragmentManager fm;
@@ -50,98 +52,80 @@ public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, 
         return new InviteFriendPresenter(getActivity());
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        viewModel.setEvent(event);
-        viewModel.loadData();
-    }
 
     @Override
-    public void onResume(){
-        super.onResume();
-        viewModel.setEvent(event);
-        viewModel.loadData();
-    }
-
-    @Override
-    public void onActivityCreated(Bundle bundle){
+    public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
-//        presenter = createPresenter();
         eventManager = EventManager.getInstance(getContext());
+
         viewModel = new InviteFriendViewModel(presenter);
-        binding.setViewModel(viewModel);
-        headerBinding.setViewModel(viewModel);
         viewModel.setHeaderView((LinearLayout) headerBinding.getRoot());
         viewModel.setSideBarListView(binding.friendsListView);
         inviteeGroupView = headerBinding.inviteeGroupView;
+
+        viewModel.setEvent(event);
+        viewModel.loadData();
+
+        binding.setViewModel(viewModel);
+        headerBinding.setViewModel(viewModel);
+
     }
 
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater,
-                R.layout.fragment_invite_fridends, container, false);
-        headerBinding = DataBindingUtil.inflate(inflater,
-                R.layout.listview_invitee_header, null, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_invite_fridends, container, false);
+        headerBinding = DataBindingUtil.inflate(inflater, R.layout.listview_invitee_header, null, false);
         fm = getFragmentManager();
         return binding.getRoot();
     }
 
 
-    public void gotoInviteMobileContacts(){
+    public void toInviteMobileContactsPage() {
 
-        if(mobileFragment==null){
+        if (mobileFragment == null) {
             mobileFragment = new InviteMobileContactsFragment();
         }
-        fm.beginTransaction()
-                .hide(this)
-                .add(R.id.contentFrameLayout, mobileFragment)
-                .addToBackStack(null)
-                .commit();
+        getBaseActivity().openFragment(mobileFragment);
     }
 
-    public void gotoInviteGmailContacts(){
+    public void toInviteGmailContactsPage() {
 
-        if(gmailFragment==null){
+        if (gmailFragment == null) {
             gmailFragment = new InviteOtherContactsFragment();
             gmailFragment.setSource(InviteOtherContactsFragment.GMAIL);
         }
-        fm.beginTransaction()
-                .hide(this)
-                .add(R.id.contentFrameLayout, gmailFragment)
-                .addToBackStack(null)
-                .commit();
+        getBaseActivity().openFragment(gmailFragment);
     }
 
-    public void gotoInviteFacebookContacts(){
+    public void toInviteFacebookContactsPage() {
 
-        if(facebookFragment==null){
+        if (facebookFragment == null) {
             facebookFragment = new InviteOtherContactsFragment();
             facebookFragment.setSource(InviteOtherContactsFragment.FACEBOOK);
         }
-        fm.beginTransaction()
-                .hide(this)
-                .add(R.id.contentFrameLayout, facebookFragment)
-                .addToBackStack(null)
-                .commit();
+        getBaseActivity().openFragment(facebookFragment);
     }
 
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
-    public void setEvent(Event event){
+    public void setEvent(Event event) {
         this.event = event;
-        if(viewModel!=null){
-            viewModel.setEvent(event);
-        }
     }
 
     //Write your code here
     @Override
-    public void onDoneClicked(){
+    public void onNext() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(DATA_EVENT, event);
+
+        EventTimeSlotViewFragment fragment = new EventTimeSlotViewFragment();
         event.setInvitee((List<Invitee>) viewModel.getSelectedist());
+        fragment.setEvent(eventManager.copyCurrentEvent(event));
+        getBaseActivity().openFragment(fragment, bundle);
+
+//        event.setInvitee((List<Invitee>) viewModel.getSelectedist());
 //        if(getFrom() instanceof EventCreateNewFragment){
 //            if (event.getInvitee().size()>=1) {
 //                // pick at least one invitee
@@ -155,27 +139,27 @@ public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, 
 //            }
 //        }else
 
-        if (getFrom() instanceof EventTimeSlotViewFragment){
-            if (event.getInvitee().size()>=1) {
-                EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFrom();
-                eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
-                eventTimeSlotViewFragment.resetCalendar(eventManager.copyCurrentEvent(event));
-                openFragment(this, (EventTimeSlotViewFragment) getFrom());
-            }else{
-                EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-                beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
-                openFragment(this, beforeSendingFragment);
-            }
-        }else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
-            if (event.getInvitee().size()>=1) {
-                EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-                eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
-                openFragment(this, eventTimeSlotViewFragment);
-            }else{
-                EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-                beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
-                openFragment(this, beforeSendingFragment);
-            }
+//        if (getFrom() instanceof EventTimeSlotViewFragment) {
+//            if (event.getInvitee().size() >= 1) {
+//                EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFrom();
+//                eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                eventTimeSlotViewFragment.resetCalendar(eventManager.copyCurrentEvent(event));
+//                openFragment(this, (EventTimeSlotViewFragment) getFrom());
+//            } else {
+//                EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+//                beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                openFragment(this, beforeSendingFragment);
+//            }
+//        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
+//            if (event.getInvitee().size() >= 1) {
+//                EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
+//                eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                openFragment(this, eventTimeSlotViewFragment);
+//            } else {
+//                EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+//                beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                openFragment(this, beforeSendingFragment);
+//            }
 //        }else if (getFrom() instanceof EventEditFragment){
 //            if (event.getInvitee().size()>=1) {
 //                EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
@@ -186,41 +170,26 @@ public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, 
 //                eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
 //                openFragment(this, eventEditFragment);
 //            }
-        }else if (getFrom() instanceof EventDetailTimeSlotFragment){
-            if (event.getInvitee().size()>1){
-                EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment)getFrom();
-                eventDetailTimeSlotFragment.setEvent(eventManager.copyCurrentEvent(event));
-                openFragment(this, eventDetailTimeSlotFragment);
-            }else{
+//        } else if (getFrom() instanceof EventDetailTimeSlotFragment) {
+//            if (event.getInvitee().size() > 1) {
+//                EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFrom();
+//                eventDetailTimeSlotFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                openFragment(this, eventDetailTimeSlotFragment);
+//            } else {
 //                EventEditFragment eventEditFragment = (EventEditFragment)getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
 //                eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
 //                openFragment(this, eventEditFragment);
-            }
-        }
+//            }
+//        }
     }
 
-    public void onBackClicked(){
-//        if (getFrom() instanceof EventCreateNewFragment){
-//            // TODO: 29/12/2016 reset all selection
-//            viewModel.setEvent(event);
-//            EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-//            closeFragment(this, eventCreateNewFragment);
-//        }else
-
-        if (getFrom() instanceof EventTimeSlotViewFragment){
-            EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-            closeFragment(this, beforeSendingFragment);
-        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
-            closeFragment(this, (EventCreateDetailBeforeSendingFragment)getFrom());
-//        }else if (getFrom() instanceof EventEditFragment){
-//            closeFragment(this, (EventEditFragment)getFrom());
-//        }else if (getFrom() instanceof EventDetailTimeSlotFragment){
-//            EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-//            closeFragment(this, eventEditFragment);
-        }
+    public void onBack() {
+        Intent intent = new Intent();
+        getTargetFragment().onActivityResult(getTargetRequestCode(), 0, intent);
+        getFragmentManager().popBackStack();
     }
 
-    public void gotoScanQRCode(){
+    public void toScanQRCodePage() {
         startActivityForResult(new Intent(getActivity(), CaptureActivityContact.class), 0);
     }
 
@@ -235,11 +204,6 @@ public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, 
                 viewModel.addInvitee(result);
             }
         }
-    }
-
-    @Override
-    public void setData(Event event) {
-
     }
 }
 

@@ -6,21 +6,18 @@ import android.util.Log;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.BaseContact;
 import org.unimelb.itime.bean.Contact;
-import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.bean.BaseContact;
-import org.unimelb.itime.bean.ITimeUser;
-import org.unimelb.itime.ui.viewmodel.contact.AddFriendsViewModel;
-import org.unimelb.itime.util.ContactCheckUtil;
 import org.unimelb.itime.ui.mvpview.contact.InviteFriendMvpView;
 import org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel;
+import org.unimelb.itime.util.ContactCheckUtil;
 import org.unimelb.itime.util.HttpUtil;
-import org.unimelb.itime.util.rulefactory.InviteeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -213,7 +210,7 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
     }
 
     public void onBackPress() {
-        getView().onBackClicked();
+        getView().onBack();
     }
 
     public boolean isUniMelbEmail(String str) {
@@ -222,7 +219,7 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
 
     public void onDoneClicked(){
         if(getView() != null){
-            getView().onDoneClicked();
+            getView().onNext();
         }
 
     }

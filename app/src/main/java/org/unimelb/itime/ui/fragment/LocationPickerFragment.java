@@ -60,7 +60,10 @@ import java.util.concurrent.TimeUnit;
  * Created by Paul on 27/08/2016.
  * todo: change to data binding
  */
-public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<AutocompletePrediction>, LocationPresenter<TaskBasedMvpView<AutocompletePrediction>>> implements TaskBasedMvpView<AutocompletePrediction>, GoogleApiClient.OnConnectionFailedListener {
+public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<AutocompletePrediction>, LocationPresenter<TaskBasedMvpView<AutocompletePrediction>>> implements TaskBasedMvpView<AutocompletePrediction>, GoogleApiClient.OnConnectionFailedListener {
+
+    private final static String TAG = "EventLocationPickerFragment";
+    public final static String DATA_LOCATION = "location";
 
     private View root;
     protected GoogleApiClient mGoogleApiClient;
@@ -71,7 +74,6 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
 
     private AutoCompleteTextView mAutocompleteView;
 
-    private String TAG = "TAG";
     private static final int MY_PERMISSIONS_REQUEST_LOC = 30;
     private String place;
     ArrayList<String> locations = new ArrayList<>();
@@ -81,8 +83,9 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (root == null)
-            root = inflater.inflate(R.layout.fragment_event_location_pick, container, false);
+        if (root == null){
+            root = inflater.inflate(R.layout.fragment_location_picker, container, false);
+        }
         return root;
     }
 
@@ -95,12 +98,8 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
+        initListeners();
     }
-
-//    public void setEvent(Event event) {
-//        this.event = event;
-//    }
-
 
     private void init() {
         LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -147,8 +146,13 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
 
         mAutocompleteView.setOnItemClickListener(currentLocationListener);
         mAutocompleteView.setAdapter(strAdapter);
-        mAutocompleteView.setText("");
-        initListeners();
+
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            mAutocompleteView.setText(bundle.getString(DATA_LOCATION));
+        }else{
+            mAutocompleteView.setText("");
+        }
     }
 
     @Override
@@ -165,8 +169,6 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                Bundle bundle = getArguments();
-                intent.putExtra("old_data", bundle);
                 getTargetFragment().onActivityResult(getTargetRequestCode(), 0, intent);
                 getFragmentManager().popBackStack();
             }
@@ -190,9 +192,7 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
             public void onClick(View view) {
                 //todo: need to check the whether the text is null or empty
                 Intent intent = new Intent();
-                Bundle bundle = getArguments();
-                intent.putExtra("location", mAutocompleteView.getText().toString());
-                intent.putExtra("old_data", bundle);
+                intent.putExtra(DATA_LOCATION, mAutocompleteView.getText().toString());
                 getTargetFragment().onActivityResult(getTargetRequestCode(), 1, intent);
                 getFragmentManager().popBackStack();
             }
@@ -329,8 +329,6 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
-                + connectionResult.getErrorCode());
 
         // TODO(Developer): Check error code and notify the user of error state and resolution.
         Toast.makeText(getContext(),
