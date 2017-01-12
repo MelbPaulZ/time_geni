@@ -6,7 +6,9 @@ import android.view.View;
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.mvpview.UserMvpView;
+import org.unimelb.itime.ui.presenter.UserPresenter;
 
 /**
  * Created by yinchuandong on 11/1/17.
@@ -17,10 +19,18 @@ public class UserProfileViewModel extends CommonViewModel {
     public final static String TAG = "UserProfileViewModel";
 
     private UserMvpView mvpView;
+    private UserPresenter<? extends TaskBasedMvpView<User>> presenter;
     private User user;
 
-    public UserProfileViewModel(UserMvpView mvpView){
-        this.mvpView = mvpView;
+    private String password;
+    private String passwordConfirmation;
+
+
+    public UserProfileViewModel(UserPresenter<? extends TaskBasedMvpView<User>> presenter){
+        this.presenter = presenter;
+        if(presenter.getView() instanceof UserMvpView){
+            this.mvpView = (UserMvpView) presenter.getView();
+        }
     }
 
     @Bindable
@@ -88,5 +98,23 @@ public class UserProfileViewModel extends CommonViewModel {
     }
 
 
+    @Bindable
+    public String getPassword() {
+        return password;
+    }
 
+    public void setPassword(String password) {
+        this.password = password;
+        notifyPropertyChanged(BR.password);
+    }
+
+    @Bindable
+    public String getPasswordConfirmation() {
+        return passwordConfirmation;
+    }
+
+    public void setPasswordConfirmation(String passwordConfirmation) {
+        this.passwordConfirmation = passwordConfirmation;
+        notifyPropertyChanged(BR.passwordConfirmation);
+    }
 }

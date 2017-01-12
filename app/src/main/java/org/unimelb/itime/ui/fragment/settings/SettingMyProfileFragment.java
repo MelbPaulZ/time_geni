@@ -20,6 +20,7 @@ import org.unimelb.itime.ui.mvpview.UserMvpView;
 import org.unimelb.itime.ui.presenter.UserPresenter;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.UserProfileViewModel;
+import org.unimelb.itime.util.UserUtil;
 
 /**
  * Created by Paul on 26/12/2016.
@@ -48,10 +49,14 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        contentViewModel = new UserProfileViewModel(this);
+        contentViewModel = new UserProfileViewModel(getPresenter());
+        User user = UserUtil.getInstance(getContext()).getUser();
+        contentViewModel.setUser(user);
+
         toolbarViewModel = new ToolbarViewModel<>(this);
         toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
         toolbarViewModel.setTitleStr(getString(R.string.setting_my_profile));
+
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
     }
@@ -64,7 +69,6 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
 
     @Override
     public void toEditNamePage() {
-
         getBaseActivity().openFragment(new SettingMyProfileNameFragment());
     }
 

@@ -48,7 +48,11 @@ public class BaseActivity extends AppCompatActivity{
         t.commit();
     }
 
-    public void closeFragment(Fragment fragment, Bundle bundle){
+    public void backFragment(Fragment fragment){
+        backFragment(fragment, null);
+    }
+
+    public void backFragment(Fragment fragment, Bundle bundle){
         fragmentManager = getSupportFragmentManager();
         fragment.setArguments(bundle);
         FragmentTransaction t = fragmentManager.beginTransaction();
