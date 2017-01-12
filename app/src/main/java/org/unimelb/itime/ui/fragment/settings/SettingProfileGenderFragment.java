@@ -1,8 +1,6 @@
 package org.unimelb.itime.ui.fragment.settings;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -22,6 +20,9 @@ import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.UserProfileViewModel;
 import org.unimelb.itime.ui.viewmodel.UserProfileViewModel.GenderWrapper;
 import org.unimelb.itime.util.UserUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import me.tatarka.bindingcollectionadapter.ItemView;
 
@@ -71,23 +72,24 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
         binding.setToolbarVM(toolbarViewModel);
     }
 
-    private ObservableList<GenderWrapper> prepareData(){
-        ObservableList<GenderWrapper> list = new ObservableArrayList<>();
-        list.add(new GenderWrapper("Male", false));
-        list.add(new GenderWrapper("Female", false));
-        list.add(new GenderWrapper("Undefind", false));
+    private List<GenderWrapper> prepareData(){
+        List<GenderWrapper> list = new ArrayList<>();
+        // don't change the order
+        list.add(new GenderWrapper(getString(R.string.setting_female), false));
+        list.add(new GenderWrapper(getString(R.string.setting_male), false));
+        list.add(new GenderWrapper(getString(R.string.setting_undefined), false));
         return list;
     }
 
 
     @Override
     public void onBack() {
-
+        getBaseActivity().backFragment(new SettingMyProfileFragment());
     }
 
     @Override
     public void onNext() {
-
+        presenter.update(contentViewModel.getUser());
     }
 
     @Override
@@ -97,7 +99,7 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
 
     @Override
     public void onTaskSuccess(int taskId, User data) {
-
+        getBaseActivity().backFragment(new SettingMyProfileFragment());
     }
 
     @Override

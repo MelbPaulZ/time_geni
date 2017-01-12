@@ -1,7 +1,7 @@
 package org.unimelb.itime.ui.viewmodel;
 
+import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.ObservableList;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -12,7 +12,11 @@ import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.mvpview.UserMvpView;
 import org.unimelb.itime.ui.presenter.UserPresenter;
 
+import java.util.List;
+
 import me.tatarka.bindingcollectionadapter.ItemView;
+
+
 
 /**
  * Created by yinchuandong on 11/1/17.
@@ -29,7 +33,7 @@ public class UserProfileViewModel extends CommonViewModel {
     private String password;
     private String passwordConfirmation;
 
-    private ObservableList<GenderWrapper> genderWrapperList;
+    private List<GenderWrapper> genderWrapperList;
     private ItemView genderItemView;
 
 
@@ -108,9 +112,14 @@ public class UserProfileViewModel extends CommonViewModel {
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                genderWrapperList.get(i).isSelected = true;
-                notifyPropertyChanged(BR.genderWrapperList);
-                notifyPropertyChanged(BR.genderItemView);
+                for(int k = 0; k < genderWrapperList.size(); k++){
+                    if(i == k){
+                        genderWrapperList.get(k).setSelected(true);
+                    }else{
+                        genderWrapperList.get(k).setSelected(false);
+                    }
+                }
+                user.setGender(String.valueOf(i));
             }
         };
     }
@@ -137,11 +146,11 @@ public class UserProfileViewModel extends CommonViewModel {
     }
 
     @Bindable
-    public ObservableList<GenderWrapper> getGenderWrapperList() {
+    public List<GenderWrapper> getGenderWrapperList() {
         return genderWrapperList;
     }
 
-    public void setGenderWrapperList(ObservableList<GenderWrapper> genderWrapperList) {
+    public void setGenderWrapperList(List<GenderWrapper> genderWrapperList) {
         this.genderWrapperList = genderWrapperList;
         notifyPropertyChanged(BR.genderWrapperList);
     }
@@ -156,13 +165,33 @@ public class UserProfileViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.genderItemView);
     }
 
-    public static class GenderWrapper{
-        public String name;
-        public boolean isSelected;
+    public static class GenderWrapper extends BaseObservable{
+        private String name;
+        private boolean selected;
 
-        public GenderWrapper(String name, boolean isSelected){
+        public GenderWrapper(String name, boolean selected){
             this.name = name;
-            this.isSelected = isSelected;
+            this.selected = selected;
+        }
+
+        @Bindable
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+            notifyPropertyChanged(BR.name);
+        }
+
+        @Bindable
+        public boolean isSelected() {
+            return selected;
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+            notifyPropertyChanged(BR.selected);
         }
     }
 

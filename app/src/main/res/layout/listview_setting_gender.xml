@@ -25,9 +25,10 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
             android:background="@drawable/blue_tick"
-            android:visibility="@{wrapper.isSelected ? View.VISIBLE : View.GONE}"
+            android:visibility="@{wrapper.selected ? View.VISIBLE : View.GONE}"
             />
 
+        <!--android:visibility="@{wrapper. ? View.VISIBLE : View.GONE}"-->
         <TextView style="@style/itime_bottom_divider_line" />
     </RelativeLayout>
 
