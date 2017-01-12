@@ -89,7 +89,7 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
 
     @Override
     public void toEditGenderPage() {
-
+        getBaseActivity().openFragment(new SettingProfileGenderFragment());
     }
 
     @Override

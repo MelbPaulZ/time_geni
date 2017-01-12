@@ -10,6 +10,10 @@ import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.mvpview.UserMvpView;
 import org.unimelb.itime.ui.presenter.UserPresenter;
 
+import java.util.List;
+
+import me.tatarka.bindingcollectionadapter.ItemView;
+
 /**
  * Created by yinchuandong on 11/1/17.
  */
@@ -24,6 +28,9 @@ public class UserProfileViewModel extends CommonViewModel {
 
     private String password;
     private String passwordConfirmation;
+
+    private List<GenderWrapper> genderWrapperList;
+    private ItemView genderItemView;
 
 
     public UserProfileViewModel(UserPresenter<? extends TaskBasedMvpView<User>> presenter){
@@ -116,5 +123,35 @@ public class UserProfileViewModel extends CommonViewModel {
     public void setPasswordConfirmation(String passwordConfirmation) {
         this.passwordConfirmation = passwordConfirmation;
         notifyPropertyChanged(BR.passwordConfirmation);
+    }
+
+    @Bindable
+    public List<GenderWrapper> getGenderWrapperList() {
+        return genderWrapperList;
+    }
+
+    public void setGenderWrapperList(List<GenderWrapper> genderWrapperList) {
+        this.genderWrapperList = genderWrapperList;
+        notifyPropertyChanged(BR.genderWrapperList);
+    }
+
+    @Bindable
+    public ItemView getGenderItemView() {
+        return genderItemView;
+    }
+
+    public void setGenderItemView(ItemView genderItemView) {
+        this.genderItemView = genderItemView;
+        notifyPropertyChanged(BR.genderItemView);
+    }
+
+    public static class GenderWrapper{
+        public String name;
+        public boolean isSelected;
+
+        public GenderWrapper(String name, boolean isSelected){
+            this.name = name;
+            this.isSelected = isSelected;
+        }
     }
 }
