@@ -1,6 +1,8 @@
 package org.unimelb.itime.ui.fragment.settings;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -20,9 +22,6 @@ import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.UserProfileViewModel;
 import org.unimelb.itime.ui.viewmodel.UserProfileViewModel.GenderWrapper;
 import org.unimelb.itime.util.UserUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import me.tatarka.bindingcollectionadapter.ItemView;
 
@@ -72,8 +71,8 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
         binding.setToolbarVM(toolbarViewModel);
     }
 
-    private List<GenderWrapper> prepareData(){
-        List<GenderWrapper> list = new ArrayList<>();
+    private ObservableList<GenderWrapper> prepareData(){
+        ObservableList<GenderWrapper> list = new ObservableArrayList<>();
         list.add(new GenderWrapper("Male", false));
         list.add(new GenderWrapper("Female", false));
         list.add(new GenderWrapper("Undefind", false));

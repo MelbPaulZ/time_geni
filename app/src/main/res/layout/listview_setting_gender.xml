@@ -6,6 +6,7 @@
         <variable
             name="wrapper"
             type="org.unimelb.itime.ui.viewmodel.UserProfileViewModel.GenderWrapper" />
+        <import type="android.view.View" />
     </data>
 
     <RelativeLayout
@@ -23,7 +24,9 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:background="@drawable/blue_tick" />
+            android:background="@drawable/blue_tick"
+            android:visibility="@{wrapper.isSelected ? View.VISIBLE : View.GONE}"
+            />
 
         <TextView style="@style/itime_bottom_divider_line" />
     </RelativeLayout>

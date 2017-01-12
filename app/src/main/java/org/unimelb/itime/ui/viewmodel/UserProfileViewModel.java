@@ -1,7 +1,9 @@
 package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.Bindable;
+import android.databinding.ObservableList;
 import android.view.View;
+import android.widget.AdapterView;
 
 import com.android.databinding.library.baseAdapters.BR;
 
@@ -9,8 +11,6 @@ import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.mvpview.UserMvpView;
 import org.unimelb.itime.ui.presenter.UserPresenter;
-
-import java.util.List;
 
 import me.tatarka.bindingcollectionadapter.ItemView;
 
@@ -29,7 +29,7 @@ public class UserProfileViewModel extends CommonViewModel {
     private String password;
     private String passwordConfirmation;
 
-    private List<GenderWrapper> genderWrapperList;
+    private ObservableList<GenderWrapper> genderWrapperList;
     private ItemView genderItemView;
 
 
@@ -104,6 +104,17 @@ public class UserProfileViewModel extends CommonViewModel {
         };
     }
 
+    public AdapterView.OnItemClickListener onGenderItemClicked(){
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                genderWrapperList.get(i).isSelected = true;
+                notifyPropertyChanged(BR.genderWrapperList);
+                notifyPropertyChanged(BR.genderItemView);
+            }
+        };
+    }
+
 
     @Bindable
     public String getPassword() {
@@ -126,11 +137,11 @@ public class UserProfileViewModel extends CommonViewModel {
     }
 
     @Bindable
-    public List<GenderWrapper> getGenderWrapperList() {
+    public ObservableList<GenderWrapper> getGenderWrapperList() {
         return genderWrapperList;
     }
 
-    public void setGenderWrapperList(List<GenderWrapper> genderWrapperList) {
+    public void setGenderWrapperList(ObservableList<GenderWrapper> genderWrapperList) {
         this.genderWrapperList = genderWrapperList;
         notifyPropertyChanged(BR.genderWrapperList);
     }
@@ -154,4 +165,6 @@ public class UserProfileViewModel extends CommonViewModel {
             this.isSelected = isSelected;
         }
     }
+
+
 }
