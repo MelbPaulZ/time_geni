@@ -14,6 +14,5 @@ import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 public class UserPresenter<V extends TaskBasedMvpView<User>> extends MvpBasePresenter<V>{
 
     public UserPresenter(Context context){
-
     }
 }

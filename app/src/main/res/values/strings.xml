@@ -355,6 +355,7 @@
     <string name="setting_gender">Gender</string>
     <string name="region">Region</string>
     <string name="setting_my_profile">My Profile</string>
+    <string name="setting_calendar_pref">Calendar Preferences</string>
     <string name="photo_my_profile">Photo</string>
     <string name="setting_save">Save</string>
     <string name="setting_male">Male</string>

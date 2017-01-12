@@ -14,8 +14,6 @@ public class Setting {
     boolean enableEventInvitationEmail = true;
     boolean enableEventConfirmEmail = true;
 
-
-
     public boolean isEnableNotification() {
         return enableNotification;
     }

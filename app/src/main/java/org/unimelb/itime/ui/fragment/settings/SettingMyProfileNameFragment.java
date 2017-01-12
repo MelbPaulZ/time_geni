@@ -60,9 +60,6 @@ public class SettingMyProfileNameFragment extends BaseUiAuthFragment<TaskBasedMv
         binding.setToolbarVM(toolbarViewModel);
     }
 
-
-
-
     @Override
     public void onBack() {
         getBaseActivity().backFragment(new SettingMyProfileFragment());
