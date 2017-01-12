@@ -84,7 +84,7 @@ public class EventEditViewModel extends EventCommonViewModel {
                         onEndRepeatSelected(year, monthOfYear, dayOfMonth);
                         break;
                 }
-                notifyPropertyChanged(BR.eventEditViewEvent);
+                notifyPropertyChanged(BR.event);
             }
         };
 
@@ -103,7 +103,7 @@ public class EventEditViewModel extends EventCommonViewModel {
                         }
                         break;
                 }
-                notifyPropertyChanged(BR.eventEditViewEvent);
+                notifyPropertyChanged(BR.event);
             }
         };
     }
@@ -114,7 +114,7 @@ public class EventEditViewModel extends EventCommonViewModel {
         c.set(year, monthOfYear, dayOfMonth);
         event.getRule().setUntil(c.getTime());
         event.setRecurrence(event.getRule().getRecurrence());
-        notifyPropertyChanged(BR.eventEditViewEvent);
+        notifyPropertyChanged(BR.event);
     }
 
     /**
@@ -433,7 +433,7 @@ public class EventEditViewModel extends EventCommonViewModel {
         if (event.hasTimeslots()) {
             timeslotList = event.getTimeslot();
         }
-        notifyPropertyChanged(BR.eventEditViewEvent);
+        notifyPropertyChanged(BR.event);
         notifyPropertyChanged(BR.startTimeVisibility);
         notifyPropertyChanged(BR.endTimeVisibility);
         notifyPropertyChanged(BR.editEventIsRepeat);

@@ -17,14 +17,11 @@ import android.widget.TextView;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.EventTimeSlotAdapter;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
-import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarMonthDayFragment;
 import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarWeekFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
@@ -34,11 +31,8 @@ import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
-import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -259,15 +253,15 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
 
     @Override
     public void onNext() {
-        EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-        Event cpyEvent = EventManager.getInstance(getContext()).copyCurrentEvent(event);
-        for (Timeslot timeslot: cpyEvent.getTimeslot()){
-            timeslot.setStatus(Timeslot.STATUS_PENDING);
-        }
-        eventEditFragment.setEvent(cpyEvent);
-
-        EventManager.getInstance(getContext()).setCurrentEvent(event);
-
-        openFragment(this, eventEditFragment);
+//        EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+//        Event cpyEvent = EventManager.getInstance(getContext()).copyCurrentEvent(event);
+//        for (Timeslot timeslot: cpyEvent.getTimeslot()){
+//            timeslot.setStatus(Timeslot.STATUS_PENDING);
+//        }
+//        eventEditFragment.setEvent(cpyEvent);
+//
+//        EventManager.getInstance(getContext()).setCurrentEvent(event);
+//
+//        openFragment(this, eventEditFragment);
     }
 }

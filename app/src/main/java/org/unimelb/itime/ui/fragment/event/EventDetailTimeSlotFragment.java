@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.InviteeInnerResponseAdapter;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.SlotResponse;
@@ -33,7 +32,6 @@ import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -129,8 +127,8 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
     public void onClickBack() {
         if (getFrom() instanceof EventDetailFragment) {
             closeFragment(this, (EventDetailFragment) getFrom());
-        } else if (getFrom() instanceof EventEditFragment) {
-            closeFragment(this, (EventEditFragment) getFrom());
+//        } else if (getFrom() instanceof EventEditFragment) {
+//            closeFragment(this, (EventEditFragment) getFrom());
         } else if (getFrom() instanceof InviteeFragment) {
             closeFragment(this, (InviteeFragment) getFrom());
         }
@@ -139,17 +137,17 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
     @Override
     public void onClickDone(Event event) {
         TimeSlotUtil.sortTimeslot(event.getTimeslot());
-        if (getFrom() instanceof EventEditFragment) {
-            ((EventEditFragment) getFrom()).setEvent(event);
-            openFragment(this, getFrom());
-        } else if (getFrom() instanceof EventDetailFragment) {
-            ((EventDetailFragment) getFrom()).setEvent(event);
-            openFragment(this, getFrom());
-        } else if (getFrom() instanceof InviteeFragment) {
-            EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-            eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
-            openFragment(this, eventEditFragment);
-        }
+//        if (getFrom() instanceof EventEditFragment) {
+//            ((EventEditFragment) getFrom()).setEvent(event);
+//            openFragment(this, getFrom());
+//        } else if (getFrom() instanceof EventDetailFragment) {
+//            ((EventDetailFragment) getFrom()).setEvent(event);
+//            openFragment(this, getFrom());
+//        } else if (getFrom() instanceof InviteeFragment) {
+//            EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+//            eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
+//            openFragment(this, eventEditFragment);
+//        }
     }
 
 
@@ -189,19 +187,19 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
     public void onEnter() {
         super.onEnter();
 
-        if (getFrom() instanceof EventDetailFragment) {
-            initTimeslotsFromDetailFragment(weekView);
-            scrollToFstTimeSlot(event);
-            weekView.removeAllOptListener();
-        } else if (getFrom() instanceof InviteeFragment) {
-            initTimeslotsFromInviteeFragment(weekView);
-            presenter.getTimeSlots(event, event.getStartTime());
-            weekView.enableTimeSlot();
-        } else if (getFrom() instanceof EventEditFragment) {
-            initTimeslotsFromEditFragment(weekView);
-            presenter.getTimeSlots(event, event.getStartTime());
-            weekView.enableTimeSlot();
-        }
+//        if (getFrom() instanceof EventDetailFragment) {
+//            initTimeslotsFromDetailFragment(weekView);
+//            scrollToFstTimeSlot(event);
+//            weekView.removeAllOptListener();
+//        } else if (getFrom() instanceof InviteeFragment) {
+//            initTimeslotsFromInviteeFragment(weekView);
+//            presenter.getTimeSlots(event, event.getStartTime());
+//            weekView.enableTimeSlot();
+//        } else if (getFrom() instanceof EventEditFragment) {
+//            initTimeslotsFromEditFragment(weekView);
+//            presenter.getTimeSlots(event, event.getStartTime());
+//            weekView.enableTimeSlot();
+//        }
     }
 
     /**
@@ -213,32 +211,32 @@ public class EventDetailTimeSlotFragment extends EventBaseFragment<EventDetailTi
     @Override
     public void onRecommend(List<Timeslot> list) {
         // only from edit fragment and invitee fragment can receive new suggested timeslot
-        if (getFrom() instanceof EventEditFragment || getFrom() instanceof InviteeFragment) {
-            if (!event.hasTimeslots()) {
-                event.setTimeslot(new ArrayList<Timeslot>());
-            }
-            for (Timeslot timeSlot : list) {
-                if (eventManager.isTimeslotExistInEvent(event, timeSlot)) {
-                    // already exist, then do nothing
-                } else {
-                    // have to do this
-                    timeSlot.setEventUid(event.getEventUid());
-                    timeSlot.setStatus(Timeslot.STATUS_CREATING);
-                    // todo: need to check if this timeslot already exists in a map
-                    event.getTimeslot().add(timeSlot);
-                    weekView.addTimeSlot(timeSlot);
-                }
-            }
-            weekView.reloadTimeSlots(false);
-        }
+//        if (getFrom() instanceof EventEditFragment || getFrom() instanceof InviteeFragment) {
+//            if (!event.hasTimeslots()) {
+//                event.setTimeslot(new ArrayList<Timeslot>());
+//            }
+//            for (Timeslot timeSlot : list) {
+//                if (eventManager.isTimeslotExistInEvent(event, timeSlot)) {
+//                    // already exist, then do nothing
+//                } else {
+//                    // have to do this
+//                    timeSlot.setEventUid(event.getEventUid());
+//                    timeSlot.setStatus(Timeslot.STATUS_CREATING);
+//                    // todo: need to check if this timeslot already exists in a map
+//                    event.getTimeslot().add(timeSlot);
+//                    weekView.addTimeSlot(timeSlot);
+//                }
+//            }
+//            weekView.reloadTimeSlots(false);
+//        }
     }
 
     @Override
     public boolean isClickTSConfirm() {
         if (getFrom() instanceof EventDetailFragment) {
             return true;
-        } else if (getFrom() instanceof EventEditFragment) {
-            return false;
+//        } else if (getFrom() instanceof EventEditFragment) {
+//            return false;
         } else if (getFrom() instanceof InviteeFragment) {
             return false;
         }

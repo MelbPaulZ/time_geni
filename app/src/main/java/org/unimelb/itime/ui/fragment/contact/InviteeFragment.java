@@ -19,7 +19,6 @@ import org.unimelb.itime.databinding.ListviewInviteeHeaderBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.event.EventDetailTimeSlotFragment;
-import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.contact.InviteFriendMvpView;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
@@ -177,25 +176,25 @@ public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, 
                 beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
                 openFragment(this, beforeSendingFragment);
             }
-        }else if (getFrom() instanceof EventEditFragment){
-            if (event.getInvitee().size()>=1) {
-                EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-                eventDetailTimeSlotFragment.setEvent(eventManager.copyCurrentEvent(event));
-                openFragment(this, eventDetailTimeSlotFragment);
-            }else{
-                EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-                eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
-                openFragment(this, eventEditFragment);
-            }
+//        }else if (getFrom() instanceof EventEditFragment){
+//            if (event.getInvitee().size()>=1) {
+//                EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
+//                eventDetailTimeSlotFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                openFragment(this, eventDetailTimeSlotFragment);
+//            }else{
+//                EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+//                eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                openFragment(this, eventEditFragment);
+//            }
         }else if (getFrom() instanceof EventDetailTimeSlotFragment){
             if (event.getInvitee().size()>1){
                 EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment)getFrom();
                 eventDetailTimeSlotFragment.setEvent(eventManager.copyCurrentEvent(event));
                 openFragment(this, eventDetailTimeSlotFragment);
             }else{
-                EventEditFragment eventEditFragment = (EventEditFragment)getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-                eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
-                openFragment(this, eventEditFragment);
+//                EventEditFragment eventEditFragment = (EventEditFragment)getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+//                eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                openFragment(this, eventEditFragment);
             }
         }
     }
@@ -213,11 +212,11 @@ public class InviteeFragment extends BaseUiFragment<Event, InviteFriendMvpView, 
             closeFragment(this, beforeSendingFragment);
         } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment){
             closeFragment(this, (EventCreateDetailBeforeSendingFragment)getFrom());
-        }else if (getFrom() instanceof EventEditFragment){
-            closeFragment(this, (EventEditFragment)getFrom());
-        }else if (getFrom() instanceof EventDetailTimeSlotFragment){
-            EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-            closeFragment(this, eventEditFragment);
+//        }else if (getFrom() instanceof EventEditFragment){
+//            closeFragment(this, (EventEditFragment)getFrom());
+//        }else if (getFrom() instanceof EventDetailTimeSlotFragment){
+//            EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+//            closeFragment(this, eventEditFragment);
         }
     }
 

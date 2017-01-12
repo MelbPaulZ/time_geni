@@ -47,7 +47,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
     public void initFragments() {
         fragmentList.add(new EventDetailFragment());
-        fragmentList.add(new EventEditFragment());
+//        fragmentList.add(new EventEditFragment());
         fragmentList.add(new EventDetailTimeSlotFragment());
         fragmentList.add(new EventLocationPickerFragment());
         fragmentList.add(new InviteeFragment());
