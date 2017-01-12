@@ -45,7 +45,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public static String DATA_EVENT = "event";
     private static final String TAG = "EditFragment";
     private FragmentEventEditDetailBinding binding;
-    private Event event;
+    private Event event = null;
     private EventManager eventManager;
 
     private EventEditViewModel eventEditViewModel;
@@ -69,7 +69,8 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         Bundle bundle = getArguments();
         if(bundle != null && bundle.get(DATA_EVENT) != null){
             this.event = (Event) bundle.get(DATA_EVENT);
-        }else{
+        }
+        if(event == null){
             event = eventManager.copyCurrentEvent(EventManager.getInstance(getContext()).getCurrentEvent());
         }
 
@@ -202,6 +203,10 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         Log.d(TAG, "onActivityResult: " + requestCode + "/" + requestCode);
         Bundle bundle = data.getBundleExtra("old_data");
         Event event = (Event) bundle.get("event");
-//        this.event = event;
+        this.event = event;
+        if(resultCode == 1){
+            String location = data.getStringExtra("location");
+            this.event.setLocation(location);
+        }
     }
 }

@@ -49,8 +49,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
-import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.presenter.LocationPresenter;
 import org.unimelb.itime.util.EventUtil;
@@ -77,10 +75,7 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
     private static final int MY_PERMISSIONS_REQUEST_LOC = 30;
     private String place;
     ArrayList<String> locations = new ArrayList<>();
-    private EventLocationPickerFragment self;
     double longitude, latitude;
-    private Event event;
-    private EventManager eventManager;
 
 
     @Nullable
@@ -88,7 +83,6 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (root == null)
             root = inflater.inflate(R.layout.fragment_event_location_pick, container, false);
-        self = this;
         return root;
     }
 
@@ -100,7 +94,6 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        eventManager = EventManager.getInstance(getContext());
         init();
     }
 
@@ -145,11 +138,6 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
         mAutocompleteView = (AutoCompleteTextView)
                 root.findViewById(R.id.autocomplete_places);
 
-//             Register a listener that receives callbacks when a suggestion has been selected
-//
-//
-//             Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
-//             the entire world.
         mAdapter = new PlaceAutoCompleteAdapter(getContext(), mGoogleApiClient, locationNearByBounds,
                 null);
 
@@ -177,10 +165,9 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.putExtra("data", "xxx");
                 Bundle bundle = getArguments();
                 intent.putExtra("old_data", bundle);
-                getTargetFragment().onActivityResult(getTargetRequestCode(), 1, intent);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), 0, intent);
                 getFragmentManager().popBackStack();
             }
         });
@@ -201,28 +188,13 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                event.setLocation(mAutocompleteView.getText().toString());
-//                if (getFrom() instanceof EventCreateNewFragment) {
-//                    // no need of set from for event create new fragment
-//                    EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-//                    eventCreateNewFragment.setEvent(eventManager.copyCurrentEvent(event));
-//                    openFragment(self, eventCreateNewFragment);
-//                } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-//                    ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-//                    openFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
-//                } else if (getFrom() instanceof EventEditFragment) {
-//                    ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-//                    openFragment(self, ((EventEditFragment) getFrom()));
-//                }
-
-//                if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-//                    ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-//                    openFragment(self, getFrom());
-//                }
-//                else if (getFrom() instanceof EventEditFragment) {
-//                    ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-//                    openFragment(self, getFrom());
-//                }
+                //todo: need to check the whether the text is null or empty
+                Intent intent = new Intent();
+                Bundle bundle = getArguments();
+                intent.putExtra("location", mAutocompleteView.getText().toString());
+                intent.putExtra("old_data", bundle);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), 1, intent);
+                getFragmentManager().popBackStack();
             }
         });
 
@@ -292,17 +264,6 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
                         }
                         likelyPlaces.release();
                         place = fullAddress;
-                        // this might be delayed by network, so need eventbus
-//                        if (getFrom() instanceof EventCreateNewFragment) {
-//                            EventBus.getDefault().post(new MessageLocation(EventCreateNewFragment.class.getSimpleName(), place));
-//                        } else
-
-//                        if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-//                            EventBus.getDefault().post(new MessageLocation(EventCreateDetailBeforeSendingFragment.class.getSimpleName(), place));
-//                        }
-//                        else if (getFrom() instanceof EventEditFragment) {
-//                            EventBus.getDefault().post(new MessageLocation(EventEditFragment.class.getSimpleName(), place));
-//                        }
                         mAutocompleteView.setText(place);
                         mAutocompleteView.setAdapter(mAdapter);
                         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener); // change listener
@@ -327,21 +288,6 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
                 mAutocompleteView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
                 mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
-                event.setLocation(clickStr);
-                // tiao zhuan
-//                if (getFrom() instanceof EventCreateNewFragment) {
-//                    // no need of set from for event create new fragment
-//                    ((EventCreateNewFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-//                    openFragment(self, (EventCreateNewFragment) getFrom());
-//                } else
-//                if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-//                    ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-//                    openFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
-//                }
-//                else if (getFrom() instanceof EventEditFragment) {
-//                    ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-//                    openFragment(self, ((EventEditFragment) getFrom()));
-//                }
             } else {
                 Toast.makeText(getContext(), "network error, cannot find current location", Toast.LENGTH_SHORT).show();
             }
@@ -377,22 +323,6 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
             mAutocompleteView.setAdapter(mAdapter);
             mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
             strAdapter.notifyDataSetChanged();
-            event.setLocation((String) primaryText);
-//             find a way fix here later
-//            if (getFrom() instanceof EventCreateNewFragment) {
-//                // no need of set from for event create new fragment
-//                ((EventCreateNewFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-//                openFragment(self, (EventCreateNewFragment) getFrom());
-//            } else
-
-//            if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-//                ((EventCreateDetailBeforeSendingFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-//                openFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
-//            }
-//            else if (getFrom() instanceof EventEditFragment) {
-//                ((EventEditFragment) getFrom()).setEvent(eventManager.copyCurrentEvent(event));
-//                openFragment(self, ((EventEditFragment) getFrom()));
-//            }
         }
     };
 
