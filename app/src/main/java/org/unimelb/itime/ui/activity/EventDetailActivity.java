@@ -15,7 +15,6 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
@@ -49,7 +48,7 @@ public class EventDetailActivity extends AppCompatActivity {
         fragmentList.add(new EventDetailFragment());
 //        fragmentList.add(new EventEditFragment());
         fragmentList.add(new EventDetailTimeSlotFragment());
-        fragmentList.add(new EventLocationPickerFragment());
+//        fragmentList.add(new EventLocationPickerFragment());
         fragmentList.add(new InviteeFragment());
         fragmentList.add(new InviteeTimeslotFragment());
         fragmentList.add(new ViewMainCalendarFragment());

@@ -1,6 +1,7 @@
 package org.unimelb.itime.bean;
 
-import android.databinding.Bindable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
@@ -13,8 +14,8 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
+import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.util.EventUtil;
-
 import org.unimelb.itime.util.rulefactory.RuleInterface;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -24,14 +25,13 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import org.unimelb.itime.dao.EventDao;
 
 /**
  * Created by yinchuandong on 22/08/2016.
  */
 
 @Entity(active =  true)
-public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable, RuleInterface, ITimeComparable<Event>{
+public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable, Parcelable, RuleInterface, ITimeComparable<Event>{
     public static final String STATUS_PENDING = "pending";
     public static final String STATUS_UPDATING = "updating";
     public static final String STATUS_CONFIRMED = "confirmed";
@@ -627,4 +627,95 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
             return gson.toJson(entityProperty);
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.eventUid);
+        dest.writeString(this.eventId);
+        dest.writeString(this.hostUserUid);
+        dest.writeString(this.userUid);
+        dest.writeString(this.calendarUid);
+        dest.writeString(this.iCalUID);
+        dest.writeString(this.recurringEventUid);
+        dest.writeString(this.recurringEventId);
+        dest.writeStringArray(this.recurrence);
+        dest.writeString(this.status);
+        dest.writeString(this.summary);
+        dest.writeLong(this.startTime);
+        dest.writeLong(this.endTime);
+        dest.writeInt(this.confirmedCount);
+        dest.writeInt(this.showLevel);
+        dest.writeString(this.description);
+        dest.writeString(this.location);
+        dest.writeString(this.locationNote);
+        dest.writeString(this.locationLatitude);
+        dest.writeString(this.locationLongitude);
+        dest.writeString(this.eventType);
+        dest.writeInt(this.reminder);
+        dest.writeInt(this.freebusyAccess);
+        dest.writeString(this.source);
+        dest.writeInt(this.deleteLevel);
+        dest.writeInt(this.icsSequence);
+        dest.writeInt(this.inviteeVisibility);
+        dest.writeString(this.display);
+        dest.writeString(this.url);
+        dest.writeList(this.invitee);
+        dest.writeList(this.photo);
+        dest.writeList(this.timeslot);
+    }
+
+    protected Event(Parcel in) {
+        this.eventUid = in.readString();
+        this.eventId = in.readString();
+        this.hostUserUid = in.readString();
+        this.userUid = in.readString();
+        this.calendarUid = in.readString();
+        this.iCalUID = in.readString();
+        this.recurringEventUid = in.readString();
+        this.recurringEventId = in.readString();
+        this.recurrence = in.createStringArray();
+        this.status = in.readString();
+        this.summary = in.readString();
+        this.startTime = in.readLong();
+        this.endTime = in.readLong();
+        this.confirmedCount = in.readInt();
+        this.showLevel = in.readInt();
+        this.description = in.readString();
+        this.location = in.readString();
+        this.locationNote = in.readString();
+        this.locationLatitude = in.readString();
+        this.locationLongitude = in.readString();
+        this.eventType = in.readString();
+        this.reminder = in.readInt();
+        this.freebusyAccess = in.readInt();
+        this.source = in.readString();
+        this.deleteLevel = in.readInt();
+        this.icsSequence = in.readInt();
+        this.inviteeVisibility = in.readInt();
+        this.display = in.readString();
+        this.url = in.readString();
+        this.invitee = new ArrayList<Invitee>();
+        in.readList(this.invitee, Invitee.class.getClassLoader());
+        this.photo = new ArrayList<PhotoUrl>();
+        in.readList(this.photo, PhotoUrl.class.getClassLoader());
+        this.timeslot = new ArrayList<Timeslot>();
+        in.readList(this.timeslot, Timeslot.class.getClassLoader());
+    }
+
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel source) {
+            return new Event(source);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
 }

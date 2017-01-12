@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +34,15 @@ import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Created by Paul on 28/08/2016.
  */
 public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, EventPresenter<EventEditMvpView>> implements EventEditMvpView{
-
+    /**
+     * the key for pass bundle for arguments
+     */
+    public static String DATA_EVENT = "event";
     private static final String TAG = "EditFragment";
     private FragmentEventEditDetailBinding binding;
     private Event event;
@@ -61,9 +66,13 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         super.onActivityCreated(savedInstanceState);
         eventManager = EventManager.getInstance(getContext());
         eventEditViewModel = new EventEditViewModel(getPresenter());
-        if (event == null) {
+        Bundle bundle = getArguments();
+        if(bundle != null && bundle.get(DATA_EVENT) != null){
+            this.event = (Event) bundle.get(DATA_EVENT);
+        }else{
             event = eventManager.copyCurrentEvent(EventManager.getInstance(getContext()).getCurrentEvent());
         }
+
         eventEditViewModel.setEvent(event);
 
         toolbarViewModel = new ToolbarViewModel<>(this);
@@ -93,7 +102,10 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     @Override
     public void toLocationPage() {
         EventLocationPickerFragment fragment = new EventLocationPickerFragment();
-        getBaseActivity().openFragment(fragment);
+        fragment.setTargetFragment(this, 1000);
+        Bundle data = new Bundle();
+        data.putParcelable("event", this.event);
+        getBaseActivity().openFragment(fragment, data);
     }
 
     @Override
@@ -183,5 +195,13 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     @Override
     public void onNext() {
         eventEditViewModel.onBack();
+    }
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: " + requestCode + "/" + requestCode);
+        Bundle bundle = data.getBundleExtra("old_data");
+        Event event = (Event) bundle.get("event");
+//        this.event = event;
     }
 }

@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -175,22 +176,12 @@ public class EventLocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvp
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (getFrom() instanceof EventCreateNewFragment) {
-//                    // no need of set from for event create new fragment
-//                    openFragment(self, (EventCreateNewFragment) getFrom());
-//                } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-//                    openFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
-//                }
-//                if (getFrom() instanceof EventEditFragment) {
-//                    openFragment(self, (EventEditFragment) getFrom());
-//                }
-
-//                if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-//                    closeFragment(self, (EventCreateDetailBeforeSendingFragment) getFrom());
-//                }
-//                if (getFrom() instanceof EventEditFragment) {
-//                    closeFragment(self, (EventEditFragment) getFrom());
-//                }
+                Intent intent = new Intent();
+                intent.putExtra("data", "xxx");
+                Bundle bundle = getArguments();
+                intent.putExtra("old_data", bundle);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), 1, intent);
+                getFragmentManager().popBackStack();
             }
         });
 

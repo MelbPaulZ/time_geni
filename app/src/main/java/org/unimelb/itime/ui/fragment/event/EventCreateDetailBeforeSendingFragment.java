@@ -12,23 +12,20 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventCreateBeforeSendingBinding;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
-import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
-import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
@@ -155,8 +152,8 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     @Override
     public void changeLocation() {
         EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
-        eventLocationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        openFragment(this, eventLocationPickerFragment);
+//        eventLocationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
+//        openFragment(this, eventLocationPickerFragment);
     }
 
 

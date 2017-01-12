@@ -42,7 +42,7 @@ public class BaseActivity extends AppCompatActivity{
         fragmentManager = getSupportFragmentManager();
         fragment.setArguments(bundle);
         FragmentTransaction t = fragmentManager.beginTransaction();
-        t.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        t.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         t.replace(getFragmentContainerId(), fragment);
         t.addToBackStack(null);
         t.commit();
