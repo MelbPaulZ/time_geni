@@ -8,22 +8,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiAuthFragment;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentSettingMyProfileNameBinding;
-import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
-import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
-import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
+import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
+import org.unimelb.itime.ui.presenter.UserPresenter;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
+import org.unimelb.itime.ui.viewmodel.UserProfileViewModel;
+import org.unimelb.itime.util.UserUtil;
 
 /**
  * Created by Paul on 26/12/2016.
  */
 
-public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
-        implements SettingCommonMvpView{
+public class SettingMyProfileNameFragment extends BaseUiAuthFragment<TaskBasedMvpView<User>, UserPresenter<TaskBasedMvpView<User>>> implements TaskBasedMvpView<User>, ItimeCommonMvpView {
 
     private FragmentSettingMyProfileNameBinding binding;
 
+    private UserProfileViewModel contentViewModel;
+    private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
+    private UserPresenter<TaskBasedMvpView<User>> presenter;
 
     @Nullable
     @Override
@@ -33,62 +38,54 @@ public class SettingMyProfileNameFragment extends SettingBaseFragment<SettingCom
     }
 
     @Override
+    public UserPresenter<TaskBasedMvpView<User>> createPresenter() {
+        return new UserPresenter<>(getContext());
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        binding.setSettingVM(viewModel);
+        presenter = getPresenter();
+
+        contentViewModel = new UserProfileViewModel(presenter);
+        User user = UserUtil.getInstance(getContext()).getUser();
+        contentViewModel.setUser(user);
+
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
+        toolbarViewModel.setTitleStr(getString(R.string.name));
+        toolbarViewModel.setRightTitleStr(getString(R.string.setting_save));
+
+        binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
     }
 
-    @Override
-    public SettingCommonPresenter<SettingCommonMvpView> createPresenter() {
-        return new SettingCommonPresenter<>(getContext());
-    }
 
-    @Override
-    public void onEnter() {
-        super.onEnter();
-    }
 
-    @Override
-    public void onViewChange(int task, boolean isSave) {
-        SettingMyProfileFragment settingMyProfileFragment = (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
-        if (isSave) {
-            closeFragment(this, settingMyProfileFragment, SettingManager.getInstance(getContext()).copySetting(getSetting()));
-        }else{
-            closeFragment(this, settingMyProfileFragment);
-        }
-    }
-
-    @Override
-    public void setLeftTitleStringToVM() {
-        toolbarViewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
-    }
-
-    @Override
-    public void setTitleStringToVM() {
-        toolbarViewModel.setTitleStr(getString(R.string.name));
-    }
-
-    @Override
-    public void setRightTitleStringToVM() {
-        toolbarViewModel.setRightTitleStr(getString(R.string.setting_save));
-    }
-
-    @Override
-    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel() {
-        return new ToolbarViewModel<>(this);
-    }
 
     @Override
     public void onBack() {
-        closeFragment(this,
-                (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()));
+        getBaseActivity().backFragment(new SettingMyProfileFragment());
     }
 
     @Override
     public void onNext() {
-        closeFragment(this,
-                (SettingMyProfileFragment)getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName()),
-                SettingManager.getInstance(getContext()).copySetting(getSetting()));
+        // TODO: 12/1/17 presenter.update()
+
+    }
+
+    @Override
+    public void onTaskStart(int taskId) {
+
+    }
+
+    @Override
+    public void onTaskSuccess(int taskId, User data) {
+        getBaseActivity().openFragment(new SettingMyProfileFragment());
+    }
+
+    @Override
+    public void onTaskError(int taskId) {
+
     }
 }

@@ -2,8 +2,8 @@
 <layout xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="settingVM"
-            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
+            name="contentVM"
+            type="org.unimelb.itime.ui.viewmodel.UserProfileViewModel"/>
         <variable
             name="toolbarVM"
             type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
@@ -14,57 +14,6 @@
     android:layout_height="match_parent">
     <include layout="@layout/toolbar_common"
         bind:vm="@{toolbarVM}"/>
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--style="@style/itime_toolbar">-->
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-
-            <!--&lt;!&ndash;toolbar back arrow&ndash;&gt;-->
-            <!--<ImageView-->
-                <!--android:layout_width="11dp"-->
-                <!--android:layout_height="18dp"-->
-                <!--android:src="@drawable/icon_back_arrow"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar settings text&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/setting_my_profile"-->
-                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE, false)}"-->
-                <!--android:textColor="@color/title_6D6D6D"-->
-                <!--android:textSize="17sp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginLeft="14dp"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar title&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/name"-->
-                <!--android:textSize="17sp"-->
-                <!--android:textColor="@color/color_424242"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;save btn&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_marginRight="7dp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:text="@string/setting_save"-->
-                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE, true)}"-->
-                <!--android:textSize="17sp"-->
-                <!--android:textColor="@color/color_448aff"-->
-                <!--/>-->
-        <!--</RelativeLayout>-->
-    <!--</android.support.v7.widget.Toolbar>-->
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -83,7 +32,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:background="#00000000"
-                android:text="@={settingVM.setting.user.personalAlias}"/>
+                android:text="@={contentVM.user.personalAlias}"/>
             
             <ImageView
                 android:layout_width="15dp"
