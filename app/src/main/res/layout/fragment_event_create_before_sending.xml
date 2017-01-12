@@ -530,20 +530,20 @@
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
                                     android:layout_marginRight="@dimen/padding_10"
-                                    loadLocalImg="@{newEventDetailVM.newEvDtlEvent}" />
+                                    android:bindLocalSrc="@{newEventDetailVM.newEvDtlEvent}" />
 
                                 <ImageView
                                     android:id="@+id/before_sending_photo2"
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
                                     android:layout_marginRight="@dimen/padding_10"
-                                    loadLocalImg="@{newEventDetailVM.newEvDtlEvent}" />
+                                    android:bindLocalSrc="@{newEventDetailVM.newEvDtlEvent}" />
 
                                 <ImageView
                                     android:id="@+id/before_sending_photo3"
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
-                                    loadLocalImg="@{newEventDetailVM.newEvDtlEvent}" />
+                                    android:bindLocalSrc="@{newEventDetailVM.newEvDtlEvent}" />
                             </LinearLayout>
                         </HorizontalScrollView>
 
@@ -559,7 +559,5 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
-
-
     </LinearLayout>
 </layout>
