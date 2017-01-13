@@ -170,47 +170,19 @@ public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresente
 
     @Override
     public void refreshTabStatus(int pageId){
-        LinearLayout main_tab_ll = (LinearLayout) this.findViewById(R.id.main_tab_ll);
-        int count = main_tab_ll.getChildCount();
-        for (int i = 0; i < count; i++) {
-            boolean isActive = pageId == i;
-            int color = getResources().getColor(isActive ? R.color.bg_event_group_a100 : R.color.gray_9b9b9b);
-            View child = main_tab_ll.getChildAt(i);
-            if (child instanceof ViewGroup){
-                int innerCount = ((ViewGroup) child).getChildCount();
-                for (int j = 0; j < innerCount; j++) {
-                    View innerChild = ((ViewGroup) child).getChildAt(j);
-                    Object tag = innerChild.getTag();
-                    if (tag != null){
-                        if (innerChild.getTag().equals("tab_icon")){
-                            Drawable mDrawable = innerChild.getBackground();
-                            mDrawable.setColorFilter(new
-                                    PorterDuffColorFilter(color,PorterDuff.Mode.SRC_IN));
-                        }else if(innerChild.getTag().equals("tab_text")){
-                            ((TextView) innerChild).setTextColor(color);
-                        }
-                    }
-                }
-            }
-        }
+
     }
 
 
-    public void startEventCreateActivity(){
-        Intent intent = new Intent(this,EventCreateActivity.class);
-        intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_SELF_CREATE_EVENT);
-        Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
-        Calendar calendar = Calendar.getInstance();
-        EventManager.getInstance(getApplicationContext()).initNewEvent(calendar);
-        startActivityForResult(intent, EventUtil.ACTIVITY_CREATE_EVENT,bundleAnimation);
-    }
     public void startEventCreateActivity(Calendar startTime){
         Intent intent = new Intent(this, EventCreateActivity.class);
         intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_SELF_CREATE_EVENT);
+        intent.putExtra("start_time", startTime.getTimeInMillis());
         Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
-        EventManager.getInstance(getApplicationContext()).initNewEvent(startTime);
         startActivityForResult(intent, EventUtil.ACTIVITY_CREATE_EVENT,bundleAnimation);
     }
+
+
 
 
 

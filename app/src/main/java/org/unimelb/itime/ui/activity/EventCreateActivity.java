@@ -20,11 +20,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.messageevent.MessageUrl;
-import org.unimelb.itime.ui.fragment.event.EventCreateDetailBeforeSendingFragment;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
+import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class EventCreateActivity extends BaseActivity implements PlaceSelectionListener {
@@ -40,11 +43,24 @@ public class EventCreateActivity extends BaseActivity implements PlaceSelectionL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_create);
 
+        long startTime = getIntent().getLongExtra("start_time",0);
         fragmentManager = getSupportFragmentManager();
         EventEditFragment fragment = new EventEditFragment();
+        fragment.setEvent(initNewEvent(startTime));
         fragmentManager.beginTransaction()
                 .replace(getFragmentContainerId(), fragment)
                 .commit();
+    }
+
+    private Event initNewEvent(long startTime){
+        // initial default values for new event
+        Event event = new Event();
+        event.setEventUid(AppUtil.generateUuid());
+        event.setHostUserUid(UserUtil.getInstance(getApplicationContext()).getUserUid());
+        long endTime = startTime + 3600 * 1000;
+        event.setStartTime(startTime);
+        event.setEndTime(endTime);
+        return event;
     }
 
     @Override
@@ -86,20 +102,16 @@ public class EventCreateActivity extends BaseActivity implements PlaceSelectionL
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // this is the recall for photo urls
-        switch (requestCode){
-            case ACTIVITY_PHOTOPICKER: {
-                if (resultCode == Activity.RESULT_OK) {
-                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-//                    if (tag==getString(R.string.tag_create_event)){
-//                        EventCreateNewFragment eventCreateNewFragment = (EventCreateNewFragment) getSupportFragmentManager().findFragmentByTag(EventCreateNewFragment.class.getSimpleName());
-//                        eventCreateNewFragment.setPhotos(result);
-//                    }else if (tag== getString(R.string.tag_create_event_before_sending)){
-                        EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getSupportFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-                        eventCreateDetailBeforeSendingFragment.setPhotos(result);
-//                    }
-                }
-            }
-        }
+//        switch (requestCode){
+//            case ACTIVITY_PHOTOPICKER: {
+//                if (resultCode == Activity.RESULT_OK) {
+//                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+//                        EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getSupportFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
+//                        eventCreateDetailBeforeSendingFragment.setPhotos(result);
+////                    }
+//                }
+//            }
+//        }
     }
 //
     public void toPhotoPicker(){

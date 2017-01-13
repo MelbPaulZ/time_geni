@@ -65,6 +65,10 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
     private final static String TAG = "EventLocationPickerFragment";
     public final static String DATA_LOCATION = "location";
 
+    public final static int RET_LOCATION_SUCCESS = 1000;
+    public final static int RET_LOCATION_CANCEL = 1001;
+
+
     private View root;
     protected GoogleApiClient mGoogleApiClient;
 
@@ -169,7 +173,7 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                getTargetFragment().onActivityResult(getTargetRequestCode(), 0, intent);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), RET_LOCATION_CANCEL, intent);
                 getFragmentManager().popBackStack();
             }
         });
@@ -193,7 +197,7 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
                 //todo: need to check the whether the text is null or empty
                 Intent intent = new Intent();
                 intent.putExtra(DATA_LOCATION, mAutocompleteView.getText().toString());
-                getTargetFragment().onActivityResult(getTargetRequestCode(), 1, intent);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), RET_LOCATION_SUCCESS, intent);
                 getFragmentManager().popBackStack();
             }
         });

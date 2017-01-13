@@ -10,7 +10,7 @@ import java.util.List;
 public interface EventEditMvpView extends TaskBasedMvpView<List<Event>>, ItimeCommonMvpView{
     void toEventDetailPage();
     void toLocationPage();
-    void toTimeslotViewPage(Event event);
-    void toInviteePickerPage(Event event);
+    void toTimeslotViewPage();
+    void toInviteePickerPage();
     void toPhotoPickerPage();
 }

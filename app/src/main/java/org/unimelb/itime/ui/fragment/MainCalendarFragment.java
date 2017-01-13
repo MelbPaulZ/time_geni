@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.fragment;
 
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -18,10 +19,12 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
 import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.messageevent.MessageMonthYear;
+import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventSearchActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarAgendaFragment;
@@ -209,7 +212,14 @@ public class MainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvp
 
     @Override
     public void startCreateEventActivity() {
-        ((MainActivity) getActivity()).startEventCreateActivity();
+        Calendar calendar = Calendar.getInstance();
+
+        Intent intent = new Intent(getActivity(), EventCreateActivity.class);
+        intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_SELF_CREATE_EVENT);
+        intent.putExtra("start_time", calendar.getTimeInMillis());
+        Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
+        startActivityForResult(intent, EventUtil.ACTIVITY_CREATE_EVENT,bundleAnimation);
+
     }
 
     @Override

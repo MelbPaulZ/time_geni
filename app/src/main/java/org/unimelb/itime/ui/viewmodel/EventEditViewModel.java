@@ -271,7 +271,7 @@ public class EventEditViewModel extends EventCommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView != null) {
-                    mvpView.toTimeslotViewPage(event);// tiao zhuan wei zhi
+                    mvpView.toTimeslotViewPage();// tiao zhuan wei zhi
                 }
             }
         };
@@ -362,7 +362,7 @@ public class EventEditViewModel extends EventCommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView != null) {
-                    mvpView.toInviteePickerPage(event);
+                    mvpView.toInviteePickerPage();
                 }
             }
         };

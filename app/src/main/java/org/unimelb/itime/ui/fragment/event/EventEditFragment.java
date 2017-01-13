@@ -19,6 +19,7 @@ import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
+import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.LocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
@@ -39,14 +40,23 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     /**
      * the key for pass bundle for arguments
      */
-    public static String DATA_EVENT = "event";
-    private static final String TAG = "EditFragment";
+    private final static String TAG = "EditFragment";
+
+    public final static int TASK_CREATE = 0;
+    public final static int TASK_EDIT = 1;
+
+    public final static int REQ_LOCATION = 1000;
+    public final static int REQ_INVITEE = 1001;
+    public final static int REQ_TIMESLOT = 1002;
+
+
     private FragmentEventEditDetailBinding binding;
     private Event event = null;
     private EventManager eventManager;
 
     private EventEditViewModel eventEditViewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
+    private int task = TASK_CREATE;
 
 
     @Nullable
@@ -62,26 +72,32 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if(getActivity() instanceof EventCreateActivity){
+            task = TASK_CREATE;
+        }else if (getActivity() instanceof EventDetailActivity){
+            task = TASK_EDIT;
+        }
 
         eventManager = EventManager.getInstance(getContext());
         eventEditViewModel = new EventEditViewModel(getPresenter());
-        Bundle bundle = getArguments();
-        if(bundle != null && bundle.get(DATA_EVENT) != null){
-            this.event = (Event) bundle.get(DATA_EVENT);
-        }
-        if(event == null){
-            event = eventManager.copyCurrentEvent(EventManager.getInstance(getContext()).getCurrentEvent());
-        }
-
         eventEditViewModel.setEvent(event);
-
-        toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.cancel));
-        toolbarViewModel.setTitleStr(getString(R.string.edit_event));
-        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+        initToolbar();
 
         binding.setEventEditVM(eventEditViewModel);
         binding.setToolbarVM(toolbarViewModel);
+    }
+
+    private void initToolbar(){
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftTitleStr(getString(R.string.cancel));
+        if (task == TASK_CREATE) {
+            toolbarViewModel.setTitleStr(getString(R.string.new_event));
+            toolbarViewModel.setRightTitleStr(getString(R.string.send));
+
+        }else if (task == TASK_EDIT) {
+            toolbarViewModel.setTitleStr(getString(R.string.edit_event));
+            toolbarViewModel.setRightTitleStr(getString(R.string.done));
+        }
     }
 
     public void setEvent(Event event){
@@ -106,16 +122,20 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     @Override
     public void toLocationPage() {
         LocationPickerFragment fragment = new LocationPickerFragment();
-        fragment.setTargetFragment(this, 1000);
+        fragment.setTargetFragment(this, REQ_LOCATION);
         Bundle data = new Bundle();
         data.putString(LocationPickerFragment.DATA_LOCATION, event.getLocation());
-        data.putParcelable(DATA_EVENT, event);
         getBaseActivity().openFragment(fragment, data);
     }
 
     @Override
-    public void toTimeslotViewPage(Event event) {
-        // // TODO: 12/1/17  changet to bundle
+    public void toTimeslotViewPage() {
+        // // TODO: 12/1/17  changet to
+
+        EventTimeSlotViewFragment timeSlotViewFragment = new EventTimeSlotViewFragment();
+        timeSlotViewFragment.setTargetFragment(this, REQ_TIMESLOT);
+        timeSlotViewFragment.setEvent(event);
+        getBaseActivity().openFragment(timeSlotViewFragment);
 //        EventDetailTimeSlotFragment timeSlotFragment = new EventDetailTimeSlotFragment();
 //        Event cpyEvent = eventManager.copyCurrentEvent(event);
 //        Invitee me = EventUtil.getSelfInInvitees(getContext(), cpyEvent);
@@ -131,10 +151,10 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
 
     @Override
-    public void toInviteePickerPage(Event event) {
+    public void toInviteePickerPage() {
         InviteeFragment inviteeFragment = new InviteeFragment();
-        inviteeFragment.setTargetFragment(this, 1000);
-        inviteeFragment.setEvent(eventManager.copyCurrentEvent(event));
+        inviteeFragment.setTargetFragment(this, REQ_INVITEE);
+        inviteeFragment.setEvent(event);
         getBaseActivity().openFragment(inviteeFragment);
 
     }
@@ -144,23 +164,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public void toPhotoPickerPage() {
         ((EventDetailActivity)getActivity()).checkPermission();
     }
-
-    @Subscribe
-    public void getLocation(MessageLocation messageLocation){
-        if (messageLocation.tag.equals(EventEditFragment.class.getSimpleName())){
-            event.setLocation(messageLocation.locationString);
-            eventEditViewModel.setEvent(event);
-        }
-    }
-
-    @Subscribe
-    public void getInvitees(MessageInvitees messageInvitees){
-        if (messageInvitees.tag == getString(R.string.tag_host_event_edit)){
-            event.setInvitee(messageInvitees.invitees);
-            eventEditViewModel.setEvent(event);
-        }
-    }
-
 
 
     @Override
@@ -206,7 +209,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult: " + requestCode + "/" + requestCode);
-        if(resultCode == 1){
+        if(requestCode == REQ_LOCATION && resultCode == LocationPickerFragment.RET_LOCATION_SUCCESS){
             String location = data.getStringExtra("location");
             this.event.setLocation(location);
         }
