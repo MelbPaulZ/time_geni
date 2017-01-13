@@ -6,12 +6,10 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 
-import java.util.List;
-
 /**
  * Created by Paul on 10/09/2016.
  */
-public interface EventDetailTimeSlotMvpVIew extends TimeslotCommonMvpView {
+public interface EventDetailTimeSlotMvpVIew extends MvpView{
     void onClickBack();
     void onClickDone(Event event);
     void reloadTimeslot();

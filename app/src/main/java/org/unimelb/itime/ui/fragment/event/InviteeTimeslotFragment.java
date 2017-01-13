@@ -16,8 +16,8 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentSelectedInviteeBinding;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
-import org.unimelb.itime.ui.mvpview.TimeslotCommonMvpView;
-import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
+import org.unimelb.itime.ui.mvpview.TimeslotMvpView;
+import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.ui.viewmodel.TimeslotInviteeResponseViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.EventUtil;
@@ -31,7 +31,7 @@ import java.util.List;
 public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeCommonMvpView {
     private FragmentSelectedInviteeBinding binding;
     private TimeslotInviteeResponseViewModel viewModel;
-    private TimeslotCommonPresenter<TimeslotCommonMvpView> presenter;
+    private TimeslotPresenter<TimeslotMvpView> presenter;
 
     private Timeslot timeslot;
     private Event event;
@@ -58,7 +58,7 @@ public class InviteeTimeslotFragment extends EventBaseFragment implements ItimeC
     @Override
     public MvpPresenter createPresenter() {
         if (presenter == null) {
-            presenter = new TimeslotCommonPresenter<>(getContext());
+            presenter = new TimeslotPresenter<>(getContext());
         }
         return presenter;
     }

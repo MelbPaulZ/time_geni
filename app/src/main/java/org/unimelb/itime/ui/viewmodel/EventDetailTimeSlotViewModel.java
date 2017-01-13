@@ -1,40 +1,36 @@
 package org.unimelb.itime.ui.viewmodel;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.view.View;
 
 import org.unimelb.itime.BR;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.ui.mvpview.EventDetailTimeSlotMvpVIew;
-import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
+import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
-import org.unimelb.itime.vendor.dayview.FlexibleLenViewBody;
 import org.unimelb.itime.vendor.dayview.TimeSlotController;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.sql.Wrapper;
 import java.util.Calendar;
 
 /**
  * Created by Paul on 10/09/2016.
  */
 public class EventDetailTimeSlotViewModel extends CommonViewModel {
-    private TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew> presenter;
+    private TimeslotPresenter<EventDetailTimeSlotMvpVIew> presenter;
     private Event eventDetailHostEvent;
     private String hostToolBarString;
     private EventDetailTimeSlotMvpVIew mvpView;
 
 
     //
-    public EventDetailTimeSlotViewModel(TimeslotCommonPresenter<EventDetailTimeSlotMvpVIew> presenter) {
+    public EventDetailTimeSlotViewModel(TimeslotPresenter<EventDetailTimeSlotMvpVIew> presenter) {
         this.presenter = presenter;
         Calendar calendar = Calendar.getInstance();
         calendar.getTime();

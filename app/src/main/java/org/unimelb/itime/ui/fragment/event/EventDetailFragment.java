@@ -21,8 +21,6 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
-import org.unimelb.itime.ui.fragment.calendars.ViewInCalendarWeekFragment;
 import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
@@ -164,20 +162,20 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
     @Override
     public void viewInCalendar() {
 
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
-
-            ViewMainCalendarFragment viewMainCalendarFragment = (ViewMainCalendarFragment) getFragmentManager().findFragmentByTag(ViewMainCalendarFragment.class.getSimpleName());
-            ViewInCalendarWeekFragment viewInCalendarWeekFragment = viewMainCalendarFragment.getWeekViewFrag();
-            viewInCalendarWeekFragment.scrollToWithOffset(event.getStartTime());
-            viewInCalendarWeekFragment.showAnim(event);
-
-            openFragment(this,viewMainCalendarFragment);
-        }else {
-            final EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-            timeSlotFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event), this.adapterData);
-            timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
-            openFragment(this,timeSlotFragment);
-        }
+//        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+//
+//            ViewMainCalendarFragment viewMainCalendarFragment = (ViewMainCalendarFragment) getFragmentManager().findFragmentByTag(ViewMainCalendarFragment.class.getSimpleName());
+//            ViewInCalendarWeekFragment viewInCalendarWeekFragment = viewMainCalendarFragment.getWeekViewFrag();
+//            viewInCalendarWeekFragment.scrollToWithOffset(event.getStartTime());
+//            viewInCalendarWeekFragment.showAnim(event);
+//
+//            openFragment(this,viewMainCalendarFragment);
+//        }else {
+//            final EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
+//            timeSlotFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event), this.adapterData);
+//            timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
+//            openFragment(this,timeSlotFragment);
+//        }
     }
 
     @Override

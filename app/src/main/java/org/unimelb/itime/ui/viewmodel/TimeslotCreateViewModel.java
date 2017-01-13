@@ -4,29 +4,34 @@ import android.content.Context;
 import android.databinding.Bindable;
 import android.view.View;
 
-import org.unimelb.itime.BR;
-import org.unimelb.itime.ui.mvpview.TimeslotCreateMvpView;
-import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
+import com.android.databinding.library.baseAdapters.BR;
+
+import org.unimelb.itime.ui.mvpview.TimeslotMvpView;
+import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 
 import java.util.Calendar;
 
+
+
+
 /**
  * Created by Paul on 20/11/16.
  */
 public class TimeslotCreateViewModel extends CommonViewModel {
     private DraggableTimeSlotView newTimeSlotView;
-    private TimeslotCommonPresenter<TimeslotCreateMvpView> presenter;
-    private TimeslotCreateMvpView mvpView;
+    private TimeslotPresenter<TimeslotMvpView> presenter;
+    private TimeslotMvpView mvpView;
     public final int STARTTIME = 1000;
     public final int ENDTIME = 1001;
 
 
-    public TimeslotCreateViewModel(TimeslotCommonPresenter<TimeslotCreateMvpView> presenter) {
+    public TimeslotCreateViewModel(TimeslotPresenter<TimeslotMvpView> presenter) {
         this.presenter = presenter;
         mvpView = presenter.getView();
+
 
     }
 
@@ -52,7 +57,7 @@ public class TimeslotCreateViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 long time = index==STARTTIME? newTimeSlotView.getNewStartTime() : newTimeSlotView.getNewEndTime();
-                mvpView.onChooseTime(index, time);
+//                mvpView.onChooseTime(index, time);
             }
         };
     }
@@ -62,7 +67,7 @@ public class TimeslotCreateViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    mvpView.onClickPickerDone();
+//                    mvpView.onClickPickerDone();
                 }
             }
         };
@@ -92,7 +97,7 @@ public class TimeslotCreateViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    mvpView.onClickCancel();
+//                    mvpView.onClickCancel();
                 }
             }
         };
@@ -103,7 +108,7 @@ public class TimeslotCreateViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-                    mvpView.onClickDone();
+//                    mvpView.onClickDone();
                 }
             }
         };

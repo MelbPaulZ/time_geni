@@ -1,25 +1,30 @@
 package org.unimelb.itime.ui.viewmodel;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
-import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
-import org.unimelb.itime.vendor.BR;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
+import org.unimelb.itime.ui.mvpview.TimeslotBaseMvpView;
+import org.unimelb.itime.ui.mvpview.TimeslotMvpView;
+import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.vendor.BR;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
+import java.sql.Time;
 import java.util.Calendar;
+import java.util.List;
+
+import static android.databinding.tool.util.GenerationalClassUtil.ExtensionFilter.BR;
 
 /**
  * Created by Paul on 27/08/2016.
@@ -27,18 +32,16 @@ import java.util.Calendar;
 public class EventCreateTimeslotViewModel extends CommonViewModel {
 
     private String titleString;
-    private TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView> presenter;
+    private TimeslotPresenter<? extends TimeslotBaseMvpView> presenter;
     private Event event;
     private String tag;
     private ObservableField<Boolean> isChangeDuration = new ObservableField<>(false);
     private String durationTimeString = "1 hour";
-    private EventCreateNewTimeSlotMvpView mvpView;
 
-    public EventCreateTimeslotViewModel(TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView> presenter){
+    public EventCreateTimeslotViewModel(TimeslotPresenter<? extends TimeslotBaseMvpView> presenter){
         this.presenter = presenter;
         titleString = initToolBarTitle();
         event= EventManager.getInstance(getContext()).getCurrentEvent();
-        mvpView = presenter.getView();
     }
 
     private Context getContext(){

@@ -172,8 +172,8 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     public void onClickProposedTimeslots() {
         EventTimeSlotViewFragment timeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
         timeSlotViewFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        openFragment(this, timeSlotViewFragment);
-        timeSlotViewFragment.setTo(this); // this need to be set manully,coz has to be distinguish with others
+//        openFragment(this, timeSlotViewFragment);
+//        timeSlotViewFragment.setTo(this); // this need to be set manully,coz has to be distinguish with others
     }
 
     @Override

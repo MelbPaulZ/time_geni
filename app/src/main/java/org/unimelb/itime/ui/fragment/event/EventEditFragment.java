@@ -14,9 +14,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.SlotResponse;
-import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInvitees;
@@ -30,7 +27,6 @@ import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
-import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,17 +109,17 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     @Override
     public void toTimeslotViewPage(Event event) {
         // // TODO: 12/1/17  changet to bundle
-        EventDetailTimeSlotFragment timeSlotFragment = new EventDetailTimeSlotFragment();
-        Event cpyEvent = eventManager.copyCurrentEvent(event);
-        Invitee me = EventUtil.getSelfInInvitees(getContext(), cpyEvent);
-        // if the user is host, then reset all his timeslot as create
-        if (me!=null) {
-            for (SlotResponse slotResponse : me.getSlotResponses()) {
-                slotResponse.setStatus(Timeslot.STATUS_CREATING);
-            }
-        }
-        timeSlotFragment.setEvent(cpyEvent);
-        getBaseActivity().openFragment(timeSlotFragment);
+//        EventDetailTimeSlotFragment timeSlotFragment = new EventDetailTimeSlotFragment();
+//        Event cpyEvent = eventManager.copyCurrentEvent(event);
+//        Invitee me = EventUtil.getSelfInInvitees(getContext(), cpyEvent);
+//        // if the user is host, then reset all his timeslot as create
+//        if (me!=null) {
+//            for (SlotResponse slotResponse : me.getSlotResponses()) {
+//                slotResponse.setStatus(Timeslot.STATUS_CREATING);
+//            }
+//        }
+//        timeSlotFragment.setEvent(cpyEvent);
+//        getBaseActivity().openFragment(timeSlotFragment);
     }
 
 
