@@ -36,6 +36,8 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
         implements TimeslotMvpView{
 
     public final static int RET_TIMESLOT = 1000;
+    public final static int RET_EMPTY = 1001;
+
 
     private Timeslot timeslot;
     private TimeslotCreateConfirmBinding binding;
@@ -43,7 +45,6 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
     private WheelPicker yearPicker, monthPicker, dayPicker, hourPicker, minutePicker;
     private int changeTimeType;
     private PopupWindow popupWindow;
-
 
     private TimeslotCreateViewModel viewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
@@ -175,6 +176,11 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
 
     @Override
     public void onBack() {
+        Intent intent = new Intent();
+        intent.putExtra("weekStartTime", viewModel.getTimeslot().getStartTime());
+        intent.putExtra("startTime", viewModel.getTimeslot().getStartTime());
+        intent.putExtra("endTime", viewModel.getTimeslot().getEndTime());
+        getTargetFragment().onActivityResult(getTargetRequestCode(), RET_EMPTY, intent);
         getFragmentManager().popBackStack();
     }
 
@@ -182,6 +188,7 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
     public void onNext() {
 //        todo
         Intent intent = new Intent();
+        intent.putExtra("weekStartTime", viewModel.getTimeslot().getStartTime());
         intent.putExtra("startTime", viewModel.getTimeslot().getStartTime());
         intent.putExtra("endTime", viewModel.getTimeslot().getEndTime());
         getTargetFragment().onActivityResult(getTargetRequestCode(), RET_TIMESLOT, intent);

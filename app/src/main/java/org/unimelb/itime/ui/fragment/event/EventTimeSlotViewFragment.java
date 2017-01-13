@@ -36,6 +36,7 @@ import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.TimeSlotController;
 import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
+import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,8 +60,11 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     private WeekView timeslotWeekView;
     private int timePosition;
 
+    private long weekStartTime = -1;
     private EventCreateTimeslotViewModel viewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
+
+    private List<WrapperTimeSlot> timeSlotList = null;
 
     @Nullable
     @Override
@@ -90,6 +94,13 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         inflater = LayoutInflater.from(getContext());
 
         initData();
+        initListeners();
+
+        if(weekStartTime > 0){
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(weekStartTime);
+            timeslotWeekView.scrollTo(cal);
+        }
     }
 
     public void setEvent(Event event){
@@ -97,8 +108,20 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     }
 
     private void initData(){
-        initListeners();
-        resetCalendar(); // try
+
+        if (timeSlotList == null && event.hasTimeslots()) {
+            timeSlotList = new ArrayList<>();
+            for (Timeslot timeSlot : event.getTimeslot()) {
+                WrapperTimeSlot wrapper = new WrapperTimeSlot(timeSlot);
+                wrapper.setSelected(getTimeSlotIsSelected(timeSlot));
+                timeslotWeekView.addTimeSlot(wrapper);
+                timeSlotList.add(wrapper);
+            }
+        }else if(timeSlotList != null){
+            for (WrapperTimeSlot wrapper: timeSlotList){
+                timeslotWeekView.addTimeSlot(wrapper);
+            }
+        }
 
         if (event != null || event.getTimeslot() == null || event.getTimeslot().size() == 0) {
             Calendar calendar = Calendar.getInstance();
@@ -107,18 +130,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         timeslotWeekView.reloadTimeSlots(false);
     }
 
-    public void resetCalendar() {
-        timeslotWeekView.resetTimeSlots();
-        if (event.hasTimeslots()) {
-            for (Timeslot timeSlot : event.getTimeslot()) {
-                timeslotWeekView.addTimeSlot(timeSlot,getTimeSlotIsSelected(timeSlot));
-            }
-        }
-        timeslotWeekView.reloadTimeSlots(false);
-//        scrollToFstTimeSlot(event);
-    }
-
-    private void scrollToFstTimeSlot(Event event){
+    private void scrollToFirstTimeSlot(Event event){
         List<Timeslot> slots = event.getTimeslot();
         if (slots.size() > 0){
             timeslotWeekView.scrollToWithOffset(slots.get(0).getStartTime());
@@ -341,6 +353,10 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == REQ_TIMESLOT){
+            weekStartTime = data.getLongExtra("weekStartTime", 0);
+        }
+
         if (requestCode == REQ_TIMESLOT && resultCode == EventTimeSlotCreateFragment.RET_TIMESLOT) {
             long startTime = data.getLongExtra("startTime", 0);
             long endTime = data.getLongExtra("endTime", 0);
@@ -350,6 +366,9 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             timeslot.setEventUid(event.getEventUid());
             timeslot.setTimeslotUid(AppUtil.generateUuid());
             event.getTimeslot().add(timeslot);
+            WrapperTimeSlot wrapper = new WrapperTimeSlot(timeslot);
+            wrapper.setSelected(true);
+            timeSlotList.add(wrapper);
         }
     }
 }
