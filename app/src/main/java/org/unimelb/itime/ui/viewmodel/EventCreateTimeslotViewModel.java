@@ -8,23 +8,17 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.android.databinding.library.baseAdapters.BR;
+
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.mvpview.TimeslotBaseMvpView;
-import org.unimelb.itime.ui.mvpview.TimeslotMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.BR;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.weekview.WeekView;
 
-import java.sql.Time;
 import java.util.Calendar;
-import java.util.List;
-
-import static android.databinding.tool.util.GenerationalClassUtil.ExtensionFilter.BR;
 
 /**
  * Created by Paul on 27/08/2016.

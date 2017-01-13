@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.event;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -47,6 +48,8 @@ import java.util.List;
  * in created event flow
  */
 public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMvpView, TimeslotPresenter<TimeslotBaseMvpView>> implements TimeslotBaseMvpView{
+
+    public static final int REQ_TIMESLOT = 1000;
 
     private FragmentEventCreateTimeslotViewBinding binding;
     private Event event;
@@ -173,9 +176,13 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             public void onTimeSlotCreate(DraggableTimeSlotView timeSlotView) {
                 // popup timeslot create page
                 EventTimeSlotCreateFragment fragment = new EventTimeSlotCreateFragment();
-                fragment.setTimeSlotView(timeSlotView);
-//              //todo change the code
-                fragment.setTargetFragment(EventTimeSlotViewFragment.this, 1000);
+                Timeslot timeslot = new Timeslot();
+                timeslot.setStartTime(timeSlotView.getNewStartTime());
+                timeslot.setEndTime(timeSlotView.getNewEndTime());
+                fragment.setTimeslot(timeslot);
+
+              //todo change the code
+                fragment.setTargetFragment(EventTimeSlotViewFragment.this, REQ_TIMESLOT);
                 getBaseActivity().openFragment(fragment);
             }
 
@@ -328,5 +335,21 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         TimeSlotUtil.sortTimeslot(event.getTimeslot());
         EventEditFragment fragment = new EventEditFragment();
         getBaseActivity().openFragment(fragment);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_TIMESLOT && resultCode == EventTimeSlotCreateFragment.RET_TIMESLOT) {
+            long startTime = data.getLongExtra("startTime", 0);
+            long endTime = data.getLongExtra("endTime", 0);
+            Timeslot timeslot = new Timeslot();
+            timeslot.setStartTime(startTime);
+            timeslot.setEndTime(endTime);
+            timeslot.setEventUid(event.getEventUid());
+            timeslot.setTimeslotUid(AppUtil.generateUuid());
+            event.getTimeslot().add(timeslot);
+        }
     }
 }

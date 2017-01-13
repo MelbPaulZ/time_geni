@@ -6,11 +6,10 @@ import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.ui.mvpview.TimeslotMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.helper.MyCalendar;
-import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 
 import java.util.Calendar;
 
@@ -21,25 +20,26 @@ import java.util.Calendar;
  * Created by Paul on 20/11/16.
  */
 public class TimeslotCreateViewModel extends CommonViewModel {
-    private DraggableTimeSlotView newTimeSlotView;
     private TimeslotPresenter<TimeslotMvpView> presenter;
     private TimeslotMvpView mvpView;
     public final int STARTTIME = 1000;
     public final int ENDTIME = 1001;
+    private Timeslot timeslot;
+
+    private String startTimeStr = "";
+    private String endTimeStr = "";
 
 
     public TimeslotCreateViewModel(TimeslotPresenter<TimeslotMvpView> presenter) {
         this.presenter = presenter;
         mvpView = presenter.getView();
-
-
     }
 
     private Context getContext(){
         return presenter.getContext();
     }
 
-    public String getTimeString(long l){
+    private String parseTime(long l){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(l);
         int min = calendar.get(Calendar.MINUTE);
@@ -56,8 +56,8 @@ public class TimeslotCreateViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                long time = index==STARTTIME? newTimeSlotView.getNewStartTime() : newTimeSlotView.getNewEndTime();
-//                mvpView.onChooseTime(index, time);
+                long time = index == STARTTIME ? timeslot.getStartTime() : timeslot.getEndTime();
+                mvpView.onChooseTime(index, time);
             }
         };
     }
@@ -67,52 +67,43 @@ public class TimeslotCreateViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 if (mvpView!=null){
-//                    mvpView.onClickPickerDone();
+                    mvpView.onClickPickerDone();
                 }
             }
         };
     }
-
-    public void setStartTime(long time){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time);
-        newTimeSlotView.setCalendar(new MyCalendar(calendar));
-        setNewTimeSlotView(newTimeSlotView);
-    }
-
 
 
     @Bindable
-    public DraggableTimeSlotView getNewTimeSlotView() {
-        return newTimeSlotView;
+    public Timeslot getTimeslot() {
+        return timeslot;
     }
 
-    public void setNewTimeSlotView(DraggableTimeSlotView newTimeSlotView) {
-        this.newTimeSlotView = newTimeSlotView;
-        notifyPropertyChanged(BR.newTimeSlotView);
+    public void setTimeslot(Timeslot timeslot) {
+        this.timeslot = timeslot;
+
+        setStartTimeStr(parseTime(timeslot.getStartTime()));
+        setEndTimeStr(parseTime(timeslot.getEndTime()));
+        notifyPropertyChanged(BR.timeslot);
     }
 
-    public View.OnClickListener onClickCancel(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mvpView!=null){
-//                    mvpView.onClickCancel();
-                }
-            }
-        };
+    @Bindable
+    public String getStartTimeStr() {
+        return startTimeStr;
     }
 
-    public View.OnClickListener onClickDone(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mvpView!=null){
-//                    mvpView.onClickDone();
-                }
-            }
-        };
+    public void setStartTimeStr(String startTimeStr) {
+        this.startTimeStr = startTimeStr;
+        notifyPropertyChanged(BR.startTimeStr);
     }
 
+    @Bindable
+    public String getEndTimeStr() {
+        return endTimeStr;
+    }
 
+    public void setEndTimeStr(String endTimeStr) {
+        this.endTimeStr = endTimeStr;
+        notifyPropertyChanged(BR.endTimeStr);
+    }
 }

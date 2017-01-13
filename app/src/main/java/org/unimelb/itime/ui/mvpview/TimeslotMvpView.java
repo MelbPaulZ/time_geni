@@ -5,6 +5,6 @@ package org.unimelb.itime.ui.mvpview;
  */
 
 public interface TimeslotMvpView extends TimeslotBaseMvpView {
-
-
+    void onChooseTime(int index, long time);
+    void onClickPickerDone();
 }

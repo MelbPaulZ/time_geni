@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.event;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,7 +24,6 @@ import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.ui.viewmodel.TimeslotCreateViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 
 import java.util.Calendar;
 import java.util.List;
@@ -34,7 +34,10 @@ import java.util.List;
  */
 public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpView, TimeslotPresenter<TimeslotMvpView>>
         implements TimeslotMvpView{
-    private DraggableTimeSlotView timeSlotView;
+
+    public final static int RET_TIMESLOT = 1000;
+
+    private Timeslot timeslot;
     private TimeslotCreateConfirmBinding binding;
     private TimeslotCreatePickerBinding pickerBinding;
     private WheelPicker yearPicker, monthPicker, dayPicker, hourPicker, minutePicker;
@@ -57,33 +60,28 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = new TimeslotCreateViewModel(getPresenter());
+        viewModel.setTimeslot(timeslot);
+
         toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftTitleStr(getString(R.string.cancel));
+        toolbarViewModel.setTitleStr(getString(R.string.new_timeslot));
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
 
         binding.setVm(viewModel);
         pickerBinding.setVm(viewModel);
         binding.setToolbarVM(toolbarViewModel);
     }
 
-    public void setTimeSlotView(DraggableTimeSlotView timeSlotView){
-        this.timeSlotView = timeSlotView;
-        viewModel.setNewTimeSlotView(timeSlotView);
+    public void setTimeslot(Timeslot timeslot){
+        this.timeslot = timeslot;
     }
+
 
 
     @Override
     public TimeslotPresenter<TimeslotMvpView> createPresenter() {
         return new TimeslotPresenter<>(getContext());
     }
-
-//    public void onClickCancel() {
-//        closeFragment(this, (EventTimeSlotViewFragment)getFrom());
-//    }
-//
-//    public void onClickDone() {
-//        openFragment(this, (EventTimeSlotViewFragment)getFrom());
-//        // // TODO: 20/11/16 use event bus instead of calling another fragment method
-//        ((EventTimeSlotViewFragment)getFrom()).createTimeSlot(this.timeSlotView);
-//    }
 
     private void setupWheels(WheelPicker wheelPicker, List data){
         wheelPicker.setData(data);
@@ -97,6 +95,7 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
     }
 
 
+    @Override
     public void onChooseTime(int type, long time) {
         changeTimeType = type;
         Calendar calendar = Calendar.getInstance();
@@ -135,6 +134,9 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
         popupWindow.showAtLocation(binding.getRoot(), Gravity.BOTTOM, 0, 0);
     }
 
+    /**
+     * when the picker is clicked
+     */
     public void onClickPickerDone(){
         int year = yearPicker.getCurrentItemPosition() + 2010;
         int month = monthPicker.getCurrentItemPosition(); //
@@ -144,7 +146,11 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
         Calendar calendar = Calendar.getInstance();
         calendar.set(year,month,day,hour,minute,0);
         if (changeTimeType == viewModel.STARTTIME){
-            viewModel.setStartTime(calendar.getTimeInMillis());
+            long duration = timeslot.getEndTime() - timeslot.getStartTime();
+            Timeslot timeslot = viewModel.getTimeslot();
+            timeslot.setStartTime(calendar.getTimeInMillis());
+            timeslot.setEndTime(calendar.getTimeInMillis() + duration);
+            viewModel.setTimeslot(timeslot);
         }
         popupWindow.dismiss();
     }
@@ -169,13 +175,16 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
 
     @Override
     public void onBack() {
-//        closeFragment(this, getFrom());
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void onNext() {
-//        openFragment(this, getFrom());
-//        // // TODO: 20/11/16 use event bus instead of calling another fragment method
-//        ((EventTimeSlotViewFragment)getFrom()).createTimeSlot(this.timeSlotView);
+//        todo
+        Intent intent = new Intent();
+        intent.putExtra("startTime", viewModel.getTimeslot().getStartTime());
+        intent.putExtra("endTime", viewModel.getTimeslot().getEndTime());
+        getTargetFragment().onActivityResult(getTargetRequestCode(), RET_TIMESLOT, intent);
+        getFragmentManager().popBackStack();
     }
 }
