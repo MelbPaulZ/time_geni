@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.managers.CalendarManager;
+import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
@@ -17,6 +21,8 @@ import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.dayview.EventController;
+import org.unimelb.itime.vendor.dayview.MonthDayView;
+import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.unitviews.DraggableEventView;
 
 import java.util.List;
@@ -25,7 +31,7 @@ import java.util.List;
  * Created by yinchuandong on 13/1/17.
  */
 
-public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCalendarMvpView, EventPresenter<MainCalendarMvpView>> implements MainCalendarMvpView{
+public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCalendarMvpView, EventPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
 
     public final static int REQ_EVENT_CREATE = 1000;
     public final static int REQ_EVENT_DETAIL = 1001;
@@ -54,6 +60,7 @@ public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCa
 
     }
 
+
     public void toEventCreatePage(long startTime) {
         Intent intent = new Intent(getActivity(), EventCreateActivity.class);
         intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_SELF_CREATE_EVENT);
@@ -76,6 +83,7 @@ public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCa
     }
 
     public abstract void backToToday();
+
 
 
     public class EventItemListener implements EventController.OnEventListener{

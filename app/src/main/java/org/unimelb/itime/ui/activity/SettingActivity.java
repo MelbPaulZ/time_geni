@@ -1,7 +1,11 @@
 package org.unimelb.itime.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+
+import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
@@ -17,7 +21,7 @@ import org.unimelb.itime.ui.fragment.settings.SettingNotificationFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingProfileGenderFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingProfileResetPasswordFragment;
 
-public class SettingActivity extends BaseActivity{
+public class SettingActivity extends EmptyActivity{
 
     public final static String TASK = "task";
     private SettingMyProfileFragment myProfileFragment;
@@ -132,4 +136,5 @@ public class SettingActivity extends BaseActivity{
     protected void onDestroy() {
         super.onDestroy();
     }
+
 }

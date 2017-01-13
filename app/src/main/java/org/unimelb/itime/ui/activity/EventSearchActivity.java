@@ -27,7 +27,7 @@ import java.util.List;
  * Created by Paul on 6/12/2016.
  */
 
-public class EventSearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class EventSearchActivity extends EmptyActivity implements SearchView.OnQueryTextListener{
 
     private ListView eventSearchList;
     private EventAdapter eventSearchAdapter;

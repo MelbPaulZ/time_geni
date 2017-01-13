@@ -20,7 +20,7 @@ import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventDetailActivity extends AppCompatActivity {
+public class EventDetailActivity extends EmptyActivity {
 
     private List<BaseUiFragment> fragmentList = new ArrayList<>();
     private Event event;

@@ -53,7 +53,7 @@ import org.unimelb.itime.util.UserUtil;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends MvpActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
+public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
 
     private final static String TAG = "MainActivity";
     private FragmentManager fragmentManager;

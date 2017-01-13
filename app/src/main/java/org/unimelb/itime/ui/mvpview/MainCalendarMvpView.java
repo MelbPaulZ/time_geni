@@ -8,5 +8,6 @@ import java.util.List;
  * Created by yinchuandong on 11/08/2016.
  */
 public interface MainCalendarMvpView extends TaskBasedMvpView<List<Event>>{
+    void toEventCreatePage(long startTime);
 
 }

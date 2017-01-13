@@ -26,7 +26,7 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.UserUtil;
 
 
-public class EventCreateActivity extends BaseActivity implements PlaceSelectionListener {
+public class EventCreateActivity extends EmptyActivity implements PlaceSelectionListener {
     private String TAG = "EventCreateActivity";
     private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 0;

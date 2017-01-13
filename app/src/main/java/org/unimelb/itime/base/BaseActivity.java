@@ -2,17 +2,24 @@ package org.unimelb.itime.base;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
+import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.hannesdorfmann.mosby.mvp.MvpView;
+
 import org.unimelb.itime.R;
+import org.unimelb.itime.ui.mvpview.MainTabBarView;
+import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 
 /**
  * use afinal: https://github.com/yangfuhai/afinal
  */
-public class BaseActivity extends AppCompatActivity{
+public abstract class BaseActivity<V extends MvpView, P extends MvpBasePresenter<V>> extends MvpActivity<V, P> {
     public final static String TASK = "task";
     @Deprecated
     public final static int TASK_INVITE_OTHER_CREATE_EVENT = 1;
@@ -32,6 +39,8 @@ public class BaseActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+
 
     protected int getFragmentContainerId(){
         return R.id.setting_activity_framelayout;
