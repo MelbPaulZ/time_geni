@@ -97,9 +97,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         initListeners();
 
         if(weekStartTime > 0){
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(weekStartTime);
-            timeslotWeekView.scrollTo(cal);
+            timeslotWeekView.scrollToWithOffset(weekStartTime);
         }
     }
 
