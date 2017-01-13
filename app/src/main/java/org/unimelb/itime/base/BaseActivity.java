@@ -14,8 +14,12 @@ import org.unimelb.itime.R;
  */
 public class BaseActivity extends AppCompatActivity{
     public final static String TASK = "task";
+    @Deprecated
     public final static int TASK_INVITE_OTHER_CREATE_EVENT = 1;
+    @Deprecated
     public final static int TASK_SELF_CREATE_EVENT  = 2;
+    @Deprecated
+    public final static int TASK_SELF_DETAIL_EVENT  = 3;
 
     FragmentManager fragmentManager;
 

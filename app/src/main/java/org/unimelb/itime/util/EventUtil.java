@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -19,9 +21,11 @@ import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
+import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -832,6 +836,24 @@ public class EventUtil {
                 && duration >= (allDayMilliseconds * 0.9);
 
         return isAllDay;
+    }
+
+    /**
+     *
+     * @param event
+     * @return
+     */
+    public static Event copyEvent(Event event){
+        Gson gson = new Gson();
+
+        String eventStr = gson.toJson(event);
+        Event copyEvent = gson.fromJson(eventStr, Event.class);
+
+        Type dataType = new TypeToken<RuleModel<Event>>() {}.getType();
+        RuleModel response = gson.fromJson(gson.toJson(event.getRule(), dataType), dataType);
+        copyEvent.setRule(response);
+
+        return copyEvent;
     }
 
 }

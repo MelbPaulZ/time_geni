@@ -1,7 +1,6 @@
 package org.unimelb.itime.ui.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -25,9 +24,6 @@ import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.UserUtil;
-
-import java.util.ArrayList;
-import java.util.Calendar;
 
 
 public class EventCreateActivity extends BaseActivity implements PlaceSelectionListener {

@@ -1,14 +1,12 @@
 package org.unimelb.itime.ui.mvpview;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
+import org.unimelb.itime.bean.Event;
 
-import org.unimelb.itime.vendor.listener.ITimeEventInterface;
+import java.util.List;
 
 /**
  * Created by yinchuandong on 11/08/2016.
  */
-public interface MainCalendarMvpView extends MvpView{
-    void startCreateEventActivity();
-    void backToGroupEvent();
-    void startEditEventActivity(ITimeEventInterface iTimeEventInterface);
+public interface MainCalendarMvpView extends TaskBasedMvpView<List<Event>>{
+
 }
