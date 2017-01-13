@@ -112,15 +112,6 @@ public class EventCreateTimeslotViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.event);
     }
 
-    @Bindable
-    public Boolean getIsChangeDuration() {
-        return isChangeDuration.get();
-    }
-
-    public void setIsChangeDuration(Boolean isChangeDuration) {
-        this.isChangeDuration.set(isChangeDuration);
-        notifyPropertyChanged(BR.isChangeDuration);
-    }
 
     @Bindable
     public String getDurationTimeString() {

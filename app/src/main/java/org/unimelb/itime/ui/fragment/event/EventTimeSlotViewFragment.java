@@ -58,7 +58,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     private LayoutInflater inflater;
     private WheelView timeWheelView;
     private WeekView timeslotWeekView;
-    private int timePosition;
+    private int timePosition = 3;
 
     private long weekStartTime = -1;
     private EventCreateTimeslotViewModel viewModel;
@@ -99,7 +99,21 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         if(weekStartTime > 0){
             timeslotWeekView.scrollToWithOffset(weekStartTime);
         }
+
+        if (event.getTimeslot().size()>0) {
+//            Timeslot timeslot = event.getTimeslot().get(0);
+//            long duration = timeslot.getEndTime() - timeslot.getStartTime();
+//            timePosition = getTimePosition(duration);
+            timePosition =  6;
+
+        }
+        timePosition = 6;
+        viewModel.setDurationTimeString(EventUtil.getDurationTimes().get(timePosition));
+        timeslotWeekView.updateTimeSlotsDuration(EventUtil.getDurationInMintues(timePosition) * 60 * 1000, false);
+        timeslotWeekView.reloadTimeSlots(false); // for page refresh
+
     }
+
 
     public void setEvent(Event event){
         this.event = event;
@@ -115,6 +129,8 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
                 timeslotWeekView.addTimeSlot(wrapper);
                 timeSlotList.add(wrapper);
             }
+
+
         }else if(timeSlotList != null){
             for (WrapperTimeSlot wrapper: timeSlotList){
                 timeslotWeekView.addTimeSlot(wrapper);
@@ -126,6 +142,19 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             presenter.getTimeSlots(event, calendar.getTimeInMillis());
         }
         timeslotWeekView.reloadTimeSlots(false);
+    }
+
+    private int getTimePosition(long duration){
+        int minute = (int) (duration/1000/60);
+
+
+        int[] arr = {15, 30, 45, 60, 120, 180, 360, 720, 1440};
+        for(int i = 0; i < arr.length; i++){
+            if(minute <= arr[i]){
+                return i;
+            }
+        }
+        return 0;
     }
 
     private void scrollToFirstTimeSlot(Event event){
@@ -173,7 +202,6 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         durationRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.setIsChangeDuration(true);
                 initWheelPickers();
             }
         });
@@ -280,7 +308,6 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             @Override
             public void onDismiss() {
                 viewModel.setDurationTimeString(EventUtil.getDurationTimes().get(timePosition));
-                viewModel.setIsChangeDuration(true);
                 timeslotWeekView.updateTimeSlotsDuration(EventUtil.getDurationInMintues(timePosition) * 60 * 1000, false); // ? animate?
 
                 // avoid of no timeslot error
