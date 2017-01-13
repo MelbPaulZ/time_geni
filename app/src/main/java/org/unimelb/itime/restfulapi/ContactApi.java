@@ -37,5 +37,7 @@ public interface ContactApi {
     @POST("contact/clear/{contactUid}")
     Observable<HttpResult<Void>> clear(@Path("contactUid") String contactUid);
 
+    @POST("contact/update_alias/{contactUid}/{alias}")
+    Observable<HttpResult<Void>> updateAlias(@Path("contactUid") String contactUid, @Path("alias") String alias);
 
 }

@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.presenter.contact;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -16,6 +17,7 @@ import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.bean.BaseContact;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.ui.viewmodel.contact.AddFriendsViewModel;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.ContactCheckUtil;
 import org.unimelb.itime.ui.mvpview.contact.InviteFriendMvpView;
 import org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel;
@@ -154,12 +156,14 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
 //    }
 
     public void searchContact(String input, InviteFriendViewModel.SearchContactCallback callback){
+        AppUtil.showProgressBar(context, context.getString(R.string.Searching), context.getString(R.string.please_wait));
         DBManager dbManager = DBManager.getInstance(context);
         List<Contact> contacts = dbManager.getAllContact();
         for(Contact contact:contacts){
             if(contact.getUserDetail().getPhone().equals(input)
                     || contact.getUserDetail().getEmail().equals(input)){
                 callback.success(contact);
+                AppUtil.hideProgressBar();
                 return;
             }
         }
@@ -168,23 +172,25 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
     }
 
     public void findFriend(final String searchStr, final InviteFriendViewModel.SearchContactCallback callback){
+        AppUtil.showProgressBar(context, context.getString(R.string.Searching), context.getString(R.string.please_wait));
         Observable<HttpResult<List<User>>> observable = userApi.search(searchStr);
         Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
             @Override
             public void onCompleted() {
                 Log.d(TAG, "onCompleted: ");
+                AppUtil.hideProgressBar();
             }
 
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
-                e.printStackTrace();
+                AppUtil.hideProgressBar();
+                callback.failed();
             }
 
             @Override
             public void onNext(HttpResult<List<User>> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
-
                 if (result.getStatus()!=1){
 
                 }else {
