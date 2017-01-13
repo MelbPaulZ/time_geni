@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +31,6 @@ import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
-import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.dayview.TimeSlotController;
 import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
@@ -64,7 +62,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     private EventCreateTimeslotViewModel viewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
-    private List<WrapperTimeSlot> timeSlotList = null;
+    private List<WrapperTimeSlot> timeslotWrapperList = null;
 
     @Nullable
     @Override
@@ -101,13 +99,11 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         }
 
         if (event.getTimeslot().size()>0) {
-//            Timeslot timeslot = event.getTimeslot().get(0);
-//            long duration = timeslot.getEndTime() - timeslot.getStartTime();
-//            timePosition = getTimePosition(duration);
-            timePosition =  6;
-
+            Timeslot timeslot = event.getTimeslot().get(0);
+            long duration = timeslot.getEndTime() - timeslot.getStartTime();
+            timePosition = getTimePosition(duration);
         }
-        timePosition = 6;
+
         viewModel.setDurationTimeString(EventUtil.getDurationTimes().get(timePosition));
         timeslotWeekView.updateTimeSlotsDuration(EventUtil.getDurationInMintues(timePosition) * 60 * 1000, false);
         timeslotWeekView.reloadTimeSlots(false); // for page refresh
@@ -121,18 +117,18 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
     private void initData(){
 
-        if (timeSlotList == null && event.hasTimeslots()) {
-            timeSlotList = new ArrayList<>();
+        if (timeslotWrapperList == null && event.hasTimeslots()) {
+            timeslotWrapperList = new ArrayList<>();
             for (Timeslot timeSlot : event.getTimeslot()) {
                 WrapperTimeSlot wrapper = new WrapperTimeSlot(timeSlot);
-                wrapper.setSelected(getTimeSlotIsSelected(timeSlot));
+                wrapper.setSelected(true);
                 timeslotWeekView.addTimeSlot(wrapper);
-                timeSlotList.add(wrapper);
+                timeslotWrapperList.add(wrapper);
             }
 
 
-        }else if(timeSlotList != null){
-            for (WrapperTimeSlot wrapper: timeSlotList){
+        }else if(timeslotWrapperList != null){
+            for (WrapperTimeSlot wrapper: timeslotWrapperList){
                 timeslotWeekView.addTimeSlot(wrapper);
             }
         }
@@ -148,53 +144,13 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         int minute = (int) (duration/1000/60);
 
 
-        int[] arr = {15, 30, 45, 60, 120, 180, 360, 720, 1440};
+        int[] arr = {15, 30, 45, 60, 120, 180, 240, 300, 360, 720, 1440};
         for(int i = 0; i < arr.length; i++){
             if(minute <= arr[i]){
                 return i;
             }
         }
         return 0;
-    }
-
-    private void scrollToFirstTimeSlot(Event event){
-        List<Timeslot> slots = event.getTimeslot();
-        if (slots.size() > 0){
-            timeslotWeekView.scrollToWithOffset(slots.get(0).getStartTime());
-        }
-    }
-
-    private void changeTimeSlots(DraggableTimeSlotView timeSlotView) {
-        // change status of view and struct
-        boolean newStatus = !timeSlotView.isSelect();
-        Timeslot timeSlot = (Timeslot) timeSlotView.getTimeslot();
-        timeSlotView.setIsSelected(newStatus);
-        // change event attributes
-        if (timeSlot != null) {
-//            timeSlot.setDisplayStatus(newStatus);
-
-            if (timeSlot.getStatus().equals(Timeslot.STATUS_CREATING)) {
-                timeSlot.setStatus(Timeslot.STATUS_PENDING);
-            } else if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)) {
-                timeSlot.setStatus(Timeslot.STATUS_CREATING);
-            }
-        } else {
-            Log.i("error", "onTimeSlotClick: " + "no timeslot found");
-        }
-    }
-
-    public void createTimeSlot(DraggableTimeSlotView timeSlotView) {
-        Timeslot timeSlot = new Timeslot();
-        timeSlot.setTimeslotUid(AppUtil.generateUuid());
-        timeSlot.setEventUid(event.getEventUid());
-        // what is the difference between getTag().startTime and startTimeM .... discuss with David
-        timeSlot.setStartTime(timeSlotView.getNewStartTime());
-        timeSlot.setEndTime(timeSlotView.getNewEndTime());
-        timeSlot.setStatus(Timeslot.STATUS_CREATING);
-        timeSlot.setUserUid(UserUtil.getInstance(getContext()).getUserUid());
-        event.getTimeslot().add(timeSlot);
-        timeslotWeekView.addTimeSlot(timeSlot);
-        timeslotWeekView.reloadTimeSlots(false);
     }
 
     private void initListeners() {
@@ -225,15 +181,16 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             }
 
             @Override
-            public void onTimeSlotClick(DraggableTimeSlotView timeSlotView) {
-                if (TimeSlotUtil.getPendingTimeSlots(getContext(), event.getTimeslot()).size() >= 7) {
-                    if (timeSlotView.isSelect()) {
-                        changeTimeSlots(timeSlotView);
+            public void onTimeSlotClick(DraggableTimeSlotView view) {
+                WrapperTimeSlot wrapper = view.getWrapper();
+                if (getSelectedTimeslotNum() > 7) {
+                    if (wrapper.isSelected()) {
+                        view.setIsSelected(false);
                     } else {
                         Toast.makeText(getContext(), "cannot select, maximum 7 timeslots selected", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    changeTimeSlots(timeSlotView);
+                    view.setIsSelected(!wrapper.isSelected());
                 }
             }
 
@@ -249,31 +206,25 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
             @Override
             public void onTimeSlotDragDrop(DraggableTimeSlotView timeSlotView, long startTime, long endTime) {
-                timeslotDrop(timeSlotView, startTime, endTime);
+                Timeslot timeslot = (Timeslot) timeSlotView.getTimeslot();
+                timeslot.setStartTime(startTime);
+                timeslot.setEndTime(endTime);
+                timeslotWeekView.reloadTimeSlots(false);
             }
 
         });
     }
 
-    private void timeslotDrop(DraggableTimeSlotView timeSlotView, long startTime, long endTime) {
-        // update timeslot info
-        Timeslot timeslot = (Timeslot) timeSlotView.getTimeslot();
-        timeslot.setStartTime(startTime);
-        timeslot.setEndTime(endTime);
-        timeslotWeekView.reloadTimeSlots(false);
 
-    }
-
-    private boolean getTimeSlotIsSelected(Timeslot timeslot){
-        if (timeslot.getStatus().equals(Timeslot.STATUS_CREATING)){
-            return false;
-        }else if (timeslot.getStatus().equals(Timeslot.STATUS_PENDING)){
-            return true;
+    private int getSelectedTimeslotNum(){
+        int num = 0;
+        for(WrapperTimeSlot wrapper : this.timeslotWrapperList){
+            if(wrapper.isSelected()){
+                num ++;
+            }
         }
-
-        return false;
+        return num;
     }
-
 
     public void initWheelPickers() {
         View root = inflater.inflate(R.layout.timeslot_duration_picker, null);
@@ -343,14 +294,13 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             event.setTimeslot(new ArrayList<Timeslot>());
         }
         for (Timeslot timeSlot : data) {
-            if (EventManager.getInstance(getContext()).isTimeslotExistInEvent(event, timeSlot)) {
-                // already exist, then do nothing
-            } else {
+            if (!EventManager.getInstance(getContext()).isTimeslotExistInEvent(event, timeSlot)) {
                 // have to do this
                 timeSlot.setEventUid(event.getEventUid());
                 timeSlot.setStatus(Timeslot.STATUS_CREATING);
-                event.getTimeslot().add(timeSlot);
-                timeslotWeekView.addTimeSlot(timeSlot);
+                WrapperTimeSlot wrapper = new WrapperTimeSlot(timeSlot);
+                timeslotWeekView.addTimeSlot(wrapper);
+                timeslotWrapperList.add(wrapper);
             }
         }
         viewModel.setEvent(event);
@@ -369,8 +319,17 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
     @Override
     public void onNext() {
-        TimeSlotUtil.sortTimeslot(event.getTimeslot());
+        List<Timeslot> list = new ArrayList<>();
+        for(WrapperTimeSlot wrapper: this.timeslotWrapperList){
+            if(wrapper.isSelected()){
+                list.add((Timeslot) wrapper.getTimeSlot());
+            }
+        }
+        TimeSlotUtil.sortTimeslot(list);
+        event.setTimeslot(list);
+
         EventEditFragment fragment = new EventEditFragment();
+        fragment.setEvent(event);
         getBaseActivity().openFragment(fragment);
     }
 
@@ -393,7 +352,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             event.getTimeslot().add(timeslot);
             WrapperTimeSlot wrapper = new WrapperTimeSlot(timeslot);
             wrapper.setSelected(true);
-            timeSlotList.add(wrapper);
+            timeslotWrapperList.add(wrapper);
         }
     }
 }

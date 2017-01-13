@@ -31,7 +31,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -342,31 +341,8 @@ public class EventUtil {
     }
 
     public static int getDurationInMintues(int position) {
-        switch (position) {
-            case 0:
-                return 15;
-            case 1:
-                return 30;
-            case 2:
-                return 45;
-            case 3:
-                return 60;
-            case 4:
-                return 120;
-            case 5:
-                return 180;
-            case 6:
-                return 240;
-            case 7:
-                return 300;
-            case 8:
-                return 360;
-            case 9:
-                return 720;
-            case 10:
-                return 1440;
-        }
-        return 0;
+        int[] arr = {15, 30, 45, 60, 120, 180, 240, 300, 360, 720, 1440};
+        return arr[position];
     }
 
 

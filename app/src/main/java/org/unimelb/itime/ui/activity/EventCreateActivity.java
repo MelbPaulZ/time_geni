@@ -42,7 +42,9 @@ public class EventCreateActivity extends BaseActivity implements PlaceSelectionL
 
         fragmentManager = getSupportFragmentManager();
         EventEditFragment fragment = new EventEditFragment();
-        fragmentManager.beginTransaction().replace(getFragmentContainerId(), fragment).commit();
+        fragmentManager.beginTransaction()
+                .replace(getFragmentContainerId(), fragment)
+                .commit();
     }
 
     @Override
