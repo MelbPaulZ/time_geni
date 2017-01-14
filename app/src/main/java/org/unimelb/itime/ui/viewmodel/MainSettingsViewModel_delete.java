@@ -12,7 +12,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.SettingWrapper;
 import org.unimelb.itime.managers.SettingManager;
-import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
+import org.unimelb.itime.ui.mvpview.SettingCommonMvpView_delete;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 
 import java.util.ArrayList;
@@ -24,10 +24,10 @@ import me.tatarka.bindingcollectionadapter.ItemView;
  * Created by yuhaoliu on 5/12/2016.
  */
 
-public class MainSettingsViewModel extends CommonViewModel{
-    private static final String TAG = "MainSettingsViewModel";
+public class MainSettingsViewModel_delete extends CommonViewModel{
+    private static final String TAG = "MainSettingsViewModel_delete";
     private SettingCommonPresenter presenter;
-    private SettingCommonMvpView mvpView;
+    private SettingCommonMvpView_delete mvpView;
     private SettingWrapper setting;
 
     private ObservableList<Calendar> calendars = new ObservableArrayList<>();
@@ -58,9 +58,9 @@ public class MainSettingsViewModel extends CommonViewModel{
 
     private int genderTickVisibility = View.GONE;
 
-    public MainSettingsViewModel(SettingCommonPresenter presenter){
+    public MainSettingsViewModel_delete(SettingCommonPresenter presenter){
         this.presenter = presenter;
-        this.mvpView = (SettingCommonMvpView) presenter.getView();
+        this.mvpView = (SettingCommonMvpView_delete) presenter.getView();
 
         if (setting == null){
             this.setting = SettingManager.getInstance(getContext()).getSetting();

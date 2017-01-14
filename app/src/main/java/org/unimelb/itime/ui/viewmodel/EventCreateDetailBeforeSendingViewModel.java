@@ -120,14 +120,14 @@ public class EventCreateDetailBeforeSendingViewModel extends EventCommonViewMode
         notifyPropertyChanged(BR.newEvDtlEvent);
     }
 
-    public Switch.OnCheckedChangeListener eventAlldayChange(final Event event){
+    public Switch.OnCheckedChangeListener eventAlldayChange(){
         return new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    setEventToAlldayEvent(event);
+                    setEventToAlldayEvent(newEvDtlEvent);
                 }else{
-                    setAlldayEventToNotAllday(event);
+                    setAlldayEventToNotAllday(newEvDtlEvent);
                 }
             }
         };
