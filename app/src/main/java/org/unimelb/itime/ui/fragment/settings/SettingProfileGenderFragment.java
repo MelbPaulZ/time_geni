@@ -89,7 +89,7 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
 
     @Override
     public void onNext() {
-        presenter.update(contentViewModel.getUser());
+        presenter.updateProfile(contentViewModel.getUser());
     }
 
     @Override
