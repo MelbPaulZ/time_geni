@@ -54,6 +54,15 @@ public class UserProfileViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.user);
     }
 
+    public View.OnClickListener onEditNameDoneClick(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.updateProfile(user);
+            }
+        };
+    }
+
     public View.OnClickListener onAvatarClicked(){
         return new View.OnClickListener() {
             @Override

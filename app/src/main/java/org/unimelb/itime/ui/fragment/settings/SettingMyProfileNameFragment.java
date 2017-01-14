@@ -49,7 +49,7 @@ public class SettingMyProfileNameFragment extends BaseUiAuthFragment<TaskBasedMv
 
         contentViewModel = new UserProfileViewModel(presenter);
         User user = UserUtil.getInstance(getContext()).getUser();
-        contentViewModel.setUser(user);
+        contentViewModel.setUser(user.clone());
 
         toolbarViewModel = new ToolbarViewModel<>(this);
         toolbarViewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
@@ -67,8 +67,7 @@ public class SettingMyProfileNameFragment extends BaseUiAuthFragment<TaskBasedMv
 
     @Override
     public void onNext() {
-        // TODO: 12/1/17 presenter.update()
-
+        contentViewModel.onEditNameDoneClick().onClick(null);
     }
 
     @Override
