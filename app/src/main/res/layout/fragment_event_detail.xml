@@ -17,7 +17,7 @@
             name="toolbarVM"
             type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
         <variable
-            name="hostDetailVM"
+            name="contentVM"
             type="org.unimelb.itime.ui.viewmodel.EventDetailViewModel" />
     </data>
 
@@ -27,52 +27,11 @@
         android:background="@color/page_bg"
         android:orientation="vertical">
 
-        <LinearLayout
+
+        <include
             android:id="@+id/event_detail_host_title_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <include layout="@layout/toolbar_common"
-                bind:vm="@{toolbarVM}" />
-            <!--<android.support.v7.widget.Toolbar-->
-                <!--android:id="@+id/my_toolbar"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="?attr/actionBarSize"-->
-                <!--android:background="?attr/colorPrimary"-->
-                <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
-
-                <!--<Button-->
-                    <!--android:id="@+id/event_detail_host_back_btn"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="left"-->
-                    <!--android:background="@null"-->
-                    <!--android:gravity="center_vertical|left"-->
-                    <!--android:onClick="@{hostDetailVM.onClickBack()}"-->
-                    <!--android:text="@{hostDetailVM.leftTitleStr}"-->
-                    <!--android:textColor="@color/page_title_color" />-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/toolbar_title"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:text="@{hostDetailVM.titleStr}"-->
-                    <!--android:textSize="18sp" />-->
-
-                <!--<Button-->
-                    <!--android:id="@+id/event_detail_host_edit_btn"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="right"-->
-                    <!--android:background="@null"-->
-                    <!--android:onClick="@{hostDetailVM.onClickEdit()}"-->
-                    <!--android:text="@{hostDetailVM.rightTitleStr}"-->
-                    <!--android:textColor="@color/page_title_color"-->
-                    <!--android:visibility="@{hostDetailVM.evDtlHostEvent.hostUserUid.equals(UserUtil.getInstance(context).getUserUid())? View.VISIBLE : View.INVISIBLE}" />-->
-            <!--</android.support.v7.widget.Toolbar>-->
-        </LinearLayout>
+            layout="@layout/toolbar_common"
+            bind:vm="@{toolbarVM}" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -101,7 +60,7 @@
                         android:layout_height="40dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
-                        app:url="@{EventUtil.getHostPhotoUrl(hostDetailVM.evDtlHostEvent)}" />
+                        app:url="@{EventUtil.getHostPhotoUrl(contentVM.event)}" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -115,17 +74,17 @@
                             android:id="@+id/event_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{EventUtil.getHostName(hostDetailVM.evDtlHostEvent)}"
-                            android:textColor="@{hostDetailVM.getMessageStatusColor(hostDetailVM.evDtlHostEvent)}"
+                            android:text="@{EventUtil.getHostName(contentVM.event)}"
+                            android:textColor="@{contentVM.getMessageStatusColor(contentVM.event)}"
                             android:textStyle="bold"
-                            android:visibility="@{EventUtil.isUserHostOfEvent(context, hostDetailVM.evDtlHostEvent)? View.GONE: View.VISIBLE}" />
+                            android:visibility="@{EventUtil.isUserHostOfEvent(context, contentVM.event)? View.GONE: View.VISIBLE}" />
 
                         <TextView
                             android:id="@+id/event_status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{EventUtil.getEventConfirmStatus(context, hostDetailVM.evDtlHostEvent)}"
-                            android:textColor="@{hostDetailVM.getMessageStatusColor(hostDetailVM.evDtlHostEvent)}" />
+                            android:text="@{EventUtil.getEventConfirmStatus(context, contentVM.event)}"
+                            android:textColor="@{contentVM.getMessageStatusColor(contentVM.event)}" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -150,7 +109,7 @@
                             android:id="@+id/event_detail_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@{hostDetailVM.evDtlHostEvent.title}"
+                            android:text="@{contentVM.event.title}"
                             android:textColor="@color/black"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -162,7 +121,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:orientation="horizontal"
-                            android:visibility="@{hostDetailVM.confirmTimeVisibility(hostDetailVM.evDtlHostEvent)}">
+                            android:visibility="@{contentVM.confirmTimeVisibility(contentVM.event)}">
 
                             <ImageView
                                 android:layout_width="20dp"
@@ -174,7 +133,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:text="@{EventUtil.getSuggestTimeStringFromLong(context, hostDetailVM.evDtlHostEvent.startTime, hostDetailVM.evDtlHostEvent.endTime)}"
+                                android:text="@{EventUtil.getSuggestTimeStringFromLong(context, contentVM.event.startTime, contentVM.event.endTime)}"
                                 android:textSize="15sp" />
                         </LinearLayout>
 
@@ -196,7 +155,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:text="@{EventUtil.getRepeatString(context,hostDetailVM.evDtlHostEvent)}"
+                                android:text="@{EventUtil.getRepeatString(context,contentVM.event)}"
                                 android:textSize="15sp" />
                         </LinearLayout>
 
@@ -205,7 +164,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:visibility="@{hostDetailVM.getLocationVisibility(hostDetailVM.evDtlHostEvent)}"
+                            android:visibility="@{contentVM.getLocationVisibility(contentVM.event)}"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -218,7 +177,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:text="@{hostDetailVM.evDtlHostEvent.location}"
+                                android:text="@{contentVM.event.location}"
                                 android:textSize="15sp" />
                         </LinearLayout>
 
@@ -227,7 +186,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:visibility="@{hostDetailVM.getNoteVisibility(hostDetailVM.evDtlHostEvent)}"
+                            android:visibility="@{contentVM.getNoteVisibility(contentVM.event)}"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -240,7 +199,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:text="@{hostDetailVM.evDtlHostEvent.description}"
+                                android:text="@{contentVM.event.description}"
                                 android:textSize="15sp" />
                         </LinearLayout>
 
@@ -261,10 +220,10 @@
                         android:layout_marginBottom="@dimen/padding_5"
                         android:layout_marginLeft="7dp"
                         android:gravity="bottom"
-                        android:text="@{hostDetailVM.evDtlHostEvent.invitee.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
+                        android:text="@{contentVM.event.invitee.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
                         android:textColor="@color/gray_b2b2b2"
                         android:textSize="12sp"
-                        android:visibility="@{hostDetailVM.timeslotListVisibility(hostDetailVM.evDtlHostEvent)}" />
+                        android:visibility="@{contentVM.timeslotListVisibility(contentVM.event)}" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -278,13 +237,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:divider="#00000000"
-                            android:visibility="@{hostDetailVM.timeslotListVisibility(hostDetailVM.evDtlHostEvent)}" />
+                            app:items="@{contentVM.wrapperTimeSlotList}"
+                            app:itemView="@{contentVM.timeslotItemView}"
+                            android:visibility="@{contentVM.timeslotListVisibility(contentVM.event)}" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:gravity="center"
-                            android:onClick="@{hostDetailVM.onClickViewInCalendar()}"
+                            android:onClick="@{contentVM.onClickViewInCalendar()}"
                             android:text="@string/view_in_calendar"
                             android:textColor="@color/event_detail_repeat"
                             android:textSize="17dp" />
@@ -308,7 +269,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="@{hostDetailVM.soloInvisible}">
+                        android:visibility="@{contentVM.soloInvisible}">
 
                         <LinearLayout
                             android:id="@+id/invitees_status_text"
@@ -351,7 +312,7 @@
                         android:id="@+id/event_detail_host_photo_RL"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:onClick="@{hostDetailVM.gotoGridView}">
+                        android:onClick="@{contentVM.gotoGridView}">
 
                         <TextView
                             android:id="@+id/event_detail_host_photo"
@@ -372,7 +333,7 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo1"
-                                android:bindRemoteSrc="@{hostDetailVM.evDtlHostEvent}"
+                                android:bindRemoteSrc="@{contentVM.event}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"
@@ -380,7 +341,7 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo2"
-                                android:bindRemoteSrc="@{hostDetailVM.evDtlHostEvent}"
+                                android:bindRemoteSrc="@{contentVM.event}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"
@@ -388,7 +349,7 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo3"
-                                android:bindRemoteSrc="@{hostDetailVM.evDtlHostEvent}"
+                                android:bindRemoteSrc="@{contentVM.event}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center" />
@@ -430,8 +391,8 @@
                             android:autoLink="web"
                             android:gravity="center_vertical"
                             android:hint="@string/url"
-                            android:onClick="@{hostDetailVM.onClickUrl()}"
-                            android:text="@{hostDetailVM.evDtlHostEvent.url}"
+                            android:onClick="@{contentVM.onClickUrl()}"
+                            android:text="@{contentVM.event.url}"
                             android:textColor="@color/blue"
                             android:textColorHint="@color/gray_b2b2b2"
                             android:textSize="15sp" />
@@ -472,7 +433,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="@dimen/padding_5"
                             android:layout_toLeftOf="@+id/event_detail_calendar_arrow"
-                            android:text="@{CalendarUtil.getInstance(context).getCalendarName(hostDetailVM.evDtlHostEvent)}" />
+                            android:text="@{CalendarUtil.getInstance(context).getCalendarName(contentVM.event)}" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -525,7 +486,7 @@
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:background="@color/color_f9f9f9"
-            android:visibility="@{hostDetailVM.hostConfirmVisibility}">
+            android:visibility="@{contentVM.hostConfirmVisibility}">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -551,7 +512,7 @@
                 android:layout_marginEnd="55dp"
                 android:layout_marginTop="10dp"
                 android:clickable="true"
-                android:onClick="@{hostDetailVM.onClickHostQuit(hostDetailVM.evDtlHostEvent)}"
+                android:onClick="@{contentVM.onClickHostQuit(contentVM.event)}"
                 android:paddingEnd="10dp"
                 android:paddingStart="10dp"
                 android:text="@string/quit"
@@ -568,7 +529,7 @@
         <!--android:layout_height="45dp"-->
         <!--android:layout_alignParentBottom="true"-->
         <!--android:background="@color/color_f9f9f9"-->
-        <!--android:visibility="@{hostDetailVM.inviteeVisibility}">-->
+        <!--android:visibility="@{contentVM.inviteeVisibility}">-->
 
         <!--&lt;!&ndash;  left button&ndash;&gt;-->
         <!--<TextView-->
@@ -579,12 +540,12 @@
         <!--android:layout_marginLeft="40dp"-->
         <!--android:layout_marginTop="10dp"-->
         <!--android:background="@drawable/selector_event_detail_btn_bg_left"-->
-        <!--android:clickable="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"-->
-        <!--android:onClick="@{hostDetailVM.onClickInviteeLeftBtn()}"-->
+        <!--android:clickable="@{contentVM.getLeftBtnClickable(contentVM.event)}"-->
+        <!--android:onClick="@{contentVM.onClickInviteeLeftBtn()}"-->
         <!--android:paddingLeft="10dp"-->
         <!--android:paddingRight="10dp"-->
-        <!--android:text="@{hostDetailVM.leftBtnText}"-->
-        <!--android:selected="@{hostDetailVM.isLeftBtnSelected}"-->
+        <!--android:text="@{contentVM.leftBtnText}"-->
+        <!--android:selected="@{contentVM.isLeftBtnSelected}"-->
         <!--android:textAlignment="center"-->
         <!--android:textColor="@drawable/selector_event_detail_btn_text_left"-->
         <!--android:textSize="17sp"-->
@@ -598,12 +559,12 @@
         <!--android:layout_marginBottom="10dp"-->
         <!--android:layout_marginRight="40dp"-->
         <!--android:layout_marginTop="10dp"-->
-        <!--android:clickable="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"-->
-        <!--android:onClick="@{hostDetailVM.onInviteeClickRightBtn()}"-->
+        <!--android:clickable="@{contentVM.getRightBtnClickable(contentVM.event)}"-->
+        <!--android:onClick="@{contentVM.onInviteeClickRightBtn()}"-->
         <!--android:paddingLeft="10dp"-->
         <!--android:paddingRight="10dp"-->
-        <!--android:text="@{hostDetailVM.rightBtnText}"-->
-        <!--android:selected="@{hostDetailVM.isRightBtnSelected}"-->
+        <!--android:text="@{contentVM.rightBtnText}"-->
+        <!--android:selected="@{contentVM.isRightBtnSelected}"-->
         <!--android:textAlignment="center"-->
         <!--android:textColor="@drawable/selector_event_detail_btn_text_right"-->
         <!--android:background="@drawable/selector_event_detail_btn_bg_right"-->
@@ -617,7 +578,7 @@
             android:layout_alignParentBottom="true"
             android:background="@color/color_f9f9f9"
             android:clickable="true"
-            android:visibility="@{hostDetailVM.confirmVisibility(hostDetailVM.evDtlHostEvent)}">
+            android:visibility="@{contentVM.confirmVisibility(contentVM.event)}">
 
             <!--  left button-->
             <TextView
@@ -633,10 +594,10 @@
                 android:textAlignment="center"
                 android:textColor="@drawable/selector_event_detail_btn_text_left"
                 android:textSize="17sp"
-                android:text="@{hostDetailVM.leftBtnText}"
-                android:enabled="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
-                android:selected="@{hostDetailVM.isLeftBtnSelected}"
-                android:onClick="@{hostDetailVM.acceptEvent()}"
+                android:text="@{contentVM.leftBtnText}"
+                android:enabled="@{contentVM.getLeftBtnClickable(contentVM.event)}"
+                android:selected="@{contentVM.isLeftBtnSelected}"
+                android:onClick="@{contentVM.acceptEvent()}"
                 />
             <!--right button-->
             <TextView
@@ -653,10 +614,10 @@
                 android:textAlignment="center"
                 android:textColor="@drawable/selector_event_detail_btn_text_right"
                 android:textSize="17sp"
-                android:text="@{hostDetailVM.rightBtnText}"
-                android:enabled="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
-                android:selected="@{hostDetailVM.isRightBtnSelected}"
-                android:onClick="@{hostDetailVM.quitEvent()}"/>
+                android:text="@{contentVM.rightBtnText}"
+                android:enabled="@{contentVM.getRightBtnClickable(contentVM.event)}"
+                android:selected="@{contentVM.isRightBtnSelected}"
+                android:onClick="@{contentVM.quitEvent()}"/>
         </RelativeLayout>
 
         <!--unconfirm-->
@@ -666,7 +627,7 @@
             android:layout_alignParentBottom="true"
             android:background="@color/color_f9f9f9"
             android:clickable="true"
-            android:visibility="@{hostDetailVM.unconfirmVisibility(hostDetailVM.evDtlHostEvent)}">
+            android:visibility="@{contentVM.unconfirmVisibility(contentVM.event)}">
 
             <!--  left button-->
             <TextView
@@ -682,10 +643,10 @@
                 android:textAlignment="center"
                 android:textColor="@drawable/selector_event_detail_btn_text_left"
                 android:textSize="17sp"
-                android:text="@{hostDetailVM.leftBtnText}"
-                android:enabled="@{hostDetailVM.getLeftBtnClickable(hostDetailVM.evDtlHostEvent)}"
-                android:selected="@{hostDetailVM.isLeftBtnSelected}"
-                android:onClick="@{hostDetailVM.acceptEvent()}"
+                android:text="@{contentVM.leftBtnText}"
+                android:enabled="@{contentVM.getLeftBtnClickable(contentVM.event)}"
+                android:selected="@{contentVM.isLeftBtnSelected}"
+                android:onClick="@{contentVM.acceptEvent()}"
                 />
             <!--right button-->
             <TextView
@@ -702,10 +663,10 @@
                 android:textAlignment="center"
                 android:textColor="@drawable/selector_event_detail_btn_text_right"
                 android:textSize="17sp"
-                android:text="@{hostDetailVM.rightBtnText}"
-                android:enabled="@{hostDetailVM.getRightBtnClickable(hostDetailVM.evDtlHostEvent)}"
-                android:selected="@{hostDetailVM.isRightBtnSelected}"
-                android:onClick="@{hostDetailVM.rejectAll()}"
+                android:text="@{contentVM.rightBtnText}"
+                android:enabled="@{contentVM.getRightBtnClickable(contentVM.event)}"
+                android:selected="@{contentVM.isRightBtnSelected}"
+                android:onClick="@{contentVM.rejectAll()}"
                 />
         </RelativeLayout>
 
@@ -719,17 +680,17 @@
             android:gravity="center"
             android:paddingLeft="@dimen/padding_10"
             android:paddingRight="@dimen/padding_10"
-            android:visibility="@{hostDetailVM.unconfirmHostVisibility(hostDetailVM.evDtlHostEvent)}">
+            android:visibility="@{contentVM.unconfirmHostVisibility(contentVM.event)}">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? true: false}"
+                android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, contentVM.event)? true: false}"
                 android:gravity="center"
-                android:onClick="@{hostDetailVM.onClickHostConfirm()}"
+                android:onClick="@{contentVM.onClickHostConfirm()}"
                 android:text="@string/confirm_event"
                 android:textAlignment="center"
-                android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, hostDetailVM.evDtlHostEvent)? @color/color_FE9E18 : @color/gray_b2b2b2}"
+                android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, contentVM.event)? @color/color_FE9E18 : @color/gray_b2b2b2}"
                 android:textSize="17sp" />
 
         </LinearLayout>

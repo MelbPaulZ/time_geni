@@ -12,6 +12,7 @@ import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.TimeslotBaseMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.util.EventUtil;
@@ -31,6 +32,7 @@ public class EventCreateTimeslotViewModel extends CommonViewModel {
     private String tag;
     private ObservableField<Boolean> isChangeDuration = new ObservableField<>(false);
     private String durationTimeString = "1 hour";
+    private int task = -1;
 
     private long weekStartTime;
 
@@ -52,10 +54,13 @@ public class EventCreateTimeslotViewModel extends CommonViewModel {
            @Override
            public void onMonthChanged(MyCalendar myCalendar) {
                setTitleString((EventUtil.getMonth(presenter.getContext(), myCalendar.getMonth()) + " "  + myCalendar.getYear()));
-               Calendar calendar = Calendar.getInstance();
-               calendar.set(myCalendar.getYear(), myCalendar.getMonth(), myCalendar.getDay(), 0, 0,0 );
-               weekStartTime = calendar.getTimeInMillis();
-               presenter.getTimeSlots(event, weekStartTime);
+
+               if (task == EventTimeSlotViewFragment.TASK_EDIT) {
+                   Calendar calendar = Calendar.getInstance();
+                   calendar.set(myCalendar.getYear(), myCalendar.getMonth(), myCalendar.getDay(), 0, 0, 0);
+                   weekStartTime = calendar.getTimeInMillis();
+                   presenter.getTimeSlots(event, weekStartTime);
+               }
            }
        };
     }
@@ -121,6 +126,10 @@ public class EventCreateTimeslotViewModel extends CommonViewModel {
     public void setDurationTimeString(String durationTimeString) {
         this.durationTimeString = durationTimeString;
         notifyPropertyChanged(BR.durationTimeString);
+    }
+
+    public void setTask(int task) {
+        this.task = task;
     }
 
 }

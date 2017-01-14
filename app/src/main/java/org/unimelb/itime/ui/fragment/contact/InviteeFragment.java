@@ -117,24 +117,23 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
     //Write your code here
     @Override
     public void onNext() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(DATA_EVENT, event);
-
         EventTimeSlotViewFragment fragment = new EventTimeSlotViewFragment();
+        fragment.setFragment_task(EventTimeSlotViewFragment.TASK_EDIT);
         event.setInvitee((List<Invitee>) viewModel.getSelectedist());
-        fragment.setEvent(eventManager.copyCurrentEvent(event));
-        getBaseActivity().openFragment(fragment, bundle);
+        fragment.setData(event, null);
+//        fragment.setData(eventManager.copyCurrentEvent(event));
+        getBaseActivity().openFragment(fragment);
 
 //        event.setInvitee((List<Invitee>) viewModel.getSelectedist());
 //        if(getFrom() instanceof EventCreateNewFragment){
 //            if (event.getInvitee().size()>=1) {
 //                // pick at least one invitee
 //                EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-//                eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                eventTimeSlotViewFragment.setData(eventManager.copyCurrentEvent(event));
 //                openFragment(this, eventTimeSlotViewFragment);
 //            }else{
 //                EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-//                beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                beforeSendingFragment.setData(eventManager.copyCurrentEvent(event));
 //                openFragment(this, beforeSendingFragment);
 //            }
 //        }else
@@ -142,42 +141,42 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
 //        if (getFrom() instanceof EventTimeSlotViewFragment) {
 //            if (event.getInvitee().size() >= 1) {
 //                EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFrom();
-//                eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                eventTimeSlotViewFragment.setData(eventManager.copyCurrentEvent(event));
 //                eventTimeSlotViewFragment.resetCalendar(eventManager.copyCurrentEvent(event));
 //                openFragment(this, (EventTimeSlotViewFragment) getFrom());
 //            } else {
 //                EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-//                beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                beforeSendingFragment.setData(eventManager.copyCurrentEvent(event));
 //                openFragment(this, beforeSendingFragment);
 //            }
 //        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
 //            if (event.getInvitee().size() >= 1) {
 //                EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-//                eventTimeSlotViewFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                eventTimeSlotViewFragment.setData(eventManager.copyCurrentEvent(event));
 //                openFragment(this, eventTimeSlotViewFragment);
 //            } else {
 //                EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-//                beforeSendingFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                beforeSendingFragment.setData(eventManager.copyCurrentEvent(event));
 //                openFragment(this, beforeSendingFragment);
 //            }
 //        }else if (getFrom() instanceof EventEditFragment){
 //            if (event.getInvitee().size()>=1) {
 //                EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-//                eventDetailTimeSlotFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                eventDetailTimeSlotFragment.setData(eventManager.copyCurrentEvent(event));
 //                openFragment(this, eventDetailTimeSlotFragment);
 //            }else{
 //                EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-//                eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                eventEditFragment.setData(eventManager.copyCurrentEvent(event));
 //                openFragment(this, eventEditFragment);
 //            }
 //        } else if (getFrom() instanceof EventDetailTimeSlotFragment) {
 //            if (event.getInvitee().size() > 1) {
 //                EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFrom();
-//                eventDetailTimeSlotFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                eventDetailTimeSlotFragment.setData(eventManager.copyCurrentEvent(event));
 //                openFragment(this, eventDetailTimeSlotFragment);
 //            } else {
 //                EventEditFragment eventEditFragment = (EventEditFragment)getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-//                eventEditFragment.setEvent(eventManager.copyCurrentEvent(event));
+//                eventEditFragment.setData(eventManager.copyCurrentEvent(event));
 //                openFragment(this, eventEditFragment);
 //            }
 //        }

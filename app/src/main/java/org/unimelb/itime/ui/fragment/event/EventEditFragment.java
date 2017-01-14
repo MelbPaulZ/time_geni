@@ -29,6 +29,7 @@ import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         if(getActivity() instanceof EventCreateActivity){
             task = TASK_CREATE;
         }else if (getActivity() instanceof EventDetailActivity){
@@ -116,8 +117,8 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void toEventDetailPage() {
-        EventDetailFragment fragment = new EventDetailFragment();
-        getBaseActivity().openFragment(fragment);
+        // TODO: 14/1/17 clean pop backstack when reshowing edit event page
+        getFragmentManager().popBackStack();
     }
 
     @Override
@@ -134,20 +135,11 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         // // TODO: 12/1/17  changet to
 
         EventTimeSlotViewFragment timeSlotViewFragment = new EventTimeSlotViewFragment();
+        timeSlotViewFragment.setFragment_task(EventTimeSlotViewFragment.TASK_EDIT);
         timeSlotViewFragment.setTargetFragment(this, REQ_TIMESLOT);
-        timeSlotViewFragment.setEvent(event);
+        Event cpyEvent = EventUtil.copyEvent(event);
+        timeSlotViewFragment.setData(cpyEvent, null);
         getBaseActivity().openFragment(timeSlotViewFragment);
-//        EventDetailTimeSlotFragment timeSlotFragment = new EventDetailTimeSlotFragment();
-//        Event cpyEvent = eventManager.copyCurrentEvent(event);
-//        Invitee me = EventUtil.getSelfInInvitees(getContext(), cpyEvent);
-//        // if the user is host, then reset all his timeslot as create
-//        if (me!=null) {
-//            for (SlotResponse slotResponse : me.getSlotResponses()) {
-//                slotResponse.setStatus(Timeslot.STATUS_CREATING);
-//            }
-//        }
-//        timeSlotFragment.setEvent(cpyEvent);
-//        getBaseActivity().openFragment(timeSlotFragment);
     }
 
 
@@ -155,7 +147,8 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public void toInviteePickerPage() {
         InviteeFragment inviteeFragment = new InviteeFragment();
         inviteeFragment.setTargetFragment(this, REQ_INVITEE);
-        inviteeFragment.setEvent(event);
+        Event cpyEvent = EventUtil.copyEvent(event);
+        inviteeFragment.setEvent(cpyEvent);
         getBaseActivity().openFragment(inviteeFragment);
 
     }
@@ -174,21 +167,13 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
-//        switch (taskId){
-//            case EventCommonPresenter.TASK_EVENT_INSERT:
-//                break;
-//            case EventCommonPresenter.TASK_EVENT_UPDATE:{
-//                toCalendar();
-//                break;
-//            }case EventCommonPresenter.TASK_EVENT_DELETE:
-//                toCalendar();
-//                break;
-//        }
+        AppUtil.hideProgressBar();
+        toCalendar();
     }
 
     @Override
     public void onTaskError(int taskId) {
-
+        AppUtil.hideProgressBar();
     }
 
     private void toCalendar(){

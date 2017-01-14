@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -294,7 +295,7 @@ public class EventEditViewModel extends EventCommonViewModel {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // set event recurrence
                         EventUtil.changeEventFrequency(event, i);
-                        setEvent(event);
+                       notifyPropertyChanged(BR.event);
                     }
                 });
                 builder.show();
@@ -316,7 +317,7 @@ public class EventEditViewModel extends EventCommonViewModel {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         event.setReminder(i);
-                        setEvent(event);
+                        notifyPropertyChanged(BR.event);
                     }
                 });
                 builder.show();
@@ -338,7 +339,7 @@ public class EventEditViewModel extends EventCommonViewModel {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         event.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(i).getCalendarUid());
-                        setEvent(event);
+                        notifyPropertyChanged(BR.event);
                     }
                 });
                 builder.show();
@@ -412,7 +413,7 @@ public class EventEditViewModel extends EventCommonViewModel {
 
     public void setPhotos(ArrayList<String> photos) {
         event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
-        setEvent(event);
+        notifyPropertyChanged(BR.event);
     }
 
 
@@ -471,6 +472,7 @@ public class EventEditViewModel extends EventCommonViewModel {
         if (event.hasTimeslots()) {
             timeslotList = event.getTimeslot();
         }
+        Log.i("asda", "setData: " + event.getTimeslot().size());
         notifyPropertyChanged(BR.event);
         notifyPropertyChanged(BR.startTimeVisibility);
         notifyPropertyChanged(BR.endTimeVisibility);

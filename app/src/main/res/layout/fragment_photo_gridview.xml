@@ -64,7 +64,7 @@
             android:verticalSpacing="5dp"
             android:horizontalSpacing="5dp"
             android:gravity="center"
-            app:event="@{vm.evDtlHostEvent}"/>
+            app:event="@{vm.event}"/>
 
     </LinearLayout>
 </layout>

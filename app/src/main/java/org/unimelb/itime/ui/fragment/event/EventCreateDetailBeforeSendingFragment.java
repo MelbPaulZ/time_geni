@@ -151,7 +151,7 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     @Override
     public void changeLocation() {
         LocationPickerFragment locationPickerFragment = (LocationPickerFragment) getFragmentManager().findFragmentByTag(LocationPickerFragment.class.getSimpleName());
-//        eventLocationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
+//        eventLocationPickerFragment.setData(EventManager.getInstance(getContext()).copyCurrentEvent(event));
 //        openFragment(this, eventLocationPickerFragment);
     }
 
@@ -159,7 +159,7 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     @Override
     public void pickInvitees() {
 //        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-//        inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
+//        inviteeFragment.setData(EventManager.getInstance(getContext()).copyCurrentEvent(event));
 //        openFragment(this, inviteeFragment);
     }
 
@@ -171,7 +171,7 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     @Override
     public void onClickProposedTimeslots() {
         EventTimeSlotViewFragment timeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-        timeSlotViewFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
+//        timeSlotViewFragment.setData(EventManager.getInstance(getContext()).copyCurrentEvent(event));
 //        openFragment(this, timeSlotViewFragment);
 //        timeSlotViewFragment.setTo(this); // this need to be set manully,coz has to be distinguish with others
     }

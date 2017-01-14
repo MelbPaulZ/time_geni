@@ -3,47 +3,44 @@ package org.unimelb.itime.ui.fragment.event;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.adapter.EventTimeSlotAdapter;
+import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
-import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
-import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
+import org.unimelb.itime.databinding.FragmentEventDetailBinding;
+import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
-import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.helper.DensityUtil;
+import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
+import org.unimelb.itime.ui.viewmodel.EventDetailViewModel.SubTimeslotViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment.TASK_VIEW;
+
 /**
  * Created by Paul on 4/09/2016.
  */
-public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpView, EventCommonPresenter<EventDetailGroupMvpView>> implements EventDetailGroupMvpView {
-    private org.unimelb.itime.databinding.FragmentEventDetailBinding binding;
-    private EventDetailViewModel eventDetailForHostViewModel;
+public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, EventCommonPresenter<EventDetailMvpView>> implements EventDetailMvpView {
+    private FragmentEventDetailBinding binding;
     private Event event;
 
+    private EventDetailViewModel contentViewModel;
+    private ToolbarViewModel<EventDetailMvpView> toolbarViewModel;
 
-    private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
+    private List<SubTimeslotViewModel> timeslotVMList = null;
+    private Map<String, List<EventUtil.StatusKeyStruct>> replyData = null;
 
     @Nullable
     @Override
@@ -55,100 +52,71 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        eventDetailForHostViewModel = new EventDetailViewModel(getPresenter());
-        if(event == null){
-            event = EventManager.getInstance(getContext()).copyCurrentEvent(EventManager.getInstance(getContext()).getCurrentEvent());
-            this.adapterData = EventUtil.getAdapterData(event);
-        }
-        eventDetailForHostViewModel.setEvDtlHostEvent(event);
-        eventDetailForHostViewModel.setEvAdapterEvent(adapterData);
-        binding.setHostDetailVM(eventDetailForHostViewModel);
+        replyData = EventUtil.getAdapterData(event);
+
+        contentViewModel = new EventDetailViewModel(getPresenter());
+        contentViewModel.setEvent(event);
+        contentViewModel.setReplyData(replyData);
+        initTimeslotVMList();
+        initToolbar();
+
+        binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
-        setProposedTimeSlots(event);
-
-        //doing
-        refreshInviteeStatus();
     }
 
-    public void setProposedTimeSlots(Event event){
-        // for timeslots, use list view to show
-        EventTimeSlotAdapter timeSlotAdapter = new EventTimeSlotAdapter(getContext(), R.layout.listview_timeslot_pick, event.getTimeslot(), eventDetailForHostViewModel);
-        timeSlotAdapter.setAdapterEvent(event);
-        binding.eventDetailTimeslotListview.setAdapter(timeSlotAdapter);
+    private void initTimeslotVMList(){
+        if(timeslotVMList != null){
+            // if other fragment set timeslotWrapper to this fragment
+            return;
+        }
+        timeslotVMList = new ArrayList<>();
+        for (Timeslot timeslot: event.getTimeslot()){
+            WrapperTimeSlot wrapper = new WrapperTimeSlot(timeslot);
+            if (EventUtil.isUserHostOfEvent(getContext(), event)) {
+                wrapper.setSelected(timeslot.getIsConfirmed() == 1);
+            }else{
+                wrapper.setSelected(timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED));
+            }
+            SubTimeslotViewModel subTimeslotViewModel = new SubTimeslotViewModel();
+            subTimeslotViewModel.setWrapper(wrapper);
+            this.timeslotVMList.add(subTimeslotViewModel);
+        }
+        contentViewModel.setWrapperTimeSlotList(timeslotVMList);
+
     }
 
-    public void setEvent(Event event){
+    private void initToolbar(){
+        toolbarViewModel =
+                new ToolbarViewModel<EventDetailMvpView>(this);
+        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
+        String title = EventUtil.isUserHostOfEvent(getContext(), event)?
+                getString(R.string.event_details) : getString(R.string.new_invitation);
+        toolbarViewModel.setTitleStr(title);
+        toolbarViewModel.setRightTitleStr(getString(R.string.edit));
+    }
+
+
+    public void setData(Event event){
         this.event = event;
-        if (eventDetailForHostViewModel!=null) {
-            eventDetailForHostViewModel.setEvDtlHostEvent(event);
-            this.adapterData = EventUtil.getAdapterData(event);
-            eventDetailForHostViewModel.setEvAdapterEvent(this.adapterData);
-        }
-        setProposedTimeSlots(event);
-        //doing
-        refreshInviteeStatus();
     }
 
-    private void refreshInviteeStatus(){
-        if (this.adapterData != null){
-            LinearLayout status_text = (LinearLayout) binding.getRoot().findViewById(R.id.invitees_status_text);
-            LinearLayout status_img = (LinearLayout) binding.getRoot().findViewById(R.id.invitees_status_img);
-            status_text.removeAllViews();
-            status_img.removeAllViews();
-
-            List<Invitee> invitees = event.getInvitee();
-
-            int replyNum = 0;
-            int inviteesNum = invitees.size();
-
-            List<Invitee> goings = new ArrayList<>();
-
-            for (Invitee invitee:invitees
-                 ) {
-                if (invitee.getStatus().equals("accepted")){
-                    replyNum += 1;
-                    goings.add(invitee);
-                }
-            }
-
-            TextView repliedTextview = new TextView(getContext());
-            repliedTextview.setText(replyNum + (event.getStatus().equals("confirmed") ? " Going" : " Replied"));
-            repliedTextview.setTextColor(Color.parseColor("#7bb6ee"));
-            status_text.addView(repliedTextview);
-
-            TextView inviteesTextview = new TextView(getContext());
-            LinearLayout.LayoutParams inviteesTextviewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            inviteesTextview.setText(inviteesNum + " Invited");
-            inviteesTextview.setTextColor(Color.parseColor("#f99e2b"));
-            inviteesTextviewParams.leftMargin = 20;
-            status_text.addView(inviteesTextview,inviteesTextviewParams);
-
-            int width = DensityUtil.dip2px(getContext(),50);
-            for (Invitee invitee:goings) {
-                RelativeLayout frame = new RelativeLayout(getContext());
-                LinearLayout.LayoutParams frameParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                frameParams.rightMargin = 20;
-                ImageView img = new ImageView(getContext());
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,width);
-                EventUtil.bindUrlHelper(getContext(),invitee.getAliasPhoto(),img, new CircleTransform());
-                frame.addView(img,params);
-
-                ImageView status = new ImageView(getContext());
-                RelativeLayout.LayoutParams status_params = new RelativeLayout.LayoutParams(width/4,width/4);
-                status_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                status_params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-                status.setImageDrawable(getContext().getResources().getDrawable(
-                        invitee.getIsHost() == 1 ? R.drawable.icon_event_host_selected:R.drawable.icon_event_attendee_selected));
-                frame.addView(status,status_params);
-
-                status_img.addView(frame,frameParams);
-            }
+    public void setData(Event event, List<WrapperTimeSlot> wrapperList){
+        this.event = event;
+        if(wrapperList == null){
+            return;
+        }
+        timeslotVMList = new ArrayList<>();
+        for(WrapperTimeSlot t: wrapperList){
+            SubTimeslotViewModel vm = new SubTimeslotViewModel();
+            vm.setWrapper(t);
+            timeslotVMList.add(vm);
         }
     }
+
+
 
     @Override
-    public EventCommonPresenter<EventDetailGroupMvpView> createPresenter() {
+    public EventCommonPresenter<EventDetailMvpView> createPresenter() {
         return new EventCommonPresenter<>(getContext());
     }
 
@@ -161,35 +129,31 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
 
     @Override
     public void viewInCalendar() {
+        EventTimeSlotViewFragment timeSlotViewFragment = new EventTimeSlotViewFragment();
+        timeSlotViewFragment.setFragment_task(TASK_VIEW);
+        Event cpyEvent = EventUtil.copyEvent(event);
+        List<WrapperTimeSlot> wrapperTimeSlots = new ArrayList<>();
+        for (SubTimeslotViewModel vm: timeslotVMList){
+            wrapperTimeSlots.add(vm.getWrapper());
+        }
+        timeSlotViewFragment.setData(cpyEvent, wrapperTimeSlots);
+        getBaseActivity().openFragment(timeSlotViewFragment);
 
-//        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
-//
-//            ViewMainCalendarFragment viewMainCalendarFragment = (ViewMainCalendarFragment) getFragmentManager().findFragmentByTag(ViewMainCalendarFragment.class.getSimpleName());
-//            ViewInCalendarWeekFragment viewInCalendarWeekFragment = viewMainCalendarFragment.getWeekViewFrag();
-//            viewInCalendarWeekFragment.scrollToWithOffset(event.getStartTime());
-//            viewInCalendarWeekFragment.showAnim(event);
-//
-//            openFragment(this,viewMainCalendarFragment);
-//        }else {
-//            final EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-//            timeSlotFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event), this.adapterData);
-//            timeSlotFragment.getWeekView().showTimeslotAnim(event.getTimeslot());
-//            openFragment(this,timeSlotFragment);
-//        }
     }
 
     @Override
     public void viewInviteeResponse(Timeslot timeSlot) {
-        InviteeTimeslotFragment inviteeTimeslotFragment = (InviteeTimeslotFragment) getFragmentManager().findFragmentByTag(InviteeTimeslotFragment.class.getSimpleName());
-        inviteeTimeslotFragment.setData(this.event, adapterData.get(timeSlot.getTimeslotUid()),timeSlot);
-        openFragment(this, inviteeTimeslotFragment);
+
+        InviteeTimeslotFragment inviteeTimeslotFragment = new InviteeTimeslotFragment();
+        inviteeTimeslotFragment.setData(this.event, replyData.get(timeSlot.getTimeslotUid()), timeSlot);
+        getBaseActivity().openFragment(inviteeTimeslotFragment);
     }
 
     @Override
     public void gotoGridView() {
-        EventPhotoGridFragment gridFragment = (EventPhotoGridFragment) getFragmentManager().findFragmentByTag(EventPhotoGridFragment.class.getSimpleName());
+        EventPhotoGridFragment gridFragment = new EventPhotoGridFragment();
         gridFragment.setEvent(event);
-        openFragment(this, gridFragment);
+        getBaseActivity().openFragment(gridFragment);
     }
 
 
@@ -222,27 +186,6 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
     }
 
 
-    @Override
-    public void setLeftTitleStringToVM() {
-        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
-    }
-
-    @Override
-    public void setTitleStringToVM() {
-        String title = EventUtil.isUserHostOfEvent(getContext(), event)?
-                getString(R.string.event_details) : getString(R.string.new_invitation);
-        toolbarViewModel.setTitleStr(title);
-    }
-
-    @Override
-    public void setRightTitleStringToVM() {
-        toolbarViewModel.setRightTitleStr(getString(R.string.edit));
-    }
-
-    @Override
-    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
-        return new ToolbarViewModel<>(this);
-    }
 
     @Override
     public void onBack() {
@@ -251,12 +194,15 @@ public class EventDetailFragment extends EventBaseFragment<EventDetailGroupMvpVi
 
     @Override
     public void onNext() {
+        EventEditFragment eventEditFragment = new EventEditFragment();
+        eventEditFragment.setEvent(this.event);
+        getBaseActivity().openFragment(eventEditFragment);
 //        EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
 //        Event cpyEvent = EventManager.getInstance(getContext()).copyCurrentEvent(event);
 //        for (Timeslot timeslot: cpyEvent.getTimeslot()){
 //            timeslot.setStatus(Timeslot.STATUS_PENDING);
 //        }
-//        eventEditFragment.setEvent(cpyEvent);
+//        eventEditFragment.setData(cpyEvent);
 //
 //        EventManager.getInstance(getContext()).setCurrentEvent(event);
 //

@@ -9,13 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
@@ -39,7 +37,7 @@ public class EventDetailActivity extends EmptyActivity {
 
         EventDetailFragment fragment = new EventDetailFragment();
         initEvent();
-        fragment.setEvent(event);
+        fragment.setData(event);
         fragmentManager.beginTransaction()
                 .replace(getFragmentContainerId(), fragment)
                 .commit();
@@ -48,8 +46,16 @@ public class EventDetailActivity extends EmptyActivity {
     private void initEvent(){
         Intent intent = getIntent();
         String eventUid = intent.getStringExtra("event_uid");
+        if (eventUid == null || eventUid.length()==0){
+            throw new RuntimeException("event detail activity dont have parameters eventUid");
+        }
         long startTime = intent.getLongExtra("start_time",0);
         event = EventManager.getInstance(getApplicationContext()).findEventByUid(eventUid);
+    }
+
+    @Override
+    protected int getFragmentContainerId() {
+        return R.id.event_detail_fragment;
     }
 
     public void initFragments() {

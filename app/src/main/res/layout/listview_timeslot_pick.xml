@@ -5,16 +5,14 @@
         <import type="org.unimelb.itime.util.TimeSlotUtil"/>
         <import type="org.unimelb.itime.util.EventUtil"/>
         <variable
-            name="viewmodel"
-            type="org.unimelb.itime.ui.viewmodel.EventDetailViewModel"/>
-        <variable
-            name="position"
-            type="Integer"/>
+            name="itemVM"
+            type="org.unimelb.itime.ui.viewmodel.EventDetailViewModel.SubTimeslotViewModel"/>
+
     </data>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:onClick="@{viewmodel.onClickTimeSlot(viewmodel.evDtlHostEvent.timeslot.get(position))}"
+        android:onClick=""
         android:orientation="vertical">
 
         <!--this is the icon for select timeslot-->
@@ -23,8 +21,9 @@
             android:layout_width="23dp"
             android:layout_height="23dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="14dp"
-            android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent, position) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}" />
+            android:layout_marginTop="14dp"/>
+        <!--android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent, position) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}"-->
+
 
         <!--this is timeslot string-->
         <TextView
@@ -34,17 +33,19 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="13dp"
             android:layout_toRightOf="@+id/event_detail_host_ic_circle"
-            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, viewmodel.evDtlHostEvent.timeslot.get(position).startTime,viewmodel.evDtlHostEvent.timeslot.get(position).endTime )}"
             android:textColor="@color/text_enable"
             android:textSize="17sp" />
+        <!--android:text="@{EventUtil.getSuggestTimeStringFromLong(context, viewmodel.evDtlHostEvent.timeslot.get(position).startTime,viewmodel.evDtlHostEvent.timeslot.get(position).endTime )}"-->
+
 
         <TextView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:onClick="@{viewmodel.viewInviteeResponse(viewmodel.evDtlHostEvent.timeslot.get(position))}"
             />
+        <!--android:onClick="@{viewmodel.viewInviteeResponse(viewmodel.evDtlHostEvent.timeslot.get(position))}"-->
+
 
         <!--this is arrow image-->
         <ImageView
@@ -64,9 +65,10 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/padding_10"
             android:layout_toLeftOf="@+id/host_timeslot_right_arrow"
-            android:text="@{viewmodel.getPeopleNum(viewmodel.evDtlHostEvent.timeslot.get(position),viewmodel.evAdapterEvent)}"
             android:textColor="@color/gray_b2b2b2"
             android:textSize="17dp" />
+        <!--android:text="@{viewmodel.getPeopleNum(viewmodel.evDtlHostEvent.timeslot.get(position),viewmodel.evAdapterEvent)}"-->
+
 
         <!--this is the under line-->
         <TextView
