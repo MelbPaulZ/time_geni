@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -423,18 +424,21 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         TimeSlotUtil.sortTimeslot(list);
 
 
-
         if (fragment_task == TASK_EDIT) {
             event.setTimeslot(list);
+            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             EventEditFragment fragment = new EventEditFragment();
             fragment.setEvent(event);
-            getBaseActivity().openFragment(fragment);
+            getBaseActivity().openFragment(fragment, null, false);
         }else if (fragment_task == TASK_VIEW){
+            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             // TODO: 14/1/17 update invitee response
             EventDetailFragment eventDetailFragment = new EventDetailFragment();
             eventDetailFragment.setData(event);
-            getBaseActivity().openFragment(eventDetailFragment);
+            getBaseActivity().openFragment(eventDetailFragment, null, false);
+
         }
+
     }
 
     @Override
