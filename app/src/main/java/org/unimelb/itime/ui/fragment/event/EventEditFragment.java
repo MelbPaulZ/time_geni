@@ -5,20 +5,16 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.messageevent.MessageInvitees;
-import org.unimelb.itime.messageevent.MessageLocation;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.LocationPickerFragment;
@@ -71,7 +67,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         if(getActivity() instanceof EventCreateActivity){
             task = TASK_CREATE;
         }else if (getActivity() instanceof EventDetailActivity){

@@ -2,19 +2,15 @@ package org.unimelb.itime.base;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.ui.mvpview.MainTabBarView;
-import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 
 /**
  * use afinal: https://github.com/yangfuhai/afinal
@@ -48,18 +44,27 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpBasePresenter
 
 
     public void openFragment(Fragment fragment) {
-        openFragment(fragment, null);
+        openFragment(fragment, null, true);
     }
 
     public void openFragment(Fragment fragment, Bundle bundle){
+        openFragment(fragment, bundle, true);
+    }
+
+    public void openFragment(Fragment fragment, Bundle bundle, boolean isAddedToStack){
         fragmentManager = getSupportFragmentManager();
-        fragment.setArguments(bundle);
+        if(bundle != null){
+            fragment.setArguments(bundle);
+        }
         FragmentTransaction t = fragmentManager.beginTransaction();
         t.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         t.replace(getFragmentContainerId(), fragment);
-        t.addToBackStack(null);
+        if(isAddedToStack){
+            t.addToBackStack(null);
+        }
         t.commit();
     }
+
 
     public void backFragment(Fragment fragment){
         backFragment(fragment, null);
