@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -14,7 +15,9 @@ import android.widget.Toast;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 
 import java.util.ArrayList;
@@ -26,16 +29,27 @@ public class EventDetailActivity extends EmptyActivity {
     private Event event;
     private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private final int ACTIVITY_PHOTOPICKER = 2;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
-        event = EventManager.getInstance(getApplicationContext()).getCurrentEvent();
-        initFragments();
-        getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
 
+        EventDetailFragment fragment = new EventDetailFragment();
+        initEvent();
+        fragment.setEvent(event);
+        fragmentManager.beginTransaction()
+                .replace(getFragmentContainerId(), fragment)
+                .commit();
+    }
+
+    private void initEvent(){
+        Intent intent = getIntent();
+        String eventUid = intent.getStringExtra("event_uid");
+        long startTime = intent.getLongExtra("start_time",0);
+        event = EventManager.getInstance(getApplicationContext()).findEventByUid(eventUid);
     }
 
     public void initFragments() {

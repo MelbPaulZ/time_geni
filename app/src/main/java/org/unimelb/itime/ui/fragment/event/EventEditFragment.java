@@ -81,6 +81,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         eventManager = EventManager.getInstance(getContext());
         eventEditViewModel = new EventEditViewModel(getPresenter());
         eventEditViewModel.setEvent(event);
+        eventEditViewModel.setFragment_task(task);
         initToolbar();
 
         binding.setEventEditVM(eventEditViewModel);
@@ -198,12 +199,22 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void onBack() {
-        eventEditViewModel.onBack();
+        if(task == TASK_CREATE){
+            Intent intent = new Intent();
+            getActivity().setResult(Activity.RESULT_CANCELED, intent);
+            getActivity().finish();
+        }else if (task == TASK_EDIT){
+            toEventDetailPage();
+        }
     }
 
     @Override
     public void onNext() {
-        eventEditViewModel.onBack();
+        if (task == TASK_CREATE){
+            eventEditViewModel.toCreateEvent();
+        }else{
+            eventEditViewModel.editEvent();
+        }
     }
 
 

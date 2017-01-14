@@ -315,7 +315,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:checked="@{EventUtil.isAllDayEvent(eventEditVM.event)}"
-                        android:onCheckChange="@{eventEditVM.eventAlldayChange(eventEditVM.event)}" />
+                        android:onCheckChange="@{eventEditVM.eventAlldayChange()}" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -560,6 +560,7 @@
 
 
         <TextView
+            android:visibility="@{eventEditVM.deleteBtnVisibility()}"
             android:layout_width="match_parent"
             android:layout_height="59dp"
             android:background="@drawable/background_top_bottom_divider"

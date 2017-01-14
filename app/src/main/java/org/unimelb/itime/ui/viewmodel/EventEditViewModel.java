@@ -14,19 +14,23 @@ import android.widget.DatePicker;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
@@ -41,8 +45,7 @@ import me.tatarka.bindingcollectionadapter.ItemView;
  */
 public class EventEditViewModel extends EventCommonViewModel {
 
-    public final static int TASK_CREATE = 0;
-    public final static int TASK_EDIT = 0;
+    private int fragment_task = -1;
 
     private Event event;
     private EventPresenter<? extends TaskBasedMvpView<List<Event>>> presenter;
@@ -120,6 +123,8 @@ public class EventEditViewModel extends EventCommonViewModel {
         notifyPropertyChanged(BR.event);
     }
 
+
+
     /**
      * check the focus of email edit text
      *
@@ -144,25 +149,7 @@ public class EventEditViewModel extends EventCommonViewModel {
     }
 
 
-    // click cancel button on edit event page
-    public View.OnClickListener cancelEdit() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mvpView != null) {
-                    mvpView.toEventDetailPage();
-                }
-            }
-        };
-    }
-
-    public void onBack() {
-        if (mvpView != null) {
-            mvpView.toEventDetailPage();
-        }
-    }
-
-    public void onNext() {
+    public void editEvent() {
         // popup alertDialog to choose whether change all or just one
         List<Timeslot> timeslots = EventUtil.getTimeslotFromPending(getContext(), event);
         event.setTimeslot(timeslots);
@@ -215,7 +202,7 @@ public class EventEditViewModel extends EventCommonViewModel {
     }
 
 
-    public Switch.OnCheckedChangeListener eventAlldayChange(final Event event) {
+    public Switch.OnCheckedChangeListener eventAlldayChange() {
         return new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -235,13 +222,13 @@ public class EventEditViewModel extends EventCommonViewModel {
         long endOfEndDay = EventUtil.getDayEndMilliseconds(event.getEndTime());
         event.setStartTime(beginOfStartDay);
         event.setEndTime(endOfEndDay);
-        notifyPropertyChanged(BR.newEvDtlEvent);
+        notifyPropertyChanged(BR.event);
     }
 
     private void setAlldayEventToNotAllday(Event event) {
         event.setStartTime(evStartTime);
         event.setEndTime(evEndTime);
-        notifyPropertyChanged(BR.newEvDtlEvent);
+        notifyPropertyChanged(BR.event);
     }
 
     // TODO: test this change all
@@ -323,6 +310,7 @@ public class EventEditViewModel extends EventCommonViewModel {
                 CharSequence[] alertTimes;
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle(getContext().getString(R.string.choose_alert_time));
+                builder.setCancelable(true);
                 alertTimes = EventUtil.getAlertTimes(getContext());
                 builder.setItems(alertTimes, new DialogInterface.OnClickListener() {
                     @Override
@@ -344,6 +332,7 @@ public class EventEditViewModel extends EventCommonViewModel {
                 final CharSequence[] calendarType;
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle(getContext().getString(R.string.calendar));
+                builder.setCancelable(true);
                 calendarType = EventUtil.getCalendarTypes(getContext());
                 builder.setItems(calendarType, new DialogInterface.OnClickListener() {
                     @Override
@@ -424,6 +413,52 @@ public class EventEditViewModel extends EventCommonViewModel {
     public void setPhotos(ArrayList<String> photos) {
         event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
         setEvent(event);
+    }
+
+
+    public void toCreateEvent(){
+        if (event.getTitle().equals("")) {
+            event.setTitle(getContext().getString(R.string.new_event));
+        }
+
+        // pending Timeslots filtered out timeslots which not is not chosed by host
+        List<Timeslot> pendingTimeslots = new ArrayList<>();
+        for (Timeslot timeSlot : event.getTimeslot()) {
+            if (timeSlot.getStatus().equals(Timeslot.STATUS_PENDING)) {
+                pendingTimeslots.add(timeSlot);
+            }
+        }
+
+        // set event start time and end time, using the latest timeslot
+        Timeslot displayTimeslot = TimeSlotUtil.getLatestTimeSlot(pendingTimeslots);
+        if (displayTimeslot != null) {
+            event.setStartTime(displayTimeslot.getStartTime());
+            event.setEndTime(displayTimeslot.getEndTime());
+        }
+
+        event.setRecurrence(event.getRule().getRecurrence());
+        event.setTimeslot(pendingTimeslots);
+        event.setHostUserUid(UserUtil.getInstance(getContext()).getUserUid());
+        EventUtil.addSelfInInvitee(getContext(), event);
+        if (!event.hasPhoto()) {
+            event.setPhoto(new ArrayList<PhotoUrl>());
+        }
+
+        if (event.getInvitee().size() > 1) {
+            event.setEventType(Event.TYPE_GROUP);
+            event.setStatus(Event.STATUS_PENDING);
+        } else {
+            event.setEventType(Event.TYPE_SOLO);
+            event.setStatus(Event.STATUS_CONFIRMED);
+        }
+        if (event.getCalendarUid() == "") {
+            event.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(0).getCalendarUid());
+            Toast.makeText(getContext(), "auto set Uid", Toast.LENGTH_SHORT).show();
+        }
+        event.setRecurringEventUid("");
+        event.setRecurringEventId("");
+        eventManager.setCurrentEvent(event);
+        presenter.insertEvent(event);
     }
 
     @Bindable
@@ -537,5 +572,17 @@ public class EventEditViewModel extends EventCommonViewModel {
     @Bindable
     public ItemView getItemView() {
         return itemView;
+    }
+
+    public void setFragment_task(int fragment_task) {
+        this.fragment_task = fragment_task;
+    }
+
+    public int deleteBtnVisibility(){
+        if (fragment_task == EventEditFragment.TASK_CREATE){
+            return View.GONE;
+        }else{
+            return View.VISIBLE;
+        }
     }
 }
