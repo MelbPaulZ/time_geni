@@ -9,15 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.User;
-import org.unimelb.itime.databinding.FragmentSettingCalendarPreferenceBinding;
-import org.unimelb.itime.ui.mvpview.CalendarPreferenceMvpView;
+import org.unimelb.itime.databinding.FragmentSettingImportCalendarBinding;
+import org.unimelb.itime.ui.mvpview.CalendarImportMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
+import org.unimelb.itime.ui.presenter.CalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.CalendarPreferenceViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.UserUtil;
@@ -26,35 +25,35 @@ import org.unimelb.itime.util.UserUtil;
  * Created by Paul on 26/12/2016.
  */
 
-public class SettingCalendarPreferenceFragment extends BaseUiAuthFragment<CalendarPreferenceMvpView, MvpBasePresenter<CalendarPreferenceMvpView>> implements CalendarPreferenceMvpView {
+public class SettingCalendarImportFragment extends BaseUiAuthFragment<CalendarImportMvpView, CalendarPresenter<CalendarImportMvpView>> implements CalendarImportMvpView{
 
-    private FragmentSettingCalendarPreferenceBinding binding;
+    private FragmentSettingImportCalendarBinding binding;
     private CalendarPreferenceViewModel contentViewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_calendar_preference, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_import_calendar, container, false);
         return binding.getRoot();
     }
 
     @NonNull
     @Override
-    public MvpBasePresenter<CalendarPreferenceMvpView> createPresenter() {
-        return new MvpBasePresenter<>();
+    public CalendarPresenter<CalendarImportMvpView> createPresenter() {
+        return new CalendarPresenter<>(getContext());
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         contentViewModel = new CalendarPreferenceViewModel(getPresenter());
-        contentViewModel.setUser(UserUtil.getInstance(getContext()).getUser());
-        contentViewModel.setSetting(UserUtil.getInstance(getContext()).getSetting());
+        User user = UserUtil.getInstance(getContext()).getUser();
+        contentViewModel.setUser(user);
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
-        toolbarViewModel.setTitleStr(getString(R.string.setting_calendar_pref));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setTitleStr(getString(R.string.setting_import_calendar));
 
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
@@ -81,8 +80,7 @@ public class SettingCalendarPreferenceFragment extends BaseUiAuthFragment<Calend
     }
 
     public void onBack() {
-        getActivity().finish();
-        getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
     }
 
     @Override
@@ -91,17 +89,12 @@ public class SettingCalendarPreferenceFragment extends BaseUiAuthFragment<Calend
     }
 
     @Override
-    public void toCalendarPage() {
-        getBaseActivity().openFragment(new SettingCalendarDisplayFragment());
+    public void toGoogleCal() {
+
     }
 
     @Override
-    public void toAlertTimePage() {
-        getBaseActivity().openFragment(new SettingStDefaultAlertFragment());
-    }
+    public void toUnimebCal() {
 
-    @Override
-    public void toImportPage() {
-        getBaseActivity().openFragment(new SettingCalendarImportFragment());
     }
 }

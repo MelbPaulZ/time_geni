@@ -372,7 +372,7 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo1"
-                                loadRemoteImg="@{hostDetailVM.evDtlHostEvent}"
+                                android:bindRemoteSrc="@{hostDetailVM.evDtlHostEvent}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"
@@ -380,7 +380,7 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo2"
-                                loadRemoteImg="@{hostDetailVM.evDtlHostEvent}"
+                                android:bindRemoteSrc="@{hostDetailVM.evDtlHostEvent}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"
@@ -388,7 +388,7 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo3"
-                                loadRemoteImg="@{hostDetailVM.evDtlHostEvent}"
+                                android:bindRemoteSrc="@{hostDetailVM.evDtlHostEvent}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center" />

@@ -1,20 +1,44 @@
 package org.unimelb.itime.bean;
 
+import org.greenrobot.greendao.annotation.Entity;
+
+import java.io.Serializable;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * Created by yinchuandong on 11/1/17.
  */
 
-public class Setting {
+@Entity
+public class Setting implements Serializable{
 
-    boolean enableNotification =  true;
-    boolean showPreviewText = true;
-    boolean appAlertSound = true;
-    boolean systemVibrate = true;
-    boolean enableFriendRequestEmail = true;
-    boolean enableEventInvitationEmail = true;
-    boolean enableEventConfirmEmail = true;
+    private boolean enableNotification =  true;
+    private boolean showPreviewText = true;
+    private boolean appAlertSound = true;
+    private boolean systemVibrate = true;
+    private boolean enableFriendRequestEmail = true;
+    private boolean enableEventInvitationEmail = true;
+    private boolean enableEventConfirmEmail = true;
+    private int defaultAlertTime;
+    
+    @Generated(hash = 1817227832)
+    public Setting(boolean enableNotification, boolean showPreviewText,
+            boolean appAlertSound, boolean systemVibrate,
+            boolean enableFriendRequestEmail, boolean enableEventInvitationEmail,
+            boolean enableEventConfirmEmail, int defaultAlertTime) {
+        this.enableNotification = enableNotification;
+        this.showPreviewText = showPreviewText;
+        this.appAlertSound = appAlertSound;
+        this.systemVibrate = systemVibrate;
+        this.enableFriendRequestEmail = enableFriendRequestEmail;
+        this.enableEventInvitationEmail = enableEventInvitationEmail;
+        this.enableEventConfirmEmail = enableEventConfirmEmail;
+        this.defaultAlertTime = defaultAlertTime;
+    }
 
-
+    @Generated(hash = 909716735)
+    public Setting() {
+    }
 
     public boolean isEnableNotification() {
         return enableNotification;
@@ -70,5 +94,41 @@ public class Setting {
 
     public void setEnableEventConfirmEmail(boolean enableEventConfirmEmail) {
         this.enableEventConfirmEmail = enableEventConfirmEmail;
+    }
+
+    public boolean getEnableEventConfirmEmail() {
+        return this.enableEventConfirmEmail;
+    }
+
+    public boolean getEnableEventInvitationEmail() {
+        return this.enableEventInvitationEmail;
+    }
+
+    public boolean getEnableFriendRequestEmail() {
+        return this.enableFriendRequestEmail;
+    }
+
+    public boolean getSystemVibrate() {
+        return this.systemVibrate;
+    }
+
+    public boolean getAppAlertSound() {
+        return this.appAlertSound;
+    }
+
+    public boolean getShowPreviewText() {
+        return this.showPreviewText;
+    }
+
+    public boolean getEnableNotification() {
+        return this.enableNotification;
+    }
+
+    public int getDefaultAlertTime() {
+        return this.defaultAlertTime;
+    }
+
+    public void setDefaultAlertTime(int defaultAlertTime) {
+        this.defaultAlertTime = defaultAlertTime;
     }
 }

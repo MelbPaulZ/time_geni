@@ -18,6 +18,4 @@ public interface SettingApi {
 
     @POST("setting/update")
     Observable<HttpResult<Setting>> update(@Body Setting setting);
-
-
 }

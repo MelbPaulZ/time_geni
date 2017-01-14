@@ -130,6 +130,10 @@ public class RemoteService extends Service{
                 editor.putString(C.calendarString.CALENDAR_STRING,  calendarListString);
                 editor.apply();
 
+                //update db
+                DBManager.getInstance(getApplicationContext()).clearCalendars();
+                DBManager.getInstance(getApplicationContext()).insert(httpResult.getData());
+
                 pollingThread.start();
             }
         };
