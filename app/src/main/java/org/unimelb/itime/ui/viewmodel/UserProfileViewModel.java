@@ -11,6 +11,7 @@ import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.mvpview.UserMvpView;
 import org.unimelb.itime.ui.presenter.UserPresenter;
+import org.unimelb.itime.util.AppUtil;
 
 import java.util.List;
 
@@ -122,13 +123,10 @@ public class UserProfileViewModel extends CommonViewModel {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 for(int k = 0; k < genderWrapperList.size(); k++){
-                    if(i == k){
-                        genderWrapperList.get(k).setSelected(true);
-                    }else{
-                        genderWrapperList.get(k).setSelected(false);
-                    }
+                    genderWrapperList.get(k).setSelected(i == k);
                 }
-                user.setGender(String.valueOf(i));
+                user.setGender(genderWrapperList.get(i).gCode);
+                presenter.updateProfile(user);
             }
         };
     }
@@ -176,11 +174,17 @@ public class UserProfileViewModel extends CommonViewModel {
 
     public static class GenderWrapper extends BaseObservable{
         private String name;
+        private String gCode = "2";
         private boolean selected;
 
-        public GenderWrapper(String name, boolean selected){
-            this.name = name;
+        public GenderWrapper(String gCode, boolean selected){
+            this.gCode = gCode;
             this.selected = selected;
+            this.name = AppUtil.getGenderStr(gCode);
+        }
+
+        public String getgCode() {
+            return gCode;
         }
 
         @Bindable

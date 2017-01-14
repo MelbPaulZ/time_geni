@@ -103,4 +103,17 @@ public class AppUtil {
 
         }
     }
+
+    public static String getGenderStr(String gCode){
+        switch (gCode){
+            case "0":
+                return "Female";
+            case "1":
+                return "Male";
+            case "2":
+                return "Undefined";
+            default:
+                return "N/A";
+        }
+    }
 }

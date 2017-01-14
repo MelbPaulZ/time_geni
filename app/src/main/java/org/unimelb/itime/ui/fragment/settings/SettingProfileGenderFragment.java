@@ -66,7 +66,7 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
         toolbarViewModel = new ToolbarViewModel<>(this);
         toolbarViewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
         toolbarViewModel.setTitleStr(getString(R.string.setting_gender));
-        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+        toolbarViewModel.setRightTitleStr("");
 
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
@@ -75,9 +75,11 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
     private List<GenderWrapper> prepareData(){
         List<GenderWrapper> list = new ArrayList<>();
         // don't change the order
-        list.add(new GenderWrapper(getString(R.string.setting_female), false));
-        list.add(new GenderWrapper(getString(R.string.setting_male), false));
-        list.add(new GenderWrapper(getString(R.string.setting_undefined), false));
+        String gCode = UserUtil.getInstance(getContext()).getUser().getGender();
+        list.add(new GenderWrapper("0", gCode.equals("0")));
+        list.add(new GenderWrapper("1", gCode.equals("1")));
+        list.add(new GenderWrapper("2", gCode.equals("2")));
+
         return list;
     }
 
