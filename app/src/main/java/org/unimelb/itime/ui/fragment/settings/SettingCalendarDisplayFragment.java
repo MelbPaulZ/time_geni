@@ -9,55 +9,52 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import com.hannesdorfmann.mosby.mvp.MvpView;
+import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Calendar;
-import org.unimelb.itime.bean.User;
-import org.unimelb.itime.ui.mvpview.CalendarPrefMvpView;
+import org.unimelb.itime.databinding.FragmentSettingCalendarsBinding;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
-import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
+import org.unimelb.itime.ui.mvpview.SettingCalendarMvpView;
 import org.unimelb.itime.ui.presenter.CalendarPresenter;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
-import org.unimelb.itime.ui.viewmodel.CalendarPrefViewModel;
 import org.unimelb.itime.ui.viewmodel.CalendarViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 
-import java.util.List;
+import me.tatarka.bindingcollectionadapter.ItemView;
 
 /**
  * Created by Paul on 26/12/2016.
  */
 
-public class SettingCalendarPrefFragment extends BaseUiAuthFragment<CalendarPrefMvpView, CommonPresenter<CalendarPrefMvpView>> implements CalendarPrefMvpView{
+public class SettingCalendarDisplayFragment extends BaseUiAuthFragment<SettingCalendarMvpView, CalendarPresenter<SettingCalendarMvpView>> implements SettingCalendarMvpView {
 
-    private FragmentSettingCalendarBinding binding;
-    private CalendarPrefViewModel contentViewModel;
+    private FragmentSettingCalendarsBinding binding;
+    private CalendarViewModel contentViewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_calendar_preference, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_calendars, container, false);
         return binding.getRoot();
     }
 
     @NonNull
     @Override
-    public CommonPresenter<CalendarPrefMvpView> createPresenter() {
-        return new CommonPresenter<>(getContext());
+    public CalendarPresenter<SettingCalendarMvpView> createPresenter() {
+        return new CalendarPresenter<>(getContext());
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        contentViewModel = new CalendarPrefViewModel(getPresenter());
+        contentViewModel = new CalendarViewModel(getPresenter());
+        contentViewModel.setCalItemView(ItemView.of(BR.wrapper, R.layout.listview_setting_calendar));
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
-        toolbarViewModel.setTitleStr(getString(R.string.setting_calendar_pref));
+        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setTitleStr(getString(R.string.calendar_title));
 
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
@@ -69,7 +66,7 @@ public class SettingCalendarPrefFragment extends BaseUiAuthFragment<CalendarPref
     }
 
     @Override
-    public void onTaskSuccess(int taskId, User data) {
+    public void onTaskSuccess(int taskId, Calendar data) {
 
     }
 
@@ -84,8 +81,7 @@ public class SettingCalendarPrefFragment extends BaseUiAuthFragment<CalendarPref
     }
 
     public void onBack() {
-        getActivity().finish();
-        getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        getBaseActivity().backFragment(new SettingCalendarPreferenceFragment());
     }
 
     @Override
@@ -94,17 +90,17 @@ public class SettingCalendarPrefFragment extends BaseUiAuthFragment<CalendarPref
     }
 
     @Override
-    public void toCalendarPage() {
-
+    public void toAddCalendar() {
+        getBaseActivity().openFragment(new SettingCalendarCreateFragment());
     }
 
     @Override
-    public void toAlertTimePage() {
-
-    }
-
-    @Override
-    public void toImportPage() {
-
+    public void toEditCalendar(Calendar calendar) {
+        try {
+            Calendar calendarCP = calendar.clone();
+            getBaseActivity().openFragment(new SettingCalendarEditFragment(calendarCP));
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
 }

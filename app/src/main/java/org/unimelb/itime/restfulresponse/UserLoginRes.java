@@ -1,5 +1,6 @@
 package org.unimelb.itime.restfulresponse;
 
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.bean.User;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 public class UserLoginRes implements Serializable{
 
     User user;
+    Setting setting;
     String token;
 
     public User getUser() {
@@ -26,5 +28,13 @@ public class UserLoginRes implements Serializable{
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Setting getSetting() {
+        return setting;
+    }
+
+    public void setSetting(Setting setting) {
+        this.setting = setting;
     }
 }

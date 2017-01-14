@@ -3,7 +3,7 @@
     <data>
         <variable
             name="settingVM"
-            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel_delete"/>
         <variable
             name="toolbarVM"
             type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
