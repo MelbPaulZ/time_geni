@@ -18,7 +18,7 @@ import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 public class ToolbarViewModel<V extends ItimeCommonMvpView> extends CommonViewModel {
     private String leftTitleStr, titleStr, rightTitleStr;
     private int leftColor, rightColor;
-    private boolean leftClickable = true, rightClickable = false;
+    private boolean leftClickable = true, rightClickable = true;
     private Drawable leftDrawable, rightDrawable;
 
     private V mvpView;
