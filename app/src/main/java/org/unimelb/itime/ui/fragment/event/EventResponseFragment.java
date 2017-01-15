@@ -49,7 +49,9 @@ public class EventResponseFragment extends BaseUiAuthFragment<EventResponseMvpVi
 
         contentViewModel = new EventResponseViewModel(getPresenter());
         toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.event_title_response));
+        toolbarViewModel.setRightClickable(false);
 
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
