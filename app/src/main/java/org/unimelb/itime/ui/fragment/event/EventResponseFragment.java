@@ -62,12 +62,12 @@ public class EventResponseFragment extends BaseUiAuthFragment<EventResponseMvpVi
 
     @Override
     public void onBack() {
-
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void onNext() {
-
+        getFragmentManager().popBackStack();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class EventResponseFragment extends BaseUiAuthFragment<EventResponseMvpVi
 
     @Override
     public void onTaskSuccess(int taskId, List<EventResponse> data) {
-
+        contentViewModel.setItemList(data);
     }
 
     @Override
