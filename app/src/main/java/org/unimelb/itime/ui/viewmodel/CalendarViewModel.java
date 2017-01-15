@@ -2,12 +2,16 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCalendarMvpView;
+import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.presenter.CalendarPresenter;
 import org.unimelb.itime.bean.Calendar;
 
@@ -20,10 +24,11 @@ import me.tatarka.bindingcollectionadapter.ItemView;
  * Created by yuhaoliu on 12/01/2017.
  */
 
-public class CalendarViewModel extends CommonViewModel {
-    private CalendarPresenter presenter;
+public class CalendarViewModel<T extends ItimeCommonMvpView & TaskBasedMvpView<Calendar>> extends CommonViewModel {
+    private CalendarPresenter<T> presenter;
     //for creating calendar, others == null
     private Calendar calendar;
+    private ToolbarViewModel toolbarViewModel;
     private ItemView calItemView;
     protected SettingCalendarMvpView mvpView;
 
@@ -35,6 +40,14 @@ public class CalendarViewModel extends CommonViewModel {
             this.mvpView = (SettingCalendarMvpView) presenter.getView();
             setCalendars(presenter.loadCalendarFromDB());
         }
+    }
+
+    public ToolbarViewModel getToolbarViewModel() {
+        return toolbarViewModel;
+    }
+
+    public void setToolbarViewModel(ToolbarViewModel toolbarViewModel) {
+        this.toolbarViewModel = toolbarViewModel;
     }
 
     public void setCalendar(Calendar calendar) {
@@ -89,6 +102,27 @@ public class CalendarViewModel extends CommonViewModel {
         };
     }
 
+    public TextWatcher onEditTextChanged(){
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (toolbarViewModel != null){
+                    int length = s.toString().replace(" ", "").length();
+                    toolbarViewModel.setRightClickable(length!=0);
+                }
+            }
+        };
+    }
+
     private CalendarWrapper getWrapper(Calendar cal){
         return new CalendarWrapper(cal, mvpView);
     }
@@ -100,7 +134,6 @@ public class CalendarViewModel extends CommonViewModel {
                 if (i < calWrapperList.size()){
                     CalendarViewModel.CalendarWrapper wrapper = calWrapperList.get(i);
                     wrapper.setSelected(!wrapper.isSelected());
-                    // TODO: 12/01/2017 update server and local
                     presenter.update(wrapper.calendar);
                 }
             }

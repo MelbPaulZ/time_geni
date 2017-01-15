@@ -1,5 +1,7 @@
 package org.unimelb.itime.ui.fragment.settings;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -52,16 +54,13 @@ public class SettingProfileResetPasswordFragment extends BaseUiAuthFragment<Task
         contentViewModel.setUser(user);
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.setting_reset_password));
         toolbarViewModel.setRightTitleStr(getString(R.string.done));
 
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
     }
-
-
-
 
     @Override
     public void onBack() {
@@ -70,10 +69,7 @@ public class SettingProfileResetPasswordFragment extends BaseUiAuthFragment<Task
 
     @Override
     public void onNext() {
-        //todo: call present to update password
-        String password = contentViewModel.getPassword();
-        String passwordConfirmation = contentViewModel.getPasswordConfirmation();
-//        getPresenter().
+        contentViewModel.onResetPSWDoneClick().onClick(null);
     }
 
     @Override
@@ -83,11 +79,78 @@ public class SettingProfileResetPasswordFragment extends BaseUiAuthFragment<Task
 
     @Override
     public void onTaskSuccess(int taskId, User data) {
-
+        switch (taskId){
+            case UserPresenter.TASK_USER_UPDATE:{
+                showUpdateSuccessMsg();
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     @Override
     public void onTaskError(int taskId) {
 
+        switch (taskId){
+            case UserPresenter.TASK_USER_PSW_NOT_MATCH:{
+                showNotMatchMsg();
+                break;
+            }
+            default:
+                break;
+        }
+
+    }
+
+    private void showNotMatchMsg(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getContext());
+
+        // set title
+        alertDialogBuilder.setTitle("Password NOT matched");
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setNegativeButton("Done", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
+    private void showUpdateSuccessMsg(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+            getContext());
+
+        // set title
+        alertDialogBuilder.setTitle("Success");
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        getBaseActivity().backFragment(new SettingMyProfileFragment());
+                    }
+                });
+
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
     }
 }

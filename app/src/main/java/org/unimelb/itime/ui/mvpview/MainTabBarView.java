@@ -8,5 +8,4 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 public interface MainTabBarView extends MvpView{
 
     void showFragmentById(int pageId);
-    void refreshTabStatus(int pageId);
 }

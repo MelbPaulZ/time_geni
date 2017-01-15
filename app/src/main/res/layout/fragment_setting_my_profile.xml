@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="org.unimelb.itime.util.AppUtil"/>
+
         <variable
             name="contentVM"
             type="org.unimelb.itime.ui.viewmodel.UserProfileViewModel" />
@@ -16,7 +18,8 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/color_fafafa">
 
         <include
             layout="@layout/toolbar_common"
@@ -174,7 +177,7 @@
 
                     <TextView
                         style="@style/itime_subtitle_15sp"
-                        android:text="@{contentVM.user.gender}" />
+                        android:text="@{AppUtil.getGenderStr(contentVM.user.gender)}" />
 
                     <TextView style="@style/itime_bottom_divider_line" />
 

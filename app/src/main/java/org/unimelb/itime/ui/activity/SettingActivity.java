@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -45,6 +46,12 @@ public class SettingActivity extends EmptyActivity{
         fragmentManager = getSupportFragmentManager();
         int task = getIntent().getIntExtra(TASK,-100);
         this.fragmentSwitcher(task);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fragmentSwitcher(resultCode);
     }
 
     private void fragmentSwitcher(int task){

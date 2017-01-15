@@ -13,6 +13,7 @@ import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.restfulapi.CalendarApi;
 import org.unimelb.itime.restfulapi.SettingApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -29,10 +30,11 @@ import rx.Subscriber;
  */
 
 public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends MvpBasePresenter<V>{
-    private static final String TAG = "CalendarPresenter";
-    private static final int TASK_CALENDAR_UPDATE = 0;
-    private static final int TASK_CALENDAR_DELETE = 1;
-    private static final int TASK_CALENDAR_INSERT = 2;
+    public static final String TAG = "CalendarPresenter";
+    public static final int TASK_CALENDAR_UPDATE = 0;
+    public static final int TASK_CALENDAR_DELETE = 1;
+    public static final int TASK_CALENDAR_INSERT = 2;
+
     private Context context;
     private CalendarApi calendarApi;
 
@@ -72,6 +74,10 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
                         Calendar.class, "calendarUid",calendar.getCalendarUid()).get(0);
                 oldCal.delete();
                 DBManager.getInstance(context).insert(Arrays.asList(calendarHttpResult.getData()));
+
+                if(getView() != null){
+                    getView().onTaskSuccess(TASK_CALENDAR_UPDATE,calendarHttpResult.getData());
+                }
             }
 
         };
@@ -102,7 +108,8 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
             public void onNext(HttpResult<Calendar> calendarHttpResult) {
                 Calendar oldCal =  DBManager.getInstance(context).find(
                         Calendar.class, "calendarUid",calendar.getCalendarUid()).get(0);
-                oldCal.delete();
+                oldCal.setDeleteLevel(calendarHttpResult.getData().getDeleteLevel());
+                oldCal.update();
 
                 if(getView() != null){
                     getView().onTaskSuccess(TASK_CALENDAR_DELETE,calendarHttpResult.getData());
@@ -136,7 +143,7 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
             public void onNext(HttpResult<Calendar> calendarHttpResult) {
                 DBManager.getInstance(context).insert(Arrays.asList(calendarHttpResult.getData()));
                 if(getView() != null){
-                    getView().onTaskSuccess(TASK_CALENDAR_DELETE,calendarHttpResult.getData());
+                    getView().onTaskSuccess(TASK_CALENDAR_INSERT,calendarHttpResult.getData());
                 }
             }
         };

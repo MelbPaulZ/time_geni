@@ -238,7 +238,8 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
     public void onNext() {
         if (EventUtil.isUserHostOfEvent(getContext(), event)) {
             EventEditFragment eventEditFragment = new EventEditFragment();
-            eventEditFragment.setEvent(this.event);
+            Event cpyEvent = EventUtil.copyEvent(event);
+            eventEditFragment.setEvent(cpyEvent);
             getBaseActivity().openFragment(eventEditFragment);
         }
     }

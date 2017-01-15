@@ -12,6 +12,9 @@ import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.UserUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import rx.Observable;
 import rx.Subscriber;
 
@@ -22,13 +25,16 @@ import static org.unimelb.itime.ui.presenter.contact.ContextPresenter.getContext
  */
 
 public class UserPresenter<V extends TaskBasedMvpView<User>> extends MvpBasePresenter<V>{
-
-    private static final int TASK_USER_UPDATE = 0;
     private static final String TAG = "UserPresenter";
+
+    public static final int TASK_USER_UPDATE = 0;
+    public static final int TASK_USER_PSW_NOT_MATCH = 1;
+
     private Context context;
     private UserApi userApi;
 
     public UserPresenter(Context context){
+        this.context = context;
         userApi = HttpUtil.createService(context,UserApi.class);
     }
 
@@ -59,6 +65,40 @@ public class UserPresenter<V extends TaskBasedMvpView<User>> extends MvpBasePres
                 //update sharedPreference
                 UserUtil.getInstance(getContext()).login(UserUtil.getInstance(getContext()).getUserLoginRes());
 
+                if(getView() != null){
+                    getView().onTaskSuccess(TASK_USER_UPDATE, userHttpResult.getData());
+                }
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
+
+    public void updatePassword(String psw, String confirmedPsw){
+        if(getView() != null){
+            getView().onTaskStart(TASK_USER_UPDATE);
+        }
+
+        HashMap<String,Object> pswPackage = new HashMap<>();
+        pswPackage.put("password",psw);
+        pswPackage.put("password_confirmation",confirmedPsw);
+
+        Observable<HttpResult<User>> observable = userApi.updatePassword(pswPackage);
+        Subscriber<HttpResult<User>> subscriber = new Subscriber<HttpResult<User>>() {
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: ");
+                if(getView() != null){
+                    getView().onTaskError(TASK_USER_UPDATE);
+                }
+            }
+
+            @Override
+            public void onNext(HttpResult<User> userHttpResult) {
                 if(getView() != null){
                     getView().onTaskSuccess(TASK_USER_UPDATE, userHttpResult.getData());
                 }

@@ -51,7 +51,7 @@ public class SettingNotificationFragment extends BaseUiAuthFragment<TaskBasedMvp
         contentViewModel.setSetting(UserUtil.getInstance(getContext()).getSetting());
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.notifications));
 
         binding.setContentVM(contentViewModel);
@@ -65,7 +65,7 @@ public class SettingNotificationFragment extends BaseUiAuthFragment<TaskBasedMvp
 
     @Override
     public void onBack() {
-
+        getBaseActivity().finish();
     }
 
     @Override

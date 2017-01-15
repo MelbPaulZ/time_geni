@@ -73,7 +73,7 @@ public class BaseContact implements ITimeContactInterface, Serializable,Comparab
         CharacterParser characterParser = CharacterParser.getInstance();
 
         // 汉字转换成拼音
-        pinyin = characterParser.getSelling(name);
+        pinyin = characterParser.getSelling(name.toLowerCase());
         if(pinyin.length()>0) {
             String sortString = pinyin.substring(0, 1).toUpperCase();
 

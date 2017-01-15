@@ -24,9 +24,7 @@ public class PlusTitleBar extends BaseTitleBar{
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 SizeUtil.dp2px(getContext(),16),
                 SizeUtil.dp2px(getContext(),16));
-        params.addRule(CENTER_HORIZONTAL);
-        params.addRule(CENTER_IN_PARENT);
-        params.addRule(ALIGN_PARENT_RIGHT);
+        params.addRule(CENTER_VERTICAL);
         params.setMargins(SizeUtil.dp2px(getContext(), 10),
                 0,
                 SizeUtil.dp2px(getContext(), 10),

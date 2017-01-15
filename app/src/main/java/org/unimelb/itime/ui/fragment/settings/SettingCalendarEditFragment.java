@@ -27,6 +27,7 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<TaskBasedMvp
     private FragmentSettingCalendarEditBinding binding;
 
     private CalendarViewModel contentViewModel;
+
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
     private CalendarPresenter presenter;
     private Calendar calendar;
@@ -57,9 +58,11 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<TaskBasedMvp
         contentViewModel.setCalendar(calendar);
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.calendar_title));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.setting_edit_calendar));
         toolbarViewModel.setRightTitleStr(getString(R.string.done));
+
+        contentViewModel.setToolbarViewModel(toolbarViewModel);
 
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
@@ -72,8 +75,7 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<TaskBasedMvp
 
     @Override
     public void onNext() {
-        // TODO: 12/1/17 presenter.update()
-
+        contentViewModel.onEditDoneClick().onClick(null);
     }
 
     @Override
@@ -83,7 +85,7 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<TaskBasedMvp
 
     @Override
     public void onTaskSuccess(int taskId, Calendar data) {
-
+        getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
     }
 
 

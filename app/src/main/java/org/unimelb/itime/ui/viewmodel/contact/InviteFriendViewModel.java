@@ -7,9 +7,11 @@ import android.databinding.ObservableList;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.ITimeUser;
@@ -553,7 +555,7 @@ public class InviteFriendViewModel extends BaseObservable {
 
     public  class SearchContactCallback{
         public void failed(){
-
+            Toast.makeText(presenter.getContext(), presenter.getContext().getResources().getString(R.string.access_fail),Toast.LENGTH_SHORT).show();
         }
 
         public void success(Contact contact){

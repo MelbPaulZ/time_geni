@@ -54,7 +54,7 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
         contentViewModel.setUser(user);
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.setting_my_profile));
 
         binding.setContentVM(contentViewModel);

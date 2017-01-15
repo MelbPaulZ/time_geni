@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
  */
 
 @Entity
-public class User implements Serializable {
+public class User implements Serializable, Cloneable {
 
     public  final static String MALE = "male";
     public final static String FEMALE = "female";
@@ -223,6 +223,17 @@ public User(String userUid, String userId, String personalAlias, String email,
         }
     }
 
+    @Override
+    public User clone() {
+        User user = null;
+        try
+        {
+            user = (User) super.clone();
+        } catch (CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return user;
+    }
 }
 
 

@@ -49,10 +49,14 @@ public class EventResponseFragment extends BaseUiAuthFragment<EventResponseMvpVi
 
         contentViewModel = new EventResponseViewModel(getPresenter());
         toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.event_title_response));
+        toolbarViewModel.setRightClickable(false);
 
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
+
+        getPresenter().loadData(event.getEventUid());
     }
 
     public void setData(Event event){
@@ -62,12 +66,12 @@ public class EventResponseFragment extends BaseUiAuthFragment<EventResponseMvpVi
 
     @Override
     public void onBack() {
-
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void onNext() {
-
+        getFragmentManager().popBackStack();
     }
 
     @Override
@@ -77,7 +81,7 @@ public class EventResponseFragment extends BaseUiAuthFragment<EventResponseMvpVi
 
     @Override
     public void onTaskSuccess(int taskId, List<EventResponse> data) {
-
+        contentViewModel.setItemList(data);
     }
 
     @Override

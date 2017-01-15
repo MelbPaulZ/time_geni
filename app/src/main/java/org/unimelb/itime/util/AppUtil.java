@@ -1,7 +1,9 @@
 package org.unimelb.itime.util;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -101,6 +103,19 @@ public class AppUtil {
             default:
                 return "N/A";
 
+        }
+    }
+
+    public static String getGenderStr(String gCode){
+        switch (gCode){
+            case "0":
+                return "Female";
+            case "1":
+                return "Male";
+            case "2":
+                return "Undefined";
+            default:
+                return "N/A";
         }
     }
 }

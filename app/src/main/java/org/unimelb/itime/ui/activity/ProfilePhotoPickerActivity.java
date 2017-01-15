@@ -27,6 +27,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.ActivityProfilePhotopickerBinding;
 import org.unimelb.itime.managers.SettingManager;
+import org.unimelb.itime.ui.presenter.UserPresenter;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.widget.TimeGeniiPopupWindow;
@@ -93,27 +94,27 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
 
     private void initPopupWindow(){
         popupWindow =
-        new ActionSheetDialog(ProfilePhotoPickerActivity.this)
-                .builder()
-                .setCancelable(true)
-                .setCanceledOnTouchOutside(true)
-                .addSheetItem("Take Photo", null,
-                        new ActionSheetDialog.OnSheetItemClickListener() {
-                            @Override
-                            public void onClick(int i) {
-                                ImagePicker.getInstance().takePicture(ProfilePhotoPickerActivity.this,ImagePicker.REQUEST_CODE_TAKE);
+                new ActionSheetDialog(ProfilePhotoPickerActivity.this)
+                        .builder()
+                        .setCancelable(true)
+                        .setCanceledOnTouchOutside(true)
+                        .addSheetItem("Take Photo", null,
+                                new ActionSheetDialog.OnSheetItemClickListener() {
+                                    @Override
+                                    public void onClick(int i) {
+                                        ImagePicker.getInstance().takePicture(ProfilePhotoPickerActivity.this,ImagePicker.REQUEST_CODE_TAKE);
 //                                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
 //                                                startActivityForResult(intent, TAKE_PHOTO);
-                            }
-                        })
-                .addSheetItem("Choose from Photos", null,
-                        new ActionSheetDialog.OnSheetItemClickListener() {
-                            @Override
-                            public void onClick(int i) {
-                                Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
-                                startActivityForResult(intent, CHOOSE_FROM_LIBRARY);
-                            }
-                        });
+                                    }
+                                })
+                        .addSheetItem("Choose from Photos", null,
+                                new ActionSheetDialog.OnSheetItemClickListener() {
+                                    @Override
+                                    public void onClick(int i) {
+                                        Intent intent = new Intent(ProfilePhotoPickerActivity.this, ImageGridActivity.class);
+                                        startActivityForResult(intent, CHOOSE_FROM_LIBRARY);
+                                    }
+                                });
     }
 
     private void initListener(){
@@ -143,15 +144,17 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
             @Override
             public void done(AVException e) {
                 if (e==null) {
-                    SettingManager.getInstance(getApplicationContext()).getSetting().getUser().setPhoto(file.getUrl());
-                    // TODO: 28/12/2016 sync user to server
-
-
+                    User user = UserUtil.getInstance(getApplicationContext()).getUser();
+                    user.setPhoto(file.getUrl());
+                    UserPresenter presenter = new UserPresenter(getApplicationContext());
+                    presenter.updateProfile(user);
                 }else{
                     Toast.makeText(getApplicationContext(), "fail", Toast.LENGTH_SHORT).show();
                 }
 
                 AppUtil.hideProgressBar();
+                ProfilePhotoPickerActivity.this.setResult(SettingActivity.TASK_TO_MY_PROFILE);
+                finish();
             }
         });
     }
@@ -167,7 +170,6 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
                 for (int i = 0; i < images.size(); i++) {
                     Picasso.with(ProfilePhotoPickerActivity.this).load(new File(images.get(i).path)).into(binding.profileImage);
                     // todo update photo to server
-
 
                     try {
                         AppUtil.showProgressBar(this, "Waiting", "uploading photo");

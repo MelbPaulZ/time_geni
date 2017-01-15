@@ -2,6 +2,8 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -11,6 +13,7 @@ import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.mvpview.UserMvpView;
 import org.unimelb.itime.ui.presenter.UserPresenter;
+import org.unimelb.itime.util.AppUtil;
 
 import java.util.List;
 
@@ -35,6 +38,7 @@ public class UserProfileViewModel extends CommonViewModel {
 
     private List<GenderWrapper> genderWrapperList;
     private ItemView genderItemView;
+    private ToolbarViewModel toolbarViewModel;
 
 
     public UserProfileViewModel(UserPresenter<? extends TaskBasedMvpView<User>> presenter){
@@ -42,6 +46,14 @@ public class UserProfileViewModel extends CommonViewModel {
         if(presenter.getView() instanceof UserMvpView){
             this.mvpView = (UserMvpView) presenter.getView();
         }
+    }
+
+    public ToolbarViewModel getToolbarViewModel() {
+        return toolbarViewModel;
+    }
+
+    public void setToolbarViewModel(ToolbarViewModel toolbarViewModel) {
+        this.toolbarViewModel = toolbarViewModel;
     }
 
     @Bindable
@@ -52,6 +64,28 @@ public class UserProfileViewModel extends CommonViewModel {
     public void setUser(User user) {
         this.user = user;
         notifyPropertyChanged(BR.user);
+    }
+
+    public View.OnClickListener onResetPSWDoneClick(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (password.equals(passwordConfirmation)){
+                    presenter.updatePassword(password,passwordConfirmation);
+                }else{
+                    presenter.getView().onTaskError(UserPresenter.TASK_USER_PSW_NOT_MATCH);
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener onEditNameDoneClick(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.updateProfile(user);
+            }
+        };
     }
 
     public View.OnClickListener onAvatarClicked(){
@@ -113,17 +147,34 @@ public class UserProfileViewModel extends CommonViewModel {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 for(int k = 0; k < genderWrapperList.size(); k++){
-                    if(i == k){
-                        genderWrapperList.get(k).setSelected(true);
-                    }else{
-                        genderWrapperList.get(k).setSelected(false);
-                    }
+                    genderWrapperList.get(k).setSelected(i == k);
                 }
-                user.setGender(String.valueOf(i));
+                user.setGender(genderWrapperList.get(i).gCode);
+                presenter.updateProfile(user);
             }
         };
     }
 
+    public TextWatcher onEditTextChanged(){
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (toolbarViewModel != null){
+                    int length = s.toString().replace(" ", "").length();
+                    toolbarViewModel.setRightClickable(length!=0);
+                }
+            }
+        };
+    }
 
     @Bindable
     public String getPassword() {
@@ -167,11 +218,17 @@ public class UserProfileViewModel extends CommonViewModel {
 
     public static class GenderWrapper extends BaseObservable{
         private String name;
+        private String gCode = "2";
         private boolean selected;
 
-        public GenderWrapper(String name, boolean selected){
-            this.name = name;
+        public GenderWrapper(String gCode, boolean selected){
+            this.gCode = gCode;
             this.selected = selected;
+            this.name = AppUtil.getGenderStr(gCode);
+        }
+
+        public String getgCode() {
+            return gCode;
         }
 
         @Bindable

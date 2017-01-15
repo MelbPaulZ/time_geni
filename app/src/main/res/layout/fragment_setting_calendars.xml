@@ -12,7 +12,8 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_fafafa">
 
     <include layout="@layout/toolbar_common"
         bind:vm="@{toolbarVM}"/>
@@ -36,8 +37,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:padding="10dp"
             android:gravity="center"
+            android:textColor="@color/blue"
+            android:textSize="17sp"
             android:onClick="@{contentVM.onAddCalendarClick()}"
             android:text="@string/add_calendar"/>
     </LinearLayout>

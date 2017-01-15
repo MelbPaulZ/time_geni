@@ -53,7 +53,7 @@ public class SettingCalendarPreferenceFragment extends BaseUiAuthFragment<Calend
         contentViewModel.setSetting(UserUtil.getInstance(getContext()).getSetting());
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.setting_calendar_pref));
 
         binding.setContentVM(contentViewModel);

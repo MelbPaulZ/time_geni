@@ -52,7 +52,7 @@ public class SettingCalendarImportFragment extends BaseUiAuthFragment<CalendarIm
         contentViewModel.setUser(user);
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.setting_import_calendar));
 
         binding.setContentVM(contentViewModel);
