@@ -23,6 +23,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.dayview.EventController;
@@ -252,6 +253,11 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
         if (task == EventCommonPresenter.TASK_EVENT_UPDATE) {
             AppUtil.hideProgressBar();
         }
+    }
+
+    @Override
+    public ToolbarViewModel getToolbarViewModel() {
+        return null;
     }
 
     @Override

@@ -55,6 +55,19 @@ public class UserProfileViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.user);
     }
 
+    public View.OnClickListener onResetPSWDoneClick(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (password.equals(passwordConfirmation)){
+                    presenter.updatePassword(password,passwordConfirmation);
+                }else{
+                    presenter.getView().onTaskError(UserPresenter.TASK_USER_PSW_NOT_MATCH);
+                }
+            }
+        };
+    }
+
     public View.OnClickListener onEditNameDoneClick(){
         return new View.OnClickListener() {
             @Override

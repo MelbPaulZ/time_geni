@@ -17,6 +17,7 @@ import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.weekview.WeekView;
@@ -146,5 +147,10 @@ public class ViewInCalendarWeekFragment extends CalendarWeekFragment implements 
         if (task == EventCommonPresenter.TASK_EVENT_UPDATE) {
             AppUtil.hideProgressBar();
         }
+    }
+
+    @Override
+    public ToolbarViewModel getToolbarViewModel() {
+        return null;
     }
 }

@@ -9,18 +9,24 @@
         <android.support.v7.widget.Toolbar
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="44dp">
+            android:layout_height="44dp"
+            android:background="@drawable/divider_bottom">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="10dp">
+
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:text="@{vm.leftTitleStr}"
+                    android:textColor="@{vm.leftColor}"
+                    android:clickable="@{vm.leftClickable}"
+                    android:background="@{vm.leftDrawable}"
                     android:textSize="17sp"
                     android:onClick="@{vm.onClickLeft()}"/>
 
@@ -34,12 +40,15 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
                     android:text="@{vm.rightTitleStr}"
+                    android:clickable="@{vm.rightClickable}"
+                    android:textColor="@drawable/toolbar_state_right_btn"
                     android:onClick="@{vm.onClickRight()}"
+                    android:background="@{vm.rightDrawable}"
                     android:textSize="17sp" />
 
             </RelativeLayout>

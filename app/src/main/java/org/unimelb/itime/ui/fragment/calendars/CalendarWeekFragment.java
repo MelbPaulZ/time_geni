@@ -21,6 +21,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.dayview.EventController;
@@ -233,6 +234,11 @@ public class CalendarWeekFragment extends BaseUiFragment<Object, EventCommonMvpV
     @Override
     public void setData(Object o) {
 
+    }
+
+    @Override
+    public ToolbarViewModel getToolbarViewModel() {
+        return null;
     }
 
     @Override

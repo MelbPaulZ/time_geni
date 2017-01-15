@@ -56,7 +56,7 @@ public class SettingStDefaultAlertFragment extends BaseUiAuthFragment<TaskBasedM
         contentViewModel.setAlertSet(alertWrapperMaker(alertKeys));
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.setting_default_alert));
 
         binding.setContentVM(contentViewModel);
@@ -66,6 +66,11 @@ public class SettingStDefaultAlertFragment extends BaseUiAuthFragment<TaskBasedM
     @Override
     public SettingPresenter createPresenter() {
         return new SettingPresenter<>(getContext());
+    }
+
+    @Override
+    public ToolbarViewModel getToolbarViewModel() {
+        return toolbarViewModel;
     }
 
     @Override

@@ -2,12 +2,16 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCalendarMvpView;
+import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.presenter.CalendarPresenter;
 import org.unimelb.itime.bean.Calendar;
 
@@ -20,8 +24,8 @@ import me.tatarka.bindingcollectionadapter.ItemView;
  * Created by yuhaoliu on 12/01/2017.
  */
 
-public class CalendarViewModel extends CommonViewModel {
-    private CalendarPresenter presenter;
+public class CalendarViewModel<T extends ItimeCommonMvpView & TaskBasedMvpView<Calendar>> extends CommonViewModel {
+    private CalendarPresenter<T> presenter;
     //for creating calendar, others == null
     private Calendar calendar;
     private ItemView calItemView;
@@ -85,6 +89,24 @@ public class CalendarViewModel extends CommonViewModel {
             @Override
             public void onClick(View v) {
                 presenter.update(calendar);
+            }
+        };
+    }
+
+    public TextWatcher onEditTextChanged(){
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                presenter.getView().getToolbarViewModel().setLeftClickable(s.toString().replace(" ", "").length() != 0);
             }
         };
     }

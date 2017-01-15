@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +21,10 @@ import static org.unimelb.itime.R.dimen.hide;
  * Created by Paul on 18/10/16.
  */
 public class AndroidViewModel extends BaseObservable {
-
+    @BindingAdapter("android:onTextChange")
+    public static void setOnFocusChangeListener(EditText view, TextWatcher watcher){
+        view.addTextChangedListener(watcher);
+    }
 
     @BindingAdapter("android:onFocusChange")
     public static void setOnFocusChangeListener(View view, View.OnFocusChangeListener onFocusChangeListener){

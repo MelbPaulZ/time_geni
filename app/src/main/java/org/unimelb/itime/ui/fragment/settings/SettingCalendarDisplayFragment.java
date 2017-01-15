@@ -53,7 +53,7 @@ public class SettingCalendarDisplayFragment extends BaseUiAuthFragment<SettingCa
         contentViewModel.setCalItemView(ItemView.of(BR.wrapper, R.layout.listview_setting_calendar));
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.calendar_title));
 
         binding.setContentVM(contentViewModel);
@@ -67,7 +67,6 @@ public class SettingCalendarDisplayFragment extends BaseUiAuthFragment<SettingCa
 
     @Override
     public void onTaskSuccess(int taskId, Calendar data) {
-
     }
 
     @Override
@@ -78,6 +77,11 @@ public class SettingCalendarDisplayFragment extends BaseUiAuthFragment<SettingCa
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public ToolbarViewModel getToolbarViewModel() {
+        return toolbarViewModel;
     }
 
     public void onBack() {

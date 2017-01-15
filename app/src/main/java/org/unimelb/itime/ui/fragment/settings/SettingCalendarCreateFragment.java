@@ -57,12 +57,17 @@ public class SettingCalendarCreateFragment extends BaseUiAuthFragment<TaskBasedM
         contentViewModel.setCalendar(calendar);
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.calendar_title));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.add_calendar));
         toolbarViewModel.setRightTitleStr(getString(R.string.done));
 
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
+    }
+
+    @Override
+    public ToolbarViewModel getToolbarViewModel() {
+        return toolbarViewModel;
     }
 
     @Override
@@ -82,7 +87,20 @@ public class SettingCalendarCreateFragment extends BaseUiAuthFragment<TaskBasedM
 
     @Override
     public void onTaskSuccess(int taskId, Calendar data) {
-
+        switch (taskId){
+            case CalendarPresenter.TASK_CALENDAR_UPDATE:{
+                getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
+                break;
+            }
+            case CalendarPresenter.TASK_CALENDAR_DELETE:{
+                getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
+                break;
+            }
+            case CalendarPresenter.TASK_CALENDAR_INSERT:{
+                getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
+                break;
+            }
+        }
     }
 
 

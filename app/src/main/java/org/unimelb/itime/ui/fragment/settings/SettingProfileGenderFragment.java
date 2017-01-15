@@ -64,7 +64,7 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
         contentViewModel.setGenderItemView(ItemView.of(BR.wrapper, R.layout.listview_setting_gender));
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.setting_my_profile));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.setting_gender));
         toolbarViewModel.setRightTitleStr("");
 
@@ -83,6 +83,11 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
         return list;
     }
 
+
+    @Override
+    public ToolbarViewModel getToolbarViewModel() {
+        return toolbarViewModel;
+    }
 
     @Override
     public void onBack() {

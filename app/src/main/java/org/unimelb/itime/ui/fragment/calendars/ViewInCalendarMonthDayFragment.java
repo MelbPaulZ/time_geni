@@ -19,6 +19,7 @@ import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.vendor.dayview.MonthDayView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
@@ -155,5 +156,9 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
         startActivity(intent);
     }
 
+    @Override
+    public ToolbarViewModel getToolbarViewModel() {
+        return null;
+    }
 }
 
