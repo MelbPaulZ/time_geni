@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
@@ -18,6 +19,7 @@ import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.EventPresenter;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.dayview.EventController;
 import org.unimelb.itime.vendor.dayview.MonthDayView;
@@ -46,17 +48,18 @@ public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCa
 
     @Override
     public void onTaskStart(int taskId) {
-
+        AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
     }
 
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
-
+        AppUtil.hideProgressBar();
     }
 
     @Override
     public void onTaskError(int taskId) {
-
+        AppUtil.hideProgressBar();
+        Toast.makeText(getContext(), "some error", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -150,7 +153,7 @@ public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCa
                 Event copyEvent = EventUtil.copyEvent(event);
                 copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                 copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-                presenter.updateEvent(copyEvent, EventPresenter.UPDATE_ALL, originEvent.getStartTime());
+                presenter.updateEvent(copyEvent, EventPresenter.UPDATE_ALL, copyEvent.getStartTime());
             }
 
         }

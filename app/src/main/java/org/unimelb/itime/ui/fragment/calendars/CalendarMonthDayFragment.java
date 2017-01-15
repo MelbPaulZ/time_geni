@@ -141,10 +141,6 @@ public class CalendarMonthDayFragment extends CalendarBaseViewFragment {
     }
 
 
-    @Override
-    public void onTaskStart(int task) {
-        AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
-    }
 
     @Override
     public void backToToday() {
