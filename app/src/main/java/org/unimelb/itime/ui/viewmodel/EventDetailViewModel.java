@@ -33,6 +33,7 @@ import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,8 +55,6 @@ public class EventDetailViewModel extends CommonViewModel {
     private Context context;
     private ObservableBoolean isLeftBtnSelected = new ObservableBoolean(false), isRightBtnSelected = new ObservableBoolean(false);
     private String leftBtnText = "" , rightBtnText = "";
-
-
 
     private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeConfirmVisibility,
     inviteeUnconfirmVisibility, soloInvisible;
@@ -121,11 +120,14 @@ public class EventDetailViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Timeslot selectedTimeSlot = TimeSlotUtil.getSelectedTimeSlots(context, event.getTimeslot()).get(0);
-                selectedTimeSlot.setIsConfirmed(1);
-                event.setStatus(Event.STATUS_CONFIRMED);
-                presenter.confirmEvent(event, selectedTimeSlot.getTimeslotUid());
-
+                Timeslot timeslot = null;
+                for (SubTimeslotViewModel viewModel: wrapperTimeSlotList){
+                    if (viewModel.getWrapper().isSelected()){
+                        timeslot = (Timeslot) viewModel.getWrapper().getTimeSlot();
+                        break;
+                    }
+                }
+                presenter.confirmEvent(event.getCalendarUid(), event.getEventUid(), timeslot.getTimeslotUid());
             }
         };
     }
@@ -135,10 +137,15 @@ public class EventDetailViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
                 if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
                     // todo implement update only this
-                    presenter.acceptEvent(event, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                    presenter.acceptEvent(event.getCalendarUid(),
+                            event.getEventUid(),
+                            EventCommonPresenter.UPDATE_ALL,
+                            orgEvent.getStartTime());
                 }else {
                     presenter.acceptTimeslots(event);
                 }
@@ -409,6 +416,9 @@ public class EventDetailViewModel extends CommonViewModel {
             public void onClick(View v) {
                 if (mvpView!=null) {
                     // TODO: 8/12/2016 quit event update server and local
+
+
+
                     Toast.makeText(context, "Quit This Event, To do", Toast.LENGTH_SHORT).show();
                     Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
                     // TODO: 26/12/2016 implement quit only this?
@@ -417,6 +427,24 @@ public class EventDetailViewModel extends CommonViewModel {
                 }
             }
         };
+    }
+
+
+
+    /**
+     * this method use for update event by wrapperlists
+     * @param wrapperTimeSlot
+     * @param posStr if the timeslot is selected, update status to posStr
+     * @param negStr if the timeslot is unselected, update status to negStr
+     */
+    private void updateTimeslotStatus(WrapperTimeSlot wrapperTimeSlot, String posStr, String negStr){
+        Timeslot ts = (Timeslot) wrapperTimeSlot.getTimeSlot();
+        Timeslot timeslot = TimeSlotUtil.getTimeSlot(event, ts);
+        if (wrapperTimeSlot.isSelected()){
+            timeslot.setStatus(posStr);
+        }else{
+            timeslot.setStatus(negStr);
+        }
     }
 
     @BindingAdapter({"bind:url"})

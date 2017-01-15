@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.EventResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailBinding;
 import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
@@ -165,7 +166,9 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
 
     @Override
     public void toResponse() {
-        
+        EventResponseFragment eventResponseFragment = new EventResponseFragment();
+        eventResponseFragment.setData(event);
+        getBaseActivity().openFragment(eventResponseFragment);
     }
 
 
