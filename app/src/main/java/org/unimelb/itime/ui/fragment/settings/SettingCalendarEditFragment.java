@@ -62,6 +62,8 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<TaskBasedMvp
         toolbarViewModel.setTitleStr(getString(R.string.setting_edit_calendar));
         toolbarViewModel.setRightTitleStr(getString(R.string.done));
 
+        contentViewModel.setToolbarViewModel(toolbarViewModel);
+
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
     }
@@ -90,10 +92,5 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<TaskBasedMvp
     @Override
     public void onTaskError(int taskId) {
 
-    }
-
-    @Override
-    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
-        return toolbarViewModel;
     }
 }

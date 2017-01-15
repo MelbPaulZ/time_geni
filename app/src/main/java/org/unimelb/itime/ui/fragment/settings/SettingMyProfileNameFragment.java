@@ -56,14 +56,12 @@ public class SettingMyProfileNameFragment extends BaseUiAuthFragment<TaskBasedMv
         toolbarViewModel.setTitleStr(getString(R.string.name));
         toolbarViewModel.setRightTitleStr(getString(R.string.setting_save));
 
+        contentViewModel.setToolbarViewModel(toolbarViewModel);
+
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
     }
 
-    @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return toolbarViewModel;
-    }
 
     @Override
     public void onBack() {

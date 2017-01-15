@@ -256,11 +256,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
     }
 
     @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return null;
-    }
-
-    @Override
     public void onBack() {
 
     }

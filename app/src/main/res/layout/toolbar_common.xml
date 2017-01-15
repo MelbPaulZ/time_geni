@@ -45,7 +45,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
                     android:text="@{vm.rightTitleStr}"
-                    android:clickable="@{vm.rightClickable}"
+                    android:enabled="@{vm.rightClickable}"
                     android:textColor="@drawable/toolbar_state_right_btn"
                     android:onClick="@{vm.onClickRight()}"
                     android:background="@{vm.rightDrawable}"

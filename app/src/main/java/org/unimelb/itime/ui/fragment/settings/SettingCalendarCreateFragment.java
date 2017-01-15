@@ -66,11 +66,6 @@ public class SettingCalendarCreateFragment extends BaseUiAuthFragment<TaskBasedM
     }
 
     @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return toolbarViewModel;
-    }
-
-    @Override
     public void onBack() {
         getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
     }

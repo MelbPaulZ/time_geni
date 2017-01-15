@@ -79,11 +79,6 @@ public class SettingCalendarDisplayFragment extends BaseUiAuthFragment<SettingCa
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return toolbarViewModel;
-    }
-
     public void onBack() {
         getBaseActivity().backFragment(new SettingCalendarPreferenceFragment());
     }

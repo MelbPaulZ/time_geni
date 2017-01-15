@@ -83,12 +83,6 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
         return list;
     }
 
-
-    @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return toolbarViewModel;
-    }
-
     @Override
     public void onBack() {
         getBaseActivity().backFragment(new SettingMyProfileFragment());

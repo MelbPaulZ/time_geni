@@ -4,6 +4,9 @@ import android.databinding.Bindable;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+
+import com.android.databinding.library.baseAdapters.BR;
+
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 
 
@@ -15,7 +18,7 @@ import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 public class ToolbarViewModel<V extends ItimeCommonMvpView> extends CommonViewModel {
     private String leftTitleStr, titleStr, rightTitleStr;
     private int leftColor, rightColor;
-    private boolean leftClickable = true, rightClickable = true;
+    private boolean leftClickable = true, rightClickable = false;
     private Drawable leftDrawable, rightDrawable;
 
     private V mvpView;
@@ -99,6 +102,7 @@ public class ToolbarViewModel<V extends ItimeCommonMvpView> extends CommonViewMo
 
     public void setLeftClickable(boolean leftClickable) {
         this.leftClickable = leftClickable;
+        notifyPropertyChanged(BR.leftClickable);
     }
 
     @Bindable
@@ -108,6 +112,7 @@ public class ToolbarViewModel<V extends ItimeCommonMvpView> extends CommonViewMo
 
     public void setRightClickable(boolean rightClickable) {
         this.rightClickable = rightClickable;
+        notifyPropertyChanged(BR.rightClickable);
     }
 
     @Bindable
@@ -117,6 +122,7 @@ public class ToolbarViewModel<V extends ItimeCommonMvpView> extends CommonViewMo
 
     public void setLeftDrawable(Drawable leftDrawable) {
         this.leftDrawable = leftDrawable;
+        notifyPropertyChanged(BR.leftDrawable);
     }
 
     @Bindable
@@ -126,6 +132,7 @@ public class ToolbarViewModel<V extends ItimeCommonMvpView> extends CommonViewMo
 
     public void setRightDrawable(Drawable rightDrawable) {
         this.rightDrawable = rightDrawable;
+        notifyPropertyChanged(BR.rightDrawable);
     }
 
     public V getMvpView() {

@@ -62,12 +62,6 @@ public class SettingProfileResetPasswordFragment extends BaseUiAuthFragment<Task
         binding.setToolbarVM(toolbarViewModel);
     }
 
-
-    @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return toolbarViewModel;
-    }
-
     @Override
     public void onBack() {
         getBaseActivity().backFragment(new SettingMyProfileFragment());

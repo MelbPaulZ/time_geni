@@ -2,11 +2,15 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toolbar;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import org.antlr.v4.Tool;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.mvpview.UserMvpView;
@@ -36,6 +40,7 @@ public class UserProfileViewModel extends CommonViewModel {
 
     private List<GenderWrapper> genderWrapperList;
     private ItemView genderItemView;
+    private ToolbarViewModel toolbarViewModel;
 
 
     public UserProfileViewModel(UserPresenter<? extends TaskBasedMvpView<User>> presenter){
@@ -43,6 +48,14 @@ public class UserProfileViewModel extends CommonViewModel {
         if(presenter.getView() instanceof UserMvpView){
             this.mvpView = (UserMvpView) presenter.getView();
         }
+    }
+
+    public ToolbarViewModel getToolbarViewModel() {
+        return toolbarViewModel;
+    }
+
+    public void setToolbarViewModel(ToolbarViewModel toolbarViewModel) {
+        this.toolbarViewModel = toolbarViewModel;
     }
 
     @Bindable
@@ -144,6 +157,26 @@ public class UserProfileViewModel extends CommonViewModel {
         };
     }
 
+    public TextWatcher onEditTextChanged(){
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (toolbarViewModel != null){
+                    int length = s.toString().replace(" ", "").length();
+                    toolbarViewModel.setRightClickable(length!=0);
+                }
+            }
+        };
+    }
 
     @Bindable
     public String getPassword() {

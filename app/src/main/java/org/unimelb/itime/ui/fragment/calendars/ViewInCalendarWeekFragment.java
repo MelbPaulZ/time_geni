@@ -148,9 +148,4 @@ public class ViewInCalendarWeekFragment extends CalendarWeekFragment implements 
             AppUtil.hideProgressBar();
         }
     }
-
-    @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return null;
-    }
 }

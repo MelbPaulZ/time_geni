@@ -237,11 +237,6 @@ public class CalendarWeekFragment extends BaseUiFragment<Object, EventCommonMvpV
     }
 
     @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return null;
-    }
-
-    @Override
     public void onBack() {
 
     }

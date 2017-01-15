@@ -155,10 +155,5 @@ public class ViewInCalendarMonthDayFragment extends CalendarMonthDayFragment imp
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
     }
-
-    @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return null;
-    }
 }
 

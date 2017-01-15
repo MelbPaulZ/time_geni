@@ -28,6 +28,7 @@ public class CalendarViewModel<T extends ItimeCommonMvpView & TaskBasedMvpView<C
     private CalendarPresenter<T> presenter;
     //for creating calendar, others == null
     private Calendar calendar;
+    private ToolbarViewModel toolbarViewModel;
     private ItemView calItemView;
     protected SettingCalendarMvpView mvpView;
 
@@ -39,6 +40,14 @@ public class CalendarViewModel<T extends ItimeCommonMvpView & TaskBasedMvpView<C
             this.mvpView = (SettingCalendarMvpView) presenter.getView();
             setCalendars(presenter.loadCalendarFromDB());
         }
+    }
+
+    public ToolbarViewModel getToolbarViewModel() {
+        return toolbarViewModel;
+    }
+
+    public void setToolbarViewModel(ToolbarViewModel toolbarViewModel) {
+        this.toolbarViewModel = toolbarViewModel;
     }
 
     public void setCalendar(Calendar calendar) {
@@ -106,7 +115,10 @@ public class CalendarViewModel<T extends ItimeCommonMvpView & TaskBasedMvpView<C
 
             @Override
             public void afterTextChanged(Editable s) {
-                presenter.getView().getToolbarViewModel().setLeftClickable(s.toString().replace(" ", "").length() != 0);
+                if (toolbarViewModel != null){
+                    int length = s.toString().replace(" ", "").length();
+                    toolbarViewModel.setRightClickable(length!=0);
+                }
             }
         };
     }
@@ -122,7 +134,6 @@ public class CalendarViewModel<T extends ItimeCommonMvpView & TaskBasedMvpView<C
                 if (i < calWrapperList.size()){
                     CalendarViewModel.CalendarWrapper wrapper = calWrapperList.get(i);
                     wrapper.setSelected(!wrapper.isSelected());
-                    // TODO: 12/01/2017 update server and local
                     presenter.update(wrapper.calendar);
                 }
             }

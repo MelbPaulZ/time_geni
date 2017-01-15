@@ -79,11 +79,6 @@ public class SettingCalendarImportFragment extends BaseUiAuthFragment<CalendarIm
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return toolbarViewModel;
-    }
-
     public void onBack() {
 
     }

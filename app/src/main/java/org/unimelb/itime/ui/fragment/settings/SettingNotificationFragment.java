@@ -64,11 +64,6 @@ public class SettingNotificationFragment extends BaseUiAuthFragment<TaskBasedMvp
     }
 
     @Override
-    public ToolbarViewModel getToolbarViewModel() {
-        return toolbarViewModel;
-    }
-
-    @Override
     public void onBack() {
         getBaseActivity().finish();
     }
