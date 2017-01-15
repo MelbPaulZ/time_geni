@@ -445,7 +445,8 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp">
+                        android:layout_height="60dp"
+                        android:onClick="@{contentVM.toResponse()}">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -595,7 +596,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_left"
                 android:textSize="17sp"
                 android:text="@{contentVM.leftBtnText}"
-                android:enabled="@{contentVM.getLeftBtnClickable(contentVM.event)}"
+                android:enabled="@{contentVM.getLeftBtnClickable(contentVM.wrapperTimeSlotList)}"
                 android:selected="@{contentVM.isLeftBtnSelected}"
                 android:onClick="@{contentVM.acceptEvent()}"
                 />
@@ -615,7 +616,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_right"
                 android:textSize="17sp"
                 android:text="@{contentVM.rightBtnText}"
-                android:enabled="@{contentVM.getRightBtnClickable(contentVM.event)}"
+                android:enabled="@{contentVM.getRightBtnClickable(contentVM.wrapperTimeSlotList)}"
                 android:selected="@{contentVM.isRightBtnSelected}"
                 android:onClick="@{contentVM.quitEvent()}"/>
         </RelativeLayout>
@@ -644,7 +645,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_left"
                 android:textSize="17sp"
                 android:text="@{contentVM.leftBtnText}"
-                android:enabled="@{contentVM.getLeftBtnClickable(contentVM.event)}"
+                android:enabled="@{contentVM.getLeftBtnClickable(contentVM.wrapperTimeSlotList)}"
                 android:selected="@{contentVM.isLeftBtnSelected}"
                 android:onClick="@{contentVM.acceptEvent()}"
                 />
@@ -664,7 +665,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_right"
                 android:textSize="17sp"
                 android:text="@{contentVM.rightBtnText}"
-                android:enabled="@{contentVM.getRightBtnClickable(contentVM.event)}"
+                android:enabled="@{contentVM.getRightBtnClickable(contentVM.wrapperTimeSlotList)}"
                 android:selected="@{contentVM.isRightBtnSelected}"
                 android:onClick="@{contentVM.rejectAll()}"
                 />
@@ -682,15 +683,17 @@
             android:paddingRight="@dimen/padding_10"
             android:visibility="@{contentVM.unconfirmHostVisibility(contentVM.event)}">
 
+            <!--change from event to wrapperlist panduan-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, contentVM.event)? true: false}"
+
+                android:clickable="@{TimeSlotUtil.isAtLeastOneWrapperSelected(contentVM.wrapperTimeSlotList)? true: false}"
                 android:gravity="center"
                 android:onClick="@{contentVM.onClickHostConfirm()}"
                 android:text="@string/confirm_event"
                 android:textAlignment="center"
-                android:textColor="@{TimeSlotUtil.chooseAtLeastOnTimeSlot(context, contentVM.event)? @color/color_FE9E18 : @color/gray_b2b2b2}"
+                android:textColor="@{TimeSlotUtil.isAtLeastOneWrapperSelected(contentVM.wrapperTimeSlotList)? @color/color_FE9E18 : @color/gray_b2b2b2}"
                 android:textSize="17sp" />
 
         </LinearLayout>

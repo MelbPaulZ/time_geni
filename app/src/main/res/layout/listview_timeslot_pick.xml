@@ -21,9 +21,11 @@
             android:layout_width="23dp"
             android:layout_height="23dp"
             android:layout_marginLeft="10dp"
-            android:background="@{itemVM.wrapper.selected ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}"
+            android:selected="@{itemVM.iconSelected}"
+            android:background="@drawable/selector_icon_timeslot_bg"
             android:layout_marginTop="14dp"/>
-        <!--android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent, position) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}"-->
+        <!--android:background="@{itemVM.imageBackGround}"-->
+        <!--android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent, position) ? @drawable/icon_event_invitee_selected : @drawable/icon_event_invitee_unselected}"-->
 
 
         <!--this is timeslot string-->

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.EventResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailBinding;
 import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
@@ -20,6 +21,7 @@ import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel.SubTimeslotViewModel;
 
@@ -83,7 +85,6 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             this.timeslotVMList.add(subTimeslotViewModel);
         }
         contentViewModel.setWrapperTimeSlotList(timeslotVMList);
-
     }
 
     private void initToolbar(){
@@ -158,6 +159,17 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         getBaseActivity().openFragment(gridFragment);
     }
 
+    @Override
+    public void reloadPage() {
+        contentViewModel.setWrapperTimeSlotList(timeslotVMList);
+    }
+
+    @Override
+    public void toResponse() {
+        EventResponseFragment eventResponseFragment = new EventResponseFragment();
+        eventResponseFragment.setData(event);
+        getBaseActivity().openFragment(eventResponseFragment);
+    }
 
 
     @Override

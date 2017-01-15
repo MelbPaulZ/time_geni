@@ -71,6 +71,16 @@ implements EventDetailMvpView {
 
     }
 
+    @Override
+    public void reloadPage() {
+
+    }
+
+    @Override
+    public void toResponse() {
+
+    }
+
 
     @Override
     public void onTaskStart(int task) {

@@ -10,4 +10,6 @@ public interface EventDetailMvpView extends EventCommonMvpView{
     void viewInCalendar();
     void viewInviteeResponse(Timeslot timeSlot);
     void gotoGridView();
+    void reloadPage();
+    void toResponse();
 }
