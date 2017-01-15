@@ -6,11 +6,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toolbar;
 
 import com.android.databinding.library.baseAdapters.BR;
 
-import org.antlr.v4.Tool;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.mvpview.UserMvpView;

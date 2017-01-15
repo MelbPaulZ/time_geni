@@ -7,7 +7,7 @@ import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
 
 
-public class TestActivity extends BaseActivity{
+public class TestActivity extends EmptyActivity{
 
     private final static String TAG = "TestActivity";
 

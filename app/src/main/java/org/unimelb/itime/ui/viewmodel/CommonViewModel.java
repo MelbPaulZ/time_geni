@@ -1,14 +1,10 @@
 package org.unimelb.itime.ui.viewmodel;
 
-import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import com.squareup.picasso.Picasso;
-import org.unimelb.itime.BR;
+
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
@@ -17,7 +13,7 @@ import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
-import java.io.File;
+
 import java.util.List;
 
 /**
@@ -35,8 +31,8 @@ public abstract class CommonViewModel extends AndroidViewModel {
     }
 
 
-//    @BindingAdapter({"android:bindRemoteSrc"})
-//    public static void bindRemoteImg(ImageView imageView, Event event){
+    @BindingAdapter({"bind:loadRemoteImg"})
+    public static void bindRemoteImg(ImageView imageView, Event event){
 ////        LinearLayout parent = (LinearLayout) imageView.getParent();
 ////        int position = parent.indexOfChild(imageView); // get the position
 ////        if (event==null){
@@ -56,7 +52,7 @@ public abstract class CommonViewModel extends AndroidViewModel {
 ////        }else{
 ////            imageView.setVisibility(View.GONE);
 ////        }
-//    }
+    }
 //
 //    @BindingAdapter({"android:bindLocalSrc"})
 //    public static void bindLocalImg(ImageView imageView, Event event){

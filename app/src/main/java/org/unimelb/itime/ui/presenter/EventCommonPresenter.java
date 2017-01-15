@@ -202,24 +202,18 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
 
     /** call the api to accept timeSlots in a event,
      *  after this api called, it will automatically sync with db
-     *  @param event
+     *
      * */
-    public void acceptTimeslots(Event event){
+    public void acceptTimeslots(String calendarUid, String eventUid, HashMap<String, Object> params){
         if (getView()!=null){
             getView().onTaskStart(TASK_TIMESLOT_ACCEPT);
         }
 
-        ArrayList<String> timeslotUids = new ArrayList<>();
-        for (Timeslot timeslot: event.getTimeslot()){
-            if (timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
-                timeslotUids.add(timeslot.getTimeslotUid());
-            }
-        }
-
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("timeslots", timeslotUids);
         String syncToken = AppUtil.getEventSyncToken(context);
-        Observable<HttpResult<List<Event>>> observable = eventApi.acceptTimeslot(event.getCalendarUid(), event.getEventUid(), parameters, syncToken);
+        Observable<HttpResult<List<Event>>> observable = eventApi.acceptTimeslot(calendarUid,
+                eventUid,
+                params,
+                syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
             public void onCompleted() {
@@ -246,15 +240,15 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void acceptEvent(Event event, String type, long orgStartTime){
+    public void acceptEvent(String calendarUid, String eventUid, String type, long orgStartTime){
         if (getView()!=null){
             getView().onTaskStart(TASK_TIMESLOT_ACCEPT);
         }
 
         String syncToken = AppUtil.getEventSyncToken(context);
         Observable<HttpResult<List<Event>>> observable = eventApi.acceptEvent(
-                event.getCalendarUid(),
-                event.getEventUid(),
+                calendarUid,
+                eventUid,
                 type,
                 orgStartTime,
                 syncToken);
@@ -325,15 +319,16 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
     }
 
 
-
     /** call the api to confirm event to server,
      *  after this api called, it will automatically sync db
-     *  @param newEvent
-     *  @param timeslotUid
-     * */
-    public void confirmEvent(Event newEvent, String timeslotUid){
+     *
+     * @param calendarUid
+     * @param eventUid
+     * @param timeslotUid
+     */
+    public void confirmEvent(String calendarUid, String eventUid, String timeslotUid){
         String syncToken = AppUtil.getEventSyncToken(context);
-        Observable<HttpResult<List<Event>>> observable = eventApi.confirm(newEvent.getCalendarUid(), newEvent.getEventUid(), timeslotUid, newEvent, syncToken);
+        Observable<HttpResult<List<Event>>> observable = eventApi.confirm(calendarUid,eventUid, timeslotUid, syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
             public void onCompleted() {

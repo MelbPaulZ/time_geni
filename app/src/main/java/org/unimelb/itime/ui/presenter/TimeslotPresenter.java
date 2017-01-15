@@ -10,7 +10,7 @@ import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.ui.mvpview.TimeslotCommonMvpView;
+import org.unimelb.itime.ui.mvpview.TimeslotBaseMvpView;
 import org.unimelb.itime.util.HttpUtil;
 
 import java.util.List;
@@ -22,11 +22,11 @@ import rx.Subscriber;
  * Created by Paul on 20/12/2016.
  */
 
-public class TimeslotCommonPresenter<T extends TimeslotCommonMvpView> extends MvpBasePresenter<T> {
+public class TimeslotPresenter<V extends TimeslotBaseMvpView> extends MvpBasePresenter<V> {
     private Context context;
     private EventApi eventApi;
     private final static String TAG = "TimeslotCommonPresenter";
-    public TimeslotCommonPresenter(Context context) {
+    public TimeslotPresenter(Context context) {
         this.context = context;
         eventApi = HttpUtil.createService(context, EventApi.class);
     }
@@ -53,7 +53,7 @@ public class TimeslotCommonPresenter<T extends TimeslotCommonMvpView> extends Mv
             @Override
             public void onNext(HttpResult<List<Timeslot>> result) {
                 if(getView() != null){
-                    getView().onRecommend(result.getData());
+                    getView().onTaskSuccess(0, result.getData());
                 }
                 Log.i(TAG, "onNext: ");
             }

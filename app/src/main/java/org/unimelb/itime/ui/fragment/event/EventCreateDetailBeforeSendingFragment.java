@@ -12,23 +12,19 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventCreateBeforeSendingBinding;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEventDate;
 import org.unimelb.itime.messageevent.MessageInvitees;
 import org.unimelb.itime.messageevent.MessageLocation;
-import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
-import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
-import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
+import org.unimelb.itime.ui.fragment.LocationPickerFragment;
 import org.unimelb.itime.ui.mvpview.EventCreateDetailBeforeSendingMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
@@ -154,17 +150,17 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
 
     @Override
     public void changeLocation() {
-        EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
-        eventLocationPickerFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        openFragment(this, eventLocationPickerFragment);
+        LocationPickerFragment locationPickerFragment = (LocationPickerFragment) getFragmentManager().findFragmentByTag(LocationPickerFragment.class.getSimpleName());
+//        eventLocationPickerFragment.setData(EventManager.getInstance(getContext()).copyCurrentEvent(event));
+//        openFragment(this, eventLocationPickerFragment);
     }
 
 
     @Override
     public void pickInvitees() {
-        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        inviteeFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        openFragment(this, inviteeFragment);
+//        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
+//        inviteeFragment.setData(EventManager.getInstance(getContext()).copyCurrentEvent(event));
+//        openFragment(this, inviteeFragment);
     }
 
     @Override
@@ -175,9 +171,9 @@ public class EventCreateDetailBeforeSendingFragment extends EventBaseFragment<Ev
     @Override
     public void onClickProposedTimeslots() {
         EventTimeSlotViewFragment timeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-        timeSlotViewFragment.setEvent(EventManager.getInstance(getContext()).copyCurrentEvent(event));
-        openFragment(this, timeSlotViewFragment);
-        timeSlotViewFragment.setTo(this); // this need to be set manully,coz has to be distinguish with others
+//        timeSlotViewFragment.setData(EventManager.getInstance(getContext()).copyCurrentEvent(event));
+//        openFragment(this, timeSlotViewFragment);
+//        timeSlotViewFragment.setTo(this); // this need to be set manully,coz has to be distinguish with others
     }
 
     @Override

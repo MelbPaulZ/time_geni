@@ -515,6 +515,7 @@ public class EventManager {
     }
 
     // paul paul 改！
+    @Deprecated
     public Event copyCurrentEvent(Event event){
         Gson gson = new Gson();
 

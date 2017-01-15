@@ -17,7 +17,7 @@ import org.unimelb.itime.util.DefaultPhotoUtil;
 import org.unimelb.itime.util.googleAuth.GoogleSignUtil;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 
-public class ContactTestActivityContact extends BaseActivity {
+public class ContactTestActivityContact extends EmptyActivity {
     ActivityContactMainBinding binding;
 
 

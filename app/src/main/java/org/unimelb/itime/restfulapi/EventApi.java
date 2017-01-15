@@ -57,7 +57,6 @@ public interface EventApi {
             @Path("calendarUid") String calendarUid,
             @Path("eventUid") String eventUid,
             @Path("timeslotUid") String timeslotUid,
-            @Body Event event,
             @Query("syncToken") String syncToken);
 
     // after event has been confirmed, use accept event

@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;

@@ -31,7 +31,7 @@ import java.util.Calendar;
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarAgendaFragment extends BaseUiFragment {
+public class CalendarAgendaFragment extends CalendarBaseViewFragment {
     private View root;
     private MonthAgendaView monthAgendaView;
     private EventManager eventManager;
@@ -86,11 +86,6 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     }
 
 
-    public void backToday(){
-        monthAgendaView.backToToday();
-    }
-
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
@@ -99,8 +94,8 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     }
 
     @Override
-    public MvpPresenter createPresenter() {
-        return new EventCommonPresenter(getContext());
+    public void backToToday() {
+        monthAgendaView.backToToday();
     }
 
     @Override
@@ -109,10 +104,6 @@ public class CalendarAgendaFragment extends BaseUiFragment {
         EventBus.getDefault().register(this);
     }
 
-    @Override
-    public void setData(Object o) {
-
-    }
 
     @Override
     public void onDestroy() {

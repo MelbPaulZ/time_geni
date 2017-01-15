@@ -14,7 +14,7 @@ import org.unimelb.itime.ui.fragment.login.LoginPickAvatarFragment;
 import org.unimelb.itime.ui.fragment.login.LoginResetPasswordFragment;
 import org.unimelb.itime.ui.fragment.login.LoginSetPWFragment;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends EmptyActivity {
 
     private static final String TAG = "LoginActivity";
     private LoginIndexFragment indexFragment;

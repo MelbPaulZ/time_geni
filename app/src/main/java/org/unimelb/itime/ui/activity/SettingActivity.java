@@ -7,13 +7,12 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.ui.fragment.settings.SettingAboutFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingCalendarPreferenceFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingNotificationFragment;
 
-public class SettingActivity extends BaseActivity{
+public class SettingActivity extends EmptyActivity{
     public final static int TASK_LOGOUT = 1;
     public final static int TASK_VIEW_AVATAR = 2;
     public final static int TASK_TO_MY_PROFILE = 3;
@@ -93,4 +92,5 @@ public class SettingActivity extends BaseActivity{
     protected void onDestroy() {
         super.onDestroy();
     }
+
 }
