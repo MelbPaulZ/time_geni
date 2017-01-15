@@ -11,15 +11,26 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="44dp">
-
+        
+        <ImageView
+            android:id="@+id/rep_photo"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            app:remote_url="@{item.photo}"
+            />
         <TextView
             style="@style/itime_blacktitle_17sp"
             android:text="@{item.content}"
             />
 
         <TextView
+            android:id="@+id/rep_time"
             style="@style/itime_bottom_divider_line"
-            android:layout_marginLeft="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:layout_alignParentEnd="true"
+            />
 
     </RelativeLayout>
 

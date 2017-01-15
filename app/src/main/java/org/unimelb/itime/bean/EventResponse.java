@@ -10,7 +10,8 @@ public class EventResponse implements Serializable{
 
     private String responseUid;
     private String userUid;
-    private String photo;
+    //todo: need to change it after server is done
+    private String photo = "http://img.zybus.com/uploads/allimg/131213/1-131213111353.jpg";
     private String eventUid;
     private String content;
     private int deleteLevel;

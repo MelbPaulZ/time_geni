@@ -53,6 +53,8 @@ public class EventResponseFragment extends BaseUiAuthFragment<EventResponseMvpVi
 
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
+
+        getPresenter().loadData(event.getEventUid());
     }
 
     public void setData(Event event){
