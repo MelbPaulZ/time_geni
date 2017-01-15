@@ -35,6 +35,7 @@ import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -138,7 +139,6 @@ public class EventDetailViewModel extends CommonViewModel {
             @Override
             public void onClick(View v) {
 
-
                 Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
                 if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
                     // todo implement update only this
@@ -147,7 +147,19 @@ public class EventDetailViewModel extends CommonViewModel {
                             EventCommonPresenter.UPDATE_ALL,
                             orgEvent.getStartTime());
                 }else {
-                    presenter.acceptTimeslots(event);
+                    HashMap<String, Object> params = new HashMap<>();
+                    ArrayList<String> timeslotUids=  new ArrayList<>();
+                    for (SubTimeslotViewModel viewModel: wrapperTimeSlotList){
+                        if(viewModel.getWrapper().isSelected()){
+                            Timeslot timeslot = (Timeslot) viewModel.getWrapper().getTimeSlot();
+                            timeslotUids.add(timeslot.getTimeslotUid());
+                        }
+                    }
+                    params.put("timeslots", timeslotUids);
+                    presenter.acceptTimeslots(
+                            event.getCalendarUid(),
+                            event.getEventUid(),
+                            params);
                 }
             }
         };

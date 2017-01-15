@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -58,7 +59,12 @@ public class EventSearchActivity extends EmptyActivity implements SearchView.OnQ
         eventSearchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                EventUtil.startEditEventActivity(getApplicationContext(), EventSearchActivity.this, eventSearchAdapter.getItem(i));
+                Intent intent = new Intent(EventSearchActivity.this, EventDetailActivity.class);
+                Event event = eventSearchAdapter.getItem(i);
+                intent.putExtra("event_uid", event.getEventUid());
+                intent.putExtra("start_time", event.getStartTime());
+                startActivity(intent);
+
             }
         });
 
