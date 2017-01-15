@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="org.unimelb.itime.ui.viewmodel.EventDetailViewModel" />
+            type="org.unimelb.itime.ui.viewmodel.EventGridPhotoViewModel" />
 
         <variable
             name="toolbarVM"
@@ -20,39 +20,6 @@
 
         <include layout="@layout/toolbar_common"
             bind:vm="@{toolbarVM}"/>
-
-        <!--<android.support.v7.widget.Toolbar-->
-            <!--style="@style/itime_toolbar">-->
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent">-->
-
-                <!--&lt;!&ndash;toolbar back arrow&ndash;&gt;-->
-                <!--<ImageView-->
-                    <!--android:layout_width="31dp"-->
-                    <!--android:layout_height="48dp"-->
-                    <!--android:padding="10dp"-->
-                    <!--android:src="@drawable/icon_back_arrow"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:onClick="@{vm.onClickPhotoGridBack()}"-->
-                    <!--/>-->
-
-                <!--&lt;!&ndash;toolbar settings text&ndash;&gt;-->
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@{vm.leftTitleStr}"-->
-                    <!--android:textColor="@color/title_6D6D6D"-->
-                    <!--android:textSize="17sp"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:layout_marginLeft="14dp"-->
-                    <!--android:onClick="@{vm.onClickPhotoGridBack()}"-->
-                    <!--/>-->
-
-
-            <!--</RelativeLayout>-->
-        <!--</android.support.v7.widget.Toolbar>-->
-
 
         <GridView
             android:id="@+id/gridview_photo"

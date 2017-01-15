@@ -410,34 +410,27 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
     @Override
     public void onNext() {
-        List<Timeslot> list = new ArrayList<>();
-        for(WrapperTimeSlot wrapper: this.timeslotWrapperList){
-            if(wrapper.isSelected()){
-
-                if (fragment_task == TASK_EDIT) {
+        if (fragment_task == TASK_EDIT) {
+            List<Timeslot> list = new ArrayList<>();
+            for (WrapperTimeSlot wrapper : this.timeslotWrapperList) {
+                if (wrapper.isSelected()) {
                     wrapper.getTimeSlot().setStatus(Timeslot.STATUS_PENDING);
-                    list.add((Timeslot) wrapper.getTimeSlot());
-                }else if (fragment_task == TASK_VIEW){
-                    wrapper.getTimeSlot().setStatus(Timeslot.STATUS_ACCEPTED);
                     list.add((Timeslot) wrapper.getTimeSlot());
                 }
             }
-        }
-        TimeSlotUtil.sortTimeslot(list);
-
-
-        if (fragment_task == TASK_EDIT) {
+            TimeSlotUtil.sortTimeslot(list);
             event.setTimeslot(list);
             getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             EventEditFragment fragment = new EventEditFragment();
             fragment.setEvent(event);
             getBaseActivity().openFragment(fragment, null, false);
         }else if (fragment_task == TASK_VIEW){
+
             getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             // TODO: 14/1/17 update invitee response
             EventDetailFragment eventDetailFragment = new EventDetailFragment();
-            eventDetailFragment.setData(event);
-            getBaseActivity().openFragment(eventDetailFragment, null, false);
+            eventDetailFragment.setData(event ,timeslotWrapperList);
+            getBaseActivity().backFragment(eventDetailFragment);
 
         }
 

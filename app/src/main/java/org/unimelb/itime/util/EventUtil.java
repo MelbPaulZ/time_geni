@@ -349,16 +349,6 @@ public class EventUtil {
         return arr[position];
     }
 
-
-    public static void startEditEventActivity(Context context, Activity activity, ITimeEventInterface iTimeEventInterface) {
-        Intent intent = new Intent(activity, EventDetailActivity.class);
-        Event event = (Event) iTimeEventInterface;
-        event.getInvitee();
-        EventManager.getInstance(context).setCurrentEvent((Event) iTimeEventInterface);
-        activity.startActivityForResult(intent, ACTIVITY_EDIT_EVENT);
-    }
-
-
     public static String getEventConfirmStatus(Context context, Event event) {
         if (isUserHostOfEvent(context, event)) {
             if (event.getStatus().equals(Event.STATUS_PENDING)) {

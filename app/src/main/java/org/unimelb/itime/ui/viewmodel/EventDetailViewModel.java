@@ -25,7 +25,8 @@ import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
+import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.util.CircleTransform;
@@ -33,7 +34,6 @@ import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +49,7 @@ import static org.unimelb.itime.util.EventUtil.isUserHostOfEvent;
  * Created by Paul on 4/09/2016.
  */
 public class EventDetailViewModel extends CommonViewModel {
-    private EventCommonPresenter<EventDetailMvpView> presenter;
+    private EventPresenter<EventDetailMvpView> presenter;
     private Event event;
     private LayoutInflater inflater;
     private EventDetailMvpView mvpView;
@@ -61,8 +61,7 @@ public class EventDetailViewModel extends CommonViewModel {
     inviteeUnconfirmVisibility, soloInvisible;
 
 
-
-    public EventDetailViewModel(EventCommonPresenter<EventDetailMvpView> presenter) {
+    public EventDetailViewModel(EventPresenter<EventDetailMvpView> presenter) {
         this.presenter = presenter;
         this.context = getContext();
         this.inflater = LayoutInflater.from(getContext());
@@ -144,7 +143,7 @@ public class EventDetailViewModel extends CommonViewModel {
                     // todo implement update only this
                     presenter.acceptEvent(event.getCalendarUid(),
                             event.getEventUid(),
-                            EventCommonPresenter.UPDATE_ALL,
+                            EventPresenter.UPDATE_ALL,
                             orgEvent.getStartTime());
                 }else {
                     HashMap<String, Object> params = new HashMap<>();
@@ -175,13 +174,13 @@ public class EventDetailViewModel extends CommonViewModel {
                     // TODO: 4/1/17 repeat event popup window
                     if (event.getRecurrence().length==0) {
                         // non-repeat event quit
-                        presenter.quitEvent(event, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                        presenter.quitEvent(event.getCalendarUid(), event.getEventUid(), EventPresenter.UPDATE_ALL, orgEvent.getStartTime());
                     }else{
                         // repeat event quit
                         popupRepeatQuit(orgEvent);
                     }
                 }else {
-                    presenter.rejectTimeslots(event);
+                    presenter.rejectTimeslots(event.getCalendarUid(), event.getEventUid());
                 }
             }
         };
@@ -196,14 +195,20 @@ public class EventDetailViewModel extends CommonViewModel {
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {
-                                presenter.quitEvent(event, EventCommonPresenter.UPDATE_THIS, orgEvent.getStartTime());
+                                presenter.quitEvent(event.getCalendarUid(),
+                                        event.getEventUid(),
+                                        EventPresenter.UPDATE_THIS,
+                                        orgEvent.getStartTime());
                             }
                         })
                 .addSheetItem(getContext().getString(R.string.event_quit_repeat_text2), ActionSheetDialog.SheetItemColor.Black,
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int i) {
-                                presenter.quitEvent(event, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                                presenter.quitEvent(event.getCalendarUid(),
+                                        event.getEventUid(),
+                                        EventPresenter.UPDATE_ALL,
+                                        orgEvent.getStartTime());
                             }
                         });
         actionSheetDialog.show();
@@ -235,9 +240,12 @@ public class EventDetailViewModel extends CommonViewModel {
 
                         Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
                         if (EventUtil.isEventConfirmed(context, event)) {
-                            presenter.quitEvent(event, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                            presenter.quitEvent(event.getCalendarUid(),
+                                    event.getEventUid(),
+                                    EventPresenter.UPDATE_ALL,
+                                    orgEvent.getStartTime());
                         }else {
-                            presenter.rejectTimeslots(event);
+                            presenter.rejectTimeslots(event.getCalendarUid(), event.getEventUid());
                         }
 
                     }
@@ -434,7 +442,11 @@ public class EventDetailViewModel extends CommonViewModel {
                     Toast.makeText(context, "Quit This Event, To do", Toast.LENGTH_SHORT).show();
                     Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
                     // TODO: 26/12/2016 implement quit only this?
-                    presenter.quitEvent(event, EventCommonPresenter.UPDATE_ALL ,orgEvent.getStartTime());
+                    presenter.quitEvent(
+                            event.getCalendarUid(),
+                            event.getEventUid(),
+                            EventPresenter.UPDATE_ALL,
+                            orgEvent.getStartTime());
 
                 }
             }
@@ -602,19 +614,6 @@ public class EventDetailViewModel extends CommonViewModel {
         this.rightBtnText = rightBtnText;
     }
 
-    // set grid view data binding
-    @BindingAdapter("app:event")
-    public static void setGradView(GridView gridView, Event event){
-
-        List<String> urls = new ArrayList<>();
-        if (event!=null) {
-            for (PhotoUrl photoUrl : event.getPhoto()) {
-                urls.add(photoUrl.getUrl());
-            }
-            PhotoAdapter adapter = new PhotoAdapter(gridView.getContext(), R.id.gridview_photo, urls);
-            gridView.setAdapter(adapter);
-        }
-    }
 
     private List<SubTimeslotViewModel> wrapperTimeSlotList;
     private ItemView timeslotItemView = ItemView.of(BR.itemVM, R.layout.listview_timeslot_pick);
@@ -646,7 +645,16 @@ public class EventDetailViewModel extends CommonViewModel {
         private WrapperTimeSlot wrapper;
         private EventDetailMvpView mvpView;
         private boolean iconSelected;
+        private boolean isHostEvent;
         private Map<String, List<EventUtil.StatusKeyStruct>> replyData;
+
+        public boolean isHostEvent() {
+            return isHostEvent;
+        }
+
+        public void setHostEvent(boolean hostEvent) {
+            isHostEvent = hostEvent;
+        }
 
 
         public SubTimeslotViewModel(EventDetailMvpView mvpView) {
@@ -671,11 +679,12 @@ public class EventDetailViewModel extends CommonViewModel {
                     setIconSelected(wrapper.isSelected());
                     // call back to fragment, and let outter viewmodel reload page
                     if (mvpView!=null){
-                        mvpView.reloadPage();
+                        mvpView.onTimeslotClick(wrapper);
                     }
                 }
             };
         }
+
 
         @Bindable
         public boolean isIconSelected() {
@@ -726,5 +735,6 @@ public class EventDetailViewModel extends CommonViewModel {
         public void setReplyData(Map<String, List<EventUtil.StatusKeyStruct>> replyData) {
             this.replyData = replyData;
         }
+
     }
 }

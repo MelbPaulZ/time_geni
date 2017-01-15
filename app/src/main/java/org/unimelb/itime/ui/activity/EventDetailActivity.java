@@ -37,6 +37,7 @@ public class EventDetailActivity extends EmptyActivity {
 
         EventDetailFragment fragment = new EventDetailFragment();
         initEvent();
+        EventManager.getInstance(getApplicationContext()).setCurrentEvent(event);
         fragment.setData(event);
         fragmentManager.beginTransaction()
                 .replace(getFragmentContainerId(), fragment)

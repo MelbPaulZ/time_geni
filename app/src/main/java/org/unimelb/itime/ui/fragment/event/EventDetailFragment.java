@@ -17,7 +17,7 @@ import org.unimelb.itime.bean.EventResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailBinding;
 import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
+import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.EventUtil;
@@ -34,7 +34,7 @@ import static org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment.TASK
 /**
  * Created by Paul on 4/09/2016.
  */
-public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, EventCommonPresenter<EventDetailMvpView>> implements EventDetailMvpView {
+public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, EventPresenter<EventDetailMvpView>> implements EventDetailMvpView {
     private FragmentEventDetailBinding binding;
     private Event event;
 
@@ -52,9 +52,13 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
     }
 
     @Override
+    public EventPresenter<EventDetailMvpView> createPresenter() {
+        return new EventPresenter<>(getContext());
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        replyData = EventUtil.getAdapterData(event);
 
         contentViewModel = new EventDetailViewModel(getPresenter());
         contentViewModel.setEvent(event);
@@ -81,6 +85,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             }
             SubTimeslotViewModel subTimeslotViewModel = new SubTimeslotViewModel(this);
             subTimeslotViewModel.setWrapper(wrapper);
+            subTimeslotViewModel.setHostEvent(EventUtil.isUserHostOfEvent(getContext(), event));
             subTimeslotViewModel.setReplyData(replyData);
             this.timeslotVMList.add(subTimeslotViewModel);
         }
@@ -94,12 +99,15 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         String title = EventUtil.isUserHostOfEvent(getContext(), event)?
                 getString(R.string.event_details) : getString(R.string.new_invitation);
         toolbarViewModel.setTitleStr(title);
-        toolbarViewModel.setRightTitleStr(getString(R.string.edit));
+        if (EventUtil.isUserHostOfEvent(getContext(), event)) {
+            toolbarViewModel.setRightTitleStr(getString(R.string.edit));
+        }
     }
 
 
-    public void setData(Event event){
+    public void setData(Event event) {
         this.event = event;
+        replyData = EventUtil.getAdapterData(event);
     }
 
     public void setData(Event event, List<WrapperTimeSlot> wrapperList){
@@ -108,23 +116,22 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             return;
         }
         timeslotVMList = new ArrayList<>();
+        replyData = EventUtil.getAdapterData(event);
         for(WrapperTimeSlot t: wrapperList){
             SubTimeslotViewModel vm = new SubTimeslotViewModel(this);
             vm.setWrapper(t);
+            vm.setHostEvent(EventUtil.isUserHostOfEvent(getContext(), event));
             vm.setReplyData(replyData);
+            vm.setIconSelected(t.isSelected());
             timeslotVMList.add(vm);
         }
     }
 
 
-
-    @Override
-    public EventCommonPresenter<EventDetailMvpView> createPresenter() {
-        return new EventCommonPresenter<>(getContext());
-    }
-
     private void toCalendar(int resultCode) {
         Intent intent = new Intent();
+
+
         getActivity().setResult(resultCode, intent);
         getActivity().finish();
     }
@@ -137,6 +144,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         Event cpyEvent = EventUtil.copyEvent(event);
         List<WrapperTimeSlot> wrapperTimeSlots = new ArrayList<>();
         for (SubTimeslotViewModel vm: timeslotVMList){
+            vm.getWrapper().setSelected(vm.isIconSelected());
             wrapperTimeSlots.add(vm.getWrapper());
         }
         timeSlotViewFragment.setData(cpyEvent, wrapperTimeSlots);
@@ -160,8 +168,29 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
     }
 
     @Override
-    public void reloadPage() {
+    public void onTimeslotClick(WrapperTimeSlot wrapper) {
+        // this wrapper has been changed, if host, then has already two selected wrappers
+        if (EventUtil.isUserHostOfEvent(getContext(), event)){
+            if (wrapper.isSelected() && TimeSlotUtil.numberSelectedWrapper(timeslotVMList) >1){
+                unselectWrappers(wrapper);
+            }
+        }
         contentViewModel.setWrapperTimeSlotList(timeslotVMList);
+
+    }
+
+    /**
+     * this method unselect other timeslots, if the host select more than one timeslots
+     * @param wrapper
+     */
+    private void unselectWrappers(WrapperTimeSlot wrapper){
+        for (SubTimeslotViewModel viewModel: timeslotVMList){
+            WrapperTimeSlot wrapperTimeSlot = viewModel.getWrapper();
+            if (!wrapperTimeSlot.equals(wrapper)){
+                wrapperTimeSlot.setSelected(false);
+                viewModel.setIconSelected(false);
+            }
+        }
     }
 
     @Override
@@ -178,48 +207,39 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
     }
 
     @Override
-    public void onTaskError(int task, String errorMsg, int code) {
-        Log.i("TAG", "onTaskError: " + errorMsg);
-    }
-
-    @Override
-    public void onTaskComplete(int task, List<Event> dataList) {
-        if (task == EventCommonPresenter.TASK_TIMESLOT_ACCEPT){
+    public void onTaskSuccess(int taskId, List<Event> data) {
+        if (taskId == EventPresenter.TASK_TIMESLOT_ACCEPT){
             toCalendar(Activity.RESULT_OK);
-        }else if (task == EventCommonPresenter.TASK_EVENT_CONFIRM){
+        }else if (taskId == EventPresenter.TASK_EVENT_CONFIRM){
             toCalendar(Activity.RESULT_OK);
-        }else if (task == EventCommonPresenter.TASK_TIMESLOT_REJECT){
+        }else if (taskId == EventPresenter.TASK_TIMESLOT_REJECT){
             toCalendar(Activity.RESULT_OK);
-        }else if (task == EventCommonPresenter.TASK_BACK){
+        }else if (taskId == EventPresenter.TASK_BACK){
             toCalendar(Activity.RESULT_CANCELED);
-        }else if (task == EventCommonPresenter.TASK_EVENT_ACCEPT){
+        }else if (taskId == EventPresenter.TASK_EVENT_ACCEPT){
             toCalendar(Activity.RESULT_OK);
-        }else if (task == EventCommonPresenter.TASK_EVENT_REJECT){
+        }else if (taskId == EventPresenter.TASK_EVENT_REJECT){
             toCalendar(Activity.RESULT_OK);
         }
     }
 
+    @Override
+    public void onTaskError(int taskId) {
+
+    }
 
 
     @Override
     public void onBack() {
-        toCalendar(EventCommonPresenter.TASK_BACK);
+        toCalendar(EventPresenter.TASK_BACK);
     }
 
     @Override
     public void onNext() {
-        EventEditFragment eventEditFragment = new EventEditFragment();
-        eventEditFragment.setEvent(this.event);
-        getBaseActivity().openFragment(eventEditFragment);
-//        EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-//        Event cpyEvent = EventManager.getInstance(getContext()).copyCurrentEvent(event);
-//        for (Timeslot timeslot: cpyEvent.getTimeslot()){
-//            timeslot.setStatus(Timeslot.STATUS_PENDING);
-//        }
-//        eventEditFragment.setData(cpyEvent);
-//
-//        EventManager.getInstance(getContext()).setCurrentEvent(event);
-//
-//        openFragment(this, eventEditFragment);
+        if (EventUtil.isUserHostOfEvent(getContext(), event)) {
+            EventEditFragment eventEditFragment = new EventEditFragment();
+            eventEditFragment.setEvent(this.event);
+            getBaseActivity().openFragment(eventEditFragment);
+        }
     }
 }

@@ -142,9 +142,7 @@ public class CalendarMonthDayFragment extends CalendarBaseViewFragment {
 
     @Override
     public void onTaskStart(int task) {
-        if (task == EventCommonPresenter.TASK_EVENT_UPDATE) {
-            AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
-        }
+        AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
     }
 
     @Override

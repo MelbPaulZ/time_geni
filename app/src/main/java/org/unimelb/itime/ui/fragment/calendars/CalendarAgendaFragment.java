@@ -55,7 +55,7 @@ public class CalendarAgendaFragment extends CalendarBaseViewFragment {
         monthAgendaView.setOnEventClickListener(new AgendaViewBody.OnEventClickListener() {
             @Override
             public void onEventClick(ITimeEventInterface iTimeEventInterface) {
-                EventUtil.startEditEventActivity(getContext(), getActivity(), iTimeEventInterface);
+                toEventDetailPage(iTimeEventInterface.getEventUid(), iTimeEventInterface.getStartTime());
             }
         });
         monthAgendaView.setOnHeaderListener(new MonthAgendaView.OnHeaderListener() {

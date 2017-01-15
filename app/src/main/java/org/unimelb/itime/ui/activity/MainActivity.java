@@ -35,6 +35,7 @@ import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
+import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.fragment.contact.ContactHomePageFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
@@ -168,27 +169,15 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
     }
 
 
-    public void startEventCreateActivity(Calendar startTime){
-        Intent intent = new Intent(this, EventCreateActivity.class);
-        intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_SELF_CREATE_EVENT);
-        intent.putExtra("start_time", startTime.getTimeInMillis());
-        Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
-        startActivityForResult(intent, EventUtil.ACTIVITY_CREATE_EVENT,bundleAnimation);
-    }
-
-
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EventUtil.ACTIVITY_CREATE_EVENT ){
+        if (requestCode == CalendarBaseViewFragment.REQ_EVENT_CREATE ){
             if (resultCode == Activity.RESULT_OK) {
                 ((MainCalendarFragment) tagFragments[0]).reloadEvent();
                 ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
             }
-        }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
+        }else if (requestCode == CalendarBaseViewFragment.REQ_EVENT_DETAIL ){
             if (resultCode == Activity.RESULT_OK) {
                 ((MainCalendarFragment) tagFragments[0]).reloadEvent();
                 ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());

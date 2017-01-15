@@ -19,11 +19,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.UserUtil;
+import org.unimelb.itime.util.rulefactory.InviteeUtil;
+
+import static android.R.attr.fragment;
 
 
 public class EventCreateActivity extends EmptyActivity implements PlaceSelectionListener {
@@ -41,8 +46,17 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
 
         long startTime = getIntent().getLongExtra("start_time",0);
         fragmentManager = getSupportFragmentManager();
+        Event event = initNewEvent(startTime);
         EventEditFragment fragment = new EventEditFragment();
-        fragment.setEvent(initNewEvent(startTime));
+
+        fragment.setEvent(event);
+
+        // if has default contact, this only happens when invitee a contact to event
+        Contact contact = (Contact) getIntent().getSerializableExtra("contact");
+        if (contact!=null){
+            event.addInvitee(InviteeUtil.getInstance().contactToInvitee(contact, event));
+        }
+        EventManager.getInstance(getApplicationContext()).setCurrentEvent(event);
         fragmentManager.beginTransaction()
                 .replace(getFragmentContainerId(), fragment)
                 .commit();
@@ -56,6 +70,7 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
         long endTime = startTime + 3600 * 1000;
         event.setStartTime(startTime);
         event.setEndTime(endTime);
+
         return event;
     }
 
