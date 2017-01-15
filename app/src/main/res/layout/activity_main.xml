@@ -122,6 +122,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:tag="tab_icon"
+                    android:selected="@{tabBarVM.tabSelectedArr[2]}"
                     android:background="@drawable/selector_tab_inbox"
                     />
                 <TextView
@@ -181,6 +182,7 @@
                     android:tag="tab_icon"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
+                    android:selected="@{tabBarVM.tabSelectedArr[3]}"
                     android:background="@drawable/selector_tab_setting"
                     />
                 <TextView
