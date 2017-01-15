@@ -1,6 +1,5 @@
 package org.unimelb.itime.ui.viewmodel;
 
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.view.View;
 
@@ -8,17 +7,18 @@ import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 
-import static android.view.View.GONE;
 
 /**
  * Created by yinchuandong on 16/08/2016.
  */
-public class MainTabBarViewModel extends BaseObservable{
+public class MainTabBarViewModel extends CommonViewModel{
 
     private MainTabBarPresenter presenter;
     private String unReadNum;
     private int visible;
     private int unReadFriendRequest;
+
+    private boolean[] tabSelectedArr = {true, false, false, false};
 
     public MainTabBarViewModel(MainTabBarPresenter presenter){
         this.presenter = presenter;
@@ -29,7 +29,14 @@ public class MainTabBarViewModel extends BaseObservable{
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.refreshTabStatus(pageId);
+                for(int i = 0; i < tabSelectedArr.length; i++){
+                    if(pageId == i){
+                        tabSelectedArr[i] = true;
+                    }else{
+                        tabSelectedArr[i] = false;
+                    }
+                }
+                notifyPropertyChanged(BR.tabSelectedArr);
                 presenter.showFragmentById(pageId);
             }
         };
@@ -65,5 +72,16 @@ public class MainTabBarViewModel extends BaseObservable{
     public void setUnReadFriendRequest(int unReadFriendRequest) {
         this.unReadFriendRequest = unReadFriendRequest;
         notifyPropertyChanged(BR.unReadFriendRequest);
+    }
+
+
+    @Bindable
+    public boolean[] getTabSelectedArr() {
+        return tabSelectedArr;
+    }
+
+    public void setTabSelectedArr(boolean[] tabSelectedArr) {
+        this.tabSelectedArr = tabSelectedArr;
+        notifyPropertyChanged(BR.tabSelectedArr);
     }
 }

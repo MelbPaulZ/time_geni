@@ -28,7 +28,10 @@
             android:id="@+id/main_tab_ll"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/divider_top"
+            android:paddingTop="1dp"
+            >
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -44,7 +47,8 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:tag="tab_icon"
-                    android:background="@drawable/ic_calendar_tab"/>
+                    android:selected="@{tabBarVM.tabSelectedArr[0]}"
+                    android:background="@drawable/selector_tab_calendar"/>
 
                 <TextView
                     android:id="@+id/main_tab_calendar_tv"
@@ -72,7 +76,8 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:tag="tab_icon"
-                    android:background="@drawable/ic_contact"/>
+                    android:selected="@{tabBarVM.tabSelectedArr[1]}"
+                    android:background="@drawable/selector_tab_contact"/>
                 <TextView
                     android:id="@+id/main_tab_contact_tv"
                     android:layout_width="wrap_content"
@@ -117,7 +122,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:tag="tab_icon"
-                    android:background="@drawable/ic_mail"
+                    android:background="@drawable/selector_tab_inbox"
                     />
                 <TextView
                     android:id="@+id/main_tab_inbox_tv"
@@ -176,7 +181,7 @@
                     android:tag="tab_icon"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/ic_setting"
+                    android:background="@drawable/selector_tab_setting"
                     />
                 <TextView
                     android:id="@+id/main_tab_setting_tv"
