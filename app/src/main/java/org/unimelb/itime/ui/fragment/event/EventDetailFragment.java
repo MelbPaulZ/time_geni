@@ -56,7 +56,6 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
 
         contentViewModel = new EventDetailViewModel(getPresenter());
         contentViewModel.setEvent(event);
-        contentViewModel.setReplyData(replyData);
         initTimeslotVMList();
         initToolbar();
 
@@ -67,6 +66,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
     private void initTimeslotVMList(){
         if(timeslotVMList != null){
             // if other fragment set timeslotWrapper to this fragment
+            contentViewModel.setWrapperTimeSlotList(timeslotVMList);
             return;
         }
         timeslotVMList = new ArrayList<>();
@@ -77,8 +77,9 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             }else{
                 wrapper.setSelected(timeslot.getStatus().equals(Timeslot.STATUS_ACCEPTED));
             }
-            SubTimeslotViewModel subTimeslotViewModel = new SubTimeslotViewModel();
+            SubTimeslotViewModel subTimeslotViewModel = new SubTimeslotViewModel(this);
             subTimeslotViewModel.setWrapper(wrapper);
+            subTimeslotViewModel.setReplyData(replyData);
             this.timeslotVMList.add(subTimeslotViewModel);
         }
         contentViewModel.setWrapperTimeSlotList(timeslotVMList);
@@ -107,8 +108,9 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         }
         timeslotVMList = new ArrayList<>();
         for(WrapperTimeSlot t: wrapperList){
-            SubTimeslotViewModel vm = new SubTimeslotViewModel();
+            SubTimeslotViewModel vm = new SubTimeslotViewModel(this);
             vm.setWrapper(t);
+            vm.setReplyData(replyData);
             timeslotVMList.add(vm);
         }
     }

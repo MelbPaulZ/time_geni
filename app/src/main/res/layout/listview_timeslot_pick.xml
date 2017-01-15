@@ -12,7 +12,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:onClick=""
+        android:onClick="@{itemVM.onLeftPartClicked()}"
         android:orientation="vertical">
 
         <!--this is the icon for select timeslot-->
@@ -21,6 +21,7 @@
             android:layout_width="23dp"
             android:layout_height="23dp"
             android:layout_marginLeft="10dp"
+            android:background="@{itemVM.wrapper.selected ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}"
             android:layout_marginTop="14dp"/>
         <!--android:background="@{TimeSlotUtil.isTimeSlotSelected(context, viewmodel.evDtlHostEvent, position) ? @drawable/icon_event_attendee_selected : @drawable/icon_event_attendee_unselected}"-->
 
@@ -34,6 +35,7 @@
             android:layout_marginTop="13dp"
             android:layout_toRightOf="@+id/event_detail_host_ic_circle"
             android:textColor="@color/text_enable"
+            android:text="@{EventUtil.getSuggestTimeStringFromLong(context, itemVM.wrapper.timeSlot.startTime, itemVM.wrapper.timeSlot.endTime)}"
             android:textSize="17sp" />
         <!--android:text="@{EventUtil.getSuggestTimeStringFromLong(context, viewmodel.evDtlHostEvent.timeslot.get(position).startTime,viewmodel.evDtlHostEvent.timeslot.get(position).endTime )}"-->
 
@@ -43,6 +45,7 @@
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:onClick="@{itemVM.onRightPartClicked()}"
             />
         <!--android:onClick="@{viewmodel.viewInviteeResponse(viewmodel.evDtlHostEvent.timeslot.get(position))}"-->
 
@@ -66,7 +69,9 @@
             android:layout_marginRight="@dimen/padding_10"
             android:layout_toLeftOf="@+id/host_timeslot_right_arrow"
             android:textColor="@color/gray_b2b2b2"
+            android:text="@{itemVM.getPeopleNum(itemVM.wrapper.timeSlot, itemVM.replyData)}"
             android:textSize="17dp" />
+        <!--android:text="@{itemVM.getPeopleNum(itemVM.wrapper.timeSlot, itemVM.replyData)}"-->
         <!--android:text="@{viewmodel.getPeopleNum(viewmodel.evDtlHostEvent.timeslot.get(position),viewmodel.evAdapterEvent)}"-->
 
 

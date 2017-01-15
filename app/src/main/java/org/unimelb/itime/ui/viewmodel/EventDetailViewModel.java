@@ -30,6 +30,7 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.TimeSlotUtil;
+import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
 import java.util.ArrayList;
@@ -50,7 +51,6 @@ public class EventDetailViewModel extends CommonViewModel {
     private Event event;
     private LayoutInflater inflater;
     private EventDetailMvpView mvpView;
-    private Map<String, List<EventUtil.StatusKeyStruct>> adapterData;
     private Context context;
     private ObservableBoolean isLeftBtnSelected = new ObservableBoolean(false), isRightBtnSelected = new ObservableBoolean(false);
     private String leftBtnText = "" , rightBtnText = "";
@@ -58,14 +58,6 @@ public class EventDetailViewModel extends CommonViewModel {
     inviteeUnconfirmVisibility, soloInvisible;
 
 
-    public void setReplyData(Map<String, List<EventUtil.StatusKeyStruct>> adapterData){
-        this.adapterData = adapterData;
-    }
-
-    @Bindable
-    public Map<String, List<EventUtil.StatusKeyStruct>> getEvAdapterEvent(){
-        return this.adapterData;
-    }
 
     public EventDetailViewModel(EventCommonPresenter<EventDetailMvpView> presenter) {
         this.presenter = presenter;
@@ -442,22 +434,6 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
-    public String getPeopleNum(Timeslot timeslot, Map<String, List<EventUtil.StatusKeyStruct>> adapterData){
-
-        List<EventUtil.StatusKeyStruct> structs = adapterData.get(timeslot.getTimeslotUid());
-        int count = 0;
-        for (EventUtil.StatusKeyStruct struct: structs
-             ) {
-            if (struct.getStatus().equals("accepted")){
-                count = struct.getInviteeList().size();
-                break;
-            }
-        }
-
-        return count + "";
-    }
-
-
     public int confirmTimeVisibility(Event event){
         if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
             return View.VISIBLE;
@@ -704,6 +680,14 @@ public class EventDetailViewModel extends CommonViewModel {
      */
     public static class SubTimeslotViewModel extends BaseObservable{
         private WrapperTimeSlot wrapper;
+        private EventDetailMvpView mvpView;
+        private Map<String, List<EventUtil.StatusKeyStruct>> replyData;
+        private int imageBackGround;
+
+
+        public SubTimeslotViewModel(EventDetailMvpView mvpView) {
+            this.mvpView = mvpView;
+        }
 
         @Bindable
         public WrapperTimeSlot getWrapper() {
@@ -720,8 +704,15 @@ public class EventDetailViewModel extends CommonViewModel {
                 @Override
                 public void onClick(View v) {
                     wrapper.setSelected(!wrapper.isSelected());
+                    notifyAll();
                 }
             };
+        }
+
+        private void getImageBackground(boolean isTick){
+            if (isTick){
+                
+            }
         }
 
         public View.OnClickListener onRightPartClicked(){
@@ -729,8 +720,39 @@ public class EventDetailViewModel extends CommonViewModel {
                 @Override
                 public void onClick(View v) {
                     //todo
+                    if (mvpView!=null){
+                        mvpView.viewInviteeResponse((Timeslot) wrapper.getTimeSlot());
+                    }
                 }
             };
+        }
+
+        public EventDetailMvpView getMvpView() {
+            return mvpView;
+        }
+
+        public String getPeopleNum(ITimeTimeSlotInterface timeslot, Map<String, List<EventUtil.StatusKeyStruct>> adapterData){
+
+            List<EventUtil.StatusKeyStruct> structs = adapterData.get(timeslot.getTimeslotUid());
+            int count = 0;
+            for (EventUtil.StatusKeyStruct struct: structs
+                    ) {
+                if (struct.getStatus().equals("accepted")){
+                    count = struct.getInviteeList().size();
+                    break;
+                }
+            }
+
+            return count + "";
+        }
+
+        @Bindable
+        public Map<String, List<EventUtil.StatusKeyStruct>> getReplyData() {
+            return replyData;
+        }
+
+        public void setReplyData(Map<String, List<EventUtil.StatusKeyStruct>> replyData) {
+            this.replyData = replyData;
         }
     }
 }

@@ -139,6 +139,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     private void initData(){
 
         if (timeslotWrapperList == null && event.hasTimeslots()) {
+            // when create event, and jump page from invitee page
             timeslotWrapperList = new ArrayList<>();
             for (Timeslot timeSlot : event.getTimeslot()) {
                 WrapperTimeSlot wrapper = new WrapperTimeSlot(timeSlot);
@@ -159,6 +160,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
 
         }else if(timeslotWrapperList != null){
+            // jump page when already has timeslots
             for (WrapperTimeSlot wrapper: timeslotWrapperList){
                 timeslotWeekView.addTimeSlot(wrapper);
             }
