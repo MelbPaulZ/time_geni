@@ -20,6 +20,7 @@ import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel.SubTimeslotViewModel;
 
@@ -83,7 +84,6 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             this.timeslotVMList.add(subTimeslotViewModel);
         }
         contentViewModel.setWrapperTimeSlotList(timeslotVMList);
-
     }
 
     private void initToolbar(){
@@ -158,6 +158,15 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         getBaseActivity().openFragment(gridFragment);
     }
 
+    @Override
+    public void reloadPage() {
+        contentViewModel.setWrapperTimeSlotList(timeslotVMList);
+    }
+
+    @Override
+    public void toResponse() {
+        
+    }
 
 
     @Override
