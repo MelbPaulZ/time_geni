@@ -66,15 +66,18 @@ public class BaseTitleBar  extends RelativeLayout {
         rightParams.addRule(ALIGN_PARENT_RIGHT);
         rightButton.setLayoutParams(rightParams);
 
+
         leftButton = new RelativeLayout(getContext());
         RelativeLayout.LayoutParams leftParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 SizeUtil.dp2px(getContext(), 44));
+
         leftParams.addRule(ALIGN_PARENT_LEFT);
         leftButton.setLayoutParams(leftParams);
 
         this.addView(contentView);
-        contentView.addView(rightButton);
         contentView.addView(leftButton);
+        contentView.addView(rightButton);
+
     }
 
     public void initBackLayout(){
@@ -183,6 +186,7 @@ public class BaseTitleBar  extends RelativeLayout {
 
     public void setRightView(View rightView){
         rightButton.addView(rightView);
+
     }
 
     public void setLeftView(View leftView){

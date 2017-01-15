@@ -11,6 +11,7 @@ import android.view.View;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.ContactCheckUtil;
 import org.unimelb.itime.ui.presenter.contact.AddFriendsPresenter;
 import org.unimelb.itime.widget.SearchBar;

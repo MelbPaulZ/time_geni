@@ -319,6 +319,7 @@
     <string name="scan_qr_code_explain">Align QR code within frame to scan</string>
     <string name="invite_friend_through_qr_code">Invite Friend Through QR Code</string>
     <string name="unblock_fail">Unblock failed, please check your network</string>
+    <string name="access_fail">Access failed, please check your network</string>
     <string name="block_fail">Block failed, please check your network</string>
     <string name="unblock_contact">Unblock contact</string>
     <string name="block_contact">Block contact</string>
@@ -336,6 +337,9 @@
     <string name="add_to_contact">Add to contact</string>
     <string name="request_sent">Request sent</string>
     <string name="Accept">Accept</string>
+    <string name="Searching">Searching</string>
+    <string name="please_wait">Please wait</string>
+    <string name="cannot_find_user">Can not find this user</string>
 
 
     <!--setting-->

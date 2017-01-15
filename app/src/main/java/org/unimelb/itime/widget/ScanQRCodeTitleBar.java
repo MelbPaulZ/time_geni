@@ -25,9 +25,7 @@ public class ScanQRCodeTitleBar extends BlackTitleBar {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(CENTER_HORIZONTAL);
-        params.addRule(CENTER_IN_PARENT);
-        params.addRule(ALIGN_PARENT_RIGHT);
+        params.addRule(CENTER_VERTICAL);
         params.setMargins(SizeUtil.dp2px(getContext(), 10),
                 SizeUtil.dp2px(getContext(), 10),
                 SizeUtil.dp2px(getContext(), 10),
