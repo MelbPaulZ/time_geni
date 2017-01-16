@@ -79,7 +79,7 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
         return R.id.create_event_fragment;
     }
 
-    public void checkPermission(String tag){
+    public void checkPermission(){
        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
             || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
            ActivityCompat.requestPermissions(this,
