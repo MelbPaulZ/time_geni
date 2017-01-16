@@ -298,7 +298,7 @@ public class RemoteService extends Service{
             HttpResult<List<Message>> listHttpResult = params[0];
             List<Message> msgs = listHttpResult.getData();
 
-            if (checkMessageValidation(msgs)){
+//            if (checkMessageValidation(msgs)){
                 token = listHttpResult.getSyncToken();
                 DBManager.getInstance(getBaseContext()).deleteAllMessages();
                 Collections.sort(msgs); // sort data depends on edit time
@@ -306,7 +306,7 @@ public class RemoteService extends Service{
                 DBManager.getInstance(getBaseContext()).insertMessageList(msgs);
                 valid = true;
                 //set data to inbox;
-            }
+//            }
 
             return msgs;
         }

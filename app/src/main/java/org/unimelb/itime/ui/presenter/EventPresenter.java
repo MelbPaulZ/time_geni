@@ -127,6 +127,37 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
         HttpUtil.subscribe(observable,subscriber);
     }
 
+    public void fetchEvent(String calendarUid, String eventUid){
+        Observable<HttpResult<Event>> observable = eventApi.get(
+                calendarUid
+                , eventUid);
+        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
+
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: " + "eventApi");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: " + "eventApi" + e.getMessage());
+                if (getView() != null){
+                    getView().onTaskError(TASK_EVENT_GET);
+                }
+            }
+
+            @Override
+            public void onNext(HttpResult<Event> eventHttpResult) {
+                EventManager.getInstance(context).updateDB(Arrays.asList(eventHttpResult.getData()));
+                if (getView() != null){
+                    getView().onTaskSuccess(TASK_EVENT_GET,Arrays.asList(eventHttpResult.getData()));
+                }
+            }
+
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
+
     public void insertEvent(Event event){
         if (getView()!=null){
             getView().onTaskStart(TASK_EVENT_INSERT);

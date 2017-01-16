@@ -28,6 +28,7 @@ import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     private FragmentEventEditDetailBinding binding;
     private Event event = null;
+    private List<WrapperTimeSlot> wrapperTimeSlotList;
     private EventManager eventManager;
 
     private EventEditViewModel eventEditViewModel;

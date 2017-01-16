@@ -37,8 +37,9 @@ import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
+import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
-import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.AppUtil;
 
 import java.util.List;
 
@@ -117,14 +118,11 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
 //                Event event = EventManager.getInstance(getContext()).findEventByUid(message.getEventUid());
                 Event event = DBManager.getInstance(getContext()).getEvent(message.getEventUid());
                 if (event==null){
+                    presenter.fetchEvent(String.valueOf(-1),message.getEventUid());
                     Toast.makeText(getContext(), "cannot find event, please try later", Toast.LENGTH_SHORT).show();
-                }else {
 
-                    Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-                    intent.putExtra("event_uid", event.getEventUid());
-                    intent.putExtra("start_time", event.getStartTime());
-                    EventManager.getInstance(getContext()).setCurrentEvent(event);
-                    getActivity().startActivityForResult(intent, CalendarBaseViewFragment.REQ_EVENT_DETAIL);
+                }else {
+                    intentToEventDetail(event);
                 }
             }
         });
@@ -143,6 +141,14 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
             }
         });
         initSearch();
+    }
+
+    private void intentToEventDetail(Event event){
+        Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+        intent.putExtra("event_uid", event.getEventUid());
+        intent.putExtra("start_time", event.getStartTime());
+        EventManager.getInstance(getContext()).setCurrentEvent(event);
+        getActivity().startActivityForResult(intent, CalendarBaseViewFragment.REQ_EVENT_DETAIL);
     }
 
     private void initSearch(){
@@ -196,5 +202,33 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     @Override
     public void setData(Object o) {
 
+    }
+
+    @Override
+    public void onTaskStart(int taskId) {
+        AppUtil.showProgressBar(getActivity(),"","Please wait...");
+    }
+
+    @Override
+    public void onTaskSuccess(int taskId, Object data) {
+        AppUtil.hideProgressBar();
+        if (!(data instanceof List) && (((List)data).size()) == 0){
+            return;
+        }
+        List<? extends Object> list = (List) data;
+        switch (taskId){
+            case MainInboxPresenter.TASK_EVENT_GET:{
+                if (list.get(0) instanceof Event){
+                    intentToEventDetail((Event) ((List) data).get(0));
+                }
+                break;
+            }
+
+        }
+    }
+
+    @Override
+    public void onTaskError(int taskId) {
+        AppUtil.hideProgressBar();
     }
 }
