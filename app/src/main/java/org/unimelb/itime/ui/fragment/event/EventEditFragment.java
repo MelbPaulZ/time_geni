@@ -150,7 +150,11 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void toPhotoPickerPage() {
-        ((EventDetailActivity)getActivity()).checkPermission();
+        if (getActivity() instanceof EventDetailActivity) {
+            ((EventDetailActivity) getActivity()).checkPermission();
+        }else if (getActivity() instanceof EventCreateActivity){
+            ((EventCreateActivity) getBaseActivity()).checkPermission();
+        }
     }
 
     @Override
