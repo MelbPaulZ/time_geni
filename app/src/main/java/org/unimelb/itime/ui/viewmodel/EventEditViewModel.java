@@ -507,6 +507,7 @@ public class EventEditViewModel extends EventCommonViewModel {
         notifyPropertyChanged(BR.timeslotList);
     }
 
+
     @Bindable
     public Boolean getEditEventIsRepeat() {
         if (event.hasRecurrence()) {

@@ -99,9 +99,7 @@ public class InviteeTimeslotFragment extends BaseUiAuthFragment implements Itime
 
     @Override
     public void onBack() {
-        EventDetailFragment eventDetailFragment = new EventDetailFragment();
-        eventDetailFragment.setData(event);
-        getBaseActivity().backFragment(eventDetailFragment);
+        getFragmentManager().popBackStack();
     }
 
     @Override

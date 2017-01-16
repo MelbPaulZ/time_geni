@@ -264,7 +264,7 @@
                                 android:layout_height="wrap_content"
                                 android:divider="#00000000"
                                 app:itemView="@{eventEditVM.itemView}"
-                                app:items="@{EventUtil.getTimeslotFromPending(context, eventEditVM.event)}" />
+                                app:items="@{eventEditVM.timeslotList}" />
 
                         </LinearLayout>
 

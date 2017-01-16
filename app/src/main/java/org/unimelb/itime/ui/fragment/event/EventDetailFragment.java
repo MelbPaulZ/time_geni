@@ -41,7 +41,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
     private EventDetailViewModel contentViewModel;
     private ToolbarViewModel<EventDetailMvpView> toolbarViewModel;
 
-    private List<SubTimeslotViewModel> timeslotVMList = null;
+    private List<SubTimeslotViewModel> timeslotVMList;
     private Map<String, List<EventUtil.StatusKeyStruct>> replyData = null;
 
     @Nullable
