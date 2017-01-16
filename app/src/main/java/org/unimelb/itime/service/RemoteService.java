@@ -204,7 +204,7 @@ public class RemoteService extends Service{
                             super.run();
                             isUpdateThreadRuning = true;
 
-//                            EventManager.getInstance(getApplicationContext()).updateDB(eventList);
+                            EventManager.getInstance(getApplicationContext()).updateDB(eventList);
                             EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                             isUpdateThreadRuning = false;
                         }

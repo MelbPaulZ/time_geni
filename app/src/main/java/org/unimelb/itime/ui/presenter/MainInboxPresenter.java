@@ -30,6 +30,8 @@ import rx.Subscriber;
  * Created by Paul on 3/10/16.
  */
 public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
+    public static final int TASK_EVENT_GET = 4;
+
     private String TAG = "MainInboxPresenter";
     private Context context;
     private MessageApi messageApi;
@@ -101,4 +103,37 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
         HttpUtil.subscribe(observable, subscriber);
     }
 
+    public void fetchEvent(String calendarUid, String eventUid){
+        if (getView() != null){
+            getView().onTaskStart(TASK_EVENT_GET);
+        }
+        Observable<HttpResult<Event>> observable = eventApi.get(
+                calendarUid
+                , eventUid);
+        Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
+
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: " + "eventApi");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: " + "eventApi" + e.getMessage());
+                if (getView() != null){
+                    getView().onTaskError(TASK_EVENT_GET);
+                }
+            }
+
+            @Override
+            public void onNext(HttpResult<Event> eventHttpResult) {
+                EventManager.getInstance(context).updateDB(Arrays.asList(eventHttpResult.getData()));
+                if (getView() != null){
+                    getView().onTaskSuccess(TASK_EVENT_GET,Arrays.asList(eventHttpResult.getData()));
+                }
+            }
+
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
 }
