@@ -97,7 +97,9 @@ public class SettingCalendarDisplayFragment extends BaseUiAuthFragment<SettingCa
     public void toEditCalendar(Calendar calendar) {
         try {
             Calendar calendarCP = calendar.clone();
-            getBaseActivity().openFragment(new SettingCalendarEditFragment(calendarCP));
+            SettingCalendarEditFragment fragment = new SettingCalendarEditFragment();
+            fragment.setData(calendarCP);
+            getBaseActivity().openFragment(fragment);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }

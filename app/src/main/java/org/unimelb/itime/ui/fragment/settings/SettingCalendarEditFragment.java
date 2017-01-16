@@ -33,10 +33,6 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<TaskBasedMvp
     private Calendar calendar;
 
 
-    public SettingCalendarEditFragment(Calendar calendar) {
-        this.calendar = calendar;
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,6 +62,10 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<TaskBasedMvp
 
         binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
+    }
+
+    public void setData(Calendar calendar){
+        this.calendar = calendar;
     }
 
     @Override
