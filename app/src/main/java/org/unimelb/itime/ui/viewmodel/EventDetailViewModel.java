@@ -346,29 +346,6 @@ public class EventDetailViewModel extends CommonViewModel {
         }
     }
 
-
-    public boolean getRightBtnClickable(Event event){
-        Invitee me = EventUtil.getSelfInInvitees(context, this.event);
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
-            // event has been confirmed by host
-            if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
-                return false;
-            }else{
-                return true;
-            }
-        }else if (event.getStatus().equals(Event.STATUS_PENDING) || event.getStatus().equals(Event.STATUS_UPDATING)){
-            if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
-                return false;
-            }else if (TimeSlotUtil.chooseAtLeastOnTimeSlot(context, event)){
-                return false;
-            }else{
-                return true;
-            }
-        }
-        // TODO: 3/1/17 cancelled panduan
-        return true;
-    }
-
     public boolean getRightBtnClickable(List<SubTimeslotViewModel> viewModels){
         Invitee me = EventUtil.getSelfInInvitees(context, this.event);
         if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
