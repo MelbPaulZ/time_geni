@@ -55,7 +55,6 @@ public class EventPhotoGridFragment extends BaseUiAuthFragment implements ItimeC
         toolbarViewModel.setTitleStr(getString(R.string.photo));
     }
 
-
     public void setEvent(Event event) {
         this.event = event;
     }
