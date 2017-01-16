@@ -215,6 +215,15 @@ public class DBManager {
         return list;
     }
 
+    public List<Contact> getBlockContacts() {
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        ContactDao contactDao = daoSession.getContactDao();
+        QueryBuilder<Contact> qb = contactDao.queryBuilder();
+        qb.where(ContactDao.Properties.BlockLevel.gt(0)).orderAsc(ContactDao.Properties.AliasName);
+        List<Contact> list = qb.list();
+        return list;
+    }
 
 
     public synchronized void deleteAllContact(){
