@@ -25,9 +25,9 @@ public class PhotoAdapter extends ArrayAdapter<String> {
     private Context context;
 
 
-    public PhotoAdapter(Context context, int resource, List<String> objects) {
-        super(context, resource, objects);
-        this.urls = objects;
+    public PhotoAdapter(Context context, int resource, List<String> urls) {
+        super(context, resource, urls);
+        this.urls = urls;
         this.res = resource;
         this.context = context;
     }
