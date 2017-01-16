@@ -37,8 +37,9 @@ import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
+import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
-import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.AppUtil;
 
 import java.util.List;
 
@@ -49,12 +50,16 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
 
     private FragmentMainInboxBinding binding;
     private MainInboxPresenter presenter;
+    private EventPresenter eventPresenter;
     private MessageAdapter messageAdapter;
 
     @Override
     public MainInboxPresenter createPresenter() {
         if (presenter == null) {
             presenter = new MainInboxPresenter(getContext());
+        }
+        if (eventPresenter == null){
+            eventPresenter = new EventPresenter(getContext());
         }
         return presenter;
     }
@@ -117,7 +122,9 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
 //                Event event = EventManager.getInstance(getContext()).findEventByUid(message.getEventUid());
                 Event event = DBManager.getInstance(getContext()).getEvent(message.getEventUid());
                 if (event==null){
+                    eventPresenter.fetchEvent(String.valueOf(-1),message.getEventUid());
                     Toast.makeText(getContext(), "cannot find event, please try later", Toast.LENGTH_SHORT).show();
+
                 }else {
 
                     Intent intent = new Intent(getActivity(), EventDetailActivity.class);
@@ -195,6 +202,21 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
 
     @Override
     public void setData(Object o) {
+
+    }
+
+    @Override
+    public void onTaskStart(int taskId) {
+        AppUtil.showProgressBar(getActivity(),"","Please wait...");
+    }
+
+    @Override
+    public void onTaskSuccess(int taskId, Object data) {
+        AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onTaskError(int taskId) {
 
     }
 }

@@ -7,14 +7,19 @@ import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
+import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.managers.MessageManager;
+import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.HttpUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,10 +33,12 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
     private String TAG = "MainInboxPresenter";
     private Context context;
     private MessageApi messageApi;
+    private EventApi eventApi;
 
     public MainInboxPresenter(Context context) {
         this.context = context;
         messageApi = HttpUtil.createService(context, MessageApi.class);
+        eventApi = HttpUtil.createService(context, EventApi.class);
     }
 
     public Context getContext() {
@@ -93,4 +100,5 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
 
         HttpUtil.subscribe(observable, subscriber);
     }
+
 }

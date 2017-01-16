@@ -27,7 +27,7 @@ public interface EventApi {
             @Query("syncToken") String syncToken);
 
     @GET("event/get/{calendarUid}/{eventUid}")
-    Observable<HttpResult<Event>> get(@Path("calendarUid") String calendarUid);
+    Observable<HttpResult<Event>> get(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid);
 
     @POST("event/insert")
     Observable<HttpResult<List<Event>>> insert(
