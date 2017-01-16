@@ -93,7 +93,9 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
         toolbarViewModel = new ToolbarViewModel<>(this);
         toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
-        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+        if (fragment_task == TASK_EDIT) {
+            toolbarViewModel.setRightTitleStr(getString(R.string.done));
+        }
         binding.setTimeslotVM(viewModel);
         binding.setToolbarVM(toolbarViewModel);
         inflater = LayoutInflater.from(getContext());
@@ -362,7 +364,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
                 for (WrapperTimeSlot wrapper: timeslotWrapperList){
                     wrapper.getTimeSlot().setEndTime(wrapper.getTimeSlot().getStartTime() + EventUtil.getDurationInMintues(timePosition) * 60 * 1000);
                 }
-                
+
                 timeslotWeekView.reloadTimeSlots(false); // for page refresh
             }
         });
@@ -416,7 +418,6 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         if (fragment_task == TASK_EDIT) {
             List<Timeslot> list = new ArrayList<>();
             for (WrapperTimeSlot wrapper : this.timeslotWrapperList) {
-                long duration = (wrapper.getTimeSlot().getEndTime() - wrapper.getTimeSlot().getStartTime())/1000;
                 if (wrapper.isSelected()) {
                     wrapper.getTimeSlot().setStatus(Timeslot.STATUS_PENDING);
                     list.add((Timeslot) wrapper.getTimeSlot());

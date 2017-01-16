@@ -68,6 +68,7 @@ public class EventEditViewModel extends EventCommonViewModel {
 
     private EventManager eventManager;
     private boolean isEndTimeChanged = false;
+    private String alertString = null;
 
 
     public EventEditViewModel(EventPresenter<? extends TaskBasedMvpView<List<Event>>> presenter) {
@@ -323,7 +324,7 @@ public class EventEditViewModel extends EventCommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CharSequence[] alertTimes;
+                final CharSequence[] alertTimes;
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle(getContext().getString(R.string.choose_alert_time));
                 builder.setCancelable(true);
@@ -332,6 +333,7 @@ public class EventEditViewModel extends EventCommonViewModel {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         event.setReminder(i);
+                        setAlertString((String) alertTimes[i]);
                         notifyPropertyChanged(BR.event);
                     }
                 });
@@ -340,6 +342,17 @@ public class EventEditViewModel extends EventCommonViewModel {
         };
     }
 
+
+
+    @Bindable
+    public String getAlertString() {
+        return alertString;
+    }
+
+    public void setAlertString(String alertString) {
+        this.alertString = alertString;
+        notifyPropertyChanged(BR.alertString);
+    }
 
     public View.OnClickListener onChooseCalendarType() {
         return new View.OnClickListener() {

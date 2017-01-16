@@ -76,6 +76,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             return;
         }
         timeslotVMList = new ArrayList<>();
+        TimeSlotUtil.sortTimeslot(event.getTimeslot());
         for (Timeslot timeslot: event.getTimeslot()){
             WrapperTimeSlot wrapper = new WrapperTimeSlot(timeslot);
             if (EventUtil.isUserHostOfEvent(getContext(), event)) {
