@@ -91,7 +91,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         viewModel.setEvent(event);
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setRightTitleStr(getString(R.string.done));
         binding.setTimeslotVM(viewModel);
         binding.setToolbarVM(toolbarViewModel);

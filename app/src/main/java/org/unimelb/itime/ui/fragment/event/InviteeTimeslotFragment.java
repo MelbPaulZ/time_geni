@@ -70,7 +70,7 @@ public class InviteeTimeslotFragment extends BaseUiAuthFragment implements Itime
         binding.setVm(viewModel);
 
         toolbarViewModel= new ToolbarViewModel(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.invitee));
         binding.setToolbarVM(toolbarViewModel);
         initData();

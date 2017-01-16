@@ -86,7 +86,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     private void initToolbar(){
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.cancel));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         if (task == TASK_CREATE) {
             toolbarViewModel.setTitleStr(getString(R.string.new_event));
             toolbarViewModel.setRightTitleStr(getString(R.string.send));

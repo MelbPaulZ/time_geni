@@ -54,7 +54,7 @@ implements SettingCommonMvpView_delete {
 
     @Override
     public void setLeftTitleStringToVM() {
-        toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
     }
 
     @Override

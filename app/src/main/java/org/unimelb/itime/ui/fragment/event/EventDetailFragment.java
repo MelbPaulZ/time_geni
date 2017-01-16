@@ -95,7 +95,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
     private void initToolbar(){
         toolbarViewModel =
                 new ToolbarViewModel<EventDetailMvpView>(this);
-        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         String title = EventUtil.isUserHostOfEvent(getContext(), event)?
                 getString(R.string.event_details) : getString(R.string.new_invitation);
         toolbarViewModel.setTitleStr(title);
