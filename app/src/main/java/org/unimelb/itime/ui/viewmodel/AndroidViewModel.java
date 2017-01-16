@@ -119,13 +119,17 @@ public class AndroidViewModel extends BaseObservable {
 
                     if (!localUrl.equals("")){
                         Picasso.with(imagesContainer.getContext()).load(new File(localUrl)).resize(size,size).into(imgView);
+                        imgView.setVisibility(View.VISIBLE);
                         continue;
                     }
 
                     if (!remoteUrl.equals("")){
                         Picasso.with(imagesContainer.getContext()).load(remoteUrl).resize(size,size).into(imgView);
+                        imgView.setVisibility(View.VISIBLE);
                         continue;
                     }
+
+                    imgView.setVisibility(View.GONE);
                 }
             }
         }
