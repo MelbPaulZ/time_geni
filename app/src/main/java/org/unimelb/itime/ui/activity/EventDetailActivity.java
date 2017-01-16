@@ -108,8 +108,10 @@ public class EventDetailActivity extends EmptyActivity {
             case ACTIVITY_PHOTOPICKER: {
                 if (resultCode == Activity.RESULT_OK) {
                     ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-                    EventEditFragment eventEditFragment = (EventEditFragment) getSupportFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+                    EventEditFragment eventEditFragment = new EventEditFragment();
+                    eventEditFragment.setEvent(event);
                     eventEditFragment.setPhotos(result);
+                    openFragment(eventEditFragment);
                 }
             }
         }

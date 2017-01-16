@@ -333,7 +333,6 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo1"
-                                android:bindRemoteSrc="@{contentVM.event}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"
@@ -341,7 +340,6 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo2"
-                                android:bindRemoteSrc="@{contentVM.event}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"
@@ -349,7 +347,6 @@
 
                             <ImageView
                                 android:id="@+id/detail_photo3"
-                                android:bindRemoteSrc="@{contentVM.event}"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center" />

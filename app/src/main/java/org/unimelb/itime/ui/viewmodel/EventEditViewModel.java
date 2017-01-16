@@ -8,17 +8,21 @@ import android.content.DialogInterface;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
@@ -35,6 +39,7 @@ import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.util.UserUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -421,10 +426,10 @@ public class EventEditViewModel extends EventCommonViewModel {
         };
     }
 
-    public void setPhotos(ArrayList<String> photos) {
-        event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
-        notifyPropertyChanged(BR.event);
-    }
+//    public void setPhotos(ArrayList<String> photos) {
+//        event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
+//        notifyPropertyChanged(BR.event);
+//    }
 
 
     public void toCreateEvent(){
@@ -619,5 +624,29 @@ public class EventEditViewModel extends EventCommonViewModel {
 
     public String getRepeatHint(Event event){
         return String.format(getContext().getString(R.string.frequency), EventUtil.getRepeatString(getContext(),event));
+    }
+
+    private void bindUrls(ViewGroup imagesContainer, Event event){
+        if (event != null && event.getPhoto().size() != 0){
+            int cCount = imagesContainer.getChildCount();
+            for (int i = 0; i < cCount; i++) {
+                View imgView = imagesContainer.getChildAt(i);
+                if (imgView instanceof ImageView && i < event.getPhoto().size()){
+                    PhotoUrl photoUrl = event.getPhoto().get(i);
+                    String localUrl = photoUrl.getLocalPath();
+                    String remoteUrl = photoUrl.getUrl();
+
+                    if (!localUrl.equals("")){
+                        Picasso.with(getContext()).load(new File(localUrl)).resize(40,40);
+                        continue;
+                    }
+
+                    if (!remoteUrl.equals("")){
+                        Picasso.with(getContext()).load(remoteUrl).resize(40,40);
+                        continue;
+                    }
+                }
+            }
+        }
     }
 }

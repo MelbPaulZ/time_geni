@@ -7,10 +7,12 @@ import android.databinding.BindingAdapter;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 
@@ -18,8 +20,11 @@ import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
+
+import java.io.File;
 
 /**
  * Created by Paul on 18/10/16.
@@ -96,6 +101,34 @@ public class AndroidViewModel extends BaseObservable {
                     .resize(size, size)
                     .centerCrop()
                     .into(imageView);
+    }
+
+    @BindingAdapter({"bind:imgDisplayer"})
+    public static void imgDisplayer(View container, Event event){
+        int size = 200;
+        if (container instanceof ViewGroup && event != null && event.getPhoto().size() != 0){
+            ViewGroup imagesContainer = (ViewGroup) container;
+            int cCount = imagesContainer.getChildCount();
+            for (int i = 0; i < cCount; i++) {
+                View child = imagesContainer.getChildAt(i);
+                if (child instanceof ImageView && i < event.getPhoto().size()){
+                    ImageView imgView = (ImageView) child;
+                    PhotoUrl photoUrl = event.getPhoto().get(i);
+                    String localUrl = photoUrl.getLocalPath();
+                    String remoteUrl = photoUrl.getUrl();
+
+                    if (!localUrl.equals("")){
+                        Picasso.with(imagesContainer.getContext()).load(new File(localUrl)).resize(size,size).into(imgView);
+                        continue;
+                    }
+
+                    if (!remoteUrl.equals("")){
+                        Picasso.with(imagesContainer.getContext()).load(remoteUrl).resize(size,size).into(imgView);
+                        continue;
+                    }
+                }
+            }
+        }
     }
 
 }

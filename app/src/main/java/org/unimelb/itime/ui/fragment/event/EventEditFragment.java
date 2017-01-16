@@ -107,7 +107,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
     public void setPhotos(ArrayList<String> photos){
-        eventEditViewModel.setPhotos(photos);
+        event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
     }
 
     @Override
