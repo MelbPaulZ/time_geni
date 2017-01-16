@@ -6,10 +6,12 @@ import android.util.Log;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Block;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.restfulapi.ContactApi;
+import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.contact.BlockContactsMvpView;
 import org.unimelb.itime.ui.mvpview.contact.ContactHomePageMvpView;
@@ -31,11 +33,11 @@ import rx.functions.Func1;
 public class BlockContactsPresenter extends MvpBasePresenter<BlockContactsMvpView> {
     private static final String TAG = "BlockContacts";
     private Context context;
-    private ContactApi contactApi;
+    private UserApi userApi;
 
     public BlockContactsPresenter(Context context){
         this.context = context;
-        this.contactApi = HttpUtil.createService(context, ContactApi.class);
+        this.userApi = HttpUtil.createService(context, UserApi.class);
     }
 
     public Context getContext() {
@@ -49,9 +51,12 @@ public class BlockContactsPresenter extends MvpBasePresenter<BlockContactsMvpVie
         getBlockListFromServer(callBack);
     }
 
-    private List<ITimeUser> generateITimeUserList(List<Contact> list){
+    private List<ITimeUser> generateITimeUserList(List<Block> list){
         List<ITimeUser> result = new ArrayList<>();
-        for(Contact contact: list){
+        for(Block block: list){
+            Contact contact = new Contact(block.getUserDetail());
+            contact.setBlockLevel(block.getBlockLevel());
+            contact.setRelationship(1);
             ITimeUser user = new ITimeUser(contact);
             result.add(user);
         }
@@ -60,23 +65,23 @@ public class BlockContactsPresenter extends MvpBasePresenter<BlockContactsMvpVie
 
     private void getBlockListFromServer(final BlockContactsViewModel.ContactsCallBack callBack){
         final DBManager dbManager = DBManager.getInstance(context);
-        Observable<HttpResult<List<Contact>>> observable = contactApi.list();
-        Observable<List<Contact>> dbObservable = observable.map(new Func1<HttpResult<List<Contact>>, List<Contact>>() {
+        Observable<HttpResult<List<Block>>> observable = userApi.listBlock();
+        Observable<List<Block>> dbObservable = observable.map(new Func1<HttpResult<List<Block>>, List<Block>>() {
             @Override
-            public List<Contact> call(HttpResult<List<Contact>> result) {
+            public List<Block> call(HttpResult<List<Block>> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
                     return null;
                 }else {
-                    for(Contact contact:result.getData()) {
-                        dbManager.insertContact(contact);
+                    for(Block block:result.getData()) {
+                        dbManager.insertBlock(block);
                     }
                     return DBManager.getInstance(context).getBlockContacts();
                 }
             }
         });
 
-        Subscriber<List<Contact>> subscriber = new Subscriber<List<Contact>>() {
+        Subscriber<List<Block>> subscriber = new Subscriber<List<Block>>() {
             @Override
             public void onCompleted() {
                 Log.d(TAG, "onCompleted: ");
@@ -85,12 +90,11 @@ public class BlockContactsPresenter extends MvpBasePresenter<BlockContactsMvpVie
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
-                e.printStackTrace();
                 callBack.failed();
             }
 
             @Override
-            public void onNext(List<Contact> list) {
+            public void onNext(List<Block> list) {
                 if(list == null){
                     callBack.failed();
                 }else {

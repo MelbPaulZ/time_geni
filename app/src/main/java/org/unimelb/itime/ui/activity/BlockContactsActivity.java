@@ -14,7 +14,7 @@ import org.unimelb.itime.ui.fragment.contact.ProfileFragment;
  * Created by Qiushuo Huang on 2017/1/14.
  */
 
-public class BlockContactsActivity extends BaseActivity{
+public class BlockContactsActivity extends EmptyActivity{
 
     private FragmentManager fragmentManager;
     @Override

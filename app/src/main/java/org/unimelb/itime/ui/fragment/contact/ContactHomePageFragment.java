@@ -21,11 +21,13 @@ import org.unimelb.itime.messageevent.MessageEditContact;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
 import org.unimelb.itime.messageevent.MessageRemoveContact;
 import org.unimelb.itime.ui.activity.AddFriendActivityContact;
+import org.unimelb.itime.ui.activity.BlockContactsActivity;
 import org.unimelb.itime.ui.activity.FriendRequestActivityContact;
 import org.unimelb.itime.ui.activity.ProfileActivityContact;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.ui.mvpview.contact.ContactHomePageMvpView;
 import org.unimelb.itime.ui.presenter.contact.ContactHomePagePresenter;
+import org.unimelb.itime.ui.viewmodel.contact.BlockContactsViewModel;
 import org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel;
 
 /**
@@ -54,7 +56,6 @@ public class ContactHomePageFragment extends BaseContactFragment<ContactHomePage
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void removeContact(MessageRemoveContact msg){
-        System.out.println("remove " + msg.contact.getContactUid());
         viewModel.removeContact(msg.contact);
     }
 
@@ -100,6 +101,11 @@ public class ContactHomePageFragment extends BaseContactFragment<ContactHomePage
         Intent intent = new Intent();
         intent.setClass(getActivity(), FriendRequestActivityContact.class);
         startActivity(intent);
+
+//        Intent intent = new Intent();
+//        intent.setClass(getActivity(), BlockContactsActivity.class);
+//        startActivity(intent);
+
     }
 
     public void goToProfileFragment(Contact user) {

@@ -20,8 +20,8 @@ import java.lang.reflect.Type;
 @Entity
 public class User implements Serializable, Cloneable {
 
-    public  final static String MALE = "male";
-    public final static String FEMALE = "female";
+    public  final static String MALE = "2";
+    public final static String FEMALE = "1";
 
     @Id
     private String userUid="";

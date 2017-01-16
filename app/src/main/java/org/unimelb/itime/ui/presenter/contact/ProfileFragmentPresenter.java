@@ -13,6 +13,8 @@ import org.unimelb.itime.bean.RequestFriend;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.messageevent.MessageAddContact;
 import org.unimelb.itime.messageevent.MessageRemoveContact;
+import org.unimelb.itime.messageevent.contact.MessageBlockContact;
+import org.unimelb.itime.messageevent.contact.MessageUnblockContact;
 import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulapi.UserApi;
@@ -111,7 +113,11 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
                 }else {
                     user.setBlockLevel(result.getData().getBlockLevel());
                     dbManager.updateContact(user);
+                    Block block = result.getData();
+                    block.setUserDetail(user.getUserDetail());
+                    dbManager.insertBlock(block);
                     EventBus.getDefault().post(new MessageRemoveContact(user));
+                    EventBus.getDefault().post(new MessageBlockContact(user));
                     callBack.success();
                 }
             }
@@ -140,7 +146,9 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
                 }else {
                     user.setBlockLevel(result.getData().getBlockLevel());
                     dbManager.updateContact(user);
+                    dbManager.deleteBlock(result.getData());
                     EventBus.getDefault().post(new MessageAddContact(user));
+                    EventBus.getDefault().post(new MessageUnblockContact(user));
                     callBack.success();
                 }
             }

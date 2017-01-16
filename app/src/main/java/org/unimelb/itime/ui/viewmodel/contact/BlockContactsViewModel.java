@@ -247,6 +247,7 @@ public class BlockContactsViewModel  extends BaseObservable {
     public class ContactsCallBack{
 
         public void success(List<ITimeUser> users){
+            System.out.println(users.size());
             setFriendList(users);
         }
 

@@ -35,7 +35,7 @@ public class ContactTestActivityContact extends EmptyActivity {
 
     public void toHomePage() {
         Intent intent = new Intent();
-        intent.setClass(this, ContactHomePageActivityContact.class);
+        intent.setClass(this, BlockContactsActivity.class);
         startActivity(intent);
     }
 

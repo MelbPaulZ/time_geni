@@ -44,7 +44,7 @@ public class BlockContactsFragment extends BaseContactFragment<BlockContactsMvpV
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,
-                R.layout.contact_home_page, container, false);
+                R.layout.fragment_blocklist, container, false);
         initMainView();
         fm = getFragmentManager();
         viewModel.initSideBarListView(binding.sortListView);
