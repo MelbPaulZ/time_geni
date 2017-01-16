@@ -46,7 +46,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public final static int REQ_INVITEE = 1001;
     public final static int REQ_TIMESLOT = 1002;
 
-
     private FragmentEventEditDetailBinding binding;
     private Event event = null;
     private EventManager eventManager;
@@ -107,7 +106,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
     public void setPhotos(ArrayList<String> photos){
-        eventEditViewModel.setPhotos(photos);
+        event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
     }
 
     @Override

@@ -8,22 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentPhotoGridviewBinding;
-import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
-import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.ui.viewmodel.EventGridPhotoViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
-import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
-
-import java.util.List;
 
 /**
  * Created by Paul on 1/1/17.

@@ -130,7 +130,6 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
     private void toCalendar(int resultCode) {
         Intent intent = new Intent();
 
-
         getActivity().setResult(resultCode, intent);
         getActivity().finish();
     }

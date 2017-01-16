@@ -32,8 +32,8 @@ public abstract class BindingAdapter {
         }
     }
 
-    @android.databinding.BindingAdapter({"android:bindRemoteSrc"})
-    public static void bindRemoteImg(ImageView imageView, Event event){
+//    @android.databinding.BindingAdapter({"android:bindRemoteSrc"})
+//    public static void bindRemoteImg(ImageView imageView, Event event){
 //        LinearLayout parent = (LinearLayout) imageView.getParent();
 //        int position = parent.indexOfChild(imageView); // get the position
 //        if (event==null){
@@ -53,46 +53,46 @@ public abstract class BindingAdapter {
 //        }else{
 //            imageView.setVisibility(View.GONE);
 //        }
-    }
-
-    @android.databinding.BindingAdapter({"android:bindLocalSrc"})
-    public static void bindLocalImg(final ImageView imageView, Event event){
-        imageView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                imageView.setImageDrawable(imageView.getResources().getDrawable(R.drawable.invitee_selected_default_picture));
-            }
-        },5000);
-        LinearLayout parent = (LinearLayout) imageView.getParent();
-        int position = parent.indexOfChild(imageView); // get the position
-        if (event==null){
-
-        }else{
-            // event has url
-            if (event.hasPhoto() && event.getPhoto().size()>= position+1){
-                imageView.setVisibility(View.VISIBLE);
-                File f = new File(event.getPhoto().get(position).getLocalPath());
-                if (f.exists()){
-                    int size = DensityUtil.dip2px(imageView.getContext(), 40);
-                    imageView.setImageDrawable(imageView.getResources().getDrawable(R.drawable.icon_event_host_selected));
-
-//                    Picasso.with(imageView.getContext())
-//                            .load(f)
-//                            .placeholder(R.drawable.invitee_selected_default_picture)
-//                            .resize(size, size)
-//                            .centerCrop()
-//                            .into(imageView);
-                }else {
-                    Log.i("fuck", "bindLocalImg: fuck");
-                }
-
-            }else{
-                try {
-//                    bindRemoteImg(imageView,event);
-                }catch (Exception e){
-//                    imageView.setVisibility(View.GONE);
-                }
-            }
-        }
-    }
+//    }
+//
+//    @android.databinding.BindingAdapter({"android:bindLocalSrc"})
+//    public static void bindLocalImg(final ImageView imageView, Event event){
+//        imageView.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                imageView.setImageDrawable(imageView.getResources().getDrawable(R.drawable.invitee_selected_default_picture));
+//            }
+//        },5000);
+//        LinearLayout parent = (LinearLayout) imageView.getParent();
+//        int position = parent.indexOfChild(imageView); // get the position
+//        if (event==null){
+//
+//        }else{
+//            // event has url
+//            if (event.hasPhoto() && event.getPhoto().size()>= position+1){
+//                imageView.setVisibility(View.VISIBLE);
+//                File f = new File(event.getPhoto().get(position).getLocalPath());
+//                if (f.exists()){
+//                    int size = DensityUtil.dip2px(imageView.getContext(), 40);
+//                    imageView.setImageDrawable(imageView.getResources().getDrawable(R.drawable.icon_event_host_selected));
+//
+////                    Picasso.with(imageView.getContext())
+////                            .load(f)
+////                            .placeholder(R.drawable.invitee_selected_default_picture)
+////                            .resize(size, size)
+////                            .centerCrop()
+////                            .into(imageView);
+//                }else {
+//                    Log.i("fuck", "bindLocalImg: fuck");
+//                }
+//
+//            }else{
+//                try {
+////                    bindRemoteImg(imageView,event);
+//                }catch (Exception e){
+////                    imageView.setVisibility(View.GONE);
+//                }
+//            }
+//        }
+//    }
 }
