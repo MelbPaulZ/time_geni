@@ -2,26 +2,17 @@ package org.unimelb.itime.ui.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,16 +26,17 @@ import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
+import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.fragment.contact.ContactHomePageFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
 import org.unimelb.itime.ui.fragment.MainSettingFragment;
+import org.unimelb.itime.ui.fragment.contact.ContactHomePageFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
 import org.unimelb.itime.util.EventUtil;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
@@ -128,7 +120,6 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
 
         fragmentTransaction.commit();
         showFragmentById(0);
-        refreshTabStatus(0);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -162,33 +153,16 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void refreshTabStatus(int pageId){
-
-    }
-
-
-    public void startEventCreateActivity(Calendar startTime){
-        Intent intent = new Intent(this, EventCreateActivity.class);
-        intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_SELF_CREATE_EVENT);
-        intent.putExtra("start_time", startTime.getTimeInMillis());
-        Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getApplicationContext(),R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
-        startActivityForResult(intent, EventUtil.ACTIVITY_CREATE_EVENT,bundleAnimation);
-    }
-
-
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EventUtil.ACTIVITY_CREATE_EVENT ){
+        if (requestCode == CalendarBaseViewFragment.REQ_EVENT_CREATE ){
             if (resultCode == Activity.RESULT_OK) {
                 ((MainCalendarFragment) tagFragments[0]).reloadEvent();
                 ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
             }
-        }else if (requestCode == EventUtil.ACTIVITY_EDIT_EVENT ){
+        }else if (requestCode == CalendarBaseViewFragment.REQ_EVENT_DETAIL ){
             if (resultCode == Activity.RESULT_OK) {
                 ((MainCalendarFragment) tagFragments[0]).reloadEvent();
                 ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
@@ -199,7 +173,6 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
 
     @Override
     protected void onDestroy() {
-//        stopService(new Intent(this, RemoteService.class));
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

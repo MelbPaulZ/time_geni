@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
@@ -17,8 +18,8 @@ import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.presenter.EventPresenter;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.dayview.EventController;
 import org.unimelb.itime.vendor.dayview.MonthDayView;
@@ -47,40 +48,36 @@ public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCa
 
     @Override
     public void onTaskStart(int taskId) {
-
+        AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
     }
 
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
-
+        AppUtil.hideProgressBar();
     }
 
     @Override
     public void onTaskError(int taskId) {
-
+        AppUtil.hideProgressBar();
+        Toast.makeText(getContext(), "some error", Toast.LENGTH_SHORT).show();
     }
 
 
     public void toEventCreatePage(long startTime) {
         Intent intent = new Intent(getActivity(), EventCreateActivity.class);
-        intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_SELF_CREATE_EVENT);
         intent.putExtra("start_time", startTime);
         Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getContext(), R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
-        startActivityForResult(intent, REQ_EVENT_CREATE, bundleAnimation);
+        getActivity().startActivityForResult(intent, REQ_EVENT_CREATE, bundleAnimation);
     }
 
     public void toEventDetailPage(String eventUid, long startTime) {
         Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-        intent.putExtra(BaseActivity.TASK, BaseActivity.TASK_SELF_DETAIL_EVENT);
         intent.putExtra("start_time", startTime);
         intent.putExtra("event_uid", eventUid);
         Bundle bundleAnimation = ActivityOptions.makeCustomAnimation(getContext(), R.anim.create_event_animation1, R.anim.create_event_animation2).toBundle();
-        startActivityForResult(intent, REQ_EVENT_DETAIL, bundleAnimation);
+        getActivity().startActivityForResult(intent, REQ_EVENT_DETAIL, bundleAnimation);
     }
 
-    public void toSearchEventPage() {
-
-    }
 
     public abstract void backToToday();
 
@@ -135,11 +132,11 @@ public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCa
                                 switch (which) {
 //
                                     case 0: {
-                                        presenter.updateEvent(event, EventCommonPresenter.UPDATE_THIS, originEvent.getStartTime());
+                                        presenter.updateEvent(event, EventPresenter.UPDATE_THIS, originEvent.getStartTime());
                                         break;
                                     }
                                     case 1: {
-                                        presenter.updateEvent(event, EventCommonPresenter.UPDATE_FOLLOWING, originEvent.getStartTime());
+                                        presenter.updateEvent(event, EventPresenter.UPDATE_FOLLOWING, originEvent.getStartTime());
                                         break;
                                     }
                                     case 2: {
@@ -156,7 +153,7 @@ public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCa
                 Event copyEvent = EventUtil.copyEvent(event);
                 copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
                 copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-                presenter.updateEvent(copyEvent, EventCommonPresenter.UPDATE_ALL, originEvent.getStartTime());
+                presenter.updateEvent(copyEvent, EventPresenter.UPDATE_ALL, copyEvent.getStartTime());
             }
 
         }

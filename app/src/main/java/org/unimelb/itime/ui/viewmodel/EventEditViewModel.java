@@ -29,7 +29,6 @@ import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 import org.unimelb.itime.ui.mvpview.EventCustomRepeatMvpView;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
@@ -204,8 +203,7 @@ public class EventEditViewModel extends EventCommonViewModel {
                 event.setStatus(Event.STATUS_CONFIRMED);
             }
 
-            Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
-            presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+            presenter.updateEvent(event, EventPresenter.UPDATE_ALL, event.getStartTime());
             // this if might change later, because the host can be kicked??????
         }
     }
@@ -243,7 +241,7 @@ public class EventEditViewModel extends EventCommonViewModel {
     // TODO: test this change all
     private void changeAllEvent(Event event) {
         Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
-        presenter.updateEvent(event, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+        presenter.updateEvent(event, EventPresenter.UPDATE_ALL, orgEvent.getStartTime());
     }
 
     private void changeOnlyThisEvent(Event event) {
@@ -256,7 +254,7 @@ public class EventEditViewModel extends EventCommonViewModel {
         }
         // here change the event as a new event
         Event orgEvent = EventManager.getInstance(getContext()).getCurrentEvent();
-        presenter.updateEvent(event, EventCommonPresenter.UPDATE_THIS, orgEvent.getStartTime());
+        presenter.updateEvent(event, EventPresenter.UPDATE_THIS, orgEvent.getStartTime());
 
     }
 
@@ -378,13 +376,13 @@ public class EventEditViewModel extends EventCommonViewModel {
                 if (EventUtil.isEventRepeat(event)) {
                     // repeat event delete
                     if (event.getRecurrence().length == 0) {
-                        presenter.deleteEvent(event, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                        presenter.deleteEvent(event, EventPresenter.UPDATE_ALL, orgEvent.getStartTime());
                     } else {
                         repeatDeletePopup(orgEvent);
                     }
                 } else {
                     // none repeat event delete
-                    presenter.deleteEvent(event, EventCommonPresenter.UPDATE_ALL, orgEvent.getStartTime());
+                    presenter.deleteEvent(event, EventPresenter.UPDATE_ALL, orgEvent.getStartTime());
                 }
             }
         };
@@ -399,14 +397,14 @@ public class EventEditViewModel extends EventCommonViewModel {
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {
-                                presenter.deleteEvent(event, EventCommonPresenter.UPDATE_THIS, orgEvent.getStartTime());
+                                presenter.deleteEvent(event, EventPresenter.UPDATE_THIS, orgEvent.getStartTime());
                             }
                         })
                 .addSheetItem(getContext().getString(R.string.event_delete_repeat_text2), ActionSheetDialog.SheetItemColor.Black,
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int i) {
-                                presenter.deleteEvent(event, EventCommonPresenter.UPDATE_FOLLOWING, orgEvent.getStartTime());
+                                presenter.deleteEvent(event, EventPresenter.UPDATE_FOLLOWING, orgEvent.getStartTime());
                             }
                         });
         actionSheetDialog.show();

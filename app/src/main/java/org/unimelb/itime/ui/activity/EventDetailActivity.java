@@ -17,6 +17,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
+import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,9 @@ public class EventDetailActivity extends EmptyActivity {
 
         EventDetailFragment fragment = new EventDetailFragment();
         initEvent();
-        fragment.setData(event);
+        EventManager.getInstance(getApplicationContext()).setCurrentEvent(event);
+        Event cpyEvent = EventUtil.copyEvent(event);
+        fragment.setData(cpyEvent);
         fragmentManager.beginTransaction()
                 .replace(getFragmentContainerId(), fragment)
                 .commit();
@@ -56,24 +59,6 @@ public class EventDetailActivity extends EmptyActivity {
     @Override
     protected int getFragmentContainerId() {
         return R.id.event_detail_fragment;
-    }
-
-    public void initFragments() {
-//        fragmentList.add(new EventDetailFragment());
-//        fragmentList.add(new EventEditFragment());
-//        fragmentList.add(new EventDetailTimeSlotFragment());
-//        fragmentList.add(new EventLocationPickerFragment());
-//        fragmentList.add(new InviteeFragment());
-//        fragmentList.add(new InviteeTimeslotFragment());
-//        fragmentList.add(new ViewMainCalendarFragment());
-//        fragmentList.add(new EventPhotoGridFragment());
-//        hideAllFragments();
-    }
-
-    public void hideAllFragments() {
-        for (BaseUiFragment fragment : fragmentList) {
-            getSupportFragmentManager().beginTransaction().add(R.id.event_detail_fragment, fragment, fragment.getClassName()).hide(fragment).commit();
-        }
     }
 
 

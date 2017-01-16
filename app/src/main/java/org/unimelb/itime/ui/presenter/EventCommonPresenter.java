@@ -277,12 +277,15 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void rejectTimeslots(final Event event){
+    public void rejectTimeslots(String calendarUid, String eventUid){
         if (getView()!=null){
             getView().onTaskStart(TASK_TIMESLOT_REJECT);
         }
         String syncToken = AppUtil.getEventSyncToken(context);
-        Observable<HttpResult<List<Event>>> observable = eventApi.rejectTimeslot(event.getCalendarUid() ,event.getEventUid(),syncToken);
+        Observable<HttpResult<List<Event>>> observable = eventApi.rejectTimeslot(
+                calendarUid,
+                eventUid,
+                syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
             public void onCompleted() {
@@ -346,10 +349,10 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
             public void onNext(HttpResult<List<Event>> eventHttpResult) {
                 synchronizeLocal(eventHttpResult.getData());
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                 if (getView()!=null){
                     getView().onTaskComplete(TASK_EVENT_CONFIRM, eventHttpResult.getData());
                 }
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
             }
         };
         HttpUtil.subscribe(observable,subscriber);
@@ -466,14 +469,14 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void quitEvent(Event event, String type, long originalStartTime){
+    public void quitEvent(String calendarUid, String eventUid, String type, long originalStartTime){
         if (getView()!=null){
             getView().onTaskStart(TASK_EVENT_REJECT);
         }
         String syncToken = AppUtil.getEventSyncToken(context);
         Observable<HttpResult<List<Event>>> observable = eventApi.quitEvent(
-                event.getCalendarUid(),
-                event.getEventUid(),
+                calendarUid,
+                eventUid,
                 type,
                 originalStartTime,
                 syncToken);

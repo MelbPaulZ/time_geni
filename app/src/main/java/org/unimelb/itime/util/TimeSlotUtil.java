@@ -89,6 +89,16 @@ public class TimeSlotUtil {
         return false;
     }
 
+    public static int numberSelectedWrapper(List<EventDetailViewModel.SubTimeslotViewModel> wrapperTimeSlotList){
+        int count = 0;
+        for (EventDetailViewModel.SubTimeslotViewModel viewModel: wrapperTimeSlotList){
+            if (viewModel.getWrapper().isSelected()){
+                count ++;
+            }
+        }
+        return count;
+    }
+
 
     public static Timeslot getTimeSlot(Event event, Timeslot timeSlot){
         for (Timeslot eventTimeSlot : event.getTimeslot()){

@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.fragment;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -32,6 +33,9 @@ import org.unimelb.itime.databinding.FragmentMainInboxBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
+import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.ui.activity.MainActivity;
+import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.util.EventUtil;
@@ -115,7 +119,12 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
                 if (event==null){
                     Toast.makeText(getContext(), "cannot find event, please try later", Toast.LENGTH_SHORT).show();
                 }else {
-                    EventUtil.startEditEventActivity(getContext(), getActivity(), event);
+
+                    Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+                    intent.putExtra("event_uid", event.getEventUid());
+                    intent.putExtra("start_time", event.getStartTime());
+                    EventManager.getInstance(getContext()).setCurrentEvent(event);
+                    getActivity().startActivityForResult(intent, CalendarBaseViewFragment.REQ_EVENT_DETAIL);
                 }
             }
         });
