@@ -44,6 +44,7 @@ public class EventPhotoGridFragment extends BaseUiAuthFragment implements ItimeC
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = new EventGridPhotoViewModel();
+        viewModel.setEvent(event);
         initToolbar();
         binding.setVm(viewModel);
         binding.setToolbarVM(toolbarViewModel);
