@@ -9,10 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
@@ -31,7 +33,9 @@ import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.databinding.repacked.kotlin.text.Typography.times;
+import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_INSERT;
+import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_SYN_IMAGE;
+import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_UPLOAD_IMAGE;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -55,6 +59,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     private EventManager eventManager;
 
     private EventEditViewModel eventEditViewModel;
+//    private EventPresenter presenter;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
     private int task = TASK_CREATE;
 
@@ -106,7 +111,8 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public EventPresenter<EventEditMvpView> createPresenter() {
-        return new EventPresenter<>(getContext());
+        presenter = new EventPresenter<>(getContext());
+        return presenter;
     }
 
     public void setPhotos(ArrayList<String> photos){
@@ -172,17 +178,52 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void onTaskStart(int task) {
-        AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
+        AppUtil.showProgressBar(getActivity(),"","Please wait...");
     }
 
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
-        AppUtil.hideProgressBar();
-        toCalendar();
+        switch (taskId){
+            case TASK_UPLOAD_IMAGE:{
+                for (Event event:data
+                     ) {
+                    for (PhotoUrl photoUrl:event.getPhoto()
+                         ) {
+                        presenter.updatePhotoToServer(event, photoUrl.getPhotoUid(), photoUrl.getUrl());
+                    }
+                }
+                break;
+            }
+            case TASK_SYN_IMAGE:{
+                AppUtil.hideProgressBar();
+                toCalendar();
+                break;
+            }
+
+            case TASK_EVENT_INSERT:{
+                AppUtil.hideProgressBar();
+                toCalendar();
+                break;
+            }
+            default:{
+                AppUtil.hideProgressBar();
+                toCalendar();
+            }
+        }
     }
 
     @Override
     public void onTaskError(int taskId) {
+        switch (taskId) {
+            case TASK_UPLOAD_IMAGE: {
+                Toast.makeText(getContext(), "Upload Image Failed, LeanCloud ERROR", Toast.LENGTH_LONG).show();
+                break;
+            }
+            case TASK_SYN_IMAGE: {
+                Toast.makeText(getContext(), "Upload Image Failed, ITime-Server ERROR", Toast.LENGTH_LONG).show();
+                break;
+            }
+        }
         AppUtil.hideProgressBar();
     }
 

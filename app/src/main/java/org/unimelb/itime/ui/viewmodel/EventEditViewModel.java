@@ -137,8 +137,6 @@ public class EventEditViewModel extends EventCommonViewModel {
         notifyPropertyChanged(BR.event);
     }
 
-
-
     /**
      * check the focus of email edit text
      *
@@ -157,11 +155,9 @@ public class EventEditViewModel extends EventCommonViewModel {
         };
     }
 
-
     public Context getContext() {
         return presenter.getContext();
     }
-
 
     public void editEvent() {
         // popup alertDialog to choose whether change all or just one
@@ -213,7 +209,6 @@ public class EventEditViewModel extends EventCommonViewModel {
             // this if might change later, because the host can be kicked??????
         }
     }
-
 
     public Switch.OnCheckedChangeListener eventAlldayChange() {
         return new Switch.OnCheckedChangeListener() {
