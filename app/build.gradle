@@ -30,6 +30,12 @@ android {
             storePassword 'itime_2016'
             keyPassword 'itime_2016'
         }
+        release {
+            keyAlias 'itime'
+            storeFile file('keystore.jks')
+            storePassword 'itime_2016'
+            keyPassword 'itime_2016'
+        }
     }
 
     dataBinding {
