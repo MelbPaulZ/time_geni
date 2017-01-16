@@ -146,7 +146,13 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             vm.getWrapper().setSelected(vm.isIconSelected());
             wrapperTimeSlots.add(vm.getWrapper());
         }
-        timeSlotViewFragment.setData(cpyEvent, wrapperTimeSlots);
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+            // if the event is confirmed, then no timeslot showing
+            timeSlotViewFragment.setData(cpyEvent);
+            timeSlotViewFragment.setDisplayTimeslot(false);
+        }else {
+            timeSlotViewFragment.setData(cpyEvent, wrapperTimeSlots);
+        }
         getBaseActivity().openFragment(timeSlotViewFragment);
 
     }

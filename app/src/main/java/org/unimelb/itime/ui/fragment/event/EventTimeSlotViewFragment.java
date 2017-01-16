@@ -68,6 +68,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     public static final int TASK_EDIT = 1;
     public static final int TASK_VIEW = 2;
     private int fragment_task = -1;
+    private boolean displayTimeslot= true;
 
     @Nullable
     @Override
@@ -137,41 +138,42 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
 
     private void initData(){
-
-        if (timeslotWrapperList == null && event.hasTimeslots()) {
-            // when create event, and jump page from invitee page
-            timeslotWrapperList = new ArrayList<>();
-            for (Timeslot timeSlot : event.getTimeslot()) {
-                WrapperTimeSlot wrapper = new WrapperTimeSlot(timeSlot);
-                if (fragment_task == TASK_EDIT) {
-                    // create timeslots
-                    wrapper.setSelected(true);
-                }else if (fragment_task == TASK_VIEW){
-                    // just view timeslots
-                    if (timeSlot.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
+        if (displayTimeslot) {
+            if (timeslotWrapperList == null && event.hasTimeslots()) {
+                // when create event, and jump page from invitee page
+                timeslotWrapperList = new ArrayList<>();
+                for (Timeslot timeSlot : event.getTimeslot()) {
+                    WrapperTimeSlot wrapper = new WrapperTimeSlot(timeSlot);
+                    if (fragment_task == TASK_EDIT) {
+                        // create timeslots
                         wrapper.setSelected(true);
-                    }else{
-                        wrapper.setSelected(false);
+                    } else if (fragment_task == TASK_VIEW) {
+                        // just view timeslots
+                        if (timeSlot.getStatus().equals(Timeslot.STATUS_ACCEPTED)) {
+                            wrapper.setSelected(true);
+                        } else {
+                            wrapper.setSelected(false);
+                        }
                     }
+                    timeslotWeekView.addTimeSlot(wrapper);
+                    timeslotWrapperList.add(wrapper);
                 }
-                timeslotWeekView.addTimeSlot(wrapper);
-                timeslotWrapperList.add(wrapper);
-            }
 
 
-        }else if(timeslotWrapperList != null){
-            // jump page when already has timeslots
-            for (WrapperTimeSlot wrapper: timeslotWrapperList){
-                timeslotWeekView.addTimeSlot(wrapper);
+            } else if (timeslotWrapperList != null) {
+                // jump page when already has timeslots
+                for (WrapperTimeSlot wrapper : timeslotWrapperList) {
+                    timeslotWeekView.addTimeSlot(wrapper);
+                }
             }
-        }
 
-        if (fragment_task == TASK_EDIT) {
-            if (event != null || event.getTimeslot() == null || event.getTimeslot().size() == 0) {
-                Calendar calendar = Calendar.getInstance();
-                presenter.getTimeSlots(event, calendar.getTimeInMillis());
+            if (fragment_task == TASK_EDIT) {
+                if (event != null || event.getTimeslot() == null || event.getTimeslot().size() == 0) {
+                    Calendar calendar = Calendar.getInstance();
+                    presenter.getTimeSlots(event, calendar.getTimeInMillis());
+                }
+                timeslotWeekView.reloadTimeSlots(false);
             }
-            timeslotWeekView.reloadTimeSlots(false);
         }
     }
 
@@ -461,5 +463,9 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
     public void setFragment_task(int fragment_task) {
         this.fragment_task = fragment_task;
+    }
+
+    public void setDisplayTimeslot(boolean displayTimeslot) {
+        this.displayTimeslot = displayTimeslot;
     }
 }

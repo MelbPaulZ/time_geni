@@ -115,6 +115,7 @@ public class EventCustomRepeatFragment extends BaseUiAuthFragment<EventCustomRep
     @Override
     public void onNext() {
         EventEditFragment frag = new EventEditFragment();
+        editEvent.setRecurrence(editEvent.getRule().getRecurrence()); // this use for set recurrence to event
         frag.setEvent(editEvent);
         getBaseActivity().backFragment(frag);
     }
