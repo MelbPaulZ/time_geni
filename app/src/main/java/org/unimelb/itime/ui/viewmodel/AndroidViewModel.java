@@ -111,24 +111,26 @@ public class AndroidViewModel extends BaseObservable {
             int cCount = imagesContainer.getChildCount();
             for (int i = 0; i < cCount; i++) {
                 View child = imagesContainer.getChildAt(i);
-                if (child instanceof ImageView && i < event.getPhoto().size()){
+                if (child instanceof ImageView){
                     ImageView imgView = (ImageView) child;
-                    PhotoUrl photoUrl = event.getPhoto().get(i);
-                    String localUrl = photoUrl.getLocalPath();
-                    String remoteUrl = photoUrl.getUrl();
 
-                    if (!localUrl.equals("")){
-                        Picasso.with(imagesContainer.getContext()).load(new File(localUrl)).resize(size,size).into(imgView);
-                        imgView.setVisibility(View.VISIBLE);
-                        continue;
+                    if (i < event.getPhoto().size()){
+                        PhotoUrl photoUrl = event.getPhoto().get(i);
+                        String localUrl = photoUrl.getLocalPath();
+                        String remoteUrl = photoUrl.getUrl();
+
+                        if (!localUrl.equals("")){
+                            Picasso.with(imagesContainer.getContext()).load(new File(localUrl)).resize(size,size).into(imgView);
+                            imgView.setVisibility(View.VISIBLE);
+                            continue;
+                        }
+
+                        if (!remoteUrl.equals("")){
+                            Picasso.with(imagesContainer.getContext()).load(remoteUrl).resize(size,size).into(imgView);
+                            imgView.setVisibility(View.VISIBLE);
+                            continue;
+                        }
                     }
-
-                    if (!remoteUrl.equals("")){
-                        Picasso.with(imagesContainer.getContext()).load(remoteUrl).resize(size,size).into(imgView);
-                        imgView.setVisibility(View.VISIBLE);
-                        continue;
-                    }
-
                     imgView.setVisibility(View.GONE);
                 }
             }

@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -28,6 +29,8 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.util.rulefactory.InviteeUtil;
 
+import java.util.ArrayList;
+
 import static android.R.attr.fragment;
 
 
@@ -38,6 +41,7 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
     private final int ACTIVITY_PHOTOPICKER = 2;
 
     private FragmentManager fragmentManager;
+    private Event event = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +50,7 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
 
         long startTime = getIntent().getLongExtra("start_time",0);
         fragmentManager = getSupportFragmentManager();
-        Event event = initNewEvent(startTime);
+        event = initNewEvent(startTime);
         EventEditFragment fragment = new EventEditFragment();
 
         fragment.setEvent(event);
@@ -113,16 +117,17 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // this is the recall for photo urls
-//        switch (requestCode){
-//            case ACTIVITY_PHOTOPICKER: {
-//                if (resultCode == Activity.RESULT_OK) {
-//                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-//                        EventCreateDetailBeforeSendingFragment eventCreateDetailBeforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getSupportFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-//                        eventCreateDetailBeforeSendingFragment.setPhotos(result);
-////                    }
-//                }
-//            }
-//        }
+        switch (requestCode) {
+            case ACTIVITY_PHOTOPICKER: {
+                if (resultCode == Activity.RESULT_OK) {
+                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+                    EventEditFragment eventEditFragment = new EventEditFragment();
+                    eventEditFragment.setEvent(event);
+                    eventEditFragment.setPhotos(result);
+                    openFragment(eventEditFragment);
+                }
+            }
+        }
     }
 //
     public void toPhotoPicker(){

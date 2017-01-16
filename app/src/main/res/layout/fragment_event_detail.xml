@@ -329,7 +329,8 @@
                             android:layout_height="match_parent"
                             android:layout_marginEnd="10dp"
                             android:layout_toStartOf="@+id/event_detail_photo_arrow"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            app:imgDisplayer="@{contentVM.event}">
 
                             <ImageView
                                 android:id="@+id/detail_photo1"
