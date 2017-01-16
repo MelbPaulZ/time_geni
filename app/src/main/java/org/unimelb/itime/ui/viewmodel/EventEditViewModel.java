@@ -482,7 +482,6 @@ public class EventEditViewModel extends EventCommonViewModel {
         if (event.hasTimeslots()) {
             timeslotList = event.getTimeslot();
         }
-        Log.i("asda", "setData: " + event.getTimeslot().size());
         notifyPropertyChanged(BR.event);
         notifyPropertyChanged(BR.startTimeVisibility);
         notifyPropertyChanged(BR.endTimeVisibility);
