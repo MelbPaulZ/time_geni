@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
+import android.databinding.tool.util.L;
 import android.util.Log;
 
 import com.avos.avoscloud.AVException;
@@ -20,8 +21,11 @@ import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.HttpUtil;
+import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,6 +62,12 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
     public static final int TASK_TIMESLOT_REJECT = 9;
     public static final int TASK_BACK = 10;
 
+    public static final int TASK_UPLOAD_IMAGE= 11;
+    public static final int TASK_UPDATE_IMAGE= 12;
+    public static final int TASK_DELETE_IMAGE= 13;
+    public static final int TASK_SYN_IMAGE= 14;
+
+
     public static final String UPDATE_THIS = "this";
     public static final String UPDATE_ALL = "all";
     public static final String UPDATE_FOLLOWING = "following";
@@ -71,9 +81,6 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
     public Context getContext(){
         return this.context;
     }
-
-
-
 
     public void updateEvent(Event event, String type, long originalStartTime){
         if(getView() != null){
@@ -120,7 +127,6 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
         HttpUtil.subscribe(observable,subscriber);
     }
 
-
     public void insertEvent(Event event){
         if (getView()!=null){
             getView().onTaskStart(TASK_EVENT_INSERT);
@@ -148,14 +154,19 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                 Event ev = eventHttpResult.getData().get(0);
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
 
-                // if the event is successfully insert into server, then begin to upload photos
-                uploadImage(ev);
+
                 insertEventLocal(ev);
-                if(getView() != null){
-                    getView().onTaskSuccess(TASK_EVENT_INSERT, eventHttpResult.getData());
+
+                // if the event is successfully insert into server, then begin to upload photos
+                if (ev.hasPhoto()){
+                    uploadImage(ev);
+                }else {
+                    if(getView() != null){
+                        getView().onTaskSuccess(TASK_EVENT_INSERT, eventHttpResult.getData());
+                    }
+                    // todo: put event bus into fragment
+                    EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                 }
-                // todo: put event bus into fragment
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
             }
         };
         HttpUtil.subscribe(observable,subscriber);
@@ -206,7 +217,16 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
      */
     public void uploadImage(final Event event) {
         if (event.hasPhoto()){
+            if (getView() != null){
+                getView().onTaskStart(TASK_UPLOAD_IMAGE);
+            }
+
+            final List<ImageUploadWrapper> wrappers = new ArrayList<>();
+
             for (final PhotoUrl photoUrl : event.getPhoto()){
+                final ImageUploadWrapper wrapper = new ImageUploadWrapper(photoUrl,false);
+                wrappers.add(wrapper);
+
                 // create file
                 String fileName = event.getEventUid() + "_" + photoUrl.getPhotoUid() + ".png";
 
@@ -216,7 +236,16 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                         @Override
                         public void done(AVException e) {
                             if (e==null){
-                                updatePhotoToServer(event, photoUrl.getPhotoUid(), file.getUrl());
+                                wrapper.getPhoto().setUrl(file.getUrl());
+                                wrapper.setUploaded(true);
+
+                                if (imageUploadChecker(wrappers) && getView() != null){
+                                    getView().onTaskSuccess(TASK_UPLOAD_IMAGE, Arrays.asList(event));
+                                }
+                            }else{
+                                if (getView() != null){
+                                    getView().onTaskError(TASK_UPLOAD_IMAGE);
+                                }
                             }
                         }
                     });
@@ -232,7 +261,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
      * @param event
      * @param url
      */
-    private void updatePhotoToServer(Event event, String photoUid, String url){
+    public void updatePhotoToServer(final Event event, String photoUid, String url){
         Observable<HttpResult<Event>> observable = photoApi.updatePhoto(event.getCalendarUid(), event.getEventUid(), photoUid, url);
         Subscriber<HttpResult<Event>> subscriber = new Subscriber<HttpResult<Event>>() {
             @Override
@@ -243,11 +272,17 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: ");
+                if (getView() != null){
+                    getView().onTaskError(TASK_SYN_IMAGE);
+                }
             }
 
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
                 synchronizeLocal(eventHttpResult.getData());
+                if (getView() != null){
+                    getView().onTaskSuccess(TASK_SYN_IMAGE, Arrays.asList(event));
+                }
             }
         };
         HttpUtil.subscribe(observable, subscriber);
@@ -494,5 +529,43 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
     private void setEventToEventManager(Event event){
         EventManager.getInstance(context).setCurrentEvent(event);
 
+    }
+
+    private boolean imageUploadChecker(List<ImageUploadWrapper> wrappers){
+        for (ImageUploadWrapper wrapper:wrappers
+             ) {
+            if (wrapper.isUploaded()){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private class ImageUploadWrapper{
+        PhotoUrl photo;
+        boolean uploaded;
+
+
+        ImageUploadWrapper(PhotoUrl photo, boolean uploaded) {
+            this.photo = photo;
+            this.uploaded = uploaded;
+        }
+
+        boolean isUploaded() {
+            return uploaded;
+        }
+
+        void setUploaded(boolean uploaded) {
+            this.uploaded = uploaded;
+        }
+
+        PhotoUrl getPhoto() {
+            return photo;
+        }
+
+        void setPhoto(PhotoUrl photo) {
+            this.photo = photo;
+        }
     }
 }

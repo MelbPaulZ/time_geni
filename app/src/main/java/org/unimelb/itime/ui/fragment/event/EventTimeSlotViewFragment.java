@@ -117,6 +117,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         timeslotWeekView.updateTimeSlotsDuration(EventUtil.getDurationInMintues(timePosition) * 60 * 1000, false);
         timeslotWeekView.reloadTimeSlots(false); // for page refresh
 
+        this.showAnimation();
     }
 
 
@@ -310,7 +311,6 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         });
     }
 
-
     private int getSelectedTimeslotNum(){
         int num = 0;
         for(WrapperTimeSlot wrapper : this.timeslotWrapperList){
@@ -377,7 +377,6 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             }
         });
     }
-
 
     @Override
     public void onTaskStart(int task) {
@@ -471,4 +470,14 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     public void setDisplayTimeslot(boolean displayTimeslot) {
         this.displayTimeslot = displayTimeslot;
     }
+
+    private void showAnimation(){
+        if (displayTimeslot){
+            timeslotWeekView.showTimeslotAnim(event.getTimeslot());
+        }else {
+            timeslotWeekView.showEventAnim(event);
+        }
+    }
+
+
 }

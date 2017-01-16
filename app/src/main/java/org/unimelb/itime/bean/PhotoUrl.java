@@ -23,7 +23,6 @@ public class PhotoUrl {
 
     }
 
-
     public String getUrl() {
         return url;
     }
@@ -56,27 +55,17 @@ public class PhotoUrl {
         this.filename = filename;
     }
 
-
-
-
-
     public String getLocalPath() {
         return this.localPath;
     }
-
-
 
     public void setLocalPath(String localPath) {
         this.localPath = localPath;
     }
 
-
-
     public int getSuccess() {
         return this.success;
     }
-
-
 
     public void setSuccess(int success) {
         this.success = success;
