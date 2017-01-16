@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.unimelb.itime.bean.Block;
 import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
@@ -13,6 +14,7 @@ import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.bean.SettingWrapper;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.dao.BlockDao;
 import org.unimelb.itime.dao.CalendarDao;
 import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
@@ -207,7 +209,35 @@ public class DBManager {
         return list;
     }
 
+    public List<Block> getBlockContacts() {
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        BlockDao blockDao = daoSession.getBlockDao();
+        QueryBuilder<Block> qb = blockDao.queryBuilder();
+        qb.where(BlockDao.Properties.BlockLevel.gt(0));
+        List<Block> list = qb.list();
+        return list;
+    }
 
+    public void insertBlock(Block block) {
+        if(block==null){
+            return;
+        }
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        BlockDao blockDao = daoSession.getBlockDao();
+        blockDao.insertOrReplace(block);
+    }
+
+    public void deleteBlock(Block block) {
+        if(block==null){
+            return;
+        }
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        BlockDao blockDao = daoSession.getBlockDao();
+        blockDao.delete(block);
+    }
 
     public synchronized void deleteAllContact(){
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());

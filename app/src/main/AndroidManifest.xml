@@ -186,6 +186,7 @@
         <activity android:name=".ui.activity.ProfileActivityContact"/>
         <activity android:name=".ui.activity.AddFriendActivityContact"/>
         <activity android:name=".ui.activity.FriendRequestActivityContact"/>
+        <activity android:name=".ui.activity.BlockContactsActivity"/>
         <activity android:name=".util.googleAuth.GoogleAuthActivity"/>
     </application>
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout >
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="mainViewModel"
+            type="org.unimelb.itime.ui.viewmodel.contact.BlockContactsViewModel"/>
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <org.unimelb.itime.widget.BaseTitleBar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_height"
+            app:title="@{mainViewModel.title}"
+            app:showLeft="@{mainViewModel.showTitileBack}"
+            app:showRight="@{mainViewModel.showTitleRight}"
+            app:backOnClickListener="@{mainViewModel.titleBackListener}"
+            android:id="@+id/titleBar"
+            />
+        <include layout="@layout/line"/>
+
+        <!--<org.unimelb.itime.widget.SearchBar-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/searchBar"-->
+            <!--app:searchListener = "@{mainViewModel.onEditListener}"/>-->
+
+        <!--<include layout="@layout/line"/>-->
+
+        <org.unimelb.itime.widget.SideBarListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sortListView"
+            android:visibility="@{mainViewModel.searching?View.GONE:View.VISIBLE}"
+            />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{mainViewModel.searching?View.VISIBLE:View.GONE}"
+            app:items="@{mainViewModel.searchItems}"
+            app:itemView="@{mainViewModel.itemView}"
+            app:onItemClickListener = "@{mainViewModel.onItemClickListener}"
+            />
+
+    </LinearLayout>
+</layout>

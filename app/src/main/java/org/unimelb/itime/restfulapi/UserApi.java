@@ -48,7 +48,7 @@ public interface UserApi {
 
 //    Description: Get all block record of this user.
 //    "blockLevel" > 0 represents this user is blocked; "blockLevel"==0 represents this user is not blocked.
-    @GET("user/block/list")
+    @GET("user/blocklist")
     Observable<HttpResult<List<Block>>> listBlock();
 
 

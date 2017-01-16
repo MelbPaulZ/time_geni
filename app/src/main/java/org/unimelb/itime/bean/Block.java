@@ -1,13 +1,17 @@
 package org.unimelb.itime.bean;
 
+import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * Created by Qiushuo Huang on 2016/12/22.
  */
+@Entity
 public class Block {
     private int status;
-    private int id;
+    @Id
     private String blockUid;
     private String userUid;
     private String blockUserUid;
@@ -15,15 +19,20 @@ public class Block {
     private String createdAt;
     private String updatedAt;
 
-    public Block(int status, int id, String blockUid, String userUid, String blockUserUid, int blockLevel, String createdAt, String updatedAt) {
+    @Convert(converter = User.UserConverter.class , columnType = String.class)
+    private User userDetail;
+
+    @Generated(hash = 996069551)
+    public Block(int status, String blockUid, String userUid, String blockUserUid, int blockLevel, String createdAt,
+            String updatedAt, User userDetail) {
         this.status = status;
-        this.id = id;
         this.blockUid = blockUid;
         this.userUid = userUid;
         this.blockUserUid = blockUserUid;
         this.blockLevel = blockLevel;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.userDetail = userDetail;
     }
 
     public Block(){}
@@ -36,13 +45,6 @@ public class Block {
         this.status = status;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getBlockUid() {
         return blockUid;
@@ -90,5 +92,13 @@ public class Block {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public User getUserDetail() {
+        return userDetail;
+    }
+
+    public void setUserDetail(User userDetail) {
+        this.userDetail = userDetail;
     }
 }
