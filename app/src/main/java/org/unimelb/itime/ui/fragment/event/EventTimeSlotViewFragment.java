@@ -168,7 +168,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             }
 
             if (fragment_task == TASK_EDIT) {
-                if (event != null || event.getTimeslot() == null || event.getTimeslot().size() == 0) {
+                if (event != null || !event.hasTimeslots() || event.getTimeslot().size() == 0) {
                     Calendar calendar = Calendar.getInstance();
                     presenter.getTimeSlots(event, calendar.getTimeInMillis());
                 }
@@ -358,10 +358,11 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
                 if (!event.hasTimeslots()) {
                     event.setTimeslot(new ArrayList<Timeslot>());
                 }
-                for (Timeslot timeSlot : event.getTimeslot()) {
-                    timeSlot.setEndTime(timeSlot.getStartTime() + EventUtil.getDurationInMintues(timePosition) * 60 * 1000);
+
+                for (WrapperTimeSlot wrapper: timeslotWrapperList){
+                    wrapper.getTimeSlot().setEndTime(wrapper.getTimeSlot().getStartTime() + EventUtil.getDurationInMintues(timePosition) * 60 * 1000);
                 }
-                viewModel.setEvent(event);
+                
                 timeslotWeekView.reloadTimeSlots(false); // for page refresh
             }
         });
@@ -415,6 +416,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         if (fragment_task == TASK_EDIT) {
             List<Timeslot> list = new ArrayList<>();
             for (WrapperTimeSlot wrapper : this.timeslotWrapperList) {
+                long duration = (wrapper.getTimeSlot().getEndTime() - wrapper.getTimeSlot().getStartTime())/1000;
                 if (wrapper.isSelected()) {
                     wrapper.getTimeSlot().setStatus(Timeslot.STATUS_PENDING);
                     list.add((Timeslot) wrapper.getTimeSlot());
