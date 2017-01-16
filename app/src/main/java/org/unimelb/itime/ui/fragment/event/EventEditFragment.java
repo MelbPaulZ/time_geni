@@ -154,6 +154,14 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         ((EventDetailActivity)getActivity()).checkPermission();
     }
 
+    @Override
+    public void toCustomPage() {
+        EventCustomRepeatFragment eventCustomRepeatFragment = new EventCustomRepeatFragment();
+
+        eventCustomRepeatFragment.setEvent(event);
+        getBaseActivity().openFragment(eventCustomRepeatFragment);
+    }
+
 
     @Override
     public void onTaskStart(int task) {

@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -16,6 +17,8 @@ import android.widget.Switch;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 /**
@@ -94,7 +97,5 @@ public class AndroidViewModel extends BaseObservable {
                     .centerCrop()
                     .into(imageView);
     }
-
-
 
 }

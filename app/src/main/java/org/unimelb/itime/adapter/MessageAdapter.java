@@ -13,16 +13,13 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.ListviewInboxHostBinding;
 import org.unimelb.itime.databinding.ListviewInboxInviteeBinding;
 import org.unimelb.itime.managers.DBManager;
-import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.ui.viewmodel.InboxViewModel;
 import org.unimelb.itime.util.CircleTransform;
-import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 import java.util.List;

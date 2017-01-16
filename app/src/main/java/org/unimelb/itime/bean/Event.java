@@ -454,11 +454,13 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Event clone() {
         Event event = null;
         try
         {
             event = (Event) super.clone();
+            RuleModel ruleModel = new RuleModel();
+            event.setRule(ruleModel);
         } catch (CloneNotSupportedException e){
             e.printStackTrace();
         }

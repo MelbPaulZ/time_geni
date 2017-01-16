@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.Bindable;
+import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
+import org.unimelb.itime.ui.mvpview.EventCustomRepeatMvpView;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
@@ -52,6 +54,7 @@ public class EventEditViewModel extends EventCommonViewModel {
     private EventPresenter<? extends TaskBasedMvpView<List<Event>>> presenter;
     private ObservableField<Boolean> editEventIsRepeat = new ObservableField<>();
     private EventEditMvpView mvpView;
+    private EventCustomRepeatMvpView customRepeatMvpView;
     private PickerTask currentTask;
     private int startTimeVisibility, endTimeVisibility;
     private long evStartTime, evEndTime;
@@ -66,7 +69,12 @@ public class EventEditViewModel extends EventCommonViewModel {
     public EventEditViewModel(EventPresenter<? extends TaskBasedMvpView<List<Event>>> presenter) {
         this.presenter = presenter;
         eventManager = EventManager.getInstance(getContext());
-        mvpView = (EventEditMvpView) presenter.getView();
+        if (presenter.getView() instanceof EventEditMvpView){
+            mvpView = (EventEditMvpView) presenter.getView();
+
+        }else if(presenter.getView() instanceof EventCustomRepeatMvpView){
+            customRepeatMvpView = (EventCustomRepeatMvpView) presenter.getView();
+        }
         editEventIsRepeat = new ObservableField<>(false); // TODO: 11/12/2016 change this and isAlldayEvent later.... needs to be bind with event
         initDialog();
     }
@@ -286,16 +294,20 @@ public class EventEditViewModel extends EventCommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CharSequence[] repeats;
+                final CharSequence[] repeats;
                 AlertDialog.Builder builder = new AlertDialog.Builder(presenter.getContext());
                 builder.setTitle(getContext().getString(R.string.choose_repeat));
-                repeats = EventUtil.getRepeats(getContext(), event);
+                 repeats = EventUtil.getRepeats(getContext(), event);
                 builder.setItems(repeats, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == repeats.length - 1){
+                            mvpView.toCustomPage();
+                            return;
+                        }
                         // set event recurrence
                         EventUtil.changeEventFrequency(event, i);
-                       notifyPropertyChanged(BR.event);
+                        notifyPropertyChanged(BR.event);
                     }
                 });
                 builder.show();
@@ -586,5 +598,28 @@ public class EventEditViewModel extends EventCommonViewModel {
         }else{
             return View.VISIBLE;
         }
+    }
+
+
+    public View.OnClickListener onFrequencyClick(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customRepeatMvpView.popUpFrequencyPickerDialog();
+            }
+        };
+    }
+
+    public View.OnClickListener onEveryClick(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customRepeatMvpView.popUpEveryPickerDialog();
+            }
+        };
+    }
+
+    public String getRepeatHint(Event event){
+        return String.format(getContext().getString(R.string.frequency), EventUtil.getRepeatString(getContext(),event));
     }
 }

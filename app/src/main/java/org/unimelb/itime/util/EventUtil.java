@@ -52,6 +52,7 @@ public class EventUtil {
     public final static int REPEAT_EVERY_TWOWEEKS = 3;
     public final static int REPEAT_EVERY_MONTH = 4;
     public final static int REPEAT_EVERY_YEAR = 5;
+    public final static int REPEAT_CUSTOM = 6;
     public final static long allDayMilliseconds = 24 * 60 * 60 * 1000;
 
 
@@ -229,7 +230,8 @@ public class EventUtil {
                 String.format(context.getString(R.string.repeat_everyweek), dayOfWeek),
                 String.format(context.getString(R.string.repeat_every_twoweek)),
                 String.format(context.getString(R.string.repeat_every_month)),
-                String.format(context.getString(R.string.repeat_every_year))};
+                String.format(context.getString(R.string.repeat_every_year)),
+                String.format(context.getString(R.string.repeat_custom))};
     }
 
     public static void changeEventFrequency(Event event, int repeatIndex) {
@@ -251,6 +253,9 @@ public class EventUtil {
         } else if (repeatIndex == REPEAT_EVERY_YEAR) {
             event.getRule().setFrequencyEnum(FrequencyEnum.YEARLY);
             event.getRule().setInterval(1);
+        } else if(repeatIndex == REPEAT_CUSTOM){
+            // TODO: 15/01/2017 custom
+
         }
         event.setRecurrence(event.getRule().getRecurrence());
     }
@@ -398,24 +403,43 @@ public class EventUtil {
         calendar.setTimeInMillis(event.getStartTime());
         String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
         FrequencyEnum frequencyEnum = event.getRule().getFrequencyEnum();
-        if (frequencyEnum == null) {
+        int interval = event.getRule().getInterval();
+
+        if (frequencyEnum == null){
             return String.format(context.getString(R.string.repeat_never));
-        } else if (frequencyEnum == FrequencyEnum.DAILY) {
-            return String.format(context.getString(R.string.repeat_everyday));
-        } else if (frequencyEnum == FrequencyEnum.WEEKLY) {
-            if (event.getRule().getInterval() == 1) {
-                return String.format(context.getString(R.string.repeat_everyweek), dayOfWeek);
-            } else if (event.getRule().getInterval() == 2) {
-                return String.format(context.getString(R.string.repeat_every_twoweek));
-            }
-        } else if (frequencyEnum == FrequencyEnum.MONTHLY) {
-            return String.format(context.getString(R.string.repeat_every_month));
-        } else if (frequencyEnum == FrequencyEnum.YEARLY) {
-            return String.format(context.getString(R.string.repeat_every_year));
         }
 
-        // if not all of this above (impossible)
-        return "";
+        switch (frequencyEnum){
+            case DAILY:
+                return String.format(context.getString(R.string.repeat_everyday_cus),interval==1?"":" "+interval+" ");
+            case WEEKLY:
+                return String.format(context.getString(R.string.repeat_everyweek_cus),interval==1?" ":" "+interval+" ",dayOfWeek);
+            case MONTHLY:
+                return String.format(context.getString(R.string.repeat_every_month_cus),interval==1?" ":" "+interval+" ");
+            case YEARLY:
+                return String.format(context.getString(R.string.repeat_every_year_cus),interval==1?" ":" "+interval+" ");
+            default:
+                return String.format(context.getString(R.string.repeat_never));
+        }
+
+//        if (frequencyEnum == null) {
+//            return String.format(context.getString(R.string.repeat_never));
+//        } else if (frequencyEnum == FrequencyEnum.DAILY) {
+//            return String.format(context.getString(R.string.repeat_everyday));
+//        } else if (frequencyEnum == FrequencyEnum.WEEKLY) {
+//            if (event.getRule().getInterval() == 1) {
+//                return String.format(context.getString(R.string.repeat_everyweek), dayOfWeek);
+//            } else if (event.getRule().getInterval() == 2) {
+//                return String.format(context.getString(R.string.repeat_every_twoweek));
+//            }
+//        } else if (frequencyEnum == FrequencyEnum.MONTHLY) {
+//            return String.format(context.getString(R.string.repeat_every_month));
+//        } else if (frequencyEnum == FrequencyEnum.YEARLY) {
+//            return String.format(context.getString(R.string.repeat_every_year));
+//        }
+
+//        // if not all of this above (impossible)
+//        return "";
     }
 
 
@@ -854,6 +878,53 @@ public class EventUtil {
         copyEvent.setRule(response);
 
         return copyEvent;
+    }
+
+
+    public static String[] getRepeatFreqStr(){
+        return new String[]{"Daily","Weekly","Monthly","Annually"};
+    }
+
+    public static String[] getRepeatIntervalStr(){
+        return new String[] {"1","2","3","4","5","6","7","8","9","10"};
+    }
+
+    public static FrequencyEnum getFreqEnum(String code){
+        final String[] values = getRepeatFreqStr();
+
+        if (code.equals(values[0])){
+            return FrequencyEnum.DAILY;
+        }else if(code.equals(values[1])){
+            return FrequencyEnum.WEEKLY;
+        }else if(code.equals(values[2])){
+            return FrequencyEnum.MONTHLY;
+        }else if(code.equals(values[3])){
+            return FrequencyEnum.YEARLY;
+        }
+
+        return null;
+    }
+
+    public static String getRepeatStrByFreq(FrequencyEnum frequencyEnum){
+        final String[] values = getRepeatFreqStr();
+
+        if (frequencyEnum == null){
+            return values[0];
+        }
+
+        switch (frequencyEnum){
+            case DAILY:
+               return values[0];
+            case WEEKLY:
+               return values[1];
+            case MONTHLY:
+               return values[2];
+            case YEARLY:
+               return values[3];
+
+        }
+
+        return "UnKnow";
     }
 
 }

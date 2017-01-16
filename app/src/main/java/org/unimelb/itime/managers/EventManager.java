@@ -348,11 +348,8 @@ public class EventManager {
         for (Long time: repeatedEventsTimes
                 ) {
             Event dup_event = null;
-            try {
-                dup_event = (Event) event.clone();
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
+            dup_event = event.clone();
+
             if (dup_event == null){
                 throw new RuntimeException("Clone error");
             }

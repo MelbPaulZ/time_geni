@@ -261,12 +261,22 @@
     <string name="agenda_view">Agenda View</string>
 
     <string name="repeat_never">Never</string>
-    <string name="repeat_everyday">Everyday</string>
+
+    <string name="repeat_everyday_cus">Every%1$sday</string>
+    <string name="repeat_everyweek_cus">Every%1$sweek ( Every %2$s )</string>
+    <string name="repeat_every_month_cus">Every%1$smonth</string>
+    <string name="repeat_every_year_cus">Every%1$syear</string>
+
+    <string name="repeat_everyday">Every Day</string>
     <string name="repeat_everyweek">Every Week ( Every %1$s )</string>
     <string name="repeat_every_twoweek">Every Two Weeks</string>
     <string name="repeat_every_month">Every Month</string>
     <string name="repeat_every_year">Every Year</string>
+
+    <string name="repeat_custom">Custom</string>
     <string name="end_repeat">End Repeat</string>
+
+    <string name="frequency">Event will occur %1$s</string>
 
     <string name="camera_done_num">DONE (%1$d/%2$d)</string>
     <string name="camera_done">DONE</string>

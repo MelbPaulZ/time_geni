@@ -116,8 +116,6 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         }
     }
 
-
-
     @Override
     public EventCommonPresenter<EventDetailMvpView> createPresenter() {
         return new EventCommonPresenter<>(getContext());
