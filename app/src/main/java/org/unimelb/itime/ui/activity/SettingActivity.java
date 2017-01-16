@@ -2,128 +2,95 @@ package org.unimelb.itime.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseActivity;
-import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.service.MusicService;
-import org.unimelb.itime.ui.fragment.contact.MyQRCodeFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingAboutFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingCalendarPreferenceFragment;
-import org.unimelb.itime.ui.fragment.settings.SettingDefaultAlertFragment;
-import org.unimelb.itime.ui.fragment.settings.SettingImportCalendarFragment;
-import org.unimelb.itime.ui.fragment.settings.SettingImportCalendarUnimelbFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
-import org.unimelb.itime.ui.fragment.settings.SettingMyProfileNameFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingNotificationFragment;
-import org.unimelb.itime.ui.fragment.settings.SettingProfileGenderFragment;
-import org.unimelb.itime.ui.fragment.settings.SettingProfileResetPasswordFragment;
-import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
 
-public class SettingActivity extends BaseActivity{
+public class SettingActivity extends EmptyActivity{
+    public final static int TASK_LOGOUT = 1;
+    public final static int TASK_VIEW_AVATAR = 2;
+    public final static int TASK_TO_MY_PROFILE = 3;
+    public final static int TASK_TO_SETTING = 4;
+    public final static int TASK_TO_MY_PROFILE_NAME = 5;
+    public final static int TASK_TO_RESET_PASSWORD = 6;
+    public final static int TASK_TO_QR_CODE = 7;
+    public final static int TASK_TO_GENDER = 8;
+    public final static int TASK_TO_REGION = 9;
+    public final static int TASK_TO_SCAN_QR_CODE = 10;
+    public final static int TASK_TO_BLOCK_USER = 11;
+    public final static int TASK_TO_NOTICIFATION = 12;
+    public final static int TASK_TO_CALENDAR_PREFERENCE = 13;
+    public final static int TASK_TO_HELP_AND_FEEDBACK = 14;
+    public final static int TASK_TO_ABOUT = 15;
+    public final static int TASK_TO_DEFAULT_ALERT = 16;
+    public final static int TASK_TO_IMPORT_UNIMELB_CALENDAR = 17;
+    public final static int TASK_TO_IMPORT_GOOGLE_CALENDAR = 18;
+    public final static int TASK_TO_IMPORT_CALENDAR = 19;
 
     public final static String TASK = "task";
-    private SettingMyProfileFragment myProfileFragment;
-    private SettingMyProfileNameFragment myProfileNameFragment;
-    private SettingAboutFragment aboutFragment;
-    private SettingCalendarPreferenceFragment calendarPreferenceFragment;
-    private SettingDefaultAlertFragment defaultCalendarFragment;
-    private SettingImportCalendarUnimelbFragment importCalendarUnimelbFragment;
-    private SettingNotificationFragment notificationFragment;
-    private SettingProfileGenderFragment profileGenderFragment;
-    private SettingProfileResetPasswordFragment resetPasswordFragment;
-    private SettingImportCalendarFragment importCalendarFragment;
-    private MyQRCodeFragment myQRCodeFragment;
-
-
-
+    private static final String TAG = "Setting";
+    private FragmentManager fragmentManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        initSettingFragments();
-        show();
 
-//        music();
+        fragmentManager = getSupportFragmentManager();
+        int task = getIntent().getIntExtra(TASK,-100);
+        this.fragmentSwitcher(task);
     }
 
-    private void music(){
-        Intent intent = new Intent(this,MusicService.class);
-        startService(intent);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fragmentSwitcher(resultCode);
     }
 
-    private void show(){
-        Intent intent = getIntent();
-        int task = intent.getIntExtra(TASK,-100);
-        if (task!=-100){
-            showOnTask(task);
+    private void fragmentSwitcher(int task){
+        Class<? extends Fragment> name = null;
+        if (task != -100){
+            switch (task){
+                case TASK_TO_MY_PROFILE:
+                    name = SettingMyProfileFragment.class;
+                    break;
+                case TASK_TO_BLOCK_USER:
+                    break;
+                case TASK_TO_NOTICIFATION:
+                    name = SettingNotificationFragment.class;
+                    break;
+                case TASK_TO_CALENDAR_PREFERENCE:
+                    name = SettingCalendarPreferenceFragment.class;
+                    break;
+                case TASK_TO_HELP_AND_FEEDBACK:
+                    break;
+                case TASK_TO_ABOUT:
+                    name = SettingAboutFragment.class;
+                    break;
+                default:
+                    return;
+            }
+        }
+
+        try {
+            fragmentManager.beginTransaction().
+                    replace(getFragmentContainerId(), name.newInstance())
+                    .commit();
+        }catch (Exception e){
+            Log.i(TAG, "error on fragment swicher: ");
         }
     }
-
-    private void showOnTask(int task){
-        switch (task){
-            case MainSettingsViewModel.TASK_TO_MY_PROFILE:
-                showFragment(myProfileFragment);
-                break;
-            case MainSettingsViewModel.TASK_TO_SCAN_QR_CODE:
-                break;
-            case MainSettingsViewModel.TASK_TO_BLOCK_USER:
-                break;
-            case MainSettingsViewModel.TASK_TO_NOTICIFATION:
-                showFragment(notificationFragment);
-                break;
-            case MainSettingsViewModel.TASK_TO_CALENDAR_PREFERENCE:
-                showFragment(calendarPreferenceFragment);
-                break;
-            case MainSettingsViewModel.TASK_TO_HELP_AND_FEEDBACK:
-                break;
-            case MainSettingsViewModel.TASK_TO_ABOUT:
-                showFragment(aboutFragment);
-        }
-    }
-
-    private void initSettingFragments(){
-        myProfileFragment = new SettingMyProfileFragment();
-        myProfileNameFragment = new SettingMyProfileNameFragment();
-        aboutFragment = new SettingAboutFragment();
-        calendarPreferenceFragment = new SettingCalendarPreferenceFragment();
-        defaultCalendarFragment = new SettingDefaultAlertFragment();
-        importCalendarUnimelbFragment = new SettingImportCalendarUnimelbFragment();
-        notificationFragment = new SettingNotificationFragment();
-        profileGenderFragment = new SettingProfileGenderFragment();
-        resetPasswordFragment = new SettingProfileResetPasswordFragment();
-        importCalendarFragment = new SettingImportCalendarFragment();
-        myQRCodeFragment = new MyQRCodeFragment();
-
-
-        hideFragment(myProfileFragment);
-        hideFragment(myProfileNameFragment);
-        hideFragment(aboutFragment);
-        hideFragment(calendarPreferenceFragment);
-        hideFragment(defaultCalendarFragment);
-        hideFragment(importCalendarUnimelbFragment);
-        hideFragment(notificationFragment);
-        hideFragment(profileGenderFragment);
-        hideFragment(resetPasswordFragment);
-        hideFragment(importCalendarFragment);
-        hideFragment(myQRCodeFragment);
-    }
-
-    private void hideFragment(BaseUiFragment fragment){
-        getSupportFragmentManager().beginTransaction().add(R.id.setting_activity_framelayout, fragment, fragment.getClassName()).hide(fragment).commit();
-    }
-
-    private void showFragment(BaseUiFragment fragment){
-        getSupportFragmentManager().beginTransaction().show(fragment).commit();
-    }
-
 
     @Override
     protected void onDestroy() {
-//        Intent intent = new Intent(this,MusicService.class);
-//        stopService(intent);
         super.onDestroy();
     }
+
 }

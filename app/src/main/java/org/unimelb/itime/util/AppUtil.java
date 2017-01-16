@@ -1,10 +1,14 @@
 package org.unimelb.itime.util;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import org.unimelb.itime.base.C;
+import org.unimelb.itime.service.RemoteService;
 
 import java.util.UUID;
 
@@ -69,5 +73,49 @@ public class AppUtil {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, syncToken);
         editor.apply();
+    }
+
+    public static void stopRemoteService(Context context){
+        Intent serviceI = new Intent(context, RemoteService.class);
+        context.stopService(serviceI);
+    }
+
+    public static String getDefaultAlertStr(int key){
+        switch (key){
+            case -1:
+                return "None";
+            case 0:
+                return "At the time of the event";
+            case 5:
+                return "5 minutes before";
+            case 15:
+                return "15 minutes before";
+            case 30:
+                return "30 minutes before";
+            case 60:
+                return "1 hour before";
+            case 120:
+                return "2 hours before";
+            case 2*24*60:
+                return "2 days before";
+            case 7*24*60:
+                return "1 week before";
+            default:
+                return "N/A";
+
+        }
+    }
+
+    public static String getGenderStr(String gCode){
+        switch (gCode){
+            case "0":
+                return "Female";
+            case "1":
+                return "Male";
+            case "2":
+                return "Undefined";
+            default:
+                return "N/A";
+        }
     }
 }

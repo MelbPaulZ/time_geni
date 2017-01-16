@@ -20,41 +20,6 @@
 
         <include layout="@layout/toolbar_common"
             bind:vm="@{toolbarVM}"/>
-        <!--<android.support.v7.widget.Toolbar-->
-            <!--android:id="@+id/my_toolbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="?attr/actionBarSize"-->
-            <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
-
-            <!--<Button-->
-                <!--android:id="@+id/timeslot_create_cancel_button"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="left"-->
-                <!--android:background="@null"-->
-                <!--android:gravity="center_vertical|left"-->
-                <!--android:text="@{vm.leftTitleStr}"-->
-                <!--android:textColor="@color/page_title_color"-->
-                <!--android:onClick="@{vm.onClickCancel()}"/>-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/toolbar_title"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:text="@string/new_timeslot"-->
-                <!--android:textColor="@color/page_title_color" />-->
-
-            <!--<Button-->
-                <!--android:id="@+id/timeslot_create_done_button"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="right"-->
-                <!--android:background="@null"-->
-                <!--android:text="@{vm.rightTitleStr}"-->
-                <!--android:textColor="@color/page_title_color"-->
-                <!--android:onClick="@{vm.onClickDone()}"/>-->
-        <!--</android.support.v7.widget.Toolbar>-->
     </LinearLayout>
 
     <RelativeLayout
@@ -74,7 +39,7 @@
             android:paddingRight="10dp"
             android:layout_alignParentRight="true"
             android:gravity="center_vertical"
-            android:text="@{vm.getTimeString(vm.newTimeSlotView.newStartTime)}"
+            android:text="@{vm.startTimeStr}"
             android:onClick="@{vm.onChooseTime(vm.STARTTIME)}"/>
     </RelativeLayout>
     <RelativeLayout
@@ -93,7 +58,7 @@
             android:paddingRight="10dp"
             android:layout_alignParentRight="true"
             android:gravity="center_vertical"
-            android:text="@{vm.getTimeString(vm.newTimeSlotView.newEndTime)}"/>
+            android:text="@{vm.endTimeStr}"/>
     </RelativeLayout>
 
 </LinearLayout>

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -19,9 +21,11 @@ import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
+import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +35,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -342,31 +345,8 @@ public class EventUtil {
     }
 
     public static int getDurationInMintues(int position) {
-        switch (position) {
-            case 0:
-                return 15;
-            case 1:
-                return 30;
-            case 2:
-                return 45;
-            case 3:
-                return 60;
-            case 4:
-                return 120;
-            case 5:
-                return 180;
-            case 6:
-                return 240;
-            case 7:
-                return 300;
-            case 8:
-                return 360;
-            case 9:
-                return 720;
-            case 10:
-                return 1440;
-        }
-        return 0;
+        int[] arr = {15, 30, 45, 60, 120, 180, 240, 300, 360, 720, 1440};
+        return arr[position];
     }
 
 
@@ -856,6 +836,24 @@ public class EventUtil {
                 && duration >= (allDayMilliseconds * 0.9);
 
         return isAllDay;
+    }
+
+    /**
+     *
+     * @param event
+     * @return
+     */
+    public static Event copyEvent(Event event){
+        Gson gson = new Gson();
+
+        String eventStr = gson.toJson(event);
+        Event copyEvent = gson.fromJson(eventStr, Event.class);
+
+        Type dataType = new TypeToken<RuleModel<Event>>() {}.getType();
+        RuleModel response = gson.fromJson(gson.toJson(event.getRule(), dataType), dataType);
+        copyEvent.setRule(response);
+
+        return copyEvent;
     }
 
 }

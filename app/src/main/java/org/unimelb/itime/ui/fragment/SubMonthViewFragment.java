@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiAuthFragment;
+import org.unimelb.itime.base.BaseUiFragment;
 
-public class SubMonthViewFragment extends BaseUiAuthFragment{
+public class SubMonthViewFragment extends BaseUiFragment {
 
     @Override
     public MvpPresenter createPresenter() {

@@ -3,13 +3,17 @@ package org.unimelb.itime.managers;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.greenrobot.greendao.AbstractDao;
+import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.bean.SettingWrapper;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.dao.CalendarDao;
 import org.unimelb.itime.dao.ContactDao;
 import org.unimelb.itime.dao.DaoMaster;
 import org.unimelb.itime.dao.DaoSession;
@@ -29,10 +33,12 @@ public class DBManager {
     private static DBManager mInstance;
     private DaoMaster.DevOpenHelper openHelper;
     private Context context;
+    private DaoSession daoSession;
 
     public DBManager(Context context) {
         this.context = context;
         openHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
+        daoSession = new DaoMaster(getWritableDatabase()).newSession();
     }
 
 
@@ -72,20 +78,6 @@ public class DBManager {
             insertMessage(message);
         }
     }
-
-//    public void insertPhoto(PhotoUrl photoUrl){
-//        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
-//        DaoSession daoSession = daoMaster.newSession();
-//        PhotoUrlDao photoUrlDao = daoSession.getPhotoUrlDao();
-//        photoUrlDao.insert(photoUrl);
-//    }
-//
-//    public void insertInvitee(Invitee invitee) {
-//        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
-//        DaoSession daoSession = daoMaster.newSession();
-//        InviteeDao inviteeDao = daoSession.getInviteeDao();
-//        inviteeDao.insert(invitee);
-//    }
 
     public void insertContact(Contact contact) {
         if(contact==null){
@@ -287,4 +279,77 @@ public class DBManager {
         List<FriendRequest> list = qb.list();
         return list;
     }
+
+    public List<Calendar> getAllCalendars(){
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        CalendarDao calendarDao = daoSession.getCalendarDao();
+        QueryBuilder<Calendar> qb = calendarDao.queryBuilder();
+        List<Calendar> list = qb.list();
+        return list;
+    }
+
+    public void insertCalendars(List<Calendar> cals){
+        if (cals == null || cals.isEmpty()) {
+            return;
+        }
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        CalendarDao calDao = daoSession.getCalendarDao();
+        calDao.insertInTx(cals);
+    }
+
+    public void clearCalendars(){
+        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        CalendarDao calDao = daoSession.getCalendarDao();
+        calDao.deleteAll();
+    }
+
+    /*********************************** delete above *************************************/
+    @SuppressWarnings("unchecked")
+    public <T extends Object,V> List<T> find(Class<T> className, String name, V value){
+        AbstractDao abd =  daoSession.getDao(className);
+        QueryBuilder<T> qb = abd.queryBuilder();
+        Property[] ptys = abd.getProperties();
+        Property attr = null;
+
+        for (Property pty:ptys
+             ) {
+            if (pty.name.equals(name)){
+                attr = pty;
+                break;
+            }
+        }
+        if (attr == null){
+            return null;
+        }
+
+        return qb.where(
+                attr.eq(value)).list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Object> AbstractDao getQueryDao(Class<T> className){
+        return daoSession.getDao(className);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Object> List<T> getAll(Class<T> className){
+        return ((AbstractDao) daoSession.getDao(className)).queryBuilder().list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Object> void deleteAll(Class<T> className){
+        ((AbstractDao) daoSession.getDao(className)).deleteAll();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Object> void insert(List<T> objs){
+        if (objs == null || objs.isEmpty()) {
+            return;
+        }
+        ((AbstractDao) daoSession.getDao(objs.get(0).getClass())).insertInTx(objs);
+    }
+
 }

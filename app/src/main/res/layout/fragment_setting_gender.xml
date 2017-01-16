@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="settingVM"
-            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
+            name="contentVM"
+            type="org.unimelb.itime.ui.viewmodel.UserProfileViewModel"/>
         <variable
             name="toolbarVM"
             type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
@@ -11,48 +12,11 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_fafafa">
 
     <include layout="@layout/toolbar_common"
         bind:vm="@{toolbarVM}"/>
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--style="@style/itime_toolbar">-->
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-
-            <!--&lt;!&ndash;toolbar back arrow&ndash;&gt;-->
-            <!--<ImageView-->
-                <!--android:layout_width="11dp"-->
-                <!--android:layout_height="18dp"-->
-                <!--android:src="@drawable/icon_back_arrow"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar settings text&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/setting_my_profile"-->
-                <!--android:textColor="@color/title_6D6D6D"-->
-                <!--android:textSize="17sp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE, false)}"-->
-                <!--android:layout_marginLeft="14dp"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar title&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/setting_gender"-->
-                <!--android:textSize="17sp"-->
-                <!--android:textColor="@color/black"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--/>-->
-        <!--</RelativeLayout>-->
-    <!--</android.support.v7.widget.Toolbar>-->
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,66 +25,14 @@
         android:paddingLeft="16dp"
         android:background="@drawable/background_top_bottom_divider">
 
-        <RelativeLayout
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:onClick="@{settingVM.chooseGender(0)}">
-            <TextView
-                style="@style/itime_blacktitle_17sp"
-                android:text="@string/setting_male"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="16dp"
-                android:visibility="@{settingVM.getGenderVisibility(0, settingVM.setting)}"
-                android:background="@drawable/blue_tick"/>
-
-            <TextView
-                style="@style/itime_bottom_divider_line" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:onClick="@{settingVM.chooseGender(1)}">
-            <TextView
-                style="@style/itime_blacktitle_17sp"
-                android:text="@string/setting_female"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="16dp"
-                android:visibility="@{settingVM.getGenderVisibility(1, settingVM.setting)}"
-                android:background="@drawable/blue_tick"/>
-            <TextView
-                style="@style/itime_bottom_divider_line" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:onClick="@{settingVM.chooseGender(2)}">
-            <TextView
-                style="@style/itime_blacktitle_17sp"
-                android:text="@string/setting_Undefined"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="16dp"
-                android:visibility="@{settingVM.getGenderVisibility(2, settingVM.setting)}"
-                android:background="@drawable/blue_tick"/>
-            <TextView
-                style="@style/itime_bottom_divider_line" />
-        </RelativeLayout>
-
-
-
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:onListItemClick="@{contentVM.onGenderItemClicked()}"
+            app:items="@{contentVM.genderWrapperList}"
+            app:itemView="@{contentVM.genderItemView}"
+            />
     </LinearLayout>
 
 </LinearLayout>

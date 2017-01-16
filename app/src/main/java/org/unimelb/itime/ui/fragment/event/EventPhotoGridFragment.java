@@ -7,15 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
-
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentPhotoGridviewBinding;
-import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
-import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
+import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
@@ -27,8 +23,8 @@ import java.util.List;
  * Created by Paul on 1/1/17.
  */
 
-public class EventPhotoGridFragment extends EventBaseFragment<EventDetailGroupMvpView, EventCommonPresenter<EventDetailGroupMvpView>>
-implements EventDetailGroupMvpView{
+public class EventPhotoGridFragment extends EventBaseFragment<EventDetailMvpView, EventCommonPresenter<EventDetailMvpView>>
+implements EventDetailMvpView {
 
     private FragmentPhotoGridviewBinding binding;
     private Event event;
@@ -45,21 +41,18 @@ implements EventDetailGroupMvpView{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = new EventDetailViewModel(getPresenter());
+        viewModel.setEvent(event);
         binding.setVm(viewModel);
         binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
-    public EventCommonPresenter<EventDetailGroupMvpView> createPresenter() {
+    public EventCommonPresenter<EventDetailMvpView> createPresenter() {
         return new EventCommonPresenter<>(getContext());
     }
 
     public void setEvent(Event event){
         this.event = event;
-        if (viewModel!=null) {
-            viewModel.setEvDtlHostEvent(event);
-        }
-
     }
 
 
@@ -75,6 +68,16 @@ implements EventDetailGroupMvpView{
 
     @Override
     public void gotoGridView() {
+
+    }
+
+    @Override
+    public void reloadPage() {
+
+    }
+
+    @Override
+    public void toResponse() {
 
     }
 
@@ -116,8 +119,7 @@ implements EventDetailGroupMvpView{
 
     @Override
     public void onBack() {
-        EventDetailFragment eventDetailFragment = (EventDetailFragment) getFragmentManager().findFragmentByTag(EventDetailFragment.class.getSimpleName());
-        closeFragment(this, eventDetailFragment);
+        getFragmentManager().popBackStack();
     }
 
     @Override

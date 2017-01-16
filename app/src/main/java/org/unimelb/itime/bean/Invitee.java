@@ -1,5 +1,7 @@
 package org.unimelb.itime.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.widget.ListView;
 
@@ -21,7 +23,7 @@ import org.greenrobot.greendao.annotation.Generated;
 /**
  * Created by yuhaoliu on 10/09/2016.
  */
-public class Invitee implements ITimeInviteeInterface, Serializable {
+public class Invitee implements ITimeInviteeInterface, Serializable, Parcelable {
     public final static String STATUS_NEEDSACTION = "needsAction";
     public final static String STATUS_ACCEPTED = "accepted";
     public final static String STATUS_DECLINED = "declined";
@@ -160,4 +162,53 @@ public class Invitee implements ITimeInviteeInterface, Serializable {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.eventUid);
+        dest.writeString(this.inviteeUid);
+        dest.writeString(this.userUid);
+        dest.writeString(this.userId);
+        dest.writeString(this.aliasName);
+        dest.writeString(this.aliasPhoto);
+        dest.writeString(this.status);
+        dest.writeString(this.reason);
+        dest.writeInt(this.isHost);
+        dest.writeString(this.userStatus);
+        dest.writeList(this.inviteeTimeslot);
+    }
+
+    public Invitee() {
+    }
+
+    protected Invitee(Parcel in) {
+        this.eventUid = in.readString();
+        this.inviteeUid = in.readString();
+        this.userUid = in.readString();
+        this.userId = in.readString();
+        this.aliasName = in.readString();
+        this.aliasPhoto = in.readString();
+        this.status = in.readString();
+        this.reason = in.readString();
+        this.isHost = in.readInt();
+        this.userStatus = in.readString();
+        this.inviteeTimeslot = new ArrayList<SlotResponse>();
+        in.readList(this.inviteeTimeslot, SlotResponse.class.getClassLoader());
+    }
+
+    public static final Creator<Invitee> CREATOR = new Creator<Invitee>() {
+        @Override
+        public Invitee createFromParcel(Parcel source) {
+            return new Invitee(source);
+        }
+
+        @Override
+        public Invitee[] newArray(int size) {
+            return new Invitee[size];
+        }
+    };
 }

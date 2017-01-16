@@ -166,6 +166,7 @@
     <string name="event_third_proposed_time">EventThirdProposedTime</string>
     <string name="event_calendar_type">EventCalendarType</string>
     <string name="event_default_end_repeate">Never</string>
+    <string name="event_title_response">Messages</string>
     <string name="next">next</string>
     <string name="back">Back</string>
     <string name="delete_event">Delete Event</string>
@@ -338,7 +339,7 @@
     <string name="Accept">Accept</string>
     <string name="Searching">Searching</string>
     <string name="please_wait">Please wait</string>
-    <string name="cannot_find_user">Can't find this user</string>
+    <string name="cannot_find_user">Can not find this user</string>
 
 
     <!--setting-->
@@ -359,6 +360,7 @@
     <string name="setting_gender">Gender</string>
     <string name="region">Region</string>
     <string name="setting_my_profile">My Profile</string>
+    <string name="setting_calendar_pref">Calendar Preferences</string>
     <string name="photo_my_profile">Photo</string>
     <string name="setting_save">Save</string>
     <string name="setting_male">Male</string>
@@ -388,5 +390,10 @@
     <string name="setting_confirm_hint">Confirm password</string>
     <string name="setting_calendar_import_unimelb_subtext1">Enter your university account information to import its calendar into iTime</string>
     <string name="setting_itime_calendars">iTime Calendars</string>
+    <string name="add_calendar">Add Calendar</string>
+    <string name="calendar_title">Calendars</string>
+    <string name="setting_edit_calendar">Edit Calendar</string>
+    <string name="calendar_name">Calendar Name</string>
+    <string name="delete_calendar">Delete Calendar</string>
 
 </resources>

@@ -7,54 +7,67 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
-import org.unimelb.itime.ui.fragment.ViewMainCalendarFragment;
-import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
-import org.unimelb.itime.ui.fragment.event.EventDetailTimeSlotFragment;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
-import org.unimelb.itime.ui.fragment.event.EventPhotoGridFragment;
-import org.unimelb.itime.ui.fragment.event.InviteeTimeslotFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventDetailActivity extends AppCompatActivity {
+public class EventDetailActivity extends EmptyActivity {
 
     private List<BaseUiFragment> fragmentList = new ArrayList<>();
     private Event event;
     private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private final int ACTIVITY_PHOTOPICKER = 2;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
-        event = EventManager.getInstance(getApplicationContext()).getCurrentEvent();
-        initFragments();
-        getSupportFragmentManager().beginTransaction().show(fragmentList.get(0)).commit();
 
+        EventDetailFragment fragment = new EventDetailFragment();
+        initEvent();
+        fragment.setData(event);
+        fragmentManager.beginTransaction()
+                .replace(getFragmentContainerId(), fragment)
+                .commit();
+    }
+
+    private void initEvent(){
+        Intent intent = getIntent();
+        String eventUid = intent.getStringExtra("event_uid");
+        if (eventUid == null || eventUid.length()==0){
+            throw new RuntimeException("event detail activity dont have parameters eventUid");
+        }
+        long startTime = intent.getLongExtra("start_time",0);
+        event = EventManager.getInstance(getApplicationContext()).findEventByUid(eventUid);
+    }
+
+    @Override
+    protected int getFragmentContainerId() {
+        return R.id.event_detail_fragment;
     }
 
     public void initFragments() {
-        fragmentList.add(new EventDetailFragment());
-        fragmentList.add(new EventEditFragment());
-        fragmentList.add(new EventDetailTimeSlotFragment());
-        fragmentList.add(new EventLocationPickerFragment());
-        fragmentList.add(new InviteeFragment());
-        fragmentList.add(new InviteeTimeslotFragment());
-        fragmentList.add(new ViewMainCalendarFragment());
-        fragmentList.add(new EventPhotoGridFragment());
-        hideAllFragments();
+//        fragmentList.add(new EventDetailFragment());
+//        fragmentList.add(new EventEditFragment());
+//        fragmentList.add(new EventDetailTimeSlotFragment());
+//        fragmentList.add(new EventLocationPickerFragment());
+//        fragmentList.add(new InviteeFragment());
+//        fragmentList.add(new InviteeTimeslotFragment());
+//        fragmentList.add(new ViewMainCalendarFragment());
+//        fragmentList.add(new EventPhotoGridFragment());
+//        hideAllFragments();
     }
 
     public void hideAllFragments() {

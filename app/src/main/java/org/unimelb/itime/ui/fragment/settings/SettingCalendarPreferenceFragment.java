@@ -1,28 +1,36 @@
 package org.unimelb.itime.ui.fragment.settings;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiAuthFragment;
+import org.unimelb.itime.bean.Calendar;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentSettingCalendarPreferenceBinding;
+import org.unimelb.itime.ui.mvpview.CalendarPreferenceMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
-import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
-import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
-import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
+import org.unimelb.itime.ui.viewmodel.CalendarPreferenceViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
+import org.unimelb.itime.util.UserUtil;
 
 /**
- * Created by Paul on 27/12/2016.
+ * Created by Paul on 26/12/2016.
  */
 
-public class SettingCalendarPreferenceFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
-implements SettingCommonMvpView{
+public class SettingCalendarPreferenceFragment extends BaseUiAuthFragment<CalendarPreferenceMvpView, MvpBasePresenter<CalendarPreferenceMvpView>> implements CalendarPreferenceMvpView {
 
     private FragmentSettingCalendarPreferenceBinding binding;
+    private CalendarPreferenceViewModel contentViewModel;
+    private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
     @Nullable
     @Override
@@ -31,52 +39,47 @@ implements SettingCommonMvpView{
         return binding.getRoot();
     }
 
+    @NonNull
+    @Override
+    public MvpBasePresenter<CalendarPreferenceMvpView> createPresenter() {
+        return new MvpBasePresenter<>();
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        MainSettingsViewModel viewModel = new MainSettingsViewModel(getPresenter());
-        binding.setSettingVM(viewModel);
+        contentViewModel = new CalendarPreferenceViewModel(getPresenter());
+        contentViewModel.setUser(UserUtil.getInstance(getContext()).getUser());
+        contentViewModel.setSetting(UserUtil.getInstance(getContext()).getSetting());
+
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
+        toolbarViewModel.setTitleStr(getString(R.string.setting_calendar_pref));
+
+        binding.setContentVM(contentViewModel);
         binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
-    public SettingCommonPresenter<SettingCommonMvpView> createPresenter() {
-        return new SettingCommonPresenter<>(getContext());
-    }
-
-
-    @Override
-    public void onViewChange(int task, boolean isSave) {
-        if (task == MainSettingsViewModel.TASK_TO_SETTING){
-            getActivity().finish();
-            getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-//            closeFragment(this, (SettingIndexFragment)getFragmentManager().findFragmentByTag(SettingIndexFragment.class.getSimpleName()));
-        }else if (task == MainSettingsViewModel.TASK_TO_DEFAULT_ALERT){
-            openFragment(this, (SettingDefaultAlertFragment)getFragmentManager().findFragmentByTag(SettingDefaultAlertFragment.class.getSimpleName()));
-        }
-    }
-
-    @Override
-    public void setLeftTitleStringToVM() {
-        toolbarViewModel.setLeftTitleStr(getString(R.string.action_settings));
-    }
-
-    @Override
-    public void setTitleStringToVM() {
-        toolbarViewModel.setTitleStr(getString(R.string.calendar_preferences));
-    }
-
-    @Override
-    public void setRightTitleStringToVM() {
+    public void onTaskStart(int taskId) {
 
     }
 
     @Override
-    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel() {
-        return new ToolbarViewModel<>(this);
+    public void onTaskSuccess(int taskId, Calendar data) {
+
     }
 
     @Override
+    public void onTaskError(int taskId) {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     public void onBack() {
         getActivity().finish();
         getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -84,6 +87,21 @@ implements SettingCommonMvpView{
 
     @Override
     public void onNext() {
-        openFragment(this, (SettingDefaultAlertFragment)getFragmentManager().findFragmentByTag(SettingDefaultAlertFragment.class.getSimpleName()));
+
+    }
+
+    @Override
+    public void toCalendarPage() {
+        getBaseActivity().openFragment(new SettingCalendarDisplayFragment());
+    }
+
+    @Override
+    public void toAlertTimePage() {
+        getBaseActivity().openFragment(new SettingStDefaultAlertFragment());
+    }
+
+    @Override
+    public void toImportPage() {
+        getBaseActivity().openFragment(new SettingCalendarImportFragment());
     }
 }

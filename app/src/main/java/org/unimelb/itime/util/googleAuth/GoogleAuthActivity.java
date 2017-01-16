@@ -22,6 +22,7 @@ import org.unimelb.itime.bean.RequestReadBody;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.restfulapi.BindApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
+import org.unimelb.itime.ui.activity.EmptyActivity;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
 import org.unimelb.itime.util.HttpUtil;
 
@@ -32,7 +33,7 @@ import rx.Subscriber;
  * Created by Qiushuo Huang on 2017/1/2.
  */
 
-public class GoogleAuthActivity extends BaseActivity{
+public class GoogleAuthActivity extends EmptyActivity{
     private static final String TAG = "Google Auth";
     private static final int RC_SIGN_IN = 9001;
     private BindApi bindApi;

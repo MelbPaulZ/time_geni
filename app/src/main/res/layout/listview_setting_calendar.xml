@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="wrapper"
+            type="org.unimelb.itime.ui.viewmodel.CalendarViewModel.CalendarWrapper" />
+        <import type="android.view.View" />
+        <import type="org.unimelb.itime.R" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:paddingStart="2dp">
+
+        <ImageView
+            android:id="@+id/check_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@{wrapper.selected ? @drawable/icon_event_row_selected : @drawable/icon_event_row_unselected}" />
+
+        <TextView
+            android:id="@+id/name_txt"
+            style="@style/itime_blacktitle_17sp"
+            android:layout_toRightOf="@id/check_img"
+            android:layout_centerVertical="true"
+            android:text="@{wrapper.name}"
+            />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/icon_moreinfo"
+            android:onClick="@{wrapper.onMoreInfoClick()}"
+            />
+
+        <TextView style="@style/itime_bottom_divider_line"
+            android:layout_alignLeft="@id/name_txt"/>
+    </RelativeLayout>
+
+</layout>

@@ -103,7 +103,7 @@ public class AddMobileContactsViewModel extends BaseObservable {
     }
 
     public ItemView getItemView(){
-        return ItemView.of(BR.viewmodel, R.layout.listview_add_mobile_contact_item);
+        return ItemView.of(BR.viewModel, R.layout.listview_add_mobile_contact_item);
     }
 
     private void updateListView(List<BaseContact> list){

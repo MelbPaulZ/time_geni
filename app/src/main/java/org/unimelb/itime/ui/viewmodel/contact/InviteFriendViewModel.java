@@ -234,7 +234,7 @@ public class InviteFriendViewModel extends BaseObservable {
     public void setSideBarListView(ListView sideBarListView) {
         this.sideBarListView = sideBarListView;
         //this.sideBarListView.setOnInviteeClickListener(getOnItemClickListener());
-        adapter = new InviteFriendAdapter(presenter.getView().getActivity().getApplicationContext());
+        adapter = new InviteFriendAdapter(presenter.getContext());
         adapter.setList(getITimeFriendItems());
         getSearchItems();
         this.sideBarListView.addHeaderView(headerView);
@@ -268,15 +268,15 @@ public class InviteFriendViewModel extends BaseObservable {
     }
 
     public void gotoInviteFacebookContacts() {
-        presenter.getView().gotoInviteFacebookContacts();
+        presenter.getView().toInviteFacebookContactsPage();
     }
 
     public void gotoInviteGmailContacts() {
-        presenter.getView().gotoInviteGmailContacts();
+        presenter.getView().toInviteGmailContactsPage();
     }
 
     public void gotoInviteMobileContacts() {
-        presenter.getView().gotoInviteMobileContacts();
+        presenter.getView().toInviteMobileContactsPage();
     }
 
     @Bindable
@@ -572,7 +572,7 @@ public class InviteFriendViewModel extends BaseObservable {
            @Override
            public void onClick(View view) {
                if(presenter.getView()!=null) {
-                   presenter.getView().gotoScanQRCode();
+                   presenter.getView().toScanQRCodePage();
                }
            }
        };

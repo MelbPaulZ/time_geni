@@ -2,25 +2,30 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
-import android.util.Log;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Switch;
 
-import static org.unimelb.itime.R.dimen.hide;
+import com.squareup.picasso.Picasso;
+
+import org.unimelb.itime.R;
+import org.unimelb.itime.vendor.helper.DensityUtil;
 
 /**
  * Created by Paul on 18/10/16.
  */
 public class AndroidViewModel extends BaseObservable {
-
+    @BindingAdapter("android:onTextChange")
+    public static void setOnFocusChangeListener(EditText view, TextWatcher watcher){
+        view.addTextChangedListener(watcher);
+    }
 
     @BindingAdapter("android:onFocusChange")
     public static void setOnFocusChangeListener(View view, View.OnFocusChangeListener onFocusChangeListener){
@@ -75,6 +80,19 @@ public class AndroidViewModel extends BaseObservable {
                 return false;
             }
         };
+    }
+
+
+    @BindingAdapter({"bind:remote_url"})
+    public static void loadRemoteUrl(ImageView imageView, String url){
+            imageView.setVisibility(View.VISIBLE);
+            int size = DensityUtil.dip2px(imageView.getContext(), 40);
+            Picasso.with(imageView.getContext())
+                    .load(url)
+                    .placeholder(R.drawable.invitee_selected_default_picture)
+                    .resize(size, size)
+                    .centerCrop()
+                    .into(imageView);
     }
 
 

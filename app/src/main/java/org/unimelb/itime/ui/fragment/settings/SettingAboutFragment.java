@@ -10,17 +10,17 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentSettingAboutBinding;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
-import org.unimelb.itime.ui.mvpview.SettingCommonMvpView;
+import org.unimelb.itime.ui.mvpview.SettingCommonMvpView_delete;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
-import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel;
+import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel_delete;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 
 /**
  * Created by Paul on 27/12/2016.
  */
 
-public class SettingAboutFragment extends SettingBaseFragment<SettingCommonMvpView, SettingCommonPresenter<SettingCommonMvpView>>
-implements SettingCommonMvpView{
+public class SettingAboutFragment extends SettingBaseFragment<SettingCommonMvpView_delete, SettingCommonPresenter<SettingCommonMvpView_delete>>
+implements SettingCommonMvpView_delete {
 
     private FragmentSettingAboutBinding binding;
 
@@ -39,14 +39,14 @@ implements SettingCommonMvpView{
     }
 
     @Override
-    public SettingCommonPresenter<SettingCommonMvpView> createPresenter() {
+    public SettingCommonPresenter<SettingCommonMvpView_delete> createPresenter() {
         return new SettingCommonPresenter<>(getContext());
     }
 
 
     @Override
     public void onViewChange(int task, boolean isSave) {
-        if (task == MainSettingsViewModel.TASK_TO_SETTING){
+        if (task == MainSettingsViewModel_delete.TASK_TO_SETTING){
             getActivity().finish();
             getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         }

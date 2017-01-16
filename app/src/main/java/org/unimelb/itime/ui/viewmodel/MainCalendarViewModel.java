@@ -8,7 +8,7 @@ import android.view.View;
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
+import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.util.EventUtil;
 
 import java.util.Calendar;
@@ -18,13 +18,13 @@ import java.util.Calendar;
  */
 public class MainCalendarViewModel extends CommonViewModel{
     public final static String TAG = "MainCalendarViewModel";
-    private CommonPresenter<MainCalendarMvpView> presenter;
+    private EventPresenter<MainCalendarMvpView> presenter;
 
     private String toolbarTitle;
     private MainCalendarMvpView mvpView;
 
 
-    public MainCalendarViewModel(CommonPresenter<MainCalendarMvpView> presenter) {
+    public MainCalendarViewModel(EventPresenter<MainCalendarMvpView> presenter) {
         this.presenter = presenter;
         mvpView = presenter.getView();
         toolbarTitle = initToolBarTitle();
@@ -65,18 +65,8 @@ public class MainCalendarViewModel extends CommonViewModel{
             public void onClick(View view) {
                 Log.i(TAG, "onClick: " + System.currentTimeMillis());
                 if (mvpView!=null){
-                    mvpView.startCreateEventActivity();
-                }
-            }
-        };
-    }
-
-    public View.OnClickListener onClickBack(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mvpView!=null){
-                    mvpView.backToGroupEvent();
+                    long startTime = Calendar.getInstance().getTimeInMillis();
+                    mvpView.toEventCreatePage(startTime);
                 }
             }
         };

@@ -11,7 +11,7 @@ import org.unimelb.itime.ui.fragment.settings.SettingMyProfileNameFragment;
 /**
  * Created by Paul on 23/08/2016.
  */
-public class TestActivityPaul extends BaseActivity {
+public class TestActivityPaul extends EmptyActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

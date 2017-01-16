@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="contentVM"
+            type="org.unimelb.itime.ui.viewmodel.CalendarViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_fafafa">
+        <include layout="@layout/toolbar_common"
+            bind:vm="@{toolbarVM}"/>
+
+        <org.unimelb.itime.vendor.contact.helper.ClearEditText
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/divider_top_and_bottom"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:gravity="center_vertical|left"
+            android:hint="@string/calendar_name"
+            android:textColorHint="@color/color_bdbdbd"
+            android:text="@={contentVM.calendar.summary}"
+            />
+    </LinearLayout>
+</layout>
