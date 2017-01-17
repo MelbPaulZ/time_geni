@@ -299,7 +299,7 @@
     <string name="accepted">accepted</string>
     <string name="going">Going</string>
     <string name="no_reply">No Reply</string>
-    <string name="inbox">Inbox</string>
+    <string name="inbox">Messages</string>
 
     <string name="Save_for_this_event_only">Save for this event only</string>
     <string name="Save_for_future_events">Save for future events</string>
@@ -365,6 +365,8 @@
     <string name="profile_photo">Profile Photo</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
+
+    <string name="setting">Settings</string>
     <string name="setting_reset_password">Reset Password</string>
     <string name="my_qr_code">My QR Code</string>
     <string name="setting_gender">Gender</string>

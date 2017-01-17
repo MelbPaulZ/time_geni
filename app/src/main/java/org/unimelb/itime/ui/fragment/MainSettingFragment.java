@@ -1,49 +1,31 @@
 package org.unimelb.itime.ui.fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.base.BaseUiFragment;
-import org.unimelb.itime.base.C;
-import org.unimelb.itime.bean.Contact;
-import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentSettingBinding;
-import org.unimelb.itime.managers.DBManager;
-import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.messageevent.MessageEvent;
-import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.LoginActivity;
-import org.unimelb.itime.ui.activity.ProfileActivityContact;
 import org.unimelb.itime.ui.activity.SettingActivity;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.MainSettingMvpView;
-import org.unimelb.itime.ui.mvpview.SettingCommonMvpView_delete;
-import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
-import org.unimelb.itime.ui.viewmodel.CalendarPreferenceViewModel;
 import org.unimelb.itime.ui.viewmodel.MainSettingViewModel;
-import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel_delete;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
-import org.unimelb.itime.util.AuthUtil;
-import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 import org.unimelb.itime.util.UserUtil;
+import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 
@@ -54,6 +36,7 @@ import me.fesky.library.widget.ios.ActionSheetDialog;
 public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpView,MvpBasePresenter<MainSettingMvpView>> implements MainSettingMvpView {
     private FragmentSettingBinding binding;
     private MainSettingViewModel contentViewModel;
+    private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
     @Override
     public MvpBasePresenter createPresenter() {
@@ -74,6 +57,12 @@ public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpVie
         User user = UserUtil.getInstance(getContext()).getUser();
         contentViewModel.setUser(user);
 
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setTitleStr(getString(R.string.setting));
+        toolbarViewModel.setLeftClickable(false);
+        toolbarViewModel.setRightClickable(false);
+
+        binding.setToolbarVM(toolbarViewModel);
         binding.setContentVM(contentViewModel);
     }
 
@@ -185,6 +174,16 @@ public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpVie
 
     @Override
     public void setData(Object o) {
+
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
 
     }
 }

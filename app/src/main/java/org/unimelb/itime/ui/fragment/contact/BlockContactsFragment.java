@@ -7,45 +7,44 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.databinding.ContactHomePageBinding;
+import org.unimelb.itime.databinding.FragmentBlocklistBinding;
 import org.unimelb.itime.messageevent.MessageAddContact;
 import org.unimelb.itime.messageevent.MessageEditContact;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
 import org.unimelb.itime.messageevent.MessageRemoveContact;
+import org.unimelb.itime.messageevent.contact.MessageBlockContact;
+import org.unimelb.itime.messageevent.contact.MessageUnblockContact;
 import org.unimelb.itime.ui.activity.AddFriendActivityContact;
-import org.unimelb.itime.ui.activity.BlockContactsActivity;
 import org.unimelb.itime.ui.activity.FriendRequestActivityContact;
 import org.unimelb.itime.ui.activity.ProfileActivityContact;
-import org.unimelb.itime.bean.ITimeUser;
+import org.unimelb.itime.ui.mvpview.contact.BlockContactsMvpView;
 import org.unimelb.itime.ui.mvpview.contact.ContactHomePageMvpView;
+import org.unimelb.itime.ui.presenter.contact.BlockContactsPresenter;
 import org.unimelb.itime.ui.presenter.contact.ContactHomePagePresenter;
 import org.unimelb.itime.ui.viewmodel.contact.BlockContactsViewModel;
 import org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel;
+import org.unimelb.itime.ui.viewmodel.contact.ProfileFragmentViewModel;
 
 /**
- * Created by 37925 on 2016/12/8.
+ * Created by Qiushuo Huang on 2017/1/14.
  */
 
-public class ContactHomePageFragment extends BaseContactFragment<ContactHomePageMvpView, ContactHomePagePresenter> implements ContactHomePageMvpView {
-    private ContactHomePageBinding binding;
+public class BlockContactsFragment extends BaseContactFragment<BlockContactsMvpView, BlockContactsPresenter> implements BlockContactsMvpView {
+    private FragmentBlocklistBinding binding;
     private android.support.v4.app.FragmentManager fm;
-    private NewFriendFragment newFriendFragment;
-    private AddFriendsFragment addFriendsFragment;
     private ProfileFragment profileFragment;
-    private ContactHomePageViewModel viewModel;
+    private BlockContactsViewModel viewModel;
 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,
-                R.layout.contact_home_page, container, false);
+                R.layout.fragment_blocklist, container, false);
         initMainView();
         fm = getFragmentManager();
         viewModel.initSideBarListView(binding.sortListView);
@@ -55,23 +54,13 @@ public class ContactHomePageFragment extends BaseContactFragment<ContactHomePage
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void removeContact(MessageRemoveContact msg){
+    public void removeBlock(MessageUnblockContact msg){
         viewModel.removeContact(msg.contact);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void addContact(MessageAddContact msg){
+    public void addBlock(MessageBlockContact msg){
         viewModel.addContact(msg.contact);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setRequestCount(MessageNewFriendRequest msg){
-        viewModel.setRequestCount(msg.count);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void editContact(MessageEditContact msg){
-        viewModel.loadData();
     }
 
     @Override
@@ -90,8 +79,7 @@ public class ContactHomePageFragment extends BaseContactFragment<ContactHomePage
 
     public void initMainView() {
         presenter = createPresenter();
-        viewModel = new ContactHomePageViewModel(presenter);
-        viewModel.setPresenter(presenter);
+        viewModel = new BlockContactsViewModel(presenter);
         binding.setMainViewModel(viewModel);
     }
 
@@ -101,35 +89,24 @@ public class ContactHomePageFragment extends BaseContactFragment<ContactHomePage
         Intent intent = new Intent();
         intent.setClass(getActivity(), FriendRequestActivityContact.class);
         startActivity(intent);
-
-//        Intent intent = new Intent();
-//        intent.setClass(getActivity(), BlockContactsActivity.class);
-//        startActivity(intent);
-
     }
 
     public void goToProfileFragment(Contact user) {
-//        if (profileFragment == null) {
-//            profileFragment = new ProfileFragment();
-//        }
-//        profileFragment.setUser(user);
-//        profileFragment.setShowRightButton(true);
-//        fm.beginTransaction()
-//                .hide(this)
-//                .add(R.id.contentFrameLayout, profileFragment)
-//                .addToBackStack(null)
-//                .commit();
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), ProfileActivityContact.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ProfileActivityContact.USER,user);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
-    @Override
-    public ContactHomePageBinding getBinding() {
-        return binding;
+        if (profileFragment == null) {
+            profileFragment = new ProfileFragment();
+        }
+        profileFragment.setUser(user);
+        fm.beginTransaction()
+                .hide(this)
+                .add(R.id.contentFrameLayout, profileFragment)
+                .addToBackStack(null)
+                .commit();
+//        Intent intent = new Intent();
+//        intent.setClass(getActivity(), ProfileActivityContact.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable(ProfileActivityContact.USER,user);
+//        intent.putExtras(bundle);
+//        startActivity(intent);
     }
 
     public void goToAddFriendsFragment() {
@@ -139,8 +116,8 @@ public class ContactHomePageFragment extends BaseContactFragment<ContactHomePage
     }
 
     @Override
-    public ContactHomePagePresenter createPresenter() {
-        return new ContactHomePagePresenter(getContext());
+    public BlockContactsPresenter createPresenter() {
+        return new BlockContactsPresenter(getContext());
     }
 
     @Override

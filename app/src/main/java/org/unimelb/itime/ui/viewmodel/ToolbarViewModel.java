@@ -10,40 +10,39 @@ import com.android.databinding.library.baseAdapters.BR;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 
 
-
 /**
  * Created by Paul on 11/1/17.
  */
 
 public class ToolbarViewModel<V extends ItimeCommonMvpView> extends CommonViewModel {
-    private String leftTitleStr, titleStr, rightTitleStr;
+    private String leftTitleStr = "", titleStr = "", rightTitleStr = "";
     private int leftColor, rightColor;
     private boolean leftClickable = true, rightClickable = true;
     private Drawable leftDrawable, rightDrawable;
 
     private V mvpView;
 
-    public ToolbarViewModel(V view){
+    public ToolbarViewModel(V view) {
         this.mvpView = view;
         this.leftColor = this.rightColor = Color.parseColor("#000000");
     }
 
-    public View.OnClickListener onClickLeft(){
+    public View.OnClickListener onClickLeft() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mvpView!=null){
+                if (mvpView != null) {
                     mvpView.onBack();
                 }
             }
         };
     }
 
-    public View.OnClickListener onClickRight(){
+    public View.OnClickListener onClickRight() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mvpView!=null){
+                if (mvpView != null) {
                     mvpView.onNext();
                 }
             }
