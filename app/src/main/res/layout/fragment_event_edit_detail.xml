@@ -333,6 +333,7 @@
                     <TextView
                         android:id="@+id/create_event_start_time"
                         style="@style/itime_select_time_16sp"
+                        android:enabled="@{eventEditVM.isAlldayEvent ==1 ? false: true}"
                         android:onClick="@{eventEditVM.onChangeTime(PickerTask.START_TIME)}"
                         android:text="@{EventUtil.getSelectTimeStringFromLong(context, eventEditVM.event.startTime)}"
                         android:textColor="@color/text_enable" />
@@ -361,6 +362,7 @@
                     <TextView
                         android:id="@+id/create_event_end_time"
                         style="@style/itime_select_time_16sp"
+                        android:enabled="@{eventEditVM.isAlldayEvent ==1 ? false: true}"
                         android:onClick="@{eventEditVM.onChangeTime(PickerTask.END_TIME)}"
                         android:text="@{EventUtil.getSelectTimeStringFromLong(context, eventEditVM.event.endTime)}"
                         android:textColor="@color/text_enable" />
