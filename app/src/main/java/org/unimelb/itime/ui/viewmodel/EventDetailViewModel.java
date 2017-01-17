@@ -389,13 +389,13 @@ public class EventDetailViewModel extends CommonViewModel {
             }else if (TimeSlotUtil.isAtLeastOneWrapperSelected(viewModels)){
                 return false;
             }else{
+                Log.i("123", "getRightBtnClickable: ");
                 return true;
             }
         }
         // TODO: 3/1/17 cancelled panduan
         return true;
     }
-
 
 //    ***************************************************************
 
