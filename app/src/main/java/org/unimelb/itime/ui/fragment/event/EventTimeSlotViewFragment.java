@@ -259,6 +259,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             }
 
         });
+        
     }
 
     private void viewInitListener(){
@@ -309,6 +310,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
             }
         });
+        timeslotWeekView.removeAllOptListener();
     }
 
     private int getSelectedTimeslotNum(){
