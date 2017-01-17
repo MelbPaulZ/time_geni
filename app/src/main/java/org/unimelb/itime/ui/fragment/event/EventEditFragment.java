@@ -109,6 +109,10 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     public void setEvent(Event event){
         this.event = event;
+        // this is for photo choose back, then refresh page
+        if (eventEditViewModel!=null){
+            eventEditViewModel.setEvent(event);
+        }
     }
 
     @Override
@@ -119,6 +123,10 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     public void setPhotos(ArrayList<String> photos){
         event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
+        // this is for letting viewmodel refresh data
+        if (eventEditViewModel!=null){
+            eventEditViewModel.setEvent(event);
+        }
     }
 
     @Override
@@ -251,9 +259,16 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         }
     }
 
+
+
     @Override
     public void onNext() {
-        if (task == TASK_CREATE){
+        if (event.hasAttendee()
+                && EventUtil.hasOtherInviteeExceptSelf(getContext(), event)
+                && event.getTimeslot().size()==0){
+            // has other invitees but no timeslots
+            toTimeslotViewPage();
+        }else if (task == TASK_CREATE){
             eventEditViewModel.toCreateEvent();
         }else{
             eventEditViewModel.editEvent();

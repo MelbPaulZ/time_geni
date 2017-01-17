@@ -128,8 +128,8 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
                     ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
                     EventEditFragment eventEditFragment = (EventEditFragment) getSupportFragmentManager().findFragmentById(getFragmentContainerId());
 //                    EventEditFragment eventEditFragment = new EventEditFragment();
-                    eventEditFragment.setEvent(event);
                     eventEditFragment.setPhotos(result);
+                    eventEditFragment.setEvent(event);
                     openFragment(eventEditFragment);
                 }
             }
