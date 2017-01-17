@@ -110,6 +110,7 @@ public class EventCustomRepeatFragment extends BaseUiAuthFragment<EventCustomRep
         EventEditFragment frag = new EventEditFragment();
         frag.setEvent(orgEvent);
         getBaseActivity().backFragment(frag);
+
     }
 
     @Override

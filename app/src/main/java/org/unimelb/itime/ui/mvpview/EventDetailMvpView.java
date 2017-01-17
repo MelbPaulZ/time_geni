@@ -15,4 +15,5 @@ public interface EventDetailMvpView extends TaskBasedMvpView<List<Event>>, Itime
     void gotoGridView();
     void onTimeslotClick(WrapperTimeSlot wrapper);
     void toResponse();
+    void createEventFromThisTemplate(Event event);
 }

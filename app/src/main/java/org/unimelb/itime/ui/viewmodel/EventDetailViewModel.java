@@ -22,11 +22,13 @@ import org.unimelb.itime.adapter.PhotoAdapter;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventPresenter;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.util.CircleTransform;
@@ -101,6 +103,32 @@ public class EventDetailViewModel extends CommonViewModel {
             public void onClick(View v) {
                 if (mvpView!=null){
                     mvpView.toResponse();
+                }
+            }
+        };
+    }
+
+    public View.OnClickListener createEventFromThisTemplate(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // create the template for new event
+                Event cpyEvent = EventUtil.copyEvent(event);
+                String eventUid = AppUtil.generateUuid();
+                cpyEvent.setEventUid(eventUid);
+                for (Invitee invitee : cpyEvent.getInvitee()){
+                    invitee.setEventUid(eventUid);
+                    invitee.setStatus(Invitee.STATUS_NEEDSACTION); // maybe need to check if it is host
+                    String inviteeUid = AppUtil.generateUuid();
+                    invitee.setInviteeUid(inviteeUid);
+                    invitee.setSlotResponses(new ArrayList<SlotResponse>());
+                }
+
+                cpyEvent.setTimeslot(new ArrayList<Timeslot>());
+                cpyEvent.setPhoto(new ArrayList<PhotoUrl>());
+
+                if (mvpView!=null){
+                    mvpView.createEventFromThisTemplate(cpyEvent);
                 }
             }
         };

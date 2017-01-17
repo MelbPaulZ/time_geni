@@ -16,6 +16,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.EventResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailBinding;
+import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
@@ -25,6 +26,7 @@ import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel.SubTimeslotViewModel;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -203,6 +205,13 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         EventResponseFragment eventResponseFragment = new EventResponseFragment();
         eventResponseFragment.setData(event);
         getBaseActivity().openFragment(eventResponseFragment);
+    }
+
+    @Override
+    public void createEventFromThisTemplate(Event event) {
+        Intent intent = new Intent(getActivity(), EventCreateActivity.class);
+        intent.putExtra("event", (Serializable) event);
+        startActivity(intent);
     }
 
 

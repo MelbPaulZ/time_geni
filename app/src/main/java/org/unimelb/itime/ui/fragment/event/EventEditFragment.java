@@ -61,6 +61,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     private EventEditViewModel eventEditViewModel;
 //    private EventPresenter presenter;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
+
     private int task = TASK_CREATE;
 
 

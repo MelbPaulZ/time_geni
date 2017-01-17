@@ -307,6 +307,7 @@
     <string name="quit">Quit</string>
     <string name="quitted">Quitted</string>
     <string name="Messages">Messages</string>
+    <string name="create_event_from_this_event">Create Event From This Event</string>
 
     <string name="has_not_confirmed_this_event">has not confirmed this event</string>
     <string name="has_confirmed_this_event">has confirmed this events</string>
