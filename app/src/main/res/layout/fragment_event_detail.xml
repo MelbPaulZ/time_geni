@@ -11,6 +11,8 @@
 
         <import type="org.unimelb.itime.util.UserUtil" />
         <import type="org.unimelb.itime.util.CalendarUtil"/>
+        <import type="me.tatarka.bindingcollectionadapter.LayoutManagers" />
+        <import type="android.support.v7.widget.LinearLayoutManager" />
 
         <import type="android.view.View" />
         <variable
@@ -287,18 +289,13 @@
                             android:layout_marginTop="@dimen/padding_5"
                             android:background="@color/gray_b2b2b2" />
 
-                        <HorizontalScrollView
+                        <android.support.v7.widget.RecyclerView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <LinearLayout
-                                android:id="@+id/invitees_status_img"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:padding="5dp"/>
-                        </HorizontalScrollView>
+                            android:layout_height="60dp"
+                            app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, false)}"
+                            app:items="@{contentVM.inviteeList}"
+                            app:itemView="@{contentVM.inviteeItemView}"
+                            />
 
                         <TextView
                             android:layout_width="match_parent"
