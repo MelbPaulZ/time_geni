@@ -917,4 +917,20 @@ public class EventUtil {
         return "UnKnow";
     }
 
+    public static List<Invitee> getInviteeWithStatus(List<Invitee> invitees, String... status){
+        List<Invitee> result = new ArrayList<>();
+        for (Invitee invitee:invitees
+             ) {
+            for (String state:status
+                 ) {
+                if (invitee.getStatus().equals(state)){
+                    result.add(invitee);
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
 }

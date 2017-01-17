@@ -30,6 +30,7 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
@@ -155,6 +156,17 @@ public class EventDetailViewModel extends CommonViewModel {
             }
         };
     }
+
+//    public String getPeopleNum(String type) {
+//                Timeslot timeslot = null;
+//                for (SubTimeslotViewModel viewModel: wrapperTimeSlotList){
+//                    if (viewModel.getWrapper().isSelected()){
+//                        timeslot = (Timeslot) viewModel.getWrapper().getTimeSlot();
+//                        break;
+//                    }
+//                }
+//                presenter.confirmEvent(event.getCalendarUid(), event.getEventUid(), timeslot.getTimeslotUid());
+//    }
 
 
     public View.OnClickListener acceptEvent(){
@@ -642,6 +654,8 @@ public class EventDetailViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.timeslotItemView);
     }
 
+
+
     /**
      * the view model of timeslot item view
      */
@@ -739,7 +753,6 @@ public class EventDetailViewModel extends CommonViewModel {
         public void setReplyData(Map<String, List<EventUtil.StatusKeyStruct>> replyData) {
             this.replyData = replyData;
         }
-
     }
 
 
@@ -750,8 +763,10 @@ public class EventDetailViewModel extends CommonViewModel {
     private List<Invitee> inviteeList = new ArrayList<>();
     private ItemView inviteeItemView = ItemView.of(BR.item, R.layout.listview_invitee_photo);
 
+
     @Bindable
     public List<Invitee> getInviteeList() {
+
         return inviteeList;
     }
 

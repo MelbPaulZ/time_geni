@@ -92,7 +92,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             this.timeslotVMList.add(subTimeslotViewModel);
         }
         contentViewModel.setWrapperTimeSlotList(timeslotVMList);
-        contentViewModel.setInviteeList(event.getInvitee());
+        contentViewModel.setInviteeList(EventUtil.getInviteeWithStatus(event.getInvitee(),"accepted","rejected"));
     }
 
     private void initToolbar(){

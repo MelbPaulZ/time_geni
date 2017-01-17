@@ -297,8 +297,8 @@
     <string name="change_all">Change all</string>
     <string name="only_this_event">Only this event</string>
     <string name="accepted">accepted</string>
-    <string name="going">Going</string>
-    <string name="no_reply">No Reply</string>
+    <string name="going">&#160;Going</string>
+    <string name="no_reply">&#160;No Reply</string>
     <string name="inbox">Messages</string>
 
     <string name="Save_for_this_event_only">Save for this event only</string>

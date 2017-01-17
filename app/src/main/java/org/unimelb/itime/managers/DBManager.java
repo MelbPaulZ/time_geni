@@ -35,12 +35,10 @@ public class DBManager {
     private static DBManager mInstance;
     private DaoMaster.DevOpenHelper openHelper;
     private Context context;
-    private DaoSession daoSession;
 
     public DBManager(Context context) {
         this.context = context;
         openHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
-        daoSession = new DaoMaster(getWritableDatabase()).newSession();
     }
 
 
@@ -330,7 +328,7 @@ public class DBManager {
     /*********************************** delete above *************************************/
     @SuppressWarnings("unchecked")
     public <T extends Object,V> List<T> find(Class<T> className, String name, V value){
-        AbstractDao abd =  daoSession.getDao(className);
+        AbstractDao abd =  (new DaoMaster(getWritableDatabase()).newSession()).getDao(className);
         QueryBuilder<T> qb = abd.queryBuilder();
         Property[] ptys = abd.getProperties();
         Property attr = null;
@@ -352,17 +350,17 @@ public class DBManager {
 
     @SuppressWarnings("unchecked")
     public <T extends Object> AbstractDao getQueryDao(Class<T> className){
-        return daoSession.getDao(className);
+        return (new DaoMaster(getWritableDatabase()).newSession()).getDao(className);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends Object> List<T> getAll(Class<T> className){
-        return ((AbstractDao) daoSession.getDao(className)).queryBuilder().list();
+        return ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(className)).queryBuilder().list();
     }
 
     @SuppressWarnings("unchecked")
     public <T extends Object> void deleteAll(Class<T> className){
-        ((AbstractDao) daoSession.getDao(className)).deleteAll();
+        ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(className)).deleteAll();
     }
 
     @SuppressWarnings("unchecked")
@@ -370,7 +368,10 @@ public class DBManager {
         if (objs == null || objs.isEmpty()) {
             return;
         }
-        ((AbstractDao) daoSession.getDao(objs.get(0).getClass())).insertInTx(objs);
+        for (T obj:objs
+             ) {
+            ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(obj.getClass())).insertOrReplace(obj);
+        }
     }
 
 }
