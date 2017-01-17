@@ -34,11 +34,11 @@ import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
-import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
-import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 
 import java.util.List;
@@ -51,6 +51,8 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     private FragmentMainInboxBinding binding;
     private MainInboxPresenter presenter;
     private MessageAdapter messageAdapter;
+
+    private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
     @Override
     public MainInboxPresenter createPresenter() {
@@ -72,6 +74,12 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setTitleStr(getString(R.string.inbox));
+        toolbarViewModel.setRightDrawable(getResources().getDrawable(R.drawable.icon_three_lines));
+        binding.setToolbarVM(toolbarViewModel);
+
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
@@ -230,5 +238,15 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     @Override
     public void onTaskError(int taskId) {
         AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
+
     }
 }

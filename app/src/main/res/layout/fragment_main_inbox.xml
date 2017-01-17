@@ -1,43 +1,22 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+        <data>
+            <variable
+                name="toolbarVM"
+                type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
+        </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
+        <include
             android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            layout="@layout/toolbar_common"
+            bind:vm="@{toolbarVM}"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="11dp"
-                    android:text="@string/inbox"
-                    android:textSize="17sp"
-                    android:textColor="@color/title_6D6D6D" />
-                <TextView
-                    android:layout_width="30dp"
-                    android:layout_height="20dp"
-                    android:padding="3dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="13dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/icon_three_lines"
-                    />
-            </RelativeLayout>
-        </android.support.v7.widget.Toolbar>
         <LinearLayout
             android:id="@+id/inbox_searchview"
             android:layout_width="match_parent"
