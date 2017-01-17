@@ -535,21 +535,7 @@ public class EventManager {
         this.currentEvent = currentEvent;
     }
 
-    public boolean isTimeslotExistInEvent(Event event, Timeslot timeslot){
-        if (event.hasTimeslots()) {
-            List<Timeslot> timeslotList = event.getTimeslot();
-            for (Timeslot ts : timeslotList){
-                long tsSecond= ts.getStartTime()/(1000*60*15);
-                long recSecond = timeslot.getStartTime()/(1000*60*15);
-                if(tsSecond == recSecond){
-                    return true;
-                }
-            }
-            return false;
-        }else{
-            return false;
-        }
-    }
+
 
     public String getHostInviteeUid(Event event) {
         for (Invitee invitee : event.getInvitee()) {
