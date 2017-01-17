@@ -120,9 +120,12 @@ public class AndroidViewModel extends BaseObservable {
                         String remoteUrl = photoUrl.getUrl();
 
                         if (!localUrl.equals("")){
-                            Picasso.with(imagesContainer.getContext()).load(new File(localUrl)).resize(size,size).into(imgView);
-                            imgView.setVisibility(View.VISIBLE);
-                            continue;
+                            File file = new File(localUrl);
+                            if (file.exists()){
+                                Picasso.with(imagesContainer.getContext()).load(file).resize(size,size).into(imgView);
+                                imgView.setVisibility(View.VISIBLE);
+                                continue;
+                            }
                         }
 
                         if (!remoteUrl.equals("")){
