@@ -41,7 +41,6 @@ public class PhotoAdapter extends ArrayAdapter<String> {
         }
         String url = urls.get(position);
 
-        convertView.setBackgroundColor(context.getResources().getColor(R.color.gray));
         ImageView imageView = (ImageView) convertView.findViewById(R.id.gridview_image);
         imageView.setOnClickListener(onImageClick());
         Picasso.with(context).load((url==null || url.equals("")) ? "nothing":url).placeholder(R.drawable.invitee_selected_default_picture).error(R.drawable.ic_photo_loading).resize(120,120).centerCrop().into(imageView);
