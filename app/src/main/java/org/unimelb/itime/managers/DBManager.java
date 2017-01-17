@@ -346,8 +346,8 @@ public class DBManager {
             return null;
         }
 
-        return qb.where(
-                attr.eq(value)).list();
+        List<T> list = qb.where(attr.eq(value)).list();
+        return list;
     }
 
     @SuppressWarnings("unchecked")
