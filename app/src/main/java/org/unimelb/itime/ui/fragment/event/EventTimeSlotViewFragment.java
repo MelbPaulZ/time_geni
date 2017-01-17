@@ -259,7 +259,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             }
 
         });
-        
+
     }
 
     private void viewInitListener(){
