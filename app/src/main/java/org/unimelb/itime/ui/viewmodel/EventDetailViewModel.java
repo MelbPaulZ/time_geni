@@ -9,7 +9,6 @@ import android.databinding.ObservableBoolean;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +17,6 @@ import com.android.databinding.library.baseAdapters.BR;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
-import org.unimelb.itime.adapter.PhotoAdapter;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
@@ -26,12 +24,11 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
-import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
+import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.util.AppUtil;
-import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.util.CircleTransform;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
@@ -40,7 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 import me.tatarka.bindingcollectionadapter.ItemView;
@@ -620,6 +616,9 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
+    /**
+     * for timeslot view
+     */
     private List<SubTimeslotViewModel> wrapperTimeSlotList;
     private ItemView timeslotItemView = ItemView.of(BR.itemVM, R.layout.listview_timeslot_pick);
 
@@ -741,5 +740,33 @@ public class EventDetailViewModel extends CommonViewModel {
             this.replyData = replyData;
         }
 
+    }
+
+
+    /**
+     * for invitee photo
+     */
+
+    private List<Invitee> inviteeList = new ArrayList<>();
+    private ItemView inviteeItemView = ItemView.of(BR.item, R.layout.listview_invitee_photo);
+
+    @Bindable
+    public List<Invitee> getInviteeList() {
+        return inviteeList;
+    }
+
+    public void setInviteeList(List<Invitee> inviteeList) {
+        this.inviteeList = inviteeList;
+        notifyPropertyChanged(BR.inviteeList);
+    }
+
+    @Bindable
+    public ItemView getInviteeItemView() {
+        return inviteeItemView;
+    }
+
+    public void setInviteeItemView(ItemView inviteeItemView) {
+        this.inviteeItemView = inviteeItemView;
+        notifyPropertyChanged(BR.inviteeItemView);
     }
 }

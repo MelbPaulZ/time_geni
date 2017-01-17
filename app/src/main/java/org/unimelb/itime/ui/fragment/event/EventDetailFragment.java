@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +12,16 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.EventResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailBinding;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
+import org.unimelb.itime.ui.viewmodel.EventDetailViewModel.SubTimeslotViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
-import org.unimelb.itime.ui.viewmodel.EventDetailViewModel.SubTimeslotViewModel;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
 import java.io.Serializable;
@@ -93,6 +91,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             this.timeslotVMList.add(subTimeslotViewModel);
         }
         contentViewModel.setWrapperTimeSlotList(timeslotVMList);
+        contentViewModel.setInviteeList(event.getInvitee());
     }
 
     private void initToolbar(){
