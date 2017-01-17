@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_INSERT;
+import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_UPDATE;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_SYN_IMAGE;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_UPLOAD_IMAGE;
 
@@ -201,7 +202,12 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
                 break;
             }
 
-            case TASK_EVENT_INSERT:{
+            case TASK_EVENT_INSERT: {
+                AppUtil.hideProgressBar();
+                toCalendar();
+                break;
+            }
+            case TASK_EVENT_UPDATE:{
                 AppUtil.hideProgressBar();
                 toCalendar();
                 break;

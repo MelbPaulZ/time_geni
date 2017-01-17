@@ -21,24 +21,23 @@ import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.HttpUtil;
-import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
-
-import static org.unimelb.itime.ui.presenter.EventCommonPresenter.TASK_EVENT_ACCEPT;
-import static org.unimelb.itime.ui.presenter.EventCommonPresenter.TASK_EVENT_CONFIRM;
-import static org.unimelb.itime.ui.presenter.EventCommonPresenter.TASK_EVENT_DELETE;
-import static org.unimelb.itime.ui.presenter.EventCommonPresenter.TASK_EVENT_INSERT;
-import static org.unimelb.itime.ui.presenter.EventCommonPresenter.TASK_EVENT_REJECT;
-import static org.unimelb.itime.ui.presenter.EventCommonPresenter.TASK_TIMESLOT_ACCEPT;
-import static org.unimelb.itime.ui.presenter.EventCommonPresenter.TASK_TIMESLOT_REJECT;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * Created by yinchuandong on 12/1/17.
@@ -82,10 +81,11 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
         return this.context;
     }
 
-    public void updateEvent(Event event, String type, long originalStartTime){
+    public void updateEvent(final Event event, String type, long originalStartTime){
         if(getView() != null){
             getView().onTaskStart(TASK_EVENT_UPDATE);
         }
+
         setEventToEventManager(event);
         // orgCalendarUid to get the previous org event in server link
         String orgCalendarUid = EventManager.getInstance(context).getCurrentEvent().getCalendarUid();
@@ -118,9 +118,13 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                 synchronizeLocal(eventHttpResult.getData());
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
-                if(getView() != null){
-                    getView().onTaskSuccess(TASK_EVENT_UPDATE, eventHttpResult.getData());
-                }
+
+                updateImage(event);
+
+//                if (getView()!=null){
+//                    getView().onTaskSuccess(TASK_EVENT_UPDATE,eventHttpResult.getData());
+//                }
+
                 Log.i(TAG, "onNext: " +"done");
             }
         };
@@ -255,34 +259,60 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             final List<ImageUploadWrapper> wrappers = new ArrayList<>();
 
             for (final PhotoUrl photoUrl : event.getPhoto()){
-                final ImageUploadWrapper wrapper = new ImageUploadWrapper(photoUrl,false);
-                wrappers.add(wrapper);
-
                 // create file
-                String fileName = event.getEventUid() + "_" + photoUrl.getPhotoUid() + ".png";
+                final String fileName = event.getEventUid() + "_" + photoUrl.getPhotoUid() + ".png";
 
-                try {
-                    final AVFile file = AVFile.withAbsoluteLocalPath(fileName,photoUrl.getLocalPath());
-                    file.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(AVException e) {
-                            if (e==null){
-                                wrapper.getPhoto().setUrl(file.getUrl());
-                                wrapper.setUploaded(true);
+                File image = new File(photoUrl.getLocalPath());
+                Luban.get(context)
+                        .load(image)                     //传人要压缩的图片
+                        .putGear(Luban.THIRD_GEAR)      //设定压缩档次，默认三挡
+                        .asObservable()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnError(new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
+                        })
+                        .onErrorResumeNext(new Func1<Throwable, Observable<? extends File>>() {
+                            @Override
+                            public Observable<? extends File> call(Throwable throwable) {
+                                return Observable.empty();
+                            }
+                        })
+                        .subscribe(new Action1<File>() {
+                            @Override
+                            public void call(File file) {
+                                final ImageUploadWrapper wrapper = new ImageUploadWrapper(photoUrl,false);
+                                wrappers.add(wrapper);
+                                final AVFile avFile;
+                                try {
+                                    avFile = AVFile.withFile(fileName,file);
+                                    avFile.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(AVException e) {
+                                            if (e==null){
+                                                wrapper.getPhoto().setUrl(avFile.getUrl());
+                                                wrapper.setUploaded(true);
 
-                                if (imageUploadChecker(wrappers) && getView() != null){
-                                    getView().onTaskSuccess(TASK_UPLOAD_IMAGE, Arrays.asList(event));
-                                }
-                            }else{
-                                if (getView() != null){
-                                    getView().onTaskError(TASK_UPLOAD_IMAGE);
+                                                if (imageUploadChecker(wrappers) && getView() != null){
+                                                    getView().onTaskSuccess(TASK_UPLOAD_IMAGE, Arrays.asList(event));
+                                                }else{
+                                                    Log.i(TAG, "done: ");
+                                                }
+                                            }else{
+                                                if (getView() != null){
+                                                    getView().onTaskError(TASK_UPLOAD_IMAGE);
+                                                }
+                                            }
+                                        }
+                                    });
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
                                 }
                             }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                        });
             }
         }
     }
@@ -565,7 +595,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
     private boolean imageUploadChecker(List<ImageUploadWrapper> wrappers){
         for (ImageUploadWrapper wrapper:wrappers
              ) {
-            if (wrapper.isUploaded()){
+            if (!wrapper.isUploaded()){
                 return false;
             }
         }
@@ -573,10 +603,27 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
         return true;
     }
 
+    private void updateImage(Event event){
+        List<PhotoUrl> newImageSet = new ArrayList<>();
+        for (PhotoUrl url: event.getPhoto()
+             ) {
+            if (url.getUrl().equals("") && !url.getLocalPath().equals("")){
+                newImageSet.add(url);
+            }
+        }
+        if (newImageSet.size()!=0){
+            event.setPhoto(newImageSet);
+            uploadImage(event);
+        }else{
+            if (getView()!=null){
+                getView().onTaskSuccess(TASK_EVENT_UPDATE,null);
+            }
+        }
+    }
+
     private class ImageUploadWrapper{
         PhotoUrl photo;
         boolean uploaded;
-
 
         ImageUploadWrapper(PhotoUrl photo, boolean uploaded) {
             this.photo = photo;
