@@ -80,7 +80,7 @@ public class SettingCalendarImportFragment extends BaseUiAuthFragment<CalendarIm
     }
 
     public void onBack() {
-
+        getBaseActivity().backFragment(new SettingCalendarPreferenceFragment());
     }
 
     @Override
