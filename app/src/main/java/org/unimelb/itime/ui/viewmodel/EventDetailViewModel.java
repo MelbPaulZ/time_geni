@@ -54,10 +54,10 @@ public class EventDetailViewModel extends CommonViewModel {
     private EventDetailMvpView mvpView;
     private Context context;
     private ObservableBoolean isLeftBtnSelected = new ObservableBoolean(false), isRightBtnSelected = new ObservableBoolean(false);
-    private String leftBtnText = "" , rightBtnText = "";
+    private String leftBtnText = "", rightBtnText = "";
 
     private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeConfirmVisibility,
-    inviteeUnconfirmVisibility, soloInvisible;
+            inviteeUnconfirmVisibility, soloInvisible;
 
 
     public EventDetailViewModel(EventPresenter<EventDetailMvpView> presenter) {
@@ -76,36 +76,36 @@ public class EventDetailViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mvpView!=null){
+                if (mvpView != null) {
                     mvpView.viewInCalendar();
                 }
             }
         };
     }
 
-    public View.OnClickListener gotoGridView(){
+    public View.OnClickListener gotoGridView() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mvpView!=null){
+                if (mvpView != null) {
                     mvpView.gotoGridView();
                 }
             }
         };
     }
 
-    public View.OnClickListener toResponse(){
+    public View.OnClickListener toResponse() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mvpView!=null){
+                if (mvpView != null) {
                     mvpView.toResponse();
                 }
             }
         };
     }
 
-    public View.OnClickListener createEventFromThisTemplate(){
+    public View.OnClickListener createEventFromThisTemplate() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,7 +113,7 @@ public class EventDetailViewModel extends CommonViewModel {
                 Event cpyEvent = EventUtil.copyEvent(event);
                 String eventUid = AppUtil.generateUuid();
                 cpyEvent.setEventUid(eventUid);
-                for (Invitee invitee : cpyEvent.getInvitee()){
+                for (Invitee invitee : cpyEvent.getInvitee()) {
                     invitee.setEventUid(eventUid);
                     invitee.setStatus(Invitee.STATUS_NEEDSACTION); // maybe need to check if it is host
                     String inviteeUid = AppUtil.generateUuid();
@@ -124,7 +124,7 @@ public class EventDetailViewModel extends CommonViewModel {
                 cpyEvent.setTimeslot(new ArrayList<Timeslot>());
                 cpyEvent.setPhoto(new ArrayList<PhotoUrl>());
 
-                if (mvpView!=null){
+                if (mvpView != null) {
                     mvpView.createEventFromThisTemplate(cpyEvent);
                 }
             }
@@ -146,8 +146,8 @@ public class EventDetailViewModel extends CommonViewModel {
             @Override
             public void onClick(View view) {
                 Timeslot timeslot = null;
-                for (SubTimeslotViewModel viewModel: wrapperTimeSlotList){
-                    if (viewModel.getWrapper().isSelected()){
+                for (SubTimeslotViewModel viewModel : wrapperTimeSlotList) {
+                    if (viewModel.getWrapper().isSelected()) {
                         timeslot = (Timeslot) viewModel.getWrapper().getTimeSlot();
                         break;
                     }
@@ -169,23 +169,23 @@ public class EventDetailViewModel extends CommonViewModel {
 //    }
 
 
-    public View.OnClickListener acceptEvent(){
+    public View.OnClickListener acceptEvent() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
-                if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+                if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
                     // todo implement update only this
                     presenter.acceptEvent(event.getCalendarUid(),
                             event.getEventUid(),
                             EventPresenter.UPDATE_ALL,
                             orgEvent.getStartTime());
-                }else {
+                } else {
                     HashMap<String, Object> params = new HashMap<>();
-                    ArrayList<String> timeslotUids=  new ArrayList<>();
-                    for (SubTimeslotViewModel viewModel: wrapperTimeSlotList){
-                        if(viewModel.getWrapper().isSelected()){
+                    ArrayList<String> timeslotUids = new ArrayList<>();
+                    for (SubTimeslotViewModel viewModel : wrapperTimeSlotList) {
+                        if (viewModel.getWrapper().isSelected()) {
                             Timeslot timeslot = (Timeslot) viewModel.getWrapper().getTimeSlot();
                             timeslotUids.add(timeslot.getTimeslotUid());
                         }
@@ -201,29 +201,29 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
-    public View.OnClickListener quitEvent(){
+    public View.OnClickListener quitEvent() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
                 if (EventUtil.isEventConfirmed(context, event)) {
                     // TODO: 4/1/17 repeat event popup window
-                    if (event.getRecurrence().length==0) {
+                    if (event.getRecurrence().length == 0) {
                         // non-repeat event quit
                         presenter.quitEvent(event.getCalendarUid(), event.getEventUid(), EventPresenter.UPDATE_ALL, orgEvent.getStartTime());
-                    }else{
+                    } else {
                         // repeat event quit
                         popupRepeatQuit(orgEvent);
                     }
-                }else {
+                } else {
                     presenter.rejectTimeslots(event.getCalendarUid(), event.getEventUid());
                 }
             }
         };
     }
 
-    private void popupRepeatQuit(final Event orgEvent){
-        ActionSheetDialog actionSheetDialog= new ActionSheetDialog(getContext())
+    private void popupRepeatQuit(final Event orgEvent) {
+        ActionSheetDialog actionSheetDialog = new ActionSheetDialog(getContext())
                 .builder()
                 .setCancelable(true)
                 .setCanceledOnTouchOutside(true)
@@ -250,7 +250,7 @@ public class EventDetailViewModel extends CommonViewModel {
         actionSheetDialog.show();
     }
 
-    public View.OnClickListener rejectAll(){
+    public View.OnClickListener rejectAll() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -280,7 +280,7 @@ public class EventDetailViewModel extends CommonViewModel {
                                     event.getEventUid(),
                                     EventPresenter.UPDATE_ALL,
                                     orgEvent.getStartTime());
-                        }else {
+                        } else {
                             presenter.rejectTimeslots(event.getCalendarUid(), event.getEventUid());
                         }
 
@@ -293,115 +293,128 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
-
-
-    private void resetState(){
+    private void resetState() {
         resetLeftBtn();
         resetRightBtn();
     }
 
     // left buttons
 
-    public void resetLeftBtn(){
+    public void resetLeftBtn() {
         Invitee me = EventUtil.getSelfInInvitees(context, event);
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
             // event has been confirmed by host
-            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)) {
                 setIsLeftBtnSelected(true);
                 setLeftBtnText(context.getString(R.string.accepted));
-            }else{
+            } else {
                 setIsLeftBtnSelected(false);
                 setLeftBtnText(context.getString(R.string.accept));
             }
-        }else if (event.getStatus().equals(Event.STATUS_PENDING) ||
-                event.getStatus().equals(Event.STATUS_UPDATING)){
-            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+        } else if (event.getStatus().equals(Event.STATUS_PENDING) ||
+                event.getStatus().equals(Event.STATUS_UPDATING)) {
+            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)) {
                 setIsLeftBtnSelected(true);
                 setLeftBtnText(context.getString(R.string.accepted));
-            }else{
+            } else {
                 setIsLeftBtnSelected(false);
                 setLeftBtnText(context.getString(R.string.accept));
             }
-        }else if (event.getStatus().equals(Event.STATUS_CANCELLED)){
+        } else if (event.getStatus().equals(Event.STATUS_CANCELLED)) {
             setIsLeftBtnSelected(false);
             setLeftBtnText(context.getString(R.string.accept));
         }
     }
 
 
-
-    public boolean getLeftBtnClickable(List<SubTimeslotViewModel> viewModels){
+    public boolean getLeftBtnEnable(List<SubTimeslotViewModel> viewModels) {
         Invitee me = EventUtil.getSelfInInvitees(context, this.event);
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
             // event has been confirmed by host
-            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
-        }else if (event.getStatus().equals(Event.STATUS_PENDING) ||
-                event.getStatus().equals(Event.STATUS_UPDATING)){
-            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+        } else if (event.getStatus().equals(Event.STATUS_PENDING) ||
+                event.getStatus().equals(Event.STATUS_UPDATING)) {
+            if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)) {
                 return false;
-            }else if (me.getStatus().equals(Invitee.STATUS_NEEDSACTION)){
-                if (TimeSlotUtil.isAtLeastOneWrapperSelected(viewModels)){
+            } else if (me.getStatus().equals(Invitee.STATUS_NEEDSACTION)) {
+                if (TimeSlotUtil.isAtLeastOneWrapperSelected(viewModels)) {
                     return true;
-                }else {
+                } else {
                     return false;
                 }
             }
+        } else if (event.getStatus().equals(Event.STATUS_CANCELLED)){
+            if (TimeSlotUtil.isAtLeastOneWrapperSelected(viewModels)){
+                return true;
+            }else{
+                return false;
+            }
         }
+        Toast.makeText(context, "todo: event status: " + event.getStatus(), Toast.LENGTH_SHORT).show();
         return true;
     }
 
 
-
     // right buttons
-    private void resetRightBtn(){
+    private void resetRightBtn() {
         Invitee me = EventUtil.getSelfInInvitees(context, event);
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
             // event has been confirmed by host
-            if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
+            if (me.getStatus().equals(Invitee.STATUS_DECLINED)) {
                 setIsRightBtnSelected(true);
                 setRightBtnText(context.getString(R.string.quitted));
-            }else{
+            } else {
                 setIsRightBtnSelected(false);
                 setRightBtnText(context.getString(R.string.quit));
             }
-        }else if (event.getStatus().equals(Event.STATUS_PENDING) || event.getStatus().equals(Event.STATUS_UPDATING)){
-            if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
+        } else if (event.getStatus().equals(Event.STATUS_PENDING) || event.getStatus().equals(Event.STATUS_UPDATING)) {
+            if (me.getStatus().equals(Invitee.STATUS_DECLINED)) {
                 setIsRightBtnSelected(true);
                 setRightBtnText(context.getString(R.string.all_rejected));
-            }else{
+            } else {
                 setIsRightBtnSelected(false);
                 setRightBtnText(context.getString(R.string.reject_all));
             }
-        }else if (event.getStatus().equals(Event.STATUS_CANCELLED)){
+        } else if (event.getStatus().equals(Event.STATUS_CANCELLED)) {
             setIsRightBtnSelected(true);
             setRightBtnText(context.getString(R.string.quitted));
         }
     }
 
-    public boolean getRightBtnClickable(List<SubTimeslotViewModel> viewModels){
+    public boolean getRightBtnEnable(List<SubTimeslotViewModel> viewModels) {
         Invitee me = EventUtil.getSelfInInvitees(context, this.event);
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
             // event has been confirmed by host
-            if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
+            if (me.getStatus().equals(Invitee.STATUS_DECLINED)) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
-        }else if (event.getStatus().equals(Event.STATUS_PENDING) || event.getStatus().equals(Event.STATUS_UPDATING)){
-            if (me.getStatus().equals(Invitee.STATUS_DECLINED)){
+        } else if (event.getStatus().equals(Event.STATUS_PENDING) || event.getStatus().equals(Event.STATUS_UPDATING)) {
+            if (me.getStatus().equals(Invitee.STATUS_DECLINED)) {
                 return false;
-            }else if (TimeSlotUtil.isAtLeastOneWrapperSelected(viewModels)){
-                return false;
-            }else{
-                Log.i("123", "getRightBtnClickable: ");
-                return true;
+            } else if (me.getStatus().equals(Invitee.STATUS_ACCEPTED)) {
+                if (TimeSlotUtil.isAtLeastOneWrapperSelected(viewModels)){
+                    return false;
+                }else{
+                    return true;
+                }
+            } else if (me.getStatus().equals(Invitee.STATUS_NEEDSACTION)) {
+                if (TimeSlotUtil.isAtLeastOneWrapperSelected(viewModels)) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
+        }else if (event.getStatus().equals(Event.STATUS_CANCELLED)) {
+            return false;
         }
-        // TODO: 3/1/17 cancelled panduan
+
+        Toast.makeText(context, "wrong status :" + event.getStatus(), Toast.LENGTH_SHORT).show();
         return true;
     }
 
@@ -419,37 +432,36 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
-    public int confirmTimeVisibility(Event event){
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+    public int confirmTimeVisibility(Event event) {
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
             return View.VISIBLE;
-        }else{
+        } else {
             return View.GONE;
         }
     }
 
-    public int timeslotListVisibility(Event event){
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+    public int timeslotListVisibility(Event event) {
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
             return View.GONE;
-        }else{
+        } else {
             return View.VISIBLE;
         }
     }
 
-    public int getMessageStatusColor(Event event){
-        if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
+    public int getMessageStatusColor(Event event) {
+        if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
             return context.getResources().getColor(R.color.color_63ADF2);
-        }else{
+        } else {
             return context.getResources().getColor(R.color.color_FF9600);
         }
     }
 
-    public View.OnClickListener onClickHostQuit(final Event event){
+    public View.OnClickListener onClickHostQuit(final Event event) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mvpView!=null) {
+                if (mvpView != null) {
                     // TODO: 8/12/2016 quit event update server and local
-
 
 
                     Toast.makeText(context, "Quit This Event, To do", Toast.LENGTH_SHORT).show();
@@ -467,25 +479,25 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
-
     /**
      * this method use for update event by wrapperlists
+     *
      * @param wrapperTimeSlot
-     * @param posStr if the timeslot is selected, update status to posStr
-     * @param negStr if the timeslot is unselected, update status to negStr
+     * @param posStr          if the timeslot is selected, update status to posStr
+     * @param negStr          if the timeslot is unselected, update status to negStr
      */
-    private void updateTimeslotStatus(WrapperTimeSlot wrapperTimeSlot, String posStr, String negStr){
+    private void updateTimeslotStatus(WrapperTimeSlot wrapperTimeSlot, String posStr, String negStr) {
         Timeslot ts = (Timeslot) wrapperTimeSlot.getTimeSlot();
         Timeslot timeslot = TimeSlotUtil.getTimeSlot(event, ts);
-        if (wrapperTimeSlot.isSelected()){
+        if (wrapperTimeSlot.isSelected()) {
             timeslot.setStatus(posStr);
-        }else{
+        } else {
             timeslot.setStatus(negStr);
         }
     }
 
     @BindingAdapter({"bind:url"})
-    public static void bindUrlHelper(ImageView view,String url){
+    public static void bindUrlHelper(ImageView view, String url) {
         EventUtil.bindUrlHelper(view.getContext(), url, view, new CircleTransform());
     }
 
@@ -503,71 +515,70 @@ public class EventDetailViewModel extends CommonViewModel {
 
 
     //***********************************************************
-    public int confirmVisibility(Event event){
-        if (event.getEventType().equals(Event.TYPE_SOLO)){
+    public int confirmVisibility(Event event) {
+        if (event.getEventType().equals(Event.TYPE_SOLO)) {
             return View.GONE;
         }
         if (event.getStatus().equals(Event.STATUS_CONFIRMED) ||
-                (event.getStatus().equals(Event.STATUS_CANCELLED) && isCancelledEventConfirmed(event))){
+                (event.getStatus().equals(Event.STATUS_CANCELLED) && isCancelledEventConfirmed(event))) {
             return View.VISIBLE;
-        }else{
+        } else {
             return View.GONE;
         }
     }
 
-    public int unconfirmVisibility(Event event){
+    public int unconfirmVisibility(Event event) {
         if (event.getStatus().equals(Event.STATUS_PENDING) ||
                 event.getStatus().equals(Event.STATUS_UPDATING) ||
-                event.getStatus().equals(Event.STATUS_CANCELLED)){
-            if (!isUserHostOfEvent(context, event)){
+                event.getStatus().equals(Event.STATUS_CANCELLED)) {
+            if (!isUserHostOfEvent(context, event)) {
                 Log.i("debug", "unconfirmVisibility: 2");
                 return View.VISIBLE;
-            }else{
+            } else {
                 return View.GONE;
             }
-        }else{
+        } else {
             Log.i("debug", "unconfirmVisibility: 1");
             return View.GONE;
         }
     }
 
-    private boolean isCancelledEventConfirmed(Event event){
-        if (event.getConfirmedCount()>0){
+    private boolean isCancelledEventConfirmed(Event event) {
+        if (event.getConfirmedCount() > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public int unconfirmHostVisibility(Event event){
+    public int unconfirmHostVisibility(Event event) {
         if ((event.getStatus().equals(Event.STATUS_PENDING) ||
-                event.getStatus().equals(Event.STATUS_UPDATING) )&&
-                isUserHostOfEvent(context, event)){
+                event.getStatus().equals(Event.STATUS_UPDATING)) &&
+                isUserHostOfEvent(context, event)) {
             return View.VISIBLE;
-        }else if ((event.getStatus().equals(Event.STATUS_CANCELLED) && !isCancelledEventConfirmed(event))){
+        } else if ((event.getStatus().equals(Event.STATUS_CANCELLED) && !isCancelledEventConfirmed(event))) {
             if (isUserHostOfEvent(context, event)) {
                 return View.VISIBLE;
-            }else{
+            } else {
                 return View.GONE;
             }
-        }
-        else{
+        } else {
             return View.GONE;
         }
     }
 
-    public int getLocationVisibility(Event event){
-        if (!event.getLocation().equals("")){
+    public int getLocationVisibility(Event event) {
+        if (!event.getLocation().equals("")) {
             return View.VISIBLE;
-        }else{
+        } else {
             return View.GONE;
         }
     }
 
-    public int getNoteVisibility(Event event){
-        if (!event.getDescription().equals("")){
+    public int getNoteVisibility(Event event) {
+        if (!event.getDescription().equals("")) {
             return View.VISIBLE;
-        }else{
+        } else {
             return View.GONE;
         }
     }
@@ -577,9 +588,9 @@ public class EventDetailViewModel extends CommonViewModel {
 
     @Bindable
     public int getSoloInvisible() {
-        if (!EventUtil.isGroupEvent(context, event)){
+        if (!EventUtil.isGroupEvent(context, event)) {
             return View.GONE;
-        }else{
+        } else {
             return View.VISIBLE;
         }
     }
@@ -655,11 +666,10 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
-
     /**
      * the view model of timeslot item view
      */
-    public static class SubTimeslotViewModel extends BaseObservable{
+    public static class SubTimeslotViewModel extends BaseObservable {
         private WrapperTimeSlot wrapper;
         private EventDetailMvpView mvpView;
         private boolean iconSelected;
@@ -686,17 +696,18 @@ public class EventDetailViewModel extends CommonViewModel {
 
         public void setWrapper(WrapperTimeSlot wrapper) {
             this.wrapper = wrapper;
+            setIconSelected(wrapper.isSelected());
             notifyPropertyChanged(BR.wrapper);
         }
 
-        public View.OnClickListener onLeftPartClicked(){
+        public View.OnClickListener onLeftPartClicked() {
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     wrapper.setSelected(!wrapper.isSelected());
                     setIconSelected(wrapper.isSelected());
                     // call back to fragment, and let outter viewmodel reload page
-                    if (mvpView!=null){
+                    if (mvpView != null) {
                         mvpView.onTimeslotClick(wrapper);
                     }
                 }
@@ -714,12 +725,12 @@ public class EventDetailViewModel extends CommonViewModel {
             notifyPropertyChanged(BR.iconSelected);
         }
 
-        public View.OnClickListener onRightPartClicked(){
+        public View.OnClickListener onRightPartClicked() {
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //todo
-                    if (mvpView!=null){
+                    if (mvpView != null) {
                         mvpView.viewInviteeResponse((Timeslot) wrapper.getTimeSlot());
                     }
                 }
@@ -730,13 +741,13 @@ public class EventDetailViewModel extends CommonViewModel {
             return mvpView;
         }
 
-        public String getPeopleNum(ITimeTimeSlotInterface timeslot, Map<String, List<EventUtil.StatusKeyStruct>> adapterData){
+        public String getPeopleNum(ITimeTimeSlotInterface timeslot, Map<String, List<EventUtil.StatusKeyStruct>> adapterData) {
 
             List<EventUtil.StatusKeyStruct> structs = adapterData.get(timeslot.getTimeslotUid());
             int count = 0;
-            for (EventUtil.StatusKeyStruct struct: structs
+            for (EventUtil.StatusKeyStruct struct : structs
                     ) {
-                if (struct.getStatus().equals("accepted")){
+                if (struct.getStatus().equals("accepted")) {
                     count = struct.getInviteeList().size();
                     break;
                 }

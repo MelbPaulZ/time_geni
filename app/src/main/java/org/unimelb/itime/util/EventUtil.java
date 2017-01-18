@@ -355,6 +355,7 @@ public class EventUtil {
     }
 
     public static String getEventConfirmStatus(Context context, Event event) {
+
         if (isUserHostOfEvent(context, event)) {
             if (event.getStatus().equals(Event.STATUS_PENDING)) {
                 return context.getString(R.string.You_have_not_confirmed_this_event);
@@ -593,40 +594,6 @@ public class EventUtil {
         Calendar updateTimeCalendar = Calendar.getInstance();
         updateTimeCalendar.setTime(d);
         return updateTimeCalendar;
-    }
-
-
-    public static void addSoloEventBasicInfo(Context context, Event event) {
-        event.setCalendarUid(CalendarUtil.getInstance(context).getCalendar().get(0).getCalendarUid());
-        event.setStatus(Event.STATUS_CONFIRMED);
-        event.setEventId(""); // might need change later, ask chuandong what is eventId
-        event.setUserUid(UserUtil.getInstance(context).getUserUid());
-        event.setEventType(Event.TYPE_SOLO);
-        event.setInviteeVisibility(1);
-        event.setFreebusyAccess(1); // ask chuandong
-    }
-
-    public static void regenerateRelatedUid(Event event) {
-        // change eventUid
-        String newEventUid = AppUtil.generateUuid();
-        event.setEventUid(newEventUid);
-        // change inviteeEventUid
-        for (Invitee invitee : event.getInvitee()) {
-            invitee.setEventUid(newEventUid);
-            invitee.setInviteeUid(AppUtil.generateUuid());
-        }
-
-        // change timeslotEventUid
-        for (Timeslot timeslot : event.getTimeslot()) {
-            timeslot.setEventUid(newEventUid);
-            timeslot.setTimeslotUid(AppUtil.generateUuid());
-        }
-
-        // change PhotoEventUid
-        for (PhotoUrl photoUrl : event.getPhoto()) {
-            photoUrl.setEventUid(newEventUid);
-            photoUrl.setPhotoUid(AppUtil.generateUuid());
-        }
     }
 
     public static boolean isUserHostOfEvent(Context context, Event event) {

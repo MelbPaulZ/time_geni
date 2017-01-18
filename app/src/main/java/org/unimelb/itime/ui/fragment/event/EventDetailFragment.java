@@ -255,6 +255,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         if (EventUtil.isUserHostOfEvent(getContext(), event)) {
             EventEditFragment eventEditFragment = new EventEditFragment();
             Event cpyEvent = EventUtil.copyEvent(event);
+            cpyEvent.setStatus(Event.STATUS_UPDATING); // from here to edit event, must be updating
             eventEditFragment.setEvent(cpyEvent);
             getBaseActivity().openFragment(eventEditFragment);
         }

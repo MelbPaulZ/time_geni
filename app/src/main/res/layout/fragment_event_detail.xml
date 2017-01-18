@@ -571,7 +571,7 @@
         <!--android:layout_marginLeft="40dp"-->
         <!--android:layout_marginTop="10dp"-->
         <!--android:background="@drawable/selector_event_detail_btn_bg_left"-->
-        <!--android:clickable="@{contentVM.getLeftBtnClickable(contentVM.event)}"-->
+        <!--android:clickable="@{contentVM.getLeftBtnEnable(contentVM.event)}"-->
         <!--android:onClick="@{contentVM.onClickInviteeLeftBtn()}"-->
         <!--android:paddingLeft="10dp"-->
         <!--android:paddingRight="10dp"-->
@@ -590,7 +590,7 @@
         <!--android:layout_marginBottom="10dp"-->
         <!--android:layout_marginRight="40dp"-->
         <!--android:layout_marginTop="10dp"-->
-        <!--android:clickable="@{contentVM.getRightBtnClickable(contentVM.event)}"-->
+        <!--android:clickable="@{contentVM.getRightBtnEnable(contentVM.event)}"-->
         <!--android:onClick="@{contentVM.onInviteeClickRightBtn()}"-->
         <!--android:paddingLeft="10dp"-->
         <!--android:paddingRight="10dp"-->
@@ -626,7 +626,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_left"
                 android:textSize="17sp"
                 android:text="@{contentVM.leftBtnText}"
-                android:enabled="@{contentVM.getLeftBtnClickable(contentVM.wrapperTimeSlotList)}"
+                android:enabled="@{contentVM.getLeftBtnEnable(contentVM.wrapperTimeSlotList)}"
                 android:selected="@{contentVM.isLeftBtnSelected}"
                 android:onClick="@{contentVM.acceptEvent()}"
                 />
@@ -646,7 +646,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_right"
                 android:textSize="17sp"
                 android:text="@{contentVM.rightBtnText}"
-                android:enabled="@{contentVM.getRightBtnClickable(contentVM.wrapperTimeSlotList)}"
+                android:enabled="@{contentVM.getRightBtnEnable(contentVM.wrapperTimeSlotList)}"
                 android:selected="@{contentVM.isRightBtnSelected}"
                 android:onClick="@{contentVM.quitEvent()}"/>
         </RelativeLayout>
@@ -675,7 +675,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_left"
                 android:textSize="17sp"
                 android:text="@{contentVM.leftBtnText}"
-                android:enabled="@{contentVM.getLeftBtnClickable(contentVM.wrapperTimeSlotList)}"
+                android:enabled="@{contentVM.getLeftBtnEnable(contentVM.wrapperTimeSlotList)}"
                 android:selected="@{contentVM.isLeftBtnSelected}"
                 android:onClick="@{contentVM.acceptEvent()}"
                 />
@@ -695,7 +695,7 @@
                 android:textColor="@drawable/selector_event_detail_btn_text_right"
                 android:textSize="17sp"
                 android:text="@{contentVM.rightBtnText}"
-                android:enabled="@{contentVM.getRightBtnClickable(contentVM.wrapperTimeSlotList)}"
+                android:enabled="@{contentVM.getRightBtnEnable(contentVM.wrapperTimeSlotList)}"
                 android:selected="@{contentVM.isRightBtnSelected}"
                 android:onClick="@{contentVM.rejectAll()}"
                 />
