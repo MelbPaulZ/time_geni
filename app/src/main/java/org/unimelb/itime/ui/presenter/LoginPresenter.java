@@ -171,13 +171,16 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
 
             @Override
             public void onNext(HttpResult<UserLoginRes> ret) {
-                if(getView() == null){
-                    return;
-                }
                 if (ret.getStatus() != 1 ){
-                    getView().onTaskError(TASK_SIGNUP, ret.getInfo());
+                    if(getView() != null){
+                        getView().onTaskError(TASK_SIGNUP, ret.getInfo());
+                    }
                 }else{
-                    getView().onTaskSuccess(TASK_SIGNUP, ret.getData());
+                    AuthUtil.saveJwtToken(context, ret.getData().getToken());
+                    UserUtil.getInstance(context).login(ret.getData());
+                    if(getView() != null){
+                        getView().onTaskSuccess(TASK_SIGNUP, ret.getData());
+                    }
                 }
             }
         };

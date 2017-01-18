@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentSignupPickAvatarBinding;
+import org.unimelb.itime.restfulresponse.UserLoginRes;
 import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
@@ -73,6 +74,8 @@ public class SignupPickAvatarFragment extends LoginBaseFragment implements Login
 
         if(taskId == LoginPresenter.TASK_SIGNUP){
             SignupFindFriendFragment friendFragment = new SignupFindFriendFragment();
+            UserLoginRes res = (UserLoginRes) data;
+            friendFragment.setData(res.getUser());
             getBaseActivity().openFragment(friendFragment);
         }
     }
