@@ -18,6 +18,8 @@ import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.util.AuthUtil;
 
+import static com.avos.avoscloud.LogUtil.log.show;
+
 /**
  * Created by Paul on 20/12/2016.
  */
@@ -85,11 +87,12 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
+        hideProgressDialog();
         if(taskId == LoginPresenter.TASK_LOGIN){
             successLogin();
         }
@@ -97,7 +100,10 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
 
     @Override
     public void onTaskError(int taskId, Object data) {
-
+        hideProgressDialog();
+        if(taskId == LoginPresenter.TASK_LOGIN){
+            showDialog("error", (String) data);
+        }
     }
 
 }
