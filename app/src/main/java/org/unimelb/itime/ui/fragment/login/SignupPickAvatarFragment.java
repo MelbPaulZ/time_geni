@@ -46,8 +46,6 @@ public class SignupPickAvatarFragment extends LoginBaseFragment implements Login
                 break;
             }
             case LoginViewModel.TO_FIND_FRIEND_FRAG:{
-                SignupFindFriendFragment friendFragment = new SignupFindFriendFragment();
-                getBaseActivity().openFragment(friendFragment);
                 break;
             }
             case LoginViewModel.TO_TERM_AGREEMENT_FRAG:{
@@ -71,6 +69,11 @@ public class SignupPickAvatarFragment extends LoginBaseFragment implements Login
             }else{
                 presenter.uploadImageToLeanCloud(loginUser, loginUser.getPhoto());
             }
+        }
+
+        if(taskId == LoginPresenter.TASK_SIGNUP){
+            SignupFindFriendFragment friendFragment = new SignupFindFriendFragment();
+            getBaseActivity().openFragment(friendFragment);
         }
     }
 

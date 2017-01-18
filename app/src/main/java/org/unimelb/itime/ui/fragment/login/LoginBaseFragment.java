@@ -30,6 +30,11 @@ public class LoginBaseFragment extends BaseUiAuthFragment<LoginMvpView, LoginPre
     protected LoginViewModel loginViewModel;
     protected User loginUser;
     protected AlertDialog dialog;
+
+    public LoginBaseFragment(){
+        this.loginUser = new User();
+    }
+
     @Override
     public LoginPresenter createPresenter() {
         return new LoginPresenter(getContext());
@@ -41,7 +46,6 @@ public class LoginBaseFragment extends BaseUiAuthFragment<LoginMvpView, LoginPre
         loginViewModel = new LoginViewModel(getPresenter());
         softKeyboardStateUtil = new SoftKeyboardStateUtil(getView());
         bindSoftKeyboardEvent();
-        loginUser = new User();
         loginViewModel.setLoginUser(loginUser); // maintain consistency of viewmodel and fragment
     }
 
@@ -67,6 +71,9 @@ public class LoginBaseFragment extends BaseUiAuthFragment<LoginMvpView, LoginPre
     }
 
 
+    /**
+     * called if successfully login
+     */
     public void successLogin(){
         PushService.setDefaultPushCallback(getActivity().getApplication(), MainActivity.class);
         AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {

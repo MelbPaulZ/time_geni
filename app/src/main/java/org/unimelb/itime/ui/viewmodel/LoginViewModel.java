@@ -46,6 +46,7 @@ public class LoginViewModel extends AndroidViewModel{
     public final static int TO_RESET_PASSWORD_FRAG = 7;
     public final static int TO_SET_PASSWORD_FRAG = 8;
     public final static int TO_TERM_AGREEMENT_FRAG = 9;
+    public final static int TO_CALENDAR = 10;
 
 
     public LoginViewModel(LoginPresenter presenter){
@@ -221,9 +222,8 @@ public class LoginViewModel extends AndroidViewModel{
             @Override
             public void onClick(View v) {
                 if (mvpView!=null){
-//                    mvpView.(TO_CALENDAR);
+                    mvpView.onPageChange(TO_CALENDAR);
                 }
-                Toast.makeText(getContext(), "tocalendar here", Toast.LENGTH_SHORT).show();
             }
         };
     }
