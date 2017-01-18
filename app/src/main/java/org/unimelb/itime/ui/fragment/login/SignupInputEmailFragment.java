@@ -35,6 +35,8 @@ public class SignupInputEmailFragment extends LoginBaseFragment implements Login
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        loginUser.setEmail("chuandongy@student.unimelb.edu.au");
+        loginUser.setUserId("chuandongy@student.unimelb.edu.au");
         binding.setLoginVM(loginViewModel);
     }
 

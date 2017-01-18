@@ -13,7 +13,6 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
-import org.unimelb.itime.util.DefaultPhotoUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,14 +81,21 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-    public void signup(){
-        if (loginUser.getPhoto().length()==0){
-            presenter.uploadImageToLeanCloud(loginUser,
-                    DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getPersonalAlias()));
-        }else{
-            presenter.uploadImageToLeanCloud(loginUser, loginUser.getPhoto());
-        }
-    }
+
+//    public View.OnClickListener onClickSignUpBtn(){
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (loginUser.getPhoto().length()==0){
+//                    presenter.uploadImageToLeanCloud(loginUser,
+//                            DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getPersonalAlias()));
+//                }else{
+//                    presenter.uploadImageToLeanCloud(loginUser, loginUser.getPhoto());
+//                }
+//            }
+//        };
+//    }
+
 
     public View.OnClickListener onClickInputEmailBtn(final int task){
         return new View.OnClickListener() {

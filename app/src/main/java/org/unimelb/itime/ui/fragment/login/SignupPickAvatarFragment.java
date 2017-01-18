@@ -13,6 +13,7 @@ import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
+import org.unimelb.itime.util.DefaultPhotoUtil;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 /**
@@ -57,16 +58,25 @@ public class SignupPickAvatarFragment extends LoginBaseFragment implements Login
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
-
+        hideProgressDialog();
+        if(taskId == LoginPresenter.TASK_VALIDATE){
+            if (loginUser.getPhoto().length()==0){
+                presenter.uploadImageToLeanCloud(loginUser,
+                        DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getPersonalAlias()));
+            }else{
+                presenter.uploadImageToLeanCloud(loginUser, loginUser.getPhoto());
+            }
+        }
     }
 
     @Override
     public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
         if(taskId == LoginPresenter.TASK_VALIDATE){
             ValidateRes res = (ValidateRes)data;
             showDialog(res.getTitle(), res.getContent());
