@@ -54,8 +54,8 @@ public class EventDetailActivity extends EmptyActivity {
             throw new RuntimeException("event detail activity dont have parameters eventUid");
         }
         long startTime = intent.getLongExtra("start_time",0);
-        event = DBManager.getInstance(getApplicationContext()).getEvent(eventUid);
-//        event = DBManager.getInstance(getApplicationContext()).find(Event.class, "eventUid", eventUid).get(0);
+//        event = DBManager.getInstance(getApplicationContext()).getEvent(eventUid);
+        event = DBManager.getInstance(getApplicationContext()).find(Event.class, "eventUid", eventUid).get(0);
     }
 
     @Override
