@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.FragmentLoginSetPasswordBinding;
+import org.unimelb.itime.databinding.FragmentSignupSetPasswordBinding;
 import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
@@ -22,15 +22,15 @@ import org.unimelb.itime.ui.viewmodel.LoginViewModel;
  * Created by Paul on 19/12/2016.
  */
 
-public class LoginSetPWFragment extends LoginBaseFragment implements LoginMvpView{
+public class SignupSetPWFragment extends LoginBaseFragment implements LoginMvpView{
 
-    private FragmentLoginSetPasswordBinding binding;
+    private FragmentSignupSetPasswordBinding binding;
     private Dialog pwTooSimpleDialog;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_set_password,container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup_set_password,container, false);
         return binding.getRoot();
     }
 
@@ -84,11 +84,11 @@ public class LoginSetPWFragment extends LoginBaseFragment implements LoginMvpVie
     public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
-                closeFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+                closeFragment(this, (SignupInputEmailFragment)getFragmentManager().findFragmentByTag(SignupInputEmailFragment.class.getSimpleName()));
                 break;
             }
             case LoginViewModel.TO_PICK_AVATAR_FRAG:{
-                LoginPickAvatarFragment avatarFragment = (LoginPickAvatarFragment)getFragmentManager().findFragmentByTag(LoginPickAvatarFragment.class.getSimpleName());
+                SignupPickAvatarFragment avatarFragment = (SignupPickAvatarFragment)getFragmentManager().findFragmentByTag(SignupPickAvatarFragment.class.getSimpleName());
                 avatarFragment.setLoginUser(loginUser.getCopyLoginUser());
                 openFragment(this, avatarFragment);
                 break;

@@ -1,18 +1,15 @@
 package org.unimelb.itime.ui.fragment.login;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.FragmentLoginInputEmailBinding;
+import org.unimelb.itime.databinding.FragmentSignupInputEmailBinding;
 import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
@@ -21,18 +18,18 @@ import org.unimelb.itime.ui.viewmodel.LoginViewModel;
  * Created by yinchuandong on 15/12/16.
  */
 
-public class LoginInputEmailFragment extends LoginBaseFragment implements LoginMvpView {
+public class SignupInputEmailFragment extends LoginBaseFragment implements LoginMvpView {
 
     private final static String TAG = "LoginIndexFragment";
 
-    private FragmentLoginInputEmailBinding binding;
+    private FragmentSignupInputEmailBinding binding;
 
     private AlertDialog unsupportEmailDialog;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_input_email, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup_input_email, container, false);
         return binding.getRoot();
     }
 
@@ -68,7 +65,7 @@ public class LoginInputEmailFragment extends LoginBaseFragment implements LoginM
                 break;
             }
             case LoginViewModel.TO_SET_PASSWORD_FRAG:{
-                LoginSetPWFragment loginSetPWFragment = (LoginSetPWFragment)getFragmentManager().findFragmentByTag(LoginSetPWFragment.class.getSimpleName());
+                SignupSetPWFragment loginSetPWFragment = (SignupSetPWFragment)getFragmentManager().findFragmentByTag(SignupSetPWFragment.class.getSimpleName());
                 loginSetPWFragment.setLoginUser(loginUser.getCopyLoginUser());
                 openFragment(this, loginSetPWFragment);
                 break;

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.FragmentLoginFindFriendBinding;
+import org.unimelb.itime.databinding.FragmentResetPasswordSentBinding;
 import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
@@ -17,14 +17,14 @@ import org.unimelb.itime.ui.viewmodel.LoginViewModel;
  * Created by Paul on 20/12/2016.
  */
 
-public class LoginFindFriendFragment extends LoginBaseFragment implements LoginMvpView{
+public class ResetPasswordSentFragment extends LoginBaseFragment implements LoginMvpView {
 
-    private FragmentLoginFindFriendBinding binding;
+    private FragmentResetPasswordSentBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_find_friend, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password_sent, container, false);
         return binding.getRoot();
     }
 
@@ -41,9 +41,6 @@ public class LoginFindFriendFragment extends LoginBaseFragment implements LoginM
 
     @Override
     public void onLoginSucceed(int task) {
-        if (task == LoginViewModel.TO_CALENDAR){
-            successLogin();
-        }
 
     }
 
@@ -52,14 +49,23 @@ public class LoginFindFriendFragment extends LoginBaseFragment implements LoginM
 
     }
 
-
     @Override
     public void onPageChange(int task) {
-
+        switch(task){
+            case LoginViewModel.TO_INDEX_FRAG: {
+                closeFragment(this, (LoginIndexFragment) getFragmentManager().findFragmentByTag(LoginIndexFragment.class.getSimpleName()));
+                break;
+            }
+            case LoginViewModel.TO_RESET_PASSWORD_FRAG:{
+                closeFragment(this, (ResetPasswordFragment)getFragmentManager().findFragmentByTag(ResetPasswordFragment.class.getSimpleName()));
+                break;
+            }
+        }
     }
 
     @Override
     public void showErrorDialog(ValidateRes res) {
-
+        showDialog(res.getTitle(), res.getContent());
     }
+
 }

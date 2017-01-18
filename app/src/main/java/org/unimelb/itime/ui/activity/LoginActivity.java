@@ -2,29 +2,28 @@ package org.unimelb.itime.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.ui.fragment.login.LoginEmailSentFragment;
-import org.unimelb.itime.ui.fragment.login.LoginFindFriendFragment;
+import org.unimelb.itime.ui.fragment.login.ResetPasswordSentFragment;
+import org.unimelb.itime.ui.fragment.login.SignupFindFriendFragment;
 import org.unimelb.itime.ui.fragment.login.LoginFragment;
 import org.unimelb.itime.ui.fragment.login.LoginIndexFragment;
-import org.unimelb.itime.ui.fragment.login.LoginInputEmailFragment;
-import org.unimelb.itime.ui.fragment.login.LoginPickAvatarFragment;
-import org.unimelb.itime.ui.fragment.login.LoginResetPasswordFragment;
-import org.unimelb.itime.ui.fragment.login.LoginSetPWFragment;
+import org.unimelb.itime.ui.fragment.login.SignupInputEmailFragment;
+import org.unimelb.itime.ui.fragment.login.SignupPickAvatarFragment;
+import org.unimelb.itime.ui.fragment.login.ResetPasswordFragment;
+import org.unimelb.itime.ui.fragment.login.SignupSetPWFragment;
 
 public class LoginActivity extends EmptyActivity {
 
     private static final String TAG = "LoginActivity";
     private LoginIndexFragment indexFragment;
-    private LoginInputEmailFragment inputEmailFragment;
-    private LoginSetPWFragment setPWFragment;
-    private LoginPickAvatarFragment pickAvatarFragment;
+    private SignupInputEmailFragment inputEmailFragment;
+    private SignupSetPWFragment setPWFragment;
+    private SignupPickAvatarFragment pickAvatarFragment;
     private LoginFragment loginFragment;
-    private LoginResetPasswordFragment resetPasswordFragment;
-    private LoginEmailSentFragment sentFragment;
-    private LoginFindFriendFragment findFriendFragment;
+    private ResetPasswordFragment resetPasswordFragment;
+    private ResetPasswordSentFragment sentFragment;
+    private SignupFindFriendFragment findFriendFragment;
 
 
     @Override
@@ -39,19 +38,19 @@ public class LoginActivity extends EmptyActivity {
     private void initFragment(){
         indexFragment = new LoginIndexFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, indexFragment, indexFragment.getClassName()).hide(indexFragment).commit();
-        inputEmailFragment = new LoginInputEmailFragment();
+        inputEmailFragment = new SignupInputEmailFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, inputEmailFragment, inputEmailFragment.getClassName()).hide(inputEmailFragment).commit();
-        setPWFragment = new LoginSetPWFragment();
+        setPWFragment = new SignupSetPWFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, setPWFragment, setPWFragment.getClassName()).hide(setPWFragment).commit();
-        pickAvatarFragment = new LoginPickAvatarFragment();
+        pickAvatarFragment = new SignupPickAvatarFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, pickAvatarFragment, pickAvatarFragment.getClassName()).hide(pickAvatarFragment).commit();
         loginFragment = new LoginFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, loginFragment, loginFragment.getClassName()).hide(loginFragment).commit();
-        resetPasswordFragment = new LoginResetPasswordFragment();
+        resetPasswordFragment = new ResetPasswordFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, resetPasswordFragment, resetPasswordFragment.getClassName()).hide(resetPasswordFragment).commit();
-        sentFragment = new LoginEmailSentFragment();
+        sentFragment = new ResetPasswordSentFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, sentFragment, sentFragment.getClassName()).hide(sentFragment).commit();
-        findFriendFragment = new LoginFindFriendFragment();
+        findFriendFragment = new SignupFindFriendFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.login_framelayout, findFriendFragment, findFriendFragment.getClassName()).hide(findFriendFragment).commit();
     }
 

@@ -1,15 +1,12 @@
 package org.unimelb.itime.ui.fragment.login;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
@@ -96,11 +93,11 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
                 break;
             }
             case LoginViewModel.TO_RESET_PASSWORD_FRAG:{
-                openFragment(this, (LoginResetPasswordFragment)getFragmentManager().findFragmentByTag(LoginResetPasswordFragment.class.getSimpleName()));
+                openFragment(this, (ResetPasswordFragment)getFragmentManager().findFragmentByTag(ResetPasswordFragment.class.getSimpleName()));
                 break;
             }
             case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
-                openFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+                openFragment(this, (SignupInputEmailFragment)getFragmentManager().findFragmentByTag(SignupInputEmailFragment.class.getSimpleName()));
                 break;
             }
         }

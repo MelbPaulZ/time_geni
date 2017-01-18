@@ -1,41 +1,32 @@
 package org.unimelb.itime.ui.fragment.login;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.FragmentLoginPickAvatarBinding;
+import org.unimelb.itime.databinding.FragmentSignupPickAvatarBinding;
 import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
-import static android.R.id.empty;
-import static com.avos.avoscloud.LogUtil.log.show;
-import static org.unimelb.itime.R.id.dialog;
-
 /**
  * Created by Paul on 19/12/2016.
  */
 
-public class LoginPickAvatarFragment extends LoginBaseFragment implements LoginMvpView{
+public class SignupPickAvatarFragment extends LoginBaseFragment implements LoginMvpView{
 
-    private FragmentLoginPickAvatarBinding binding;
+    private FragmentSignupPickAvatarBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_pick_avatar, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup_pick_avatar, container, false);
         return binding.getRoot();
     }
 
@@ -71,11 +62,11 @@ public class LoginPickAvatarFragment extends LoginBaseFragment implements LoginM
     public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_SET_PASSWORD_FRAG:{
-                closeFragment(this, (LoginSetPWFragment)getFragmentManager().findFragmentByTag(LoginSetPWFragment.class.getSimpleName()));
+                closeFragment(this, (SignupSetPWFragment)getFragmentManager().findFragmentByTag(SignupSetPWFragment.class.getSimpleName()));
                 break;
             }
             case LoginViewModel.TO_FIND_FRIEND_FRAG:{
-                openFragment(this, (LoginFindFriendFragment)getFragmentManager().findFragmentByTag(LoginFindFriendFragment.class.getSimpleName()));
+                openFragment(this, (SignupFindFriendFragment)getFragmentManager().findFragmentByTag(SignupFindFriendFragment.class.getSimpleName()));
                 break;
             }
             case LoginViewModel.TO_TERM_AGREEMENT_FRAG:{

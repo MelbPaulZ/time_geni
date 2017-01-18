@@ -62,7 +62,7 @@ public class LoginIndexFragment extends LoginBaseFragment implements LoginMvpVie
     public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
-                openFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+                openFragment(this, (SignupInputEmailFragment)getFragmentManager().findFragmentByTag(SignupInputEmailFragment.class.getSimpleName()));
                 break;
             }
             case LoginViewModel.TO_LOGIN_FRAG:{

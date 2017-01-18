@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.FragmentLoginResetPasswordBinding;
+import org.unimelb.itime.databinding.FragmentResetPasswordBinding;
 import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
@@ -17,14 +17,14 @@ import org.unimelb.itime.ui.viewmodel.LoginViewModel;
  * Created by Paul on 20/12/2016.
  */
 
-public class LoginResetPasswordFragment extends LoginBaseFragment implements LoginMvpView {
+public class ResetPasswordFragment extends LoginBaseFragment implements LoginMvpView {
     private static final String TAG = "LoginResetPWFrag";
-    private FragmentLoginResetPasswordBinding binding;
+    private FragmentResetPasswordBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_reset_password, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false);
         return binding.getRoot();
     }
 
@@ -61,11 +61,11 @@ public class LoginResetPasswordFragment extends LoginBaseFragment implements Log
                 break;
             }
             case LoginViewModel.TO_EMAIL_SENT_FRAG:{
-                openFragment(this, (LoginEmailSentFragment)getFragmentManager().findFragmentByTag(LoginEmailSentFragment.class.getSimpleName()));
+                openFragment(this, (ResetPasswordSentFragment)getFragmentManager().findFragmentByTag(ResetPasswordSentFragment.class.getSimpleName()));
                 break;
             }
             case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
-                openFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+                openFragment(this, (SignupInputEmailFragment)getFragmentManager().findFragmentByTag(SignupInputEmailFragment.class.getSimpleName()));
                 break;
             }
         }
