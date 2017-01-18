@@ -15,6 +15,7 @@ import com.squareup.picasso.Transformation;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
@@ -48,11 +49,11 @@ public class InviteeResponseAdapter extends BaseAdapter{
         this.pending = new ArrayList<>();
         for (EventUtil.StatusKeyStruct structs: responses
              ) {
-            if (structs.getStatus().equals(Invitee.STATUS_ACCEPTED)){
+            if (structs.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
                 this.accepted.addAll(structs.getInviteeList());
-            }else if(structs.getStatus().equals(Invitee.STATUS_DECLINED)){
+            }else if(structs.getStatus().equals(Timeslot.STATUS_REJECTED)){
                 this.rejected.addAll(structs.getInviteeList());
-            }else if(structs.getStatus().equals(Invitee.STATUS_NEEDSACTION)){
+            }else if(structs.getStatus().equals(Timeslot.STATUS_PENDING)){
                 this.pending.addAll(structs.getInviteeList());
             }
         }

@@ -55,10 +55,13 @@ public class PhotoAdapter extends ArrayAdapter<PhotoUrl> {
                 localValid = true;
             }
         }
+
         if (localValid){
             Picasso.with(context).load(new File(url.getLocalPath())).placeholder(R.drawable.invitee_selected_default_picture).error(R.drawable.ic_photo_loading).resize(120,120).centerCrop().into(imageView);
         }else{
-            Picasso.with(context).load(url.getUrl()).placeholder(R.drawable.invitee_selected_default_picture).error(R.drawable.ic_photo_loading).resize(120,120).centerCrop().into(imageView);
+            if (!url.getUrl().equals("")){
+                Picasso.with(context).load(url.getUrl()).placeholder(R.drawable.invitee_selected_default_picture).error(R.drawable.ic_photo_loading).resize(120,120).centerCrop().into(imageView);
+            }
         }
         return convertView;
     }

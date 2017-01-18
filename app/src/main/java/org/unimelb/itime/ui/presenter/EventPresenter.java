@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
@@ -117,12 +118,6 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
 
                 updateImage(event);
-
-//                if (getView()!=null){
-//                    getView().onTaskSuccess(TASK_EVENT_UPDATE,eventHttpResult.getData());
-//                }
-
-                Log.i(TAG, "onNext: " +"done");
             }
         };
         HttpUtil.subscribe(observable,subscriber);
@@ -185,19 +180,16 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                 }
                 Event ev = eventHttpResult.getData().get(0);
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
-
-
                 insertEventLocal(ev);
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+
+                if(getView() != null){
+                    getView().onTaskSuccess(TASK_EVENT_INSERT, eventHttpResult.getData());
+                }
 
                 // if the event is successfully insert into server, then begin to upload photos
                 if (ev.hasPhoto()){
                     uploadImage(ev);
-                }else {
-                    if(getView() != null){
-                        getView().onTaskSuccess(TASK_EVENT_INSERT, eventHttpResult.getData());
-                    }
-                    // todo: put event bus into fragment
-                    EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                 }
             }
         };
@@ -293,8 +285,13 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                                                 wrapper.getPhoto().setUrl(avFile.getUrl());
                                                 wrapper.setUploaded(true);
 
-                                                if (imageUploadChecker(wrappers) && getView() != null){
-                                                    getView().onTaskSuccess(TASK_UPLOAD_IMAGE, Arrays.asList(event));
+                                                if (imageUploadChecker(wrappers)){
+                                                    Toast.makeText(getContext(),"Image Uploaded to leanCloud",Toast.LENGTH_SHORT).show();
+                                                    //start to syn server
+                                                    for (PhotoUrl photoUrl:event.getPhoto()
+                                                            ) {
+                                                        updatePhotoToServer(event, photoUrl.getPhotoUid(), photoUrl.getUrl());
+                                                    }
                                                 }else{
                                                     Log.i(TAG, "done: ");
                                                 }
@@ -338,9 +335,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
                 synchronizeLocal(eventHttpResult.getData());
-                if (getView() != null){
-                    getView().onTaskSuccess(TASK_SYN_IMAGE, Arrays.asList(event));
-                }
+                Toast.makeText(getContext(),"Image Synchronized to ITime",Toast.LENGTH_SHORT).show();
             }
         };
         HttpUtil.subscribe(observable, subscriber);

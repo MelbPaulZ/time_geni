@@ -195,21 +195,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public void onTaskSuccess(int taskId, List<Event> data) {
         hideProgressDialog();
         switch (taskId){
-            case TASK_UPLOAD_IMAGE:{
-                for (Event event:data
-                     ) {
-                    for (PhotoUrl photoUrl:event.getPhoto()
-                         ) {
-                        presenter.updatePhotoToServer(event, photoUrl.getPhotoUid(), photoUrl.getUrl());
-                    }
-                }
-                break;
-            }
-            case TASK_SYN_IMAGE:{
-                toCalendar();
-                break;
-            }
-
             case TASK_EVENT_INSERT: {
                 toCalendar();
                 break;

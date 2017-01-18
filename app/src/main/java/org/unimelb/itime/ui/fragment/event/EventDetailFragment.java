@@ -72,7 +72,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
 
     private void initTimeslotVMList(){
         // it needs to be puted on the begining, otherwise won't initialize
-        contentViewModel.setInviteeList(EventUtil.getInviteeWithStatus(event.getInvitee(), Invitee.STATUS_ACCEPTED,Invitee.STATUS_DECLINED));
+        contentViewModel.setInviteeList(EventUtil.getInviteeWithStatus(event.getInvitee(), Invitee.STATUS_ACCEPTED));
         if(timeslotVMList != null){
             // if other fragment set timeslotWrapper to this fragment
             contentViewModel.setWrapperTimeSlotList(timeslotVMList);
