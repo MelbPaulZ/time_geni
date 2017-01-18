@@ -11,8 +11,8 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentSignupPickAvatarBinding;
 import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
+import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 /**
@@ -38,35 +38,15 @@ public class SignupPickAvatarFragment extends LoginBaseFragment implements Login
     }
 
     @Override
-    public void onLoginStart() {
-    }
-
-    @Override
-    public void onLoginSucceed(int task) {
-        if (task == LoginViewModel.SIGN_UP){
-            loginViewModel.signup();
-        }else {
-            AppUtil.hideProgressBar();
-            onPageChange(task);
-        }
-    }
-
-    @Override
-    public void onLoginFail(int task, String errorMsg) {
-
-    }
-
-
-
-    @Override
     public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_SET_PASSWORD_FRAG:{
-                closeFragment(this, (SignupSetPWFragment)getFragmentManager().findFragmentByTag(SignupSetPWFragment.class.getSimpleName()));
+                getFragmentManager().popBackStack();
                 break;
             }
             case LoginViewModel.TO_FIND_FRIEND_FRAG:{
-                openFragment(this, (SignupFindFriendFragment)getFragmentManager().findFragmentByTag(SignupFindFriendFragment.class.getSimpleName()));
+                SignupFindFriendFragment friendFragment = new SignupFindFriendFragment();
+                getBaseActivity().openFragment(friendFragment);
                 break;
             }
             case LoginViewModel.TO_TERM_AGREEMENT_FRAG:{
@@ -76,8 +56,21 @@ public class SignupPickAvatarFragment extends LoginBaseFragment implements Login
     }
 
     @Override
-    public void showErrorDialog(ValidateRes res) {
-        showDialog(res.getTitle(), res.getContent());
+    public void onTaskStart(int taskId) {
+
+    }
+
+    @Override
+    public void onTaskSuccess(int taskId, Object data) {
+
+    }
+
+    @Override
+    public void onTaskError(int taskId, Object data) {
+        if(taskId == LoginPresenter.TASK_VALIDATE){
+            ValidateRes res = (ValidateRes)data;
+            showDialog(res.getTitle(), res.getContent());
+        }
     }
 
 

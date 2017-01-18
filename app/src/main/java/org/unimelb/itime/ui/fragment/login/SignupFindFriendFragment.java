@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentSignupFindFriendBinding;
-import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
-import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
  * Created by Paul on 20/12/2016.
@@ -34,23 +32,6 @@ public class SignupFindFriendFragment extends LoginBaseFragment implements Login
         binding.setLoginVM(loginViewModel);
     }
 
-    @Override
-    public void onLoginStart() {
-
-    }
-
-    @Override
-    public void onLoginSucceed(int task) {
-        if (task == LoginViewModel.TO_CALENDAR){
-            successLogin();
-        }
-
-    }
-
-    @Override
-    public void onLoginFail(int task, String errorMsg) {
-
-    }
 
 
     @Override
@@ -59,7 +40,18 @@ public class SignupFindFriendFragment extends LoginBaseFragment implements Login
     }
 
     @Override
-    public void showErrorDialog(ValidateRes res) {
+    public void onTaskStart(int taskId) {
 
     }
+
+    @Override
+    public void onTaskSuccess(int taskId, Object data) {
+
+    }
+
+    @Override
+    public void onTaskError(int taskId, Object data) {
+
+    }
+
 }

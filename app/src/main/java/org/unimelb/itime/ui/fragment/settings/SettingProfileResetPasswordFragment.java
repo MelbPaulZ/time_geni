@@ -90,7 +90,7 @@ public class SettingProfileResetPasswordFragment extends BaseUiAuthFragment<Task
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
         switch (taskId){
             case UserPresenter.TASK_USER_PSW_NOT_MATCH:{

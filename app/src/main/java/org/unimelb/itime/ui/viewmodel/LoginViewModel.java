@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.LoginUser;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.util.DefaultPhotoUtil;
@@ -37,7 +37,7 @@ public class LoginViewModel extends AndroidViewModel{
     private ItemView suggestedEmailItemView = ItemView.of(BR.itemText, R.layout.listview_login_email_tips);
 
 
-    private LoginUser loginUser;
+    private User loginUser;
 
     public final static int TO_EMAIL_SENT_FRAG = 1;
     public final static int TO_FIND_FRIEND_FRAG = 2;
@@ -48,15 +48,6 @@ public class LoginViewModel extends AndroidViewModel{
     public final static int TO_RESET_PASSWORD_FRAG = 7;
     public final static int TO_SET_PASSWORD_FRAG = 8;
     public final static int TO_TERM_AGREEMENT_FRAG = 9;
-    public final static int TO_CALENDAR = 10;
-    public final static int SIGN_UP = 11;
-
-    public final static int INVALID_EMAIL_ALREADY_REGISTER = 0;
-    public final static int INVALID_UNSUPPORTED_EMAIL = 1;
-    public final static int INVALID_PASSWORD_TOO_SIMPLE = 2;
-    public final static int INVALID_PASSWORD_TOO_LONG = 3;
-    public final static int INVALID_ALIAS_EMPTY =4;
-    public final static int INVALID_ALIAS_SPECIAL_SINGAL = 5;
 
 
     public LoginViewModel(LoginPresenter presenter){
@@ -71,26 +62,6 @@ public class LoginViewModel extends AndroidViewModel{
         return presenter.getContext();
     }
 
-//    public View.OnClickListener onBtnEmailLogin(){
-//        return new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.d(TAG, "onEmailLoginClick: " + loginUser.getEmail() +
-//                        "/" + loginUser.getPassword());
-//                presenter.loginByEmail(loginUser.getEmail(), loginUser.getPassword());
-//            }
-//        };
-//    }
-
-    public View.OnClickListener onBtnRefreshToken(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.refreshToken();
-            }
-        };
-    }
-
     public View.OnClickListener onSwitchFragment(final int task){
         return new View.OnClickListener() {
             @Override
@@ -98,12 +69,12 @@ public class LoginViewModel extends AndroidViewModel{
 
                 switch (task){
                     case TO_EMAIL_SENT_FRAG:
-                        presenter.sendResetLink(task, loginUser.getEmail());
+                        presenter.sendResetLink(loginUser.getEmail());
                         break;
                     case TO_FIND_FRIEND_FRAG:
                         HashMap<String, String> params = new HashMap<>();
                         params.put("personalAlias", loginUser.getPersonalAlias());
-                        presenter.validate(SIGN_UP, params);
+                        presenter.validate(params);
                         break;
                     default:
                         mvpView.onPageChange(task);
@@ -121,44 +92,6 @@ public class LoginViewModel extends AndroidViewModel{
         }
     }
 
-//    private void signUp(LoginUser loginUser){
-//        if (loginUser.getPhoto().length()==0){
-//            presenter.uploadImageToLeanCloud(loginUser,
-//                    DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getEmail()));
-//        }else{
-//            presenter.uploadImageToLeanCloud(loginUser, loginUser.getPhoto());
-//        }
-//    }
-
-//    private boolean isAliasValidation(){
-//        if (loginUser.getPersonalAlias().isEmpty()){
-//            mvpView.invalidPopup(INVALID_ALIAS_EMPTY);
-//            return false;
-//        }else if (!isAlphaNumeric(loginUser.getPersonalAlias())){
-//            mvpView.invalidPopup(INVALID_ALIAS_SPECIAL_SINGAL);
-//            return false;
-//        }else{
-//            return true;
-//        }
-//    }
-
-//    private boolean isAlphaNumeric(String s){
-//        String pattern= "^[a-zA-Z0-9]*$";
-//        return s.matches(pattern);
-//    }
-
-
-
-    public View.OnClickListener onBtnListUser(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                presenter.listUser();
-                presenter.testList();
-            }
-        };
-    }
-
     public View.OnClickListener onClickInputEmailBtn(final int task){
         return new View.OnClickListener() {
             @Override
@@ -166,20 +99,10 @@ public class LoginViewModel extends AndroidViewModel{
                 // validate Email
                 HashMap<String, String> params = new HashMap<>();
                 params.put("userId", loginUser.getEmail()); // use userId to check the validation
-                presenter.validate(task, params);
+                presenter.validate(params);
 
-//                if (isEmailValid()){
-//                    mvpView.onPageChange(task);
-//                }else{
-//                    mvpView.invalidPopup(INVALID_UNSUPPORTED_EMAIL);
-//                }
             }
         };
-    }
-
-    // todo implement regix
-    private boolean isEmailValid(){
-        return true;
     }
 
     /**
@@ -209,7 +132,7 @@ public class LoginViewModel extends AndroidViewModel{
 
                 HashMap<String, String> params = new HashMap<>();
                 params.put("password", loginUser.getPassword());
-                presenter.validate(TO_PICK_AVATAR_FRAG, params);
+                presenter.validate(params);
 //                if (loginUser.getPassword().length()<8){
 //                    mvpView.invalidPopup(INVALID_PASSWORD_TOO_SIMPLE);
 //                }else if (loginUser.getPassword().length()>16){
@@ -266,9 +189,8 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.loginByEmail( TO_CALENDAR ,loginUser.getEmail(), loginUser.getPassword());
-                Toast.makeText(getContext(), "logging in", Toast.LENGTH_SHORT).show();
-//                mvpView.invalidPopup();
+                //todo: check the userId and password
+                presenter.loginByEmail(loginUser.getUserId(), loginUser.getPassword());
             }
         };
     }
@@ -301,7 +223,7 @@ public class LoginViewModel extends AndroidViewModel{
             @Override
             public void onClick(View v) {
                 if (mvpView!=null){
-                    mvpView.onLoginSucceed(TO_CALENDAR);
+//                    mvpView.(TO_CALENDAR);
                 }
                 Toast.makeText(getContext(), "tocalendar here", Toast.LENGTH_SHORT).show();
             }
@@ -340,11 +262,11 @@ public class LoginViewModel extends AndroidViewModel{
     }
 
     @Bindable
-    public LoginUser getLoginUser() {
+    public User getLoginUser() {
         return loginUser;
     }
 
-    public void setLoginUser(LoginUser loginUser) {
+    public void setLoginUser(User loginUser) {
         this.loginUser = loginUser;
         notifyPropertyChanged(BR.loginUser);
     }

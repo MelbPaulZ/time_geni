@@ -85,7 +85,7 @@ public class EventResponseFragment extends BaseUiAuthFragment<EventResponseMvpVi
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
     }
 }

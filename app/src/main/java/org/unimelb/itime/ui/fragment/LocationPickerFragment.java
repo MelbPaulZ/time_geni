@@ -352,7 +352,7 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
     }
 

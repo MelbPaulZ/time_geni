@@ -2,12 +2,10 @@ package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.SeekBar;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.bean.Setting;
-import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulapi.SettingApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
@@ -52,7 +50,7 @@ public class SettingPresenter <V extends TaskBasedMvpView<Setting>> extends MvpB
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: ");
                 if(getView() != null){
-                    getView().onTaskError(TASK_SETTING_UPDATE);
+                    getView().onTaskError(TASK_SETTING_UPDATE, null);
                 }
             }
 

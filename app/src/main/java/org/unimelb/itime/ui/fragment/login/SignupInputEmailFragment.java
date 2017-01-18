@@ -1,6 +1,5 @@
 package org.unimelb.itime.ui.fragment.login;
 
-import android.app.AlertDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +11,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentSignupInputEmailBinding;
 import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
+import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
@@ -24,7 +24,6 @@ public class SignupInputEmailFragment extends LoginBaseFragment implements Login
 
     private FragmentSignupInputEmailBinding binding;
 
-    private AlertDialog unsupportEmailDialog;
 
     @Nullable
     @Override
@@ -37,37 +36,19 @@ public class SignupInputEmailFragment extends LoginBaseFragment implements Login
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setLoginVM(loginViewModel);
-//        loginViewModel.setLoginUser(loginUser); // this is for init the loginUser
     }
-
-
-    @Override
-    public void onLoginStart() {
-
-    }
-
-    @Override
-    public void onLoginSucceed(int task) {
-        onPageChange(task);
-    }
-
-    @Override
-    public void onLoginFail(int task, String errorMsg) {
-
-    }
-
 
     @Override
     public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_INDEX_FRAG:{
-                closeFragment(this, (LoginIndexFragment)getFragmentManager().findFragmentByTag(LoginIndexFragment.class.getSimpleName()));
+                getFragmentManager().popBackStack();
                 break;
             }
             case LoginViewModel.TO_SET_PASSWORD_FRAG:{
-                SignupSetPWFragment loginSetPWFragment = (SignupSetPWFragment)getFragmentManager().findFragmentByTag(SignupSetPWFragment.class.getSimpleName());
-                loginSetPWFragment.setLoginUser(loginUser.getCopyLoginUser());
-                openFragment(this, loginSetPWFragment);
+                SignupSetPWFragment fragment = new SignupSetPWFragment();
+                fragment.setData(loginUser);
+                getBaseActivity().openFragment(fragment);
                 break;
             }
             case LoginViewModel.TO_TERM_AGREEMENT_FRAG:{
@@ -77,7 +58,21 @@ public class SignupInputEmailFragment extends LoginBaseFragment implements Login
     }
 
     @Override
-    public void showErrorDialog(ValidateRes res) {
-        showDialog(res.getTitle(), res.getContent());
+    public void onTaskStart(int taskId) {
+
     }
+
+    @Override
+    public void onTaskSuccess(int taskId, Object data) {
+
+    }
+
+    @Override
+    public void onTaskError(int taskId, Object data) {
+        if(taskId == LoginPresenter.TASK_VALIDATE){
+            ValidateRes res = (ValidateRes)data;
+            showDialog(res.getTitle(), res.getContent());
+        }
+    }
+
 }

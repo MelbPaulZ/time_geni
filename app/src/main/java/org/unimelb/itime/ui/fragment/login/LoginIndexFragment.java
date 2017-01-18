@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentLoginIndexBinding;
-import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
@@ -38,43 +37,35 @@ public class LoginIndexFragment extends LoginBaseFragment implements LoginMvpVie
     }
 
 
-    public void signUpClick(View v){
-
-    }
-
-    @Override
-    public void onLoginStart() {
-
-    }
-
-    @Override
-    public void onLoginSucceed(int task) {
-
-    }
-
-    @Override
-    public void onLoginFail(int task, String errorMsg) {
-
-    }
-
 
     @Override
     public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
-                openFragment(this, (SignupInputEmailFragment)getFragmentManager().findFragmentByTag(SignupInputEmailFragment.class.getSimpleName()));
+                SignupInputEmailFragment fragment = new SignupInputEmailFragment();
+                getBaseActivity().openFragment(fragment);
                 break;
             }
             case LoginViewModel.TO_LOGIN_FRAG:{
-                openFragment(this, (LoginFragment)getFragmentManager().findFragmentByTag(LoginFragment.class.getSimpleName()));
+                LoginFragment fragment = new LoginFragment();
+                getBaseActivity().openFragment(fragment);
                 break;
             }
         }
     }
 
     @Override
-    public void showErrorDialog(ValidateRes res) {
+    public void onTaskStart(int taskId) {
 
     }
 
+    @Override
+    public void onTaskSuccess(int taskId, Object data) {
+
+    }
+
+    @Override
+    public void onTaskError(int taskId, Object data) {
+
+    }
 }

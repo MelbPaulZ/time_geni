@@ -240,7 +240,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
         hideProgressDialog();
     }
 

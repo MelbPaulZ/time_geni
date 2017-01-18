@@ -1,7 +1,6 @@
 package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
-import android.databinding.tool.util.L;
 import android.util.Log;
 
 import com.avos.avoscloud.AVException;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -37,7 +35,6 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
 
 /**
  * Created by yinchuandong on 12/1/17.
@@ -105,7 +102,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 if(getView() != null){
-                    getView().onTaskError(TASK_EVENT_UPDATE);
+                    getView().onTaskError(TASK_EVENT_UPDATE, null);
                 }
                 Log.i(TAG, "onError: " + e.getMessage());
             }
@@ -146,7 +143,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: " + "eventApi" + e.getMessage());
                 if (getView() != null){
-                    getView().onTaskError(TASK_EVENT_GET);
+                    getView().onTaskError(TASK_EVENT_GET, null);
                 }
             }
 
@@ -177,7 +174,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 if(getView() != null){
-                    getView().onTaskError(TASK_EVENT_INSERT);
+                    getView().onTaskError(TASK_EVENT_INSERT, null);
                 }
             }
 
@@ -227,7 +224,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 if (getView()!=null){
-                    getView().onTaskError(TASK_EVENT_DELETE);
+                    getView().onTaskError(TASK_EVENT_DELETE, null);
                 }
             }
 
@@ -303,7 +300,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                                                 }
                                             }else{
                                                 if (getView() != null){
-                                                    getView().onTaskError(TASK_UPLOAD_IMAGE);
+                                                    getView().onTaskError(TASK_UPLOAD_IMAGE, null);
                                                 }
                                             }
                                         }
@@ -334,7 +331,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: ");
                 if (getView() != null){
-                    getView().onTaskError(TASK_SYN_IMAGE);
+                    getView().onTaskError(TASK_SYN_IMAGE, null);
                 }
             }
 
@@ -376,7 +373,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: " + e.getMessage());
                 if (getView()!=null){
-                    getView().onTaskError(TASK_EVENT_REJECT);
+                    getView().onTaskError(TASK_EVENT_REJECT, null);
                 }
             }
 
@@ -454,7 +451,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: " + e.getMessage());
                 if (getView()!=null){
-                    getView().onTaskError(TASK_TIMESLOT_ACCEPT);
+                    getView().onTaskError(TASK_TIMESLOT_ACCEPT, null);
                 }
             }
 
@@ -490,7 +487,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 if (getView()!=null){
-                    getView().onTaskError(TASK_EVENT_CONFIRM);
+                    getView().onTaskError(TASK_EVENT_CONFIRM, null);
                 }
             }
 
@@ -526,7 +523,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 if (getView()!=null){
-                    getView().onTaskError(TASK_TIMESLOT_REJECT);
+                    getView().onTaskError(TASK_TIMESLOT_REJECT, null);
                 }
             }
 

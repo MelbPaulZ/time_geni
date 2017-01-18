@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.converter.PropertyConverter;
 
 import java.io.Serializable;
@@ -20,6 +19,12 @@ import java.lang.reflect.Type;
 @Entity
 public class User implements Serializable, Cloneable {
 
+    public static final String SOURCE_GOOGLE = "google";
+    public static final String SOURCE_FACEBOOK = "facebook";
+    public static final String SOURCE_ITIME = "itime";
+    public static final String SOURCE_EMAIL = "email";
+    public static final String SOURCE_PHONE = "phone";
+
     public  final static String MALE = "2";
     public final static String FEMALE = "1";
 
@@ -27,6 +32,7 @@ public class User implements Serializable, Cloneable {
     private String userUid="";
 
     private String userId="";
+    private String password="";
     private String personalAlias="";
     private String email="";
     private String phone="";
@@ -43,14 +49,16 @@ public class User implements Serializable, Cloneable {
     private String gender="";
     private String location="";
 
-@Generated(hash = 1717660507)
-public User(String userUid, String userId, String personalAlias, String email,
-        String phone, String photo, String source, String deviceToken,
-        String deviceId, String averageRatingValue, String timezone,
-        String lastSigninTime, int signinCount, String createdAt,
-        String updatedAt, String gender, String location) {
+@Generated(hash = 223006400)
+public User(String userUid, String userId, String password,
+        String personalAlias, String email, String phone, String photo,
+        String source, String deviceToken, String deviceId,
+        String averageRatingValue, String timezone, String lastSigninTime,
+        int signinCount, String createdAt, String updatedAt, String gender,
+        String location) {
     this.userUid = userUid;
     this.userId = userId;
+    this.password = password;
     this.personalAlias = personalAlias;
     this.email = email;
     this.phone = phone;
@@ -233,6 +241,14 @@ public User(String userUid, String userId, String personalAlias, String email,
             e.printStackTrace();
         }
         return user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
 

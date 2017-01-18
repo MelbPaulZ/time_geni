@@ -142,7 +142,7 @@ public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpVie
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
     }
 
