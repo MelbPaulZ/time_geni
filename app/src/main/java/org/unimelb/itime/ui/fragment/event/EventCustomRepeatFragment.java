@@ -95,7 +95,7 @@ public class EventCustomRepeatFragment extends BaseUiAuthFragment<EventCustomRep
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
         hideProgressDialog();
     }
 

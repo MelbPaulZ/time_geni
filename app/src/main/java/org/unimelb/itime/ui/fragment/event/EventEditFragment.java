@@ -210,7 +210,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
         hideProgressDialog();
         switch (taskId) {
             case TASK_UPLOAD_IMAGE: {

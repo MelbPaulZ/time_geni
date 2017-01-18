@@ -73,7 +73,7 @@ public class UserProfileViewModel extends CommonViewModel {
                 if (password.equals(passwordConfirmation)){
                     presenter.updatePassword(password,passwordConfirmation);
                 }else{
-                    presenter.getView().onTaskError(UserPresenter.TASK_USER_PSW_NOT_MATCH);
+                    presenter.getView().onTaskError(UserPresenter.TASK_USER_PSW_NOT_MATCH, null);
                 }
             }
         };

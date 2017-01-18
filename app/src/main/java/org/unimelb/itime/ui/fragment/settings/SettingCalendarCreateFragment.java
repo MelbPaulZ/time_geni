@@ -101,7 +101,7 @@ public class SettingCalendarCreateFragment extends BaseUiAuthFragment<TaskBasedM
 
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
         hideProgressDialog();
     }
 }

@@ -49,7 +49,7 @@ public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCa
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
         hideProgressDialog();
         Toast.makeText(getContext(), "some error", Toast.LENGTH_SHORT).show();
     }

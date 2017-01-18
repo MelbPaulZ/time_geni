@@ -10,5 +10,5 @@ public interface TaskBasedMvpView<M> extends MvpView{
 
     void onTaskStart(int taskId);
     void onTaskSuccess(int taskId, M data);
-    void onTaskError(int taskId);
+    void onTaskError(int taskId, Object data);
 }

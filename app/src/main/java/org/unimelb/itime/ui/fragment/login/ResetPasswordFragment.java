@@ -8,25 +8,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.FragmentLoginIndexBinding;
+import org.unimelb.itime.databinding.FragmentResetPasswordBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
- * Created by yinchuandong on 15/12/16.
+ * Created by Paul on 20/12/2016.
  */
 
-public class LoginIndexFragment extends LoginBaseFragment implements LoginMvpView {
-
-    private final static String TAG = "LoginIndexFragment";
-
-    private FragmentLoginIndexBinding binding;
-
+public class ResetPasswordFragment extends LoginBaseFragment implements LoginMvpView {
+    private static final String TAG = "LoginResetPWFrag";
+    private FragmentResetPasswordBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_index, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false);
         return binding.getRoot();
     }
 
@@ -41,31 +38,34 @@ public class LoginIndexFragment extends LoginBaseFragment implements LoginMvpVie
     @Override
     public void onPageChange(int task) {
         switch (task){
-            case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
-                SignupInputEmailFragment fragment = new SignupInputEmailFragment();
-                getBaseActivity().openFragment(fragment);
+            case LoginViewModel.TO_LOGIN_FRAG:{
+                getFragmentManager().popBackStack();
                 break;
             }
-            case LoginViewModel.TO_LOGIN_FRAG:{
-                LoginFragment fragment = new LoginFragment();
+            case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
+                SignupInputEmailFragment fragment = new SignupInputEmailFragment();
                 getBaseActivity().openFragment(fragment);
                 break;
             }
         }
     }
 
+
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
-
+        hideProgressDialog();
+        ResetPasswordSentFragment fragment = new ResetPasswordSentFragment();
+        getBaseActivity().openFragment(fragment);
     }
 
     @Override
     public void onTaskError(int taskId, Object data) {
-
+        hideProgressDialog();
+        showDialog("error", (String)data);
     }
 }
