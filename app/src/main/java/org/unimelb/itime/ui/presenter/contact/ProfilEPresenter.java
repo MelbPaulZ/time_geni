@@ -34,15 +34,20 @@ import rx.Subscriber;
  * Created by 37925 on 2016/12/14.
  */
 
-public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
+public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
     private static final String TAG = "profile";
+    public static final int TASK_ADD = 0;
+    public static final int TASK_DELETE = 1;
+    public static final int TASK_BLOCK = 2;
+    public static final int TASK_UNBLOCK = 3;
+    public static final int TASK_ACCEPT = 4;
     private Context context;
     private UserApi userApi;
     private ContactApi contactApi;
     private FriendRequestApi requestApi;
     DBManager dbManager;
 
-    public ProfileFragmentPresenter(Context context) {
+    public ProfilePresenter(Context context) {
         this.context = context;
         dbManager = DBManager.getInstance(getContext());
         userApi = HttpUtil.createService(context, UserApi.class);
@@ -62,7 +67,7 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
         getView().getActivity().onBackPressed();
     }
 
-    public void acceptRequest(final FriendRequest request, final ProfileFragmentViewModel.AcceptCallBack callBack){
+    public void acceptRequest(final FriendRequest request){
         Observable<HttpResult<List<FriendRequest>>> observable = requestApi.confirm(request.getFreqUid());
         Subscriber<HttpResult<List<FriendRequest>>> subscriber = new Subscriber<HttpResult<List<FriendRequest>>>() {
             @Override
@@ -73,26 +78,33 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
-                e.printStackTrace();
+                if(getView()!=null) {
+                    getView().onTaskError(TASK_ACCEPT);
+                }
             }
 
             @Override
             public void onNext(HttpResult<List<FriendRequest>> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
-                    callBack.fail();
+
                 }else {
                     FriendRequest resultRequest = result.getData().get(0);
                     resultRequest.setUserDetail(request.getUserDetail());
                     dbManager.insertFriendRequest(resultRequest);
-                    callBack.success();
+                    if(getView()!=null) {
+                        getView().onTaskSuccess(TASK_ACCEPT, null);
+                    }
                 }
             }
         };
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void blockUser(final Contact user, final ProfileFragmentViewModel.BlockCallBack callBack){
+    public void blockUser(final Contact user){
+        if(getView()==null){
+            return;
+        }
         Observable<HttpResult<Block>> observable = userApi.block(Integer.parseInt(user.getContactUid()));
         Subscriber<HttpResult<Block>> subscriber = new Subscriber<HttpResult<Block>>() {
             @Override
@@ -103,13 +115,18 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
+                if(getView()!=null) {
+                    getView().onTaskError(TASK_BLOCK);
+                }
             }
 
             @Override
             public void onNext(HttpResult<Block> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
-                    callBack.fail();
+                    if(getView()!=null) {
+                        getView().onTaskError(TASK_BLOCK);
+                    }
                 }else {
                     user.setBlockLevel(result.getData().getBlockLevel());
                     dbManager.updateContact(user);
@@ -118,14 +135,20 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
                     dbManager.insertBlock(block);
                     EventBus.getDefault().post(new MessageRemoveContact(user));
                     EventBus.getDefault().post(new MessageBlockContact(user));
-                    callBack.success();
+
+                    if(getView()!=null) {
+                        getView().onTaskSuccess(TASK_BLOCK, null);
+                    }
                 }
             }
         };
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void unblockUser(final Contact user, final ProfileFragmentViewModel.UnblockCallBack callBack){
+    public void unblockUser(final Contact user){
+        if(getView()==null){
+            return;
+        }
         Observable<HttpResult<Block>> observable = userApi.unblock(Integer.parseInt(user.getContactUid()));
         Subscriber<HttpResult<Block>> subscriber = new Subscriber<HttpResult<Block>>() {
             @Override
@@ -136,27 +159,37 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
+                if(getView()!=null) {
+                    getView().onTaskError(TASK_UNBLOCK);
+                }
             }
 
             @Override
             public void onNext(HttpResult<Block> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
-                    callBack.fail();
+                    if(getView()!=null) {
+                        getView().onTaskError(TASK_UNBLOCK);
+                    }
                 }else {
                     user.setBlockLevel(result.getData().getBlockLevel());
                     dbManager.updateContact(user);
                     dbManager.deleteBlock(result.getData());
                     EventBus.getDefault().post(new MessageAddContact(user));
                     EventBus.getDefault().post(new MessageUnblockContact(user));
-                    callBack.success();
+                    if(getView()!=null) {
+                        getView().onTaskSuccess(TASK_UNBLOCK, null);
+                    }
                 }
             }
         };
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void deleteUser(final Contact user, final ProfileFragmentViewModel.DeleteCallBack callBack){
+    public void deleteUser(final Contact user){
+        if(getView()==null){
+            return;
+        }
         Observable<HttpResult<Contact>> observable = contactApi.delete(user.getContactUid());
         Subscriber<HttpResult<Contact>> subscriber = new Subscriber<HttpResult<Contact>>() {
             @Override
@@ -167,26 +200,36 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
+                if(getView()!=null) {
+                    getView().onTaskError(TASK_DELETE);
+                }
             }
 
             @Override
             public void onNext(HttpResult<Contact> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
-                    callBack.fail();
+                    if(getView()!=null) {
+                        getView().onTaskError(TASK_DELETE);
+                    }
                 }else {
                     user.setStatus(result.getData().getStatus());
                     user.setRelationship(user.getRelationship()-1);
                     dbManager.updateContact(user);
                     EventBus.getDefault().post(new MessageRemoveContact(result.getData()));
-                    callBack.success();
+                    if(getView()!=null) {
+                        getView().onTaskSuccess(TASK_DELETE, null);
+                    }
                 }
             }
         };
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void addUser(Contact user, final ProfileFragmentViewModel.AddCallBack callBack){
+    public void addUser(Contact user){
+        if(getView()==null){
+            return;
+        }
         Observable<HttpResult<Void>> observable = requestApi.send(user.getContactUid(), FriendRequest.SOURCE_ITIME);
         Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
             @Override
@@ -197,15 +240,22 @@ public class ProfileFragmentPresenter extends MvpBasePresenter<ProfileMvpView> {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
+                if(getView()!=null) {
+                    getView().onTaskError(TASK_ADD);
+                }
             }
 
             @Override
             public void onNext(HttpResult<Void> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
-                    callBack.fail();
+                    if(getView()!=null) {
+                        getView().onTaskError(TASK_ADD);
+                    }
                 }else {
-                   callBack.success();
+                    if(getView()!=null) {
+                        getView().onTaskSuccess(TASK_ADD, null);
+                    }
                 }
             }
         };

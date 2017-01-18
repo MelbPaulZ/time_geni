@@ -2,9 +2,7 @@ package org.unimelb.itime.ui.viewmodel.contact;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 
@@ -12,9 +10,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.bean.User;
-import org.unimelb.itime.widget.TimeGeniiDialog;
-import org.unimelb.itime.ui.presenter.contact.ProfileFragmentPresenter;
-import org.unimelb.itime.widget.TimeGeniiPopupWindow;
+import org.unimelb.itime.ui.presenter.contact.ProfilePresenter;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 import me.fesky.library.widget.ios.AlertDialog;
@@ -32,7 +28,6 @@ public class ProfileFragmentViewModel extends BaseObservable {
     private FriendRequest request;
     private boolean showTitileBack = true;
     private boolean showTitleRight = true;
-    private boolean showGender = true;
     private boolean showAdd = false;
     private boolean showSent = false;
     private boolean showEmail = true;
@@ -41,16 +36,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
     private boolean showAccepted = false;
     private boolean showEdit = false;
     private boolean showRealName = false;
-    private ProfileFragmentPresenter presenter;
-    private String title = "Profile";
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    private ProfilePresenter presenter;
 
     @Bindable
     public boolean getShowTitileBack() {
@@ -82,7 +68,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
         notifyPropertyChanged(BR.showTitleRight);
     }
 
-    public ProfileFragmentViewModel(ProfileFragmentPresenter presenter){
+    public ProfileFragmentViewModel(ProfilePresenter presenter){
         this.presenter = presenter;
     }
 
@@ -101,7 +87,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.addUser(friend, new AddCallBack());
+                presenter.addUser(friend);
             }
         };
     }
@@ -111,7 +97,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.acceptRequest(request, new AcceptCallBack());
+                presenter.acceptRequest(request);
             }
         };
     }
@@ -210,11 +196,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
 
     @Bindable
     public boolean getShowGender(){
-        if(friend.getUserDetail().getGender().equals(User.MALE)
-                ||friend.getUserDetail().getGender().equals(User.FEMALE)){
-            return true;
-        }
-        return false;
+        return !friend.getUserDetail().getGender().equals(User.UNDEFINED);
     }
 
 
@@ -272,74 +254,14 @@ public class ProfileFragmentViewModel extends BaseObservable {
         return friend.getBlockLevel()!=0;
     }
 
-    public View.OnClickListener getTitleRightListener(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    public void onRightClicked(){
                 if(popupWindow==null){
                     initPopupWindow();
                 }
                 popupWindow.show();
-            }
-        };
     }
 
-    public View.OnClickListener getTitleBackListener(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.onBackPressed();
-            }
-        };
-    }
-
-//    private void initPopupWindow(){
-//        popupWindow = new TimeGeniiPopupWindow(presenter.getContext(), presenter.getView().getContentView());
-//        if(getBlocked()) {
-//            popupWindow.addSheetItem(presenter.getContext().getString(R.string.unblock_contact),
-//                    presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
-//                        @Override
-//                        public void onClick() {
-//                            if(!getBlocked()) {
-//                                if (blockDialog == null) {
-//                                    initBlockDialog();
-//                                }
-//                                blockDialog.show();
-//                            }else{
-//                                unblockFriend();
-//                            }
-//                        }
-//                    });
-//        }else{
-//            popupWindow.addSheetItem(presenter.getContext().getString(R.string.block_contact),
-//                    presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
-//                        @Override
-//                        public void onClick() {
-//                            if(!getBlocked()) {
-//                                if (blockDialog == null) {
-//                                    initBlockDialog();
-//                                }
-//                                blockDialog.show();
-//                            }else{
-//                                unblockFriend();
-//                            }
-//                        }
-//                    });
-//        }
-//
-//        popupWindow.addSheetItem(presenter.getContext().getString(R.string.delete_contact),
-//                presenter.getContext().getResources().getColor(R.color.textBlue), new TimeGeniiPopupWindow.OnSheetItemClickListener() {
-//                    @Override
-//                    public void onClick() {
-//                        if(deleteDialog==null){
-//                            initDeleteDialog();
-//                        }
-//                        deleteDialog.show();
-//                    }
-//                });
-//    }
-
-    private void initPopupWindow(){
+    public void initPopupWindow(){
         if(presenter.getView()==null){
             return;
         }
@@ -439,72 +361,27 @@ public class ProfileFragmentViewModel extends BaseObservable {
 
 
     private void unblockFriend(){
-        presenter.unblockUser(friend, new UnblockCallBack());
+        presenter.unblockUser(friend);
     }
 
     private void blockFriend(){
-        presenter.blockUser(friend, new BlockCallBack());
+        presenter.blockUser(friend);
     }
 
     private void deleteFriend(){
-        presenter.deleteUser(friend, new DeleteCallBack());
+        presenter.deleteUser(friend);
     }
 
-    public class BlockCallBack{
-        public void success(){
-            friend.setBlockLevel(1);
-            notifyPropertyChanged(BR.blocked);
-            initPopupWindow();
-        }
-
-        public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.block_fail), Toast.LENGTH_SHORT).show();
-        }
+    public void blockSuccess(){
+        friend.setBlockLevel(1);
+        notifyPropertyChanged(BR.blocked);
+        initPopupWindow();
     }
 
-    public class DeleteCallBack{
-        public void success(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.delete_success), Toast.LENGTH_SHORT).show();
-            presenter.onBackPressed();
-        }
-
-        public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.delete_fail), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public class UnblockCallBack{
-        public void success(){
-            friend.setBlockLevel(0);
-            notifyPropertyChanged(BR.blocked);
-            initPopupWindow();
-        }
-
-        public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.unblock_fail), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public class AddCallBack{
-        public void success(){
-            setShowAdd(false);
-            setShowSent(true);
-        }
-
-        public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.add_fail), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public class AcceptCallBack{
-        public void success(){
-            setShowAccept(false);
-            setShowAccepted(true);
-        }
-
-        public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.accept_fail), Toast.LENGTH_SHORT).show();
-        }
+    public void unblockSuccess(){
+        friend.setBlockLevel(0);
+        notifyPropertyChanged(BR.blocked);
+        initPopupWindow();
     }
 
     @Bindable

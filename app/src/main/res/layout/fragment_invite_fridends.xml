@@ -6,6 +6,9 @@
         <variable
             name="viewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel" />
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,15 +21,8 @@
         android:orientation="vertical"
         >
 
-        <org.unimelb.itime.widget.DoneTitleBar
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/title_height"
-            app:title="@{viewModel.title}"
-            app:showLeft="@{viewModel.showTitleBack}"
-            app:showRight="@{viewModel.showTitleRight}"
-            app:titleBackListener="@{viewModel.titleBackListener}"
-            app:titleRightListener="@{viewModel.titleRightListener}"
-            android:id="@+id/titleBar" />
+        <include layout="@layout/toolbar_common"
+            app:vm="@{toolbarVM}"/>
 
         <include layout="@layout/line" />
 

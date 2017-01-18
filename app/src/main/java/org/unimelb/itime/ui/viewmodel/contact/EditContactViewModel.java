@@ -52,20 +52,6 @@ public class EditContactViewModel extends BaseObservable{
         notifyPropertyChanged(BR.contact);
     }
 
-    public View.OnClickListener getRightOnClickListener(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(alias.equals("")){
-                    contact.setAliasName(contact.getUserDetail().getPersonalAlias());
-                }else{
-                    contact.setAliasName(alias);
-                }
-                presenter.editAlias(contact);
-            }
-        };
-    }
-
     public View.OnClickListener getCleanListener(){
         return new View.OnClickListener() {
             @Override

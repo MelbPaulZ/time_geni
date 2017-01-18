@@ -36,19 +36,15 @@ import rx.functions.Func1;
 
 public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMvpView>{
     private static final String TAG = "ContactPresenter";
+    public static final int TASK_CONTACTS = 0;
     private Context context;
     private ContactApi contactApi;
     private FriendRequestApi requestApi;
-    private ContactHomePageViewModel.RequestCountListener requestCountListener;
 
     public ContactHomePagePresenter(Context context) {
         this.context = context;
         contactApi =  HttpUtil.createService(context, ContactApi.class);
         requestApi = HttpUtil.createService(context,FriendRequestApi.class);
-    }
-
-    public void setRequestCountListener(ContactHomePageViewModel.RequestCountListener listener){
-        requestCountListener = listener;
     }
 
     public void goToProfileFragment(Contact user){
@@ -66,14 +62,16 @@ public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMv
             getView().goToAddFriendsFragment();
     }
 
-    public void getFriends(final ContactHomePageViewModel.FriendsCallBack callBack){
+    public void getFriends(){
         DBManager dbManager = DBManager.getInstance(context);
         List<ITimeUser> list = generateITimeUserList(dbManager.getAllContact());
-        callBack.success(list);
-        getFriendsFromServer(callBack);
+        if(getView()!=null){
+            getView().onTaskSuccess(TASK_CONTACTS, list);
+        }
+        getFriendsFromServer();
     }
 
-    public void getFriendsFromServer(final ContactHomePageViewModel.FriendsCallBack callBack){
+    public void getFriendsFromServer(){
         final DBManager dbManager = DBManager.getInstance(context);
         Observable<HttpResult<List<Contact>>> observable = contactApi.list();
         Observable<List<Contact>> dbObservable = observable.map(new Func1<HttpResult<List<Contact>>, List<Contact>>() {
@@ -100,16 +98,21 @@ public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMv
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
-                e.printStackTrace();
-                callBack.failed();
+                if(getView()!=null){
+                    getView().onTaskError(TASK_CONTACTS);
+                }
             }
 
             @Override
             public void onNext(List<Contact> list) {
                 if(list == null){
-                    callBack.failed();
+                    if(getView()!=null){
+                        getView().onTaskError(TASK_CONTACTS);
+                    }
                 }else {
-                    callBack.success(generateITimeUserList(list));
+                    if(getView()!=null){
+                        getView().onTaskSuccess(TASK_CONTACTS, generateITimeUserList(list));
+                    }
                 }
             }
         };

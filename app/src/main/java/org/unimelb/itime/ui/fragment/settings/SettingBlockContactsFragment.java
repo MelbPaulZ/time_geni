@@ -1,4 +1,4 @@
-package org.unimelb.itime.ui.fragment.contact;
+package org.unimelb.itime.ui.fragment.settings;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -11,46 +11,54 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Contact;
-import org.unimelb.itime.databinding.ContactHomePageBinding;
+import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.databinding.FragmentBlocklistBinding;
-import org.unimelb.itime.messageevent.MessageAddContact;
-import org.unimelb.itime.messageevent.MessageEditContact;
-import org.unimelb.itime.messageevent.MessageNewFriendRequest;
-import org.unimelb.itime.messageevent.MessageRemoveContact;
 import org.unimelb.itime.messageevent.contact.MessageBlockContact;
 import org.unimelb.itime.messageevent.contact.MessageUnblockContact;
-import org.unimelb.itime.ui.activity.AddFriendActivityContact;
-import org.unimelb.itime.ui.activity.FriendRequestActivityContact;
-import org.unimelb.itime.ui.activity.ProfileActivityContact;
+import org.unimelb.itime.ui.activity.AddFriendActivity;
+import org.unimelb.itime.ui.activity.FriendRequestActivity;
+import org.unimelb.itime.ui.fragment.contact.BaseContactFragment;
+import org.unimelb.itime.ui.fragment.contact.ProfileFragment;
 import org.unimelb.itime.ui.mvpview.contact.BlockContactsMvpView;
-import org.unimelb.itime.ui.mvpview.contact.ContactHomePageMvpView;
 import org.unimelb.itime.ui.presenter.contact.BlockContactsPresenter;
-import org.unimelb.itime.ui.presenter.contact.ContactHomePagePresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.contact.BlockContactsViewModel;
 import org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel;
-import org.unimelb.itime.ui.viewmodel.contact.ProfileFragmentViewModel;
+
+import java.util.List;
 
 /**
  * Created by Qiushuo Huang on 2017/1/14.
  */
 
-public class BlockContactsFragment extends BaseContactFragment<BlockContactsMvpView, BlockContactsPresenter> implements BlockContactsMvpView {
+public class SettingBlockContactsFragment extends BaseUiAuthFragment<BlockContactsMvpView, BlockContactsPresenter> implements BlockContactsMvpView {
     private FragmentBlocklistBinding binding;
     private android.support.v4.app.FragmentManager fm;
     private ProfileFragment profileFragment;
     private BlockContactsViewModel viewModel;
+    private ToolbarViewModel toolbarViewModel;
 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_blocklist, container, false);
-        initMainView();
-        fm = getFragmentManager();
-        viewModel.initSideBarListView(binding.sortListView);
 
-        EventBus.getDefault().register(this);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle bundle){
+        super.onActivityCreated(bundle);
+        viewModel = new BlockContactsViewModel(presenter);
+        viewModel.initSideBarListView(binding.sortListView);
+        binding.setMainViewModel(viewModel);
+
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setTitleStr(getString(R.string.contacts));
+        toolbarViewModel.setLeftDrawable(getResources().getDrawable(R.drawable.ic_back_arrow));
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -63,11 +71,6 @@ public class BlockContactsFragment extends BaseContactFragment<BlockContactsMvpV
         viewModel.addContact(msg.contact);
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     public void onStart(){
         super.onStart();
         viewModel.loadData();
@@ -77,42 +80,23 @@ public class BlockContactsFragment extends BaseContactFragment<BlockContactsMvpV
         super.onResume();
     }
 
-    public void initMainView() {
-        presenter = createPresenter();
-        viewModel = new BlockContactsViewModel(presenter);
-        binding.setMainViewModel(viewModel);
-    }
-
-
-
-    public void goToNewFriendFragment() {
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), FriendRequestActivityContact.class);
-        startActivity(intent);
-    }
-
     public void goToProfileFragment(Contact user) {
         if (profileFragment == null) {
             profileFragment = new ProfileFragment();
         }
         profileFragment.setUser(user);
-        fm.beginTransaction()
-                .hide(this)
-                .add(R.id.contentFrameLayout, profileFragment)
-                .addToBackStack(null)
-                .commit();
+        getBaseActivity().openFragment(profileFragment, null, true);
+//        fm.beginTransaction()
+//                .hide(this)
+//                .add(R.id.contentFrameLayout, profileFragment)
+//                .addToBackStack(null)
+//                .commit();
 //        Intent intent = new Intent();
-//        intent.setClass(getActivity(), ProfileActivityContact.class);
+//        intent.setClass(getActivity(), ProfileActivity.class);
 //        Bundle bundle = new Bundle();
-//        bundle.putSerializable(ProfileActivityContact.USER,user);
+//        bundle.putSerializable(ProfileActivity.USER,user);
 //        intent.putExtras(bundle);
 //        startActivity(intent);
-    }
-
-    public void goToAddFriendsFragment() {
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), AddFriendActivityContact.class);
-        startActivity(intent);
     }
 
     @Override
@@ -123,6 +107,30 @@ public class BlockContactsFragment extends BaseContactFragment<BlockContactsMvpV
     @Override
     public void onDestroy(){
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onBack() {
+        getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onNext() {
+
+    }
+
+    @Override
+    public void onTaskStart(int taskId) {
+
+    }
+
+    @Override
+    public void onTaskSuccess(int taskId, List<ITimeUser> data) {
+        viewModel.setFriendList(data);
+    }
+
+    @Override
+    public void onTaskError(int taskId) {
+
     }
 }

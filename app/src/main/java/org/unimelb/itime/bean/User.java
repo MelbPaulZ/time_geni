@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.converter.PropertyConverter;
 
 import java.io.Serializable;
@@ -20,8 +19,9 @@ import java.lang.reflect.Type;
 @Entity
 public class User implements Serializable, Cloneable {
 
-    public  final static String MALE = "2";
-    public final static String FEMALE = "1";
+    public final static String MALE = "1";
+    public final static String FEMALE = "0";
+    public final static String UNDEFINED = "2";
 
     @Id
     private String userUid="";
@@ -41,7 +41,7 @@ public class User implements Serializable, Cloneable {
     private String createdAt="";
     private String updatedAt="";
     private String gender="";
-    private String location="";
+    private String location ="";
 
 @Generated(hash = 1717660507)
 public User(String userUid, String userId, String personalAlias, String email,
@@ -221,6 +221,14 @@ public User(String userUid, String userId, String personalAlias, String email,
         public String convertToDatabaseValue(User entityProperty) {
             return gson.toJson(entityProperty);
         }
+    }
+
+    public String getRegion(){
+        return location;
+    }
+
+    public void setRegion(String region){
+        location = region;
     }
 
     @Override

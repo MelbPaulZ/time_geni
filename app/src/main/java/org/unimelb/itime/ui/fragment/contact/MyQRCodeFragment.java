@@ -17,6 +17,7 @@ import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.databinding.FragmentMyQrCodeBinding;
 import org.unimelb.itime.ui.mvpview.contact.MyQRCodeMvpView;
 import org.unimelb.itime.ui.presenter.contact.MyQRCodePresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.contact.MyQRCodeVieModel;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
@@ -35,6 +36,7 @@ public class MyQRCodeFragment extends BaseUiFragment<Object,MyQRCodeMvpView, MyQ
 
     private FragmentMyQrCodeBinding binding;
     private MyQRCodeVieModel viewModel;
+    private ToolbarViewModel toolbarViewModel;
     private int preview;
 
     public View onCreateView(LayoutInflater inflater,
@@ -49,6 +51,13 @@ public class MyQRCodeFragment extends BaseUiFragment<Object,MyQRCodeMvpView, MyQ
         super.onActivityCreated(savedInstanceState);
         viewModel = new MyQRCodeVieModel(presenter);
         binding.setViewModel(viewModel);
+
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow_white));
+        toolbarViewModel.setTitleStr(getString(R.string.my_qr_code));
+        toolbarViewModel.setRightClickable(true);
+        toolbarViewModel.setRightDrawable(getResources().getDrawable(R.drawable.contact_more_bgblack));
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     public void setPreview(int preview){
@@ -57,8 +66,7 @@ public class MyQRCodeFragment extends BaseUiFragment<Object,MyQRCodeMvpView, MyQ
 
     public void onStart(){
         super.onStart();
-        ITimeUser user = new ITimeUser(UserUtil.getInstance(getContext()).getUser());
-        viewModel.setUser(user);
+        viewModel.setUser(UserUtil.getInstance(getContext()).getUser());
     }
 
     public void saveQRCode(){
@@ -93,11 +101,7 @@ public class MyQRCodeFragment extends BaseUiFragment<Object,MyQRCodeMvpView, MyQ
 
     @Override
     public void back() {
-//        if (getFrom() instanceof SettingMyProfileFragment){
-//            closeFragment(this, (SettingMyProfileFragment)getFrom());
-//        }else{
-//            getActivity().onBackPressed();
-//        }
+        getActivity().onBackPressed();
     }
 
     @Override
@@ -127,5 +131,15 @@ public class MyQRCodeFragment extends BaseUiFragment<Object,MyQRCodeMvpView, MyQ
     @Override
     public void setData(Object o) {
 
+    }
+
+    @Override
+    public void onBack() {
+        back();
+    }
+
+    @Override
+    public void onNext() {
+        viewModel.rightClicked();
     }
 }

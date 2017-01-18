@@ -44,11 +44,13 @@ public class BlockContactsPresenter extends MvpBasePresenter<BlockContactsMvpVie
         return context;
     }
 
-    public void getBlockList(BlockContactsViewModel.ContactsCallBack callBack){
+    public void getBlockList(){
         DBManager dbManager = DBManager.getInstance(context);
         List<ITimeUser> list = generateITimeUserList(dbManager.getBlockContacts());
-        callBack.success(list);
-        getBlockListFromServer(callBack);
+        if(getView()!=null){
+            getView().onTaskSuccess(0, list);
+        }
+        getBlockListFromServer();
     }
 
     private List<ITimeUser> generateITimeUserList(List<Block> list){
@@ -63,7 +65,7 @@ public class BlockContactsPresenter extends MvpBasePresenter<BlockContactsMvpVie
         return result;
     }
 
-    private void getBlockListFromServer(final BlockContactsViewModel.ContactsCallBack callBack){
+    private void getBlockListFromServer(){
         final DBManager dbManager = DBManager.getInstance(context);
         Observable<HttpResult<List<Block>>> observable = userApi.listBlock();
         Observable<List<Block>> dbObservable = observable.map(new Func1<HttpResult<List<Block>>, List<Block>>() {
@@ -90,15 +92,21 @@ public class BlockContactsPresenter extends MvpBasePresenter<BlockContactsMvpVie
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
-                callBack.failed();
+                if(getView()!=null){
+                    getView().onTaskError(0);
+                }
             }
 
             @Override
             public void onNext(List<Block> list) {
                 if(list == null){
-                    callBack.failed();
+                    if(getView()!=null){
+                        getView().onTaskError(0);
+                    }
                 }else {
-                    callBack.success(generateITimeUserList(list));
+                    if(getView()!=null){
+                        getView().onTaskSuccess(0, generateITimeUserList(list));
+                    }
                 }
             }
         };

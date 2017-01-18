@@ -5,20 +5,16 @@
         <variable
             name="mainViewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.BlockContactsViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <org.unimelb.itime.widget.BaseTitleBar
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/title_height"
-            app:title="@{mainViewModel.title}"
-            app:showLeft="@{mainViewModel.showTitileBack}"
-            app:showRight="@{mainViewModel.showTitleRight}"
-            app:backOnClickListener="@{mainViewModel.titleBackListener}"
-            android:id="@+id/titleBar"
-            />
+        <include layout="@layout/toolbar_common"
+            app:vm="@{toolbarVM}"/>
         <include layout="@layout/line"/>
 
         <!--<org.unimelb.itime.widget.SearchBar-->

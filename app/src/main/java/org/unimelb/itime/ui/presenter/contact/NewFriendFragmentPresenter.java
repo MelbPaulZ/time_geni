@@ -41,6 +41,7 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
     private FriendRequestApi requestApi;
     private ContactApi contactApi;
     private DBManager dbManager;
+    private static final int TASK_ID = 0;
 
     public NewFriendFragmentPresenter(Context context){
         this.context = context;
@@ -121,19 +122,21 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void getRequestFriendList(final NewFriendViewModel.RequestListCallBack callBack) {
+    public void getRequestFriendList() {
         List<FriendRequest> requests = dbManager.getAllFriendRequest();
         if(requests!=null){
             List<RequestFriend> list = new ArrayList<>();
             for(FriendRequest request:requests) {
                 list.add(new RequestFriend(request));
             }
-            callBack.success(list);
+            if(getView()!=null) {
+                getView().onTaskSuccess(TASK_ID, list);
+            }
         }
-        getRequestFriendListFromServer(callBack);
+        getRequestFriendListFromServer();
     }
 
-    public void getRequestFriendListFromServer(final NewFriendViewModel.RequestListCallBack callBack){
+    public void getRequestFriendListFromServer(){
         Observable<HttpResult<FriendRequestResult>> observable = requestApi.list();
         Observable<List<FriendRequest>> dbObservable = observable.map(new Func1<HttpResult<FriendRequestResult>, List<FriendRequest>>() {
             @Override
@@ -163,13 +166,17 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
                 e.printStackTrace();
-                callBack.fail();
+                if(getView()!=null) {
+                    getView().onTaskError(TASK_ID);
+                }
             }
 
             @Override
             public void onNext(List<FriendRequest> list) {
                 if (list == null){
-                    callBack.fail();
+                    if(getView()!=null) {
+                        getView().onTaskError(TASK_ID);
+                    }
                 }else {
                     List<String> unreadIds = new ArrayList<>();
                     List<RequestFriend> result = new ArrayList<>();
@@ -186,7 +193,9 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
                         setRead(array);
                     }
                     EventBus.getDefault().post(new MessageNewFriendRequest(0));
-                    callBack.success(result);
+                    if(getView()!=null) {
+                        getView().onTaskSuccess(TASK_ID, result);
+                    }
                 }
             }
         };
@@ -194,13 +203,15 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
     }
 
     public void gotoProfile(RequestFriend requestFriend){
-        if(requestFriend.getDisplayStatus().equals(FriendRequest.DISPLAY_STATUS_ACCEPT)){
-            Contact contact = new Contact(requestFriend.getUser());
-            contact.setStatus(FriendRequest.DISPLAY_STATUS_ACCEPT);
-            getView().goToProfileFragment(contact,requestFriend.getRequest() );
-        }else{
-            Contact contact = DBManager.getInstance(context).searchContact(requestFriend.getUser().getUserUid());
-            getView().goToProfileFragment(contact, requestFriend.getRequest());
+        if(getView()!=null) {
+            if (requestFriend.getDisplayStatus().equals(FriendRequest.DISPLAY_STATUS_ACCEPT)) {
+                Contact contact = new Contact(requestFriend.getUser());
+                contact.setStatus(FriendRequest.DISPLAY_STATUS_ACCEPT);
+                getView().goToProfileFragment(contact, requestFriend.getRequest());
+            } else {
+                Contact contact = DBManager.getInstance(context).searchContact(requestFriend.getUser().getUserUid());
+                getView().goToProfileFragment(contact, requestFriend.getRequest());
+            }
         }
     }
 
