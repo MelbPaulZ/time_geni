@@ -5,7 +5,6 @@ import org.unimelb.itime.restfulresponse.HttpResult;
 import java.util.HashMap;
 
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -18,7 +17,4 @@ public interface PasswordApi {
     @POST("password/send_reset_link")
     public Observable<HttpResult<Void>> sendResetLink(@Body HashMap<String, Object> parameters);
 
-
-    @POST("password/reset")
-    public Observable<HttpResult<Void>> reset();
 }

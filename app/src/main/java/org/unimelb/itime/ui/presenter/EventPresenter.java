@@ -1,8 +1,8 @@
 package org.unimelb.itime.ui.presenter;
 
 import android.content.Context;
-import android.databinding.tool.util.L;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -37,7 +36,6 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
 
 /**
  * Created by yinchuandong on 12/1/17.
@@ -105,7 +103,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 if(getView() != null){
-                    getView().onTaskError(TASK_EVENT_UPDATE);
+                    getView().onTaskError(TASK_EVENT_UPDATE, null);
                 }
                 Log.i(TAG, "onError: " + e.getMessage());
             }
@@ -120,12 +118,6 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
 
                 updateImage(event);
-
-//                if (getView()!=null){
-//                    getView().onTaskSuccess(TASK_EVENT_UPDATE,eventHttpResult.getData());
-//                }
-
-                Log.i(TAG, "onNext: " +"done");
             }
         };
         HttpUtil.subscribe(observable,subscriber);
@@ -146,7 +138,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: " + "eventApi" + e.getMessage());
                 if (getView() != null){
-                    getView().onTaskError(TASK_EVENT_GET);
+                    getView().onTaskError(TASK_EVENT_GET, null);
                 }
             }
 
@@ -177,7 +169,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 if(getView() != null){
-                    getView().onTaskError(TASK_EVENT_INSERT);
+                    getView().onTaskError(TASK_EVENT_INSERT, null);
                 }
             }
 
@@ -188,19 +180,16 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                 }
                 Event ev = eventHttpResult.getData().get(0);
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
-
-
                 insertEventLocal(ev);
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+
+                if(getView() != null){
+                    getView().onTaskSuccess(TASK_EVENT_INSERT, eventHttpResult.getData());
+                }
 
                 // if the event is successfully insert into server, then begin to upload photos
                 if (ev.hasPhoto()){
                     uploadImage(ev);
-                }else {
-                    if(getView() != null){
-                        getView().onTaskSuccess(TASK_EVENT_INSERT, eventHttpResult.getData());
-                    }
-                    // todo: put event bus into fragment
-                    EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                 }
             }
         };
@@ -227,7 +216,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 if (getView()!=null){
-                    getView().onTaskError(TASK_EVENT_DELETE);
+                    getView().onTaskError(TASK_EVENT_DELETE, null);
                 }
             }
 
@@ -296,14 +285,19 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                                                 wrapper.getPhoto().setUrl(avFile.getUrl());
                                                 wrapper.setUploaded(true);
 
-                                                if (imageUploadChecker(wrappers) && getView() != null){
-                                                    getView().onTaskSuccess(TASK_UPLOAD_IMAGE, Arrays.asList(event));
+                                                if (imageUploadChecker(wrappers)){
+                                                    Toast.makeText(getContext(),"Image Uploaded to leanCloud",Toast.LENGTH_SHORT).show();
+                                                    //start to syn server
+                                                    for (PhotoUrl photoUrl:event.getPhoto()
+                                                            ) {
+                                                        updatePhotoToServer(event, photoUrl.getPhotoUid(), photoUrl.getUrl());
+                                                    }
                                                 }else{
                                                     Log.i(TAG, "done: ");
                                                 }
                                             }else{
                                                 if (getView() != null){
-                                                    getView().onTaskError(TASK_UPLOAD_IMAGE);
+                                                    getView().onTaskError(TASK_UPLOAD_IMAGE, null);
                                                 }
                                             }
                                         }
@@ -334,16 +328,14 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: ");
                 if (getView() != null){
-                    getView().onTaskError(TASK_SYN_IMAGE);
+                    getView().onTaskError(TASK_SYN_IMAGE, null);
                 }
             }
 
             @Override
             public void onNext(HttpResult<Event> eventHttpResult) {
                 synchronizeLocal(eventHttpResult.getData());
-                if (getView() != null){
-                    getView().onTaskSuccess(TASK_SYN_IMAGE, Arrays.asList(event));
-                }
+                Toast.makeText(getContext(),"Image Synchronized to ITime",Toast.LENGTH_SHORT).show();
             }
         };
         HttpUtil.subscribe(observable, subscriber);
@@ -376,7 +368,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: " + e.getMessage());
                 if (getView()!=null){
-                    getView().onTaskError(TASK_EVENT_REJECT);
+                    getView().onTaskError(TASK_EVENT_REJECT, null);
                 }
             }
 
@@ -454,7 +446,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: " + e.getMessage());
                 if (getView()!=null){
-                    getView().onTaskError(TASK_TIMESLOT_ACCEPT);
+                    getView().onTaskError(TASK_TIMESLOT_ACCEPT, null);
                 }
             }
 
@@ -490,7 +482,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 if (getView()!=null){
-                    getView().onTaskError(TASK_EVENT_CONFIRM);
+                    getView().onTaskError(TASK_EVENT_CONFIRM, null);
                 }
             }
 
@@ -526,7 +518,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onError(Throwable e) {
                 if (getView()!=null){
-                    getView().onTaskError(TASK_TIMESLOT_REJECT);
+                    getView().onTaskError(TASK_TIMESLOT_REJECT, null);
                 }
             }
 

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailBinding;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
@@ -20,7 +21,6 @@ import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel.SubTimeslotViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
@@ -72,7 +72,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
 
     private void initTimeslotVMList(){
         // it needs to be puted on the begining, otherwise won't initialize
-        contentViewModel.setInviteeList(EventUtil.getInviteeWithStatus(event.getInvitee(),"accepted","rejected"));
+        contentViewModel.setInviteeList(EventUtil.getInviteeWithStatus(event.getInvitee(), Invitee.STATUS_ACCEPTED));
         if(timeslotVMList != null){
             // if other fragment set timeslotWrapper to this fragment
             contentViewModel.setWrapperTimeSlotList(timeslotVMList);
@@ -218,12 +218,12 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
 
     @Override
     public void onTaskStart(int task) {
-        AppUtil.showProgressBar(getContext(), "Loading", "Waiting");
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
-        AppUtil.hideProgressBar();
+        hideProgressDialog();
         if (taskId == EventPresenter.TASK_TIMESLOT_ACCEPT){
             toCalendar(Activity.RESULT_OK);
         }else if (taskId == EventPresenter.TASK_EVENT_CONFIRM){
@@ -240,8 +240,8 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
     }
 
     @Override
-    public void onTaskError(int taskId) {
-        AppUtil.hideProgressBar();
+    public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
     }
 
 

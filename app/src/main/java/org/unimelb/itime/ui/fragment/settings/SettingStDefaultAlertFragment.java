@@ -89,7 +89,7 @@ public class SettingStDefaultAlertFragment extends BaseUiAuthFragment<TaskBasedM
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
         Toast.makeText(getContext(),"Internet Error",Toast.LENGTH_LONG).show();
     }
 

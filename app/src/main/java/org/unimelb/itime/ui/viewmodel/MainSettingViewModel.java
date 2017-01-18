@@ -8,6 +8,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.MainSettingMvpView;
 
+import com.android.databinding.library.baseAdapters.BR;
 /**
  * Created by yuhaoliu on 5/12/2016.
  */
@@ -31,6 +32,7 @@ public class MainSettingViewModel extends CommonViewModel{
 
     public void setUser(User user) {
         this.user = user;
+        notifyPropertyChanged(BR.user);
     }
 
     public View.OnClickListener onProfileClick(){

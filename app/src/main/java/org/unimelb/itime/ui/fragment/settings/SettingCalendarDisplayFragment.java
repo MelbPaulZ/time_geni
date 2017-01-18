@@ -62,16 +62,17 @@ public class SettingCalendarDisplayFragment extends BaseUiAuthFragment<SettingCa
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Calendar data) {
+        hideProgressDialog();
     }
 
     @Override
-    public void onTaskError(int taskId) {
-
+    public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
     }
 
     @Override

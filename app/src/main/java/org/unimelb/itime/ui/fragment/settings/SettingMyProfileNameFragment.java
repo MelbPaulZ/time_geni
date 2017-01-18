@@ -84,7 +84,7 @@ public class SettingMyProfileNameFragment extends BaseUiAuthFragment<TaskBasedMv
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
     }
 }

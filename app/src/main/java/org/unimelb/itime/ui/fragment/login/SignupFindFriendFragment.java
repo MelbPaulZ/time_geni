@@ -8,23 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.databinding.FragmentLoginFindFriendBinding;
-import org.unimelb.itime.restfulresponse.ValidateRes;
+import org.unimelb.itime.databinding.FragmentSignupFindFriendBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
-import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
  * Created by Paul on 20/12/2016.
  */
 
-public class LoginFindFriendFragment extends LoginBaseFragment implements LoginMvpView{
+public class SignupFindFriendFragment extends LoginBaseFragment implements LoginMvpView{
 
-    private FragmentLoginFindFriendBinding binding;
+    private FragmentSignupFindFriendBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_find_friend, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup_find_friend, container, false);
         return binding.getRoot();
     }
 
@@ -34,23 +32,6 @@ public class LoginFindFriendFragment extends LoginBaseFragment implements LoginM
         binding.setLoginVM(loginViewModel);
     }
 
-    @Override
-    public void onLoginStart() {
-
-    }
-
-    @Override
-    public void onLoginSucceed(int task) {
-        if (task == LoginViewModel.TO_CALENDAR){
-            successLogin();
-        }
-
-    }
-
-    @Override
-    public void onLoginFail(int task, String errorMsg) {
-
-    }
 
 
     @Override
@@ -59,7 +40,18 @@ public class LoginFindFriendFragment extends LoginBaseFragment implements LoginM
     }
 
     @Override
-    public void showErrorDialog(ValidateRes res) {
+    public void onTaskStart(int taskId) {
 
     }
+
+    @Override
+    public void onTaskSuccess(int taskId, Object data) {
+
+    }
+
+    @Override
+    public void onTaskError(int taskId, Object data) {
+
+    }
+
 }

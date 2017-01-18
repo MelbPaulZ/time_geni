@@ -193,47 +193,30 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void onTaskStart(int task) {
-        AppUtil.showProgressBar(getActivity(),"","Please wait...");
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
+        hideProgressDialog();
         switch (taskId){
-            case TASK_UPLOAD_IMAGE:{
-                for (Event event:data
-                     ) {
-                    for (PhotoUrl photoUrl:event.getPhoto()
-                         ) {
-                        presenter.updatePhotoToServer(event, photoUrl.getPhotoUid(), photoUrl.getUrl());
-                    }
-                }
-                break;
-            }
-            case TASK_SYN_IMAGE:{
-                AppUtil.hideProgressBar();
-                toCalendar();
-                break;
-            }
-
             case TASK_EVENT_INSERT: {
-                AppUtil.hideProgressBar();
                 toCalendar();
                 break;
             }
             case TASK_EVENT_UPDATE:{
-                AppUtil.hideProgressBar();
                 toCalendar();
                 break;
             }
             default:{
-                AppUtil.hideProgressBar();
                 toCalendar();
             }
         }
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
         switch (taskId) {
             case TASK_UPLOAD_IMAGE: {
                 Toast.makeText(getContext(), "Upload Image Failed, LeanCloud ERROR", Toast.LENGTH_LONG).show();
@@ -244,7 +227,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
                 break;
             }
         }
-        AppUtil.hideProgressBar();
     }
 
     private void toCalendar(){

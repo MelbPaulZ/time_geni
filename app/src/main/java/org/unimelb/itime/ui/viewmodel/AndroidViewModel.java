@@ -144,15 +144,17 @@ public class AndroidViewModel extends BaseObservable {
 
     @BindingAdapter({"bind:loadRemoteUrlWithCircle"})
     public static void loadRemoteUrlWithCircle(ImageView imageView, String url){
-        imageView.setVisibility(View.VISIBLE);
-        int size = DensityUtil.dip2px(imageView.getContext(), 50);
-        Picasso.with(imageView.getContext())
-                .load(url)
-                .placeholder(R.drawable.invitee_selected_default_picture)
-                .resize(size, size)
-                .centerCrop()
-                .transform(new CircleTransform())
-                .into(imageView);
+        if (!url.equals("")){
+            imageView.setVisibility(View.VISIBLE);
+            int size = DensityUtil.dip2px(imageView.getContext(), 50);
+            Picasso.with(imageView.getContext())
+                    .load(url)
+                    .placeholder(R.drawable.invitee_selected_default_picture)
+                    .resize(size, size)
+                    .centerCrop()
+                    .transform(new CircleTransform())
+                    .into(imageView);
+        }
     }
 
 

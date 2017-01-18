@@ -113,14 +113,14 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
                 inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
                 inboxInviteeBinding.setVm(viewModel);
                 convertView = inboxInviteeBinding.getRoot();
-                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)));
+                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)),message.getPhoto());
             } else {
                 // message.template = invitee
                 inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
                 inboxInviteeBinding.setVm(viewModel);
                 convertView = inboxInviteeBinding.getRoot();
                 //david added
-                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)));
+                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)),message.getPhoto());
             }
             convertView.setTag(viewModel);
         }else{
@@ -131,8 +131,12 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
     }
 
     //david added
-    public void setImage(ImageView view){
-        Picasso.with(presenter.getContext()).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
+    public void setImage(ImageView view, String url){
+        if (url.equals("")){
+            Picasso.with(presenter.getContext()).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
+            return;
+        }
+        Picasso.with(presenter.getContext()).load(url).placeholder(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
     }
 
     @Override

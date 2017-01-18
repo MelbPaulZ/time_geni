@@ -422,7 +422,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
     }
 

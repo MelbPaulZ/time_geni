@@ -236,7 +236,7 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
         AppUtil.hideProgressBar();
     }
 

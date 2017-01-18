@@ -1,14 +1,16 @@
 package org.unimelb.itime.base;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.MvpView;
@@ -24,11 +26,14 @@ public abstract class BaseUiAuthFragment<V extends MvpView, P extends MvpPresent
 
     protected BaseActivity baseActivity;
 
+    protected ProgressDialog progressDialog;
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         baseActivity = (BaseActivity)getActivity();
+        progressDialog = new ProgressDialog(getContext());
     }
 
     public BaseActivity getBaseActivity(){
@@ -54,5 +59,25 @@ public abstract class BaseUiAuthFragment<V extends MvpView, P extends MvpPresent
                     }
                 });
          builder.create().show();
+    }
+
+    public void showProgressDialog(){
+        progressDialog.show();
+    }
+
+    public void hideProgressDialog(){
+        progressDialog.hide();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        // hide soft key board
+        if (!hidden) {
+            final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (getView() != null) {
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
+        }
     }
 }

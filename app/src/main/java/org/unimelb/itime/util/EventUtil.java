@@ -26,6 +26,7 @@ import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -663,13 +664,13 @@ public class EventUtil {
         for (Timeslot slot: timeSlots
                 ) {
             List<StatusKeyStruct> structs = new ArrayList<>();
-            StatusKeyStruct acp_st = new StatusKeyStruct("accepted");
+            StatusKeyStruct acp_st = new StatusKeyStruct(Timeslot.STATUS_ACCEPTED);
             structs.add(acp_st);
 
-            StatusKeyStruct rejected_st = new StatusKeyStruct("rejected");
+            StatusKeyStruct rejected_st = new StatusKeyStruct(Timeslot.STATUS_REJECTED);
             structs.add(rejected_st);
 
-            StatusKeyStruct pending_st = new StatusKeyStruct("pending");
+            StatusKeyStruct pending_st = new StatusKeyStruct(Timeslot.STATUS_PENDING);
             structs.add(pending_st);
 
             results.put(slot.getTimeslotUid(),structs);
@@ -681,10 +682,10 @@ public class EventUtil {
 
             for (SlotResponse response: responses
                     ) {
-                List<StatusKeyStruct> stucts = results.get(response.getTimeslotUid());
-                for (int i = 0; i < stucts.size(); i++) {
-                    if (stucts.get(i).getStatus().equals(response.getStatus())){
-                        stucts.get(i).addInvitee(invitee);
+                List<StatusKeyStruct> structs = results.get(response.getTimeslotUid());
+                for (int i = 0; i < structs.size(); i++) {
+                    if (structs.get(i).getStatus().equals(response.getStatus())){
+                        structs.get(i).addInvitee(invitee);
                         break;
                     }
                 }
