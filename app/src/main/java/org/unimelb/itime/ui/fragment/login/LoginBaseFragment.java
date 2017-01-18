@@ -13,11 +13,14 @@ import com.avos.avoscloud.SaveCallback;
 
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.service.RemoteService;
 import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
+import org.unimelb.itime.util.AuthUtil;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
 import org.unimelb.itime.util.UserUtil;
 
@@ -43,6 +46,16 @@ public class LoginBaseFragment extends BaseUiAuthFragment<LoginMvpView, LoginPre
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        String synToken = AuthUtil.getJwtToken(getContext());
+        // this use to create DB manager...
+        DBManager.getInstance(getContext());
+        EventManager.getInstance(getContext());
+        if (!synToken.equals("")){
+            successLogin();
+            return;
+        }
+
         loginViewModel = new LoginViewModel(getPresenter());
         softKeyboardStateUtil = new SoftKeyboardStateUtil(getView());
         bindSoftKeyboardEvent();
