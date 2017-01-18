@@ -21,6 +21,7 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.SoftKeyboardStateUtil;
 
 import static android.R.id.empty;
+import static com.avos.avoscloud.LogUtil.log.show;
 import static org.unimelb.itime.R.id.dialog;
 
 /**
@@ -47,7 +48,6 @@ public class LoginPickAvatarFragment extends LoginBaseFragment implements LoginM
 
     @Override
     public void onLoginStart() {
-        AppUtil.showProgressBar(getContext(), "Signing Up", "Waiting");
     }
 
     @Override

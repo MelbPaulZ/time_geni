@@ -152,7 +152,6 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
 //    }
 
     public void searchContact(String input, InviteFriendViewModel.SearchContactCallback callback){
-        AppUtil.showProgressBar(context, context.getString(R.string.Searching), context.getString(R.string.please_wait));
         DBManager dbManager = DBManager.getInstance(context);
         List<Contact> contacts = dbManager.getAllContact();
         for(Contact contact:contacts){
@@ -168,7 +167,6 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
     }
 
     public void findFriend(final String searchStr, final InviteFriendViewModel.SearchContactCallback callback){
-        AppUtil.showProgressBar(context, context.getString(R.string.Searching), context.getString(R.string.please_wait));
         Observable<HttpResult<List<User>>> observable = userApi.search(searchStr);
         Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
             @Override

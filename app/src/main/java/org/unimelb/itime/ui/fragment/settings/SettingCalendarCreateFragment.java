@@ -77,11 +77,12 @@ public class SettingCalendarCreateFragment extends BaseUiAuthFragment<TaskBasedM
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Calendar data) {
+        hideProgressDialog();
         switch (taskId){
             case CalendarPresenter.TASK_CALENDAR_UPDATE:{
                 getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
@@ -101,6 +102,6 @@ public class SettingCalendarCreateFragment extends BaseUiAuthFragment<TaskBasedM
 
     @Override
     public void onTaskError(int taskId) {
-
+        hideProgressDialog();
     }
 }
