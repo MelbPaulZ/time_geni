@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by yuhaoliu on 21/11/16.
@@ -23,6 +24,7 @@ public class RuleFactory {
     }
 
     private RuleFactory() {
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     public RuleModel getRuleModel(RuleInterface ruleInterface){
