@@ -11,6 +11,7 @@ import android.databinding.ObservableField;
 import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -449,6 +450,18 @@ public class EventEditViewModel extends EventCommonViewModel {
         };
     }
 
+    public View.OnTouchListener pickPhotoOnTouch(){
+        return new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (mvpView != null) {
+                    mvpView.toPhotoPickerPage();
+                }
+                return false;
+            }
+        };
+    }
+
 //    public void setPhotos(ArrayList<String> photos) {
 //        event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
 //        notifyPropertyChanged(BR.event);
@@ -509,6 +522,10 @@ public class EventEditViewModel extends EventCommonViewModel {
         this.event = event;
         if (event.hasTimeslots()) {
             timeslotList = event.getTimeslot();
+        }
+
+        if (event.hasPhoto()){
+            photoUrls = event.getPhoto();
         }
         notifyPropertyChanged(BR.event);
         notifyPropertyChanged(BR.startTimeVisibility);
@@ -671,5 +688,32 @@ public class EventEditViewModel extends EventCommonViewModel {
                 }
             }
         }
+    }
+
+
+    /**
+     * the following is for binding photos
+     */
+    private List<PhotoUrl> photoUrls = new ArrayList<>();
+    private ItemView photoItemView = ItemView.of(BR.photoUrl, R.layout.listview_photo);
+
+    @Bindable
+    public List<PhotoUrl> getPhotoUrls() {
+        return photoUrls;
+    }
+
+    public void setPhotoUrls(List<PhotoUrl> photoUrls) {
+        this.photoUrls = photoUrls;
+        notifyPropertyChanged(BR.photoUrls);
+    }
+
+    @Bindable
+    public ItemView getPhotoItemView() {
+        return photoItemView;
+    }
+
+    public void setPhotoItemView(ItemView photoItemView) {
+        this.photoItemView = photoItemView;
+        notifyPropertyChanged(BR.photoItemView);
     }
 }

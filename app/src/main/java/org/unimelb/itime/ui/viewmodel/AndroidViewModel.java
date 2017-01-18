@@ -154,4 +154,26 @@ public class AndroidViewModel extends BaseObservable {
                 .transform(new CircleTransform())
                 .into(imageView);
     }
+
+
+    @BindingAdapter({"bind:loadPhoto"})
+    public static void loadPhoto(ImageView imageView, PhotoUrl photoUrl){
+        String localUrl = photoUrl.getLocalPath();
+        String remoteUrl = photoUrl.getUrl();
+        int size = 200;
+        if (!localUrl.equals("")){
+            File file = new File(localUrl);
+            if (file.exists()){
+                Picasso.with(imageView.getContext()).load(file).resize(size,size).into(imageView);
+                return;
+            }
+        }
+
+        if (!remoteUrl.equals("")){
+            Picasso.with(imageView.getContext()).load(remoteUrl).resize(size,size).into(imageView);
+            return;
+        }
+    }
+
+
 }

@@ -58,6 +58,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     private Event event = null;
     private List<WrapperTimeSlot> wrapperTimeSlotList;
     private EventManager eventManager;
+    private List<PhotoUrl> photoUrls;
 
     private EventEditViewModel eventEditViewModel;
 //    private EventPresenter presenter;
@@ -87,6 +88,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         eventManager = EventManager.getInstance(getContext());
         eventEditViewModel = new EventEditViewModel(getPresenter());
         eventEditViewModel.setEvent(event);
+        eventEditViewModel.setPhotoUrls(photoUrls);
         eventEditViewModel.setFragment_task(task);
         initToolbar();
 
@@ -122,12 +124,15 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
     public void setPhotos(ArrayList<String> photos){
-        event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
-        // this is for letting viewmodel refresh data
+        List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), photos);
+        this.photoUrls = photoUrls;
+        // this is for photo choose back, then refresh page
         if (eventEditViewModel!=null){
-            eventEditViewModel.setEvent(event);
+            eventEditViewModel.setPhotoUrls(photoUrls);
         }
+        // this is for letting viewmodel refresh data
     }
+
 
     @Override
     public void toEventDetailPage() {

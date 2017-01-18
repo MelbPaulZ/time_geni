@@ -111,7 +111,6 @@ public class EventDetailActivity extends EmptyActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
                     EventEditFragment eventEditFragment = (EventEditFragment) getSupportFragmentManager().findFragmentById(getFragmentContainerId());
-                    eventEditFragment.setEvent(event);
                     eventEditFragment.setPhotos(result);
                     openFragment(eventEditFragment);
                 }
