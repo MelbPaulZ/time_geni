@@ -12,7 +12,6 @@ import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.ui.mvpview.contact.AddFriendsMvpView;
 import org.unimelb.itime.ui.viewmodel.contact.AddFriendsViewModel;
 import org.unimelb.itime.util.AppUtil;
@@ -42,7 +41,6 @@ public class AddFriendsPresenter extends MvpBasePresenter<AddFriendsMvpView> {
         if(searchStr==null || searchStr.equals("")){
             return;
         }
-        AppUtil.showProgressBar(context, context.getResources().getString(R.string.Searching), context.getResources().getString(R.string.please_wait));
         DBManager dbManager = DBManager.getInstance(context);
         searchStr = searchStr.trim();
         final List<Contact> contacts = dbManager.getAllContact();

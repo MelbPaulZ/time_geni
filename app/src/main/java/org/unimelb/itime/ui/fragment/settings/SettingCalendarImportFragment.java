@@ -61,17 +61,17 @@ public class SettingCalendarImportFragment extends BaseUiAuthFragment<CalendarIm
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Calendar data) {
-
+        hideProgressDialog();
     }
 
     @Override
     public void onTaskError(int taskId) {
-
+        hideProgressDialog();
     }
 
     @Override

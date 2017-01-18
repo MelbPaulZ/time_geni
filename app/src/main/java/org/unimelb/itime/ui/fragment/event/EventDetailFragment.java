@@ -20,7 +20,6 @@ import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
 import org.unimelb.itime.ui.viewmodel.EventDetailViewModel.SubTimeslotViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
@@ -218,12 +217,12 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
 
     @Override
     public void onTaskStart(int task) {
-        AppUtil.showProgressBar(getContext(), "Loading", "Waiting");
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
-        AppUtil.hideProgressBar();
+        hideProgressDialog();
         if (taskId == EventPresenter.TASK_TIMESLOT_ACCEPT){
             toCalendar(Activity.RESULT_OK);
         }else if (taskId == EventPresenter.TASK_EVENT_CONFIRM){
@@ -241,7 +240,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
 
     @Override
     public void onTaskError(int taskId) {
-        AppUtil.hideProgressBar();
+        hideProgressDialog();
     }
 
 
