@@ -8,6 +8,7 @@
         <import type="org.unimelb.itime.util.EventUtil" />
 
         <import type="org.unimelb.itime.util.TimeSlotUtil" />
+        <import type="org.unimelb.itime.bean.Invitee" />
 
         <import type="org.unimelb.itime.util.UserUtil" />
         <import type="org.unimelb.itime.util.CalendarUtil"/>
@@ -291,7 +292,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text='@{String.valueOf(EventUtil.getInviteeWithStatus(contentVM.event.invitee,"accepted").size()) + @string/going}'
+                                android:text='@{String.valueOf(EventUtil.getInviteeWithStatus(contentVM.event.invitee,Invitee.STATUS_ACCEPTED).size()) + @string/going}'
                                 android:textColor="@color/blue"/>
 
                             <TextView
@@ -306,7 +307,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text='@{String.valueOf(EventUtil.getInviteeWithStatus(contentVM.event.invitee,"pending").size()) + @string/no_reply}'
+                                android:text='@{String.valueOf(EventUtil.getInviteeWithStatus(contentVM.event.invitee,Invitee.STATUS_NEEDSACTION).size()) + @string/no_reply}'
                                 android:textColor="@color/orange"/>
                         </LinearLayout>
 

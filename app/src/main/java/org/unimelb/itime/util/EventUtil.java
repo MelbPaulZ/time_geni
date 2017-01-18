@@ -533,6 +533,7 @@ public class EventUtil {
             self.setUserId(UserUtil.getInstance(context).getUser().getUserId());
             self.setIsHost(1); // 1 refers to host
             self.setAliasName(UserUtil.getInstance(context).getUser().getPersonalAlias());
+            self.setAliasPhoto(UserUtil.getInstance(context).getUser().getPhoto());
             event.addInvitee(self);
         }
     }

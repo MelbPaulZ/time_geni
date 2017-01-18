@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailBinding;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
@@ -71,7 +72,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
 
     private void initTimeslotVMList(){
         // it needs to be puted on the begining, otherwise won't initialize
-        contentViewModel.setInviteeList(EventUtil.getInviteeWithStatus(event.getInvitee(),"accepted","rejected"));
+        contentViewModel.setInviteeList(EventUtil.getInviteeWithStatus(event.getInvitee(), Invitee.STATUS_ACCEPTED,Invitee.STATUS_DECLINED));
         if(timeslotVMList != null){
             // if other fragment set timeslotWrapper to this fragment
             contentViewModel.setWrapperTimeSlotList(timeslotVMList);
