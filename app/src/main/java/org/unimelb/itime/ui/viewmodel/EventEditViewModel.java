@@ -426,14 +426,14 @@ public class EventEditViewModel extends EventCommonViewModel {
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {
-                                presenter.deleteEvent(event, EventPresenter.UPDATE_THIS, orgEvent.getStartTime());
+                                presenter.deleteEvent(event, EventPresenter.UPDATE_THIS, event.getStartTime());
                             }
                         })
                 .addSheetItem(getContext().getString(R.string.event_delete_repeat_text2), ActionSheetDialog.SheetItemColor.Black,
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int i) {
-                                presenter.deleteEvent(event, EventPresenter.UPDATE_FOLLOWING, orgEvent.getStartTime());
+                                presenter.deleteEvent(event, EventPresenter.UPDATE_FOLLOWING, event.getStartTime());
                             }
                         });
         actionSheetDialog.show();

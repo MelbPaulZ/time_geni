@@ -508,10 +508,9 @@
                         <!--android:background="@drawable/table_row_border"-->
                         <!--android:onClick="@{eventEditVM.pickPhoto()}">-->
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:background="@drawable/table_row_border">
 
                         <TextView
@@ -524,15 +523,7 @@
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
 
-                        <android.support.v7.widget.RecyclerView
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:onTouch="@{eventEditVM.pickPhotoOnTouch()}"
-                            android:layout_gravity="center_vertical"
-                            app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, false)}"
-                            app:items="@{eventEditVM.photoUrls}"
-                            app:itemView="@{eventEditVM.photoItemView}"
-                            />
+
 
                         <ImageView
                             android:id="@+id/edit_event_photo_arrow"
@@ -542,7 +533,19 @@
                             android:layout_centerVertical="true"
                             android:layout_gravity="center_vertical|right"
                             android:src="@drawable/arrow" />
-                    </LinearLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:layout_width="wrap_content"
+                            android:layout_height="60dp"
+                            android:layout_toLeftOf="@+id/edit_event_photo_arrow"
+                            android:minWidth="200dp"
+                            android:onTouch="@{eventEditVM.pickPhotoOnTouch()}"
+                            android:layout_gravity="center_vertical"
+                            app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, true)}"
+                            app:items="@{eventEditVM.photoUrls}"
+                            app:itemView="@{eventEditVM.photoItemView}"
+                            />
+                    </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
