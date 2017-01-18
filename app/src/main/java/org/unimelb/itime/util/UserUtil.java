@@ -94,9 +94,10 @@ public class UserUtil {
         AuthUtil.clearJwtToken(context);
         SharedPreferences sp = AppUtil.getTokenSaver(context);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, "");
-        editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, "");
-        editor.apply();
+        editor.clear().apply();
+//        editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, "");
+//        editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, "");
+//        editor.apply();
 
         DBManager.getInstance(context).deleteAllMessages();
         DBManager.getInstance(context).clearDB();

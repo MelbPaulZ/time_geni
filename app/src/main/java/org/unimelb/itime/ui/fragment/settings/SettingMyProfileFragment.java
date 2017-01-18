@@ -113,11 +113,6 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     public void onBack() {
         getActivity().finish();
         getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
