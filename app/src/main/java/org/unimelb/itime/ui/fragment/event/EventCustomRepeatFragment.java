@@ -85,18 +85,18 @@ public class EventCustomRepeatFragment extends BaseUiAuthFragment<EventCustomRep
 
     @Override
     public void onTaskStart(int task) {
-        AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
-        AppUtil.hideProgressBar();
+        hideProgressDialog();
         toCalendar();
     }
 
     @Override
-    public void onTaskError(int taskId) {
-        AppUtil.hideProgressBar();
+    public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
     }
 
     private void toCalendar(){
@@ -110,6 +110,7 @@ public class EventCustomRepeatFragment extends BaseUiAuthFragment<EventCustomRep
         EventEditFragment frag = new EventEditFragment();
         frag.setEvent(orgEvent);
         getBaseActivity().backFragment(frag);
+
     }
 
     @Override

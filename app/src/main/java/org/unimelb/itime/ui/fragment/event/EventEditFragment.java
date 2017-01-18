@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_INSERT;
+import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_UPDATE;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_SYN_IMAGE;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_UPLOAD_IMAGE;
 
@@ -61,6 +62,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     private EventEditViewModel eventEditViewModel;
 //    private EventPresenter presenter;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
+
     private int task = TASK_CREATE;
 
 
@@ -107,6 +109,10 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     public void setEvent(Event event){
         this.event = event;
+        // this is for photo choose back, then refresh page
+        if (eventEditViewModel!=null){
+            eventEditViewModel.setEvent(event);
+        }
     }
 
     @Override
@@ -117,6 +123,10 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     public void setPhotos(ArrayList<String> photos){
         event.setPhoto(EventUtil.fromStringToPhotoUrlList(getContext(), photos));
+        // this is for letting viewmodel refresh data
+        if (eventEditViewModel!=null){
+            eventEditViewModel.setEvent(event);
+        }
     }
 
     @Override
@@ -178,42 +188,30 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void onTaskStart(int task) {
-        AppUtil.showProgressBar(getActivity(),"","Please wait...");
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
+        hideProgressDialog();
         switch (taskId){
-            case TASK_UPLOAD_IMAGE:{
-                for (Event event:data
-                     ) {
-                    for (PhotoUrl photoUrl:event.getPhoto()
-                         ) {
-                        presenter.updatePhotoToServer(event, photoUrl.getPhotoUid(), photoUrl.getUrl());
-                    }
-                }
-                break;
-            }
-            case TASK_SYN_IMAGE:{
-                AppUtil.hideProgressBar();
+            case TASK_EVENT_INSERT: {
                 toCalendar();
                 break;
             }
-
-            case TASK_EVENT_INSERT:{
-                AppUtil.hideProgressBar();
+            case TASK_EVENT_UPDATE:{
                 toCalendar();
                 break;
             }
             default:{
-                AppUtil.hideProgressBar();
                 toCalendar();
             }
         }
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
         switch (taskId) {
             case TASK_UPLOAD_IMAGE: {
                 Toast.makeText(getContext(), "Upload Image Failed, LeanCloud ERROR", Toast.LENGTH_LONG).show();
@@ -224,7 +222,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
                 break;
             }
         }
-        AppUtil.hideProgressBar();
     }
 
     private void toCalendar(){
@@ -244,9 +241,16 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         }
     }
 
+
+
     @Override
     public void onNext() {
-        if (task == TASK_CREATE){
+        if (event.hasAttendee()
+                && EventUtil.hasOtherInviteeExceptSelf(getContext(), event)
+                && event.getTimeslot().size()==0){
+            // has other invitees but no timeslots
+            toTimeslotViewPage();
+        }else if (task == TASK_CREATE){
             eventEditViewModel.toCreateEvent();
         }else{
             eventEditViewModel.editEvent();

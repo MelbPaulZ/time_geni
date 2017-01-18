@@ -156,8 +156,12 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
 //        return dao.getFriends();
 //    }
 
+<<<<<<< HEAD
     public void searchContact(String input){
         AppUtil.showProgressBar(context, context.getString(R.string.Searching), context.getString(R.string.please_wait));
+=======
+    public void searchContact(String input, InviteFriendViewModel.SearchContactCallback callback){
+>>>>>>> 7b0f2e992707f61bf2c148439211aa50b0007e6a
         DBManager dbManager = DBManager.getInstance(context);
         List<Contact> contacts = dbManager.getAllContact();
         for(Contact contact:contacts){
@@ -173,8 +177,12 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
         findFriend(input);
     }
 
+<<<<<<< HEAD
     public void findFriend(final String searchStr){
         AppUtil.showProgressBar(context, context.getString(R.string.Searching), context.getString(R.string.please_wait));
+=======
+    public void findFriend(final String searchStr, final InviteFriendViewModel.SearchContactCallback callback){
+>>>>>>> 7b0f2e992707f61bf2c148439211aa50b0007e6a
         Observable<HttpResult<List<User>>> observable = userApi.search(searchStr);
         Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
             @Override

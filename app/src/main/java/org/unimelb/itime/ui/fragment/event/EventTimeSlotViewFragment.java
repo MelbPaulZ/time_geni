@@ -93,7 +93,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
         toolbarViewModel = new ToolbarViewModel<>(this);
         toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
-        if (fragment_task == TASK_EDIT) {
+        if (!event.getStatus().equals(Event.STATUS_CONFIRMED)) {
             toolbarViewModel.setRightTitleStr(getString(R.string.done));
         }
         binding.setTimeslotVM(viewModel);
@@ -259,6 +259,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             }
 
         });
+
     }
 
     private void viewInitListener(){
@@ -309,6 +310,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
             }
         });
+        timeslotWeekView.removeAllOptListener();
     }
 
     private int getSelectedTimeslotNum(){
@@ -389,7 +391,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             event.setTimeslot(new ArrayList<Timeslot>());
         }
         for (Timeslot timeSlot : data) {
-            if (!EventManager.getInstance(getContext()).isTimeslotExistInEvent(event, timeSlot)) {
+            if (!isTimeslotExistInWrapperList(timeslotWrapperList, timeSlot)) {
                 // have to do this
                 timeSlot.setEventUid(event.getEventUid());
                 timeSlot.setStatus(Timeslot.STATUS_CREATING);
@@ -402,8 +404,23 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         timeslotWeekView.reloadTimeSlots(false);
     }
 
+    private boolean isTimeslotExistInWrapperList(List<WrapperTimeSlot> wrapperTimeSlots, Timeslot timeslot){
+        if (wrapperTimeSlots!=null && wrapperTimeSlots.size()>0) {
+            for (WrapperTimeSlot wrapper : wrapperTimeSlots){
+                long tsSecond= wrapper.getTimeSlot().getStartTime()/(1000*60*15);
+                long recSecond = timeslot.getStartTime()/(1000*60*15);
+                if(tsSecond == recSecond){
+                    return true;
+                }
+            }
+            return false;
+        }else{
+            return false;
+        }
+    }
+
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
     }
 

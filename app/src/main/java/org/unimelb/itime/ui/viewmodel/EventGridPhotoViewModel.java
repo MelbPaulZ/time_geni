@@ -13,6 +13,7 @@ import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import com.android.databinding.library.baseAdapters.BR;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +40,15 @@ public class EventGridPhotoViewModel extends BaseObservable {
     @BindingAdapter("app:event")
     public static void setGradView(GridView gridView, Event event){
 
-        List<String> urls = new ArrayList<>();
+//        List<String> urls = new ArrayList<>();
         if (event!=null) {
-            for (PhotoUrl photoUrl : event.getPhoto()) {
-                urls.add(photoUrl.getUrl());
-            }
-            PhotoAdapter adapter = new PhotoAdapter(gridView.getContext(), R.id.gridview_photo, urls);
+//            for (PhotoUrl photoUrl : event.getPhoto()) {
+//                File file = new File(photoUrl.getLocalPath());
+//                if (file.exists()){
+//                    urls.add(photoUrl.getUrl());
+//                }
+//            }
+            PhotoAdapter adapter = new PhotoAdapter(gridView.getContext(), R.id.gridview_photo, event.getPhoto());
             gridView.setAdapter(adapter);
         }
     }

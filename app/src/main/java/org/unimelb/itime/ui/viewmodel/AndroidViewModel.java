@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
@@ -120,9 +121,12 @@ public class AndroidViewModel extends BaseObservable {
                         String remoteUrl = photoUrl.getUrl();
 
                         if (!localUrl.equals("")){
-                            Picasso.with(imagesContainer.getContext()).load(new File(localUrl)).resize(size,size).into(imgView);
-                            imgView.setVisibility(View.VISIBLE);
-                            continue;
+                            File file = new File(localUrl);
+                            if (file.exists()){
+                                Picasso.with(imagesContainer.getContext()).load(file).resize(size,size).into(imgView);
+                                imgView.setVisibility(View.VISIBLE);
+                                continue;
+                            }
                         }
 
                         if (!remoteUrl.equals("")){
@@ -137,4 +141,19 @@ public class AndroidViewModel extends BaseObservable {
         }
     }
 
+
+    @BindingAdapter({"bind:loadRemoteUrlWithCircle"})
+    public static void loadRemoteUrlWithCircle(ImageView imageView, String url){
+        if (!url.equals("")){
+            imageView.setVisibility(View.VISIBLE);
+            int size = DensityUtil.dip2px(imageView.getContext(), 50);
+            Picasso.with(imageView.getContext())
+                    .load(url)
+                    .placeholder(R.drawable.invitee_selected_default_picture)
+                    .resize(size, size)
+                    .centerCrop()
+                    .transform(new CircleTransform())
+                    .into(imageView);
+        }
+    }
 }

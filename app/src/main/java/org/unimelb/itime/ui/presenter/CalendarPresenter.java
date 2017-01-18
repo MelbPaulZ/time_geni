@@ -7,18 +7,13 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.unimelb.itime.bean.Calendar;
-import org.unimelb.itime.bean.User;
 import org.unimelb.itime.dao.CalendarDao;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.restfulapi.CalendarApi;
-import org.unimelb.itime.restfulapi.SettingApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.util.HttpUtil;
-import org.unimelb.itime.util.UserUtil;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -64,7 +59,7 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: ");
                 if(getView() != null){
-                    getView().onTaskError(TASK_CALENDAR_UPDATE);
+                    getView().onTaskError(TASK_CALENDAR_UPDATE, null);
                 }
             }
 
@@ -100,7 +95,7 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: ");
                 if(getView() != null){
-                    getView().onTaskError(TASK_CALENDAR_DELETE);
+                    getView().onTaskError(TASK_CALENDAR_DELETE, null);
                 }
             }
 
@@ -135,7 +130,7 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: ");
                 if(getView() != null){
-                    getView().onTaskError(TASK_CALENDAR_INSERT);
+                    getView().onTaskError(TASK_CALENDAR_INSERT, null);
                 }
             }
 

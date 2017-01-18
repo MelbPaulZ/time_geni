@@ -32,6 +32,7 @@ import org.unimelb.itime.util.rulefactory.InviteeUtil;
 import java.util.ArrayList;
 
 import static android.R.attr.fragment;
+import static android.R.attr.start;
 
 
 public class EventCreateActivity extends EmptyActivity implements PlaceSelectionListener {
@@ -50,7 +51,11 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
 
         long startTime = getIntent().getLongExtra("start_time",0);
         fragmentManager = getSupportFragmentManager();
-        event = initNewEvent(startTime);
+        if (startTime!=0) {
+            event = initNewEvent(startTime);
+        }else{
+            event = (Event) getIntent().getSerializableExtra("event");
+        }
         EventEditFragment fragment = new EventEditFragment();
 
         fragment.setEvent(event);
@@ -121,9 +126,10 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
             case ACTIVITY_PHOTOPICKER: {
                 if (resultCode == Activity.RESULT_OK) {
                     ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-                    EventEditFragment eventEditFragment = new EventEditFragment();
-                    eventEditFragment.setEvent(event);
+                    EventEditFragment eventEditFragment = (EventEditFragment) getSupportFragmentManager().findFragmentById(getFragmentContainerId());
+//                    EventEditFragment eventEditFragment = new EventEditFragment();
                     eventEditFragment.setPhotos(result);
+                    eventEditFragment.setEvent(event);
                     openFragment(eventEditFragment);
                 }
             }

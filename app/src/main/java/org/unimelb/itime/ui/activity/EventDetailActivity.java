@@ -14,6 +14,7 @@ import android.widget.Toast;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.event.EventDetailFragment;
 import org.unimelb.itime.ui.fragment.event.EventEditFragment;
@@ -53,7 +54,8 @@ public class EventDetailActivity extends EmptyActivity {
             throw new RuntimeException("event detail activity dont have parameters eventUid");
         }
         long startTime = intent.getLongExtra("start_time",0);
-        event = EventManager.getInstance(getApplicationContext()).findEventByUid(eventUid);
+//        event = DBManager.getInstance(getApplicationContext()).getEvent(eventUid);
+        event = DBManager.getInstance(getApplicationContext()).find(Event.class, "eventUid", eventUid).get(0);
     }
 
     @Override
@@ -108,7 +110,7 @@ public class EventDetailActivity extends EmptyActivity {
             case ACTIVITY_PHOTOPICKER: {
                 if (resultCode == Activity.RESULT_OK) {
                     ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-                    EventEditFragment eventEditFragment = new EventEditFragment();
+                    EventEditFragment eventEditFragment = (EventEditFragment) getSupportFragmentManager().findFragmentById(getFragmentContainerId());
                     eventEditFragment.setEvent(event);
                     eventEditFragment.setPhotos(result);
                     openFragment(eventEditFragment);

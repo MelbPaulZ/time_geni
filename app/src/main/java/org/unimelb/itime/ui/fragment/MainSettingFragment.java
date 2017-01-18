@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentSettingBinding;
 import org.unimelb.itime.messageevent.MessageEvent;
@@ -70,7 +71,7 @@ public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpVie
     public void toProfilePage() {
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         intent.putExtra(SettingActivity.TASK, SettingActivity.TASK_TO_MY_PROFILE);
-        startActivity(intent);
+        startActivityForResult(intent, SettingActivity.TASK_TO_MY_PROFILE);
     }
 
     @Override
@@ -142,7 +143,7 @@ public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpVie
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
     }
 
@@ -185,5 +186,14 @@ public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpVie
     @Override
     public void onNext() {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case SettingActivity.TASK_TO_MY_PROFILE:
+                contentViewModel.setUser(UserUtil.getInstance(getContext()).getUser());
+        }
     }
 }

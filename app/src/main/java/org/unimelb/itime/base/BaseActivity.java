@@ -59,6 +59,7 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpBasePresenter
         FragmentTransaction t = fragmentManager.beginTransaction();
         t.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         t.replace(getFragmentContainerId(), fragment);
+
         if(isAddedToStack){
             t.addToBackStack(null);
         }

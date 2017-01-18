@@ -13,7 +13,6 @@ import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.UserUtil;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -54,7 +53,7 @@ public class UserPresenter<V extends TaskBasedMvpView<User>> extends MvpBasePres
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: ");
                 if(getView() != null){
-                    getView().onTaskError(TASK_USER_UPDATE);
+                    getView().onTaskError(TASK_USER_UPDATE, null);
                 }
             }
 
@@ -93,7 +92,7 @@ public class UserPresenter<V extends TaskBasedMvpView<User>> extends MvpBasePres
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: ");
                 if(getView() != null){
-                    getView().onTaskError(TASK_USER_UPDATE);
+                    getView().onTaskError(TASK_USER_UPDATE, null);
                 }
             }
 

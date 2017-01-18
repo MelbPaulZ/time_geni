@@ -8,9 +8,12 @@
         <import type="org.unimelb.itime.util.EventUtil" />
 
         <import type="org.unimelb.itime.util.TimeSlotUtil" />
+        <import type="org.unimelb.itime.bean.Invitee" />
 
         <import type="org.unimelb.itime.util.UserUtil" />
         <import type="org.unimelb.itime.util.CalendarUtil"/>
+        <import type="me.tatarka.bindingcollectionadapter.LayoutManagers" />
+        <import type="android.support.v7.widget.LinearLayoutManager" />
 
         <import type="android.view.View" />
         <variable
@@ -271,15 +274,6 @@
                         android:orientation="vertical"
                         android:visibility="@{contentVM.soloInvisible}">
 
-                        <LinearLayout
-                            android:id="@+id/invitees_status_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingBottom="2dp"
-                            android:paddingTop="5dp"/>
-
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -287,18 +281,43 @@
                             android:layout_marginTop="@dimen/padding_5"
                             android:background="@color/gray_b2b2b2" />
 
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
 
-                            <LinearLayout
-                                android:id="@+id/invitees_status_img"
-                                android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:paddingLeft="10dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:padding="5dp"/>
-                        </HorizontalScrollView>
+                                android:gravity="center"
+                                android:text='@{String.valueOf(EventUtil.getInviteeWithStatus(contentVM.event.invitee,Invitee.STATUS_ACCEPTED).size()) + @string/going}'
+                                android:textColor="@color/blue"/>
+
+                            <TextView
+                                android:layout_width="5dp"
+                                android:layout_height="5dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:gravity="center"
+                                android:background="@drawable/itime_event_dot"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text='@{String.valueOf(EventUtil.getInviteeWithStatus(contentVM.event.invitee,Invitee.STATUS_NEEDSACTION).size()) + @string/no_reply}'
+                                android:textColor="@color/orange"/>
+                        </LinearLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, false)}"
+                            app:items="@{contentVM.inviteeList}"
+                            app:itemView="@{contentVM.inviteeItemView}"
+                            />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -312,6 +331,7 @@
                         android:id="@+id/event_detail_host_photo_RL"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
+                        android:visibility="@{contentVM.event.hasPhoto()? View.VISIBLE: View.GONE}"
                         android:onClick="@{contentVM.gotoGridView}">
 
                         <TextView
@@ -372,6 +392,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="@{contentVM.event.url.empty? View.GONE: View.VISIBLE}"
                         android:orientation="vertical">
 
                         <TextView
@@ -461,6 +482,18 @@
                             android:layout_alignParentBottom="true"
                             android:layout_marginTop="@dimen/padding_5"
                             android:background="@color/gray_b2b2b2" />
+                    </RelativeLayout>
+
+
+                    <!--create event from this template-->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:visibility="@{EventUtil.isUserHostOfEvent(context, contentVM.event)? View.VISIBLE : View.GONE}"
+                        android:onClick="@{contentVM.createEventFromThisTemplate()}"
+                        android:layout_height="60dp">
+                        <TextView
+                            style="@style/itime_blacktitle_17sp"
+                            android:text="@string/create_event_from_this_event" />
                     </RelativeLayout>
 
 

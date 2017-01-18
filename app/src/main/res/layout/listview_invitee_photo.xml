@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="org.unimelb.itime.util.UserUtil"/>
+        <import type="android.view.View"/>
+        <variable
+            name="item"
+            type="org.unimelb.itime.bean.Invitee"/>
+        <import type="org.unimelb.itime.bean.Invitee" />
+
+    </data>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="50dp"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:loadRemoteUrlWithCircle="@{item.aliasPhoto}"
+            android:layout_centerInParent="true"/>
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src='@{item.status.equals(Invitee.STATUS_DECLINED)? @drawable/icon_event_response_rejected:item.isHost==1 ? @drawable/icon_event_host_selected:@drawable/icon_event_invitee_selected }'
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+</layout>

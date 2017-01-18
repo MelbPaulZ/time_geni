@@ -3,9 +3,7 @@ package org.unimelb.itime.ui.presenter;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
@@ -15,13 +13,11 @@ import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.HttpUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -121,7 +117,7 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> {
             public void onError(Throwable e) {
                 Log.i(TAG, "onError: " + "eventApi" + e.getMessage());
                 if (getView() != null){
-                    getView().onTaskError(TASK_EVENT_GET);
+                    getView().onTaskError(TASK_EVENT_GET, null);
                 }
             }
 

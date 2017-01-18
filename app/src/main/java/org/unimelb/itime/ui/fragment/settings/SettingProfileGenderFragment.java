@@ -23,6 +23,7 @@ import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import me.tatarka.bindingcollectionadapter.ItemView;
 
@@ -104,7 +105,7 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
     }
 }

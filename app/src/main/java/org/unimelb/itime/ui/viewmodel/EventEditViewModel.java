@@ -69,6 +69,7 @@ public class EventEditViewModel extends EventCommonViewModel {
     private EventManager eventManager;
     private boolean isEndTimeChanged = false;
     private String alertString = null;
+    private int isAlldayEvent = 0; // this is for defining whether event is all day event, 0 = false, 1 = true
 
 
     public EventEditViewModel(EventPresenter<? extends TaskBasedMvpView<List<Event>>> presenter) {
@@ -80,6 +81,7 @@ public class EventEditViewModel extends EventCommonViewModel {
         }else if(presenter.getView() instanceof EventCustomRepeatMvpView){
             customRepeatMvpView = (EventCustomRepeatMvpView) presenter.getView();
         }
+
         editEventIsRepeat = new ObservableField<>(false); // TODO: 11/12/2016 change this and isAlldayEvent later.... needs to be bind with event
         initDialog();
     }
@@ -223,6 +225,17 @@ public class EventEditViewModel extends EventCommonViewModel {
         };
     }
 
+
+    @Bindable
+    public int getIsAlldayEvent() {
+        return isAlldayEvent;
+    }
+
+    public void setIsAlldayEvent(int isAlldayEvent) {
+        this.isAlldayEvent = isAlldayEvent;
+        notifyPropertyChanged(BR.isAlldayEvent);
+    }
+
     private void setEventToAlldayEvent(Event event) {
         evStartTime = event.getStartTime();
         evEndTime = event.getEndTime();
@@ -230,12 +243,14 @@ public class EventEditViewModel extends EventCommonViewModel {
         long endOfEndDay = EventUtil.getDayEndMilliseconds(event.getEndTime());
         event.setStartTime(beginOfStartDay);
         event.setEndTime(endOfEndDay);
+        setIsAlldayEvent(1);
         notifyPropertyChanged(BR.event);
     }
 
     private void setAlldayEventToNotAllday(Event event) {
         event.setStartTime(evStartTime);
         event.setEndTime(evEndTime);
+        setIsAlldayEvent(0);
         notifyPropertyChanged(BR.event);
     }
 

@@ -15,8 +15,10 @@ import com.squareup.picasso.Transformation;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +29,14 @@ import java.util.List;
 
 public class InviteeResponseAdapter extends BaseAdapter{
     private static final String TAG = "Response";
-    List<EventUtil.StatusKeyStruct> responses = new ArrayList<>();
-    LayoutInflater layoutInflater;
-    Context context;
+    private LayoutInflater layoutInflater;
+    private Context context;
 
-    ArrayList<Invitee> accepted = new ArrayList<>();
-    ArrayList<Invitee> rejected = new ArrayList<>();
-    ArrayList<Invitee> pending = new ArrayList<>();
+    private ArrayList<Invitee> accepted = new ArrayList<>();
+    private ArrayList<Invitee> rejected = new ArrayList<>();
+    private ArrayList<Invitee> pending = new ArrayList<>();
 
-    ArrayList<View> views = new ArrayList<>();
+    private ArrayList<View> views = new ArrayList<>();
 
     public InviteeResponseAdapter(Context context) {
         this.context = context;
@@ -43,17 +44,16 @@ public class InviteeResponseAdapter extends BaseAdapter{
     }
 
     public void setInvitees(List<EventUtil.StatusKeyStruct> responses, Event event){
-        this.responses = responses;
         this.accepted = new ArrayList<>();
         this.rejected = new ArrayList<>();
         this.pending = new ArrayList<>();
         for (EventUtil.StatusKeyStruct structs: responses
              ) {
-            if (structs.getStatus().equals("accepted")){
+            if (structs.getStatus().equals(Timeslot.STATUS_ACCEPTED)){
                 this.accepted.addAll(structs.getInviteeList());
-            }else if(structs.getStatus().equals("rejected")){
+            }else if(structs.getStatus().equals(Timeslot.STATUS_REJECTED)){
                 this.rejected.addAll(structs.getInviteeList());
-            }else if(structs.getStatus().equals("pending")){
+            }else if(structs.getStatus().equals(Timeslot.STATUS_PENDING)){
                 this.pending.addAll(structs.getInviteeList());
             }
         }
@@ -101,7 +101,7 @@ public class InviteeResponseAdapter extends BaseAdapter{
             View root = layoutInflater.inflate(R.layout.listview_timeslot_response, null);
             ImageView imgView = (ImageView) root.findViewById(R.id.img_view);
             TextView txtView = (TextView) root.findViewById(R.id.text_view);
-            bindUrlHelper(context, invitee.getPhoto(), imgView, new CircleTransform());
+            bindUrlHelper(context,invitee.getAliasPhoto(), imgView, new CircleTransform());
             txtView.setText(invitee.getName() + ifHost(event, invitee));
             this.views.add(root);
         }

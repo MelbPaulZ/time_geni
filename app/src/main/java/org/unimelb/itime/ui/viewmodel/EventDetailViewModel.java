@@ -9,7 +9,6 @@ import android.databinding.ObservableBoolean;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,19 +17,20 @@ import com.android.databinding.library.baseAdapters.BR;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
-import org.unimelb.itime.adapter.PhotoAdapter;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageUrl;
-import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
-import org.unimelb.itime.ui.presenter.EventPresenter;
-import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
+import org.unimelb.itime.ui.presenter.EventPresenter;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CircleTransform;
+import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 import me.tatarka.bindingcollectionadapter.ItemView;
@@ -106,6 +105,32 @@ public class EventDetailViewModel extends CommonViewModel {
         };
     }
 
+    public View.OnClickListener createEventFromThisTemplate(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // create the template for new event
+                Event cpyEvent = EventUtil.copyEvent(event);
+                String eventUid = AppUtil.generateUuid();
+                cpyEvent.setEventUid(eventUid);
+                for (Invitee invitee : cpyEvent.getInvitee()){
+                    invitee.setEventUid(eventUid);
+                    invitee.setStatus(Invitee.STATUS_NEEDSACTION); // maybe need to check if it is host
+                    String inviteeUid = AppUtil.generateUuid();
+                    invitee.setInviteeUid(inviteeUid);
+                    invitee.setSlotResponses(new ArrayList<SlotResponse>());
+                }
+
+                cpyEvent.setTimeslot(new ArrayList<Timeslot>());
+                cpyEvent.setPhoto(new ArrayList<PhotoUrl>());
+
+                if (mvpView!=null){
+                    mvpView.createEventFromThisTemplate(cpyEvent);
+                }
+            }
+        };
+    }
+
     public View.OnClickListener onClickUrl() {
         return new View.OnClickListener() {
             @Override
@@ -131,6 +156,17 @@ public class EventDetailViewModel extends CommonViewModel {
             }
         };
     }
+
+//    public String getPeopleNum(String type) {
+//                Timeslot timeslot = null;
+//                for (SubTimeslotViewModel viewModel: wrapperTimeSlotList){
+//                    if (viewModel.getWrapper().isSelected()){
+//                        timeslot = (Timeslot) viewModel.getWrapper().getTimeSlot();
+//                        break;
+//                    }
+//                }
+//                presenter.confirmEvent(event.getCalendarUid(), event.getEventUid(), timeslot.getTimeslotUid());
+//    }
 
 
     public View.OnClickListener acceptEvent(){
@@ -361,13 +397,13 @@ public class EventDetailViewModel extends CommonViewModel {
             }else if (TimeSlotUtil.isAtLeastOneWrapperSelected(viewModels)){
                 return false;
             }else{
+                Log.i("123", "getRightBtnClickable: ");
                 return true;
             }
         }
         // TODO: 3/1/17 cancelled panduan
         return true;
     }
-
 
 //    ***************************************************************
 
@@ -592,6 +628,9 @@ public class EventDetailViewModel extends CommonViewModel {
     }
 
 
+    /**
+     * for timeslot view
+     */
     private List<SubTimeslotViewModel> wrapperTimeSlotList;
     private ItemView timeslotItemView = ItemView.of(BR.itemVM, R.layout.listview_timeslot_pick);
 
@@ -614,6 +653,8 @@ public class EventDetailViewModel extends CommonViewModel {
         this.timeslotItemView = timeslotItemView;
         notifyPropertyChanged(BR.timeslotItemView);
     }
+
+
 
     /**
      * the view model of timeslot item view
@@ -712,6 +753,35 @@ public class EventDetailViewModel extends CommonViewModel {
         public void setReplyData(Map<String, List<EventUtil.StatusKeyStruct>> replyData) {
             this.replyData = replyData;
         }
+    }
 
+
+    /**
+     * for invitee photo
+     */
+
+    private List<Invitee> inviteeList = new ArrayList<>();
+    private ItemView inviteeItemView = ItemView.of(BR.item, R.layout.listview_invitee_photo);
+
+
+    @Bindable
+    public List<Invitee> getInviteeList() {
+
+        return inviteeList;
+    }
+
+    public void setInviteeList(List<Invitee> inviteeList) {
+        this.inviteeList = inviteeList;
+        notifyPropertyChanged(BR.inviteeList);
+    }
+
+    @Bindable
+    public ItemView getInviteeItemView() {
+        return inviteeItemView;
+    }
+
+    public void setInviteeItemView(ItemView inviteeItemView) {
+        this.inviteeItemView = inviteeItemView;
+        notifyPropertyChanged(BR.inviteeItemView);
     }
 }

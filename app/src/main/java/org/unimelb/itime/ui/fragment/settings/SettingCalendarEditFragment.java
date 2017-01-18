@@ -80,17 +80,18 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<TaskBasedMvp
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Calendar data) {
+        hideProgressDialog();
         getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
     }
 
 
     @Override
-    public void onTaskError(int taskId) {
-
+    public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
     }
 }

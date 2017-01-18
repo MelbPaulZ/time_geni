@@ -7,23 +7,15 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.managers.CalendarManager;
-import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
 import org.unimelb.itime.ui.presenter.EventPresenter;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.dayview.EventController;
-import org.unimelb.itime.vendor.dayview.MonthDayView;
-import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.unitviews.DraggableEventView;
 
 import java.util.List;
@@ -48,17 +40,17 @@ public abstract class CalendarBaseViewFragment extends BaseUiAuthFragment<MainCa
 
     @Override
     public void onTaskStart(int taskId) {
-        AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
-        AppUtil.hideProgressBar();
+        hideProgressDialog();
     }
 
     @Override
-    public void onTaskError(int taskId) {
-        AppUtil.hideProgressBar();
+    public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
         Toast.makeText(getContext(), "some error", Toast.LENGTH_SHORT).show();
     }
 
