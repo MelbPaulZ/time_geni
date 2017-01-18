@@ -7,6 +7,7 @@
         <variable
             name="item"
             type="org.unimelb.itime.bean.Invitee"/>
+        <import type="org.unimelb.itime.bean.Invitee" />
 
     </data>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,7 +22,7 @@
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src='@{item.status.equals("rejected")? @drawable/icon_event_response_rejected :item.isHost==1 ? @drawable/icon_event_host_selected:@drawable/icon_event_invitee_selected }'
+            android:src='@{item.status.equals(Invitee.STATUS_DECLINED)? @drawable/icon_event_response_rejected :item.isHost==1 ? @drawable/icon_event_host_selected:@drawable/icon_event_invitee_selected }'
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"/>
 
