@@ -78,8 +78,8 @@ public class ProfilePhotoPickerActivity extends AppCompatActivity {
                 imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
                 imagePicker.setFocusWidth(width);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
                 imagePicker.setFocusHeight(width);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
-                imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
-                imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
+                imagePicker.setOutPutX(200);//保存文件的宽度。单位像素
+                imagePicker.setOutPutY(200);//保存文件的高度。单位像素
             }
         });
 
