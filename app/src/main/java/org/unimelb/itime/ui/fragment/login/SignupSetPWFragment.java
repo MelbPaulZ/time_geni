@@ -44,31 +44,30 @@ public class SignupSetPWFragment extends LoginBaseFragment implements LoginMvpVi
                 getFragmentManager().popBackStack();
                 break;
             }
-            case LoginViewModel.TO_PICK_AVATAR_FRAG:{
-                SignupPickAvatarFragment avatarFragment = new SignupPickAvatarFragment();
-                avatarFragment.setData(loginUser);
-                getBaseActivity().openFragment(avatarFragment);
-                break;
-            }
+
         }
     }
 
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
-
+        hideProgressDialog();
+        SignupPickAvatarFragment avatarFragment = new SignupPickAvatarFragment();
+        avatarFragment.setData(loginUser);
+        getBaseActivity().openFragment(avatarFragment);
     }
 
     @Override
     public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
         if(taskId == LoginPresenter.TASK_VALIDATE){
             ValidateRes res = (ValidateRes)data;
-            showDialog(res.getTitle(), res.getContent());
+            showDialog("error", res.getTitle());
         }
     }
 }

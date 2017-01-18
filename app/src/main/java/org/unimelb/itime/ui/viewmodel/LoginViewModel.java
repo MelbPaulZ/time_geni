@@ -44,7 +44,6 @@ public class LoginViewModel extends AndroidViewModel{
     public final static int TO_LOGIN_FRAG = 3;
     public final static int TO_INDEX_FRAG = 4;
     public final static int TO_INPUT_EMAIL_FRAG = 5;
-    public final static int TO_PICK_AVATAR_FRAG = 6;
     public final static int TO_RESET_PASSWORD_FRAG = 7;
     public final static int TO_SET_PASSWORD_FRAG = 8;
     public final static int TO_TERM_AGREEMENT_FRAG = 9;
@@ -133,13 +132,6 @@ public class LoginViewModel extends AndroidViewModel{
                 HashMap<String, String> params = new HashMap<>();
                 params.put("password", loginUser.getPassword());
                 presenter.validate(params);
-//                if (loginUser.getPassword().length()<8){
-//                    mvpView.invalidPopup(INVALID_PASSWORD_TOO_SIMPLE);
-//                }else if (loginUser.getPassword().length()>16){
-//                    mvpView.invalidPopup(INVALID_PASSWORD_TOO_LONG);
-//                }else{
-//                    mvpView.onPageChange(TO_PICK_AVATAR_FRAG);
-//                }
             }
         };
     }

@@ -98,6 +98,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
     }
 
 
+    @Deprecated
     public void refreshToken() {
         String authToken = AuthUtil.getJwtToken(context);
         Call<JwtToken> call = userApi.refreshToken(authToken);
@@ -118,10 +119,11 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
 
 
     public void sendResetLink(String contact){
-
+        if(getView() != null){
+            getView().onTaskStart(TASK_SEND_LINK);
+        }
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("contact", contact);
-
         Observable<HttpResult<Void>> observable = passwordApi.sendResetLink(hashMap);
         Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
             @Override
@@ -243,6 +245,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
     }
 
     public void validate(HashMap<String, String> params){
+        if(getView() != null){
+            getView().onTaskStart(TASK_VALIDATE);
+        }
         Subscriber<HttpResult<ValidateRes>> subscriber = new Subscriber<HttpResult<ValidateRes>>() {
             @Override
             public void onCompleted() {
