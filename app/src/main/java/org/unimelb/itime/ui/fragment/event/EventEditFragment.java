@@ -153,6 +153,11 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         getBaseActivity().openFragment(fragment, data);
     }
 
+    /**
+     * this has to be override to null, in order not to have error
+     * "Can not perform this action after onSaveInstanceState"
+     * @param outState
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
 
@@ -282,7 +287,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult: " + requestCode + "/" + requestCode);
         if (requestCode == REQ_LOCATION && resultCode == LocationPickerFragment.RET_LOCATION_SUCCESS) {
             String location = data.getStringExtra("location");
             this.event.setLocation(location);
@@ -302,6 +306,13 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
 
+    /**
+     * after request permission, this will be called back. If the corresponding permission is granted,
+     * can continue do further
+     * @param requestCode {REQUEST_LOCATION_PERMISSION, REQUEST_PHOTO_PERMISSION}
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
