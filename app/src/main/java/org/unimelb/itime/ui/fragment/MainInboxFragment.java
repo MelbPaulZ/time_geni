@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +44,7 @@ import java.util.List;
 /**
  * required signIn, need to extend BaseUiAuthFragment
  */
-public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView, SearchView.OnQueryTextListener{
+public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView {
 
     private FragmentMainInboxBinding binding;
     private MainInboxPresenter presenter;
@@ -159,10 +158,14 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     }
 
     private void initSearch(){
+        if(getView() == null){
+            return;
+        }
         SearchBar searchBar = (SearchBar) getView().findViewById(R.id.message_searchview);
         searchBar.setSearchListener(new SearchBar.OnEditListener() {
             @Override
             public void onEditing(View view, String text) {
+                messageAdapter.getFilter().filter(text);
             }
         });
 
@@ -189,17 +192,6 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String constrains) {
-        messageAdapter.getFilter().filter(constrains);
-        return false;
     }
 
     @Override

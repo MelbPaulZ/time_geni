@@ -31,7 +31,6 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="11dp"
-                app:searchBackGroundColor="@color/color_a2a2a2"
                 app:searchHintTitle="@string/search"
                 app:searchHintText="@string/search"
                 />
