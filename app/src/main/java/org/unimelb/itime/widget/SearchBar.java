@@ -2,6 +2,8 @@ package org.unimelb.itime.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -20,33 +22,41 @@ import org.unimelb.itime.util.SizeUtil;
 
 
 /**
- * Created by 37925 on 2016/12/5.
+ * Created by Qiushuo Huang on 2016/12/5.
  */
 
 public class SearchBar extends FrameLayout {
+
+    private static final int DEFAULT_SEARCH_BACKGROUND_COLOR = Color.WHITE;
+    private static final int DEFAULT_HINT_TEXT_COLOR = Color.parseColor("#949494");
+    private static final int DEFAULT_SEARCH_TEXT_COLOR = Color.parseColor("#6D6D6D");
 
     private LinearLayout mainLayout;
     private RelativeLayout searchButton;
     private RelativeLayout inputView;
     private PureEditText inputText;
-    private TextView cancelButton;
     private ImageView cleanIcon;
     private int inputFontSize = 12;
     private OnEditListener onEditListener;
     private boolean onEditing;
     private OnClickListener cancelListener;
-    private int cancelButtonId = View.generateViewId();
     private int iconId = View.generateViewId();
     private int cleanIconId = View.generateViewId();
 
-    private boolean showCancel = false;
     private String searchHintText;
     private String searchHintTitle;
+    private int searchBackgroundColor;
+    private int searchHintTextColor;
+    private int searchTextColor;
+    private boolean showSearchButton = true;
 
     public SearchBar(Context context) {
         super(context);
         searchHintText = getContext().getString(R.string.search_hint);
         searchHintTitle = getContext().getString(R.string.search);
+        searchBackgroundColor = DEFAULT_SEARCH_BACKGROUND_COLOR;
+        searchHintTextColor = DEFAULT_SEARCH_BACKGROUND_COLOR;
+        searchTextColor = DEFAULT_SEARCH_TEXT_COLOR;
         init();
     }
 
@@ -65,49 +75,56 @@ public class SearchBar extends FrameLayout {
     private void initDeclaredStyle(Context context, AttributeSet attrs, int defStyleAttr){
         searchHintText = getContext().getString(R.string.search_hint);
         searchHintTitle = getContext().getString(R.string.search);
+        searchBackgroundColor = DEFAULT_SEARCH_BACKGROUND_COLOR;
+        searchHintTextColor = DEFAULT_HINT_TEXT_COLOR;
+        searchTextColor = DEFAULT_SEARCH_TEXT_COLOR;
+
         TypedArray arr = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SearchBar, defStyleAttr, 0);
         try {
-            searchHintText = arr.getString(R.styleable.SearchBar_searchHintText);
-            searchHintTitle = arr.getString(R.styleable.SearchBar_searchHintTitle);
-            showCancel = arr.getBoolean(R.styleable.SearchBar_showCancel, false);
+            if(arr.getString(R.styleable.SearchBar_searchHintText)!=null)
+                searchHintText = arr.getString(R.styleable.SearchBar_searchHintText);
+            if(arr.getString(R.styleable.SearchBar_searchHintTitle)!=null)
+                searchHintTitle = arr.getString(R.styleable.SearchBar_searchHintTitle);
+            searchBackgroundColor = arr.getColor(R.styleable.SearchBar_searchBackGroundColor, DEFAULT_SEARCH_BACKGROUND_COLOR);
+            searchHintTextColor = arr.getColor(R.styleable.SearchBar_searchHintTextColor, DEFAULT_HINT_TEXT_COLOR);
+            searchTextColor = arr.getColor(R.styleable.SearchBar_searchTextColor, DEFAULT_SEARCH_TEXT_COLOR);
+            showSearchButton = arr.getBoolean(R.styleable.SearchBar_showSearchButton, true);
         } finally {
             arr.recycle();
         }
     }
 
     private void init(){
+//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+//                SizeUtil.dp2px(getContext(), 50));
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                SizeUtil.dp2px(getContext(), 50));
+                SizeUtil.dp2px(getContext(), 35));
         mainLayout = new LinearLayout(getContext());
         mainLayout.setOrientation(LinearLayout.HORIZONTAL);
         mainLayout.setLayoutParams(params);
-        mainLayout.setBackground(getResources().getDrawable(R.color.grey_six));
-        mainLayout.setPadding(SizeUtil.dp2px(getContext(),8),
-                SizeUtil.dp2px(getContext(),7.5),
-                SizeUtil.dp2px(getContext(),8),
-                SizeUtil.dp2px(getContext(),7.5));
+//        mainLayout.setPadding(SizeUtil.dp2px(getContext(),8),
+//                SizeUtil.dp2px(getContext(),7.5),
+//                SizeUtil.dp2px(getContext(),8),
+//                SizeUtil.dp2px(getContext(),7.5));
+        this.setBackgroundResource(R.drawable.corner_border);
         this.addView(mainLayout);
         this.initSearchButton();
         this.initInputView();
         this.hideInputView();
-    }
-
-    public void setShowCancel(boolean show){
-        showCancel = show;
+        if(showSearchButton==false) {
+            showInputView();
+        }
     }
 
     public boolean isOnEditing(){
         return !inputText.getText().toString().equals("");
     }
 
-
-
     public void initSearchButton(){
         LayoutParams params = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         searchButton = new RelativeLayout(getContext());
         searchButton.setLayoutParams(params);
-        searchButton.setBackgroundResource(R.drawable.corner_border);
         searchButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +145,7 @@ public class SearchBar extends FrameLayout {
         iconParams.gravity = Gravity.CENTER_VERTICAL;
         ImageView icon = new ImageView(getContext());
         icon.setLayoutParams(iconParams);
-        icon.setImageResource(R.drawable.icon_general_search);
+        icon.setImageResource(R.drawable.icon_searchbar_search);
 
         LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -142,7 +159,6 @@ public class SearchBar extends FrameLayout {
         linearLayout.addView(icon);
         linearLayout.addView(search);
         searchButton.addView(linearLayout);
-
         mainLayout.addView(searchButton);
     }
 
@@ -153,10 +169,11 @@ public class SearchBar extends FrameLayout {
 //                SizeUtil.dp2px(getContext(),10),
 //                SizeUtil.dp2px(getContext(),10),
 //                SizeUtil.dp2px(getContext(),10));
-        params.addRule(RelativeLayout.LEFT_OF, cancelButtonId);
         RelativeLayout editTextLayout = new RelativeLayout(getContext());
         editTextLayout.setLayoutParams(params);
-        editTextLayout.setBackground(getResources().getDrawable(R.drawable.corner_border));
+        GradientDrawable background = (GradientDrawable) getResources().getDrawable(R.drawable.corner_border);
+        background.setColor(searchBackgroundColor);
+        editTextLayout.setBackground(background);
 
         RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams(SizeUtil.dp2px(getContext(),15),
                 SizeUtil.dp2px(getContext(),15));
@@ -168,7 +185,7 @@ public class SearchBar extends FrameLayout {
                 0);
         ImageView icon = new ImageView(getContext());
         icon.setLayoutParams(iconParams);
-        icon.setImageResource(R.drawable.icon_general_search);
+        icon.setImageResource(R.drawable.icon_searchbar_search);
         icon.setId(iconId);
 //        icon.setId(2);
 
@@ -182,7 +199,7 @@ public class SearchBar extends FrameLayout {
         cleanIconParams.addRule(RelativeLayout.CENTER_VERTICAL);
         cleanIcon = new ImageView(getContext());
         cleanIcon.setLayoutParams(cleanIconParams);
-        cleanIcon.setImageResource(R.drawable.invitee_selected_emotionstore_progresscancelbtn);
+        cleanIcon.setImageResource(R.drawable.icon_searchbar_cancel);
         cleanIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -202,9 +219,11 @@ public class SearchBar extends FrameLayout {
         inputTextParams.setMargins(0,0, SizeUtil.dp2px(getContext(),10),0);
         inputText.setTextSize(inputFontSize);
         inputText.setHint(searchHintText);
-        inputText.setHintTextColor(getResources().getColor(R.color.normalGrey));
+        inputText.setHintTextColor(searchHintTextColor);
         inputText.setSingleLine(true);
         inputText.setLayoutParams(inputTextParams);
+        inputText.setTextColor(searchTextColor);
+
         editTextLayout.addView(icon);
         editTextLayout.addView(inputText);
         editTextLayout.addView(cleanIcon);
@@ -213,9 +232,6 @@ public class SearchBar extends FrameLayout {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(onEditListener!=null) {
                     if(isOnEditing()){
-                        if(showCancel) {
-                            cancelButton.setVisibility(VISIBLE);
-                        }
                         cleanIcon.setVisibility(VISIBLE);
                     }else{
                         cleanIcon.setVisibility(GONE);
@@ -240,36 +256,35 @@ public class SearchBar extends FrameLayout {
 //                SizeUtil.dp2px(getContext(),10));
         inputView = new RelativeLayout(getContext());
         inputView.setLayoutParams(inputViewParams);
-
-
-        cancelButton = new TextView(getContext());
-        RelativeLayout.LayoutParams cancelButtonParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        cancelButtonParams.addRule(RelativeLayout.CENTER_VERTICAL);
-        cancelButtonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        cancelButtonParams.setMargins(SizeUtil.dp2px(getContext(),10),
-                0,
-                0,
-                0);
-        cancelButton.setLayoutParams(cancelButtonParams);
-        cancelButton.setText("Cancel");
-        cancelButton.setTextColor(getResources().getColor(R.color.red_alert));
-        cancelButton.setId(cancelButtonId);
-        cancelButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideInputView();
-                inputText.setText("");
-                if(cancelListener!=null) {
-                    cancelListener.onClick(view);
-                }
-            }
-        });
-        cancelButton.setVisibility(GONE);
+//
+//
+//        cancelButton = new TextView(getContext());
+//        RelativeLayout.LayoutParams cancelButtonParams = new RelativeLayout.LayoutParams(
+//                ViewGroup.LayoutParams.WRAP_CONTENT,
+//                ViewGroup.LayoutParams.WRAP_CONTENT);
+//        cancelButtonParams.addRule(RelativeLayout.CENTER_VERTICAL);
+//        cancelButtonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//        cancelButtonParams.setMargins(SizeUtil.dp2px(getContext(),10),
+//                0,
+//                0,
+//                0);
+//        cancelButton.setLayoutParams(cancelButtonParams);
+//        cancelButton.setText("Cancel");
+//        cancelButton.setTextColor(getResources().getColor(R.color.red_alert));
+//        cancelButton.setId(cancelButtonId);
+//        cancelButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                hideInputView();
+//                inputText.setText("");
+//                if(cancelListener!=null) {
+//                    cancelListener.onClick(view);
+//                }
+//            }
+//        });
+//        cancelButton.setVisibility(GONE);
 
         inputView.addView(editTextLayout);
-        inputView.addView(cancelButton);
         mainLayout.addView(inputView);
     }
 
@@ -298,9 +313,22 @@ public class SearchBar extends FrameLayout {
     private void hideInputView(){
         searchButton.setVisibility(VISIBLE);
         inputView.setVisibility(GONE);
-        cancelButton.setVisibility(GONE);
         searchButton.requestFocus();
         hideKeyboard();
+    }
+
+    public void clearInput(){
+        inputText.setText("");
+    }
+
+    public void setShowSearchButton(boolean bool){
+        this.showSearchButton = bool;
+        if(showSearchButton==true){
+            clearInput();
+            hideInputView();
+        }else{
+            showInputView();
+        }
     }
 
     public void setSearchListener(OnEditListener listener){

@@ -16,11 +16,22 @@
         <include layout="@layout/toolbar_common"
             app:vm="@{toolbarVM}"/>
         <include layout="@layout/line"/>
-        <org.unimelb.itime.widget.SearchBar
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:searchListener = "@{viewModel.onEditListener}"
-            android:id="@+id/searchBar"/>
+            android:paddingTop="7.5dp"
+            android:paddingBottom="7.5dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@color/grey_six">
+            <org.unimelb.itime.widget.SearchBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchBar"
+                app:searchHintTitle="@string/search"
+                app:searchHintText="@string/search_hint"
+                app:searchListener = "@{viewModel.onEditListener}"/>
+        </FrameLayout>
         <include layout="@layout/line"/>
             <ListView
                 android:layout_width="match_parent"
