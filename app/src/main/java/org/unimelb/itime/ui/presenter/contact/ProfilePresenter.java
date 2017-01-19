@@ -9,7 +9,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Block;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.FriendRequest;
-import org.unimelb.itime.bean.RequestFriend;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.messageevent.MessageAddContact;
 import org.unimelb.itime.messageevent.MessageRemoveContact;
@@ -19,10 +18,7 @@ import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
-import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.ui.mvpview.contact.ProfileMvpView;
-import org.unimelb.itime.ui.viewmodel.contact.ProfileFragmentViewModel;
-import org.unimelb.itime.ui.viewmodel.contact.RequestFriendItemViewModel;
 import org.unimelb.itime.util.HttpUtil;
 
 import java.util.List;
