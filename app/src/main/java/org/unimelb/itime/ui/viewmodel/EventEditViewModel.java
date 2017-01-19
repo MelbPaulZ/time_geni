@@ -48,6 +48,8 @@ import java.util.List;
 import me.fesky.library.widget.ios.ActionSheetDialog;
 import me.tatarka.bindingcollectionadapter.ItemView;
 
+import static org.unimelb.itime.ui.viewmodel.EventCommonViewModel.PickerTask.END_REPEAT;
+
 /**
  * Created by Paul on 28/08/2016.
  */
@@ -100,7 +102,11 @@ public class EventEditViewModel extends EventCommonViewModel {
                     case START_TIME:
                         event.setStartTime(updateYearMonthDay(event.getStartTime(), year, monthOfYear, dayOfMonth).getTimeInMillis());
                         if (!isEndTimeChanged) {
-                            event.setEndTime(event.getStartTime() + 60 * 60 * 1000);
+                            if(isAlldayEvent == 1){
+                                event.setEndTime(event.getStartTime() + 24 * 60 * 60 *1000 - 60 * 1000); // if is all day event, set end time to another day
+                            }else if (isAlldayEvent == 0) {
+                                event.setEndTime(event.getStartTime() + 60 * 60 * 1000); // if not all day event, set end time to next hour
+                            }
                         }
                         break;
                     case END_REPEAT:

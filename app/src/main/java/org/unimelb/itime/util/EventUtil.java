@@ -21,6 +21,7 @@ import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
+import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
@@ -394,6 +395,9 @@ public class EventUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
         String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
+//        if ()
+//        RuleModel ruleModel = RuleFactory.getInstance().getRuleModel(event);
+//        event.setRule(ruleModel);
         FrequencyEnum frequencyEnum = event.getRule().getFrequencyEnum();
         int interval = event.getRule().getInterval();
 
@@ -413,25 +417,6 @@ public class EventUtil {
             default:
                 return String.format(context.getString(R.string.repeat_never));
         }
-
-//        if (frequencyEnum == null) {
-//            return String.format(context.getString(R.string.repeat_never));
-//        } else if (frequencyEnum == FrequencyEnum.DAILY) {
-//            return String.format(context.getString(R.string.repeat_everyday));
-//        } else if (frequencyEnum == FrequencyEnum.WEEKLY) {
-//            if (event.getRule().getInterval() == 1) {
-//                return String.format(context.getString(R.string.repeat_everyweek), dayOfWeek);
-//            } else if (event.getRule().getInterval() == 2) {
-//                return String.format(context.getString(R.string.repeat_every_twoweek));
-//            }
-//        } else if (frequencyEnum == FrequencyEnum.MONTHLY) {
-//            return String.format(context.getString(R.string.repeat_every_month));
-//        } else if (frequencyEnum == FrequencyEnum.YEARLY) {
-//            return String.format(context.getString(R.string.repeat_every_year));
-//        }
-
-//        // if not all of this above (impossible)
-//        return "";
     }
 
 
