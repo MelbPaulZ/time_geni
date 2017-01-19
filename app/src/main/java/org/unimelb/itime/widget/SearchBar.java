@@ -98,7 +98,7 @@ public class SearchBar extends FrameLayout {
 //        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
 //                SizeUtil.dp2px(getContext(), 50));
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                SizeUtil.dp2px(getContext(), 35));
+                SizeUtil.dp2px(getContext(), 28));
         mainLayout = new LinearLayout(getContext());
         mainLayout.setOrientation(LinearLayout.HORIZONTAL);
         mainLayout.setLayoutParams(params);
@@ -169,16 +169,17 @@ public class SearchBar extends FrameLayout {
 //                SizeUtil.dp2px(getContext(),10),
 //                SizeUtil.dp2px(getContext(),10),
 //                SizeUtil.dp2px(getContext(),10));
-        RelativeLayout editTextLayout = new RelativeLayout(getContext());
+        LinearLayout editTextLayout = new LinearLayout(getContext());
+        editTextLayout.setOrientation(LinearLayout.HORIZONTAL);
         editTextLayout.setLayoutParams(params);
         GradientDrawable background = (GradientDrawable) getResources().getDrawable(R.drawable.corner_border);
         background.setColor(searchBackgroundColor);
         editTextLayout.setBackground(background);
 
-        RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams(SizeUtil.dp2px(getContext(),15),
+        LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(SizeUtil.dp2px(getContext(),15),
                 SizeUtil.dp2px(getContext(),15));
-        iconParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        iconParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        iconParams.weight = 0;
+        iconParams.gravity = Gravity.CENTER_VERTICAL;
         iconParams.setMargins(SizeUtil.dp2px(getContext(),10),
                 0,
                 SizeUtil.dp2px(getContext(),10),
@@ -189,14 +190,14 @@ public class SearchBar extends FrameLayout {
         icon.setId(iconId);
 //        icon.setId(2);
 
-        RelativeLayout.LayoutParams cleanIconParams = new RelativeLayout.LayoutParams(SizeUtil.dp2px(getContext(),15),
+        LinearLayout.LayoutParams cleanIconParams = new LinearLayout.LayoutParams(SizeUtil.dp2px(getContext(),15),
                 SizeUtil.dp2px(getContext(),15));
         cleanIconParams.setMargins(SizeUtil.dp2px(getContext(),10),
                 0,
                 SizeUtil.dp2px(getContext(),10),
                 0);
-        cleanIconParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        cleanIconParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        cleanIconParams.weight = 0;
+        cleanIconParams.gravity = Gravity.CENTER_VERTICAL;
         cleanIcon = new ImageView(getContext());
         cleanIcon.setLayoutParams(cleanIconParams);
         cleanIcon.setImageResource(R.drawable.icon_searchbar_cancel);
@@ -211,11 +212,10 @@ public class SearchBar extends FrameLayout {
 //        cleanIcon.setId(3);
 
         inputText = new PureEditText(getContext());
-        RelativeLayout.LayoutParams inputTextParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        inputTextParams.addRule(RelativeLayout.RIGHT_OF, iconId);
-        inputTextParams.addRule(RelativeLayout.LEFT_OF, cleanIconId);
-        inputTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        LinearLayout.LayoutParams inputTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        inputTextParams.weight = 1;
+        inputTextParams.gravity = Gravity.CENTER_VERTICAL;
         inputTextParams.setMargins(0,0, SizeUtil.dp2px(getContext(),10),0);
         inputText.setTextSize(inputFontSize);
         inputText.setHint(searchHintText);
