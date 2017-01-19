@@ -401,8 +401,9 @@ public class EventUtil {
         FrequencyEnum frequencyEnum = event.getRule().getFrequencyEnum();
         int interval = event.getRule().getInterval();
 
+        // when view event details, the fraquencyEnum will be null
         if (frequencyEnum == null){
-            return String.format(context.getString(R.string.repeat_never));
+            return "None";
         }
 
         switch (frequencyEnum){

@@ -12,10 +12,12 @@ import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleInterface;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -541,7 +543,9 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         @Override
         public String[] convertToEntityProperty(String databaseValue) {
             Type listType = new TypeToken<String[]>() {}.getType();
-            return gson.fromJson(databaseValue, listType);
+            String[] rst =  gson.fromJson(databaseValue, listType);
+
+            return rst;
         }
 
         @Override
@@ -693,7 +697,8 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         in.readList(this.timeslot, Timeslot.class.getClassLoader());
     }
 
-    @Generated(hash = 690417110)
+
+    @Keep
     public Event(String eventUid, String eventId, String hostUserUid, String userUid, String calendarUid, String iCalUID,
             String recurringEventUid, String recurringEventId, String[] recurrence, String status, String summary, long startTime,
             long endTime, int confirmedCount, int showLevel, String description, String location, String locationNote,
@@ -733,6 +738,9 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         this.invitee = invitee;
         this.photo = photo;
         this.timeslot = timeslot;
+
+        //
+        setRule(RuleFactory.getInstance().getRuleModel(this));
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {

@@ -53,6 +53,9 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public final static int REQ_LOCATION = 1000;
     public final static int REQ_INVITEE = 1001;
     public final static int REQ_TIMESLOT = 1002;
+    public final static int REQ_CUSTOM_REPEAT = 1003;
+
+
 
     private FragmentEventEditDetailBinding binding;
     private Event event = null;
@@ -185,10 +188,11 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     @Override
     public void toCustomPage() {
         EventCustomRepeatFragment eventCustomRepeatFragment = new EventCustomRepeatFragment();
-
+        eventCustomRepeatFragment.setTargetFragment(this, REQ_CUSTOM_REPEAT);
         eventCustomRepeatFragment.setEvent(event);
         getBaseActivity().openFragment(eventCustomRepeatFragment);
     }
+
 
 
     @Override
@@ -268,6 +272,11 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         if(requestCode == REQ_LOCATION && resultCode == LocationPickerFragment.RET_LOCATION_SUCCESS){
             String location = data.getStringExtra("location");
             this.event.setLocation(location);
+        }
+
+        if (requestCode == REQ_CUSTOM_REPEAT && resultCode == EventCustomRepeatFragment.RET_CUSTOM_REPEAT){
+            Event event = (Event) data.getSerializableExtra("event");
+            setEvent(event);
         }
     }
 }
