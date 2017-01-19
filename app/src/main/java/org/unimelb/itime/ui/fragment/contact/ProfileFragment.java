@@ -179,7 +179,7 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
         switch (taskId){
             case ProfilePresenter.TASK_ACCEPT :
                 Toast.makeText(getContext(), getString(R.string.accept_fail), Toast.LENGTH_SHORT).show();

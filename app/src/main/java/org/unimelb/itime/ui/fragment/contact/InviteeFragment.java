@@ -241,7 +241,7 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId,Object data) {
         switch (taskId){
             case InviteFriendPresenter.TASK_SEARCH_CONTACT:
                 Toast.makeText(getContext(), getResources().getString(R.string.access_fail),Toast.LENGTH_SHORT).show();

@@ -99,7 +99,7 @@ public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMv
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
                 if(getView()!=null){
-                    getView().onTaskError(TASK_CONTACTS);
+                    getView().onTaskError(TASK_CONTACTS, null);
                 }
             }
 
@@ -107,7 +107,7 @@ public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMv
             public void onNext(List<Contact> list) {
                 if(list == null){
                     if(getView()!=null){
-                        getView().onTaskError(TASK_CONTACTS);
+                        getView().onTaskError(TASK_CONTACTS, null);
                     }
                 }else {
                     if(getView()!=null){

@@ -61,16 +61,6 @@ public class SettingBlockContactsFragment extends BaseUiAuthFragment<BlockContac
         binding.setToolbarVM(toolbarViewModel);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void removeBlock(MessageUnblockContact msg){
-        viewModel.removeContact(msg.contact);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void addBlock(MessageBlockContact msg){
-        viewModel.addContact(msg.contact);
-    }
-
     public void onStart(){
         super.onStart();
         viewModel.loadData();
@@ -130,7 +120,7 @@ public class SettingBlockContactsFragment extends BaseUiAuthFragment<BlockContac
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
     }
 }

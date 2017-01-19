@@ -172,7 +172,7 @@ public class MainContactFragment extends BaseUiAuthFragment<ContactHomePageMvpVi
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
 
     }
 }

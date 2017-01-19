@@ -79,7 +79,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
                 if(getView()!=null) {
-                    getView().onTaskError(TASK_ACCEPT);
+                    getView().onTaskError(TASK_ACCEPT, null);
                 }
             }
 
@@ -116,7 +116,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
                 if(getView()!=null) {
-                    getView().onTaskError(TASK_BLOCK);
+                    getView().onTaskError(TASK_BLOCK, null);
                 }
             }
 
@@ -125,7 +125,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
                     if(getView()!=null) {
-                        getView().onTaskError(TASK_BLOCK);
+                        getView().onTaskError(TASK_BLOCK, null);
                     }
                 }else {
                     user.setBlockLevel(result.getData().getBlockLevel());
@@ -160,7 +160,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
                 if(getView()!=null) {
-                    getView().onTaskError(TASK_UNBLOCK);
+                    getView().onTaskError(TASK_UNBLOCK, null);
                 }
             }
 
@@ -169,7 +169,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
                     if(getView()!=null) {
-                        getView().onTaskError(TASK_UNBLOCK);
+                        getView().onTaskError(TASK_UNBLOCK, null);
                     }
                 }else {
                     user.setBlockLevel(result.getData().getBlockLevel());
@@ -201,7 +201,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
                 if(getView()!=null) {
-                    getView().onTaskError(TASK_DELETE);
+                    getView().onTaskError(TASK_DELETE, null);
                 }
             }
 
@@ -210,7 +210,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
                     if(getView()!=null) {
-                        getView().onTaskError(TASK_DELETE);
+                        getView().onTaskError(TASK_DELETE, null);
                     }
                 }else {
                     user.setStatus(result.getData().getStatus());
@@ -241,7 +241,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
                 if(getView()!=null) {
-                    getView().onTaskError(TASK_ADD);
+                    getView().onTaskError(TASK_ADD, null);
                 }
             }
 
@@ -250,7 +250,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
                     if(getView()!=null) {
-                        getView().onTaskError(TASK_ADD);
+                        getView().onTaskError(TASK_ADD, null);
                     }
                 }else {
                     if(getView()!=null) {

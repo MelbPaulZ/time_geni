@@ -123,7 +123,7 @@ public class NewFriendFragment extends BaseUiAuthFragment<NewFriendMvpView, NewF
     }
 
     @Override
-    public void onTaskError(int taskId) {
+    public void onTaskError(int taskId, Object data) {
         Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.add_fail), Toast.LENGTH_SHORT).show();
     }
 }

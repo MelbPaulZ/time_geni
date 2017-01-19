@@ -93,7 +93,7 @@ public class BlockContactsPresenter extends MvpBasePresenter<BlockContactsMvpVie
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
                 if(getView()!=null){
-                    getView().onTaskError(0);
+                    getView().onTaskError(0, null);
                 }
             }
 
@@ -101,7 +101,7 @@ public class BlockContactsPresenter extends MvpBasePresenter<BlockContactsMvpVie
             public void onNext(List<Block> list) {
                 if(list == null){
                     if(getView()!=null){
-                        getView().onTaskError(0);
+                        getView().onTaskError(0, null);
                     }
                 }else {
                     if(getView()!=null){

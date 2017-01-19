@@ -1,6 +1,5 @@
 package org.unimelb.itime.ui.presenter.contact;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -19,7 +18,6 @@ import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.bean.RequestFriend;
 import org.unimelb.itime.ui.mvpview.contact.NewFriendMvpView;
-import org.unimelb.itime.ui.viewmodel.contact.NewFriendViewModel;
 import org.unimelb.itime.ui.viewmodel.contact.RequestFriendItemViewModel;
 import org.unimelb.itime.util.HttpUtil;
 
@@ -41,7 +39,7 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
     private FriendRequestApi requestApi;
     private ContactApi contactApi;
     private DBManager dbManager;
-    private static final int TASK_ID = 0;
+    private static final int TASK_REQUEST_LIST = 0;
 
     public NewFriendFragmentPresenter(Context context){
         this.context = context;
@@ -130,7 +128,7 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
                 list.add(new RequestFriend(request));
             }
             if(getView()!=null) {
-                getView().onTaskSuccess(TASK_ID, list);
+                getView().onTaskSuccess(TASK_REQUEST_LIST, list);
             }
         }
         getRequestFriendListFromServer();
@@ -167,7 +165,7 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
                 Log.d(TAG, "onError: " + e.getMessage());
                 e.printStackTrace();
                 if(getView()!=null) {
-                    getView().onTaskError(TASK_ID);
+                    getView().onTaskError(TASK_REQUEST_LIST, null);
                 }
             }
 
@@ -175,7 +173,7 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
             public void onNext(List<FriendRequest> list) {
                 if (list == null){
                     if(getView()!=null) {
-                        getView().onTaskError(TASK_ID);
+                        getView().onTaskError(TASK_REQUEST_LIST, null);
                     }
                 }else {
                     List<String> unreadIds = new ArrayList<>();
@@ -194,7 +192,7 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
                     }
                     EventBus.getDefault().post(new MessageNewFriendRequest(0));
                     if(getView()!=null) {
-                        getView().onTaskSuccess(TASK_ID, result);
+                        getView().onTaskSuccess(TASK_REQUEST_LIST, result);
                     }
                 }
             }

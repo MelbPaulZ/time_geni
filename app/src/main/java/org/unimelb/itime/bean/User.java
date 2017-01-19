@@ -19,20 +19,14 @@ import java.lang.reflect.Type;
 @Entity
 public class User implements Serializable, Cloneable {
 
-<<<<<<< HEAD
     public final static String MALE = "1";
     public final static String FEMALE = "0";
     public final static String UNDEFINED = "2";
-=======
     public static final String SOURCE_GOOGLE = "google";
     public static final String SOURCE_FACEBOOK = "facebook";
     public static final String SOURCE_ITIME = "itime";
     public static final String SOURCE_EMAIL = "email";
     public static final String SOURCE_PHONE = "phone";
-
-    public  final static String MALE = "2";
-    public final static String FEMALE = "1";
->>>>>>> 7b0f2e992707f61bf2c148439211aa50b0007e6a
 
     @Id
     private String userUid="";
