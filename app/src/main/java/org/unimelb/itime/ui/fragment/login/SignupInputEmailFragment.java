@@ -35,6 +35,8 @@ public class SignupInputEmailFragment extends LoginBaseFragment implements Login
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        loginUser.setEmail("chuandongy@student.unimelb.edu.au");
+        loginUser.setUserId("chuandongy@student.unimelb.edu.au");
         binding.setLoginVM(loginViewModel);
     }
 
@@ -45,12 +47,6 @@ public class SignupInputEmailFragment extends LoginBaseFragment implements Login
                 getFragmentManager().popBackStack();
                 break;
             }
-            case LoginViewModel.TO_SET_PASSWORD_FRAG:{
-                SignupSetPWFragment fragment = new SignupSetPWFragment();
-                fragment.setData(loginUser);
-                getBaseActivity().openFragment(fragment);
-                break;
-            }
             case LoginViewModel.TO_TERM_AGREEMENT_FRAG:{
                 // todo implement agreement
             }
@@ -59,16 +55,20 @@ public class SignupInputEmailFragment extends LoginBaseFragment implements Login
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
-
+        hideProgressDialog();
+        SignupSetPWFragment fragment = new SignupSetPWFragment();
+        fragment.setData(loginUser);
+        getBaseActivity().openFragment(fragment);
     }
 
     @Override
     public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
         if(taskId == LoginPresenter.TASK_VALIDATE){
             ValidateRes res = (ValidateRes)data;
             showDialog(res.getTitle(), res.getContent());

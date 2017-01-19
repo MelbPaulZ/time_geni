@@ -43,5 +43,7 @@
         <attr name="showCancel" format="boolean"/>
         <attr name="cancelListener" format="reference"/>
         <attr name="searchListener" format="reference"/>
+        <attr name="searchHintText" format="string" />
+        <attr name="searchHintTitle" format="string" />
     </declare-styleable>
 </resources>

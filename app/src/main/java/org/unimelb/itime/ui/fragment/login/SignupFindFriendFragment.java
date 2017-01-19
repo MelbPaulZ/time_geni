@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentSignupFindFriendBinding;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
+import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
  * Created by Paul on 20/12/2016.
@@ -36,7 +37,9 @@ public class SignupFindFriendFragment extends LoginBaseFragment implements Login
 
     @Override
     public void onPageChange(int task) {
-
+        if(task == LoginViewModel.TO_CALENDAR){
+            successLogin();
+        }
     }
 
     @Override

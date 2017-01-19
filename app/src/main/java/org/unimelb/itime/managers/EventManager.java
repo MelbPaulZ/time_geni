@@ -2,6 +2,7 @@ package org.unimelb.itime.managers;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -433,6 +434,28 @@ public class EventManager {
         return null;
     }
 
+    /**
+     * Paul Paul, your finding Repeated Events
+     * @param dayStartTime
+     * @param UUID
+     * @return
+     */
+    private Event findRepeatedByUUUID(String dayStartTime, String UUID){
+        if (repeatedEventMap.containsKey(dayStartTime)){
+            List<ITimeEventInterface> repeats = repeatedEventMap.get(dayStartTime);
+            for (ITimeEventInterface event:repeats
+                 ) {
+                if (event.getEventUid().equals(UUID)){
+                    return (Event) event;
+                }
+            }
+        }else {
+            Log.i(TAG, "findRepeatedByUUUID:  Repeated Event not belong to input day");
+        }
+
+        return null;
+    }
+
     private void refreshRepeatedEvent(Event event){
         this.removeRepeatedEvent(event);
         this.orgRepeatedEventList.remove(event);
@@ -535,8 +558,6 @@ public class EventManager {
         this.currentEvent = currentEvent;
     }
 
-
-
     public String getHostInviteeUid(Event event) {
         for (Invitee invitee : event.getInvitee()) {
             if (invitee.getIsHost() == 1) {
@@ -547,9 +568,4 @@ public class EventManager {
         return null;
     }
 
-
-    // paul paul 改！
-//    public Event getNewEvent(){
-//        return new Event();
-//    }
 }

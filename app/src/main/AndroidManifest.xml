@@ -86,7 +86,9 @@
             android:label="@string/title_activity_base" />
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:label="Itime">
+            android:label="Itime"
+            android:windowSoftInputMode="adjustResize"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,6 +1,7 @@
 package org.unimelb.itime.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -15,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.SizeCollector;
 import org.unimelb.itime.util.SizeUtil;
 
 
@@ -34,28 +34,48 @@ public class SearchBar extends FrameLayout {
     private int inputFontSize = 12;
     private OnEditListener onEditListener;
     private boolean onEditing;
-    private boolean showCancel = false;
     private OnClickListener cancelListener;
     private int cancelButtonId = View.generateViewId();
     private int iconId = View.generateViewId();
     private int cleanIconId = View.generateViewId();
 
+    private boolean showCancel = false;
+    private String searchHintText;
+    private String searchHintTitle;
+
     public SearchBar(Context context) {
         super(context);
+        searchHintText = getContext().getString(R.string.search_hint);
+        searchHintTitle = getContext().getString(R.string.search);
         init();
     }
 
     public SearchBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initDeclaredStyle(context, attrs, 0);
         init();
     }
 
     public SearchBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initDeclaredStyle(context, attrs, defStyleAttr);
         init();
     }
 
-    public void init(){
+    private void initDeclaredStyle(Context context, AttributeSet attrs, int defStyleAttr){
+        searchHintText = getContext().getString(R.string.search_hint);
+        searchHintTitle = getContext().getString(R.string.search);
+        TypedArray arr = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SearchBar, defStyleAttr, 0);
+        try {
+            searchHintText = arr.getString(R.styleable.SearchBar_searchHintText);
+            searchHintTitle = arr.getString(R.styleable.SearchBar_searchHintTitle);
+            showCancel = arr.getBoolean(R.styleable.SearchBar_showCancel, false);
+        } finally {
+            arr.recycle();
+        }
+    }
+
+    private void init(){
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 SizeUtil.dp2px(getContext(), 50));
         mainLayout = new LinearLayout(getContext());
@@ -115,7 +135,7 @@ public class SearchBar extends FrameLayout {
         textParams.gravity = Gravity.CENTER_VERTICAL;
         TextView search = new TextView(getContext());
         search.setLayoutParams(textParams);
-        search.setText("Search");
+        search.setText(searchHintTitle);
         search.getPaint().setFakeBoldText(true);
         search.setTextSize(inputFontSize);
 
@@ -181,7 +201,7 @@ public class SearchBar extends FrameLayout {
         inputTextParams.addRule(RelativeLayout.CENTER_VERTICAL);
         inputTextParams.setMargins(0,0, SizeUtil.dp2px(getContext(),10),0);
         inputText.setTextSize(inputFontSize);
-        inputText.setHint(getContext().getString(R.string.search_hint));
+        inputText.setHint(searchHintText);
         inputText.setHintTextColor(getResources().getColor(R.color.normalGrey));
         inputText.setSingleLine(true);
         inputText.setLayoutParams(inputTextParams);

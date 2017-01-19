@@ -1,10 +1,7 @@
 package org.unimelb.itime.ui.activity;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +16,6 @@ import org.unimelb.itime.adapter.EventAdapter;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
-import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.List;
@@ -39,16 +35,16 @@ public class EventSearchActivity extends EmptyActivity implements SearchView.OnQ
         setContentView(R.layout.activity_event_search);
 
         init();
-        SearchManager searchManager = (SearchManager)
-                getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) findViewById(R.id.event_search_view);
-        searchView.setSearchableInfo(searchManager.
-                getSearchableInfo(getComponentName()));
-//        searchView.setSubmitButtonEnabled(true);
-        searchView.setOnQueryTextListener(this);
-        searchView.setFocusable(true);
-        searchView.setIconified(false);
-        searchView.setIconifiedByDefault(false);
+//        SearchManager searchManager = (SearchManager)
+//                getSystemService(Context.SEARCH_SERVICE);
+//        SearchView searchView = (SearchView) findViewById(R.id.event_search_view);
+//        searchView.setSearchableInfo(searchManager.
+//                getSearchableInfo(getComponentName()));
+////        searchView.setSubmitButtonEnabled(true);
+//        searchView.setOnQueryTextListener(this);
+//        searchView.setFocusable(true);
+//        searchView.setIconified(false);
+//        searchView.setIconifiedByDefault(false);
     }
 
     private void init(){
