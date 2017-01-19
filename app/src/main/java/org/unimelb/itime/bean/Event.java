@@ -12,10 +12,12 @@ import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleInterface;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -73,6 +75,10 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     private String url = "";
 
+    // to save message in event, need to convert the message to string
+    @Convert(converter = Event.MessageConverter.class, columnType = String.class)
+    private Message message;
+
     // later delete
     private transient long repeatEndsTime;
 
@@ -106,48 +112,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     }
 
-    @Generated(hash = 242008653)
-    public Event(String eventUid, String eventId, String hostUserUid, String userUid,
-            String calendarUid, String iCalUID, String recurringEventUid, String recurringEventId,
-            String[] recurrence, String status, String summary, long startTime, long endTime,
-            int confirmedCount, int showLevel, String description, String location,
-            String locationNote, String locationLatitude, String locationLongitude, String eventType,
-            int reminder, int freebusyAccess, String source, int deleteLevel, int icsSequence,
-            int inviteeVisibility, String display, String url, List<Invitee> invitee,
-            List<PhotoUrl> photo, List<Timeslot> timeslot) {
-        this.eventUid = eventUid;
-        this.eventId = eventId;
-        this.hostUserUid = hostUserUid;
-        this.userUid = userUid;
-        this.calendarUid = calendarUid;
-        this.iCalUID = iCalUID;
-        this.recurringEventUid = recurringEventUid;
-        this.recurringEventId = recurringEventId;
-        this.recurrence = recurrence;
-        this.status = status;
-        this.summary = summary;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.confirmedCount = confirmedCount;
-        this.showLevel = showLevel;
-        this.description = description;
-        this.location = location;
-        this.locationNote = locationNote;
-        this.locationLatitude = locationLatitude;
-        this.locationLongitude = locationLongitude;
-        this.eventType = eventType;
-        this.reminder = reminder;
-        this.freebusyAccess = freebusyAccess;
-        this.source = source;
-        this.deleteLevel = deleteLevel;
-        this.icsSequence = icsSequence;
-        this.inviteeVisibility = inviteeVisibility;
-        this.display = display;
-        this.url = url;
-        this.invitee = invitee;
-        this.photo = photo;
-        this.timeslot = timeslot;
-    }
 
     @Override
     public void setTitle(String summary) {
@@ -579,12 +543,28 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         @Override
         public String[] convertToEntityProperty(String databaseValue) {
             Type listType = new TypeToken<String[]>() {}.getType();
-            return gson.fromJson(databaseValue, listType);
+            String[] rst =  gson.fromJson(databaseValue, listType);
+
+            return rst;
         }
 
         @Override
         public String convertToDatabaseValue(String[] entityProperty) {
             return  gson.toJson(entityProperty);
+        }
+    }
+
+    public static class MessageConverter implements PropertyConverter<Message, String>{
+        Gson gson = new Gson();
+
+        @Override
+        public Message convertToEntityProperty(String databaseValue) {
+            return gson.fromJson(databaseValue, Message.class);
+        }
+
+        @Override
+        public String convertToDatabaseValue(Message entityProperty) {
+            return gson.toJson(entityProperty);
         }
     }
 
@@ -671,6 +651,14 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         dest.writeList(this.timeslot);
     }
 
+    public Message getMessage() {
+        return this.message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
     protected Event(Parcel in) {
         this.eventUid = in.readString();
         this.eventId = in.readString();
@@ -707,6 +695,52 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         in.readList(this.photo, PhotoUrl.class.getClassLoader());
         this.timeslot = new ArrayList<Timeslot>();
         in.readList(this.timeslot, Timeslot.class.getClassLoader());
+    }
+
+
+    @Keep
+    public Event(String eventUid, String eventId, String hostUserUid, String userUid, String calendarUid, String iCalUID,
+            String recurringEventUid, String recurringEventId, String[] recurrence, String status, String summary, long startTime,
+            long endTime, int confirmedCount, int showLevel, String description, String location, String locationNote,
+            String locationLatitude, String locationLongitude, String eventType, int reminder, int freebusyAccess, String source,
+            int deleteLevel, int icsSequence, int inviteeVisibility, String display, String url, Message message,
+            List<Invitee> invitee, List<PhotoUrl> photo, List<Timeslot> timeslot) {
+        this.eventUid = eventUid;
+        this.eventId = eventId;
+        this.hostUserUid = hostUserUid;
+        this.userUid = userUid;
+        this.calendarUid = calendarUid;
+        this.iCalUID = iCalUID;
+        this.recurringEventUid = recurringEventUid;
+        this.recurringEventId = recurringEventId;
+        this.recurrence = recurrence;
+        this.status = status;
+        this.summary = summary;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.confirmedCount = confirmedCount;
+        this.showLevel = showLevel;
+        this.description = description;
+        this.location = location;
+        this.locationNote = locationNote;
+        this.locationLatitude = locationLatitude;
+        this.locationLongitude = locationLongitude;
+        this.eventType = eventType;
+        this.reminder = reminder;
+        this.freebusyAccess = freebusyAccess;
+        this.source = source;
+        this.deleteLevel = deleteLevel;
+        this.icsSequence = icsSequence;
+        this.inviteeVisibility = inviteeVisibility;
+        this.display = display;
+        this.url = url;
+        this.message = message;
+        this.invitee = invitee;
+        this.photo = photo;
+        this.timeslot = timeslot;
+
+        //
+        setRule(RuleFactory.getInstance().getRuleModel(this));
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {

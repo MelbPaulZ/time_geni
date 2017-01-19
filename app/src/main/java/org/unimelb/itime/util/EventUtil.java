@@ -21,6 +21,7 @@ import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
+import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
@@ -356,6 +357,7 @@ public class EventUtil {
     }
 
     public static String getEventConfirmStatus(Context context, Event event) {
+
         if (isUserHostOfEvent(context, event)) {
             if (event.getStatus().equals(Event.STATUS_PENDING)) {
                 return context.getString(R.string.You_have_not_confirmed_this_event);
@@ -393,11 +395,15 @@ public class EventUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
         String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
+//        if ()
+//        RuleModel ruleModel = RuleFactory.getInstance().getRuleModel(event);
+//        event.setRule(ruleModel);
         FrequencyEnum frequencyEnum = event.getRule().getFrequencyEnum();
         int interval = event.getRule().getInterval();
 
+        // when view event details, the fraquencyEnum will be null
         if (frequencyEnum == null){
-            return String.format(context.getString(R.string.repeat_never));
+            return "None";
         }
 
         switch (frequencyEnum){
@@ -412,25 +418,6 @@ public class EventUtil {
             default:
                 return String.format(context.getString(R.string.repeat_never));
         }
-
-//        if (frequencyEnum == null) {
-//            return String.format(context.getString(R.string.repeat_never));
-//        } else if (frequencyEnum == FrequencyEnum.DAILY) {
-//            return String.format(context.getString(R.string.repeat_everyday));
-//        } else if (frequencyEnum == FrequencyEnum.WEEKLY) {
-//            if (event.getRule().getInterval() == 1) {
-//                return String.format(context.getString(R.string.repeat_everyweek), dayOfWeek);
-//            } else if (event.getRule().getInterval() == 2) {
-//                return String.format(context.getString(R.string.repeat_every_twoweek));
-//            }
-//        } else if (frequencyEnum == FrequencyEnum.MONTHLY) {
-//            return String.format(context.getString(R.string.repeat_every_month));
-//        } else if (frequencyEnum == FrequencyEnum.YEARLY) {
-//            return String.format(context.getString(R.string.repeat_every_year));
-//        }
-
-//        // if not all of this above (impossible)
-//        return "";
     }
 
 
@@ -594,40 +581,6 @@ public class EventUtil {
         Calendar updateTimeCalendar = Calendar.getInstance();
         updateTimeCalendar.setTime(d);
         return updateTimeCalendar;
-    }
-
-
-    public static void addSoloEventBasicInfo(Context context, Event event) {
-        event.setCalendarUid(CalendarUtil.getInstance(context).getCalendar().get(0).getCalendarUid());
-        event.setStatus(Event.STATUS_CONFIRMED);
-        event.setEventId(""); // might need change later, ask chuandong what is eventId
-        event.setUserUid(UserUtil.getInstance(context).getUserUid());
-        event.setEventType(Event.TYPE_SOLO);
-        event.setInviteeVisibility(1);
-        event.setFreebusyAccess(1); // ask chuandong
-    }
-
-    public static void regenerateRelatedUid(Event event) {
-        // change eventUid
-        String newEventUid = AppUtil.generateUuid();
-        event.setEventUid(newEventUid);
-        // change inviteeEventUid
-        for (Invitee invitee : event.getInvitee()) {
-            invitee.setEventUid(newEventUid);
-            invitee.setInviteeUid(AppUtil.generateUuid());
-        }
-
-        // change timeslotEventUid
-        for (Timeslot timeslot : event.getTimeslot()) {
-            timeslot.setEventUid(newEventUid);
-            timeslot.setTimeslotUid(AppUtil.generateUuid());
-        }
-
-        // change PhotoEventUid
-        for (PhotoUrl photoUrl : event.getPhoto()) {
-            photoUrl.setEventUid(newEventUid);
-            photoUrl.setPhotoUid(AppUtil.generateUuid());
-        }
     }
 
     public static boolean isUserHostOfEvent(Context context, Event event) {

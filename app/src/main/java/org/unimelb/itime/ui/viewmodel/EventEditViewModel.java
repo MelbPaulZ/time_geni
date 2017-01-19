@@ -11,6 +11,7 @@ import android.databinding.ObservableField;
 import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -46,6 +47,8 @@ import java.util.List;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 import me.tatarka.bindingcollectionadapter.ItemView;
+
+import static org.unimelb.itime.ui.viewmodel.EventCommonViewModel.PickerTask.END_REPEAT;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -99,7 +102,11 @@ public class EventEditViewModel extends EventCommonViewModel {
                     case START_TIME:
                         event.setStartTime(updateYearMonthDay(event.getStartTime(), year, monthOfYear, dayOfMonth).getTimeInMillis());
                         if (!isEndTimeChanged) {
-                            event.setEndTime(event.getStartTime() + 60 * 60 * 1000);
+                            if(isAlldayEvent == 1){
+                                event.setEndTime(event.getStartTime() + 24 * 60 * 60 *1000 - 60 * 1000); // if is all day event, set end time to another day
+                            }else if (isAlldayEvent == 0) {
+                                event.setEndTime(event.getStartTime() + 60 * 60 * 1000); // if not all day event, set end time to next hour
+                            }
                         }
                         break;
                     case END_REPEAT:
@@ -425,14 +432,14 @@ public class EventEditViewModel extends EventCommonViewModel {
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {
-                                presenter.deleteEvent(event, EventPresenter.UPDATE_THIS, orgEvent.getStartTime());
+                                presenter.deleteEvent(event, EventPresenter.UPDATE_THIS, event.getStartTime());
                             }
                         })
                 .addSheetItem(getContext().getString(R.string.event_delete_repeat_text2), ActionSheetDialog.SheetItemColor.Black,
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int i) {
-                                presenter.deleteEvent(event, EventPresenter.UPDATE_FOLLOWING, orgEvent.getStartTime());
+                                presenter.deleteEvent(event, EventPresenter.UPDATE_FOLLOWING, event.getStartTime());
                             }
                         });
         actionSheetDialog.show();
@@ -445,6 +452,18 @@ public class EventEditViewModel extends EventCommonViewModel {
                 if (mvpView != null) {
                     mvpView.toPhotoPickerPage();
                 }
+            }
+        };
+    }
+
+    public View.OnTouchListener pickPhotoOnTouch(){
+        return new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (mvpView != null) {
+                    mvpView.toPhotoPickerPage();
+                }
+                return false;
             }
         };
     }
@@ -479,9 +498,7 @@ public class EventEditViewModel extends EventCommonViewModel {
         event.setTimeslot(pendingTimeslots);
         event.setHostUserUid(UserUtil.getInstance(getContext()).getUserUid());
         EventUtil.addSelfInInvitee(getContext(), event);
-        if (!event.hasPhoto()) {
-            event.setPhoto(new ArrayList<PhotoUrl>());
-        }
+        event.setPhoto(photoUrls);
 
         if (event.getInvitee().size() > 1) {
             event.setEventType(Event.TYPE_GROUP);
@@ -509,6 +526,10 @@ public class EventEditViewModel extends EventCommonViewModel {
         this.event = event;
         if (event.hasTimeslots()) {
             timeslotList = event.getTimeslot();
+        }
+
+        if (event.hasPhoto()){
+            setPhotoUrls(event.getPhoto());
         }
         notifyPropertyChanged(BR.event);
         notifyPropertyChanged(BR.startTimeVisibility);
@@ -671,5 +692,32 @@ public class EventEditViewModel extends EventCommonViewModel {
                 }
             }
         }
+    }
+
+
+    /**
+     * the following is for binding photos
+     */
+    private List<PhotoUrl> photoUrls = new ArrayList<>();
+    private ItemView photoItemView = ItemView.of(BR.photoUrl, R.layout.listview_photo);
+
+    @Bindable
+    public List<PhotoUrl> getPhotoUrls() {
+        return photoUrls;
+    }
+
+    public void setPhotoUrls(List<PhotoUrl> photoUrls) {
+        this.photoUrls = photoUrls;
+        notifyPropertyChanged(BR.photoUrls);
+    }
+
+    @Bindable
+    public ItemView getPhotoItemView() {
+        return photoItemView;
+    }
+
+    public void setPhotoItemView(ItemView photoItemView) {
+        this.photoItemView = photoItemView;
+        notifyPropertyChanged(BR.photoItemView);
     }
 }
