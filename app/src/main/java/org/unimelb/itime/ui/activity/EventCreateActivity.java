@@ -37,10 +37,6 @@ import static android.R.attr.start;
 
 public class EventCreateActivity extends EmptyActivity implements PlaceSelectionListener {
     private String TAG = "EventCreateActivity";
-    private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
-    private final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
-    private final int ACTIVITY_PHOTOPICKER = 2;
-
     private FragmentManager fragmentManager;
     private Event event = null;
 
@@ -88,61 +84,6 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
         return R.id.create_event_fragment;
     }
 
-    public void checkPermission(){
-       if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
-            || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
-           ActivityCompat.requestPermissions(this,
-                   new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA},
-                   MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-        }else{
-           ActivityCompat.requestPermissions(this,
-                   new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA},
-                   MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-       }
-    }
-//
-//
-//    // todo alert dialog show image
-//
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:{
-                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
-                    toPhotoPicker();
-                }else {
-                    Toast.makeText(getBaseContext(), "retry",Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        }
-    }
-//
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // this is the recall for photo urls
-        switch (requestCode) {
-            case ACTIVITY_PHOTOPICKER: {
-                if (resultCode == Activity.RESULT_OK) {
-                    ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-                    EventEditFragment eventEditFragment = (EventEditFragment) getSupportFragmentManager().findFragmentById(getFragmentContainerId());
-                    eventEditFragment.setPhotos(result);
-                    openFragment(eventEditFragment);
-                }
-            }
-        }
-    }
-//
-    public void toPhotoPicker(){
-        Intent intent = new Intent(this, PhotoPickerActivity.class);
-        int selectedMode = PhotoPickerActivity.MODE_MULTI;
-        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-        int maxNum = 3;
-        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
-        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, true);
-        startActivityForResult(intent, ACTIVITY_PHOTOPICKER);
-    }
 
     @Subscribe
     public void gotoUrl(MessageUrl messageUrl) {

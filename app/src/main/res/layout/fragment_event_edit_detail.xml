@@ -510,7 +510,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:background="@drawable/table_row_border">
 
                         <TextView
@@ -534,17 +534,24 @@
                             android:layout_gravity="center_vertical|right"
                             android:src="@drawable/arrow" />
 
+
                         <android.support.v7.widget.RecyclerView
                             android:layout_width="wrap_content"
-                            android:layout_height="60dp"
+                            android:layout_height="match_parent"
                             android:layout_toLeftOf="@+id/edit_event_photo_arrow"
                             android:minWidth="200dp"
-                            android:onTouch="@{eventEditVM.pickPhotoOnTouch()}"
                             android:layout_gravity="center_vertical"
                             app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, true)}"
                             app:items="@{eventEditVM.photoUrls}"
                             app:itemView="@{eventEditVM.photoItemView}"
                             />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentBottom="true"
+                            android:onClick="@{eventEditVM.pickPhoto()}"/>
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>

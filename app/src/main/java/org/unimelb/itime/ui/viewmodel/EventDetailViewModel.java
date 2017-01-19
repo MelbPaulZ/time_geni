@@ -42,6 +42,7 @@ import java.util.Map;
 import me.fesky.library.widget.ios.ActionSheetDialog;
 import me.tatarka.bindingcollectionadapter.ItemView;
 
+import static org.unimelb.itime.R.string.photo;
 import static org.unimelb.itime.util.EventUtil.isUserHostOfEvent;
 
 /**
@@ -58,6 +59,33 @@ public class EventDetailViewModel extends CommonViewModel {
 
     private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeConfirmVisibility,
             inviteeUnconfirmVisibility, soloInvisible;
+
+
+    /**
+     * the following is for binding photos
+     */
+    private List<PhotoUrl> photoUrls = new ArrayList<>();
+    private ItemView photoItemView = ItemView.of(BR.photoUrl, R.layout.listview_photo);
+
+    @Bindable
+    public List<PhotoUrl> getPhotoUrls() {
+        return photoUrls;
+    }
+
+    public void setPhotoUrls(List<PhotoUrl> photoUrls) {
+        this.photoUrls = photoUrls;
+        notifyPropertyChanged(BR.photoUrls);
+    }
+
+    @Bindable
+    public ItemView getPhotoItemView() {
+        return photoItemView;
+    }
+
+    public void setPhotoItemView(ItemView photoItemView) {
+        this.photoItemView = photoItemView;
+        notifyPropertyChanged(BR.photoItemView);
+    }
 
 
     public EventDetailViewModel(EventPresenter<EventDetailMvpView> presenter) {
@@ -428,6 +456,9 @@ public class EventDetailViewModel extends CommonViewModel {
     public void setEvent(Event event) {
         this.event = event;
         resetState();
+        if (event.hasPhoto()){
+            setPhotoUrls(event.getPhoto());
+        }
         notifyPropertyChanged(BR.event);
     }
 

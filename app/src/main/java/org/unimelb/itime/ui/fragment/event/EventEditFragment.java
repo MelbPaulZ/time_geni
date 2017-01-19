@@ -1,10 +1,15 @@
 package org.unimelb.itime.ui.fragment.event;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +24,7 @@ import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.ui.activity.PhotoPickerActivity;
 import org.unimelb.itime.ui.fragment.LocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
@@ -37,6 +43,7 @@ import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_INSERT;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_UPDATE;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_SYN_IMAGE;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_UPLOAD_IMAGE;
+import static org.unimelb.itime.util.EventUtil.fromStringToPhotoUrlList;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -54,7 +61,9 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public final static int REQ_INVITEE = 1001;
     public final static int REQ_TIMESLOT = 1002;
     public final static int REQ_CUSTOM_REPEAT = 1003;
+    public final static int REQ_PHOTO = 1004;
 
+    public final static int REQUEST_PERMISSION = 101;
 
 
     private FragmentEventEditDetailBinding binding;
@@ -91,7 +100,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         eventManager = EventManager.getInstance(getContext());
         eventEditViewModel = new EventEditViewModel(getPresenter());
         eventEditViewModel.setEvent(event);
-        eventEditViewModel.setPhotoUrls(photoUrls);
         eventEditViewModel.setFragment_task(task);
         initToolbar();
 
@@ -127,7 +135,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
     public void setPhotos(ArrayList<String> photos){
-        List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), photos);
+        List<PhotoUrl> photoUrls = fromStringToPhotoUrlList(getContext(), photos);
         this.photoUrls = photoUrls;
         // this is for photo choose back, then refresh page
         if (eventEditViewModel!=null){
@@ -176,14 +184,48 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
 
-    @Override
-    public void toPhotoPickerPage() {
-        if (getActivity() instanceof EventDetailActivity) {
-            ((EventDetailActivity) getActivity()).checkPermission();
-        }else if (getActivity() instanceof EventCreateActivity){
-            ((EventCreateActivity) getBaseActivity()).checkPermission();
+    public void checkPermission() {
+        if (ContextCompat.checkSelfPermission(getContext()
+                , Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                    REQUEST_PERMISSION);
+        }else{
+            startPhotoPicker();
         }
     }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case REQUEST_PERMISSION:{
+                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                    startPhotoPicker();
+                }else {
+                    Toast.makeText(getContext(), "retry",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
+    }
+
+    private void startPhotoPicker(){
+        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
+        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+        int maxNum = 3;
+        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, true);
+        startActivityForResult(intent, REQ_PHOTO);
+    }
+
+    @Override
+    public void toPhotoPickerPage() {
+        checkPermission();
+    }
+
 
     @Override
     public void toCustomPage() {
@@ -276,6 +318,13 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
         if (requestCode == REQ_CUSTOM_REPEAT && resultCode == EventCustomRepeatFragment.RET_CUSTOM_REPEAT){
             Event event = (Event) data.getSerializableExtra("event");
+            setEvent(event);
+        }
+
+        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK){
+            ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+            List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
+            event.setPhoto(photoUrls);
             setEvent(event);
         }
     }

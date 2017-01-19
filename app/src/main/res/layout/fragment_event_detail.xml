@@ -337,43 +337,15 @@
                             android:textColor="@color/color_000000"
                             android:textSize="17sp" />
 
-                        <LinearLayout
+                        <android.support.v7.widget.RecyclerView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginEnd="10dp"
-                            android:layout_toStartOf="@+id/event_detail_photo_arrow"
-                            android:orientation="horizontal"
-                            app:imgDisplayer="@{contentVM.event}">
-
-                            <ImageView
-                                android:id="@+id/detail_photo1"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_gravity="center"
-                                android:layout_marginEnd="@dimen/padding_10" />
-
-                            <ImageView
-                                android:id="@+id/detail_photo2"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_gravity="center"
-                                android:layout_marginEnd="@dimen/padding_10" />
-
-                            <ImageView
-                                android:id="@+id/detail_photo3"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_gravity="center" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/event_detail_photo_arrow"
-                            android:layout_width="8dp"
-                            android:layout_height="13dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/padding_10"
-                            android:background="@drawable/icon_general_arrow_right" />
+                            android:minWidth="200dp"
+                            android:layout_gravity="center_vertical"
+                            app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, true)}"
+                            app:items="@{contentVM.photoUrls}"
+                            app:itemView="@{contentVM.photoItemView}"
+                            />
 
                         <TextView
                             android:layout_width="match_parent"

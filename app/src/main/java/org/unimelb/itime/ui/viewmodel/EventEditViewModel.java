@@ -498,9 +498,7 @@ public class EventEditViewModel extends EventCommonViewModel {
         event.setTimeslot(pendingTimeslots);
         event.setHostUserUid(UserUtil.getInstance(getContext()).getUserUid());
         EventUtil.addSelfInInvitee(getContext(), event);
-        if (!event.hasPhoto()) {
-            event.setPhoto(new ArrayList<PhotoUrl>());
-        }
+        event.setPhoto(photoUrls);
 
         if (event.getInvitee().size() > 1) {
             event.setEventType(Event.TYPE_GROUP);
@@ -531,7 +529,7 @@ public class EventEditViewModel extends EventCommonViewModel {
         }
 
         if (event.hasPhoto()){
-            photoUrls = event.getPhoto();
+            setPhotoUrls(event.getPhoto());
         }
         notifyPropertyChanged(BR.event);
         notifyPropertyChanged(BR.startTimeVisibility);
