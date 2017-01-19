@@ -25,6 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/searchBar"
+        app:searchHintTitle="@string/search"
+        app:searchHintText="@string/search_hint"
         app:searchListener = "@{mainViewModel.onEditListener}"/>
 
     <include layout="@layout/line"/>
