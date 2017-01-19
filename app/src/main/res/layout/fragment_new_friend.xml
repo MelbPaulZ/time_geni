@@ -26,7 +26,7 @@
             android:background="@color/grey_six">
             <org.unimelb.itime.widget.SearchBar
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="28dp"
                 android:id="@+id/searchBar"
                 app:searchHintTitle="@string/search"
                 app:searchHintText="@string/search_hint"

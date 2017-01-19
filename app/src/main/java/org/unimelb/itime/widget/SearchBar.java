@@ -98,7 +98,7 @@ public class SearchBar extends FrameLayout {
 //        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
 //                SizeUtil.dp2px(getContext(), 50));
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                SizeUtil.dp2px(getContext(), 28));
+                LinearLayout.LayoutParams.MATCH_PARENT);
         mainLayout = new LinearLayout(getContext());
         mainLayout.setOrientation(LinearLayout.HORIZONTAL);
         mainLayout.setLayoutParams(params);
