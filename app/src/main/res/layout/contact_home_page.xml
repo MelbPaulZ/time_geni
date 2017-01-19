@@ -5,27 +5,34 @@
         <variable
             name="mainViewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <org.unimelb.itime.widget.PlusTitleBar
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
-        app:title="@{mainViewModel.title}"
-        app:showLeft="@{mainViewModel.showTitileBack}"
-        app:showRight="@{mainViewModel.showTitleRight}"
-        app:titleRightListener="@{mainViewModel.titleRightListener}"
-        android:id="@+id/titleBar"
-        />
+    <include layout="@layout/toolbar_common"
+        app:vm="@{toolbarVM}"/>
     <include layout="@layout/line"/>
 
-    <org.unimelb.itime.widget.SearchBar
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="7.5dp"
+        android:paddingBottom="7.5dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:background="@color/grey_six">
+    <org.unimelb.itime.widget.SearchBar
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:id="@+id/searchBar"
+        app:searchHintTitle="@string/search"
+        app:searchHintText="@string/search_hint"
         app:searchListener = "@{mainViewModel.onEditListener}"/>
+    </FrameLayout>
 
     <include layout="@layout/line"/>
 

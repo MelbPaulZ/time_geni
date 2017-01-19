@@ -19,14 +19,14 @@ import java.lang.reflect.Type;
 @Entity
 public class User implements Serializable, Cloneable {
 
+    public final static String MALE = "1";
+    public final static String FEMALE = "0";
+    public final static String UNDEFINED = "2";
     public static final String SOURCE_GOOGLE = "google";
     public static final String SOURCE_FACEBOOK = "facebook";
     public static final String SOURCE_ITIME = "itime";
     public static final String SOURCE_EMAIL = "email";
     public static final String SOURCE_PHONE = "phone";
-
-    public  final static String MALE = "2";
-    public final static String FEMALE = "1";
 
     @Id
     private String userUid="";
@@ -47,7 +47,7 @@ public class User implements Serializable, Cloneable {
     private String createdAt="";
     private String updatedAt="";
     private String gender="";
-    private String location="";
+    private String location ="";
 
 @Generated(hash = 223006400)
 public User(String userUid, String userId, String password,
@@ -229,6 +229,14 @@ public User(String userUid, String userId, String password,
         public String convertToDatabaseValue(User entityProperty) {
             return gson.toJson(entityProperty);
         }
+    }
+
+    public String getRegion(){
+        return location;
+    }
+
+    public void setRegion(String region){
+        location = region;
     }
 
     @Override

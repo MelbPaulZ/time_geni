@@ -199,11 +199,11 @@ public class ContactHomePageViewModel  extends BaseObservable {
     }
 
     public void loadData(){
-        presenter.getFriends(new FriendsCallBack());
+        presenter.getFriends();
     }
 
     public void initData(){
-        presenter.getFriends(new FriendsCallBack());
+        presenter.getFriends();
     }
 
     public void initSideBarListView(SideBarListView sideBarListView){
@@ -271,16 +271,6 @@ public class ContactHomePageViewModel  extends BaseObservable {
 
     private List<ITimeUser> filterData(String text){
         return ContactFilterUtil.getInstance().filterUser(friendList, text);
-    }
-
-    public class FriendsCallBack{
-        public void success(List<ITimeUser> list){
-            setFriendList(list);
-        }
-
-        public void failed(){
-
-        }
     }
 
     public class RequestCountListener{

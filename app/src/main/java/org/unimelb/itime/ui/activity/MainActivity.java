@@ -27,15 +27,13 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
 import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
-import org.unimelb.itime.ui.fragment.contact.ContactHomePageFragment;
+import org.unimelb.itime.ui.fragment.MainContactFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
 import org.unimelb.itime.ui.fragment.MainSettingFragment;
-import org.unimelb.itime.ui.fragment.contact.ContactHomePageFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
-import org.unimelb.itime.util.EventUtil;
 
 import java.util.List;
 
@@ -107,7 +105,7 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
     private void init(){
         tagFragments = new MvpFragment[4];
         tagFragments[0] = new MainCalendarFragment();
-        tagFragments[1] = new ContactHomePageFragment();
+        tagFragments[1] = new MainContactFragment();
         tagFragments[2] = new MainInboxFragment();
         tagFragments[3] = new MainSettingFragment();
 

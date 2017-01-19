@@ -42,7 +42,7 @@ public class ResetPasswordSentFragment extends LoginBaseFragment implements Logi
             case LoginViewModel.TO_INDEX_FRAG: {
                 getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 LoginIndexFragment fragment = new LoginIndexFragment();
-                getBaseActivity().openFragment(fragment);
+                getBaseActivity().openFragment(fragment, null, false);
                 break;
             }
             case LoginViewModel.TO_RESET_PASSWORD_FRAG:{

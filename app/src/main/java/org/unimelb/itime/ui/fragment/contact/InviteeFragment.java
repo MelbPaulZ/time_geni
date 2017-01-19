@@ -8,10 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
+import org.unimelb.itime.bean.BaseContact;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.databinding.FragmentInviteFridendsBinding;
@@ -20,6 +23,7 @@ import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.contact.InviteFriendMvpView;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel;
 import org.unimelb.itime.widget.InviteeGroupView;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
@@ -46,6 +50,7 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
     private Event event;
     private InviteeGroupView inviteeGroupView;
     private EventManager eventManager;
+    private ToolbarViewModel toolbarViewModel;
 
     @Override
     public InviteFriendPresenter createPresenter() {
@@ -68,6 +73,14 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
 
         binding.setViewModel(viewModel);
         headerBinding.setViewModel(viewModel);
+
+        toolbarViewModel = new ToolbarViewModel(this);
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
+        toolbarViewModel.setTitleStr(getString(R.string.invitee));
+        toolbarViewModel.setRightClickable(true);
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+        binding.setToolbarVM(toolbarViewModel);
 
     }
 
@@ -202,6 +215,40 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
                 String result = bundle.getString("result");
                 viewModel.addInvitee(result);
             }
+        }
+    }
+
+    @Override
+    public void onTaskStart(int taskId) {
+
+    }
+
+    @Override
+    public void onTaskSuccess(int taskId, Object data) {
+        switch (taskId){
+            case InviteFriendPresenter.TASK_SEARCH_CONTACT:
+                if(data instanceof Contact){
+                    viewModel.addInvitee(viewModel.contactToInvitee((Contact) data));
+                }else if(data instanceof String){
+                    viewModel.addInvitee(viewModel.unactivatedInvitee((String) data));
+                }
+                break;
+            case InviteFriendPresenter.TASK_FRIEND_LIST:
+                viewModel.setFriendList((List<BaseContact>) data);
+                break;
+
+        }
+    }
+
+    @Override
+    public void onTaskError(int taskId,Object data) {
+        switch (taskId){
+            case InviteFriendPresenter.TASK_SEARCH_CONTACT:
+                Toast.makeText(getContext(), getResources().getString(R.string.access_fail),Toast.LENGTH_SHORT).show();
+                break;
+            case InviteFriendPresenter.TASK_FRIEND_LIST:
+                break;
+
         }
     }
 }

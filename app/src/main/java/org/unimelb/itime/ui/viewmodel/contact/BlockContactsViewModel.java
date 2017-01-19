@@ -203,7 +203,7 @@ public class BlockContactsViewModel  extends BaseObservable {
     }
 
     public void loadData(){
-        presenter.getBlockList(new ContactsCallBack());
+        presenter.getBlockList();
     }
 
     public void initSideBarListView(SideBarListView sideBarListView){
@@ -242,18 +242,6 @@ public class BlockContactsViewModel  extends BaseObservable {
 
     private List<ITimeUser> filterData(String text){
         return ContactFilterUtil.getInstance().filterUser(friendList, text);
-    }
-
-    public class ContactsCallBack{
-
-        public void success(List<ITimeUser> users){
-            System.out.println(users.size());
-            setFriendList(users);
-        }
-
-        public void failed(){
-            Toast.makeText(presenter.getContext(),presenter.getContext().getString(R.string.access_fail) , Toast.LENGTH_SHORT).show();
-        }
     }
 
 }

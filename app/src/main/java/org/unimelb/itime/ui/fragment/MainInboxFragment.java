@@ -1,15 +1,12 @@
 package org.unimelb.itime.ui.fragment;
 
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,13 +37,14 @@ import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.widget.SearchBar;
 
 import java.util.List;
 
 /**
  * required signIn, need to extend BaseUiAuthFragment
  */
-public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView, SearchView.OnQueryTextListener{
+public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView {
 
     private FragmentMainInboxBinding binding;
     private MainInboxPresenter presenter;
@@ -160,16 +158,16 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     }
 
     private void initSearch(){
-        SearchManager searchManager = (SearchManager)
-                getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) binding.getRoot().findViewById(R.id.message_searchview);
-        searchView.setSearchableInfo(searchManager.
-                getSearchableInfo(getActivity().getComponentName()));
-//        searchView.setSubmitButtonEnabled(true);
-        searchView.setOnQueryTextListener(this);
-        searchView.setFocusable(true);
-        searchView.setIconified(false);
-        searchView.setIconifiedByDefault(false);
+        if(getView() == null){
+            return;
+        }
+        SearchBar searchBar = (SearchBar) getView().findViewById(R.id.message_searchview);
+        searchBar.setSearchListener(new SearchBar.OnEditListener() {
+            @Override
+            public void onEditing(View view, String text) {
+                messageAdapter.getFilter().filter(text);
+            }
+        });
 
     }
 
@@ -194,17 +192,6 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String constrains) {
-        messageAdapter.getFilter().filter(constrains);
-        return false;
     }
 
     @Override

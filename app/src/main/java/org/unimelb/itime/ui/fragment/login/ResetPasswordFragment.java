@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.FragmentResetPasswordBinding;
-import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
-import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 
 /**
@@ -44,11 +42,6 @@ public class ResetPasswordFragment extends LoginBaseFragment implements LoginMvp
                 getFragmentManager().popBackStack();
                 break;
             }
-            case LoginViewModel.TO_EMAIL_SENT_FRAG:{
-                ResetPasswordFragment fragment = new ResetPasswordFragment();
-                getBaseActivity().openFragment(fragment);
-                break;
-            }
             case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
                 SignupInputEmailFragment fragment = new SignupInputEmailFragment();
                 getBaseActivity().openFragment(fragment);
@@ -60,19 +53,19 @@ public class ResetPasswordFragment extends LoginBaseFragment implements LoginMvp
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
-
+        hideProgressDialog();
+        ResetPasswordSentFragment fragment = new ResetPasswordSentFragment();
+        getBaseActivity().openFragment(fragment);
     }
 
     @Override
     public void onTaskError(int taskId, Object data) {
-        if(taskId == LoginPresenter.TASK_VALIDATE){
-            ValidateRes res = (ValidateRes) data;
-            showDialog(res.getTitle(), res.getContent());
-        }
+        hideProgressDialog();
+        showDialog("error", (String)data);
     }
 }

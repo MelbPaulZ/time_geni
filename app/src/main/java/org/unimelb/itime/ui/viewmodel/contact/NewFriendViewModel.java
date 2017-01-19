@@ -67,21 +67,12 @@ public class NewFriendViewModel extends BaseObservable {
     }
 
     public void loadData(){
-        presenter.getRequestFriendList(new RequestListCallBack());
+        presenter.getRequestFriendList();
     }
 
     public void setRequestList(List<RequestFriend> list){
         requestList = list;
         updateListView(requestList);
-    }
-
-    public View.OnClickListener getTitleRightListener(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            presenter.getView().goToAddFriendsFragment();
-            }
-        };
     }
 
     public View.OnClickListener getTitleBackListener(){
@@ -112,17 +103,6 @@ public class NewFriendViewModel extends BaseObservable {
             RequestFriendItemViewModel item = new RequestFriendItemViewModel(presenter);
             item.setRequestFriend(request);
             items.add(item);
-        }
-    }
-
-    public class RequestListCallBack{
-        public void success(List<RequestFriend> list){
-            System.out.println(list.size());
-            setRequestList(list);
-        }
-
-        public void fail(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getString(R.string.add_fail), Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -5,21 +5,19 @@
         <variable
             name="viewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.ProfileFragmentViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
-    <org.unimelb.itime.widget.DotTitleBar
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
-        android:id="@+id/titleBar"
-        app:title="@{viewModel.title}"
-        app:showLeft="@{viewModel.showTitileBack}"
-        app:showRight="@{viewModel.showTitleRight}"
-        app:titleBackListener="@{viewModel.titleBackListener}"
-        app:titleRightListener="@{viewModel.titleRightListener}"/>
+
+    <include layout="@layout/toolbar_common"
+        app:vm="@{toolbarVM}"/>
+
 <include layout="@layout/line"/>
     <RelativeLayout
         android:layout_width="match_parent"

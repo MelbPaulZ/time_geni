@@ -13,7 +13,6 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
 import org.unimelb.itime.ui.presenter.LoginPresenter;
-import org.unimelb.itime.util.DefaultPhotoUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,10 +43,10 @@ public class LoginViewModel extends AndroidViewModel{
     public final static int TO_LOGIN_FRAG = 3;
     public final static int TO_INDEX_FRAG = 4;
     public final static int TO_INPUT_EMAIL_FRAG = 5;
-    public final static int TO_PICK_AVATAR_FRAG = 6;
     public final static int TO_RESET_PASSWORD_FRAG = 7;
     public final static int TO_SET_PASSWORD_FRAG = 8;
     public final static int TO_TERM_AGREEMENT_FRAG = 9;
+    public final static int TO_CALENDAR = 10;
 
 
     public LoginViewModel(LoginPresenter presenter){
@@ -83,14 +82,21 @@ public class LoginViewModel extends AndroidViewModel{
         };
     }
 
-    public void signup(){
-        if (loginUser.getPhoto().length()==0){
-            presenter.uploadImageToLeanCloud(loginUser,
-                    DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getPersonalAlias()));
-        }else{
-            presenter.uploadImageToLeanCloud(loginUser, loginUser.getPhoto());
-        }
-    }
+
+//    public View.OnClickListener onClickSignUpBtn(){
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (loginUser.getPhoto().length()==0){
+//                    presenter.uploadImageToLeanCloud(loginUser,
+//                            DefaultPhotoUtil.getInstance().getPhoto(getContext(), loginUser.getPersonalAlias()));
+//                }else{
+//                    presenter.uploadImageToLeanCloud(loginUser, loginUser.getPhoto());
+//                }
+//            }
+//        };
+//    }
+
 
     public View.OnClickListener onClickInputEmailBtn(final int task){
         return new View.OnClickListener() {
@@ -133,13 +139,6 @@ public class LoginViewModel extends AndroidViewModel{
                 HashMap<String, String> params = new HashMap<>();
                 params.put("password", loginUser.getPassword());
                 presenter.validate(params);
-//                if (loginUser.getPassword().length()<8){
-//                    mvpView.invalidPopup(INVALID_PASSWORD_TOO_SIMPLE);
-//                }else if (loginUser.getPassword().length()>16){
-//                    mvpView.invalidPopup(INVALID_PASSWORD_TOO_LONG);
-//                }else{
-//                    mvpView.onPageChange(TO_PICK_AVATAR_FRAG);
-//                }
             }
         };
     }
@@ -223,9 +222,8 @@ public class LoginViewModel extends AndroidViewModel{
             @Override
             public void onClick(View v) {
                 if (mvpView!=null){
-//                    mvpView.(TO_CALENDAR);
+                    mvpView.onPageChange(TO_CALENDAR);
                 }
-                Toast.makeText(getContext(), "tocalendar here", Toast.LENGTH_SHORT).show();
             }
         };
     }

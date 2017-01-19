@@ -17,7 +17,7 @@ import org.unimelb.itime.util.DefaultPhotoUtil;
 import org.unimelb.itime.util.googleAuth.GoogleSignUtil;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 
-public class ContactTestActivityContact extends EmptyActivity {
+public class ContactTestActivity extends EmptyActivity {
     ActivityContactMainBinding binding;
 
 
@@ -33,6 +33,11 @@ public class ContactTestActivityContact extends EmptyActivity {
 //        initView();
     }
 
+    @Override
+    protected int getFragmentContainerId(){
+        return R.id.contentFrameLayout;
+    }
+
     public void toHomePage() {
         Intent intent = new Intent();
         intent.setClass(this, BlockContactsActivity.class);
@@ -41,7 +46,7 @@ public class ContactTestActivityContact extends EmptyActivity {
 
     public void toInvitee() {
 //        Intent intent = new Intent();
-//        intent.setClass(this, InviteFriendsActivityContact.class);
+//        intent.setClass(this, InviteFriendsActivity.class);
 //        startActivity(intent);
         new AlertDialog.Builder(this).setTitle("Title").setMessage("this is a message").setPositiveButton("确定", null)
         .setNegativeButton("取消", null).show();
@@ -82,7 +87,6 @@ public class ContactTestActivityContact extends EmptyActivity {
     }
 
     public Bitmap getPhoto(){
-
        return DefaultPhotoUtil.getInstance().getPhoto(getApplicationContext(),"Qiushuo zuang");
     }
 

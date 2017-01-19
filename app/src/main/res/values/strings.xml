@@ -351,8 +351,11 @@
     <string name="Searching">Searching</string>
     <string name="please_wait">Please wait</string>
     <string name="cannot_find_user">Can not find this user</string>
-
-
+    <string name="add_friends">Add Friends</string>
+    <string name="edit_alias">Edit Alias</string>
+    <string name="profile">Profile</string>
+    <string name="new_friends">New Friends</string>
+    <string name="contacts">Contacts</string>
     <!--setting-->
     <string name="blocked_users">Blocked Users</string>
     <string name="notifications">Notifications</string>
@@ -371,7 +374,7 @@
     <string name="setting_reset_password">Reset Password</string>
     <string name="my_qr_code">My QR Code</string>
     <string name="setting_gender">Gender</string>
-    <string name="region">Region</string>
+    <string name="location">Region</string>
     <string name="setting_my_profile">My Profile</string>
     <string name="setting_calendar_pref">Calendar Preferences</string>
     <string name="photo_my_profile">Photo</string>

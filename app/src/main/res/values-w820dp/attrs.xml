@@ -40,8 +40,13 @@
     </declare-styleable>
 
     <declare-styleable name="SearchBar">
-        <attr name="showCancel" format="boolean"/>
+        <attr name="showSearchButton" format="boolean"/>
         <attr name="cancelListener" format="reference"/>
         <attr name="searchListener" format="reference"/>
+        <attr name="searchHintText" format="string" />
+        <attr name="searchHintTitle" format="string" />
+        <attr name="searchBackGroundColor" format="color" />
+        <attr name="searchHintTextColor" format="color" />
+        <attr name="searchTextColor" format="color" />
     </declare-styleable>
 </resources>

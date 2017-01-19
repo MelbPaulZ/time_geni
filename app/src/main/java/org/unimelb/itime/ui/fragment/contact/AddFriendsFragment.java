@@ -10,12 +10,15 @@ import android.view.ViewGroup;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.databinding.FragmentAddFriendBinding;
 import org.unimelb.itime.bean.ITimeUser;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.contact.AddFriendsMvpView;
 import org.unimelb.itime.ui.presenter.contact.AddFriendsPresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 import org.unimelb.itime.ui.viewmodel.contact.AddFriendsViewModel;
 
@@ -23,7 +26,7 @@ import org.unimelb.itime.ui.viewmodel.contact.AddFriendsViewModel;
  * Created by 37925 on 2016/12/10.
  */
 
-public class AddFriendsFragment extends BaseContactFragment<AddFriendsMvpView, AddFriendsPresenter> implements AddFriendsMvpView{
+public class AddFriendsFragment extends BaseUiAuthFragment<AddFriendsMvpView, AddFriendsPresenter> implements AddFriendsMvpView{
 
     android.support.v4.app.FragmentManager fm;
     FragmentAddFriendBinding binding;
@@ -32,29 +35,41 @@ public class AddFriendsFragment extends BaseContactFragment<AddFriendsMvpView, A
     AddOtherContactsFragment facebookFragment;
     AddMobileContactsFragment mobileFragment;
     ProfileFragment profileFragment;
+    private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
+    @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_add_friend, container, false);
-        presenter = createPresenter();
-        mainViewModel = new AddFriendsViewModel(presenter);
-        binding.setMainViewModel(mainViewModel);
-        fm = getFragmentManager();
         return binding.getRoot();
     }
+
+    @Override
+    public void onActivityCreated(Bundle bundle){
+        super.onActivityCreated(bundle);
+        mainViewModel = new AddFriendsViewModel(presenter);
+        binding.setMainViewModel(mainViewModel);
+
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
+        toolbarViewModel.setTitleStr(getString(R.string.add_friends));
+        binding.setToolbarVM(toolbarViewModel);
+    }
+
 
     public void goToProfileFragment(Contact user){
         if(profileFragment == null) {
             profileFragment = new ProfileFragment();
         }
         profileFragment.setUser(user);
+        getBaseActivity().openFragment(profileFragment, null, true);
 
-        fm.beginTransaction()
-                .hide(this)
-                .replace(R.id.contentFrameLayout, profileFragment)
-                .addToBackStack(null)
-                .commit();
+//        fm.beginTransaction()
+//                .hide(this)
+//                .replace(R.id.contentFrameLayout, profileFragment)
+//                .addToBackStack(null)
+//                .commit();
     }
 
     public void goToAddFacebookContacts(){
@@ -123,4 +138,13 @@ public class AddFriendsFragment extends BaseContactFragment<AddFriendsMvpView, A
         return new AddFriendsPresenter(getContext());
     }
 
+    @Override
+    public void onBack() {
+        getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onNext() {
+
+    }
 }

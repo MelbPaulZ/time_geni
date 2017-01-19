@@ -4,18 +4,17 @@
         <variable
             name="viewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.EditContactViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <org.unimelb.itime.widget.DoneTitleBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:title="@{viewModel.title}"
-        app:backOnClickListener="@{viewModel.backOnClickListener}"
-        app:rightOnClickListener="@{viewModel.rightOnClickListener}"/>
+    <include layout="@layout/toolbar_common"
+        app:vm="@{toolbarVM}"/>
 
     <include layout="@layout/line"/>
 
