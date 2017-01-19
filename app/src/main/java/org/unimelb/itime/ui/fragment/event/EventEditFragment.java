@@ -32,7 +32,6 @@ import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
@@ -48,7 +47,7 @@ import static org.unimelb.itime.util.EventUtil.fromStringToPhotoUrlList;
 /**
  * Created by Paul on 28/08/2016.
  */
-public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, EventPresenter<EventEditMvpView>> implements EventEditMvpView{
+public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, EventPresenter<EventEditMvpView>> implements EventEditMvpView {
     /**
      * the key for pass bundle for arguments
      */
@@ -63,8 +62,9 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public final static int REQ_CUSTOM_REPEAT = 1003;
     public final static int REQ_PHOTO = 1004;
 
-    public final static int REQUEST_PERMISSION = 101;
-
+    public final static int REQUEST_PHOTO_PERMISSION = 101;
+    public final static int REQUEST_LOCATION_PERMISSION = 102;
+    private List<String> permissionList;
 
     private FragmentEventEditDetailBinding binding;
     private Event event = null;
@@ -73,7 +73,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     private List<PhotoUrl> photoUrls;
 
     private EventEditViewModel eventEditViewModel;
-//    private EventPresenter presenter;
+    //    private EventPresenter presenter;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
     private int task = TASK_CREATE;
@@ -87,13 +87,12 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(getActivity() instanceof EventCreateActivity){
+        if (getActivity() instanceof EventCreateActivity) {
             task = TASK_CREATE;
-        }else if (getActivity() instanceof EventDetailActivity){
+        } else if (getActivity() instanceof EventDetailActivity) {
             task = TASK_EDIT;
         }
 
@@ -107,23 +106,23 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         binding.setToolbarVM(toolbarViewModel);
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
         toolbarViewModel = new ToolbarViewModel<>(this);
         toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         if (task == TASK_CREATE) {
             toolbarViewModel.setTitleStr(getString(R.string.new_event));
             toolbarViewModel.setRightTitleStr(getString(R.string.send));
 
-        }else if (task == TASK_EDIT) {
+        } else if (task == TASK_EDIT) {
             toolbarViewModel.setTitleStr(getString(R.string.edit_event));
             toolbarViewModel.setRightTitleStr(getString(R.string.done));
         }
     }
 
-    public void setEvent(Event event){
+    public void setEvent(Event event) {
         this.event = event;
         // this is for photo choose back, then refresh page
-        if (eventEditViewModel!=null){
+        if (eventEditViewModel != null) {
             eventEditViewModel.setEvent(event);
         }
     }
@@ -132,16 +131,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public EventPresenter<EventEditMvpView> createPresenter() {
         presenter = new EventPresenter<>(getContext());
         return presenter;
-    }
-
-    public void setPhotos(ArrayList<String> photos){
-        List<PhotoUrl> photoUrls = fromStringToPhotoUrlList(getContext(), photos);
-        this.photoUrls = photoUrls;
-        // this is for photo choose back, then refresh page
-        if (eventEditViewModel!=null){
-            eventEditViewModel.setPhotoUrls(photoUrls);
-        }
-        // this is for letting viewmodel refresh data
     }
 
 
@@ -153,11 +142,20 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void toLocationPage() {
+        checkLocationPermission();
+    }
+
+    private void gotoLocationPicker() {
         LocationPickerFragment fragment = new LocationPickerFragment();
         fragment.setTargetFragment(this, REQ_LOCATION);
         Bundle data = new Bundle();
         data.putString(LocationPickerFragment.DATA_LOCATION, event.getLocation());
         getBaseActivity().openFragment(fragment, data);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
     }
 
     @Override
@@ -184,34 +182,10 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
 
-    public void checkPermission() {
-        if (ContextCompat.checkSelfPermission(getContext()
-                , Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
-                    REQUEST_PERMISSION);
-        }else{
-            startPhotoPicker();
-        }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case REQUEST_PERMISSION:{
-                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
-                    startPhotoPicker();
-                }else {
-                    Toast.makeText(getContext(), "retry",Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        }
-    }
-
-    private void startPhotoPicker(){
+    /**
+     * only photo related permission granted, then can go to photo picker
+     */
+    private void startPhotoPicker() {
         Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
         int selectedMode = PhotoPickerActivity.MODE_MULTI;
         intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
@@ -223,7 +197,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void toPhotoPickerPage() {
-        checkPermission();
+        checkPhotoPickerPermissions();
     }
 
 
@@ -236,7 +210,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
 
-
     @Override
     public void onTaskStart(int task) {
         showProgressDialog();
@@ -245,16 +218,16 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     @Override
     public void onTaskSuccess(int taskId, List<Event> data) {
         hideProgressDialog();
-        switch (taskId){
+        switch (taskId) {
             case TASK_EVENT_INSERT: {
                 toCalendar();
                 break;
             }
-            case TASK_EVENT_UPDATE:{
+            case TASK_EVENT_UPDATE: {
                 toCalendar();
                 break;
             }
-            default:{
+            default: {
                 toCalendar();
             }
         }
@@ -275,7 +248,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         }
     }
 
-    private void toCalendar(){
+    private void toCalendar() {
         Intent intent = new Intent();
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
@@ -283,27 +256,26 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void onBack() {
-        if(task == TASK_CREATE){
+        if (task == TASK_CREATE) {
             Intent intent = new Intent();
             getActivity().setResult(Activity.RESULT_CANCELED, intent);
             getActivity().finish();
-        }else if (task == TASK_EDIT){
+        } else if (task == TASK_EDIT) {
             toEventDetailPage();
         }
     }
-
 
 
     @Override
     public void onNext() {
         if (event.hasAttendee()
                 && EventUtil.hasOtherInviteeExceptSelf(getContext(), event)
-                && event.getTimeslot().size()==0){
+                && event.getTimeslot().size() == 0) {
             // has other invitees but no timeslots
             toTimeslotViewPage();
-        }else if (task == TASK_CREATE){
+        } else if (task == TASK_CREATE) {
             eventEditViewModel.toCreateEvent();
-        }else{
+        } else {
             eventEditViewModel.editEvent();
         }
     }
@@ -311,21 +283,111 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult: " + requestCode + "/" + requestCode);
-        if(requestCode == REQ_LOCATION && resultCode == LocationPickerFragment.RET_LOCATION_SUCCESS){
+        if (requestCode == REQ_LOCATION && resultCode == LocationPickerFragment.RET_LOCATION_SUCCESS) {
             String location = data.getStringExtra("location");
             this.event.setLocation(location);
         }
 
-        if (requestCode == REQ_CUSTOM_REPEAT && resultCode == EventCustomRepeatFragment.RET_CUSTOM_REPEAT){
+        if (requestCode == REQ_CUSTOM_REPEAT && resultCode == EventCustomRepeatFragment.RET_CUSTOM_REPEAT) {
             Event event = (Event) data.getSerializableExtra("event");
             setEvent(event);
         }
 
-        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK) {
             ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
             List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
             event.setPhoto(photoUrls);
             setEvent(event);
         }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION_PERMISSION: {
+                if (allPermissionGranted(grantResults)) {
+                    gotoLocationPicker();
+                } else {
+                    Toast.makeText(getContext(), "need location permission", Toast.LENGTH_SHORT).show();
+                }
+            }
+            case REQUEST_PHOTO_PERMISSION: {
+                if (allPermissionGranted(grantResults)) {
+                    startPhotoPicker();
+                } else {
+                    Toast.makeText(getContext(), "need photo permission", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
+    }
+
+    /**
+     * for photo picker, need to check storage permission and camera permission
+     */
+    private void checkPhotoPickerPermissions() {
+        permissionList = new ArrayList<>();
+        checkCameraPermission();
+        checkStoragePermission();
+        if (permissionList.size() > 0) {
+            requestPermissions(
+                    permissionList.toArray(new String[permissionList.size()]),
+                    REQUEST_PHOTO_PERMISSION
+            );
+        } else {
+            toPhotoPickerPage();
+        }
+    }
+
+
+    /**
+     * check camera permission, if not granted, add to check permission list
+     */
+    private void checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.CAMERA);
+        }
+    }
+
+    /**
+     * check storage permission, if not granted, then add to check permission list
+     */
+    private void checkStoragePermission() {
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+    }
+
+
+    /**
+     * if location permission granted, then go to location picker
+     */
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+        }else{
+            gotoLocationPicker();
+        }
+    }
+
+    /**
+     *
+     * @param grantResults all requirements
+     * @return true if all granted, otherwise false
+     */
+    private boolean allPermissionGranted(int[] grantResults) {
+        int size = grantResults.length;
+        for (int i = 0; i < size; i++) {
+            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 }

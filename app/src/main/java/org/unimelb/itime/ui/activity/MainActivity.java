@@ -35,6 +35,7 @@ import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
@@ -48,8 +49,8 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
     private ActivityMainBinding binding;
     private MainTabBarViewModel tabBarViewModel;
 
-    private final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_AND_CAMERA = 1001;
     private EventManager eventManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +61,7 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
         tabBarViewModel = new MainTabBarViewModel(getPresenter());
         binding.setTabBarVM(tabBarViewModel);
         tabBarViewModel.setUnReadNum(0+""); // give a default value
-        checkPermission();
-//        init();
+        init();
     }
 
     @Override
@@ -69,32 +69,66 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
 
     }
 
-    public void checkPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA , Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_AND_CAMERA);
-        } else {
-            init();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_AND_CAMERA:{
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-                    init();
-                }else {
-                    Toast.makeText(getApplicationContext(), "needs permissions to continue", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
+//    private void checkPermission() {
+//        permissionList = new ArrayList<>();
+//        checkReadExternalPermission();
+//        checkCameraPermission();
+//        checkStoragePermission();
+//
+//        if (permissionList.size()>0) {
+//            ActivityCompat.requestPermissions(
+//                    this,
+//                    permissionList.toArray(new String[permissionList.size()]),
+//                    PERMISSIONS_REQUEST);
+//        }else{
+//            init();
+//        }
+//    }
+//
+//    private void checkReadExternalPermission(){
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED){
+//            permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+//        }
+//    }
+//
+//    private void checkCameraPermission(){
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+//                != PackageManager.PERMISSION_GRANTED){
+//            permissionList.add(Manifest.permission.CAMERA);
+//        }
+//    }
+//
+//
+//    private void checkStoragePermission(){
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED){
+//            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
+//        }
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        switch (requestCode){
+//            case PERMISSIONS_REQUEST:{
+//                if (allPermissionGranted(grantResults)) {
+//                    init();
+//                }else {
+//                    checkPermission();
+//                }
+//            }
+//        }
+//    }
+//
+//    private boolean allPermissionGranted(int[] grantResults){
+//        int size = grantResults.length;
+//        for (int i = 0 ; i < size ; i++){
+//            if (grantResults[i] != PackageManager.PERMISSION_GRANTED){
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
     @NonNull
     @Override
