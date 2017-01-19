@@ -426,11 +426,13 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
     @Override
     public void onBack() {
+        event.setHighLighted(false);
         getFragmentManager().popBackStack();
     }
 
     @Override
     public void onNext() {
+        event.setHighLighted(false);
         if (fragment_task == TASK_EDIT) {
             List<Timeslot> list = new ArrayList<>();
             for (WrapperTimeSlot wrapper : this.timeslotWrapperList) {
@@ -492,6 +494,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         if (displayTimeslot){
             timeslotWeekView.showTimeslotAnim(event.getTimeslot());
         }else {
+            event.setHighLighted(true);
             timeslotWeekView.showEventAnim(event);
         }
     }

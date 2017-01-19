@@ -74,8 +74,14 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     private String url = "";
 
+
+
     // later delete
     private transient long repeatEndsTime;
+
+    //for vendor
+    private transient boolean highlighted;
+
 
     @Convert(converter = Event.InviteeConverter.class, columnType = String.class)
     private List<Invitee> invitee = new ArrayList<>();
@@ -167,6 +173,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         }
         return this.invitee;
     }
+
 
     public void addInvitee(Invitee invitee){
         this.invitee.add(invitee);
@@ -721,4 +728,14 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
             return new Event[size];
         }
     };
+
+    @Override
+    public boolean isHighlighted() {
+        return highlighted;
+    }
+
+    @Override
+    public void setHighLighted(boolean highlighted) {
+        this.highlighted = highlighted;
+    }
 }
