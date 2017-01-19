@@ -18,27 +18,28 @@
             bind:vm="@{toolbarVM}"/>
 
         <LinearLayout
-            android:id="@+id/inbox_searchview"
+            android:id="@+id/inbox_searchview_layout"
             android:layout_width="match_parent"
             android:layout_height="43dp"
+            android:gravity="center"
             android:background="@color/color_c3c3c7"
             android:layout_below="@id/toolbar_layout"
             >
-            <android.support.v7.widget.SearchView
+            <org.unimelb.itime.widget.SearchBar
                 android:id="@+id/message_searchview"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/search_write_round_background"
-                android:queryHint="@string/search" />
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="11dp"
+                app:searchBackGroundColor="@color/color_a2a2a2"
+                app:searchHintTitle="@string/search"
+                app:searchHintText="@string/search"
+                />
         </LinearLayout>
         <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/inbox_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/inbox_searchview"/>
+            android:layout_below="@id/inbox_searchview_layout"/>
     </RelativeLayout>
 </layout>

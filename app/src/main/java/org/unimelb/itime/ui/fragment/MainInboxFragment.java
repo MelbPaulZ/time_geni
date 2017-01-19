@@ -1,8 +1,6 @@
 package org.unimelb.itime.ui.fragment;
 
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -40,6 +38,7 @@ import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.widget.SearchBar;
 
 import java.util.List;
 
@@ -160,16 +159,12 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     }
 
     private void initSearch(){
-        SearchManager searchManager = (SearchManager)
-                getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) binding.getRoot().findViewById(R.id.message_searchview);
-        searchView.setSearchableInfo(searchManager.
-                getSearchableInfo(getActivity().getComponentName()));
-//        searchView.setSubmitButtonEnabled(true);
-        searchView.setOnQueryTextListener(this);
-        searchView.setFocusable(true);
-        searchView.setIconified(false);
-        searchView.setIconifiedByDefault(false);
+        SearchBar searchBar = (SearchBar) getView().findViewById(R.id.message_searchview);
+        searchBar.setSearchListener(new SearchBar.OnEditListener() {
+            @Override
+            public void onEditing(View view, String text) {
+            }
+        });
 
     }
 
