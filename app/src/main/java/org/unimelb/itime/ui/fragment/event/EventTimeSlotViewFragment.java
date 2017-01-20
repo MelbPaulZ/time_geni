@@ -104,6 +104,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         // use event start time to set the current title string date
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
+        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
         calendar.set(Calendar.DAY_OF_WEEK,calendar.getFirstDayOfWeek());
         toolbarViewModel.setTitleStr(getTitleString(calendar.getTimeInMillis()));
 
