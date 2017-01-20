@@ -152,8 +152,8 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         }
         if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
             // if the event is confirmed, then no timeslot showing
-            Event refEvent = EventManager.getInstance(getContext()).findEventByUid(event.getEventUid());
-            timeSlotViewFragment.setData(refEvent==null?cpyEvent:refEvent);
+            Event temp_event = EventManager.getInstance(getContext()).findEventByUid(event.getEventUid());
+            timeSlotViewFragment.setData(temp_event);
             timeSlotViewFragment.setDisplayTimeslot(false);
         }else {
             timeSlotViewFragment.setData(cpyEvent, wrapperTimeSlots);

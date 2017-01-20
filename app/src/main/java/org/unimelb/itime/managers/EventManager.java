@@ -440,7 +440,7 @@ public class EventManager {
      * @param UUID
      * @return
      */
-    private Event findRepeatedByUUUID(String dayStartTime, String UUID){
+    public Event findRepeatedByUUUID(long dayStartTime, String UUID){
         if (repeatedEventMap.containsKey(dayStartTime)){
             List<ITimeEventInterface> repeats = repeatedEventMap.get(dayStartTime);
             for (ITimeEventInterface event:repeats

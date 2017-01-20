@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.unimelb.itime.R;
@@ -51,8 +52,24 @@ public class EventDetailActivity extends EmptyActivity {
             throw new RuntimeException("event detail activity dont have parameters eventUid");
         }
         long startTime = intent.getLongExtra("start_time",0);
-//        event = DBManager.getInstance(getApplicationContext()).getEvent(eventUid);
-        event = DBManager.getInstance(getApplicationContext()).find(Event.class, "eventUid", eventUid).get(0);
+
+        long beginOfDay = EventUtil.getDayBeginMilliseconds(startTime);
+
+
+        //find org event
+        event = EventManager.getInstance(getBaseContext()).findEventByUid(eventUid);
+        //if repeated, find the correspond child
+        if (event != null && event.getRecurrence().length != 0){
+            event = EventManager.getInstance(getBaseContext()).findRepeatedByUUUID(beginOfDay,eventUid);
+        }
+        //if deleted, find in db
+        if (event == null){
+            event = DBManager.getInstance(getApplicationContext()).find(Event.class, "eventUid", eventUid).get(0);
+            event = event.clone();
+            long duration = event.getDurationMilliseconds();
+            event.setStartTime(startTime);
+            event.setEndTime(startTime + duration);
+        }
     }
 
     @Override
