@@ -48,11 +48,8 @@
             android:text="@{viewModel.countStr}"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="9dp"
-
             android:layout_marginBottom="7dp"/>
     </LinearLayout>
-
-
 
     <LinearLayout
         android:layout_height="wrap_content"
