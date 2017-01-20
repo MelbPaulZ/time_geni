@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.databinding.library.baseAdapters.BR;
-import com.google.common.eventbus.Subscribe;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
