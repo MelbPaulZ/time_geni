@@ -19,8 +19,6 @@ import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
-import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.agendaview.AgendaViewBody;
 import org.unimelb.itime.vendor.agendaview.MonthAgendaView;
 import org.unimelb.itime.vendor.helper.MyCalendar;

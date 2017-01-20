@@ -19,7 +19,6 @@ import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.vendor.dayview.MonthDayView;
@@ -35,7 +34,6 @@ import java.util.List;
 public class CalendarMonthDayFragment extends CalendarBaseViewFragment {
     private View root;
     private MonthDayView monthDayView;
-    private EventCommonPresenter presenter;
     private String TAG = "MonthDayFragment";
     private EventManager eventManager;
 
