@@ -58,7 +58,6 @@ public class InviteFriendViewModel extends BaseObservable {
     private Map<String, Integer> positionMap;
     private boolean showAlertMsg = false;
     private Event event;
-    private SearchContactCallback searchContactCallback = new SearchContactCallback();
     private Invitee inviteeSelf;
 
     public LinearLayout getHeaderView() {
@@ -157,7 +156,7 @@ public class InviteFriendViewModel extends BaseObservable {
     }
 
     public void loadData(){
-        presenter.getFriends(new FriendCallBack());
+        presenter.getFriends();
     }
 
     public ObservableList getITimeFriendItems() {
@@ -335,7 +334,7 @@ public class InviteFriendViewModel extends BaseObservable {
 
                 } else {
                     viewModel.setSelected(true);
-                    addInvitee(contactToInvitee(user.getContact(), event));
+                    addInvitee(contactToInvitee(user.getContact()));
                 }
             }
         };
@@ -356,7 +355,7 @@ public class InviteFriendViewModel extends BaseObservable {
                             deleteInvitee(user.getContact());
                         } else {
                             item.setSelected(true);
-                            addInvitee(contactToInvitee(user.getContact(), event));
+                            addInvitee(contactToInvitee(user.getContact()));
                         }
                         break;
                     }
@@ -387,24 +386,6 @@ public class InviteFriendViewModel extends BaseObservable {
         setAddButtonText(str);
     }
 
-    public View.OnClickListener getTitleBackListener(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.onBackPress();
-            }
-        };
-    }
-
-    public View.OnClickListener getTitleRightListener(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.onDoneClicked();
-            }
-        };
-    }
-
     public View.OnClickListener getAddButtonListener(){
         return new View.OnClickListener() {
             @Override
@@ -419,7 +400,7 @@ public class InviteFriendViewModel extends BaseObservable {
     }
 
     public void addInvitee(String str){
-        presenter.searchContact(str, searchContactCallback);
+        presenter.searchContact(str);
     }
 
     private void updatePositionMap(ObservableList<ContactItem> list){
@@ -451,17 +432,7 @@ public class InviteFriendViewModel extends BaseObservable {
         }
     }
 
-    public class FriendCallBack{
-        public void success(List<BaseContact> list){
-            setFriendList(list);
-        }
-
-        public void failed(){
-            //Toast.makeText(presenter.getView().getActivity(), )
-        }
-    }
-
-    private Invitee contactToInvitee(Contact contact, Event event) {
+    public Invitee contactToInvitee(Contact contact) {
         Invitee invitee = new Invitee();
         invitee.setEventUid(event.getEventUid());
         // need to check if the contact in the invitee list
@@ -476,7 +447,7 @@ public class InviteFriendViewModel extends BaseObservable {
     }
 
     // str is email or phone
-    private Invitee unactivatedInvitee(String str, Event event) {
+    public Invitee unactivatedInvitee(String str) {
         Invitee invitee = new Invitee();
         invitee.setUserStatus(Invitee.USER_STATUS_UNACTIVATED);
         invitee.setUserId(str);
@@ -519,7 +490,7 @@ public class InviteFriendViewModel extends BaseObservable {
         notifyPropertyChanged(BR.inviteeList);
     }
 
-    private void addInvitee(Invitee invitee){
+    public void addInvitee(Invitee invitee){
         for(ITimeInviteeInterface i:inviteeList){
             if (i.getUserId().equals(invitee.getUserId())){
                 notifyPropertyChanged(BR.inviteeList);
@@ -551,20 +522,6 @@ public class InviteFriendViewModel extends BaseObservable {
         }
         setCountStr(inviteeList.size());
         notifyPropertyChanged(BR.inviteeList);
-    }
-
-    public  class SearchContactCallback{
-        public void failed(){
-            Toast.makeText(presenter.getContext(), presenter.getContext().getResources().getString(R.string.access_fail),Toast.LENGTH_SHORT).show();
-        }
-
-        public void success(Contact contact){
-            addInvitee(contactToInvitee(contact, event));
-        }
-
-        public void success(String contact){
-            addInvitee(unactivatedInvitee(contact, event));
-        }
     }
 
     public View.OnClickListener getScanQRCodeListener(){

@@ -26,6 +26,7 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -36,6 +37,8 @@ public class EventCustomRepeatFragment extends BaseUiAuthFragment<EventCustomRep
      * the key for pass bundle for arguments
      */
     private final static String TAG = "EventCustomRepeatFragment";
+
+    public final static int RET_CUSTOM_REPEAT = 1000;
 
     private FragmentEventCustomRepeatBinding binding;
     private Event orgEvent = null;
@@ -107,18 +110,17 @@ public class EventCustomRepeatFragment extends BaseUiAuthFragment<EventCustomRep
 
     @Override
     public void onBack() {
-        EventEditFragment frag = new EventEditFragment();
-        frag.setEvent(orgEvent);
-        getBaseActivity().backFragment(frag);
+        getFragmentManager().popBackStack();
 
     }
 
     @Override
     public void onNext() {
-        EventEditFragment frag = new EventEditFragment();
         editEvent.setRecurrence(editEvent.getRule().getRecurrence()); // this use for set recurrence to event
-        frag.setEvent(editEvent);
-        getBaseActivity().backFragment(frag);
+        Intent intent = new Intent();
+        intent.putExtra("event", (Serializable) editEvent);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), RET_CUSTOM_REPEAT, intent);
+        getFragmentManager().popBackStack();
     }
 
 

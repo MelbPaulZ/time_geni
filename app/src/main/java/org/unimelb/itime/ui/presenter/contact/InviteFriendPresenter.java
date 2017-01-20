@@ -34,6 +34,8 @@ import rx.functions.Func1;
 public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView> {
 
     private static final String TAG = "Invitee Presenter";
+    public static final int TASK_FRIEND_LIST = 0;
+    public static final int TASK_SEARCH_CONTACT = 1;
     private Context context;
     private ContactApi contactApi;
     private UserApi userApi;
@@ -49,14 +51,15 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
     }
 
 
-    public void getFriends(final InviteFriendViewModel.FriendCallBack callBack){
+    public void getFriends(){
         DBManager dbManager = DBManager.getInstance(context);
         List<BaseContact> list = generateITimeUserList(dbManager.getAllContact());
-        callBack.success(list);
-        getFriendsFromServer(callBack);
+        if(getView()!=null)
+            getView().onTaskSuccess(TASK_FRIEND_LIST, list);
+        getFriendsFromServer();
     }
 
-    public void getFriendsFromServer(final InviteFriendViewModel.FriendCallBack callBack){
+    public void getFriendsFromServer(){
         final DBManager dbManager = DBManager.getInstance(context);
         Observable<HttpResult<List<Contact>>> observable = contactApi.list();
         Observable<List<Contact>> dbObservable = observable.map(new Func1<HttpResult<List<Contact>>, List<Contact>>() {
@@ -83,16 +86,18 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
-                e.printStackTrace();
-                callBack.failed();
+                if(getView()!=null)
+                    getView().onTaskError(TASK_FRIEND_LIST, null);
             }
 
             @Override
             public void onNext(List<Contact> list) {
                 if(list == null){
-                    callBack.failed();
+                    if(getView()!=null)
+                        getView().onTaskError(TASK_FRIEND_LIST, null);
                 }else {
-                    callBack.success(generateITimeUserList(list));
+                    if(getView()!=null)
+                        getView().onTaskSuccess(TASK_FRIEND_LIST, generateITimeUserList(list));
                 }
             }
         };
@@ -151,22 +156,26 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
 //        return dao.getFriends();
 //    }
 
-    public void searchContact(String input, InviteFriendViewModel.SearchContactCallback callback){
+    public void searchContact(String input){
+        AppUtil.showProgressBar(context, context.getString(R.string.Searching), context.getString(R.string.please_wait));
+
         DBManager dbManager = DBManager.getInstance(context);
         List<Contact> contacts = dbManager.getAllContact();
         for(Contact contact:contacts){
             if(contact.getUserDetail().getPhone().equals(input)
                     || contact.getUserDetail().getEmail().equals(input)){
-                callback.success(contact);
+                if(getView()!=null)
+                    getView().onTaskSuccess(TASK_SEARCH_CONTACT, contact);
                 AppUtil.hideProgressBar();
                 return;
             }
         }
 
-        findFriend(input, callback);
+        findFriend(input);
     }
 
-    public void findFriend(final String searchStr, final InviteFriendViewModel.SearchContactCallback callback){
+    public void findFriend(final String searchStr){
+        AppUtil.showProgressBar(context, context.getString(R.string.Searching), context.getString(R.string.please_wait));
         Observable<HttpResult<List<User>>> observable = userApi.search(searchStr);
         Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
             @Override
@@ -179,7 +188,8 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
                 AppUtil.hideProgressBar();
-                callback.failed();
+                if(getView()!=null)
+                    getView().onTaskError(TASK_SEARCH_CONTACT, null);
             }
 
             @Override
@@ -189,10 +199,12 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
 
                 }else {
                     if(result.getData().isEmpty()){
-                        callback.success(searchStr);
+                        if(getView()!=null)
+                            getView().onTaskSuccess(TASK_SEARCH_CONTACT, searchStr);
                     }else {
                         User user = result.getData().get(0);
-                        callback.success(new Contact(user));
+                        if(getView()!=null)
+                            getView().onTaskSuccess(TASK_SEARCH_CONTACT, user);
                     }
                 }
             }
@@ -218,12 +230,5 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
 
     public boolean isUniMelbEmail(String str) {
         return ContactCheckUtil.getInsstance().isUnimelbEmail(str);
-    }
-
-    public void onDoneClicked(){
-        if(getView() != null){
-            getView().onNext();
-        }
-
     }
 }

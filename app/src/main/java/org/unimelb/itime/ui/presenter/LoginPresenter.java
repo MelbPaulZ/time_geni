@@ -41,6 +41,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
     public static int TASK_SIGNUP = 1001;
     public static int TASK_SEND_LINK = 1002;
     public static int TASK_VALIDATE = 1003;
+    public static int TASK_UPLOAD_PHOTO = 1004;
 
 
     private Context context;
@@ -170,20 +171,21 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
 
             @Override
             public void onNext(HttpResult<UserLoginRes> ret) {
-                if(getView() == null){
-                    return;
-                }
                 if (ret.getStatus() != 1 ){
-                    getView().onTaskError(TASK_SIGNUP, ret.getInfo());
+                    if(getView() != null){
+                        getView().onTaskError(TASK_SIGNUP, ret.getInfo());
+                    }
                 }else{
-                    getView().onTaskSuccess(TASK_SIGNUP, ret.getData());
+                    AuthUtil.saveJwtToken(context, ret.getData().getToken());
+                    UserUtil.getInstance(context).login(ret.getData());
+                    if(getView() != null){
+                        getView().onTaskSuccess(TASK_SIGNUP, ret.getData());
+                    }
                 }
             }
         };
         HttpUtil.subscribe(observable, subscriber);
     }
-
-
 
 
     private void prepareSignup(User loginUser){
@@ -194,6 +196,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
         hashMap.put("personalAlias", loginUser.getPersonalAlias());
         hashMap.put("phone", loginUser.getPhone());
         hashMap.put("photo", loginUser.getPhoto());
+        hashMap.put("gender", "2");
         hashMap.put("source", User.SOURCE_EMAIL);
         signUp(hashMap);
     }
@@ -204,14 +207,26 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
      * @param localPath the photo that user picked for them
      */
     public void uploadImageToLeanCloud(final User loginUser, String localPath){
+        if (getView() != null){
+            getView().onTaskStart(TASK_UPLOAD_PHOTO);
+        }
         String fileName = loginUser.getEmail() + "_" + "avatar.png";
         try {
             final AVFile file = AVFile.withAbsoluteLocalPath(fileName, localPath);
             file.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(AVException e) {
+                    if(e != null){
+                        if(getView() != null){
+                            getView().onTaskError(TASK_UPLOAD_PHOTO, e.getMessage());
+                        }
+                        return;
+                    }
                     loginUser.setPhoto(file.getUrl());
                     prepareSignup(loginUser);
+                    if(getView() != null){
+                        getView().onTaskSuccess(TASK_UPLOAD_PHOTO, file);
+                    }
                 }
             });
 
@@ -226,13 +241,25 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
      * @param bitmap the default avatar that given to user
      */
     public void uploadImageToLeanCloud(final User loginUser, Bitmap bitmap){
+        if (getView() != null){
+            getView().onTaskStart(TASK_UPLOAD_PHOTO);
+        }
         String fileName = loginUser.getEmail() + "_" + "avatar.png";
         final AVFile file = new AVFile(fileName, convertBitmapToByte(bitmap));
         file.saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
+                if(e != null){
+                    if(getView() != null){
+                        getView().onTaskError(TASK_UPLOAD_PHOTO, e.getMessage());
+                    }
+                    return;
+                }
                 loginUser.setPhoto(file.getUrl());
                 prepareSignup(loginUser);
+                if(getView() != null){
+                    getView().onTaskSuccess(TASK_UPLOAD_PHOTO, file);
+                }
             }
         });
     }

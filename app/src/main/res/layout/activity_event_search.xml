@@ -1,37 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="295dp"
-            android:layout_height="wrap_content">
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/event_search_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/search_gray_round_background"/>
-            </LinearLayout>
+        android:layout_height="50dp"
+        android:paddingTop="12dp"
+        >
+        <org.unimelb.itime.widget.SearchBar
+            android:id="@+id/event_search_view"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_toStartOf="@+id/event_search_cancel_btn"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="11dp"
+            android:layout_marginBottom="8dp"
+            app:searchBackGroundColor="@color/color_a2a2a2"
+            app:searchHintTitle="@string/search"
+            app:searchHintText="@string/search"
+            />
         <TextView
             android:id="@+id/event_search_cancel_btn"
-            android:text="@string/cancel"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="28dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:text="@string/cancel"
             android:textSize="15sp"
-            android:layout_gravity="center"
-            android:paddingRight="8dp"
+            android:gravity="center"
             android:textColor="@color/color_a2a2a2"/>
-    </LinearLayout>
+
+        <TextView
+            style="@style/itime_bottom_divider_line"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
     <ListView
         android:id="@+id/event_search_result_listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        />
 
 </LinearLayout>

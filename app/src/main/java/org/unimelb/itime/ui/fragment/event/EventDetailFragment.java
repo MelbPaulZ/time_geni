@@ -15,6 +15,7 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventDetailBinding;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.mvpview.EventDetailMvpView;
 import org.unimelb.itime.ui.presenter.EventPresenter;
@@ -151,7 +152,8 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         }
         if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
             // if the event is confirmed, then no timeslot showing
-            timeSlotViewFragment.setData(cpyEvent);
+            Event refEvent = EventManager.getInstance(getContext()).findEventByUid(event.getEventUid());
+            timeSlotViewFragment.setData(refEvent==null?cpyEvent:refEvent);
             timeSlotViewFragment.setDisplayTimeslot(false);
         }else {
             timeSlotViewFragment.setData(cpyEvent, wrapperTimeSlots);
@@ -244,7 +246,6 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         hideProgressDialog();
     }
 
-
     @Override
     public void onBack() {
         toCalendar(EventPresenter.TASK_BACK);
@@ -255,6 +256,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         if (EventUtil.isUserHostOfEvent(getContext(), event)) {
             EventEditFragment eventEditFragment = new EventEditFragment();
             Event cpyEvent = EventUtil.copyEvent(event);
+            cpyEvent.setStatus(Event.STATUS_UPDATING); // from here to edit event, must be updating
             eventEditFragment.setEvent(cpyEvent);
             getBaseActivity().openFragment(eventEditFragment);
         }

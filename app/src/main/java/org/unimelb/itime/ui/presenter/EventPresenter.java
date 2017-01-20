@@ -113,10 +113,13 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                 if(eventHttpResult.getStatus() != 1){
                     throw new RuntimeException(eventHttpResult.getInfo());
                 }
+
+                if (getView()!=null){
+                    getView().onTaskSuccess(TASK_EVENT_UPDATE, eventHttpResult.getData());
+                }
                 synchronizeLocal(eventHttpResult.getData());
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
-
                 updateImage(event);
             }
         };

@@ -5,6 +5,9 @@
         <variable
             name="mainViewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.AddFriendsViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,21 +15,46 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-    <org.unimelb.itime.widget.PlusTitleBar
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
-        app:title="@{mainViewModel.title}"
-        app:titleBackListener = "@{mainViewModel.titleBackListener}"
-        app:showLeft="@{mainViewModel.showTitileBack}"
-        app:showRight="@{mainViewModel.showTitleRight}"
-        android:visibility="@{mainViewModel.showTitle?View.VISIBLE:View.GONE}"/>
-    <org.unimelb.itime.widget.SearchBar
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/searchBar"
-        app:showCancel="@{mainViewModel.showCancel}"
-        app:searchListener = "@{mainViewModel.onEditListener}"
-        app:cancelListener="@{mainViewModel.cancelListener}"/>
+        android:visibility="@{mainViewModel.showTitle?View.VISIBLE:View.GONE}">
+    <include layout="@layout/toolbar_common"
+        app:vm="@{toolbarVM}" />
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="7.5dp"
+        android:paddingBottom="7.5dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:background="@color/grey_six">
+        <org.unimelb.itime.widget.SearchBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchBar"
+            app:searchHintTitle="@string/search"
+            app:searchHintText="@string/search_hint"
+            app:searchListener = "@{mainViewModel.onEditListener}"
+            app:showSearchButton="@{!mainViewModel.showSearch}"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/red_alert"
+            android:text="@string/cancel"
+            android:id="@+id/cancelButton"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="0"
+            android:visibility="@{mainViewModel.showCancel?View.VISIBLE:View.GONE}"
+            android:onClick="@{mainViewModel.cancelListener}"
+            />
+    </LinearLayout>
     <include layout="@layout/line"/>
     <LinearLayout
         android:layout_width="match_parent"

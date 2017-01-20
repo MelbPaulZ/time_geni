@@ -9,21 +9,25 @@ import android.view.ViewGroup;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.databinding.FragmentEditAliasBinding;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.contact.EditContactMvpView;
 import org.unimelb.itime.ui.presenter.contact.EditContactPresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.contact.EditContactViewModel;
 
 /**
  * Created by Qiushuo Huang on 2017/1/10.
  */
 
-public class EditAliasFragment extends MvpFragment<EditContactMvpView, EditContactPresenter> implements EditContactMvpView {
+public class EditAliasFragment extends BaseUiAuthFragment<EditContactMvpView, EditContactPresenter> implements EditContactMvpView {
 
     private EditContactViewModel viewModel;
     private FragmentEditAliasBinding binding;
     private Contact contact;
+    private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
     @Override
     public void onActivityCreated(Bundle bundle){
@@ -33,6 +37,13 @@ public class EditAliasFragment extends MvpFragment<EditContactMvpView, EditConta
             viewModel.setContact(contact);
         }
         binding.setViewModel(viewModel);
+
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
+        toolbarViewModel.setTitleStr(getString(R.string.edit_alias));
+        toolbarViewModel.setRightClickable(true);
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+        binding.setToolbarVM(toolbarViewModel);
     }
 
     @Override
@@ -53,5 +64,20 @@ public class EditAliasFragment extends MvpFragment<EditContactMvpView, EditConta
         if(viewModel!=null){
             viewModel.setContact(contact);
         }
+    }
+
+    @Override
+    public void onBack() {
+        this.getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onNext() {
+        if(viewModel.getAlias().equals("")){
+            contact.setAliasName(contact.getUserDetail().getPersonalAlias());
+        }else{
+            contact.setAliasName(viewModel.getAlias());
+        }
+        presenter.editAlias(contact);
     }
 }

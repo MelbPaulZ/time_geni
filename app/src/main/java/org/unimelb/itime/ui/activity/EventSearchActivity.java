@@ -1,11 +1,7 @@
 package org.unimelb.itime.ui.activity;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -19,8 +15,8 @@ import org.unimelb.itime.adapter.EventAdapter;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
-import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
+import org.unimelb.itime.widget.SearchBar;
 
 import java.util.List;
 
@@ -28,7 +24,7 @@ import java.util.List;
  * Created by Paul on 6/12/2016.
  */
 
-public class EventSearchActivity extends EmptyActivity implements SearchView.OnQueryTextListener{
+public class EventSearchActivity extends EmptyActivity{
 
     private ListView eventSearchList;
     private EventAdapter eventSearchAdapter;
@@ -39,16 +35,13 @@ public class EventSearchActivity extends EmptyActivity implements SearchView.OnQ
         setContentView(R.layout.activity_event_search);
 
         init();
-        SearchManager searchManager = (SearchManager)
-                getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) findViewById(R.id.event_search_view);
-        searchView.setSearchableInfo(searchManager.
-                getSearchableInfo(getComponentName()));
-//        searchView.setSubmitButtonEnabled(true);
-        searchView.setOnQueryTextListener(this);
-        searchView.setFocusable(true);
-        searchView.setIconified(false);
-        searchView.setIconifiedByDefault(false);
+        SearchBar searchBar = (SearchBar) findViewById(R.id.event_search_view);
+        searchBar.setSearchListener(new SearchBar.OnEditListener() {
+            @Override
+            public void onEditing(View view, String text) {
+                eventSearchAdapter.getFilter().filter(text);
+            }
+        });
     }
 
     private void init(){
@@ -82,17 +75,6 @@ public class EventSearchActivity extends EmptyActivity implements SearchView.OnQ
         List<Event> eventList = (List<Event>)interfaceList;
         eventSearchAdapter.setEventList(eventList);
         eventSearchAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String constrains) {
-        eventSearchAdapter.getFilter().filter(constrains);
-        return false;
     }
 
     @Override

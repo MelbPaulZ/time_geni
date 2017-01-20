@@ -4,19 +4,18 @@
         <variable
             name="viewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.QRCodeScanViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:orientation="vertical">
-    <org.unimelb.itime.widget.ScanQRCodeTitleBar
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
-        app:title="@{viewModel.title}"
+    <include layout="@layout/toolbar_black"
         android:id="@+id/titleBar"
-        app:titleBackListener="@{viewModel.titleBackListener}"
-        app:titleRightListener="@{viewModel.titleRightListener}"/>
+        app:vm="@{toolbarVM}"/>
     <SurfaceView
         android:id="@+id/capture_preview"
         android:layout_width="match_parent"
