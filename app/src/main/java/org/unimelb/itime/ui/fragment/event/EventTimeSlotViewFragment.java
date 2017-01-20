@@ -102,12 +102,12 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             toolbarViewModel.setRightClickable(false);
         }
         // use event start time to set the current title string date
+        // TODO: 20/1/17 the time is inaccurate, sometimes when the event is on a 1:00 of Sunday, it will display last week
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
         calendar.setFirstDayOfWeek(Calendar.SUNDAY);
         calendar.set(Calendar.DAY_OF_WEEK,calendar.getFirstDayOfWeek());
         toolbarViewModel.setTitleStr(getTitleString(calendar.getTimeInMillis()));
-
 
         binding.setTimeslotVM(viewModel);
         binding.setToolbarVM(toolbarViewModel);
