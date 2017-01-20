@@ -9,7 +9,6 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 import org.unimelb.itime.util.CircleTransform;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
@@ -25,11 +24,6 @@ public abstract class CommonViewModel extends AndroidViewModel {
     public CommonViewModel(){
 
     }
-
-    public CommonViewModel(EventCommonPresenter presenter) {
-        mvpView = (EventCommonMvpView) presenter.getView();
-    }
-
 
     @BindingAdapter({"bind:loadRemoteImg"})
     public static void bindRemoteImg(ImageView imageView, Event event){

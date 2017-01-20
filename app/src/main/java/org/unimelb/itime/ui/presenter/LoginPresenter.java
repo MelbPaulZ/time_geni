@@ -108,12 +108,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginMvpView> {
             public void onResponse(Call<JwtToken> call, Response<JwtToken> response) {
                 JwtToken jwt = response.body();
                 AuthUtil.saveJwtToken(context, jwt.getToken());
-                Log.d(TAG, "refresh: onResponse: " + jwt.getToken());
+                Log.d(TAG, "refreshEventManager: onResponse: " + jwt.getToken());
             }
 
             @Override
             public void onFailure(Call<JwtToken> call, Throwable t) {
-                Log.d(TAG, "refresh: onFailure: " + t.getMessage());
+                Log.d(TAG, "refreshEventManager: onFailure: " + t.getMessage());
             }
         });
     }

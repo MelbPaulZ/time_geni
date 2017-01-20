@@ -24,7 +24,7 @@ public interface ContactApi {
     @GET("contact/get/{contactUid}")
     Observable<HttpResult<Contact>> get(@Path("contactUid") String contactUid);
 
-    @POST("contact/insertOrReplace")
+    @POST("contact/insert")
     Observable<HttpResult<Void>> insert(Event event);
 
     @POST("contact/update/{contactUid}")

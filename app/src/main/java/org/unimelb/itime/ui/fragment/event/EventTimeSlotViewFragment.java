@@ -122,7 +122,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
         viewModel.setDurationTimeString(EventUtil.getDurationTimes().get(timePosition));
         timeslotWeekView.updateTimeSlotsDuration(EventUtil.getDurationInMintues(timePosition) * 60 * 1000, false);
-        timeslotWeekView.reloadTimeSlots(false); // for page refresh
+        timeslotWeekView.reloadTimeSlots(false); // for page refreshEventManager
 
         this.showAnimation();
     }
@@ -374,7 +374,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
                     wrapper.getTimeSlot().setEndTime(wrapper.getTimeSlot().getStartTime() + EventUtil.getDurationInMintues(timePosition) * 60 * 1000);
                 }
 
-                timeslotWeekView.reloadTimeSlots(false); // for page refresh
+                timeslotWeekView.reloadTimeSlots(false); // for page refreshEventManager
             }
         });
 

@@ -2,19 +2,9 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
-import android.databinding.ObservableField;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-
-import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
 
 import java.util.Calendar;
 
-import static android.webkit.WebSettings.PluginState.ON;
 
 /**
  * Created by Paul on 5/1/17.

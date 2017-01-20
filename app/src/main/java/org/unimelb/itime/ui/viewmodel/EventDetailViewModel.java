@@ -56,7 +56,7 @@ public class EventDetailViewModel extends CommonViewModel {
     private Context context;
     private ObservableBoolean isLeftBtnSelected = new ObservableBoolean(false), isRightBtnSelected = new ObservableBoolean(false);
     private String leftBtnText = "", rightBtnText = "";
-
+    private ObservableBoolean isViewInCalendarClickable = new ObservableBoolean(false);
     private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeConfirmVisibility,
             inviteeUnconfirmVisibility, soloInvisible;
 
@@ -109,6 +109,16 @@ public class EventDetailViewModel extends CommonViewModel {
                 }
             }
         };
+    }
+
+    @Bindable
+    public boolean getIsViewInCalendarClickable() {
+        return isViewInCalendarClickable.get();
+    }
+
+    public void setIsViewInCalendarClickable(boolean isViewInCalendarClickable) {
+        this.isViewInCalendarClickable.set(isViewInCalendarClickable);
+        notifyPropertyChanged(BR.isViewInCalendarClickable);
     }
 
     public View.OnClickListener gotoGridView() {
@@ -314,6 +324,9 @@ public class EventDetailViewModel extends CommonViewModel {
     private void resetState() {
         resetLeftBtn();
         resetRightBtn();
+
+        Invitee me = EventUtil.getSelfInInvitees(context, event);
+        setIsViewInCalendarClickable(!me.getStatus().equals(Invitee.STATUS_DECLINED));
     }
 
     // left buttons

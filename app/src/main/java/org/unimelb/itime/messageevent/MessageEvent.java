@@ -6,6 +6,7 @@ package org.unimelb.itime.messageevent;
 public class MessageEvent {
     public final static int RELOAD_EVENT = 1;
     public final static int LOGOUT = 2;
+    public final static int LOGOUTWITHDB = 3;
     public String message;
     public int task;
 

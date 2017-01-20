@@ -377,17 +377,18 @@ public class DBManager {
     }
 
     public List<Event> getAllAvailableEvents(List<org.unimelb.itime.bean.Calendar> calendars){
-//        List<org.unimelb.itime.bean.Calendar> calendars = CalendarUtil.getInstance(context).getCalendar();
         List<Event> events = new ArrayList<>();
-
         AbstractDao query = DBManager.getInstance(context).getQueryDao(Event.class);
+
         for (org.unimelb.itime.bean.Calendar cal:calendars
                 ) {
-            if (cal.getVisibility() == 1){
-                events.addAll(query.queryBuilder().where(
+            if (cal.getDeleteLevel() == 0 && cal.getVisibility() == 1){
+                List<Event> dbEvents = query.queryBuilder().where(
                         EventDao.Properties.CalendarUid.eq(cal.getCalendarUid()),
                         EventDao.Properties.ShowLevel.gt(0)
-                ).list());
+                ).list();
+
+                events.addAll(dbEvents);
             }
         }
 

@@ -82,7 +82,7 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<SettingCalen
 
     @Override
     public void onBack() {
-        getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
+        getFragmentManager().popBackStack();
     }
 
     @Override
@@ -98,7 +98,7 @@ public class SettingCalendarEditFragment extends BaseUiAuthFragment<SettingCalen
     @Override
     public void onTaskSuccess(int taskId, Calendar data) {
         hideProgressDialog();
-        getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
+        onBack();
     }
 
 

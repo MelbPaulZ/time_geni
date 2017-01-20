@@ -242,8 +242,9 @@
                             android:layout_height="45dp"
                             android:gravity="center"
                             android:onClick="@{contentVM.onClickViewInCalendar()}"
+                            android:clickable="@{contentVM.isViewInCalendarClickable}"
                             android:text="@string/view_in_calendar"
-                            android:textColor="@color/event_detail_repeat"
+                            android:textColor="@{contentVM.isViewInCalendarClickable? @color/event_detail_repeat: @color/gray_b2b2b2}"
                             android:textSize="17dp" />
                     </LinearLayout>
                 </LinearLayout>

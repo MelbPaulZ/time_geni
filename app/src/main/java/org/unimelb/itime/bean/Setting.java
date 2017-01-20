@@ -11,7 +11,7 @@ import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class Setting implements Serializable{
-
+    private String userUid = "";
     private boolean enableNotification =  true;
     private boolean showPreviewText = true;
     private boolean appAlertSound = true;
@@ -21,11 +21,12 @@ public class Setting implements Serializable{
     private boolean enableEventConfirmEmail = true;
     private int defaultAlertTime;
     
-    @Generated(hash = 1817227832)
-    public Setting(boolean enableNotification, boolean showPreviewText,
-            boolean appAlertSound, boolean systemVibrate,
+    @Generated(hash = 1644234448)
+    public Setting(String userUid, boolean enableNotification,
+            boolean showPreviewText, boolean appAlertSound, boolean systemVibrate,
             boolean enableFriendRequestEmail, boolean enableEventInvitationEmail,
             boolean enableEventConfirmEmail, int defaultAlertTime) {
+        this.userUid = userUid;
         this.enableNotification = enableNotification;
         this.showPreviewText = showPreviewText;
         this.appAlertSound = appAlertSound;
@@ -130,5 +131,13 @@ public class Setting implements Serializable{
 
     public void setDefaultAlertTime(int defaultAlertTime) {
         this.defaultAlertTime = defaultAlertTime;
+    }
+
+    public String getUserUid() {
+        return this.userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 }

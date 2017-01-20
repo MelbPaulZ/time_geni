@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.google.common.eventbus.Subscribe;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.databinding.FragmentSettingCalendarsBinding;
+import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCalendarMvpView;
 import org.unimelb.itime.ui.presenter.CalendarPresenter;
@@ -67,7 +69,17 @@ public class SettingCalendarDisplayFragment extends BaseUiAuthFragment<SettingCa
 
     @Override
     public void onTaskSuccess(int taskId, Calendar data) {
-        hideProgressDialog();
+        EventManager.getInstance(getContext()).refreshEventManager(new EventManager.OnRefreshEventManager() {
+            @Override
+            public void onTaskStart() {
+                showProgressDialog();
+            }
+
+            @Override
+            public void onTaskEnd() {
+                hideProgressDialog();
+            }
+        });
     }
 
     @Override

@@ -1,11 +1,15 @@
 package org.unimelb.itime.managers;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
@@ -175,12 +179,61 @@ public class EventManager {
         }
     }
 
-    public void refresh(){
+    public void refreshEventManager(final OnRefreshEventManager onRefreshEventManager){
+        final String START = "start";
+        final String END = "end";
+        final String KEY = "key";
+
         init();
-        loadDB();
+
+        final Handler handle = new Handler(context.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                String data = msg.getData().getString(KEY);
+
+                switch (data){
+                    case START:
+                        if (onRefreshEventManager != null) onRefreshEventManager.onTaskStart();
+                        break;
+                    case END:
+                        if (onRefreshEventManager != null) onRefreshEventManager.onTaskEnd();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        };
+
+        new Thread() {
+            @Override
+            public void run() {
+                Message msg_start = new Message();
+                Bundle bs = new Bundle();
+                bs.putString(KEY, START);
+                msg_start.setData(bs);
+
+                handle.sendMessage(msg_start);
+
+                try {
+                    loadDB();
+                } finally {
+                }
+
+                Message msg_end = new Message();
+                Bundle be = new Bundle();// 存放数据
+                be.putString(KEY, END);
+                msg_end.setData(be);
+                handle.sendMessage(msg_end);
+
+                super.run();
+            }
+        }.start();
     }
 
     private void loadDB(){
+
         List<org.unimelb.itime.bean.Calendar> calendars = CalendarUtil.getInstance(context).getCalendar();
         List<Event> events = DBManager.getInstance(context).getAllAvailableEvents(calendars);
 
@@ -313,9 +366,6 @@ public class EventManager {
         this.allDayEventList.remove(EventUtil.getItemInList(new ArrayList(this.allDayEventList), oldEvent));
         this.addEvent(newEvent);
     }
-
-
-
 
     private void handleSpecialEvent(Event event){
         String rEUID = event.getRecurringEventUid();
@@ -532,6 +582,11 @@ public class EventManager {
         }
     }
 
+    //for update EventManager
+    public interface OnRefreshEventManager {
+        void onTaskStart();
+        void onTaskEnd();
+    }
 
     /********************************** Paul Paul 改 *********************************************/
 
@@ -554,5 +609,6 @@ public class EventManager {
         }
         return null;
     }
+
 
 }

@@ -119,7 +119,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     public void setEvent(Event event) {
         this.event = event;
-        // this is for photo choose back, then refresh page
+        // this is for photo choose back, then refreshEventManager page
         if (eventEditViewModel != null) {
             eventEditViewModel.setEvent(event);
         }

@@ -19,12 +19,12 @@ import retrofit2.http.GET;
  */
 public interface CalendarApi {
     @GET("calendar/list")
-    Observable<HttpResult<List<Calendar>>> list();
+    Observable<HttpResult<List<Calendar>>> list(@Query("syncToken") String syncToken);
 
     @GET("calendar/get/{calendarUid}")
     Observable<HttpResult<Calendar>> get(@Path("calendarUid") String calendarUid);
 
-    @POST("calendar/insertOrReplace")
+    @POST("calendar/insert")
     Observable<HttpResult<Calendar>> insert(@Body Calendar calendar);
 
     @POST("calendar/update/{calendarUid}")

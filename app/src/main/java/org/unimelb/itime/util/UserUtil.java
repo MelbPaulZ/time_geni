@@ -99,6 +99,26 @@ public class UserUtil {
 //        editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, "");
 //        editor.apply();
 
+//        DBManager.getInstance(context).deleteAllMessages();
+//        DBManager.getInstance(context).clearDB();
+//        EventManager.getInstance(context).clearManager();
+    }
+
+    public void clearAccountWithDB(){
+        UserUtil user = UserUtil.getInstance(context);
+        user.logout();
+
+        SettingManager stManager = SettingManager.getInstance(context);
+        stManager.clear();
+
+        AuthUtil.clearJwtToken(context);
+        SharedPreferences sp = AppUtil.getTokenSaver(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear().apply();
+        editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, "");
+        editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, "");
+        editor.apply();
+
         DBManager.getInstance(context).deleteAllMessages();
         DBManager.getInstance(context).clearDB();
         EventManager.getInstance(context).clearManager();

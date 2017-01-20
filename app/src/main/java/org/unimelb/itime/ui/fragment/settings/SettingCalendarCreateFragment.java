@@ -67,11 +67,12 @@ public class SettingCalendarCreateFragment extends BaseUiAuthFragment<TaskBasedM
 
     @Override
     public void onBack() {
-        getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void onNext() {
+
         contentViewModel.onCreateDoneClick().onClick(null);
     }
 
@@ -85,15 +86,16 @@ public class SettingCalendarCreateFragment extends BaseUiAuthFragment<TaskBasedM
         hideProgressDialog();
         switch (taskId){
             case CalendarPresenter.TASK_CALENDAR_UPDATE:{
-                getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
+                onBack();
                 break;
             }
             case CalendarPresenter.TASK_CALENDAR_DELETE:{
-                getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
+                onBack();
                 break;
             }
             case CalendarPresenter.TASK_CALENDAR_INSERT:{
-                getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
+//                getBaseActivity().backFragment(new SettingCalendarDisplayFragment());
+                onBack();
                 break;
             }
         }
