@@ -1,6 +1,7 @@
 package org.unimelb.itime.ui.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -63,7 +64,7 @@ import java.util.concurrent.TimeUnit;
 public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<AutocompletePrediction>, LocationPresenter<TaskBasedMvpView<AutocompletePrediction>>> implements TaskBasedMvpView<AutocompletePrediction>, GoogleApiClient.OnConnectionFailedListener {
 
     private final static String TAG = "EventLocationPickerFragment";
-    public final static String DATA_LOCATION = "location";
+    public final static String LOCATION = "location";
 
     public final static int RET_LOCATION_SUCCESS = 1000;
     public final static int RET_LOCATION_CANCEL = 1001;
@@ -82,6 +83,9 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
     private String place;
     ArrayList<String> locations = new ArrayList<>();
     double longitude, latitude;
+    private boolean isCurrentLocationGet = false;
+
+
 
 
     @Nullable
@@ -151,12 +155,11 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
         mAutocompleteView.setOnItemClickListener(currentLocationListener);
         mAutocompleteView.setAdapter(strAdapter);
 
-        Bundle bundle = getArguments();
-        if(bundle != null){
-            mAutocompleteView.setText(bundle.getString(DATA_LOCATION));
-        }else{
-            mAutocompleteView.setText("");
-        }
+        mAutocompleteView.setText(place);
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
     }
 
     @Override
@@ -167,14 +170,26 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
     }
 
 
+    private void back(){
+        getActivity().setResult(Activity.RESULT_CANCELED);
+        getActivity().finish();
+        getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+    }
+
+    private void next(){
+        Intent intent = new Intent();
+        intent.putExtra("location", place);
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        getActivity().finish();
+        getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+    }
+
     public void initListeners() {
-        TextView backBtn = (TextView) root.findViewById(R.id.location_picker_back_btn);
+        final TextView backBtn = (TextView) root.findViewById(R.id.location_picker_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                getTargetFragment().onActivityResult(getTargetRequestCode(), RET_LOCATION_CANCEL, intent);
-                getFragmentManager().popBackStack();
+                back();
             }
         });
 
@@ -194,11 +209,7 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo: need to check the whether the text is null or empty
-                Intent intent = new Intent();
-                intent.putExtra(DATA_LOCATION, mAutocompleteView.getText().toString());
-                getTargetFragment().onActivityResult(getTargetRequestCode(), RET_LOCATION_SUCCESS, intent);
-                getFragmentManager().popBackStack();
+                next();
             }
         });
 
@@ -213,7 +224,7 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                place = editable.toString();
                 if (editable.length() == 1 && mAutocompleteView.getAdapter().equals(strAdapter)) {
                     mAutocompleteView.setAdapter(mAdapter);
                     mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
@@ -234,12 +245,13 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
                 mAutocompleteView.setOnItemClickListener(currentLocationListener);
                 strAdapter.notifyDataSetChanged();
                 mAutocompleteView.showDropDown();
+                place = "";
             }
         });
     }
 
 
-    public String getCurrentLocation() {
+    public void getCurrentLocation() {
         mGoogleApiClient.connect();
         if (mGoogleApiClient.isConnected()) {
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -271,11 +283,11 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
                         mAutocompleteView.setText(place);
                         mAutocompleteView.setAdapter(mAdapter);
                         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener); // change listener
+                        isCurrentLocationGet = true;
                     }
                 });
             }
         }
-        return place;
     }
 
     private AdapterView.OnItemClickListener currentLocationListener = new AdapterView.OnItemClickListener() {
@@ -283,7 +295,12 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             String clickStr = (String) strAdapter.getItem(i);
             if (i == 0) {
-                mAutocompleteView.setText(getCurrentLocation());
+                getCurrentLocation();
+                while (!isCurrentLocationGet){
+
+                }
+                isCurrentLocationGet = false;
+                mAutocompleteView.setText(place);
             } else {
                 mAutocompleteView.setText(clickStr);
             }

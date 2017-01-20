@@ -521,33 +521,6 @@ public class EventManager {
 
     /********************************** Paul Paul 改 *********************************************/
 
-    // paul paul 改！
-    public void initNewEvent(Calendar startTimeCalendar){
-        // initial default values for new event
-        Event event = new Event();
-        setCurrentEvent(event);
-        event.setEventUid(AppUtil.generateUuid());
-        event.setHostUserUid(UserUtil.getInstance(context).getUserUid());
-        long endTime = startTimeCalendar.getTimeInMillis() + 3600 * 1000;
-        event.setStartTime(startTimeCalendar.getTimeInMillis());
-        event.setEndTime(endTime);
-        setCurrentEvent(event);
-    }
-
-    // paul paul 改！
-    @Deprecated
-    public Event copyCurrentEvent(Event event){
-        Gson gson = new Gson();
-
-        String eventStr = gson.toJson(event);
-        Event copyEvent = gson.fromJson(eventStr, Event.class);
-
-        Type dataType = new TypeToken <RuleModel<Event>>() {}.getType();
-        RuleModel response = gson.fromJson(gson.toJson(event.getRule(), dataType), dataType);
-        copyEvent.setRule(response);
-
-        return copyEvent;
-    }
 
 
     public Event getCurrentEvent() {

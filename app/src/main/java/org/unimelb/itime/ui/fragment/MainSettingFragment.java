@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.fragment;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.bean.User;
@@ -34,10 +36,11 @@ import me.fesky.library.widget.ios.ActionSheetDialog;
  * Created by Paul on 25/12/2016.
  */
 
-public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpView,MvpBasePresenter<MainSettingMvpView>> implements MainSettingMvpView {
+public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,MvpBasePresenter<MainSettingMvpView>> implements MainSettingMvpView {
     private FragmentSettingBinding binding;
     private MainSettingViewModel contentViewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
+    private static final String HF_URL = "http://www.google.com";
 
     @Override
     public MvpBasePresenter createPresenter() {
@@ -100,12 +103,14 @@ public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpVie
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         intent.putExtra(SettingActivity.TASK, SettingActivity.TASK_TO_CALENDAR_PREFERENCE);
         startActivity(intent);
+
+
     }
 
     @Override
     public void toHelpFdPage() {
-        Intent intent = new Intent(getActivity(), SettingActivity.class);
-        intent.putExtra(SettingActivity.TASK, SettingActivity.TASK_TO_HELP_AND_FEEDBACK);
+        Uri uri = Uri.parse(HF_URL);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
 
@@ -124,6 +129,7 @@ public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpVie
     @Subscribe
     public void logOut(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.LOGOUT){
+            onTaskSuccess(1, null);
             UserUtil.getInstance(getContext()).clearAccount();
             Intent i = new Intent(getContext(), LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -134,17 +140,17 @@ public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpVie
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
-
+        hideProgressDialog();
     }
 
     @Override
     public void onTaskError(int taskId, Object data) {
-
+        hideProgressDialog();
     }
 
     @Override
@@ -167,16 +173,13 @@ public class MainSettingFragment extends BaseUiFragment<Object,MainSettingMvpVie
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {
+                                onTaskStart(1); // just give a random task id
                                 AppUtil.stopRemoteService(getContext());
                             }
                         });
         actionSheetDialog.show();
     }
 
-    @Override
-    public void setData(Object o) {
-
-    }
 
     @Override
     public void onBack() {

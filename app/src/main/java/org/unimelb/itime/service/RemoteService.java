@@ -82,19 +82,6 @@ public class RemoteService extends Service{
             messageHandler.cancel(true);
         }
         isStart = false;
-        while (isPollingThreadRunning){
-            if (!isPollingThreadRunning){
-                break;
-            }
-            Log.i(TAG, "onDestroy: " + "polling thread running");
-            SystemClock.sleep(50);
-        }
-        pollingThread.interrupt();
-
-        while (isUpdateThreadRuning){
-            Log.i(TAG, "onDestroy: " + "isUpdateThread running");
-            SystemClock.sleep(50);
-        }
         EventBus.getDefault().post(new MessageEvent(MessageEvent.LOGOUT));
         super.onDestroy();
     }
@@ -119,6 +106,9 @@ public class RemoteService extends Service{
 
             @Override
             public void onNext(HttpResult<List<org.unimelb.itime.bean.Calendar>> httpResult) {
+                if (!isStart){
+                    return;
+                }
                 CalendarUtil.getInstance(getApplicationContext()).setCalendar(httpResult.getData());
 
                 SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
@@ -156,7 +146,9 @@ public class RemoteService extends Service{
 
             @Override
             public void onNext(HttpResult<List<Message>> listHttpResult) {
-                Log.i(TAG, "listHttpResult: " + listHttpResult);
+                if (!isStart){
+                    return;
+                }
 
                 if (messageHandler == null){
                     messageHandler = new MessageHandler();
@@ -192,6 +184,9 @@ public class RemoteService extends Service{
 
             @Override
             public void onNext(final HttpResult<List<Event>> result) {
+                if (!isStart){
+                    return ;
+                }
                 final List<Event> eventList = result.getData();
                 Log.i(TAG, "__onNext: " + result.getData().size());
                 //update syncToken
@@ -231,6 +226,9 @@ public class RemoteService extends Service{
 
             @Override
             public void onNext(HttpResult<List<Contact>> listHttpResult) {
+                if (!isStart){
+                    return ;
+                }
                 List<Contact> contactList = listHttpResult.getData();
                 for (Contact contact : contactList){
                     DBManager.getInstance(getBaseContext()).insertContact(contact);
@@ -239,36 +237,6 @@ public class RemoteService extends Service{
             }
         };
         HttpUtil.subscribe(observable,subscriber);
-    }
-
-    private boolean checkMessageValidation(List<Message> msgs){
-        ArrayList<Message> dirtyMsgs = new ArrayList<>();
-        for (Message msg:msgs
-             ) {
-            // need to change later, deletelevel is ignored
-            if(msg.getDeleteLevel() == 1){
-                dirtyMsgs.add(msg);
-                continue;
-            }
-
-            Event correspond = DBManager.getInstance(getApplicationContext()).getEvent(msg.getEventUid());
-
-            if (correspond == null){
-                Log.i("Error_msg", "checkMessageValidation: " + msg.getEventUid());
-                return false;
-            }
-
-            if (MessageManager.getInstance().isInWaitList(msg.getMessageUid())){
-                dirtyMsgs.add(msg);
-            }
-        }
-
-        for (Message dirtyMsg: dirtyMsgs
-             ) {
-            msgs.remove(dirtyMsg);
-        }
-
-        return true;
     }
 
     private class PollingThread extends Thread {
@@ -295,6 +263,9 @@ public class RemoteService extends Service{
         String token = "";
         @Override
         protected List<Message> doInBackground(HttpResult<List<Message>>... params) {
+            if (!isStart){
+                return null;
+            }
             HttpResult<List<Message>> listHttpResult = params[0];
             List<Message> msgs = listHttpResult.getData();
 
@@ -314,6 +285,9 @@ public class RemoteService extends Service{
         @Override
         protected void onPostExecute(List<Message> messages) {
             super.onPostExecute(messages);
+            if (!isStart){
+                return ;
+            }
             if (valid){
                 //update syncToken
                 SharedPreferences sp = AppUtil.getTokenSaver(getApplicationContext());
