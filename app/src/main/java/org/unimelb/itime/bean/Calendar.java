@@ -1,19 +1,19 @@
 package org.unimelb.itime.bean;
 
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+import org.unimelb.itime.dao.CalendarDao;
+import org.unimelb.itime.dao.DaoSession;
 
 import java.io.Serializable;
-import org.greenrobot.greendao.DaoException;
-import org.unimelb.itime.dao.DaoSession;
-import org.unimelb.itime.dao.CalendarDao;
 
 /**
  * Created by Paul on 24/09/2016.
  */
 @Entity(active = true)
-public class Calendar implements Serializable, Cloneable{
+public class Calendar implements Serializable, Cloneable {
     private String iCalUID;
     private String summary;
     private String color;
@@ -21,13 +21,12 @@ public class Calendar implements Serializable, Cloneable{
     private String status;
     @Id
     private String calendarUid;
-    private String groupUid;
-    private String groupTitle;
     private int visibility;
     private int deleteLevel;
     private String createdAt;
     private String updatedAt;
     private String userUid;
+    private String extra;
     /** Used for active entity operations. */
     @Generated(hash = 859169596)
     private transient CalendarDao myDao;
@@ -35,24 +34,22 @@ public class Calendar implements Serializable, Cloneable{
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    @Generated(hash = 78326509)
+    @Generated(hash = 1268419305)
     public Calendar(String iCalUID, String summary, String color, String access,
-            String status, String calendarUid, String groupUid, String groupTitle,
-            int visibility, int deleteLevel, String createdAt, String updatedAt,
-            String userUid) {
+            String status, String calendarUid, int visibility, int deleteLevel,
+            String createdAt, String updatedAt, String userUid, String extra) {
         this.iCalUID = iCalUID;
         this.summary = summary;
         this.color = color;
         this.access = access;
         this.status = status;
         this.calendarUid = calendarUid;
-        this.groupUid = groupUid;
-        this.groupTitle = groupTitle;
         this.visibility = visibility;
         this.deleteLevel = deleteLevel;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.userUid = userUid;
+        this.extra = extra;
     }
 
     @Generated(hash = 2039519234)
@@ -107,22 +104,6 @@ public class Calendar implements Serializable, Cloneable{
         this.calendarUid = calendarUid;
     }
 
-    public String getGroupUid() {
-        return groupUid;
-    }
-
-    public void setGroupUid(String groupUid) {
-        this.groupUid = groupUid;
-    }
-
-    public String getGroupTitle() {
-        return groupTitle;
-    }
-
-    public void setGroupTitle(String groupTitle) {
-        this.groupTitle = groupTitle;
-    }
-
     public int getVisibility() {
         return visibility;
     }
@@ -163,24 +144,12 @@ public class Calendar implements Serializable, Cloneable{
         this.userUid = userUid;
     }
 
-    public String getICalUID() {
-        return this.iCalUID;
+    public String getExtra() {
+        return extra;
     }
 
-    public void setICalUID(String iCalUID) {
-        this.iCalUID = iCalUID;
-    }
-
-    @Override
-    public Calendar clone() throws CloneNotSupportedException {
-        Calendar calendar = null;
-        try
-        {
-            calendar = (Calendar) super.clone();
-        } catch (CloneNotSupportedException e){
-            e.printStackTrace();
-        }
-        return calendar;
+    public void setExtra(String extra) {
+        this.extra = extra;
     }
 
     /**
@@ -225,4 +194,25 @@ public class Calendar implements Serializable, Cloneable{
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getCalendarDao() : null;
     }
+
+    public String getICalUID() {
+        return this.iCalUID;
+    }
+
+    public void setICalUID(String iCalUID) {
+        this.iCalUID = iCalUID;
+    }
+
+    @Override
+    public Calendar clone() throws CloneNotSupportedException {
+        Calendar calendar = null;
+        try
+        {
+            calendar = (Calendar) super.clone();
+        } catch (CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return calendar;
+    }
+
 }
