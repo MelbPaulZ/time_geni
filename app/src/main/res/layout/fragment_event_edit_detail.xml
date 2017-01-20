@@ -19,6 +19,9 @@
 
         <import type="org.unimelb.itime.util.CalendarUtil" />
 
+        <import type="me.tatarka.bindingcollectionadapter.LayoutManagers" />
+        <import type="android.support.v7.widget.LinearLayoutManager" />
+
         <import type="org.unimelb.itime.ui.viewmodel.EventCommonViewModel.PickerTask" />
     </data>
 
@@ -499,13 +502,19 @@
                             android:textSize="@dimen/page_text_size" />
                     </LinearLayout>
 
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="@drawable/table_row_border"-->
+                        <!--android:onClick="@{eventEditVM.pickPhoto()}">-->
+
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border"
-                        android:onClick="@{eventEditVM.pickPhoto()}">
+                        android:layout_height="60dp"
+                        android:background="@drawable/table_row_border">
 
                         <TextView
+                            android:id="@+id/photo_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
@@ -514,38 +523,7 @@
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
 
-                        <HorizontalScrollView
-                            android:id="@+id/edit_photoList"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/padding_10"
-                            android:layout_toLeftOf="@+id/edit_event_photo_arrow">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                app:imgDisplayer="@{eventEditVM.event}">
-
-                                <ImageView
-                                    android:id="@+id/edit_photo1"
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:layout_marginRight="@dimen/padding_10"
-                                    />
-
-                                <ImageView
-                                    android:id="@+id/edit_photo2"
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:layout_marginRight="@dimen/padding_10" />
-
-                                <ImageView
-                                    android:id="@+id/edit_photo3"
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp" />
-                            </LinearLayout>
-                        </HorizontalScrollView>
 
                         <ImageView
                             android:id="@+id/edit_event_photo_arrow"
@@ -555,6 +533,25 @@
                             android:layout_centerVertical="true"
                             android:layout_gravity="center_vertical|right"
                             android:src="@drawable/arrow" />
+
+
+                        <android.support.v7.widget.RecyclerView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_toLeftOf="@+id/edit_event_photo_arrow"
+                            android:minWidth="200dp"
+                            android:layout_gravity="center_vertical"
+                            app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, true)}"
+                            app:items="@{eventEditVM.photoUrls}"
+                            app:itemView="@{eventEditVM.photoItemView}"
+                            />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentBottom="true"
+                            android:onClick="@{eventEditVM.pickPhoto()}"/>
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>

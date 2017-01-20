@@ -10,13 +10,14 @@ import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.MessageDao;
 import org.unimelb.itime.util.EventUtil;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Created by yuhaoliu on 1/12/16.
  */
 @Entity(active = true)
-public class Message implements Comparable<Message>{
+public class Message implements Comparable<Message> , Serializable{
     public final static String TPL_INVITEE = "invitee";
     public final static String TPL_HOST_UNCONFIRMED = "host_unconfirmed";
     public final static String TPL_HOST_DELETED = "host_deleted";
