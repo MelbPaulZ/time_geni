@@ -10,13 +10,9 @@ import org.unimelb.itime.bean.Block;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.managers.DBManager;
-import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.UserApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.contact.BlockContactsMvpView;
-import org.unimelb.itime.ui.mvpview.contact.ContactHomePageMvpView;
-import org.unimelb.itime.ui.viewmodel.contact.BlockContactsViewModel;
-import org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel;
 import org.unimelb.itime.util.HttpUtil;
 
 import java.util.ArrayList;

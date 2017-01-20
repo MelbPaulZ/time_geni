@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
-import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.ui.fragment.contact.ProfileFragment;
 
 /**
@@ -19,7 +18,7 @@ public class ProfileActivity extends EmptyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DataBindingUtil.setContentView(this, R.layout.contact_home_activity);
+        DataBindingUtil.setContentView(this, R.layout.activity_contacts);
         fragmentManager = getSupportFragmentManager();
         ProfileFragment fragment = new ProfileFragment();
         Contact user = (Contact) getIntent().getSerializableExtra(USER);

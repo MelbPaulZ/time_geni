@@ -52,6 +52,7 @@
                     android:visibility="@{vm.rightTitleStr.length() == 0 ? View.GONE: View.VISIBLE}"
                     android:enabled="@{vm.rightClickable}"
                     android:textColor="@drawable/toolbar_state_right_btn"
+                    android:textStyle="@{vm.rightClickable?`bold`:`normal`}"
                     android:onClick="@{vm.onClickRight()}"
                     android:background="@{vm.rightDrawable}"
                     android:textSize="17sp" />
@@ -67,6 +68,7 @@
                     android:enabled="@{vm.rightClickable}"
                     android:onClick="@{vm.onClickRight()}"
                     android:background="@{vm.rightDrawable}"
+
                     android:textSize="17sp" />
 
             </RelativeLayout>

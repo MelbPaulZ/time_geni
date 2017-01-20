@@ -17,7 +17,7 @@ public class BlockContactsActivity extends EmptyActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DataBindingUtil.setContentView(this, R.layout.contact_home_activity);
+        DataBindingUtil.setContentView(this, R.layout.activity_contacts);
         fragmentManager = getSupportFragmentManager();
         SettingBlockContactsFragment fragment = new SettingBlockContactsFragment();
         fragmentManager.beginTransaction().replace(getFragmentContainerId(), fragment).commit();
