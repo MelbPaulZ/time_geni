@@ -5,21 +5,14 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
-import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.managers.DBManager;
-import org.unimelb.itime.messageevent.MessageRemoveContact;
 import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.bean.ITimeUser;
-import org.unimelb.itime.ui.mvpview.contact.ContactHomePageMvpView;
-import org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel;
+import org.unimelb.itime.ui.mvpview.contact.MainContactsMvpView;
 import org.unimelb.itime.widget.SideBarListView;
 import org.unimelb.itime.util.HttpUtil;
 
@@ -34,7 +27,7 @@ import rx.functions.Func1;
  * Created by 37925 on 2016/12/13.
  */
 
-public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMvpView>{
+public class ContactHomePagePresenter extends MvpBasePresenter<MainContactsMvpView>{
     private static final String TAG = "ContactPresenter";
     public static final int TASK_CONTACTS = 0;
     private Context context;

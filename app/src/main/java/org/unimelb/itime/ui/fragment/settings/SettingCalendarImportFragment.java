@@ -5,9 +5,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
@@ -20,6 +22,7 @@ import org.unimelb.itime.ui.presenter.CalendarPresenter;
 import org.unimelb.itime.ui.viewmodel.CalendarPreferenceViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.UserUtil;
+import org.unimelb.itime.util.googleAuth.GoogleAuthActivity;
 
 /**
  * Created by Paul on 26/12/2016.
@@ -30,6 +33,7 @@ public class SettingCalendarImportFragment extends BaseUiAuthFragment<CalendarIm
     private FragmentSettingImportCalendarBinding binding;
     private CalendarPreferenceViewModel contentViewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
+    private static int REQUEST_GOOGLE = 1111;
 
     @Nullable
     @Override
@@ -77,6 +81,14 @@ public class SettingCalendarImportFragment extends BaseUiAuthFragment<CalendarIm
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_GOOGLE){
+            if(resultCode == GoogleAuthActivity.RESULT_SUCCESS){
+                Toast.makeText(getContext(), getString(R.string.setting_import_google_calendar_success), Toast.LENGTH_SHORT).show();
+            }
+            if(resultCode == GoogleAuthActivity.RESULT_FAILED){
+                Toast.makeText(getContext(), getString(R.string.setting_import_google_calendar_failed), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void onBack() {
@@ -90,7 +102,9 @@ public class SettingCalendarImportFragment extends BaseUiAuthFragment<CalendarIm
 
     @Override
     public void toGoogleCal() {
-
+        Intent intent = new Intent();
+        intent.setClass(getContext(), GoogleAuthActivity.class);
+        startActivityForResult(intent, REQUEST_GOOGLE);
     }
 
     @Override

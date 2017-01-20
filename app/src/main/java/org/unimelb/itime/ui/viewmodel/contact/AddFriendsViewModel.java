@@ -23,6 +23,7 @@ import com.android.databinding.library.baseAdapters.BR;
 public class AddFriendsViewModel extends BaseObservable {
     private AddFriendsPresenter presenter;
     private boolean showSearch = false;
+    private boolean resetSearchBar = true;
     private boolean showNotFound = false;
     private boolean showButtons = true;
     private boolean showAlert = false;
@@ -40,6 +41,16 @@ public class AddFriendsViewModel extends BaseObservable {
     public void setShowAlert(boolean showAlert) {
         this.showAlert = showAlert;
         notifyPropertyChanged(BR.showAlert);
+    }
+
+    @Bindable
+    public boolean getResetSearchBar() {
+        return resetSearchBar;
+    }
+
+    public void setResetSearchBar(boolean resetSearchBar) {
+        this.resetSearchBar = resetSearchBar;
+        notifyPropertyChanged(BR.resetSearchBar);
     }
 
     @Bindable
@@ -122,6 +133,7 @@ public class AddFriendsViewModel extends BaseObservable {
         setShowSearch(false);
         setShowTitile(true);
         setShowCancel(false);
+        setResetSearchBar(true);
     }
 
     @Bindable

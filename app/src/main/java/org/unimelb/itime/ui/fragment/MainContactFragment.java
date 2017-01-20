@@ -14,7 +14,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
-import org.unimelb.itime.databinding.ContactHomePageBinding;
+import org.unimelb.itime.databinding.FragmentMainContactsBinding;
 import org.unimelb.itime.messageevent.MessageAddContact;
 import org.unimelb.itime.messageevent.MessageEditContact;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
@@ -22,15 +22,10 @@ import org.unimelb.itime.messageevent.MessageRemoveContact;
 import org.unimelb.itime.ui.activity.AddFriendActivity;
 import org.unimelb.itime.ui.activity.FriendRequestActivity;
 import org.unimelb.itime.ui.activity.ProfileActivity;
-import org.unimelb.itime.ui.fragment.contact.AddFriendsFragment;
-import org.unimelb.itime.ui.fragment.contact.BaseContactFragment;
-import org.unimelb.itime.ui.fragment.contact.NewFriendFragment;
-import org.unimelb.itime.ui.fragment.contact.ProfileFragment;
-import org.unimelb.itime.ui.mvpview.contact.ContactHomePageMvpView;
+import org.unimelb.itime.ui.mvpview.contact.MainContactsMvpView;
 import org.unimelb.itime.ui.presenter.contact.ContactHomePagePresenter;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel;
-import org.unimelb.itime.ui.viewmodel.contact.ProfileFragmentViewModel;
 
 import java.util.List;
 
@@ -38,15 +33,15 @@ import java.util.List;
  * Created by 37925 on 2016/12/8.
  */
 
-public class MainContactFragment extends BaseUiAuthFragment<ContactHomePageMvpView, ContactHomePagePresenter> implements ContactHomePageMvpView {
-    private ContactHomePageBinding binding;
+public class MainContactFragment extends BaseUiAuthFragment<MainContactsMvpView, ContactHomePagePresenter> implements MainContactsMvpView {
+    private FragmentMainContactsBinding binding;
     private ContactHomePageViewModel viewModel;
     private ToolbarViewModel toolbarViewModel;
 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,
-                R.layout.contact_home_page, container, false);
+                R.layout.fragment_main_contacts, container, false);
         EventBus.getDefault().register(this);
         return binding.getRoot();
     }
@@ -127,7 +122,7 @@ public class MainContactFragment extends BaseUiAuthFragment<ContactHomePageMvpVi
     }
 
     @Override
-    public ContactHomePageBinding getBinding() {
+    public FragmentMainContactsBinding getBinding() {
         return binding;
     }
 
