@@ -190,7 +190,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                     getView().onTaskSuccess(TASK_EVENT_INSERT, eventHttpResult.getData());
                 }
 
-                // if the event is successfully insert into server, then begin to upload photos
+                // if the event is successfully insertOrReplace into server, then begin to upload photos
                 if (ev.hasPhoto()){
                     uploadImage(ev);
                 }

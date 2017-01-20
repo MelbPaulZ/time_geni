@@ -185,16 +185,6 @@ public class EventDetailViewModel extends CommonViewModel {
         };
     }
 
-//    public String getPeopleNum(String type) {
-//                Timeslot timeslot = null;
-//                for (SubTimeslotViewModel viewModel: wrapperTimeSlotList){
-//                    if (viewModel.getWrapper().isSelected()){
-//                        timeslot = (Timeslot) viewModel.getWrapper().getTimeSlot();
-//                        break;
-//                    }
-//                }
-//                presenter.confirmEvent(event.getCalendarUid(), event.getEventUid(), timeslot.getTimeslotUid());
-//    }
 
 
     public View.OnClickListener acceptEvent() {

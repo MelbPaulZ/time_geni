@@ -8,9 +8,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +22,7 @@ import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.ui.activity.LocationPickerActivity;
 import org.unimelb.itime.ui.activity.PhotoPickerActivity;
 import org.unimelb.itime.ui.fragment.LocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
@@ -42,7 +41,6 @@ import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_INSERT;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_UPDATE;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_SYN_IMAGE;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_UPLOAD_IMAGE;
-import static org.unimelb.itime.util.EventUtil.fromStringToPhotoUrlList;
 
 /**
  * Created by Paul on 28/08/2016.
@@ -146,22 +144,28 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
     private void gotoLocationPicker() {
-        LocationPickerFragment fragment = new LocationPickerFragment();
-        fragment.setTargetFragment(this, REQ_LOCATION);
-        Bundle data = new Bundle();
-        data.putString(LocationPickerFragment.DATA_LOCATION, event.getLocation());
-        getBaseActivity().openFragment(fragment, data);
+        Intent intent = new Intent(getActivity(), LocationPickerActivity.class);
+        intent.putExtra("location", event.getLocation());
+        startActivityForResult(intent, REQ_LOCATION);
+
+//        LocationPickerFragment fragment = new LocationPickerFragment();
+//        fragment.setTargetFragment(this, REQ_LOCATION);
+//        Bundle data = new Bundle();
+//        data.putString("location", event.getLocation());
+//        getBaseActivity().openFragment(fragment, data);
     }
 
-    /**
-     * this has to be override to null, in order not to have error
-     * "Can not perform this action after onSaveInstanceState"
-     * @param outState
-     */
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
 
-    }
+
+//    /**
+//     * this has to be override to null, in order not to have error
+//     * "Can not perform this action after onSaveInstanceState"
+//     * @param outState
+//     */
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//
+//    }
 
     @Override
     public void toTimeslotViewPage() {
@@ -287,9 +291,10 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQ_LOCATION && resultCode == LocationPickerFragment.RET_LOCATION_SUCCESS) {
+        if (requestCode == REQ_LOCATION && resultCode == Activity.RESULT_OK) {
             String location = data.getStringExtra("location");
             this.event.setLocation(location);
+            setEvent(event);
         }
 
         if (requestCode == REQ_CUSTOM_REPEAT && resultCode == EventCustomRepeatFragment.RET_CUSTOM_REPEAT) {
@@ -322,6 +327,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
                 } else {
                     Toast.makeText(getContext(), "need location permission", Toast.LENGTH_SHORT).show();
                 }
+                break;
             }
             case REQUEST_PHOTO_PERMISSION: {
                 if (allPermissionGranted(grantResults)) {
@@ -329,6 +335,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
                 } else {
                     Toast.makeText(getContext(), "need photo permission", Toast.LENGTH_SHORT).show();
                 }
+                break;
             }
 
         }

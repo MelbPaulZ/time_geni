@@ -2,25 +2,18 @@ package org.unimelb.itime.managers;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
-import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventPackageInterface;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -59,8 +52,23 @@ public class EventManager {
 
     private Context context;
 
-    public EventManager(Context context){
+    private EventManager(Context context){
         this.context = context;
+        this.init();
+    }
+
+    private void init(){
+        currentEvent = new Event();
+        allDayEventList = new ArrayList<>();
+        regularEventMap = new HashMap<>();
+        orgRepeatedEventList = new ArrayList<>();
+        repeatedEventMap = new HashMap<>();
+        //<UUID, List of tracer> : For tracking event on Day of repeated event map
+        uidTracerMap = new HashMap();
+        //recurrence uid (origin event uid) : special events for origin event
+        specialEvent = new HashMap<>();
+        eventsPackage = new EventsPackage();
+
         nowRepeatedStartAt = EventUtil.getBeginOfDayCalendar(nowRepeatedStartAt);
         nowRepeatedEndAt = EventUtil.getBeginOfDayCalendar(nowRepeatedEndAt);
 
@@ -75,7 +83,6 @@ public class EventManager {
     public static EventManager getInstance(Context context){
         if (instance == null){
             instance = new EventManager(context);
-            instance.loadDB();
         }
         return instance;
     }
@@ -168,12 +175,17 @@ public class EventManager {
         }
     }
 
-    public void loadDB(){
-        List<Event> list = DBManager.getInstance(context).getAllEvents();
-        for (Event ev: list) {
-            if (ev.getShowLevel() > 0){
-                addEvent(ev);
-            }
+    public void refresh(){
+        init();
+        loadDB();
+    }
+
+    private void loadDB(){
+        List<org.unimelb.itime.bean.Calendar> calendars = CalendarUtil.getInstance(context).getCalendar();
+        List<Event> events = DBManager.getInstance(context).getAllAvailableEvents(calendars);
+
+        for (Event ev: events) {
+            addEvent(ev);
         }
     }
 
@@ -216,7 +228,6 @@ public class EventManager {
         }
     }
 
-    // repeat event update need to change
     public synchronized void updateEvent(Event oldEvent, Event newEvent){
         setCurrentEvent(newEvent);
 
@@ -237,6 +248,31 @@ public class EventManager {
         Event dbOldEvent = DBManager.getInstance(context).getEvent(oldEvent.getEventUid());
         dbOldEvent.delete();
         DBManager.getInstance(context).insertEvent(newEvent);
+    }
+
+    public synchronized void updateDB(List<Event> events){
+        List<? extends ITimeEventInterface> orgITimeInterfaces = getAllEvents();
+        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
+
+        for (Event event:events) {
+            Event orgOld = null;
+
+            for (Event orgEvent:orgEvents) {
+                if (orgEvent.getEventUid().equals(event.getEventUid())){
+                    orgOld = orgEvent;
+                    // find event in event manager, and then update
+                    updateEvent(orgOld,event);
+                    break;
+                }
+            }
+
+            //new event or deleted event
+            if (orgOld == null){
+                // if cannot find event, then insertOrReplace it in DB and eventmanager
+                DBManager.getInstance(context).insertEvent(event);
+                addEvent(event);
+            }
+        }
     }
 
     private void updateRegularEvent(Event oldEvent, Event newEvent){
@@ -278,29 +314,7 @@ public class EventManager {
         this.addEvent(newEvent);
     }
 
-    public synchronized void updateDB(List<Event> events){
-        List<? extends ITimeEventInterface> orgITimeInterfaces = getAllEvents();
-        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
 
-        for (Event event:events) {
-            Event orgOld = null;
-
-            for (Event orgEvent:orgEvents) {
-                if (orgEvent.getEventUid().equals(event.getEventUid())){
-                    orgOld = orgEvent;
-                    // find event in event manager, and then update
-                    updateEvent(orgOld,event);
-                    break;
-                }
-            }
-
-            if (orgOld == null){
-                // if cannot find event, then insert it in DB and eventmanager
-                DBManager.getInstance(context).insertEvent(event);
-                addEvent(event);
-            }
-        }
-    }
 
 
     private void handleSpecialEvent(Event event){
@@ -521,33 +535,6 @@ public class EventManager {
 
     /********************************** Paul Paul 改 *********************************************/
 
-    // paul paul 改！
-    public void initNewEvent(Calendar startTimeCalendar){
-        // initial default values for new event
-        Event event = new Event();
-        setCurrentEvent(event);
-        event.setEventUid(AppUtil.generateUuid());
-        event.setHostUserUid(UserUtil.getInstance(context).getUserUid());
-        long endTime = startTimeCalendar.getTimeInMillis() + 3600 * 1000;
-        event.setStartTime(startTimeCalendar.getTimeInMillis());
-        event.setEndTime(endTime);
-        setCurrentEvent(event);
-    }
-
-    // paul paul 改！
-    @Deprecated
-    public Event copyCurrentEvent(Event event){
-        Gson gson = new Gson();
-
-        String eventStr = gson.toJson(event);
-        Event copyEvent = gson.fromJson(eventStr, Event.class);
-
-        Type dataType = new TypeToken <RuleModel<Event>>() {}.getType();
-        RuleModel response = gson.fromJson(gson.toJson(event.getRule(), dataType), dataType);
-        copyEvent.setRule(response);
-
-        return copyEvent;
-    }
 
 
     public Event getCurrentEvent() {

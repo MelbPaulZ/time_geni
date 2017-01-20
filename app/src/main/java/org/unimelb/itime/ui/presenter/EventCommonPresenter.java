@@ -156,7 +156,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
 
 
     /**
-     * call the api to insert a event to server
+     * call the api to insertOrReplace a event to server
      * after this api is called, it will automatically sync with local db
      * @param event
      */
@@ -186,7 +186,7 @@ public class EventCommonPresenter<T extends EventCommonMvpView> extends MvpBaseP
                 Event ev = eventHttpResult.getData().get(0);
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
 
-                // if the event is successfully insert into server, then begin to upload photos
+                // if the event is successfully insertOrReplace into server, then begin to upload photos
                 uploadImage(ev);
                 insertEventLocal(ev);
                 if(getView() != null){

@@ -20,7 +20,6 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.managers.MessageManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.restfulapi.CalendarApi;
@@ -32,12 +31,12 @@ import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Func1;
 
 /**
  * Created by yinchuandong on 20/06/2016.
@@ -82,19 +81,6 @@ public class RemoteService extends Service{
             messageHandler.cancel(true);
         }
         isStart = false;
-        while (isPollingThreadRunning){
-            if (!isPollingThreadRunning){
-                break;
-            }
-            Log.i(TAG, "onDestroy: " + "polling thread running");
-            SystemClock.sleep(50);
-        }
-        pollingThread.interrupt();
-
-        while (isUpdateThreadRuning){
-            Log.i(TAG, "onDestroy: " + "isUpdateThread running");
-            SystemClock.sleep(50);
-        }
         EventBus.getDefault().post(new MessageEvent(MessageEvent.LOGOUT));
         super.onDestroy();
     }
@@ -119,6 +105,9 @@ public class RemoteService extends Service{
 
             @Override
             public void onNext(HttpResult<List<org.unimelb.itime.bean.Calendar>> httpResult) {
+                if (!isStart){
+                    return;
+                }
                 CalendarUtil.getInstance(getApplicationContext()).setCalendar(httpResult.getData());
 
                 SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
@@ -132,7 +121,7 @@ public class RemoteService extends Service{
 
                 //update db
                 DBManager.getInstance(getApplicationContext()).clearCalendars();
-                DBManager.getInstance(getApplicationContext()).insert(httpResult.getData());
+                DBManager.getInstance(getApplicationContext()).insertOrReplace(httpResult.getData());
 
                 pollingThread.start();
             }
@@ -156,7 +145,9 @@ public class RemoteService extends Service{
 
             @Override
             public void onNext(HttpResult<List<Message>> listHttpResult) {
-                Log.i(TAG, "listHttpResult: " + listHttpResult);
+                if (!isStart){
+                    return;
+                }
 
                 if (messageHandler == null){
                     messageHandler = new MessageHandler();
@@ -172,12 +163,30 @@ public class RemoteService extends Service{
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void fetchEvents(String calendarUid) {
+    public void fetchEvents(Calendar calendar) {
+        final int visibility = calendar.getVisibility();
+
         String synToken = AppUtil.getEventSyncToken(getApplicationContext());
-        Log.i(TAG, "fetchEvents: " + synToken);
-        Observable<HttpResult<List<Event>>> observable = eventApi.list(
-                calendarUid
-                , synToken);
+        Observable<HttpResult<List<Event>>> observable = eventApi.list(calendar.getCalendarUid(), synToken)
+                .map(new Func1<HttpResult<List<Event>>, HttpResult<List<Event>>>() {
+            @Override
+            public HttpResult<List<Event>> call(HttpResult<List<Event>> listHttpResult) {
+                if(listHttpResult.getData().size() > 0){
+                    isUpdateThreadRuning = true;
+
+                    //if calendar not shown
+                    if (visibility == 0){
+                        DBManager.getInstance(getApplicationContext()).insertOrReplace(listHttpResult.getData());
+                    }else{
+                        EventManager.getInstance(getApplicationContext()).updateDB(listHttpResult.getData());
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                        isUpdateThreadRuning = false;
+                    }
+                }
+
+                return listHttpResult;
+            }
+        });
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
 
             @Override
@@ -192,25 +201,33 @@ public class RemoteService extends Service{
 
             @Override
             public void onNext(final HttpResult<List<Event>> result) {
+                if (!isStart){
+                    return ;
+                }
                 final List<Event> eventList = result.getData();
                 Log.i(TAG, "__onNext: " + result.getData().size());
                 //update syncToken
                 AppUtil.saveEventSyncToken(getApplicationContext(), result.getSyncToken());
                 // successfully get event from server
-                if(eventList.size() > 0){
-                    updateThread = new Thread() {
-                        @Override
-                        public void run() {
-                            super.run();
-                            isUpdateThreadRuning = true;
-
-                            EventManager.getInstance(getApplicationContext()).updateDB(eventList);
-                            EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-                            isUpdateThreadRuning = false;
-                        }
-                    };
-                    updateThread.start();
-                }
+//                if(eventList.size() > 0){
+//                    updateThread = new Thread() {
+//                        @Override
+//                        public void run() {
+//                            super.run();
+//                            isUpdateThreadRuning = true;
+//
+//                            //if calendar not shown
+//                            if (visibility == 1){
+//                                DBManager.getInstance(getApplicationContext()).
+//                            }else{
+//                                EventManager.getInstance(getApplicationContext()).updateDB(eventList);
+//                                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+//                                isUpdateThreadRuning = false;
+//                            }
+//                        }
+//                    };
+//                    updateThread.start();
+//                }
             }
         };
         HttpUtil.subscribe(observable, subscriber);
@@ -231,6 +248,9 @@ public class RemoteService extends Service{
 
             @Override
             public void onNext(HttpResult<List<Contact>> listHttpResult) {
+                if (!isStart){
+                    return ;
+                }
                 List<Contact> contactList = listHttpResult.getData();
                 for (Contact contact : contactList){
                     DBManager.getInstance(getBaseContext()).insertContact(contact);
@@ -241,36 +261,6 @@ public class RemoteService extends Service{
         HttpUtil.subscribe(observable,subscriber);
     }
 
-    private boolean checkMessageValidation(List<Message> msgs){
-        ArrayList<Message> dirtyMsgs = new ArrayList<>();
-        for (Message msg:msgs
-             ) {
-            // need to change later, deletelevel is ignored
-            if(msg.getDeleteLevel() == 1){
-                dirtyMsgs.add(msg);
-                continue;
-            }
-
-            Event correspond = DBManager.getInstance(getApplicationContext()).getEvent(msg.getEventUid());
-
-            if (correspond == null){
-                Log.i("Error_msg", "checkMessageValidation: " + msg.getEventUid());
-                return false;
-            }
-
-            if (MessageManager.getInstance().isInWaitList(msg.getMessageUid())){
-                dirtyMsgs.add(msg);
-            }
-        }
-
-        for (Message dirtyMsg: dirtyMsgs
-             ) {
-            msgs.remove(dirtyMsg);
-        }
-
-        return true;
-    }
-
     private class PollingThread extends Thread {
         @Override
         public void run() {
@@ -278,7 +268,9 @@ public class RemoteService extends Service{
             while (isStart) {
                 // todo: here to list events
                 for(Calendar calendar : CalendarUtil.getInstance(getApplication()).getCalendar()){
-                    fetchEvents(calendar.getCalendarUid());
+                    if (calendar.getDeleteLevel() == 0){
+                        fetchEvents(calendar);
+                    }
                 }
                 fetchMessages();
 
@@ -295,6 +287,9 @@ public class RemoteService extends Service{
         String token = "";
         @Override
         protected List<Message> doInBackground(HttpResult<List<Message>>... params) {
+            if (!isStart){
+                return null;
+            }
             HttpResult<List<Message>> listHttpResult = params[0];
             List<Message> msgs = listHttpResult.getData();
 
@@ -314,6 +309,9 @@ public class RemoteService extends Service{
         @Override
         protected void onPostExecute(List<Message> messages) {
             super.onPostExecute(messages);
+            if (!isStart){
+                return ;
+            }
             if (valid){
                 //update syncToken
                 SharedPreferences sp = AppUtil.getTokenSaver(getApplicationContext());

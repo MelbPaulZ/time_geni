@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,8 +153,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         }
         if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
             // if the event is confirmed, then no timeslot showing
-            Event temp_event = EventManager.getInstance(getContext()).findEventByUid(event.getEventUid());
-            timeSlotViewFragment.setData(temp_event);
+            timeSlotViewFragment.setData(event);
             timeSlotViewFragment.setDisplayTimeslot(false);
         }else {
             timeSlotViewFragment.setData(cpyEvent, wrapperTimeSlots);

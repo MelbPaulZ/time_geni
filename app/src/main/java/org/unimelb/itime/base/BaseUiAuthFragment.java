@@ -17,6 +17,8 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import org.unimelb.itime.R;
 
+import static org.dmfs.rfc5545.calendarmetrics.IslamicCalendarMetrics.LeapYearPattern.I;
+
 /**
  * use for user authorization,
  * except for LoginFragment, all others should extend this class
@@ -56,6 +58,7 @@ public abstract class BaseUiAuthFragment<V extends MvpView, P extends MvpPresent
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+
                     }
                 });
          builder.create().show();
@@ -80,4 +83,6 @@ public abstract class BaseUiAuthFragment<V extends MvpView, P extends MvpPresent
             }
         }
     }
+
+
 }

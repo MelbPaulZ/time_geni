@@ -40,12 +40,14 @@ public class AppUtil {
         return UUID.randomUUID().toString();
     }
 
+    @Deprecated
     public static void showProgressBar(Context context,String title, String subtitle){
         if (pgBar==null || !pgBar.isShowing()){
             pgBar = ProgressDialog.show(context, title, subtitle);
         }
     }
 
+    @Deprecated
     public static void hideProgressBar(){
         if(pgBar != null){
             pgBar.dismiss();

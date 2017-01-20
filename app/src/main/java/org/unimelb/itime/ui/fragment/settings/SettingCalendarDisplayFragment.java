@@ -105,4 +105,10 @@ public class SettingCalendarDisplayFragment extends BaseUiAuthFragment<SettingCa
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void toDeleteCalendar(Calendar calendar) {
+
+    }
+
 }

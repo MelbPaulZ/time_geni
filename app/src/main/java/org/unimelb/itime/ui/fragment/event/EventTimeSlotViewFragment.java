@@ -105,8 +105,13 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         initData();
         initListeners();
 
-        if(weekStartTime > 0){
-            timeslotWeekView.scrollToWithOffset(weekStartTime);
+//        if(weekStartTime > 0){
+//            timeslotWeekView.scrollToWithOffset(weekStartTime);
+//        }
+        if (displayTimeslot){
+
+        }else {
+            timeslotWeekView.scrollToWithOffset(event.getStartTime());
         }
 
         if (event.getTimeslot().size()>0) {

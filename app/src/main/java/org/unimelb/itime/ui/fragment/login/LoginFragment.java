@@ -48,8 +48,6 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
         EventManager.getInstance(getContext());
         if (!synToken.equals("")){
             onTaskSuccess(LoginPresenter.TASK_LOGIN, null);
-        }else {
-            loadData();
         }
     }
 
@@ -58,7 +56,7 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
             @Override
             public void run() {
                 super.run();
-                EventManager.getInstance(getContext()).loadDB();
+                EventManager.getInstance(getContext()).refresh();
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
             }
         }.start();
@@ -95,6 +93,7 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
         hideProgressDialog();
         if(taskId == LoginPresenter.TASK_LOGIN){
             successLogin();
+            loadData();
         }
     }
 

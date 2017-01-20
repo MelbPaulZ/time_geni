@@ -79,7 +79,9 @@ public class CalendarViewModel<T extends ItimeCommonMvpView & TaskBasedMvpView<C
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.delete(calendar);
+                if (mvpView!=null){
+                    mvpView.toDeleteCalendar(calendar);
+                }
             }
         };
     }

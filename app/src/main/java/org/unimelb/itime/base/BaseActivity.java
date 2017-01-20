@@ -64,6 +64,7 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpBasePresenter
             t.addToBackStack(null);
         }
         t.commit();
+        fragmentManager.executePendingTransactions();
     }
 
 
@@ -79,5 +80,6 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpBasePresenter
         t.replace(getFragmentContainerId(), fragment);
 //        t.addToBackStack(null);
         t.commit();
+        fragmentManager.executePendingTransactions();
     }
 }

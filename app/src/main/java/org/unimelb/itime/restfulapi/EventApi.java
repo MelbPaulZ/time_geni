@@ -29,7 +29,7 @@ public interface EventApi {
     @GET("event/get/{calendarUid}/{eventUid}")
     Observable<HttpResult<Event>> get(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid);
 
-    @POST("event/insert")
+    @POST("event/insertOrReplace")
     Observable<HttpResult<List<Event>>> insert(
             @Body Event event,
             @Query("syncToken") String syncToken);
