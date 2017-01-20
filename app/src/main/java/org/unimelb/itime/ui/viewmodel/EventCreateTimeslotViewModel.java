@@ -33,11 +33,13 @@ public class EventCreateTimeslotViewModel extends CommonViewModel {
     private ObservableField<Boolean> isChangeDuration = new ObservableField<>(false);
     private String durationTimeString = "1 hour";
     private int task = -1;
+    private TimeslotBaseMvpView mvpView;
 
     private long weekStartTime;
 
     public EventCreateTimeslotViewModel(TimeslotPresenter<? extends TimeslotBaseMvpView> presenter){
         this.presenter = presenter;
+        this.mvpView = presenter.getView();
         titleString = initToolBarTitle();
         event= EventManager.getInstance(getContext()).getCurrentEvent();
         weekStartTime = Calendar.getInstance().getTimeInMillis();
@@ -59,6 +61,9 @@ public class EventCreateTimeslotViewModel extends CommonViewModel {
                    Calendar calendar = Calendar.getInstance();
                    calendar.set(myCalendar.getYear(), myCalendar.getMonth(), myCalendar.getDay(), 0, 0, 0);
                    weekStartTime = calendar.getTimeInMillis();
+                   if (mvpView!=null){
+                       mvpView.getWeekStartTime(weekStartTime);
+                   }
                    presenter.getTimeSlots(event, weekStartTime);
                }
            }

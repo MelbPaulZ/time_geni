@@ -37,6 +37,7 @@ import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -59,7 +60,8 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     private WeekView timeslotWeekView;
     private int timePosition = 3;
 
-    private long weekStartTime = -1;
+    //
+    private long showingTime = -1;
     private EventCreateTimeslotViewModel viewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
@@ -91,6 +93,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         viewModel.setTask(fragment_task);
         viewModel.setEvent(event);
 
+        // set up title strings
         toolbarViewModel = new ToolbarViewModel<>(this);
         toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         if (!event.getStatus().equals(Event.STATUS_CONFIRMED)) {
@@ -98,6 +101,13 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         }else{
             toolbarViewModel.setRightClickable(false);
         }
+        // use event start time to set the current title string date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(event.getStartTime());
+        calendar.set(Calendar.DAY_OF_WEEK,calendar.getFirstDayOfWeek());
+        toolbarViewModel.setTitleStr(getTitleString(calendar.getTimeInMillis()));
+
+
         binding.setTimeslotVM(viewModel);
         binding.setToolbarVM(toolbarViewModel);
         inflater = LayoutInflater.from(getContext());
@@ -105,8 +115,9 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         initData();
         initListeners();
 
-        if(weekStartTime > 0){
-            timeslotWeekView.scrollToWithOffset(weekStartTime);
+        // scroll to the showing time
+        if(showingTime > 0){
+            timeslotWeekView.scrollToWithOffset(showingTime);
         }
 
         if (event.getTimeslot().size()>0) {
@@ -129,6 +140,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
      */
     public void setData(Event event){
         this.event = event;
+        showingTime = event.getStartTime();
     }
 
     /**
@@ -139,7 +151,9 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     public void setData(Event event, List<WrapperTimeSlot> wrapperList){
         this.event = event;
         this.timeslotWrapperList = wrapperList;
+        showingTime = event.getStartTime();
     }
+
 
 
     private void initData(){
@@ -466,7 +480,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == REQ_TIMESLOT){
-            weekStartTime = data.getLongExtra("weekStartTime", 0);
+            showingTime = data.getLongExtra("showingTime", 0);
         }
 
         if (requestCode == REQ_TIMESLOT && resultCode == EventTimeSlotCreateFragment.RET_TIMESLOT) {
@@ -501,4 +515,20 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         }
     }
 
+    /**
+     * this is for tool bar showing current week date
+     * @param weekStartTime
+     */
+    @Override
+    public void getWeekStartTime(long weekStartTime) {
+        toolbarViewModel.setTitleStr(getTitleString(weekStartTime));
+    }
+
+    private String getTitleString(long weekStartTime){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(weekStartTime);
+        SimpleDateFormat df = new SimpleDateFormat("MMM yyyy");
+        String title = df.format(calendar.getTime());
+        return title;
+    }
 }

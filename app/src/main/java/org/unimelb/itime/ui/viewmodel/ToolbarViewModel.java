@@ -65,6 +65,7 @@ public class ToolbarViewModel<V extends ItimeCommonMvpView> extends CommonViewMo
 
     public void setTitleStr(String titleStr) {
         this.titleStr = titleStr;
+        notifyPropertyChanged(BR.titleStr);
     }
 
     @Bindable

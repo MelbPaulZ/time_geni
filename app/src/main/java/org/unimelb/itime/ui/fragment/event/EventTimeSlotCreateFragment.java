@@ -177,7 +177,7 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
     @Override
     public void onBack() {
         Intent intent = new Intent();
-        intent.putExtra("weekStartTime", viewModel.getTimeslot().getStartTime());
+        intent.putExtra("showingTime", viewModel.getTimeslot().getStartTime());
         intent.putExtra("startTime", viewModel.getTimeslot().getStartTime());
         intent.putExtra("endTime", viewModel.getTimeslot().getEndTime());
         getTargetFragment().onActivityResult(getTargetRequestCode(), RET_EMPTY, intent);
@@ -188,10 +188,15 @@ public class EventTimeSlotCreateFragment extends BaseUiAuthFragment<TimeslotMvpV
     public void onNext() {
 //        todo
         Intent intent = new Intent();
-        intent.putExtra("weekStartTime", viewModel.getTimeslot().getStartTime());
+        intent.putExtra("showingTime", viewModel.getTimeslot().getStartTime());
         intent.putExtra("startTime", viewModel.getTimeslot().getStartTime());
         intent.putExtra("endTime", viewModel.getTimeslot().getEndTime());
         getTargetFragment().onActivityResult(getTargetRequestCode(), RET_TIMESLOT, intent);
         getFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void getWeekStartTime(long weekStartTime) {
+
     }
 }
