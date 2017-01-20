@@ -21,6 +21,8 @@ import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.HttpUtil;
+import org.unimelb.itime.util.TokenUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -162,7 +164,11 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             getView().onTaskStart(TASK_EVENT_INSERT);
         }
         setEventToEventManager(event);
-        String syncToken = AppUtil.getEventSyncToken(context);
+//        String syncToken = AppUtil.getEventSyncToken(context);
+        String syncToken = TokenUtil.getInstance(context).getEventToken(
+                UserUtil.getInstance(context).getUserUid(),
+                event.getCalendarUid()
+        );
         Observable<HttpResult<List<Event>>> observable = eventApi.insert(event, syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
             @Override
@@ -190,7 +196,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                     getView().onTaskSuccess(TASK_EVENT_INSERT, eventHttpResult.getData());
                 }
 
-                // if the event is successfully insert into server, then begin to upload photos
+                // if the event is successfully insertOrReplace into server, then begin to upload photos
                 if (ev.hasPhoto()){
                     uploadImage(ev);
                 }

@@ -78,7 +78,7 @@ public class HttpUtil {
                 UserApi userApi = createServiceWithoutToken(context, UserApi.class);
                 String authToken = AuthUtil.getJwtToken(context);
                 Call<JwtToken> call = userApi.refreshToken(authToken);
-                // refresh token needs to be synchronous doing
+                // refreshEventManager token needs to be synchronous doing
                 retrofit2.Response<JwtToken> refreshRep = call.execute();
                 JwtToken jwt = refreshRep.body();
                 if (jwt == null){

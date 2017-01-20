@@ -4,6 +4,8 @@ import android.text.format.Time;
 import android.util.Log;
 
 
+import org.unimelb.itime.bean.Event;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

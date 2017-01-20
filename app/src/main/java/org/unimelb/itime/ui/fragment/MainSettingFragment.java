@@ -138,6 +138,8 @@ public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,M
         }
     }
 
+
+
     @Override
     public void onTaskStart(int taskId) {
         showProgressDialog();
@@ -176,8 +178,20 @@ public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,M
                                 onTaskStart(1); // just give a random task id
                                 AppUtil.stopRemoteService(getContext());
                             }
+                        })
+                .addSheetItem("Clear DB & Log Out ", null,
+                        new ActionSheetDialog.OnSheetItemClickListener() {
+                            @Override
+                            public void onClick(int which) {
+                                AppUtil.stopRemoteService(getContext());
+                                UserUtil.getInstance(getContext()).clearAccountWithDB();
+                                Intent i = new Intent(getContext(), LoginActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(i);
+                                getActivity().finish();
+                            }
                         });
-        actionSheetDialog.show();
+                        actionSheetDialog.show();
     }
 
 
@@ -196,6 +210,7 @@ public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,M
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case SettingActivity.TASK_TO_MY_PROFILE:
+                //update user
                 contentViewModel.setUser(UserUtil.getInstance(getContext()).getUser());
         }
     }

@@ -16,14 +16,15 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
  * Created by yuhaoliu on 1/12/16.
  */
 public interface MessageApi {
-    @GET("message/list_group")
-    Observable<HttpResult<List<Message>>> get();
+    @GET("message/list")
+    Observable<HttpResult<List<Message>>> get(@Query("syncToken") String syncToken);
 
     @POST("message/read")
     Observable<HttpResult<Void>> read(@Body HashMap<String, Object> uidHashMap);

@@ -68,7 +68,7 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
                 Calendar oldCal =  DBManager.getInstance(context).find(
                         Calendar.class, "calendarUid",calendar.getCalendarUid()).get(0);
                 oldCal.delete();
-                DBManager.getInstance(context).insert(Arrays.asList(calendarHttpResult.getData()));
+                DBManager.getInstance(context).insertOrReplace(Arrays.asList(calendarHttpResult.getData()));
 
                 if(getView() != null){
                     getView().onTaskSuccess(TASK_CALENDAR_UPDATE,calendarHttpResult.getData());
@@ -136,7 +136,7 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
 
             @Override
             public void onNext(HttpResult<Calendar> calendarHttpResult) {
-                DBManager.getInstance(context).insert(Arrays.asList(calendarHttpResult.getData()));
+                DBManager.getInstance(context).insertOrReplace(Arrays.asList(calendarHttpResult.getData()));
                 if(getView() != null){
                     getView().onTaskSuccess(TASK_CALENDAR_INSERT,calendarHttpResult.getData());
                 }

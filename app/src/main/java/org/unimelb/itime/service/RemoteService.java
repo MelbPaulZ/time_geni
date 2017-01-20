@@ -1,6 +1,7 @@
 package org.unimelb.itime.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -18,9 +19,9 @@ import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.managers.MessageManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.restfulapi.CalendarApi;
@@ -31,13 +32,15 @@ import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.HttpUtil;
+import org.unimelb.itime.util.TokenUtil;
+import org.unimelb.itime.util.UserUtil;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Func1;
 
 /**
  * Created by yinchuandong on 20/06/2016.
@@ -54,6 +57,8 @@ public class RemoteService extends Service{
     private boolean isUpdateThreadRuning, isPollingThreadRunning = false;
     private MessageHandler messageHandler;
 
+    private Context context;
+    private User user;
 
     @Nullable
     @Override
@@ -69,11 +74,13 @@ public class RemoteService extends Service{
         calendarApi = HttpUtil.createService(getBaseContext(), CalendarApi.class);
         contactApi = HttpUtil.createService(getBaseContext(), ContactApi.class);
 
+        context = getApplicationContext();
+        user = UserUtil.getInstance(context).getUser();
+        Log.i(TAG, "onCreate: ");
+
         //create the polling thread
         pollingThread = new PollingThread();
-        Log.i(TAG, "onCreate: " + "service onCreate");
         pullDataFromRemote();
-
     }
 
     @Override
@@ -109,29 +116,20 @@ public class RemoteService extends Service{
                 if (!isStart){
                     return;
                 }
-                CalendarUtil.getInstance(getApplicationContext()).setCalendar(httpResult.getData());
 
-                SharedPreferences sp = AppUtil.getSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = sp.edit();
-
-                //todo: save it into db
-                Gson gson = new Gson();
-                String calendarListString = gson.toJson(httpResult.getData());
-                editor.putString(C.calendarString.CALENDAR_STRING,  calendarListString);
-                editor.apply();
-
-                //update db
-                DBManager.getInstance(getApplicationContext()).clearCalendars();
-                DBManager.getInstance(getApplicationContext()).insert(httpResult.getData());
+                TokenUtil.getInstance(context).setCalendarToken(user.getUserUid(),httpResult.getSyncToken());
+                DBManager.getInstance(getApplicationContext()).insertOrReplace(httpResult.getData());
 
                 pollingThread.start();
             }
         };
-        HttpUtil.subscribe(calendarApi.list(), subscriber);
+        String token = TokenUtil.getInstance(context).getCalendarToken(user.getUserUid());
+        HttpUtil.subscribe(calendarApi.list(token), subscriber);
     }
 
     public void fetchMessages(){
-        Observable<HttpResult<List<Message>>> observable = msgApi.get();
+        String token = TokenUtil.getInstance(context).getMessageToken(user.getUserUid());
+        Observable<HttpResult<List<Message>>> observable = msgApi.get(token);
         Subscriber<HttpResult<List<Message>>> subscriber = new Subscriber<HttpResult<List<Message>>>() {
 
             @Override
@@ -164,12 +162,30 @@ public class RemoteService extends Service{
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void fetchEvents(String calendarUid) {
-        String synToken = AppUtil.getEventSyncToken(getApplicationContext());
-        Log.i(TAG, "fetchEvents: " + synToken);
-        Observable<HttpResult<List<Event>>> observable = eventApi.list(
-                calendarUid
-                , synToken);
+    public void fetchEvents(final Calendar calendar) {
+        final int visibility = calendar.getVisibility();
+
+        String synToken = TokenUtil.getInstance(context).getEventToken(user.getUserUid(),calendar.getCalendarUid());
+        Observable<HttpResult<List<Event>>> observable = eventApi.list(calendar.getCalendarUid(), synToken)
+                .map(new Func1<HttpResult<List<Event>>, HttpResult<List<Event>>>() {
+            @Override
+            public HttpResult<List<Event>> call(HttpResult<List<Event>> listHttpResult) {
+                if(listHttpResult.getData().size() > 0){
+                    isUpdateThreadRuning = true;
+
+                    //if calendar not shown
+                    if (visibility == 0){
+                        DBManager.getInstance(getApplicationContext()).insertOrReplace(listHttpResult.getData());
+                    }else{
+                        EventManager.getInstance(getApplicationContext()).updateDB(listHttpResult.getData());
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                        isUpdateThreadRuning = false;
+                    }
+                }
+
+                return listHttpResult;
+            }
+        });
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
 
             @Override
@@ -187,25 +203,8 @@ public class RemoteService extends Service{
                 if (!isStart){
                     return ;
                 }
-                final List<Event> eventList = result.getData();
-                Log.i(TAG, "__onNext: " + result.getData().size());
                 //update syncToken
-                AppUtil.saveEventSyncToken(getApplicationContext(), result.getSyncToken());
-                // successfully get event from server
-                if(eventList.size() > 0){
-                    updateThread = new Thread() {
-                        @Override
-                        public void run() {
-                            super.run();
-                            isUpdateThreadRuning = true;
-
-                            EventManager.getInstance(getApplicationContext()).updateDB(eventList);
-                            EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-                            isUpdateThreadRuning = false;
-                        }
-                    };
-                    updateThread.start();
-                }
+                TokenUtil.getInstance(context).setEventToken(user.getUserUid(),calendar.getCalendarUid(),result.getSyncToken());
             }
         };
         HttpUtil.subscribe(observable, subscriber);
@@ -246,7 +245,9 @@ public class RemoteService extends Service{
             while (isStart) {
                 // todo: here to list events
                 for(Calendar calendar : CalendarUtil.getInstance(getApplication()).getCalendar()){
-                    fetchEvents(calendar.getCalendarUid());
+                    if (calendar.getDeleteLevel() == 0){
+                        fetchEvents(calendar);
+                    }
                 }
                 fetchMessages();
 

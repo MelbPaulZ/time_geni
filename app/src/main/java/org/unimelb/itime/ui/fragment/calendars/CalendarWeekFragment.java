@@ -82,6 +82,10 @@ public class CalendarWeekFragment extends CalendarBaseViewFragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (weekView != null){
+            weekView.setDayEventMap(eventManager.getEventsPackage());
+            weekView.reloadEvents();
+        }
         EventBus.getDefault().register(this);
     }
 

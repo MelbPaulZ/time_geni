@@ -100,6 +100,10 @@ public class CalendarMonthDayFragment extends CalendarBaseViewFragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (monthDayView != null){
+            monthDayView.setDayEventMap(eventManager.getEventsPackage());
+            monthDayView.reloadEvents();
+        }
         EventBus.getDefault().register(this);
     }
 
@@ -124,8 +128,6 @@ public class CalendarMonthDayFragment extends CalendarBaseViewFragment {
 
     }
 
-
-
     public void scrollTo(Calendar calendar){
         monthDayView.scrollTo(calendar);
     }
@@ -137,8 +139,6 @@ public class CalendarMonthDayFragment extends CalendarBaseViewFragment {
         Log.i(TAG, "scrollToWithOffset: " + c.getTime());
         CalendarManager.getInstance().setCurrentShowCalendar(c);
     }
-
-
 
     @Override
     public void backToToday() {

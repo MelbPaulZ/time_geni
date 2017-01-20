@@ -1,18 +1,18 @@
 package org.unimelb.itime.managers;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
-import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.util.rulefactory.RuleFactory;
@@ -20,12 +20,14 @@ import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventPackageInterface;
 
-import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Created by yuhaoliu on 29/08/16.
@@ -59,8 +61,23 @@ public class EventManager {
 
     private Context context;
 
-    public EventManager(Context context){
+    private EventManager(Context context){
         this.context = context;
+        this.init();
+    }
+
+    private void init(){
+        currentEvent = new Event();
+        allDayEventList = new ArrayList<>();
+        regularEventMap = new HashMap<>();
+        orgRepeatedEventList = new ArrayList<>();
+        repeatedEventMap = new HashMap<>();
+        //<UUID, List of tracer> : For tracking event on Day of repeated event map
+        uidTracerMap = new HashMap();
+        //recurrence uid (origin event uid) : special events for origin event
+        specialEvent = new HashMap<>();
+        eventsPackage = new EventsPackage();
+
         nowRepeatedStartAt = EventUtil.getBeginOfDayCalendar(nowRepeatedStartAt);
         nowRepeatedEndAt = EventUtil.getBeginOfDayCalendar(nowRepeatedEndAt);
 
@@ -75,7 +92,6 @@ public class EventManager {
     public static EventManager getInstance(Context context){
         if (instance == null){
             instance = new EventManager(context);
-            instance.loadDB();
         }
         return instance;
     }
@@ -168,12 +184,67 @@ public class EventManager {
         }
     }
 
-    public void loadDB(){
-        List<Event> list = DBManager.getInstance(context).getAllEvents();
-        for (Event ev: list) {
-            if (ev.getShowLevel() > 0){
-                addEvent(ev);
+    public void refreshEventManager(final OnRefreshEventManager onRefreshEventManager){
+        final String START = "start";
+        final String END = "end";
+        final String KEY = "key";
+
+        init();
+
+        final Handler handle = new Handler(context.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                String data = msg.getData().getString(KEY);
+
+                switch (data){
+                    case START:
+                        if (onRefreshEventManager != null) onRefreshEventManager.onTaskStart();
+                        break;
+                    case END:
+                        if (onRefreshEventManager != null) onRefreshEventManager.onTaskEnd();
+                        break;
+                    default:
+                        break;
+                }
             }
+
+        };
+
+        new Thread() {
+            @Override
+            public void run() {
+                Message msg_start = new Message();
+                Bundle bs = new Bundle();
+                bs.putString(KEY, START);
+                msg_start.setData(bs);
+
+                handle.sendMessage(msg_start);
+
+                try {
+                    loadDB();
+                } finally {
+                }
+
+                Message msg_end = new Message();
+                Bundle be = new Bundle();// 存放数据
+                be.putString(KEY, END);
+                msg_end.setData(be);
+                handle.sendMessage(msg_end);
+
+                super.run();
+            }
+        }.start();
+    }
+
+    private void loadDB(){
+
+        List<org.unimelb.itime.bean.Calendar> calendars = CalendarUtil.getInstance(context).getCalendar();
+        String userUid = UserUtil.getInstance(context).getUserUid();
+        List<Event> events = DBManager.getInstance(context).getAllAvailableEvents(calendars,userUid);
+
+        for (Event ev: events) {
+            addEvent(ev);
         }
     }
 
@@ -216,7 +287,6 @@ public class EventManager {
         }
     }
 
-    // repeat event update need to change
     public synchronized void updateEvent(Event oldEvent, Event newEvent){
         setCurrentEvent(newEvent);
 
@@ -237,6 +307,31 @@ public class EventManager {
         Event dbOldEvent = DBManager.getInstance(context).getEvent(oldEvent.getEventUid());
         dbOldEvent.delete();
         DBManager.getInstance(context).insertEvent(newEvent);
+    }
+
+    public synchronized void updateDB(List<Event> events){
+        List<? extends ITimeEventInterface> orgITimeInterfaces = getAllEvents();
+        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
+
+        for (Event event:events) {
+            Event orgOld = null;
+
+            for (Event orgEvent:orgEvents) {
+                if (orgEvent.getEventUid().equals(event.getEventUid())){
+                    orgOld = orgEvent;
+                    // find event in event manager, and then update
+                    updateEvent(orgOld,event);
+                    break;
+                }
+            }
+
+            //new event or deleted event
+            if (orgOld == null){
+                // if cannot find event, then insertOrReplace it in DB and eventmanager
+                DBManager.getInstance(context).insertEvent(event);
+                addEvent(event);
+            }
+        }
     }
 
     private void updateRegularEvent(Event oldEvent, Event newEvent){
@@ -278,31 +373,6 @@ public class EventManager {
         this.addEvent(newEvent);
     }
 
-    public synchronized void updateDB(List<Event> events){
-        List<? extends ITimeEventInterface> orgITimeInterfaces = getAllEvents();
-        List<Event> orgEvents = (List<Event>)  orgITimeInterfaces;
-
-        for (Event event:events) {
-            Event orgOld = null;
-
-            for (Event orgEvent:orgEvents) {
-                if (orgEvent.getEventUid().equals(event.getEventUid())){
-                    orgOld = orgEvent;
-                    // find event in event manager, and then update
-                    updateEvent(orgOld,event);
-                    break;
-                }
-            }
-
-            if (orgOld == null){
-                // if cannot find event, then insert it in DB and eventmanager
-                DBManager.getInstance(context).insertEvent(event);
-                addEvent(event);
-            }
-        }
-    }
-
-
     private void handleSpecialEvent(Event event){
         String rEUID = event.getRecurringEventUid();
 
@@ -339,16 +409,32 @@ public class EventManager {
         RuleModel rule = RuleFactory.getInstance().getRuleModel(event);
         event.setRule(rule);
 
-        ArrayList<Long> repeatedEventsTimes = rule.getOccurenceDates(rangeStart,rangeEnd);
         ArrayList<Event> specialList = null;
         //special event
         if (this.specialEvent.containsKey(event.getEventUid())){
             specialList = this.specialEvent.get(event.getEventUid());
         }
 
+        //handle special event
+        if (specialList != null){
+            SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+
+            for (Event spEvent:specialList) {
+                try {
+                    String dateStr =spEvent.getEventUid().split("_")[1];
+                    rule.addEXDate(sf.parse(dateStr));
+                }catch (Exception e){
+                    Log.i(TAG, "Parse Special Event Date Error");
+                }
+            }
+        }
+
+        ArrayList<Long> repeatedEventsTimes = rule.getOccurenceDates(rangeStart,rangeEnd);
+
         for (Long time: repeatedEventsTimes
                 ) {
-            Event dup_event = null;
+            Event dup_event;
+
             dup_event = event.clone();
 
             if (dup_event == null){
@@ -360,20 +446,20 @@ public class EventManager {
             dup_event.setStartTime(time);
             dup_event.setEndTime(time + duration);
 
-            //handle special event
-            if (specialList != null){
-                boolean skip = false;
-                for (Event spEvent:specialList
-                     ) {
-                    if (EventUtil.isSameDay(dup_event.getStartTime(), spEvent.getStartTime())){
-                        skip = true;
-                        break;
-                    }
-                }
-                if (skip){
-                    continue;
-                }
-            }
+//            //handle special event
+//            if (specialList != null){
+//                boolean skip = false;
+//                for (Event spEvent:specialList
+//                     ) {
+//                    if (EventUtil.isSameDay(dup_event.getStartTime(), spEvent.getStartTime())){
+//                        skip = true;
+//                        break;
+//                    }
+//                }
+//                if (skip){
+//                    continue;
+//                }
+//            }
 
             //if should show
             Long startTime = dup_event.getStartTime();
@@ -440,7 +526,7 @@ public class EventManager {
      * @param UUID
      * @return
      */
-    private Event findRepeatedByUUUID(String dayStartTime, String UUID){
+    public Event findRepeatedByUUUID(long dayStartTime, String UUID){
         if (repeatedEventMap.containsKey(dayStartTime)){
             List<ITimeEventInterface> repeats = repeatedEventMap.get(dayStartTime);
             for (ITimeEventInterface event:repeats
@@ -518,6 +604,11 @@ public class EventManager {
         }
     }
 
+    //for update EventManager
+    public interface OnRefreshEventManager {
+        void onTaskStart();
+        void onTaskEnd();
+    }
 
     /********************************** Paul Paul 改 *********************************************/
 
@@ -540,5 +631,6 @@ public class EventManager {
         }
         return null;
     }
+
 
 }

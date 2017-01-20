@@ -143,7 +143,6 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
 
     @Override
     public void viewInCalendar() {
-        Log.i("dianji", "viewInCalendar: " + "aaa");
         EventTimeSlotViewFragment timeSlotViewFragment = new EventTimeSlotViewFragment();
         timeSlotViewFragment.setFragment_task(TASK_VIEW);
         Event cpyEvent = EventUtil.copyEvent(event);
@@ -154,8 +153,7 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
         }
         if (event.getStatus().equals(Event.STATUS_CONFIRMED)){
             // if the event is confirmed, then no timeslot showing
-            Event refEvent = EventManager.getInstance(getContext()).findEventByUid(event.getEventUid());
-            timeSlotViewFragment.setData(refEvent==null?cpyEvent:refEvent);
+            timeSlotViewFragment.setData(event);
             timeSlotViewFragment.setDisplayTimeslot(false);
         }else {
             timeSlotViewFragment.setData(cpyEvent, wrapperTimeSlots);

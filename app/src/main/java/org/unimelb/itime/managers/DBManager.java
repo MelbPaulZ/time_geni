@@ -23,8 +23,11 @@ import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.FriendRequestDao;
 import org.unimelb.itime.dao.MessageDao;
 import org.unimelb.itime.dao.UserDao;
+import org.unimelb.itime.util.CalendarUtil;
+import org.unimelb.itime.util.UserUtil;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +59,7 @@ public class DBManager {
     public synchronized void insertSetting(SettingWrapper setting){
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
-        // TODO: 28/12/2016 insert SettingWrapper to db
+        // TODO: 28/12/2016 insertOrReplace SettingWrapper to db
     }
 
     public synchronized void insertEvent(Event event) {
@@ -135,7 +138,7 @@ public class DBManager {
 //        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
 //        DaoSession daoSession = daoMaster.newSession();
 //        TimeslotDao timeSlotDao = daoSession.getTimeslotDao();
-//        timeSlotDao.insert(timeSlot);
+//        timeSlotDao.insertOrReplace(timeSlot);
 //    }
 
 
@@ -364,7 +367,7 @@ public class DBManager {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Object> void insert(List<T> objs){
+    public <T extends Object> void insertOrReplace(List<T> objs){
         if (objs == null || objs.isEmpty()) {
             return;
         }
@@ -372,6 +375,25 @@ public class DBManager {
              ) {
             ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(obj.getClass())).insertOrReplace(obj);
         }
+    }
+
+    public List<Event> getAllAvailableEvents(List<org.unimelb.itime.bean.Calendar> calendars, String userUid){
+        List<Event> events = new ArrayList<>();
+        AbstractDao query = DBManager.getInstance(context).getQueryDao(Event.class);
+        for (org.unimelb.itime.bean.Calendar cal:calendars
+                ) {
+            if (cal.getDeleteLevel() == 0 && cal.getVisibility() == 1){
+                List<Event> dbEvents = query.queryBuilder().where(
+                        EventDao.Properties.UserUid.eq(userUid),
+                        EventDao.Properties.CalendarUid.eq(cal.getCalendarUid()),
+                        EventDao.Properties.ShowLevel.gt(0)
+                ).list();
+
+                events.addAll(dbEvents);
+            }
+        }
+
+        return events;
     }
 
 }

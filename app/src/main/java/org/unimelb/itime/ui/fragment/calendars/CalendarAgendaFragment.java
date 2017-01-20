@@ -119,4 +119,11 @@ public class CalendarAgendaFragment extends CalendarBaseViewFragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (monthAgendaView != null){
+            monthAgendaView.setDayEventMap(eventManager.getEventsPackage());
+        }
+    }
 }

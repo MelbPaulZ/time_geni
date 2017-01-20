@@ -6,9 +6,12 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.greendao.AbstractDao;
 import org.unimelb.itime.base.C;
 import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.dao.CalendarDao;
+import org.unimelb.itime.managers.DBManager;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -34,6 +37,7 @@ public class CalendarUtil {
     }
 
     public List<Calendar> getCalendar() {
+        calendars = DBManager.getInstance(context).getAll(Calendar.class);
         return calendars;
     }
 
@@ -42,26 +46,16 @@ public class CalendarUtil {
     }
 
     public String getCalendarName(Event event){
-        String calendarUid = event.getCalendarUid();
-        for (Calendar calendar: getCalendar()){
-            if (calendarUid.equals(calendar.getCalendarUid())){
-                return calendar.getSummary();
-            }
+        AbstractDao dao = DBManager.getInstance(context).getQueryDao(Calendar.class);
+        List<Calendar> cals = dao.queryBuilder().where(
+                CalendarDao.Properties.CalendarUid.eq(event.getCalendarUid())
+        ).list();
+
+        if (cals.size() == 0){
+            return "N/A";
         }
 
-        // find default calendar
-        Calendar defaultCalendar = null;
-        for (Calendar cal: CalendarUtil.getInstance(context).getCalendar()){
-            if (cal.getCalendarUid().equals(UserUtil.getInstance(context).getUserUid())){
-                defaultCalendar = cal;
-            }
-        }
-
-        if (defaultCalendar!=null){
-            return defaultCalendar.getSummary();
-        }else {
-            return "";
-        }
+        return cals.get(0).getSummary();
     }
 
     private void init(){
