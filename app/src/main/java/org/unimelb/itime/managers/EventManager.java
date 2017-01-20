@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
@@ -13,16 +14,20 @@ import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 import org.unimelb.itime.vendor.listener.ITimeEventPackageInterface;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Created by yuhaoliu on 29/08/16.
@@ -235,7 +240,8 @@ public class EventManager {
     private void loadDB(){
 
         List<org.unimelb.itime.bean.Calendar> calendars = CalendarUtil.getInstance(context).getCalendar();
-        List<Event> events = DBManager.getInstance(context).getAllAvailableEvents(calendars);
+        String userUid = UserUtil.getInstance(context).getUserUid();
+        List<Event> events = DBManager.getInstance(context).getAllAvailableEvents(calendars,userUid);
 
         for (Event ev: events) {
             addEvent(ev);
@@ -403,16 +409,32 @@ public class EventManager {
         RuleModel rule = RuleFactory.getInstance().getRuleModel(event);
         event.setRule(rule);
 
-        ArrayList<Long> repeatedEventsTimes = rule.getOccurenceDates(rangeStart,rangeEnd);
         ArrayList<Event> specialList = null;
         //special event
         if (this.specialEvent.containsKey(event.getEventUid())){
             specialList = this.specialEvent.get(event.getEventUid());
         }
 
+        //handle special event
+        if (specialList != null){
+            SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+
+            for (Event spEvent:specialList) {
+                try {
+                    String dateStr =spEvent.getEventUid().split("_")[1];
+                    rule.addEXDate(sf.parse(dateStr));
+                }catch (Exception e){
+                    Log.i(TAG, "Parse Special Event Date Error");
+                }
+            }
+        }
+
+        ArrayList<Long> repeatedEventsTimes = rule.getOccurenceDates(rangeStart,rangeEnd);
+
         for (Long time: repeatedEventsTimes
                 ) {
-            Event dup_event = null;
+            Event dup_event;
+
             dup_event = event.clone();
 
             if (dup_event == null){
@@ -424,20 +446,20 @@ public class EventManager {
             dup_event.setStartTime(time);
             dup_event.setEndTime(time + duration);
 
-            //handle special event
-            if (specialList != null){
-                boolean skip = false;
-                for (Event spEvent:specialList
-                     ) {
-                    if (EventUtil.isSameDay(dup_event.getStartTime(), spEvent.getStartTime())){
-                        skip = true;
-                        break;
-                    }
-                }
-                if (skip){
-                    continue;
-                }
-            }
+//            //handle special event
+//            if (specialList != null){
+//                boolean skip = false;
+//                for (Event spEvent:specialList
+//                     ) {
+//                    if (EventUtil.isSameDay(dup_event.getStartTime(), spEvent.getStartTime())){
+//                        skip = true;
+//                        break;
+//                    }
+//                }
+//                if (skip){
+//                    continue;
+//                }
+//            }
 
             //if should show
             Long startTime = dup_event.getStartTime();

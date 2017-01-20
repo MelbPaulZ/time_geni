@@ -9,6 +9,6 @@ import java.util.List;
  */
 
 public interface TimeslotBaseMvpView extends TaskBasedMvpView<List<Timeslot>>, ItimeCommonMvpView {
-
+    void getWeekStartTime(long weekStartTime);
 
 }
