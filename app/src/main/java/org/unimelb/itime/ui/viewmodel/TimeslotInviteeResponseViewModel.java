@@ -5,7 +5,7 @@ import android.databinding.Bindable;
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.bean.Timeslot;
-import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
+import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.util.EventUtil;
 
 /**
@@ -13,10 +13,10 @@ import org.unimelb.itime.util.EventUtil;
  */
 
 public class TimeslotInviteeResponseViewModel extends CommonViewModel {
-    private TimeslotCommonPresenter presenter;
+    private TimeslotPresenter presenter;
     private Timeslot responseTimeslot;
 
-    public TimeslotInviteeResponseViewModel(TimeslotCommonPresenter presenter) {
+    public TimeslotInviteeResponseViewModel(TimeslotPresenter presenter) {
         this.presenter = presenter;
     }
 

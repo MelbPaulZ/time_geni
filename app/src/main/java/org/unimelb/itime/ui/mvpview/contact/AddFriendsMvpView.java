@@ -6,12 +6,13 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 
 /**
  * Created by 37925 on 2016/12/14.
  */
 
-public interface AddFriendsMvpView extends MvpView {
+public interface AddFriendsMvpView extends ItimeCommonMvpView {
     Activity getActivity();
 
     void goToAddMobileContacts();

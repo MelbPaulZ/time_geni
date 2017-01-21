@@ -5,21 +5,14 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
-import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.managers.DBManager;
-import org.unimelb.itime.messageevent.MessageRemoveContact;
 import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.bean.ITimeUser;
-import org.unimelb.itime.ui.mvpview.contact.ContactHomePageMvpView;
-import org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel;
+import org.unimelb.itime.ui.mvpview.contact.MainContactsMvpView;
 import org.unimelb.itime.widget.SideBarListView;
 import org.unimelb.itime.util.HttpUtil;
 
@@ -34,21 +27,17 @@ import rx.functions.Func1;
  * Created by 37925 on 2016/12/13.
  */
 
-public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMvpView>{
+public class ContactHomePagePresenter extends MvpBasePresenter<MainContactsMvpView>{
     private static final String TAG = "ContactPresenter";
+    public static final int TASK_CONTACTS = 0;
     private Context context;
     private ContactApi contactApi;
     private FriendRequestApi requestApi;
-    private ContactHomePageViewModel.RequestCountListener requestCountListener;
 
     public ContactHomePagePresenter(Context context) {
         this.context = context;
         contactApi =  HttpUtil.createService(context, ContactApi.class);
         requestApi = HttpUtil.createService(context,FriendRequestApi.class);
-    }
-
-    public void setRequestCountListener(ContactHomePageViewModel.RequestCountListener listener){
-        requestCountListener = listener;
     }
 
     public void goToProfileFragment(Contact user){
@@ -66,14 +55,16 @@ public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMv
             getView().goToAddFriendsFragment();
     }
 
-    public void getFriends(final ContactHomePageViewModel.FriendsCallBack callBack){
+    public void getFriends(){
         DBManager dbManager = DBManager.getInstance(context);
         List<ITimeUser> list = generateITimeUserList(dbManager.getAllContact());
-        callBack.success(list);
-        getFriendsFromServer(callBack);
+        if(getView()!=null){
+            getView().onTaskSuccess(TASK_CONTACTS, list);
+        }
+        getFriendsFromServer();
     }
 
-    public void getFriendsFromServer(final ContactHomePageViewModel.FriendsCallBack callBack){
+    public void getFriendsFromServer(){
         final DBManager dbManager = DBManager.getInstance(context);
         Observable<HttpResult<List<Contact>>> observable = contactApi.list();
         Observable<List<Contact>> dbObservable = observable.map(new Func1<HttpResult<List<Contact>>, List<Contact>>() {
@@ -100,16 +91,21 @@ public class ContactHomePagePresenter extends MvpBasePresenter<ContactHomePageMv
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
-                e.printStackTrace();
-                callBack.failed();
+                if(getView()!=null){
+                    getView().onTaskError(TASK_CONTACTS, null);
+                }
             }
 
             @Override
             public void onNext(List<Contact> list) {
                 if(list == null){
-                    callBack.failed();
+                    if(getView()!=null){
+                        getView().onTaskError(TASK_CONTACTS, null);
+                    }
                 }else {
-                    callBack.success(generateITimeUserList(list));
+                    if(getView()!=null){
+                        getView().onTaskSuccess(TASK_CONTACTS, generateITimeUserList(list));
+                    }
                 }
             }
         };

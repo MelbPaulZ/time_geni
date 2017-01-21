@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,30 +17,24 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentMainCalendarBinding;
 import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.ui.activity.EventSearchActivity;
-import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarAgendaFragment;
+import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
 import org.unimelb.itime.ui.fragment.calendars.CalendarWeekFragment;
-import org.unimelb.itime.ui.mvpview.MainCalendarMvpView;
-import org.unimelb.itime.ui.presenter.CommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
 import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static org.unimelb.itime.R.string.calendar;
-
 /**
  * required signIn, need to extend BaseUiAuthFragment
  */
-public class MainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvpView, CommonPresenter<MainCalendarMvpView>> implements MainCalendarMvpView {
+public class MainCalendarFragment extends CalendarBaseViewFragment{
 
     private final static String TAG = "MainCalendarFragment";
     private CalendarMonthDayFragment monthDayFragment;
@@ -79,9 +72,18 @@ public class MainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvp
 
     }
 
+
     @Override
-    public CommonPresenter<MainCalendarMvpView> createPresenter() {
-        return new CommonPresenter<>(getContext());
+    public void backToToday() {
+        if (monthDayFragment!=null && monthDayFragment.isAdded()){
+            monthDayFragment.backToToday();
+        }
+        if (agendaFragment!=null && agendaFragment.isAdded()){
+            agendaFragment.backToToday();
+        }
+        if (weekFragment!=null && weekFragment.isAdded()){
+            weekFragment.backToToday();
+        }
     }
 
     @Nullable
@@ -120,13 +122,7 @@ public class MainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvp
         backToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (monthDayFragment.isAdded()){
-                    monthDayFragment.backToday();
-                }else if (weekFragment.isAdded()){
-                    weekFragment.backToday();
-                }else if (agendaFragment.isAdded()){
-                    agendaFragment.backToday();
-                }
+                backToToday();
             }
         });
     }
@@ -208,28 +204,8 @@ public class MainCalendarFragment extends BaseUiFragment<Object, MainCalendarMvp
     }
 
     @Override
-    public void startCreateEventActivity() {
-        ((MainActivity) getActivity()).startEventCreateActivity();
-    }
-
-    @Override
-    public void backToGroupEvent() {
-        //no such function in main calendar (normal)
-    }
-
-    @Override
-    public void startEditEventActivity(ITimeEventInterface iTimeEventInterface) {
-        EventUtil.startEditEventActivity(getContext(), getActivity(), iTimeEventInterface);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-    @Override
-    public void setData(Object o) {
-
-    }
 }

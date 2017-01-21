@@ -28,7 +28,10 @@
             android:id="@+id/main_tab_ll"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/divider_top"
+            android:paddingTop="1dp"
+            >
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -44,7 +47,8 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:tag="tab_icon"
-                    android:background="@drawable/ic_calendar_tab"/>
+                    android:selected="@{tabBarVM.tabSelectedArr[0]}"
+                    android:background="@drawable/selector_tab_calendar"/>
 
                 <TextView
                     android:id="@+id/main_tab_calendar_tv"
@@ -56,6 +60,8 @@
                     android:layout_centerHorizontal="true"
                      android:textSize="10sp"
                     android:tag="tab_text"
+                    android:selected="@{tabBarVM.tabSelectedArr[0]}"
+                    android:textColor="@drawable/selector_tab_text_color"
                     />
             </RelativeLayout>
             
@@ -72,12 +78,15 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:tag="tab_icon"
-                    android:background="@drawable/ic_contact"/>
+                    android:selected="@{tabBarVM.tabSelectedArr[1]}"
+                    android:background="@drawable/selector_tab_contact"/>
                 <TextView
                     android:id="@+id/main_tab_contact_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_contact"
+                    android:selected="@{tabBarVM.tabSelectedArr[1]}"
+                    android:textColor="@drawable/selector_tab_text_color"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="5dp"
                     android:layout_centerHorizontal="true"
@@ -117,16 +126,19 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:tag="tab_icon"
-                    android:background="@drawable/ic_mail"
+                    android:selected="@{tabBarVM.tabSelectedArr[2]}"
+                    android:background="@drawable/selector_tab_inbox"
                     />
                 <TextView
                     android:id="@+id/main_tab_inbox_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_inbox"
+                    android:text="@string/tab_message"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="5dp"
                     android:layout_centerHorizontal="true"
+                    android:selected="@{tabBarVM.tabSelectedArr[2]}"
+                    android:textColor="@drawable/selector_tab_text_color"
                     android:textSize="10sp"
                     />
 
@@ -176,7 +188,8 @@
                     android:tag="tab_icon"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/ic_setting"
+                    android:selected="@{tabBarVM.tabSelectedArr[3]}"
+                    android:background="@drawable/selector_tab_setting"
                     />
                 <TextView
                     android:id="@+id/main_tab_setting_tv"
@@ -188,6 +201,8 @@
                     android:layout_centerHorizontal="true"
                     android:textSize="10sp"
                     android:tag="tab_text"
+                    android:selected="@{tabBarVM.tabSelectedArr[3]}"
+                    android:textColor="@drawable/selector_tab_text_color"
                     />
             </RelativeLayout>
 

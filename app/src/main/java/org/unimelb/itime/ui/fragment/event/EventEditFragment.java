@@ -1,54 +1,80 @@
 package org.unimelb.itime.ui.fragment.event;
 
+import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
+import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.SlotResponse;
-import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.messageevent.MessageInvitees;
-import org.unimelb.itime.messageevent.MessageLocation;
+import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
-import org.unimelb.itime.ui.fragment.EventLocationPickerFragment;
+import org.unimelb.itime.ui.activity.LocationPickerActivity;
+import org.unimelb.itime.ui.activity.PhotoPickerActivity;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
+import org.unimelb.itime.ui.presenter.EventPresenter;
 import org.unimelb.itime.ui.viewmodel.EventEditViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_INSERT;
+import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_UPDATE;
+import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_SYN_IMAGE;
+import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_UPLOAD_IMAGE;
+
 /**
  * Created by Paul on 28/08/2016.
  */
-public class EventEditFragment extends EventBaseFragment<EventEditMvpView, EventCommonPresenter<EventEditMvpView>> implements EventEditMvpView {
+public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, EventPresenter<EventEditMvpView>> implements EventEditMvpView {
+    /**
+     * the key for pass bundle for arguments
+     */
+    private final static String TAG = "EditFragment";
 
-    private static final String TAG = "EdifFragment";
+    public final static int TASK_CREATE = 0;
+    public final static int TASK_EDIT = 1;
+
+    public final static int REQ_LOCATION = 1000;
+    public final static int REQ_INVITEE = 1001;
+    public final static int REQ_TIMESLOT = 1002;
+    public final static int REQ_CUSTOM_REPEAT = 1003;
+    public final static int REQ_PHOTO = 1004;
+
+    public final static int REQUEST_PHOTO_PERMISSION = 101;
+    public final static int REQUEST_LOCATION_PERMISSION = 102;
+    private List<String> permissionList;
+
     private FragmentEventEditDetailBinding binding;
-    private EventEditViewModel eventEditViewModel;
-    private Event event;
+    private Event event = null;
+    private List<WrapperTimeSlot> wrapperTimeSlotList;
     private EventManager eventManager;
+    private List<PhotoUrl> photoUrls;
+
+    private EventEditViewModel eventEditViewModel;
+    //    private EventPresenter presenter;
+    private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
+
+    private int task = TASK_CREATE;
+
 
     @Nullable
     @Override
@@ -57,195 +83,310 @@ public class EventEditFragment extends EventBaseFragment<EventEditMvpView, Event
         return binding.getRoot();
     }
 
+
     @Override
-    public EventCommonPresenter<EventEditMvpView> createPresenter() {
-        EventCommonPresenter<EventEditMvpView> presenter = new EventCommonPresenter<>(getContext());
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (getActivity() instanceof EventCreateActivity) {
+            task = TASK_CREATE;
+        } else if (getActivity() instanceof EventDetailActivity) {
+            task = TASK_EDIT;
+        }
+
+        eventManager = EventManager.getInstance(getContext());
+        eventEditViewModel = new EventEditViewModel(getPresenter());
+        eventEditViewModel.setEvent(event);
+        eventEditViewModel.setFragmentTask(task);
+        initToolbar();
+
+        binding.setEventEditVM(eventEditViewModel);
+        binding.setToolbarVM(toolbarViewModel);
+    }
+
+    private void initToolbar() {
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
+        if (task == TASK_CREATE) {
+            toolbarViewModel.setTitleStr(getString(R.string.new_event));
+            toolbarViewModel.setRightTitleStr(getString(R.string.send));
+
+        } else if (task == TASK_EDIT) {
+            toolbarViewModel.setTitleStr(getString(R.string.edit_event));
+            toolbarViewModel.setRightTitleStr(getString(R.string.done));
+        }
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+        // this is for photo choose back, then refreshEventManager page
+        if (eventEditViewModel != null) {
+            eventEditViewModel.setEvent(event);
+        }
+    }
+
+    @Override
+    public EventPresenter<EventEditMvpView> createPresenter() {
+        presenter = new EventPresenter<>(getContext());
         return presenter;
     }
 
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        eventManager = EventManager.getInstance(getContext());
-        eventEditViewModel = new EventEditViewModel(getPresenter());
-        if (event==null) {
-            event = eventManager.copyCurrentEvent(EventManager.getInstance(getContext()).getCurrentEvent());
-        }
-        eventEditViewModel.setEventEditViewEvent(event);
-        binding.setEventEditVM(eventEditViewModel);
-        binding.setToolbarVM(toolbarViewModel);
-    }
-
-
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
+    public void toEventDetailPage() {
+        // TODO: 14/1/17 clean pop backstack when reshowing edit event page
+        getFragmentManager().popBackStack();
     }
 
     @Override
-    public void onEnter() {
-        super.onEnter();
-        if ( getFrom() instanceof EventDetailFragment){
-            EditText editText = (EditText) binding.getRoot().findViewById(R.id.edit_event_title);
-            editText.setFocusable(true);
-            editText.requestFocus();
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-        }
+    public void toLocationPage() {
+        checkLocationPermission();
+    }
+
+    private void gotoLocationPicker() {
+        Intent intent = new Intent(getActivity(), LocationPickerActivity.class);
+        intent.putExtra("location", event.getLocation());
+        startActivityForResult(intent, REQ_LOCATION);
     }
 
     @Override
-    public void onLeave() {
-        super.onLeave();
-        EditText editText = (EditText) binding.getRoot().findViewById(R.id.edit_event_title);
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-    }
+    public void toTimeslotViewPage() {
+        // // TODO: 12/1/17  changet to
 
-    public void setEvent(Event event){
-        this.event = event;
-        if (eventEditViewModel!=null){
-            eventEditViewModel.setEventEditViewEvent(event);
-        }
-    }
-
-    public void setPhotos(ArrayList<String> photos){
-        eventEditViewModel.setPhotos(photos);
-    }
-
-    @Override
-    public void toHostEventDetail() {
-        EventDetailFragment detailFragment = (EventDetailFragment) getFragmentManager().findFragmentByTag(EventDetailFragment.class.getSimpleName());
-        closeFragment(this, detailFragment);
-    }
-
-    @Override
-    public void changeLocation() {
-        EventLocationPickerFragment eventLocationPickerFragment = (EventLocationPickerFragment) getFragmentManager().findFragmentByTag(EventLocationPickerFragment.class.getSimpleName());
-        eventLocationPickerFragment.setEvent(eventManager.copyCurrentEvent(event));
-        openFragment(this,eventLocationPickerFragment);
-    }
-
-    @Override
-    public void toTimeSlotView(Event event) {
-        EventDetailTimeSlotFragment timeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-        Event cpyEvent = eventManager.copyCurrentEvent(event);
-        Invitee me = EventUtil.getSelfInInvitees(getContext(), cpyEvent);
-        // if the user is host, then reset all his timeslot as create
-        if (me!=null) {
-            for (SlotResponse slotResponse : me.getSlotResponses()) {
-                slotResponse.setStatus(Timeslot.STATUS_CREATING);
-            }
-        }
-
-        timeSlotFragment.setEvent(cpyEvent);
-        openFragment(this, timeSlotFragment);
+        EventTimeSlotViewFragment timeSlotViewFragment = new EventTimeSlotViewFragment();
+        timeSlotViewFragment.setFragment_task(EventTimeSlotViewFragment.TASK_EDIT);
+        timeSlotViewFragment.setTargetFragment(this, REQ_TIMESLOT);
+        Event cpyEvent = EventUtil.copyEvent(event);
+        timeSlotViewFragment.setData(cpyEvent, null);
+        getBaseActivity().openFragment(timeSlotViewFragment);
     }
 
 
     @Override
-    public void toInviteePicker(Event event) {
-        InviteeFragment inviteeFragment = (InviteeFragment) getFragmentManager().findFragmentByTag(InviteeFragment.class.getSimpleName());
-        inviteeFragment.setEvent(eventManager.copyCurrentEvent(event));
-        openFragment(this, inviteeFragment);
+    public void toInviteePickerPage() {
+        InviteeFragment inviteeFragment = new InviteeFragment();
+        inviteeFragment.setTargetFragment(this, REQ_INVITEE);
+        Event cpyEvent = EventUtil.copyEvent(event);
+        inviteeFragment.setEvent(cpyEvent);
+        getBaseActivity().openFragment(inviteeFragment);
+
+    }
+
+
+    /**
+     * only photo related permission granted, then can go to photo picker
+     */
+    private void startPhotoPicker() {
+        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
+        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+        int maxNum = 3;
+        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, true);
+        startActivityForResult(intent, REQ_PHOTO);
+    }
+
+    @Override
+    public void toPhotoPickerPage() {
+        checkPhotoPickerPermissions();
     }
 
 
     @Override
-    public void toPhotoPicker() {
-        ((EventDetailActivity)getActivity()).checkPermission();
+    public void toCustomPage() {
+        EventCustomRepeatFragment eventCustomRepeatFragment = new EventCustomRepeatFragment();
+        eventCustomRepeatFragment.setTargetFragment(this, REQ_CUSTOM_REPEAT);
+        eventCustomRepeatFragment.setEvent(event);
+        getBaseActivity().openFragment(eventCustomRepeatFragment);
     }
-
-    @Subscribe
-    public void getLocation(MessageLocation messageLocation){
-        if (messageLocation.tag.equals(EventEditFragment.class.getSimpleName())){
-            event.setLocation(messageLocation.locationString);
-            eventEditViewModel.setEventEditViewEvent(event);
-        }
-    }
-
-    @Subscribe
-    public void getInvitees(MessageInvitees messageInvitees){
-        if (messageInvitees.tag == getString(R.string.tag_host_event_edit)){
-            event.setInvitee(messageInvitees.invitees);
-            eventEditViewModel.setEventEditViewEvent(event);
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
 
 
     @Override
     public void onTaskStart(int task) {
-        AppUtil.showProgressBar(getActivity(),"Updating","Please wait...");
+        showProgressDialog();
     }
 
     @Override
-    public void onTaskError(int task, String errorMsg, int code) {
-        Log.i(TAG, "onTaskError: " + errorMsg);
-        AppUtil.hideProgressBar();
-    }
-
-    @Override
-    public void onTaskComplete(int task, List<Event> dataList) {
-        AppUtil.hideProgressBar();
-        switch (task){
-            case EventCommonPresenter.TASK_EVENT_INSERT:
-                break;
-            case EventCommonPresenter.TASK_EVENT_UPDATE:{
+    public void onTaskSuccess(int taskId, List<Event> data) {
+        hideProgressDialog();
+        switch (taskId) {
+            case TASK_EVENT_INSERT: {
                 toCalendar();
                 break;
-            }case EventCommonPresenter.TASK_EVENT_DELETE:
+            }
+            case TASK_EVENT_UPDATE: {
                 toCalendar();
                 break;
+            }
+            default: {
+                toCalendar();
+            }
         }
     }
 
-    private void toCalendar(){
+    @Override
+    public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
+        switch (taskId) {
+            case TASK_UPLOAD_IMAGE: {
+                Toast.makeText(getContext(), "Upload Image Failed, LeanCloud ERROR", Toast.LENGTH_LONG).show();
+                break;
+            }
+            case TASK_SYN_IMAGE: {
+                Toast.makeText(getContext(), "Upload Image Failed, ITime-Server ERROR", Toast.LENGTH_LONG).show();
+                break;
+            }
+        }
+    }
+
+    private void toCalendar() {
         Intent intent = new Intent();
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
     }
 
     @Override
-    public void setLeftTitleStringToVM() {
-        toolbarViewModel.setLeftTitleStr(getString(R.string.cancel));
-    }
-
-    @Override
-    public void setTitleStringToVM() {
-        toolbarViewModel.setTitleStr(getString(R.string.edit_event));
-    }
-
-    @Override
-    public void setRightTitleStringToVM() {
-        toolbarViewModel.setRightTitleStr(getString(R.string.done));
-    }
-
-    @Override
-    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
-        return new ToolbarViewModel<>(this);
-    }
-
-    @Override
     public void onBack() {
-        eventEditViewModel.onBack();
+        if (task == TASK_CREATE) {
+            Intent intent = new Intent();
+            getActivity().setResult(Activity.RESULT_CANCELED, intent);
+            getActivity().finish();
+        } else if (task == TASK_EDIT) {
+            toEventDetailPage();
+        }
     }
+
 
     @Override
     public void onNext() {
-        eventEditViewModel.onBack();
+        if (event.hasAttendee()
+                && EventUtil.hasOtherInviteeExceptSelf(getContext(), event)
+                && event.getTimeslot().size() == 0) {
+            // has other invitees but no timeslots
+            toTimeslotViewPage();
+        } else if (task == TASK_CREATE) {
+            eventEditViewModel.toCreateEvent();
+        } else {
+            eventEditViewModel.editEvent();
+        }
+    }
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQ_LOCATION && resultCode == Activity.RESULT_OK) {
+            String location = data.getStringExtra("location");
+            this.event.setLocation(location);
+            setEvent(event);
+        }
+
+        if (requestCode == REQ_CUSTOM_REPEAT && resultCode == EventCustomRepeatFragment.RET_CUSTOM_REPEAT) {
+            Event event = (Event) data.getSerializableExtra("event");
+            setEvent(event);
+        }
+
+        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK) {
+            ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+            List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
+            event.setPhoto(photoUrls);
+            setEvent(event);
+        }
+    }
+
+
+    /**
+     * after request permission, this will be called back. If the corresponding permission is granted,
+     * can continue do further
+     * @param requestCode {REQUEST_LOCATION_PERMISSION, REQUEST_PHOTO_PERMISSION}
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION_PERMISSION: {
+                if (allPermissionGranted(grantResults)) {
+                    gotoLocationPicker();
+                } else {
+                    Toast.makeText(getContext(), "need location permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+            case REQUEST_PHOTO_PERMISSION: {
+                if (allPermissionGranted(grantResults)) {
+                    startPhotoPicker();
+                } else {
+                    Toast.makeText(getContext(), "need photo permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+
+        }
+    }
+
+    /**
+     * for photo picker, need to check storage permission and camera permission
+     */
+    private void checkPhotoPickerPermissions() {
+        permissionList = new ArrayList<>();
+        checkCameraPermission();
+        checkStoragePermission();
+        if (permissionList.size() > 0) {
+            requestPermissions(
+                    permissionList.toArray(new String[permissionList.size()]),
+                    REQUEST_PHOTO_PERMISSION
+            );
+        } else {
+            startPhotoPicker();
+        }
+    }
+
+
+    /**
+     * check camera permission, if not granted, add to check permission list
+     */
+    private void checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.CAMERA);
+        }
+    }
+
+    /**
+     * check storage permission, if not granted, then add to check permission list
+     */
+    private void checkStoragePermission() {
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+    }
+
+
+    /**
+     * if location permission granted, then go to location picker
+     */
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+        }else{
+            gotoLocationPicker();
+        }
+    }
+
+    /**
+     *
+     * @param grantResults all requirements
+     * @return true if all granted, otherwise false
+     */
+    private boolean allPermissionGranted(int[] grantResults) {
+        int size = grantResults.length;
+        for (int i = 0; i < size; i++) {
+            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel" />
+        <variable
+            name="contentVM"
+            type="org.unimelb.itime.ui.viewmodel.EventResponseViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_F6F7F8"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/event_detail_host_title_bar"
+            bind:vm="@{toolbarVM}"
+            layout="@layout/toolbar_common" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="28dp"
+            android:background="@color/color_B2B2B2"
+            />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null"
+            app:items="@{contentVM.itemList}"
+            app:itemView="@{contentVM.itemView}"
+            />
+
+    </LinearLayout>
+</layout>

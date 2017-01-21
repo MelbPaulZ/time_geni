@@ -1,14 +1,12 @@
 package org.unimelb.itime.ui.fragment;
 
 
-import android.app.SearchManager;
-import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,20 +30,27 @@ import org.unimelb.itime.databinding.FragmentMainInboxBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
+import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
-import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
+import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.widget.SearchBar;
 
 import java.util.List;
 
 /**
  * required signIn, need to extend BaseUiAuthFragment
  */
-public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView, SearchView.OnQueryTextListener{
+public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, MainInboxPresenter> implements  MainInboxMvpView {
 
     private FragmentMainInboxBinding binding;
     private MainInboxPresenter presenter;
     private MessageAdapter messageAdapter;
+
+    private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
 
     @Override
     public MainInboxPresenter createPresenter() {
@@ -67,6 +72,12 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setTitleStr(getString(R.string.inbox));
+        toolbarViewModel.setRightDrawable(getResources().getDrawable(R.drawable.icon_three_lines));
+        binding.setToolbarVM(toolbarViewModel);
+
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
@@ -113,9 +124,11 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
 //                Event event = EventManager.getInstance(getContext()).findEventByUid(message.getEventUid());
                 Event event = DBManager.getInstance(getContext()).getEvent(message.getEventUid());
                 if (event==null){
+                    presenter.fetchEvent(String.valueOf(-1),message.getEventUid());
                     Toast.makeText(getContext(), "cannot find event, please try later", Toast.LENGTH_SHORT).show();
+
                 }else {
-                    EventUtil.startEditEventActivity(getContext(), getActivity(), event);
+                    intentToEventDetail(event);
                 }
             }
         });
@@ -136,17 +149,25 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
         initSearch();
     }
 
+    private void intentToEventDetail(Event event){
+        Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+        intent.putExtra("event_uid", event.getEventUid());
+        intent.putExtra("start_time", event.getStartTime());
+        EventManager.getInstance(getContext()).setCurrentEvent(event);
+        getActivity().startActivityForResult(intent, CalendarBaseViewFragment.REQ_EVENT_DETAIL);
+    }
+
     private void initSearch(){
-        SearchManager searchManager = (SearchManager)
-                getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) binding.getRoot().findViewById(R.id.message_searchview);
-        searchView.setSearchableInfo(searchManager.
-                getSearchableInfo(getActivity().getComponentName()));
-//        searchView.setSubmitButtonEnabled(true);
-        searchView.setOnQueryTextListener(this);
-        searchView.setFocusable(true);
-        searchView.setIconified(false);
-        searchView.setIconifiedByDefault(false);
+        if(getView() == null){
+            return;
+        }
+        SearchBar searchBar = (SearchBar) getView().findViewById(R.id.message_searchview);
+        searchBar.setSearchListener(new SearchBar.OnEditListener() {
+            @Override
+            public void onEditing(View view, String text) {
+                messageAdapter.getFilter().filter(text);
+            }
+        });
 
     }
 
@@ -174,18 +195,45 @@ public class MainInboxFragment extends BaseUiFragment<Object, MainInboxMvpView, 
     }
 
     @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String constrains) {
-        messageAdapter.getFilter().filter(constrains);
-        return false;
-    }
-
-    @Override
     public void setData(Object o) {
+
+    }
+
+    @Override
+    public void onTaskStart(int taskId) {
+        AppUtil.showProgressBar(getActivity(),"","Please wait...");
+    }
+
+    @Override
+    public void onTaskSuccess(int taskId, Object data) {
+        AppUtil.hideProgressBar();
+        if (!(data instanceof List) && (((List)data).size()) == 0){
+            return;
+        }
+        List<? extends Object> list = (List) data;
+        switch (taskId){
+            case MainInboxPresenter.TASK_EVENT_GET:{
+                if (list.get(0) instanceof Event){
+                    intentToEventDetail((Event) ((List) data).get(0));
+                }
+                break;
+            }
+
+        }
+    }
+
+    @Override
+    public void onTaskError(int taskId, Object data) {
+        AppUtil.hideProgressBar();
+    }
+
+    @Override
+    public void onBack() {
+
+    }
+
+    @Override
+    public void onNext() {
 
     }
 }

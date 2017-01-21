@@ -81,12 +81,23 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.LocationPickerActivity"
+            android:label="Itime" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".base.BaseActivity"
             android:label="@string/title_activity_base" />
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:label="Itime">
+            android:label="Itime"
+            android:windowSoftInputMode="adjustResize"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -171,21 +182,22 @@
             android:name="io.fabric.ApiKey"
             android:value="5c0c3245d4ad893a84a0fb55ae1e3016baaac822" />
 
-        <activity android:name=".ui.activity.ContactTestActivityContact">
+        <activity android:name=".ui.activity.ContactTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.InviteFriendsActivityContact"/>
+        <activity android:name=".ui.activity.InviteFriendsActivity"/>
 
-        <activity android:name=".ui.activity.ContactHomePageActivityContact"/>
+        <activity android:name=".ui.activity.ContactHomePageActivity"/>
         <activity android:name=".widget.QRCode.CaptureActivityContact"/>
-        <activity android:name=".ui.activity.MyQRCodeActivityContact"/>
-        <activity android:name=".ui.activity.ProfileActivityContact"/>
-        <activity android:name=".ui.activity.AddFriendActivityContact"/>
-        <activity android:name=".ui.activity.FriendRequestActivityContact"/>
+        <activity android:name=".ui.activity.MyQRCodeActivity"/>
+        <activity android:name=".ui.activity.ProfileActivity"/>
+        <activity android:name=".ui.activity.AddFriendActivity"/>
+        <activity android:name=".ui.activity.FriendRequestActivity"/>
+        <activity android:name=".ui.activity.BlockContactsActivity"/>
         <activity android:name=".util.googleAuth.GoogleAuthActivity"/>
     </application>
 

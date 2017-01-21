@@ -27,7 +27,7 @@ public interface EventApi {
             @Query("syncToken") String syncToken);
 
     @GET("event/get/{calendarUid}/{eventUid}")
-    Observable<HttpResult<Event>> get(@Path("calendarUid") String calendarUid);
+    Observable<HttpResult<Event>> get(@Path("calendarUid") String calendarUid, @Path("eventUid") String eventUid);
 
     @POST("event/insert")
     Observable<HttpResult<List<Event>>> insert(
@@ -57,7 +57,6 @@ public interface EventApi {
             @Path("calendarUid") String calendarUid,
             @Path("eventUid") String eventUid,
             @Path("timeslotUid") String timeslotUid,
-            @Body Event event,
             @Query("syncToken") String syncToken);
 
     // after event has been confirmed, use accept event

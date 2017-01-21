@@ -2,56 +2,19 @@
 <layout xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="settingVM"
-            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
+            name="contentVM"
+            type="org.unimelb.itime.ui.viewmodel.SettingViewModel"/>
         <variable
             name="toolbarVM"
             type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_fafafa">
 
     <include layout="@layout/toolbar_common"
         bind:vm="@{toolbarVM}"/>
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--style="@style/itime_toolbar">-->
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-
-            <!--&lt;!&ndash;toolbar back arrow&ndash;&gt;-->
-            <!--<ImageView-->
-                <!--android:layout_width="11dp"-->
-                <!--android:layout_height="18dp"-->
-                <!--android:src="@drawable/icon_back_arrow"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar settings text&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/title_activity_settings"-->
-                <!--android:textColor="@color/title_6D6D6D"-->
-                <!--android:textSize="17sp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginLeft="14dp"-->
-                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING, false)}"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar title&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/notifications"-->
-                <!--android:textSize="17sp"-->
-                <!--android:textColor="@color/color_424242"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--/>-->
-        <!--</RelativeLayout>-->
-    <!--</android.support.v7.widget.Toolbar>-->
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,7 +37,7 @@
             <TextView
                 style="@style/itime_subtitle_15sp"
                 android:layout_marginRight="15dp"
-                android:text="Enable"/>
+                android:text="@{contentVM.setting.enableNotification ? `Enable`:`Disable`}"/>
         </RelativeLayout>
 
         <!-- second part, subtext 1 -->
@@ -106,7 +69,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
-                android:checked="true"
+                android:onCheckChange="@{contentVM.onShowPreviewTextChange()}"
+                android:checked="@{contentVM.setting.showPreviewText}"
                 />
         </RelativeLayout>
 
@@ -144,7 +108,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginRight="16dp"
-                    android:checked="true"
+                    android:onCheckChange="@{contentVM.onInAppAlertSoundChange()}"
+                    android:checked="@{contentVM.setting.appAlertSound}"
                     android:layout_centerVertical="true"/>
 
                 <TextView
@@ -165,6 +130,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginRight="16dp"
+                    android:onCheckChange="@{contentVM.onVibrateChange()}"
+                    android:checked="@{contentVM.setting.systemVibrate}"
                     android:layout_centerVertical="true"/>
 
             </RelativeLayout>

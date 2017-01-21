@@ -7,32 +7,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
+import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
-import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentPhotoGridviewBinding;
-import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
-import org.unimelb.itime.ui.mvpview.EventDetailGroupMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
-import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
+import org.unimelb.itime.ui.viewmodel.EventGridPhotoViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
-
-import java.util.List;
 
 /**
  * Created by Paul on 1/1/17.
  */
 
-public class EventPhotoGridFragment extends EventBaseFragment<EventDetailGroupMvpView, EventCommonPresenter<EventDetailGroupMvpView>>
-implements EventDetailGroupMvpView{
+public class EventPhotoGridFragment extends BaseUiAuthFragment implements ItimeCommonMvpView{
 
     private FragmentPhotoGridviewBinding binding;
     private Event event;
-    private EventDetailViewModel viewModel;
+    private ToolbarViewModel toolbarViewModel;
+    private EventGridPhotoViewModel viewModel;
 
     @Nullable
     @Override
@@ -42,82 +36,33 @@ implements EventDetailGroupMvpView{
     }
 
     @Override
+    public MvpBasePresenter createPresenter() {
+        return new MvpBasePresenter();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = new EventDetailViewModel(getPresenter());
+        viewModel = new EventGridPhotoViewModel();
+        viewModel.setEvent(event);
+        initToolbar();
         binding.setVm(viewModel);
         binding.setToolbarVM(toolbarViewModel);
     }
 
-    @Override
-    public EventCommonPresenter<EventDetailGroupMvpView> createPresenter() {
-        return new EventCommonPresenter<>(getContext());
-    }
-
-    public void setEvent(Event event){
-        this.event = event;
-        if (viewModel!=null) {
-            viewModel.setEvDtlHostEvent(event);
-        }
-
-    }
-
-
-    @Override
-    public void viewInCalendar() {
-
-    }
-
-    @Override
-    public void viewInviteeResponse(Timeslot timeSlot) {
-
-    }
-
-    @Override
-    public void gotoGridView() {
-
-    }
-
-
-    @Override
-    public void onTaskStart(int task) {
-
-    }
-
-    @Override
-    public void onTaskError(int task, String errorMsg, int code) {
-
-    }
-
-    @Override
-    public void onTaskComplete(int task, List<Event> dataList) {
-
-    }
-
-    @Override
-    public void setLeftTitleStringToVM() {
-        toolbarViewModel.setLeftTitleStr(getString(R.string.back));
-    }
-
-    @Override
-    public void setTitleStringToVM() {
+    private void initToolbar() {
+        toolbarViewModel = new ToolbarViewModel(this);
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.photo));
     }
 
-    @Override
-    public void setRightTitleStringToVM() {
-
-    }
-
-    @Override
-    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolbarViewModel() {
-        return new ToolbarViewModel<>(this);
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     @Override
     public void onBack() {
-        EventDetailFragment eventDetailFragment = (EventDetailFragment) getFragmentManager().findFragmentByTag(EventDetailFragment.class.getSimpleName());
-        closeFragment(this, eventDetailFragment);
+        getFragmentManager().popBackStack();
     }
 
     @Override

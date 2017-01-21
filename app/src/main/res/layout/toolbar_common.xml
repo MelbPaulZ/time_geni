@@ -4,26 +4,34 @@
         <variable
             name="vm"
             type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel" />
+        <import type="android.view.View" />
     </data>
 
         <android.support.v7.widget.Toolbar
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="44dp">
+            android:layout_height="44dp"
+            android:background="@drawable/divider_bottom">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <!--left textview-->
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:text="@{vm.leftTitleStr}"
+                    android:textColor="@{vm.leftColor}"
+                    android:clickable="@{vm.leftClickable}"
+                    android:background="@{vm.leftDrawable}"
                     android:textSize="17sp"
                     android:onClick="@{vm.onClickLeft()}"/>
 
+                <!--title-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -32,14 +40,35 @@
                     android:textColor="@color/color_424242"
                     android:textSize="17sp" />
 
+                <!--right textview-->
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:text="@{vm.rightTitleStr}"
+                    android:visibility="@{vm.rightTitleStr.length() == 0 ? View.GONE: View.VISIBLE}"
+                    android:enabled="@{vm.rightClickable}"
+                    android:textColor="@drawable/toolbar_state_right_btn"
+                    android:textStyle="@{vm.rightClickable?`bold`:`normal`}"
+                    android:onClick="@{vm.onClickRight()}"
+                    android:background="@{vm.rightDrawable}"
+                    android:textSize="17sp" />
+
+                <!--right imageview-->
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:text="@{vm.rightTitleStr}"
+                    android:visibility="@{vm.rightTitleStr.length() == 0 ? View.VISIBLE : View.GONE}"
+                    android:enabled="@{vm.rightClickable}"
                     android:onClick="@{vm.onClickRight()}"
+                    android:background="@{vm.rightDrawable}"
+
                     android:textSize="17sp" />
 
             </RelativeLayout>

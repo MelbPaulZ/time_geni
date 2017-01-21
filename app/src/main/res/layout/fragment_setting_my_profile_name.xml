@@ -2,8 +2,8 @@
 <layout xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="settingVM"
-            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel"/>
+            name="contentVM"
+            type="org.unimelb.itime.ui.viewmodel.UserProfileViewModel"/>
         <variable
             name="toolbarVM"
             type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
@@ -11,92 +11,29 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_fafafa">
+
     <include layout="@layout/toolbar_common"
         bind:vm="@{toolbarVM}"/>
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--style="@style/itime_toolbar">-->
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
 
-            <!--&lt;!&ndash;toolbar back arrow&ndash;&gt;-->
-            <!--<ImageView-->
-                <!--android:layout_width="11dp"-->
-                <!--android:layout_height="18dp"-->
-                <!--android:src="@drawable/icon_back_arrow"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar settings text&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/setting_my_profile"-->
-                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE, false)}"-->
-                <!--android:textColor="@color/title_6D6D6D"-->
-                <!--android:textSize="17sp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginLeft="14dp"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar title&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/name"-->
-                <!--android:textSize="17sp"-->
-                <!--android:textColor="@color/color_424242"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;save btn&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_marginRight="7dp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:text="@string/setting_save"-->
-                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_MY_PROFILE, true)}"-->
-                <!--android:textSize="17sp"-->
-                <!--android:textColor="@color/color_448aff"-->
-                <!--/>-->
-        <!--</RelativeLayout>-->
-    <!--</android.support.v7.widget.Toolbar>-->
-
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/color_fafafa">
-        
-        <RelativeLayout
+        android:layout_height="match_parent"
+        android:background="@drawable/background_top_bottom_divider">
+        <org.unimelb.itime.vendor.contact.helper.ClearEditText
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@drawable/background_top_bottom_divider">
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="300dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                android:background="#00000000"
-                android:text="@={settingVM.setting.user.personalAlias}"/>
-            
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="17dp"
-                android:background="@drawable/icon_close"
-                />
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/divider_top_and_bottom"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:gravity="center_vertical|left"
+            android:hint="Name"
+            android:textColorHint="@color/color_bdbdbd"
+            android:text="@={contentVM.user.personalAlias}"
+            android:onTextChange="@{contentVM.onEditTextChanged()}"
+            />
+    </RelativeLayout>
 </LinearLayout>
 </layout>

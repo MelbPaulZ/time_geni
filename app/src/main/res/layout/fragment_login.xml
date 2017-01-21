@@ -86,7 +86,7 @@
                         android:focusableInTouchMode="true"
                         android:hint="@string/login_input_email_edit_hint"
                         android:onFocusChange="@{loginVM.onInputEditFocusChange}"
-                        android:text="@={loginVM.loginUser.email}"
+                        android:text="@={loginVM.loginUser.userId}"
                         android:textColor="@color/color_3D5372"
                         android:textColorHint="@color/gray_b2b2b2"
                         android:textSize="14sp"

@@ -1,15 +1,11 @@
 package org.unimelb.itime.ui.fragment.login;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
@@ -17,8 +13,8 @@ import org.unimelb.itime.databinding.FragmentLoginBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
-import org.unimelb.itime.restfulresponse.ValidateRes;
 import org.unimelb.itime.ui.mvpview.LoginMvpView;
+import org.unimelb.itime.ui.presenter.LoginPresenter;
 import org.unimelb.itime.ui.viewmodel.LoginViewModel;
 import org.unimelb.itime.util.AuthUtil;
 
@@ -28,7 +24,6 @@ import org.unimelb.itime.util.AuthUtil;
 
 public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
     private FragmentLoginBinding binding;
-    private AlertDialog loginFailDialog;
     private final static String TAG = "LoginFragment";
 
     @Nullable
@@ -41,17 +36,16 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        loginUser.setUserId("johncdyin@gmail.com");
+        loginUser.setPassword("123456");
         binding.setLoginVM(loginViewModel);
-        loginViewModel.setLoginUser(loginUser);
 
         String synToken = AuthUtil.getJwtToken(getContext());
         // this use to create DB manager...
         DBManager.getInstance(getContext());
         EventManager.getInstance(getContext());
         if (!synToken.equals("")){
-            onLoginSucceed(LoginViewModel.TO_CALENDAR);
-        }else {
-            loadData();
+            onTaskSuccess(LoginPresenter.TASK_LOGIN, null);
         }
     }
 
@@ -60,54 +54,53 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
             @Override
             public void run() {
                 super.run();
-                EventManager.getInstance(getContext()).loadDB();
+                EventManager.getInstance(getContext()).refreshEventManager(null);
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
             }
         }.start();
     }
 
-
-    @Override
-    public void onLoginStart() {
-
-    }
-
-    @Override
-    public void onLoginSucceed(int task) {
-        if (task == LoginViewModel.TO_CALENDAR) {
-            successLogin();
-        }
-    }
-
-
-
-    @Override
-    public void onLoginFail(int task, String msg) {
-
-    }
-
-
-
     @Override
     public void onPageChange(int task) {
         switch (task){
             case LoginViewModel.TO_INDEX_FRAG:{
-                closeFragment(this, (LoginIndexFragment)getFragmentManager().findFragmentByTag(LoginIndexFragment.class.getSimpleName()));
+                getFragmentManager().popBackStack();
                 break;
             }
             case LoginViewModel.TO_RESET_PASSWORD_FRAG:{
-                openFragment(this, (LoginResetPasswordFragment)getFragmentManager().findFragmentByTag(LoginResetPasswordFragment.class.getSimpleName()));
+                ResetPasswordFragment fragment = new ResetPasswordFragment();
+                getBaseActivity().openFragment(fragment);
                 break;
             }
             case LoginViewModel.TO_INPUT_EMAIL_FRAG:{
-                openFragment(this, (LoginInputEmailFragment)getFragmentManager().findFragmentByTag(LoginInputEmailFragment.class.getSimpleName()));
+                SignupInputEmailFragment fragment = new SignupInputEmailFragment();
+                getBaseActivity().openFragment(fragment);
                 break;
             }
         }
     }
 
+
     @Override
-    public void showErrorDialog(ValidateRes res) {
-        showDialog(res.getTitle(), res.getContent());
+    public void onTaskStart(int taskId) {
+        showProgressDialog();
     }
+
+    @Override
+    public void onTaskSuccess(int taskId, Object data) {
+        hideProgressDialog();
+        if(taskId == LoginPresenter.TASK_LOGIN){
+            successLogin();
+            loadData();
+        }
+    }
+
+    @Override
+    public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
+        if(taskId == LoginPresenter.TASK_LOGIN){
+            showDialog("error", (String) data);
+        }
+    }
+
 }

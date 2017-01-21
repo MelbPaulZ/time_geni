@@ -2,11 +2,12 @@ package org.unimelb.itime.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.unimelb.itime.util.rulefactory.RuleModel;
 
 /**
  * Created by Paul on 16/09/2016.
  */
-public class PhotoUrl {
+public class PhotoUrl implements Cloneable {
 
     private String url = "";
     private String photoUid = "";
@@ -22,7 +23,6 @@ public class PhotoUrl {
     public PhotoUrl(){
 
     }
-
 
     public String getUrl() {
         return url;
@@ -56,29 +56,31 @@ public class PhotoUrl {
         this.filename = filename;
     }
 
-
-
-
-
     public String getLocalPath() {
         return this.localPath;
     }
-
-
 
     public void setLocalPath(String localPath) {
         this.localPath = localPath;
     }
 
-
-
     public int getSuccess() {
         return this.success;
     }
 
-
-
     public void setSuccess(int success) {
         this.success = success;
+    }
+
+    @Override
+    public PhotoUrl clone() {
+        PhotoUrl photoUrl = null;
+        try
+        {
+            photoUrl = (PhotoUrl) super.clone();
+        } catch (CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return photoUrl;
     }
 }

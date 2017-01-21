@@ -4,27 +4,34 @@
         <variable
             name="viewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.NewFriendViewModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
-        <org.unimelb.itime.widget.PlusTitleBar
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/title_height"
-            android:id="@+id/titleBar"
-            app:title="@{viewModel.title}"
-            app:showLeft="@{viewModel.showTitileBack}"
-            app:showRight="@{viewModel.showTitleRight}"
-            app:titleBackListener="@{viewModel.titleBackListener}"
-            app:titleRightListener="@{viewModel.titleRightListener}"/>
+        <include layout="@layout/toolbar_common"
+            app:vm="@{toolbarVM}"/>
         <include layout="@layout/line"/>
-        <org.unimelb.itime.widget.SearchBar
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:searchListener = "@{viewModel.onEditListener}"
-            android:id="@+id/searchBar"/>
+            android:paddingTop="7.5dp"
+            android:paddingBottom="7.5dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@color/grey_six">
+            <org.unimelb.itime.widget.SearchBar
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:id="@+id/searchBar"
+                app:searchHintTitle="@string/search"
+                app:searchHintText="@string/search_hint"
+                app:searchListener = "@{viewModel.onEditListener}"/>
+        </FrameLayout>
         <include layout="@layout/line"/>
             <ListView
                 android:layout_width="match_parent"

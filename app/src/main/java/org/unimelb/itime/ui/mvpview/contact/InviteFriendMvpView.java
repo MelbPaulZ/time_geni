@@ -1,26 +1,21 @@
 package org.unimelb.itime.ui.mvpview.contact;
 
-import android.app.Activity;
-
-import com.hannesdorfmann.mosby.mvp.MvpView;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
+import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 
 /**
  * Created by 37925 on 2016/12/16.
  */
 
-public interface InviteFriendMvpView  extends MvpView {
+public interface InviteFriendMvpView extends TaskBasedMvpView, ItimeCommonMvpView{
 
-    Activity getActivity();
+    void toInviteFacebookContactsPage();
 
-    void gotoInviteFacebookContacts();
+    void toInviteGmailContactsPage();
 
-    void gotoInviteGmailContacts();
+    void toInviteMobileContactsPage();
 
-    void gotoInviteMobileContacts();
+    void toScanQRCodePage();
 
-    void onDoneClicked();
-
-    void onBackClicked();
-
-    void gotoScanQRCode();
+    void setDoneable(boolean bool);
 }

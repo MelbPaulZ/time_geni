@@ -53,7 +53,7 @@
 
     <string name="tab_calendar">Calendar</string>
     <string name="tab_contact">Contact</string>
-    <string name="tab_inbox">Inbox</string>
+    <string name="tab_message">Message</string>
     <string name="tab_setting">Setting</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_login">Sign in</string>
@@ -166,6 +166,7 @@
     <string name="event_third_proposed_time">EventThirdProposedTime</string>
     <string name="event_calendar_type">EventCalendarType</string>
     <string name="event_default_end_repeate">Never</string>
+    <string name="event_title_response">Messages</string>
     <string name="next">next</string>
     <string name="back">Back</string>
     <string name="delete_event">Delete Event</string>
@@ -260,12 +261,22 @@
     <string name="agenda_view">Agenda View</string>
 
     <string name="repeat_never">Never</string>
-    <string name="repeat_everyday">Everyday</string>
+
+    <string name="repeat_everyday_cus">Every%1$sday</string>
+    <string name="repeat_everyweek_cus">Every%1$sweek ( Every %2$s )</string>
+    <string name="repeat_every_month_cus">Every%1$smonth</string>
+    <string name="repeat_every_year_cus">Every%1$syear</string>
+
+    <string name="repeat_everyday">Every Day</string>
     <string name="repeat_everyweek">Every Week ( Every %1$s )</string>
     <string name="repeat_every_twoweek">Every Two Weeks</string>
     <string name="repeat_every_month">Every Month</string>
     <string name="repeat_every_year">Every Year</string>
+
+    <string name="repeat_custom">Custom</string>
     <string name="end_repeat">End Repeat</string>
+
+    <string name="frequency">Event will occur %1$s</string>
 
     <string name="camera_done_num">DONE (%1$d/%2$d)</string>
     <string name="camera_done">DONE</string>
@@ -286,9 +297,9 @@
     <string name="change_all">Change all</string>
     <string name="only_this_event">Only this event</string>
     <string name="accepted">accepted</string>
-    <string name="going">Going</string>
-    <string name="no_reply">No Reply</string>
-    <string name="inbox">Inbox</string>
+    <string name="going">&#160;Going</string>
+    <string name="no_reply">&#160;No Reply</string>
+    <string name="inbox">Messages</string>
 
     <string name="Save_for_this_event_only">Save for this event only</string>
     <string name="Save_for_future_events">Save for future events</string>
@@ -296,6 +307,7 @@
     <string name="quit">Quit</string>
     <string name="quitted">Quitted</string>
     <string name="Messages">Messages</string>
+    <string name="create_event_from_this_event">Create Event From This Event</string>
 
     <string name="has_not_confirmed_this_event">has not confirmed this event</string>
     <string name="has_confirmed_this_event">has confirmed this events</string>
@@ -318,6 +330,7 @@
     <string name="scan_qr_code_explain">Align QR code within frame to scan</string>
     <string name="invite_friend_through_qr_code">Invite Friend Through QR Code</string>
     <string name="unblock_fail">Unblock failed, please check your network</string>
+    <string name="access_fail">Access failed, please check your network</string>
     <string name="block_fail">Block failed, please check your network</string>
     <string name="unblock_contact">Unblock contact</string>
     <string name="block_contact">Block contact</string>
@@ -335,8 +348,14 @@
     <string name="add_to_contact">Add to contact</string>
     <string name="request_sent">Request sent</string>
     <string name="Accept">Accept</string>
-
-
+    <string name="Searching">Searching</string>
+    <string name="please_wait">Please wait</string>
+    <string name="cannot_find_user">Can not find this user</string>
+    <string name="add_friends">Add Friends</string>
+    <string name="edit_alias">Edit Alias</string>
+    <string name="profile">Profile</string>
+    <string name="new_friends">New Friends</string>
+    <string name="contacts">Contacts</string>
     <!--setting-->
     <string name="blocked_users">Blocked Users</string>
     <string name="notifications">Notifications</string>
@@ -350,11 +369,14 @@
     <string name="profile_photo">Profile Photo</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
+
+    <string name="setting">Settings</string>
     <string name="setting_reset_password">Reset Password</string>
     <string name="my_qr_code">My QR Code</string>
     <string name="setting_gender">Gender</string>
-    <string name="region">Region</string>
+    <string name="location">Region</string>
     <string name="setting_my_profile">My Profile</string>
+    <string name="setting_calendar_pref">Calendar Preferences</string>
     <string name="photo_my_profile">Photo</string>
     <string name="setting_save">Save</string>
     <string name="setting_male">Male</string>
@@ -382,7 +404,14 @@
     <string name="setting_confirm">Confirm</string>
     <string name="setting_password_hint">New iTime password</string>
     <string name="setting_confirm_hint">Confirm password</string>
+    <string name="setting_import_google_calendar_success">Import Google calendar success</string>
+    <string name="setting_import_google_calendar_failed">Import Google calendar failed</string>
     <string name="setting_calendar_import_unimelb_subtext1">Enter your university account information to import its calendar into iTime</string>
     <string name="setting_itime_calendars">iTime Calendars</string>
+    <string name="add_calendar">Add Calendar</string>
+    <string name="calendar_title">Calendars</string>
+    <string name="setting_edit_calendar">Edit Calendar</string>
+    <string name="calendar_name">Calendar Name</string>
+    <string name="delete_calendar">Delete Calendar</string>
 
 </resources>

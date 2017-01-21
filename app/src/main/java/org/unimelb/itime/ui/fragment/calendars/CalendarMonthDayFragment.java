@@ -1,9 +1,7 @@
 package org.unimelb.itime.ui.fragment.calendars;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,15 +18,11 @@ import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.activity.MainActivity;
 import org.unimelb.itime.ui.mvpview.EventCommonMvpView;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
-import org.unimelb.itime.util.EventUtil;
-import org.unimelb.itime.vendor.dayview.EventController;
 import org.unimelb.itime.vendor.dayview.MonthDayView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
-import org.unimelb.itime.vendor.unitviews.DraggableEventView;
 
 import java.util.Calendar;
 import java.util.List;
@@ -37,10 +31,9 @@ import java.util.List;
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommonMvpView, EventCommonPresenter<EventCommonMvpView>> implements EventCommonMvpView {
+public class CalendarMonthDayFragment extends CalendarBaseViewFragment {
     private View root;
     private MonthDayView monthDayView;
-    private EventCommonPresenter presenter;
     private String TAG = "MonthDayFragment";
     private EventManager eventManager;
 
@@ -55,21 +48,12 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
         return root;
     }
 
-    @Override
-    public EventCommonPresenter createPresenter() {
-        this.presenter = new EventCommonPresenter(getActivity());
-        return presenter;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void setData(Object o) {
-
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -77,9 +61,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
 
     }
 
-    public void backToday(){
-        monthDayView.backToToday();
-    }
 
     private void initView(){
         monthDayView = (MonthDayView) root.findViewById(R.id.month_day_view);
@@ -97,81 +78,7 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
                 EventBus.getDefault().post(new MessageMonthYear(myCalendar.getYear(), myCalendar.getMonth()));
             }
         });
-        monthDayView.setOnBodyOuterListener(new EventController.OnEventListener(){
-            @Override
-            public boolean isDraggable(DraggableEventView dayDraggableEventView) {
-                Event event = (Event) dayDraggableEventView.getEvent();
-                if (event.getEventType().equals("solo")){
-                    return true;
-                }else{
-                    return false;
-                }
-            }
-
-            @Override
-            public void onEventCreate(DraggableEventView dayDraggableEventView) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(dayDraggableEventView.getStartTimeM());
-                ((MainActivity)getActivity()).startEventCreateActivity(calendar);
-            }
-
-            @Override
-            public void onEventClick(DraggableEventView dayDraggableEventView) {
-                Event event = EventManager.getInstance(getContext()).findEventByUid(dayDraggableEventView.getEvent().getEventUid());
-                EventUtil.startEditEventActivity(getContext(), getActivity(), event);
-            }
-
-            @Override
-            public void onEventDragStart(DraggableEventView dayDraggableEventView) {
-
-            }
-
-            @Override
-            public void onEventDragging(DraggableEventView dayDraggableEventView, int i, int i1) {
-
-            }
-
-            @Override
-            public void onEventDragDrop(final DraggableEventView dayDraggableEventView) {
-
-                final Event originEvent = (Event) dayDraggableEventView.getEvent();
-                final Event event = eventManager.copyCurrentEvent(originEvent);
-                event.setStartTime(dayDraggableEventView.getStartTimeM());
-                event.setEndTime(dayDraggableEventView.getEndTimeM());
-                if (event.getRecurrence().length>0){
-                    // this is repeat event
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("this is a repeat event")
-                            .setItems(EventUtil.getRepeatEventChangeOptions(getContext()), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    switch (which){
-//
-                                        case 0:{
-                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_THIS, originEvent.getStartTime());
-                                            break;
-                                        }case 1:{
-                                            presenter.updateEvent(event, EventCommonPresenter.UPDATE_FOLLOWING, originEvent.getStartTime());
-                                            break;
-                                        }case 2:{
-                                            break;
-                                        }
-
-                                    }
-                                }
-                            });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                }else{
-                    // this is not repeat event
-                    Event copyEvent = eventManager.copyCurrentEvent(event);
-                    copyEvent.setStartTime(dayDraggableEventView.getStartTimeM());
-                    copyEvent.setEndTime(dayDraggableEventView.getEndTimeM());
-                    presenter.updateEvent(copyEvent, EventCommonPresenter.UPDATE_ALL, originEvent.getStartTime());
-                }
-
-            }
-        });
+        monthDayView.setOnBodyOuterListener(new EventItemListener());
     }
 
 
@@ -193,6 +100,10 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
     @Override
     public void onStart() {
         super.onStart();
+        if (monthDayView != null){
+            monthDayView.setDayEventMap(eventManager.getEventsPackage());
+            monthDayView.reloadEvents();
+        }
         EventBus.getDefault().register(this);
     }
 
@@ -217,8 +128,6 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
 
     }
 
-
-
     public void scrollTo(Calendar calendar){
         monthDayView.scrollTo(calendar);
     }
@@ -231,37 +140,10 @@ public class CalendarMonthDayFragment extends BaseUiFragment<Object ,EventCommon
         CalendarManager.getInstance().setCurrentShowCalendar(c);
     }
 
-
     @Override
-    public void onTaskStart(int task) {
-        if (task == EventCommonPresenter.TASK_EVENT_UPDATE) {
-            AppUtil.showProgressBar(getActivity(), "Updating", "Please wait...");
-        }
+    public void backToToday() {
+        monthDayView.backToToday();
     }
 
-    @Override
-    public void onTaskError(int task, String errorMsg, int code) {
-        if (task == EventCommonPresenter.TASK_EVENT_UPDATE) {
-            AppUtil.hideProgressBar();
-        }
-
-    }
-
-    @Override
-    public void onTaskComplete(int task, List<Event> dataList) {
-        if (task == EventCommonPresenter.TASK_EVENT_UPDATE) {
-            AppUtil.hideProgressBar();
-        }
-    }
-
-    @Override
-    public void onBack() {
-
-    }
-
-    @Override
-    public void onNext() {
-
-    }
 }
 

@@ -5,6 +5,8 @@ import android.content.Context;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.ui.viewmodel.EventDetailViewModel;
+import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +18,7 @@ import java.util.List;
  * Created by Paul on 10/09/2016.
  */
 public class TimeSlotUtil {
+
     public static boolean isTimeSlotSelected(Context context, Event event , int position){
         Timeslot timeSlot = event.getTimeslot().get(position);
 
@@ -77,10 +80,29 @@ public class TimeSlotUtil {
         return false;
     }
 
+    public static boolean isAtLeastOneWrapperSelected(List<EventDetailViewModel.SubTimeslotViewModel> wrapperTimeSlotList){
+        for (EventDetailViewModel.SubTimeslotViewModel subTimeslotViewModel: wrapperTimeSlotList) {
+            if (subTimeslotViewModel.getWrapper().isSelected()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int numberSelectedWrapper(List<EventDetailViewModel.SubTimeslotViewModel> wrapperTimeSlotList){
+        int count = 0;
+        for (EventDetailViewModel.SubTimeslotViewModel viewModel: wrapperTimeSlotList){
+            if (viewModel.getWrapper().isSelected()){
+                count ++;
+            }
+        }
+        return count;
+    }
+
 
     public static Timeslot getTimeSlot(Event event, Timeslot timeSlot){
         for (Timeslot eventTimeSlot : event.getTimeslot()){
-            if(eventTimeSlot.getTimeslotUid() == timeSlot.getTimeslotUid()){
+            if(eventTimeSlot.getTimeslotUid().equals(timeSlot.getTimeslotUid())){
                 return eventTimeSlot;
             }
         }

@@ -6,7 +6,11 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 
 import org.unimelb.itime.base.C;
+import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.managers.SettingManager;
 import org.unimelb.itime.restfulresponse.UserLoginRes;
 
 /**
@@ -63,6 +67,14 @@ public class UserUtil {
         return getUser().getUserUid();
     }
 
+    public Setting getSetting(){
+        return userLoginRes.getSetting();
+    }
+
+    public void setSetting(Setting setting){
+        this.userLoginRes.setSetting(setting);
+    }
+
     public UserLoginRes getUserLoginRes() {
         return userLoginRes;
     }
@@ -70,5 +82,45 @@ public class UserUtil {
 
     public User getUser(){
         return userLoginRes.getUser();
+    }
+
+    public void clearAccount(){
+        UserUtil user = UserUtil.getInstance(context);
+        user.logout();
+
+        SettingManager stManager = SettingManager.getInstance(context);
+        stManager.clear();
+
+        AuthUtil.clearJwtToken(context);
+        SharedPreferences sp = AppUtil.getTokenSaver(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear().apply();
+//        editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, "");
+//        editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, "");
+//        editor.apply();
+
+//        DBManager.getInstance(context).deleteAllMessages();
+//        DBManager.getInstance(context).clearDB();
+//        EventManager.getInstance(context).clearManager();
+    }
+
+    public void clearAccountWithDB(){
+        UserUtil user = UserUtil.getInstance(context);
+        user.logout();
+
+        SettingManager stManager = SettingManager.getInstance(context);
+        stManager.clear();
+
+        AuthUtil.clearJwtToken(context);
+        SharedPreferences sp = AppUtil.getTokenSaver(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear().apply();
+        editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, "");
+        editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, "");
+        editor.apply();
+
+        DBManager.getInstance(context).deleteAllMessages();
+        DBManager.getInstance(context).clearDB();
+        EventManager.getInstance(context).clearManager();
     }
 }

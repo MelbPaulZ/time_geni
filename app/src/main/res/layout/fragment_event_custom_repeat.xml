@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="eventEditVM"
+            type="org.unimelb.itime.ui.viewmodel.EventEditViewModel" />
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
+
+        <import type="org.unimelb.itime.util.EventUtil" />
+
+
+        <import type="android.view.View" />
+
+    </data>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <include layout="@layout/toolbar_common"
+            bind:vm="@{toolbarVM}"/>
+
+        <!-- Frequency -->
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="40dp"
+           android:paddingLeft="10dp"
+           android:paddingRight="10dp"
+           android:background="@drawable/divider_bottom"
+           android:onClick="@{eventEditVM.onFrequencyClick()}">
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:gravity="center_vertical"
+               android:layout_alignParentLeft="true"
+               android:textColor="@color/text_enable"
+               android:text="Frequency"/>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:layout_alignParentRight="true"
+               android:gravity="center_vertical"
+               android:textColor="@color/text_disable"
+               android:text="@{EventUtil.getRepeatStrByFreq(eventEditVM.event.rule.frequencyEnum)}"/>
+       </RelativeLayout>
+
+        <!-- Every -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/divider_bottom"
+            android:onClick="@{eventEditVM.onEveryClick()}">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textColor="@color/text_enable"
+                android:layout_alignParentLeft="true"
+                android:text="Every"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:textColor="@color/text_disable"
+                android:text="@{String.valueOf(eventEditVM.event.rule.interval)}"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@{eventEditVM.getRepeatHint(eventEditVM.event)}"/>
+    </LinearLayout>
+</layout>

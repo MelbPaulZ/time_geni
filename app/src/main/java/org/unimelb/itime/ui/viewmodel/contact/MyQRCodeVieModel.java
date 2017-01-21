@@ -4,6 +4,8 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.graphics.Bitmap;
 import android.view.View;
+import android.widget.ImageView;
+
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
@@ -22,29 +24,21 @@ import me.fesky.library.widget.ios.ActionSheetDialog;
 
 public class MyQRCodeVieModel extends BaseObservable {
     private MyQRCodePresenter presenter;
-    private ITimeUser user;
+    private User user;
     private ActionSheetDialog popupWindow;
     private MyQRCodeMvpView mvpView;
 
     @Bindable
-    public String getTitle(){
-        return mvpView.getActivity().getResources().getString(R.string.my_qr_code_title);
-    }
-
-    @Bindable
     public boolean getShowGender(){
-        if(user.getSex().equals(User.MALE)||user.getSex().equals(User.FEMALE)){
-            return true;
-        }
-        return false;
+       return !user.getGender().equals(User.UNDEFINED);
     }
 
     @Bindable
-    public ITimeUser getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(ITimeUser user) {
+    public void setUser(User user) {
         this.user = user;
         notifyPropertyChanged(BR.user);
         notifyPropertyChanged(BR.myQRCode);
@@ -68,10 +62,7 @@ public class MyQRCodeVieModel extends BaseObservable {
         };
     }
 
-    public View.OnClickListener getTitleRightListener(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    public void rightClicked(){
                 if(popupWindow==null){
                     initPopupWindow();
                 }
@@ -79,8 +70,6 @@ public class MyQRCodeVieModel extends BaseObservable {
 //                    popupWindow.showAtLocation(mvpView.getContentView(), Gravity.CENTER, 0, 0);
                     popupWindow.show();
                 }
-            }
-        };
     }
 
     public void initPopupWindow(){

@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.converter.PropertyConverter;
 
 import java.io.Serializable;
@@ -18,15 +17,22 @@ import java.lang.reflect.Type;
  */
 
 @Entity
-public class User implements Serializable {
+public class User implements Serializable, Cloneable {
 
-    public  final static String MALE = "male";
-    public final static String FEMALE = "female";
+    public final static String MALE = "1";
+    public final static String FEMALE = "0";
+    public final static String UNDEFINED = "2";
+    public static final String SOURCE_GOOGLE = "google";
+    public static final String SOURCE_FACEBOOK = "facebook";
+    public static final String SOURCE_ITIME = "itime";
+    public static final String SOURCE_EMAIL = "email";
+    public static final String SOURCE_PHONE = "phone";
 
     @Id
     private String userUid="";
 
     private String userId="";
+    private String password="";
     private String personalAlias="";
     private String email="";
     private String phone="";
@@ -41,16 +47,18 @@ public class User implements Serializable {
     private String createdAt="";
     private String updatedAt="";
     private String gender="";
-    private String location="";
+    private String location ="";
 
-@Generated(hash = 1717660507)
-public User(String userUid, String userId, String personalAlias, String email,
-        String phone, String photo, String source, String deviceToken,
-        String deviceId, String averageRatingValue, String timezone,
-        String lastSigninTime, int signinCount, String createdAt,
-        String updatedAt, String gender, String location) {
+@Generated(hash = 223006400)
+public User(String userUid, String userId, String password,
+        String personalAlias, String email, String phone, String photo,
+        String source, String deviceToken, String deviceId,
+        String averageRatingValue, String timezone, String lastSigninTime,
+        int signinCount, String createdAt, String updatedAt, String gender,
+        String location) {
     this.userUid = userUid;
     this.userId = userId;
+    this.password = password;
     this.personalAlias = personalAlias;
     this.email = email;
     this.phone = phone;
@@ -223,6 +231,33 @@ public User(String userUid, String userId, String personalAlias, String email,
         }
     }
 
+    public String getRegion(){
+        return location;
+    }
+
+    public void setRegion(String region){
+        location = region;
+    }
+
+    @Override
+    public User clone() {
+        User user = null;
+        try
+        {
+            user = (User) super.clone();
+        } catch (CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
 
 

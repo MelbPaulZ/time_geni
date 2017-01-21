@@ -13,16 +13,13 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.ListviewInboxHostBinding;
 import org.unimelb.itime.databinding.ListviewInboxInviteeBinding;
 import org.unimelb.itime.managers.DBManager;
-import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.ui.viewmodel.InboxViewModel;
 import org.unimelb.itime.util.CircleTransform;
-import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,14 +113,14 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
                 inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
                 inboxInviteeBinding.setVm(viewModel);
                 convertView = inboxInviteeBinding.getRoot();
-                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)));
+                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)),message.getPhoto());
             } else {
                 // message.template = invitee
                 inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
                 inboxInviteeBinding.setVm(viewModel);
                 convertView = inboxInviteeBinding.getRoot();
                 //david added
-                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)));
+                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)),message.getPhoto());
             }
             convertView.setTag(viewModel);
         }else{
@@ -134,8 +131,12 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
     }
 
     //david added
-    public void setImage(ImageView view){
-        Picasso.with(presenter.getContext()).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
+    public void setImage(ImageView view, String url){
+        if (url.equals("")){
+            Picasso.with(presenter.getContext()).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
+            return;
+        }
+        Picasso.with(presenter.getContext()).load(url).placeholder(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
     }
 
     @Override

@@ -18,16 +18,13 @@ package org.unimelb.itime.widget.QRCode;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -51,18 +48,16 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageCropActivity;
 import com.lzy.imagepicker.ui.ImageGridActivity;
-import com.lzy.imagepicker.view.CropImageView;
-import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.ActivityQrCodeScanBinding;
 import org.unimelb.itime.ui.activity.ContactBaseActivity;
-import org.unimelb.itime.ui.activity.MyQRCodeActivityContact;
+import org.unimelb.itime.ui.activity.EmptyActivity;
+import org.unimelb.itime.ui.activity.MyQRCodeActivity;
 import org.unimelb.itime.ui.activity.PicassoImageLoader;
-import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
-import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
+import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.widget.QRCode.camera.CameraManager;
 import org.unimelb.itime.widget.QRCode.decode.DecodeThread;
 import org.unimelb.itime.widget.QRCode.utils.BeepManager;
@@ -70,7 +65,6 @@ import org.unimelb.itime.widget.QRCode.utils.CaptureActivityHandler;
 import org.unimelb.itime.widget.QRCode.utils.InactivityTimer;
 import org.unimelb.itime.ui.viewmodel.contact.QRCodeScanViewModel;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -85,7 +79,7 @@ import java.util.Hashtable;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class CaptureActivityContact extends ContactBaseActivity implements SurfaceHolder.Callback {
+public final class CaptureActivityContact extends EmptyActivity implements ItimeCommonMvpView, SurfaceHolder.Callback {
 
     private static final String TAG = CaptureActivityContact.class.getSimpleName();
     public static final int MY_QR_CODE = 1;
@@ -100,6 +94,7 @@ public final class CaptureActivityContact extends ContactBaseActivity implements
     private InactivityTimer inactivityTimer;
     private BeepManager beepManager;
     private ImagePicker imagePicker;
+    private ToolbarViewModel toolbarViewModel;
 
     private int preview;
     private SurfaceView scanPreview = null;
@@ -129,6 +124,15 @@ public final class CaptureActivityContact extends ContactBaseActivity implements
         binding.setViewModel(viewModel);
         binding.executePendingBindings();
         setContentView(binding.getRoot());
+
+        toolbarViewModel = new ToolbarViewModel(this);
+        toolbarViewModel.setLeftDrawable(getResources().getDrawable(R.drawable.ic_back_arrow_white));
+        toolbarViewModel.setTitleStr(getString(R.string.scan_qr_code));
+        toolbarViewModel.setRightClickable(true);
+        toolbarViewModel.setRightTitleStr(getString(R.string.photo));
+        binding.setToolbarVM(toolbarViewModel);
+
+
 
         imagePicker = ImagePicker.getInstance();
         imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
@@ -172,13 +176,18 @@ public final class CaptureActivityContact extends ContactBaseActivity implements
         scanLine.startAnimation(animation);
     }
 
+    @Override
+    protected int getFragmentContainerId(){
+        return R.id.contentFrameLayout;
+    }
+
     public void goToMyQRCode(){
         if(preview==MY_QR_CODE){
             onBackPressed();
         }else {
             Intent intent = new Intent();
-            intent.setClass(this, MyQRCodeActivityContact.class);
-            intent.putExtra(MyQRCodeActivityContact.PREVIEW, MyQRCodeActivityContact.SCAN_QR_CODE);
+            intent.setClass(this, MyQRCodeActivity.class);
+            intent.putExtra(MyQRCodeActivity.PREVIEW, MyQRCodeActivity.SCAN_QR_CODE);
             startActivity(intent);
         }
     }
@@ -470,5 +479,15 @@ public final class CaptureActivityContact extends ContactBaseActivity implements
             e.printStackTrace();
         }
         return 0;
+    }
+
+    @Override
+    public void onBack() {
+        onBackPressed();
+    }
+
+    @Override
+    public void onNext() {
+        goToPhotos();
     }
 }

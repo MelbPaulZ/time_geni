@@ -13,7 +13,7 @@ import android.widget.TextView;
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.SideBarListViewBinding;
 import org.unimelb.itime.ui.viewmodel.contact.SideBarListViewModel;
-import org.unimelb.itime.ui.viewmodel.contact.ContactItem;
+import org.unimelb.itime.ui.viewmodel.contact.ContactItemViewModel;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,7 +32,7 @@ public class SideBarListView extends FrameLayout {
     private TextView dialog;
     private SideBarListViewBinding binding;
     private Map<String, Integer> positionMap = new HashMap<>();
-    private ObservableList<ContactItem> items;
+    private ObservableList<ContactItemViewModel> items;
     private SideBarListViewModel viewModel;
 
     public SideBarListView(Context context) {
@@ -81,13 +81,13 @@ public class SideBarListView extends FrameLayout {
         updatePositionMap(items);
     }
 
-    private void updatePositionMap(ObservableList<ContactItem> list){
+    private void updatePositionMap(ObservableList<ContactItemViewModel> list){
         if(positionMap==null){
             positionMap = new HashMap<>();
         }
         positionMap.clear();
         for(int i=0;i<list.size();i++){
-            ContactItem item = list.get(i);
+            ContactItemViewModel item = list.get(i);
             String letter =item.getContact().getSortLetters();
             if(positionMap.containsKey(letter)){
                 item.setShowFirstLetter(false);
@@ -122,11 +122,11 @@ public class SideBarListView extends FrameLayout {
         this.addView(binding.getRoot());
     }
 
-    private void sort(ObservableList<ContactItem> list){
+    private void sort(ObservableList<ContactItemViewModel> list){
         if(list!=null) {
-            Collections.sort(list, new Comparator<ContactItem>() {
+            Collections.sort(list, new Comparator<ContactItemViewModel>() {
                 @Override
-                public int compare(ContactItem t1, ContactItem t2) {
+                public int compare(ContactItemViewModel t1, ContactItemViewModel t2) {
                     return t1.getContact().compareTo(t2.getContact());
                 }
             });

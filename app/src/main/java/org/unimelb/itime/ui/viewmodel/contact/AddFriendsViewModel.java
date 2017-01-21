@@ -11,6 +11,7 @@ import android.view.View;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.bean.User;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.ContactCheckUtil;
 import org.unimelb.itime.ui.presenter.contact.AddFriendsPresenter;
 import org.unimelb.itime.widget.SearchBar;
@@ -22,16 +23,14 @@ import com.android.databinding.library.baseAdapters.BR;
 public class AddFriendsViewModel extends BaseObservable {
     private AddFriendsPresenter presenter;
     private boolean showSearch = false;
+    private boolean resetSearchBar = true;
     private boolean showNotFound = false;
     private boolean showButtons = true;
-    private boolean showTitileBack = true;
-    private boolean showTitleRight = false;
     private boolean showAlert = false;
     private String searchText = "";
     private boolean showTitile = true;
+    private boolean showCancel = false;
     private SpannableStringBuilder inviteText;
-
-    private String title = "Add Friends";
 
     @Bindable
     public boolean getShowAlert() {
@@ -45,35 +44,18 @@ public class AddFriendsViewModel extends BaseObservable {
     }
 
     @Bindable
+    public boolean getResetSearchBar() {
+        return resetSearchBar;
+    }
+
+    public void setResetSearchBar(boolean resetSearchBar) {
+        this.resetSearchBar = resetSearchBar;
+        notifyPropertyChanged(BR.resetSearchBar);
+    }
+
+    @Bindable
     public boolean getIsUnimelb(){
         return ContactCheckUtil.getInsstance().isUnimelbEmail(getPureSearchText());
-    }
-
-    @Bindable
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Bindable
-    public boolean getShowTitileBack() {
-        return showTitileBack;
-    }
-
-    public void setShowTitileBack(boolean showTitileBack) {
-        this.showTitileBack = showTitileBack;
-    }
-
-    @Bindable
-    public boolean getShowTitleRight() {
-        return showTitleRight;
-    }
-
-    public void setShowTitleRight(boolean showTitleRight) {
-        this.showTitleRight = showTitleRight;
     }
 
     public AddFriendsViewModel(AddFriendsPresenter presenter){
@@ -91,6 +73,7 @@ public class AddFriendsViewModel extends BaseObservable {
         setShowButtons(false);
         setShowAlert(false);
         setShowTitile(false);
+        setShowCancel(true);
     }
 
     @Bindable
@@ -149,6 +132,8 @@ public class AddFriendsViewModel extends BaseObservable {
         setShowNotFound(false);
         setShowSearch(false);
         setShowTitile(true);
+        setShowCancel(false);
+        setResetSearchBar(true);
     }
 
     @Bindable
@@ -216,21 +201,12 @@ public class AddFriendsViewModel extends BaseObservable {
         notifyPropertyChanged(BR.searchText);
     }
 
-    public View.OnClickListener getTitleBackListener(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.onBackPress();
-            }
-        };
-    }
-
     public SearchBar.OnEditListener getOnEditListener(){
         return new SearchBar.OnEditListener() {
             @Override
             public void onEditing(View view, String text) {
                 if ("".equals(text)) {
-                    //showButtons();
+
                 } else {
                     showSearch();
                 }
@@ -274,6 +250,11 @@ public class AddFriendsViewModel extends BaseObservable {
 
     @Bindable
     public boolean getShowCancel(){
-        return true;
+        return showCancel;
+    }
+
+    public void setShowCancel(boolean showCancel) {
+        this.showCancel = showCancel;
+        notifyPropertyChanged(BR.showCancel);
     }
 }

@@ -48,7 +48,7 @@ public interface UserApi {
 
 //    Description: Get all block record of this user.
 //    "blockLevel" > 0 represents this user is blocked; "blockLevel"==0 represents this user is not blocked.
-    @GET("user/block/list")
+    @GET("user/blocklist")
     Observable<HttpResult<List<Block>>> listBlock();
 
 
@@ -62,13 +62,13 @@ public interface UserApi {
 
 
     @POST("user/signup")
-    Observable<HttpResult<User>> signup(@Body HashMap<String, Object> params);
+    Observable<HttpResult<UserLoginRes>> signup(@Body HashMap<String, Object> params);
 
     @POST("user/profile/update")
     Observable<HttpResult<User>> updateProfile(@Body User user);
 
     @POST("user/password/update")
-    Observable<HttpResult<Void>> updatePassword(@Body HashMap<String, Object> params);
+    Observable<HttpResult<User>> updatePassword(@Body HashMap<String, Object> params);
 
     @POST("user/validate")
     Observable<HttpResult<ValidateRes>> validate(@Body HashMap<String, String> params);

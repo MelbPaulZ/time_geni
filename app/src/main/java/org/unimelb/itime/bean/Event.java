@@ -1,6 +1,7 @@
 package org.unimelb.itime.bean;
 
-import android.databinding.Bindable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
@@ -11,10 +12,12 @@ import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.converter.PropertyConverter;
 import org.unimelb.itime.dao.DaoSession;
+import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.util.EventUtil;
-
+import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleInterface;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
@@ -24,14 +27,13 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import org.unimelb.itime.dao.EventDao;
 
 /**
  * Created by yinchuandong on 22/08/2016.
  */
 
 @Entity(active =  true)
-public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable, RuleInterface, ITimeComparable<Event>{
+public class Event implements ITimeEventInterface<Event>, Serializable, Cloneable, Parcelable, RuleInterface, ITimeComparable<Event>{
     public static final String STATUS_PENDING = "pending";
     public static final String STATUS_UPDATING = "updating";
     public static final String STATUS_CONFIRMED = "confirmed";
@@ -73,8 +75,16 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     private String url = "";
 
+    // to save message in event, need to convert the message to string
+    @Convert(converter = Event.MessageConverter.class, columnType = String.class)
+    private Message message;
+
     // later delete
     private transient long repeatEndsTime;
+
+    //for vendor
+    private transient boolean highlighted;
+
 
     @Convert(converter = Event.InviteeConverter.class, columnType = String.class)
     private List<Invitee> invitee = new ArrayList<>();
@@ -106,48 +116,6 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
     }
 
-    @Generated(hash = 242008653)
-    public Event(String eventUid, String eventId, String hostUserUid, String userUid,
-            String calendarUid, String iCalUID, String recurringEventUid, String recurringEventId,
-            String[] recurrence, String status, String summary, long startTime, long endTime,
-            int confirmedCount, int showLevel, String description, String location,
-            String locationNote, String locationLatitude, String locationLongitude, String eventType,
-            int reminder, int freebusyAccess, String source, int deleteLevel, int icsSequence,
-            int inviteeVisibility, String display, String url, List<Invitee> invitee,
-            List<PhotoUrl> photo, List<Timeslot> timeslot) {
-        this.eventUid = eventUid;
-        this.eventId = eventId;
-        this.hostUserUid = hostUserUid;
-        this.userUid = userUid;
-        this.calendarUid = calendarUid;
-        this.iCalUID = iCalUID;
-        this.recurringEventUid = recurringEventUid;
-        this.recurringEventId = recurringEventId;
-        this.recurrence = recurrence;
-        this.status = status;
-        this.summary = summary;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.confirmedCount = confirmedCount;
-        this.showLevel = showLevel;
-        this.description = description;
-        this.location = location;
-        this.locationNote = locationNote;
-        this.locationLatitude = locationLatitude;
-        this.locationLongitude = locationLongitude;
-        this.eventType = eventType;
-        this.reminder = reminder;
-        this.freebusyAccess = freebusyAccess;
-        this.source = source;
-        this.deleteLevel = deleteLevel;
-        this.icsSequence = icsSequence;
-        this.inviteeVisibility = inviteeVisibility;
-        this.display = display;
-        this.url = url;
-        this.invitee = invitee;
-        this.photo = photo;
-        this.timeslot = timeslot;
-    }
 
     @Override
     public void setTitle(String summary) {
@@ -166,6 +134,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         }
         return this.invitee;
     }
+
 
     public void addInvitee(Invitee invitee){
         this.invitee.add(invitee);
@@ -454,11 +423,13 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Event clone() {
         Event event = null;
         try
         {
             event = (Event) super.clone();
+            RuleModel ruleModel = new RuleModel();
+            event.setRule(ruleModel);
         } catch (CloneNotSupportedException e){
             e.printStackTrace();
         }
@@ -577,12 +548,28 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         @Override
         public String[] convertToEntityProperty(String databaseValue) {
             Type listType = new TypeToken<String[]>() {}.getType();
-            return gson.fromJson(databaseValue, listType);
+            String[] rst =  gson.fromJson(databaseValue, listType);
+
+            return rst;
         }
 
         @Override
         public String convertToDatabaseValue(String[] entityProperty) {
             return  gson.toJson(entityProperty);
+        }
+    }
+
+    public static class MessageConverter implements PropertyConverter<Message, String>{
+        Gson gson = new Gson();
+
+        @Override
+        public Message convertToEntityProperty(String databaseValue) {
+            return gson.fromJson(databaseValue, Message.class);
+        }
+
+        @Override
+        public String convertToDatabaseValue(Message entityProperty) {
+            return gson.toJson(entityProperty);
         }
     }
 
@@ -626,5 +613,160 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
         public String convertToDatabaseValue(List<Invitee> entityProperty) {
             return gson.toJson(entityProperty);
         }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.eventUid);
+        dest.writeString(this.eventId);
+        dest.writeString(this.hostUserUid);
+        dest.writeString(this.userUid);
+        dest.writeString(this.calendarUid);
+        dest.writeString(this.iCalUID);
+        dest.writeString(this.recurringEventUid);
+        dest.writeString(this.recurringEventId);
+        dest.writeStringArray(this.recurrence);
+        dest.writeString(this.status);
+        dest.writeString(this.summary);
+        dest.writeLong(this.startTime);
+        dest.writeLong(this.endTime);
+        dest.writeInt(this.confirmedCount);
+        dest.writeInt(this.showLevel);
+        dest.writeString(this.description);
+        dest.writeString(this.location);
+        dest.writeString(this.locationNote);
+        dest.writeString(this.locationLatitude);
+        dest.writeString(this.locationLongitude);
+        dest.writeString(this.eventType);
+        dest.writeInt(this.reminder);
+        dest.writeInt(this.freebusyAccess);
+        dest.writeString(this.source);
+        dest.writeInt(this.deleteLevel);
+        dest.writeInt(this.icsSequence);
+        dest.writeInt(this.inviteeVisibility);
+        dest.writeString(this.display);
+        dest.writeString(this.url);
+        dest.writeList(this.invitee);
+        dest.writeList(this.photo);
+        dest.writeList(this.timeslot);
+    }
+
+    public Message getMessage() {
+        return this.message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
+    protected Event(Parcel in) {
+        this.eventUid = in.readString();
+        this.eventId = in.readString();
+        this.hostUserUid = in.readString();
+        this.userUid = in.readString();
+        this.calendarUid = in.readString();
+        this.iCalUID = in.readString();
+        this.recurringEventUid = in.readString();
+        this.recurringEventId = in.readString();
+        this.recurrence = in.createStringArray();
+        this.status = in.readString();
+        this.summary = in.readString();
+        this.startTime = in.readLong();
+        this.endTime = in.readLong();
+        this.confirmedCount = in.readInt();
+        this.showLevel = in.readInt();
+        this.description = in.readString();
+        this.location = in.readString();
+        this.locationNote = in.readString();
+        this.locationLatitude = in.readString();
+        this.locationLongitude = in.readString();
+        this.eventType = in.readString();
+        this.reminder = in.readInt();
+        this.freebusyAccess = in.readInt();
+        this.source = in.readString();
+        this.deleteLevel = in.readInt();
+        this.icsSequence = in.readInt();
+        this.inviteeVisibility = in.readInt();
+        this.display = in.readString();
+        this.url = in.readString();
+        this.invitee = new ArrayList<Invitee>();
+        in.readList(this.invitee, Invitee.class.getClassLoader());
+        this.photo = new ArrayList<PhotoUrl>();
+        in.readList(this.photo, PhotoUrl.class.getClassLoader());
+        this.timeslot = new ArrayList<Timeslot>();
+        in.readList(this.timeslot, Timeslot.class.getClassLoader());
+    }
+
+
+    @Keep
+    public Event(String eventUid, String eventId, String hostUserUid, String userUid, String calendarUid, String iCalUID,
+            String recurringEventUid, String recurringEventId, String[] recurrence, String status, String summary, long startTime,
+            long endTime, int confirmedCount, int showLevel, String description, String location, String locationNote,
+            String locationLatitude, String locationLongitude, String eventType, int reminder, int freebusyAccess, String source,
+            int deleteLevel, int icsSequence, int inviteeVisibility, String display, String url, Message message,
+            List<Invitee> invitee, List<PhotoUrl> photo, List<Timeslot> timeslot) {
+        this.eventUid = eventUid;
+        this.eventId = eventId;
+        this.hostUserUid = hostUserUid;
+        this.userUid = userUid;
+        this.calendarUid = calendarUid;
+        this.iCalUID = iCalUID;
+        this.recurringEventUid = recurringEventUid;
+        this.recurringEventId = recurringEventId;
+        this.recurrence = recurrence;
+        this.status = status;
+        this.summary = summary;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.confirmedCount = confirmedCount;
+        this.showLevel = showLevel;
+        this.description = description;
+        this.location = location;
+        this.locationNote = locationNote;
+        this.locationLatitude = locationLatitude;
+        this.locationLongitude = locationLongitude;
+        this.eventType = eventType;
+        this.reminder = reminder;
+        this.freebusyAccess = freebusyAccess;
+        this.source = source;
+        this.deleteLevel = deleteLevel;
+        this.icsSequence = icsSequence;
+        this.inviteeVisibility = inviteeVisibility;
+        this.display = display;
+        this.url = url;
+        this.message = message;
+        this.invitee = invitee;
+        this.photo = photo;
+        this.timeslot = timeslot;
+
+        //
+        setRule(RuleFactory.getInstance().getRuleModel(this));
+    }
+
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel source) {
+            return new Event(source);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
+
+    @Override
+    public boolean isHighlighted() {
+        return highlighted;
+    }
+
+    @Override
+    public void setHighLighted(boolean highlighted) {
+        this.highlighted = highlighted;
     }
 }

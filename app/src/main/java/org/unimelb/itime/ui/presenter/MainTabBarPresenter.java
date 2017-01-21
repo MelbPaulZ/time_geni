@@ -12,10 +12,7 @@ import org.unimelb.itime.messageevent.MessageNewFriendRequest;
 import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
-import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
 import org.unimelb.itime.util.HttpUtil;
-
-import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -39,15 +36,6 @@ public class MainTabBarPresenter extends MvpBasePresenter<MainTabBarView>{
         }
         // call back ui
         tabBarView.showFragmentById(pageId);
-    }
-
-    public void refreshTabStatus(int pageId) {
-        MainTabBarView tabBarView = getView();
-        if (tabBarView == null){
-            return;
-        }
-        // call back ui
-        tabBarView.refreshTabStatus(pageId);
     }
 
     public void getRequestCount(){

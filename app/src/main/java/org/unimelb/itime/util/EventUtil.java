@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -19,9 +21,13 @@ import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
+import org.unimelb.itime.util.rulefactory.RuleFactory;
+import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.io.File;
+import java.lang.reflect.Type;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +37,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -49,6 +54,7 @@ public class EventUtil {
     public final static int REPEAT_EVERY_TWOWEEKS = 3;
     public final static int REPEAT_EVERY_MONTH = 4;
     public final static int REPEAT_EVERY_YEAR = 5;
+    public final static int REPEAT_CUSTOM = 6;
     public final static long allDayMilliseconds = 24 * 60 * 60 * 1000;
 
 
@@ -226,7 +232,8 @@ public class EventUtil {
                 String.format(context.getString(R.string.repeat_everyweek), dayOfWeek),
                 String.format(context.getString(R.string.repeat_every_twoweek)),
                 String.format(context.getString(R.string.repeat_every_month)),
-                String.format(context.getString(R.string.repeat_every_year))};
+                String.format(context.getString(R.string.repeat_every_year)),
+                String.format(context.getString(R.string.repeat_custom))};
     }
 
     public static void changeEventFrequency(Event event, int repeatIndex) {
@@ -248,6 +255,9 @@ public class EventUtil {
         } else if (repeatIndex == REPEAT_EVERY_YEAR) {
             event.getRule().setFrequencyEnum(FrequencyEnum.YEARLY);
             event.getRule().setInterval(1);
+        } else if(repeatIndex == REPEAT_CUSTOM){
+            // TODO: 15/01/2017 custom
+
         }
         event.setRecurrence(event.getRule().getRecurrence());
     }
@@ -342,44 +352,12 @@ public class EventUtil {
     }
 
     public static int getDurationInMintues(int position) {
-        switch (position) {
-            case 0:
-                return 15;
-            case 1:
-                return 30;
-            case 2:
-                return 45;
-            case 3:
-                return 60;
-            case 4:
-                return 120;
-            case 5:
-                return 180;
-            case 6:
-                return 240;
-            case 7:
-                return 300;
-            case 8:
-                return 360;
-            case 9:
-                return 720;
-            case 10:
-                return 1440;
-        }
-        return 0;
+        int[] arr = {15, 30, 45, 60, 120, 180, 240, 300, 360, 720, 1440};
+        return arr[position];
     }
-
-
-    public static void startEditEventActivity(Context context, Activity activity, ITimeEventInterface iTimeEventInterface) {
-        Intent intent = new Intent(activity, EventDetailActivity.class);
-        Event event = (Event) iTimeEventInterface;
-        event.getInvitee();
-        EventManager.getInstance(context).setCurrentEvent((Event) iTimeEventInterface);
-        activity.startActivityForResult(intent, ACTIVITY_EDIT_EVENT);
-    }
-
 
     public static String getEventConfirmStatus(Context context, Event event) {
+
         if (isUserHostOfEvent(context, event)) {
             if (event.getStatus().equals(Event.STATUS_PENDING)) {
                 return context.getString(R.string.You_have_not_confirmed_this_event);
@@ -417,25 +395,29 @@ public class EventUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
         String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
+//        if ()
+//        RuleModel ruleModel = RuleFactory.getInstance().getRuleModel(event);
+//        event.setRule(ruleModel);
         FrequencyEnum frequencyEnum = event.getRule().getFrequencyEnum();
-        if (frequencyEnum == null) {
-            return String.format(context.getString(R.string.repeat_never));
-        } else if (frequencyEnum == FrequencyEnum.DAILY) {
-            return String.format(context.getString(R.string.repeat_everyday));
-        } else if (frequencyEnum == FrequencyEnum.WEEKLY) {
-            if (event.getRule().getInterval() == 1) {
-                return String.format(context.getString(R.string.repeat_everyweek), dayOfWeek);
-            } else if (event.getRule().getInterval() == 2) {
-                return String.format(context.getString(R.string.repeat_every_twoweek));
-            }
-        } else if (frequencyEnum == FrequencyEnum.MONTHLY) {
-            return String.format(context.getString(R.string.repeat_every_month));
-        } else if (frequencyEnum == FrequencyEnum.YEARLY) {
-            return String.format(context.getString(R.string.repeat_every_year));
+        int interval = event.getRule().getInterval();
+
+        // when view event details, the fraquencyEnum will be null
+        if (frequencyEnum == null){
+            return "None";
         }
 
-        // if not all of this above (impossible)
-        return "";
+        switch (frequencyEnum){
+            case DAILY:
+                return String.format(context.getString(R.string.repeat_everyday_cus),interval==1?"":" "+interval+" ");
+            case WEEKLY:
+                return String.format(context.getString(R.string.repeat_everyweek_cus),interval==1?" ":" "+interval+" ",dayOfWeek);
+            case MONTHLY:
+                return String.format(context.getString(R.string.repeat_every_month_cus),interval==1?" ":" "+interval+" ");
+            case YEARLY:
+                return String.format(context.getString(R.string.repeat_every_year_cus),interval==1?" ":" "+interval+" ");
+            default:
+                return String.format(context.getString(R.string.repeat_never));
+        }
     }
 
 
@@ -539,6 +521,7 @@ public class EventUtil {
             self.setUserId(UserUtil.getInstance(context).getUser().getUserId());
             self.setIsHost(1); // 1 refers to host
             self.setAliasName(UserUtil.getInstance(context).getUser().getPersonalAlias());
+            self.setAliasPhoto(UserUtil.getInstance(context).getUser().getPhoto());
             event.addInvitee(self);
         }
     }
@@ -598,40 +581,6 @@ public class EventUtil {
         Calendar updateTimeCalendar = Calendar.getInstance();
         updateTimeCalendar.setTime(d);
         return updateTimeCalendar;
-    }
-
-
-    public static void addSoloEventBasicInfo(Context context, Event event) {
-        event.setCalendarUid(CalendarUtil.getInstance(context).getCalendar().get(0).getCalendarUid());
-        event.setStatus(Event.STATUS_CONFIRMED);
-        event.setEventId(""); // might need change later, ask chuandong what is eventId
-        event.setUserUid(UserUtil.getInstance(context).getUserUid());
-        event.setEventType(Event.TYPE_SOLO);
-        event.setInviteeVisibility(1);
-        event.setFreebusyAccess(1); // ask chuandong
-    }
-
-    public static void regenerateRelatedUid(Event event) {
-        // change eventUid
-        String newEventUid = AppUtil.generateUuid();
-        event.setEventUid(newEventUid);
-        // change inviteeEventUid
-        for (Invitee invitee : event.getInvitee()) {
-            invitee.setEventUid(newEventUid);
-            invitee.setInviteeUid(AppUtil.generateUuid());
-        }
-
-        // change timeslotEventUid
-        for (Timeslot timeslot : event.getTimeslot()) {
-            timeslot.setEventUid(newEventUid);
-            timeslot.setTimeslotUid(AppUtil.generateUuid());
-        }
-
-        // change PhotoEventUid
-        for (PhotoUrl photoUrl : event.getPhoto()) {
-            photoUrl.setEventUid(newEventUid);
-            photoUrl.setPhotoUid(AppUtil.generateUuid());
-        }
     }
 
     public static boolean isUserHostOfEvent(Context context, Event event) {
@@ -701,13 +650,13 @@ public class EventUtil {
         for (Timeslot slot: timeSlots
                 ) {
             List<StatusKeyStruct> structs = new ArrayList<>();
-            StatusKeyStruct acp_st = new StatusKeyStruct("accepted");
+            StatusKeyStruct acp_st = new StatusKeyStruct(Timeslot.STATUS_ACCEPTED);
             structs.add(acp_st);
 
-            StatusKeyStruct rejected_st = new StatusKeyStruct("rejected");
+            StatusKeyStruct rejected_st = new StatusKeyStruct(Timeslot.STATUS_REJECTED);
             structs.add(rejected_st);
 
-            StatusKeyStruct pending_st = new StatusKeyStruct("pending");
+            StatusKeyStruct pending_st = new StatusKeyStruct(Timeslot.STATUS_PENDING);
             structs.add(pending_st);
 
             results.put(slot.getTimeslotUid(),structs);
@@ -719,10 +668,10 @@ public class EventUtil {
 
             for (SlotResponse response: responses
                     ) {
-                List<StatusKeyStruct> stucts = results.get(response.getTimeslotUid());
-                for (int i = 0; i < stucts.size(); i++) {
-                    if (stucts.get(i).getStatus().equals(response.getStatus())){
-                        stucts.get(i).addInvitee(invitee);
+                List<StatusKeyStruct> structs = results.get(response.getTimeslotUid());
+                for (int i = 0; i < structs.size(); i++) {
+                    if (structs.get(i).getStatus().equals(response.getStatus())){
+                        structs.get(i).addInvitee(invitee);
                         break;
                     }
                 }
@@ -856,6 +805,87 @@ public class EventUtil {
                 && duration >= (allDayMilliseconds * 0.9);
 
         return isAllDay;
+    }
+
+    /**
+     *
+     * @param event
+     * @return
+     */
+    public static Event copyEvent(Event event){
+        Gson gson = new Gson();
+
+        String eventStr = gson.toJson(event);
+        Event copyEvent = gson.fromJson(eventStr, Event.class);
+
+        Type dataType = new TypeToken<RuleModel<Event>>() {}.getType();
+        RuleModel response = gson.fromJson(gson.toJson(event.getRule(), dataType), dataType);
+        copyEvent.setRule(response);
+
+        return copyEvent;
+    }
+
+
+    public static String[] getRepeatFreqStr(){
+        return new String[]{"Daily","Weekly","Monthly","Annually"};
+    }
+
+    public static String[] getRepeatIntervalStr(){
+        return new String[] {"1","2","3","4","5","6","7","8","9","10"};
+    }
+
+    public static FrequencyEnum getFreqEnum(String code){
+        final String[] values = getRepeatFreqStr();
+
+        if (code.equals(values[0])){
+            return FrequencyEnum.DAILY;
+        }else if(code.equals(values[1])){
+            return FrequencyEnum.WEEKLY;
+        }else if(code.equals(values[2])){
+            return FrequencyEnum.MONTHLY;
+        }else if(code.equals(values[3])){
+            return FrequencyEnum.YEARLY;
+        }
+
+        return null;
+    }
+
+    public static String getRepeatStrByFreq(FrequencyEnum frequencyEnum){
+        final String[] values = getRepeatFreqStr();
+
+        if (frequencyEnum == null){
+            return values[0];
+        }
+
+        switch (frequencyEnum){
+            case DAILY:
+               return values[0];
+            case WEEKLY:
+               return values[1];
+            case MONTHLY:
+               return values[2];
+            case YEARLY:
+               return values[3];
+
+        }
+
+        return "UnKnow";
+    }
+
+    public static List<Invitee> getInviteeWithStatus(List<Invitee> invitees, String... status){
+        List<Invitee> result = new ArrayList<>();
+        for (Invitee invitee:invitees
+             ) {
+            for (String state:status
+                 ) {
+                if (invitee.getStatus().equals(state)){
+                    result.add(invitee);
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
 }

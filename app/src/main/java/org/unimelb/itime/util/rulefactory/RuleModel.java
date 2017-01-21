@@ -1,13 +1,17 @@
 package org.unimelb.itime.util.rulefactory;
 
+import android.text.format.Time;
 import android.util.Log;
 
+
+import org.unimelb.itime.bean.Event;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -150,11 +154,24 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
     }
 
     public void setUntil(Date until) {
+        Calendar temp = Calendar.getInstance();
+        temp.setTimeInMillis(this.ruleInterface.getStartTime());
+
+        Calendar mCalendar = new GregorianCalendar();
+        TimeZone mTimeZone = mCalendar.getTimeZone();
+        int mGMTOffset = mTimeZone.getRawOffset();
+
+        int offset = 0;
+        if (mGMTOffset + temp.get(Calendar.HOUR_OF_DAY) > 24){
+            offset = 1;
+        }else if (mGMTOffset + temp.get(Calendar.HOUR_OF_DAY) < 0){
+            offset = -1;
+        }
+
         Calendar cal = Calendar.getInstance();
-        cal.setTime(until);
-        cal.set(Calendar.HOUR_OF_DAY,23);
-        cal.set(Calendar.MINUTE,59);
-        cal.set(Calendar.SECOND,59);
+        cal.setTimeInMillis(until.getTime());
+        cal.add(Calendar.DATE,offset);
+
         this.until = new Date(cal.getTimeInMillis());
     }
 
@@ -361,8 +378,6 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
 
             return orgDayOfMonth == compareDayOfMonth && diffMonth % interval == 0;
         }
-
-//        return false;
     }
 
     private boolean yearlyCheck(long dateM){
@@ -571,7 +586,6 @@ public class RuleModel<T extends RuleInterface> implements Serializable{
             String rRule = "RRULE:";
             rRule += ("FREQ=" + frequencyEnum.getValue())
                     + (until == null ? "":(";UNTIL=" + format.format(until)
-//                    + ";")) + (";INTERVAL=" + interval);
                     )) + (interval == 1 ? "": ";INTERVAL=" + interval);
             result.add(rRule);
         }

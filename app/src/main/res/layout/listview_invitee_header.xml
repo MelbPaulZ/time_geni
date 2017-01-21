@@ -28,6 +28,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="7dp"
             android:paddingRight="10dp"
+            android:paddingTop="5dp"
             android:animateLayoutChanges="true"
             android:paddingLeft="10dp">
         <org.unimelb.itime.widget.InviteeGroupView
@@ -48,11 +49,8 @@
             android:text="@{viewModel.countStr}"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="9dp"
-
             android:layout_marginBottom="7dp"/>
     </LinearLayout>
-
-
 
     <LinearLayout
         android:layout_height="wrap_content"
@@ -70,7 +68,7 @@
             <!--<org.unimelb.itime.widget.WideArrowButton-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content"-->
-                <!--android:onClick="@{()->viewModel.gotoInviteMobileContacts()}"-->
+                <!--android:onClick="@{()->viewModel.toInviteMobileContactsPage()}"-->
                 <!--app:image="@drawable/phone_contact_icon"-->
                 <!--app:text="Invite Mobile Contacts"/>-->
 
@@ -79,7 +77,7 @@
             <!--<org.unimelb.itime.widget.WideArrowButton-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content"-->
-                <!--android:onClick="@{()->viewModel.gotoInviteGmailContacts()}"-->
+                <!--android:onClick="@{()->viewModel.toInviteGmailContactsPage()}"-->
                 <!--app:image="@drawable/gmail_contact"-->
                 <!--app:text="Invite Gmail Contacts"/>-->
 
@@ -88,7 +86,7 @@
             <!--<org.unimelb.itime.widget.WideArrowButton-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content"-->
-                <!--android:onClick="@{()->viewModel.gotoInviteFacebookContacts()}"-->
+                <!--android:onClick="@{()->viewModel.toInviteFacebookContactsPage()}"-->
                 <!--app:image="@drawable/facebook_contact"-->
                 <!--app:text="Invite Facebook Contacts"/>-->
 

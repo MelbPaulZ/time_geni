@@ -1,20 +1,20 @@
 package org.unimelb.itime.ui.viewmodel;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.mvpview.EventCreateNewTimeSlotMvpView;
-import org.unimelb.itime.ui.presenter.TimeslotCommonPresenter;
-import org.unimelb.itime.vendor.BR;
+import com.android.databinding.library.baseAdapters.BR;
+
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
+import org.unimelb.itime.ui.mvpview.TimeslotBaseMvpView;
+import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.MyCalendar;
 import org.unimelb.itime.vendor.weekview.WeekView;
@@ -27,18 +27,22 @@ import java.util.Calendar;
 public class EventCreateTimeslotViewModel extends CommonViewModel {
 
     private String titleString;
-    private TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView> presenter;
+    private TimeslotPresenter<? extends TimeslotBaseMvpView> presenter;
     private Event event;
     private String tag;
     private ObservableField<Boolean> isChangeDuration = new ObservableField<>(false);
     private String durationTimeString = "1 hour";
-    private EventCreateNewTimeSlotMvpView mvpView;
+    private int task = -1;
+    private TimeslotBaseMvpView mvpView;
 
-    public EventCreateTimeslotViewModel(TimeslotCommonPresenter<EventCreateNewTimeSlotMvpView> presenter){
+    private long weekStartTime;
+
+    public EventCreateTimeslotViewModel(TimeslotPresenter<? extends TimeslotBaseMvpView> presenter){
         this.presenter = presenter;
+        this.mvpView = presenter.getView();
         titleString = initToolBarTitle();
         event= EventManager.getInstance(getContext()).getCurrentEvent();
-        mvpView = presenter.getView();
+        weekStartTime = Calendar.getInstance().getTimeInMillis();
     }
 
     private Context getContext(){
@@ -52,10 +56,16 @@ public class EventCreateTimeslotViewModel extends CommonViewModel {
            @Override
            public void onMonthChanged(MyCalendar myCalendar) {
                setTitleString((EventUtil.getMonth(presenter.getContext(), myCalendar.getMonth()) + " "  + myCalendar.getYear()));
-               Calendar calendar = Calendar.getInstance();
-               calendar.set(myCalendar.getYear(), myCalendar.getMonth(), myCalendar.getDay(), 0, 0,0 );
-               long weekStartTime = calendar.getTimeInMillis();
-               presenter.getTimeSlots(event, weekStartTime);
+
+               if (task == EventTimeSlotViewFragment.TASK_EDIT) {
+                   Calendar calendar = Calendar.getInstance();
+                   calendar.set(myCalendar.getYear(), myCalendar.getMonth(), myCalendar.getDay(), 0, 0, 0);
+                   weekStartTime = calendar.getTimeInMillis();
+                   if (mvpView!=null){
+                       mvpView.getWeekStartTime(weekStartTime);
+                   }
+                   presenter.getTimeSlots(event, weekStartTime);
+               }
            }
        };
     }
@@ -112,15 +122,6 @@ public class EventCreateTimeslotViewModel extends CommonViewModel {
         notifyPropertyChanged(BR.event);
     }
 
-    @Bindable
-    public Boolean getIsChangeDuration() {
-        return isChangeDuration.get();
-    }
-
-    public void setIsChangeDuration(Boolean isChangeDuration) {
-        this.isChangeDuration.set(isChangeDuration);
-        notifyPropertyChanged(BR.isChangeDuration);
-    }
 
     @Bindable
     public String getDurationTimeString() {
@@ -130,6 +131,10 @@ public class EventCreateTimeslotViewModel extends CommonViewModel {
     public void setDurationTimeString(String durationTimeString) {
         this.durationTimeString = durationTimeString;
         notifyPropertyChanged(BR.durationTimeString);
+    }
+
+    public void setTask(int task) {
+        this.task = task;
     }
 
 }

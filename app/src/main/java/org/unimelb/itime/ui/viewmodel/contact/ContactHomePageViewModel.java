@@ -13,9 +13,11 @@ import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.util.ContactFilterUtil;
 import org.unimelb.itime.ui.presenter.contact.ContactHomePagePresenter;
+import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 import org.unimelb.itime.widget.SearchBar;
 import org.unimelb.itime.widget.SideBarListView;
 
+import java.util.Collections;
 import java.util.List;
 
 import me.tatarka.bindingcollectionadapter.ItemView;
@@ -82,6 +84,18 @@ public class ContactHomePageViewModel  extends BaseObservable {
                 break;
             }
         }
+    }
+
+    public void updateContact(Contact contact){
+        for(ITimeUser user: friendList){
+            if(user.getContactUid().equals(contact.getContactUid())){
+                friendList.remove(user);
+                friendList.add(new ITimeUser(contact));
+                break;
+            }
+        }
+        //Collections.sort(friendList);
+        updateListView(friendList);
     }
 
     public void addContact(Contact contact){
@@ -185,11 +199,11 @@ public class ContactHomePageViewModel  extends BaseObservable {
     }
 
     public void loadData(){
-        presenter.getFriends(new FriendsCallBack());
+        presenter.getFriends();
     }
 
     public void initData(){
-        presenter.getFriends(new FriendsCallBack());
+        presenter.getFriends();
     }
 
     public void initSideBarListView(SideBarListView sideBarListView){
@@ -257,16 +271,6 @@ public class ContactHomePageViewModel  extends BaseObservable {
 
     private List<ITimeUser> filterData(String text){
         return ContactFilterUtil.getInstance().filterUser(friendList, text);
-    }
-
-    public class FriendsCallBack{
-        public void success(List<ITimeUser> list){
-            setFriendList(list);
-        }
-
-        public void failed(){
-
-        }
     }
 
     public class RequestCountListener{

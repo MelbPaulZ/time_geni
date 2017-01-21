@@ -6,21 +6,17 @@
         <variable
             name="viewModel"
             type="org.unimelb.itime.ui.viewmodel.contact.MyQRCodeVieModel"/>
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightOrange">
 
-    <org.unimelb.itime.widget.BlackDotTitleBar
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
-        app:title="@{viewModel.title}"
-        app:showLeft="true"
-        app:showRight="true"
-        app:titleBackListener = "@{viewModel.titleBackListener}"
-        app:titleRightListener = "@{viewModel.titleRightListener}"
-        />
+    <include layout="@layout/toolbar_black"
+        app:vm="@{toolbarVM}"/>
     <include layout="@layout/line"/>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -62,7 +58,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp">
                 <TextView
-                    android:text="@{viewModel.user.name}"
+                    android:text="@{viewModel.user.personalAlias}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/font_huge"
@@ -75,7 +71,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:visibility="@{viewModel.showGender?View.VISIBLE:View.GONE}"
-                    android:src="@{viewModel.user.sex.equals(User.MALE)?@drawable/male_icon:@drawable/female_icon}"
+                    android:src="@{viewModel.user.gender.equals(User.MALE)?@drawable/male_icon:@drawable/female_icon}"
                     android:layout_gravity="center_vertical"
                     android:layout_toRightOf="@id/nameTextView"
                     android:layout_alignBottom="@id/nameTextView"/>

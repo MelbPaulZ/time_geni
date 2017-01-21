@@ -19,8 +19,6 @@ import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.messageevent.MessageMonthYear;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.presenter.EventCommonPresenter;
-import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.agendaview.AgendaViewBody;
 import org.unimelb.itime.vendor.agendaview.MonthAgendaView;
 import org.unimelb.itime.vendor.helper.MyCalendar;
@@ -31,7 +29,7 @@ import java.util.Calendar;
 /**
  * Created by Paul on 21/09/2016.
  */
-public class CalendarAgendaFragment extends BaseUiFragment {
+public class CalendarAgendaFragment extends CalendarBaseViewFragment {
     private View root;
     private MonthAgendaView monthAgendaView;
     private EventManager eventManager;
@@ -55,7 +53,7 @@ public class CalendarAgendaFragment extends BaseUiFragment {
         monthAgendaView.setOnEventClickListener(new AgendaViewBody.OnEventClickListener() {
             @Override
             public void onEventClick(ITimeEventInterface iTimeEventInterface) {
-                EventUtil.startEditEventActivity(getContext(), getActivity(), iTimeEventInterface);
+                toEventDetailPage(iTimeEventInterface.getEventUid(), iTimeEventInterface.getStartTime());
             }
         });
         monthAgendaView.setOnHeaderListener(new MonthAgendaView.OnHeaderListener() {
@@ -86,11 +84,6 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     }
 
 
-    public void backToday(){
-        monthAgendaView.backToToday();
-    }
-
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loadData(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.RELOAD_EVENT) {
@@ -99,8 +92,8 @@ public class CalendarAgendaFragment extends BaseUiFragment {
     }
 
     @Override
-    public MvpPresenter createPresenter() {
-        return new EventCommonPresenter(getContext());
+    public void backToToday() {
+        monthAgendaView.backToToday();
     }
 
     @Override
@@ -109,10 +102,6 @@ public class CalendarAgendaFragment extends BaseUiFragment {
         EventBus.getDefault().register(this);
     }
 
-    @Override
-    public void setData(Object o) {
-
-    }
 
     @Override
     public void onDestroy() {
@@ -130,4 +119,11 @@ public class CalendarAgendaFragment extends BaseUiFragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (monthAgendaView != null){
+            monthAgendaView.setDayEventMap(eventManager.getEventsPackage());
+        }
+    }
 }
