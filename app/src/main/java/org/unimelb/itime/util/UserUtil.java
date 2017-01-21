@@ -84,6 +84,9 @@ public class UserUtil {
         return userLoginRes.getUser();
     }
 
+    /**
+     * not delete DB data
+     */
     public void clearAccount(){
         UserUtil user = UserUtil.getInstance(context);
         user.logout();
@@ -91,19 +94,18 @@ public class UserUtil {
         SettingManager stManager = SettingManager.getInstance(context);
         stManager.clear();
 
+        CalendarUtil.getInstance(context).clear();
+        EventManager.getInstance(context).clear();
+
         AuthUtil.clearJwtToken(context);
         SharedPreferences sp = AppUtil.getTokenSaver(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear().apply();
-//        editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, "");
-//        editor.putString(C.spkey.EVENT_LIST_SYNC_TOKEN, "");
-//        editor.apply();
-
-//        DBManager.getInstance(context).deleteAllMessages();
-//        DBManager.getInstance(context).clearDB();
-//        EventManager.getInstance(context).clearManager();
     }
 
+    /**
+     * delete everything
+     */
     public void clearAccountWithDB(){
         UserUtil user = UserUtil.getInstance(context);
         user.logout();
@@ -121,6 +123,6 @@ public class UserUtil {
 
         DBManager.getInstance(context).deleteAllMessages();
         DBManager.getInstance(context).clearDB();
-        EventManager.getInstance(context).clearManager();
+        EventManager.getInstance(context).clear();
     }
 }

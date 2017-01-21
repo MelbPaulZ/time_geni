@@ -38,6 +38,10 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
         this.calendarApi = HttpUtil.createService(context, CalendarApi.class);
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public List<Calendar> loadCalendarFromDB(){
         AbstractDao queryDao = DBManager.getInstance(context).getQueryDao(Calendar.class);
         return queryDao.queryBuilder().where(CalendarDao.Properties.DeleteLevel.le(0)).list();

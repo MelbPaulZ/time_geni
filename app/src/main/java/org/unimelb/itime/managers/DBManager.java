@@ -361,6 +361,7 @@ public class DBManager {
         return ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(className)).queryBuilder().list();
     }
 
+
     @SuppressWarnings("unchecked")
     public <T extends Object> void deleteAll(Class<T> className){
         ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(className)).deleteAll();
@@ -394,6 +395,18 @@ public class DBManager {
         }
 
         return events;
+    }
+
+
+    public List<Calendar> getAllCalendarsForUser(){
+        String uid = UserUtil.getInstance(context).getUserUid();
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        CalendarDao calendarDao = daoSession.getCalendarDao();
+        List<Calendar> calendarList = calendarDao.queryBuilder().where(
+                CalendarDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid())
+        ).list();
+        return calendarList;
     }
 
 }

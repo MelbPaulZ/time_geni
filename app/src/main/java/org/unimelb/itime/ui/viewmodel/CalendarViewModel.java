@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.viewmodel;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.text.Editable;
@@ -14,6 +15,7 @@ import org.unimelb.itime.ui.mvpview.SettingCalendarMvpView;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
 import org.unimelb.itime.ui.presenter.CalendarPresenter;
 import org.unimelb.itime.bean.Calendar;
+import org.unimelb.itime.util.CalendarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +40,12 @@ public class CalendarViewModel<T extends ItimeCommonMvpView & TaskBasedMvpView<C
         this.presenter = presenter;
         if(presenter.getView() instanceof SettingCalendarMvpView){
             this.mvpView = (SettingCalendarMvpView) presenter.getView();
-            setCalendars(presenter.loadCalendarFromDB());
+            setCalendars(CalendarUtil.getInstance(getContext()).getCalendar());
         }
+    }
+
+    private Context getContext(){
+        return presenter.getContext();
     }
 
     public ToolbarViewModel getToolbarViewModel() {

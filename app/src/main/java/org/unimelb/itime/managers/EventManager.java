@@ -248,7 +248,7 @@ public class EventManager {
         }
     }
 
-    public void clearManager(){
+    public void clear(){
         this.instance = null;
     }
 
