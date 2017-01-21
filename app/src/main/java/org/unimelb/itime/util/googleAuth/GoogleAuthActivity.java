@@ -34,11 +34,15 @@ import rx.Subscriber;
  */
 
 public class GoogleAuthActivity extends EmptyActivity{
+    public static final int RESULT_SUCCESS = 1211;
+    public static final int RESULT_FAILED = 1212;
+
     private static final String TAG = "Google Auth";
     private static final int RC_SIGN_IN = 9001;
     private BindApi bindApi;
     private GoogleApiClient mGoogleApiClient;
     private GoogleSignInOptions gso;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +117,9 @@ public class GoogleAuthActivity extends EmptyActivity{
                 Intent intent = new Intent();
                 intent.putExtra("authCode", result.getInfo());
                 if (result.getStatus()==1){
-                    GoogleAuthActivity.this.setResult(GoogleSignUtil.RESULT_SUCCESS,intent);
+                    GoogleAuthActivity.this.setResult(RESULT_SUCCESS,intent);
                 }else {
-                    GoogleAuthActivity.this.setResult(GoogleSignUtil.RESULT_FAILED,intent);
+                    GoogleAuthActivity.this.setResult(RESULT_FAILED,intent);
                 }}
         };
         HttpUtil.subscribe(observable, subscriber);

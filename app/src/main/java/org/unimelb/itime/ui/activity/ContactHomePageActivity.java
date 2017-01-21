@@ -17,7 +17,7 @@ public class ContactHomePageActivity extends EmptyActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            DataBindingUtil.setContentView(this, R.layout.contact_home_activity);
+            DataBindingUtil.setContentView(this, R.layout.activity_contacts);
             fragmentManager = getSupportFragmentManager();
             MainContactFragment home = new MainContactFragment();
             fragmentManager.beginTransaction().replace(getFragmentContainerId(), home).commit();

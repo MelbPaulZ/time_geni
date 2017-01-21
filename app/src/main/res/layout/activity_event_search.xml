@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:paddingTop="12dp"
-        >
+        android:background="@color/grey_six">
         <org.unimelb.itime.widget.SearchBar
             android:id="@+id/event_search_view"
             android:layout_width="match_parent"
@@ -17,7 +17,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="11dp"
             android:layout_marginBottom="8dp"
-            app:searchBackGroundColor="@color/color_a2a2a2"
             app:searchHintTitle="@string/search"
             app:searchHintText="@string/search"
             />
@@ -30,7 +29,7 @@
             android:text="@string/cancel"
             android:textSize="15sp"
             android:gravity="center"
-            android:textColor="@color/color_a2a2a2"/>
+            android:textColor="@color/red_alert"/>
 
         <TextView
             style="@style/itime_bottom_divider_line"

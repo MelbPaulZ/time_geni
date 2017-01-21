@@ -38,7 +38,7 @@
             app:searchHintTitle="@string/search"
             app:searchHintText="@string/search_hint"
             app:searchListener = "@{mainViewModel.onEditListener}"
-            app:showSearchButton="@{!mainViewModel.showSearch}"
+            app:showSearchButton="@{mainViewModel.resetSearchBar}"
             android:layout_weight="1"
             />
         <TextView
