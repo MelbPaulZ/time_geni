@@ -61,6 +61,7 @@ public class EventEditViewModel extends EventCommonViewModel {
     private int startTimeVisibility, endTimeVisibility;
     private long evStartTime, evEndTime;
 
+    // this is for databindind listview show data
     private List<Timeslot> timeslotList = new ArrayList<>();
     private ItemView itemView = ItemView.of(BR.timeslot, R.layout.timeslot_listview_show);
 
