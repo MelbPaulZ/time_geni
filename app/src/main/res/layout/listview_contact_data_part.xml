@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="org.unimelb.itime.ui.viewmodel.contact.ListItemViewModel"/>
+    </data>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+    <org.unimelb.itime.widget.RoundImageView
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        app:smallAvatar="@{viewModel.contact.photo}"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="11dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/avatarView"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/avatarView">
+        <TextView
+            android:text="@{viewModel.name}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_one"
+            android:textSize="@dimen/font_big"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginRight="5dp"
+            />
+
+        <TextView
+            android:text="@{viewModel.contactId}"
+            android:visibility="@{viewModel.showDetail?View.VISIBLE:View.GONE}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_four"
+            android:textSize="@dimen/font_small"
+            android:maxLines="1"
+            android:ellipsize="end"
+            />
+    </LinearLayout>
+    </RelativeLayout>
+</layout>

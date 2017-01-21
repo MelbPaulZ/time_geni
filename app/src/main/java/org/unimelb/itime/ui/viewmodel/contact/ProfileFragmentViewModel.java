@@ -230,6 +230,17 @@ public class ProfileFragmentViewModel extends BaseObservable {
     }
 
     @Bindable
+    public String getEmailText(){
+        return  presenter.getContext().getString(R.string.email)+": " + friend.getUserDetail().getEmail();
+    }
+
+    @Bindable
+    public String getRealNameText(){
+        return presenter.getContext().getString(R.string.name)+": " + friend.getUserDetail().getPersonalAlias();
+    }
+
+
+    @Bindable
     public boolean getShowAdd() {
         return showAdd;
     }

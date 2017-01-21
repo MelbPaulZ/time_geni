@@ -22,6 +22,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:layout_marginTop="50dp">
 
         <RelativeLayout
@@ -68,7 +70,10 @@
                 android:textSize="@dimen/font_extra_plus"
                 android:text="@{viewModel.name}"
                 android:textColor="@color/grey_one"
-                android:id="@+id/nameTextView"/>
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:id="@+id/nameTextView"
+                android:layout_weight="1"/>
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
@@ -76,7 +81,8 @@
                 android:src='@{viewModel.isMale? @drawable/male_icon : @drawable/female_icon}'
                 android:visibility="@{viewModel.showGender?View.VISIBLE:View.GONE}"
                 android:id="@+id/sexIcon"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0"/>
             <ImageView
                 android:layout_width="14dp"
                 android:layout_height="14dp"
@@ -84,7 +90,8 @@
                 android:src="@drawable/icon_edit"
                 android:visibility="@{viewModel.showEdit?View.VISIBLE:View.GONE}"
                 android:onClick="@{viewModel.editAliasListener}"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0"/>
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
@@ -129,24 +136,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center_horizontal">
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{`Name: `+ viewModel.realName}"
+            android:text="@{viewModel.realNameText}"
             android:textSize="@dimen/font_big"
             android:textColor="@color/grey_one"
             android:layout_marginBottom="10dp"
-            android:visibility="@{viewModel.showRealName?View.VISIBLE:View.GONE}"/>
+            android:visibility="@{viewModel.showRealName?View.VISIBLE:View.GONE}"
+            android:maxLines="1"
+            android:ellipsize="end"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{`Email: `+ viewModel.email}"
+            android:text="@{viewModel.emailText}"
             android:textSize="@dimen/font_big"
             android:id="@+id/emailTextView"
             android:textColor="@color/grey_one"
             android:layout_marginBottom="10dp"
-            android:visibility="@{viewModel.showEmail?View.VISIBLE:View.GONE}"/>
+            android:visibility="@{viewModel.showEmail?View.VISIBLE:View.GONE}"
+            android:maxLines="1"
+            android:ellipsize="end"/>
         </LinearLayout>
         <FrameLayout
             android:layout_width="match_parent"
