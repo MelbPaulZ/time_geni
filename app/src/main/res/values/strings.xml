@@ -356,6 +356,10 @@
     <string name="profile">Profile</string>
     <string name="new_friends">New Friends</string>
     <string name="contacts">Contacts</string>
+    <string name="block_contacts">Block Contacts</string>
+    <string name="alert">Alert</string>
+    <string name="edit_alias_alert_msg">Alias should be no longer than 20 letters</string>
+    <string name="edit_alias_alert">Too long alias</string>
     <!--setting-->
     <string name="blocked_users">Blocked Users</string>
     <string name="notifications">Notifications</string>

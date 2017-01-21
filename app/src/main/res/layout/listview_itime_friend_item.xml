@@ -31,8 +31,8 @@
                 />
         </LinearLayout>
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white">
@@ -81,8 +81,9 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="59dp"
-                android:layout_marginLeft="15dp">
+                android:layout_height="55.5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1">
             <include layout="@layout/listview_contact_data_part"
                 app:viewModel="@{viewModel}"/>
             </FrameLayout>
@@ -92,12 +93,12 @@
                 android:layout_height="20dp"
                 android:src="@{viewModel.selected?@drawable/icon_event_row_selected:@drawable/icon_event_row_unselected}"
                 android:visibility="@{viewModel.checkable?View.VISIBLE:View.GONE}"
-                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="16dp"
                 android:id="@+id/selectImageView"
-                android:layout_alignParentRight="true"
+                android:layout_weight="0"
                 />
-        </RelativeLayout>
+        </LinearLayout>
         </LinearLayout>
     </layout>
 

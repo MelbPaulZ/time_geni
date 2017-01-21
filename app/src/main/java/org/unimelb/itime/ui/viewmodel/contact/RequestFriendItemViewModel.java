@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.bean.BaseContact;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.bean.RequestFriend;
@@ -20,7 +21,7 @@ import com.android.databinding.library.baseAdapters.BR;
  * Created by 37925 on 2016/12/9.
  */
 
-public class RequestFriendItemViewModel extends BaseObservable {
+public class RequestFriendItemViewModel extends BaseObservable implements ContactItemViewModel{
 
     private RequestFriend requestFriend;
     private NewFriendFragmentPresenter presenter;
@@ -68,6 +69,21 @@ public class RequestFriendItemViewModel extends BaseObservable {
         notifyPropertyChanged(BR.displayStatus);
     }
 
+    @Override
+    public BaseContact getContact() {
+        return null;
+    }
+
+    @Override
+    public void setShowFirstLetter(boolean bool) {
+
+    }
+
+    @Override
+    public boolean getShowFirstLetter() {
+        return false;
+    }
+
     @Bindable
     public SpannableString getName(){
         return changeMatchColor(requestFriend.getName(), requestFriend.getMatchStr());
@@ -76,6 +92,21 @@ public class RequestFriendItemViewModel extends BaseObservable {
     @Bindable
     public SpannableString getContactId(){
         return changeMatchColor(requestFriend.getContactId(), requestFriend.getMatchStr());
+    }
+
+    @Override
+    public boolean getShowDetail() {
+        return false;
+    }
+
+    @Override
+    public void setShowDetail(boolean showDetail) {
+
+    }
+
+    @Override
+    public String getPhoto() {
+        return null;
     }
 
     public SpannableString changeMatchColor(String str, String matchStr){

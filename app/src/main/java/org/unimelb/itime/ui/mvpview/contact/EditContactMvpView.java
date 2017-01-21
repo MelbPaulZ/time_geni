@@ -12,4 +12,5 @@ import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 
 public interface EditContactMvpView extends ItimeCommonMvpView {
     Activity getActivity();
+    void showAlert();
 }

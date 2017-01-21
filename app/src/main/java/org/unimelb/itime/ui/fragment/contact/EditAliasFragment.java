@@ -73,11 +73,20 @@ public class EditAliasFragment extends BaseUiAuthFragment<EditContactMvpView, Ed
 
     @Override
     public void onNext() {
-        if(viewModel.getAlias().equals("")){
-            contact.setAliasName(contact.getUserDetail().getPersonalAlias());
-        }else{
-            contact.setAliasName(viewModel.getAlias());
+        if(viewModel.getAlias().length()>20){
+                if(presenter.getView()!=null)
+                    presenter.getView().showAlert();
+        }else {
+            if (viewModel.getAlias().equals("")) {
+                contact.setAliasName(contact.getUserDetail().getPersonalAlias());
+            } else {
+                contact.setAliasName(viewModel.getAlias());
+            }
+            presenter.editAlias(contact);
         }
-        presenter.editAlias(contact);
+    }
+
+    public void showAlert(){
+        showDialog(getString(R.string.edit_alias_alert), getString(R.string.edit_alias_alert_msg));
     }
 }
