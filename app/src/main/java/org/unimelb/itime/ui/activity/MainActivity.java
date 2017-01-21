@@ -69,67 +69,6 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
 
     }
 
-//    private void checkPermission() {
-//        permissionList = new ArrayList<>();
-//        checkReadExternalPermission();
-//        checkCameraPermission();
-//        checkStoragePermission();
-//
-//        if (permissionList.size()>0) {
-//            ActivityCompat.requestPermissions(
-//                    this,
-//                    permissionList.toArray(new String[permissionList.size()]),
-//                    PERMISSIONS_REQUEST);
-//        }else{
-//            init();
-//        }
-//    }
-//
-//    private void checkReadExternalPermission(){
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-//                != PackageManager.PERMISSION_GRANTED){
-//            permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-//        }
-//    }
-//
-//    private void checkCameraPermission(){
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-//                != PackageManager.PERMISSION_GRANTED){
-//            permissionList.add(Manifest.permission.CAMERA);
-//        }
-//    }
-//
-//
-//    private void checkStoragePermission(){
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED){
-//            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
-//        }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        switch (requestCode){
-//            case PERMISSIONS_REQUEST:{
-//                if (allPermissionGranted(grantResults)) {
-//                    init();
-//                }else {
-//                    checkPermission();
-//                }
-//            }
-//        }
-//    }
-//
-//    private boolean allPermissionGranted(int[] grantResults){
-//        int size = grantResults.length;
-//        for (int i = 0 ; i < size ; i++){
-//            if (grantResults[i] != PackageManager.PERMISSION_GRANTED){
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-
     @NonNull
     @Override
     public MainTabBarPresenter createPresenter() {

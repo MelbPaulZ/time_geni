@@ -2,7 +2,6 @@ package org.unimelb.itime.util;
 
 import android.content.Context;
 
-import org.antlr.v4.codegen.model.Sync;
 import org.greenrobot.greendao.AbstractDao;
 import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.SyncToken;
