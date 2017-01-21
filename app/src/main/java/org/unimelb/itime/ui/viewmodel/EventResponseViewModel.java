@@ -1,6 +1,8 @@
 package org.unimelb.itime.ui.viewmodel;
 
 import android.databinding.Bindable;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.android.databinding.library.baseAdapters.BR;
 
@@ -29,6 +31,17 @@ public class EventResponseViewModel extends CommonViewModel{
         this.itemList = new ArrayList<>();
     }
 
+    public AdapterView.OnItemClickListener onImageClicked(){
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(presenter.getView() != null){
+                    String userUid = itemList.get(i).getUserUid();
+                    presenter.getView().toViewProfilePage(userUid);
+                }
+            }
+        };
+    }
 
     @Bindable
     public List<EventResponse> getItemList() {
@@ -49,5 +62,6 @@ public class EventResponseViewModel extends CommonViewModel{
         this.itemView = itemView;
         notifyPropertyChanged(BR.itemView);
     }
+
 
 }

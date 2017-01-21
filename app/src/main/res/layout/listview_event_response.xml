@@ -6,6 +6,7 @@
         <variable
             name="item"
             type="org.unimelb.itime.bean.EventResponse" />
+        <import type="org.unimelb.itime.util.EventUtil" />
     </data>
 
     <RelativeLayout
@@ -16,14 +17,15 @@
             android:id="@+id/rep_photo"
             android:layout_width="37dp"
             android:layout_height="37dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
             app:remote_url="@{item.photo}"
             />
         <TextView
+            android:id="@+id/rep_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="15dp"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="48dp"
@@ -37,19 +39,19 @@
             android:id="@+id/rep_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/rep_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:textColor="@color/color_999999"
             android:textSize="12sp"
-            android:text="@{item.createdAt}"
-
+            android:text="@{EventUtil.parseRelativeTime(context, item.createdAt)}"
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginStart="8dp"
-            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/rep_time"
             android:background="@color/color_B2B2B2"
             />
     </RelativeLayout>
