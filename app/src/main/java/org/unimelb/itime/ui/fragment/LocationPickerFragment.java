@@ -296,10 +296,11 @@ public class LocationPickerFragment extends BaseUiAuthFragment<TaskBasedMvpView<
             String clickStr = (String) strAdapter.getItem(i);
             if (i == 0) {
                 getCurrentLocation();
-                while (!isCurrentLocationGet){
-
-                }
-                isCurrentLocationGet = false;
+                // TODO: 21/1/17 chongzuo zheli  
+//                while (!isCurrentLocationGet){
+//
+//                }
+//                isCurrentLocationGet = false;
                 mAutocompleteView.setText(place);
             } else {
                 mAutocompleteView.setText(clickStr);

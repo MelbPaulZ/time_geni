@@ -354,7 +354,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
                     REQUEST_PHOTO_PERMISSION
             );
         } else {
-            toPhotoPickerPage();
+            startPhotoPicker();
         }
     }
 
