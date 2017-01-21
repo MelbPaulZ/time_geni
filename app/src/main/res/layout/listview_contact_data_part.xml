@@ -4,33 +4,28 @@
         <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="org.unimelb.itime.ui.viewmodel.contact.ListItemViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.contact.ContactItemViewModel"/>
     </data>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
     <org.unimelb.itime.widget.RoundImageView
         android:layout_width="37dp"
         android:layout_height="37dp"
-        app:smallAvatar="@{viewModel.contact.photo}"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginBottom="11dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/avatarView"/>
+        app:smallAvatar="@{viewModel.photo}"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/avatarView"
+        android:layout_weight="0"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
         android:orientation="vertical"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/avatarView">
+        android:layout_marginStart="15dp"
+        android:layout_weight="1">
         <TextView
             android:text="@{viewModel.name}"
             android:layout_width="wrap_content"
@@ -53,5 +48,5 @@
             android:ellipsize="end"
             />
     </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </layout>

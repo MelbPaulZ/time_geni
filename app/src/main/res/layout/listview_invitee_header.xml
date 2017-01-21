@@ -28,6 +28,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="7dp"
             android:paddingRight="10dp"
+            android:paddingTop="5dp"
             android:animateLayoutChanges="true"
             android:paddingLeft="10dp">
         <org.unimelb.itime.widget.InviteeGroupView

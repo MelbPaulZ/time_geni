@@ -3,5 +3,5 @@
     <item android:state_enabled="true"
         android:color="@color/textBlue" /> <!-- clickable -->
     <item android:state_enabled="false"
-        android:color="@color/text_disable" /> <!-- un-clickable -->
+        android:color="@color/toolbar_disabled" /> <!-- un-clickable -->
 </selector>

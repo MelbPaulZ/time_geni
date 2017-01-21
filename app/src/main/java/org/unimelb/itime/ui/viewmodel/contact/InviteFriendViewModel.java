@@ -7,11 +7,9 @@ import android.databinding.ObservableList;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 
-import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.ITimeUser;
@@ -91,10 +89,12 @@ public class InviteFriendViewModel extends BaseObservable {
             }
             setInviteeList(inviteeList);
             setFriendList(friendList);
+
         }else{
             inviteeList = new ArrayList<>();
             setInviteeList(inviteeList);
         }
+
     }
 
     @Bindable
@@ -291,6 +291,7 @@ public class InviteFriendViewModel extends BaseObservable {
     public void setCountStr(int count) {
         this.countStr = count + " people selected";
         notifyPropertyChanged(BR.countStr);
+        presenter.setDoneable(count>0);
     }
 
     public InviteeGroupView.OnEditListener getOnEditListener(){
@@ -403,13 +404,13 @@ public class InviteFriendViewModel extends BaseObservable {
         presenter.searchContact(str);
     }
 
-    private void updatePositionMap(ObservableList<ContactItem> list){
+    private void updatePositionMap(ObservableList<ContactItemViewModel> list){
         if(positionMap==null){
             positionMap = new HashMap<>();
         }
         positionMap.clear();
         for(int i=0;i<list.size();i++){
-            ContactItem item = list.get(i);
+            ContactItemViewModel item = list.get(i);
             String letter =item.getContact().getSortLetters();
             if(positionMap.containsKey(letter)){
                 item.setShowFirstLetter(false);
@@ -421,11 +422,11 @@ public class InviteFriendViewModel extends BaseObservable {
         }
     }
 
-    private void sort(ObservableList<ContactItem> list){
+    private void sort(ObservableList<ContactItemViewModel> list){
         if(list!=null) {
-            Collections.sort(list, new Comparator<ContactItem>() {
+            Collections.sort(list, new Comparator<ContactItemViewModel>() {
                 @Override
-                public int compare(ContactItem t1, ContactItem t2) {
+                public int compare(ContactItemViewModel t1, ContactItemViewModel t2) {
                     return t1.getContact().compareTo(t2.getContact());
                 }
             });
@@ -488,6 +489,7 @@ public class InviteFriendViewModel extends BaseObservable {
     public void setInviteeList(List<Invitee> inviteeList) {
         this.inviteeList = inviteeList;
         notifyPropertyChanged(BR.inviteeList);
+        setCountStr(inviteeList.size());
     }
 
     public void addInvitee(Invitee invitee){

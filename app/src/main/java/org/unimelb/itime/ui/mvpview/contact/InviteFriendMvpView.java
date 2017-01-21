@@ -16,4 +16,6 @@ public interface InviteFriendMvpView extends TaskBasedMvpView, ItimeCommonMvpVie
     void toInviteMobileContactsPage();
 
     void toScanQRCodePage();
+
+    void setDoneable(boolean bool);
 }

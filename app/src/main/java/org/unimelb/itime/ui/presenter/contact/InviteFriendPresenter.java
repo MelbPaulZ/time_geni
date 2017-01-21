@@ -50,6 +50,12 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
         return context;
     }
 
+    public void setDoneable(boolean bool){
+        if(getView()!=null){
+            getView().setDoneable(bool);
+        }
+    }
+
 
     public void getFriends(){
         DBManager dbManager = DBManager.getInstance(context);

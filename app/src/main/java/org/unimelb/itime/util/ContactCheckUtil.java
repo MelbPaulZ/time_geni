@@ -10,7 +10,7 @@ public class ContactCheckUtil {
     private static ContactCheckUtil instance;
     Pattern emailPattern;
     private ContactCheckUtil(){
-        String str="^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w{2,3}){1,3})$";
+        String str="^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w{2,})+)$";
         emailPattern = Pattern.compile(str);
     }
 

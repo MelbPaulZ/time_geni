@@ -14,7 +14,7 @@ import org.unimelb.itime.bean.BaseContact;
  * Created by 37925 on 2016/12/15.
  */
 
-public class AddOtherContactsItemViewModel extends BaseObservable implements ContactItem {
+public class AddOtherContactsItemViewModel extends BaseObservable implements ContactItemViewModel {
 
     public static final int ADD = 0;
     public static final int ADDED = 1;
@@ -154,6 +154,21 @@ public class AddOtherContactsItemViewModel extends BaseObservable implements Con
     @Bindable
     public SpannableString getContactId(){
         return changeMatchColor(contact.getContactId(), contact.getMatchStr());
+    }
+
+    @Override
+    public boolean getShowDetail() {
+        return false;
+    }
+
+    @Override
+    public void setShowDetail(boolean showDetail) {
+
+    }
+
+    @Override
+    public String getPhoto() {
+        return null;
     }
 
     public SpannableString changeMatchColor(String str, String matchStr){

@@ -63,6 +63,14 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
         super.onActivityCreated(bundle);
         eventManager = EventManager.getInstance(getContext());
 
+        toolbarViewModel = new ToolbarViewModel(this);
+        toolbarViewModel = new ToolbarViewModel<>(this);
+        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
+        toolbarViewModel.setTitleStr(getString(R.string.invitee));
+        toolbarViewModel.setRightClickable(true);
+        toolbarViewModel.setRightTitleStr(getString(R.string.done));
+        binding.setToolbarVM(toolbarViewModel);
+
         viewModel = new InviteFriendViewModel(presenter);
         viewModel.setHeaderView((LinearLayout) headerBinding.getRoot());
         viewModel.setSideBarListView(binding.friendsListView);
@@ -73,15 +81,6 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
 
         binding.setViewModel(viewModel);
         headerBinding.setViewModel(viewModel);
-
-        toolbarViewModel = new ToolbarViewModel(this);
-        toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
-        toolbarViewModel.setTitleStr(getString(R.string.invitee));
-        toolbarViewModel.setRightClickable(true);
-        toolbarViewModel.setRightTitleStr(getString(R.string.done));
-        binding.setToolbarVM(toolbarViewModel);
-
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -203,6 +202,11 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
 
     public void toScanQRCodePage() {
         startActivityForResult(new Intent(getActivity(), CaptureActivityContact.class), 0);
+    }
+
+    @Override
+    public void setDoneable(boolean bool) {
+        toolbarViewModel.setRightClickable(bool);
     }
 
 

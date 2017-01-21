@@ -13,7 +13,7 @@ import org.unimelb.itime.bean.BaseContact;
  * Created by 37925 on 2016/12/5.
  */
 
-public class ListItemViewModel extends BaseObservable implements ContactItem {
+public class ListItemViewModel extends BaseObservable implements ContactItemViewModel {
 
     private BaseContact contact;
     private boolean selected;
@@ -25,6 +25,7 @@ public class ListItemViewModel extends BaseObservable implements ContactItem {
     private View.OnClickListener onClickListener;
     private boolean showDetail;
 
+
     @Bindable
     public boolean getShowDetail() {
         return showDetail;
@@ -33,6 +34,12 @@ public class ListItemViewModel extends BaseObservable implements ContactItem {
     public void setShowDetail(boolean showDetail) {
         this.showDetail = showDetail;
         notifyPropertyChanged(BR.showDetail);
+    }
+
+    @Override
+    @Bindable
+    public String getPhoto() {
+        return contact.getPhoto();
     }
 
     @Bindable
@@ -86,6 +93,7 @@ public class ListItemViewModel extends BaseObservable implements ContactItem {
     public void setContact(BaseContact contact) {
         this.contact = contact;
         notifyPropertyChanged(BR.contact);
+        notifyPropertyChanged(BR.photo);
     }
 
     @Bindable
