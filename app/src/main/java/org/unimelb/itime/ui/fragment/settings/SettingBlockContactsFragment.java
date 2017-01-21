@@ -56,7 +56,7 @@ public class SettingBlockContactsFragment extends BaseUiAuthFragment<BlockContac
         binding.setMainViewModel(viewModel);
 
         toolbarViewModel = new ToolbarViewModel<>(this);
-        toolbarViewModel.setTitleStr(getString(R.string.contacts));
+        toolbarViewModel.setTitleStr(getString(R.string.block_contacts));
         toolbarViewModel.setLeftDrawable(getResources().getDrawable(R.drawable.ic_back_arrow));
         binding.setToolbarVM(toolbarViewModel);
     }

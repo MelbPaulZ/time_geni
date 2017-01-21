@@ -31,64 +31,72 @@
                 />
         </LinearLayout>
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55.5dp"
             android:background="@color/white">
-            <org.unimelb.itime.widget.RoundImageView
-                android:layout_width="37dp"
-                android:layout_height="37dp"
-                app:smallAvatar="@{viewModel.contact.photo}"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginBottom="11dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:id="@+id/avatarView"/>
+            <!--<org.unimelb.itime.widget.RoundImageView-->
+                <!--android:layout_width="37dp"-->
+                <!--android:layout_height="37dp"-->
+                <!--app:smallAvatar="@{viewModel.contact.photo}"-->
+                <!--android:layout_marginLeft="15dp"-->
+                <!--android:layout_marginStart="15dp"-->
+                <!--android:layout_marginTop="11dp"-->
+                <!--android:layout_marginBottom="11dp"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_alignParentStart="true"-->
+                <!--android:id="@+id/avatarView"/>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="vertical"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/avatarView">
-                <TextView
-                    android:text="@{viewModel.name}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/grey_one"
-                    android:textSize="@dimen/font_big"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    />
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_marginLeft="15dp"-->
+                <!--android:layout_toRightOf="@+id/avatarView">-->
+                <!--<TextView-->
+                    <!--android:text="@{viewModel.name}"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/grey_one"-->
+                    <!--android:textSize="@dimen/font_big"-->
+                    <!--android:maxLines="1"-->
+                    <!--android:ellipsize="end"-->
+                    <!--/>-->
 
-                <TextView
-                    android:text="@{viewModel.contactId}"
-                    android:visibility="@{viewModel.showDetail?View.VISIBLE:View.GONE}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/grey_four"
-                    android:textSize="@dimen/font_small"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    />
-            </LinearLayout>
+                <!--<TextView-->
+                    <!--android:text="@{viewModel.contactId}"-->
+                    <!--android:visibility="@{viewModel.showDetail?View.VISIBLE:View.GONE}"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/grey_four"-->
+                    <!--android:textSize="@dimen/font_small"-->
+                    <!--android:maxLines="1"-->
+                    <!--android:ellipsize="end"-->
+                    <!--/>-->
+            <!--</LinearLayout>-->
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1">
+                <include layout="@layout/listview_contact_data_part"
+                    app:viewModel="@{viewModel}"/>
+            </FrameLayout>
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@{viewModel.selected?@drawable/icon_event_row_selected:@drawable/icon_event_row_unselected}"
                 android:visibility="@{viewModel.checkable?View.VISIBLE:View.GONE}"
-                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="16dp"
                 android:id="@+id/selectImageView"
-                android:layout_alignParentRight="true"
                 />
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 </layout>
 
