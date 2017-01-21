@@ -6,10 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
-import android.media.Image;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,14 +45,12 @@ import java.util.List;
 import me.fesky.library.widget.ios.ActionSheetDialog;
 import me.tatarka.bindingcollectionadapter.ItemView;
 
-import static org.unimelb.itime.ui.viewmodel.EventCommonViewModel.PickerTask.END_REPEAT;
-
 /**
  * Created by Paul on 28/08/2016.
  */
 public class EventEditViewModel extends EventCommonViewModel {
 
-    private int fragment_task = -1;
+    private int fragmentTask = -1;
 
     private Event event;
     private EventPresenter<? extends TaskBasedMvpView<List<Event>>> presenter;
@@ -170,8 +165,6 @@ public class EventEditViewModel extends EventCommonViewModel {
 
     public void editEvent() {
         // popup alertDialog to choose whether change all or just one
-        List<Timeslot> timeslots = EventUtil.getTimeslotFromPending(getContext(), event);
-        event.setTimeslot(timeslots);
 
         if (eventManager.getCurrentEvent().getRecurrence().length > 0) {
             // the event is repeat event
@@ -635,12 +628,12 @@ public class EventEditViewModel extends EventCommonViewModel {
         return itemView;
     }
 
-    public void setFragment_task(int fragment_task) {
-        this.fragment_task = fragment_task;
+    public void setFragmentTask(int fragmentTask) {
+        this.fragmentTask = fragmentTask;
     }
 
     public int deleteBtnVisibility(){
-        if (fragment_task == EventEditFragment.TASK_CREATE){
+        if (fragmentTask == EventEditFragment.TASK_CREATE){
             return View.GONE;
         }else{
             return View.VISIBLE;
