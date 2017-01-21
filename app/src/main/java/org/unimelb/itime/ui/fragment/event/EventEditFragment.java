@@ -24,7 +24,6 @@ import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.activity.LocationPickerActivity;
 import org.unimelb.itime.ui.activity.PhotoPickerActivity;
-import org.unimelb.itime.ui.fragment.LocationPickerFragment;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
@@ -97,7 +96,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         eventManager = EventManager.getInstance(getContext());
         eventEditViewModel = new EventEditViewModel(getPresenter());
         eventEditViewModel.setEvent(event);
-        eventEditViewModel.setFragment_task(task);
+        eventEditViewModel.setFragmentTask(task);
         initToolbar();
 
         binding.setEventEditVM(eventEditViewModel);
@@ -147,25 +146,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         Intent intent = new Intent(getActivity(), LocationPickerActivity.class);
         intent.putExtra("location", event.getLocation());
         startActivityForResult(intent, REQ_LOCATION);
-
-//        LocationPickerFragment fragment = new LocationPickerFragment();
-//        fragment.setTargetFragment(this, REQ_LOCATION);
-//        Bundle data = new Bundle();
-//        data.putString("location", event.getLocation());
-//        getBaseActivity().openFragment(fragment, data);
     }
-
-
-
-//    /**
-//     * this has to be override to null, in order not to have error
-//     * "Can not perform this action after onSaveInstanceState"
-//     * @param outState
-//     */
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//
-//    }
 
     @Override
     public void toTimeslotViewPage() {
