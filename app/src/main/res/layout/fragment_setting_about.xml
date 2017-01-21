@@ -2,9 +2,6 @@
 <layout xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="settingVM"
-            type="org.unimelb.itime.ui.viewmodel.MainSettingsViewModel_delete"/>
-        <variable
             name="toolbarVM"
             type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
     </data>
@@ -16,45 +13,6 @@
 
     <include layout="@layout/toolbar_common"
         bind:vm="@{toolbarVM}"/>
-    <!-- the toolbar has a default padding, 10 dp approx-->
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--style="@style/itime_toolbar">-->
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-
-            <!--&lt;!&ndash;toolbar back arrow&ndash;&gt;-->
-            <!--<ImageView-->
-                <!--android:layout_width="11dp"-->
-                <!--android:layout_height="18dp"-->
-                <!--android:src="@drawable/icon_back_arrow"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar settings text&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/title_activity_settings"-->
-                <!--android:textColor="@color/title_6D6D6D"-->
-                <!--android:textSize="17sp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_marginLeft="14dp"-->
-                <!--android:onClick="@{settingVM.onViewChange(settingVM.TASK_TO_SETTING, false)}"-->
-                <!--/>-->
-
-            <!--&lt;!&ndash;toolbar title&ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/about"-->
-                <!--android:textSize="17sp"-->
-                <!--android:textColor="@color/black"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--/>-->
-        <!--</RelativeLayout>-->
-    <!--</android.support.v7.widget.Toolbar>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -8,22 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.databinding.FragmentSettingAboutBinding;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.SettingCommonMvpView_delete;
 import org.unimelb.itime.ui.presenter.SettingCommonPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingsViewModel_delete;
+import org.unimelb.itime.ui.viewmodel.SettingViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 
 /**
  * Created by Paul on 27/12/2016.
  */
 
-public class SettingAboutFragment extends SettingBaseFragment<SettingCommonMvpView_delete, SettingCommonPresenter<SettingCommonMvpView_delete>>
+public class SettingAboutFragment extends BaseUiAuthFragment<SettingCommonMvpView_delete, SettingCommonPresenter<SettingCommonMvpView_delete>>
 implements SettingCommonMvpView_delete {
 
     private FragmentSettingAboutBinding binding;
-
+    private ToolbarViewModel toolbarViewModel;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,7 +36,10 @@ implements SettingCommonMvpView_delete {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        binding.setSettingVM(viewModel);
+        toolbarViewModel = new ToolbarViewModel(this);
+        toolbarViewModel.setLeftDrawable(
+                getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
+        toolbarViewModel.setTitleStr(getString(R.string.about));
         binding.setToolbarVM(toolbarViewModel);
     }
 
@@ -50,26 +55,6 @@ implements SettingCommonMvpView_delete {
             getActivity().finish();
             getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         }
-    }
-
-    @Override
-    public void setLeftTitleStringToVM() {
-        toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
-    }
-
-    @Override
-    public void setTitleStringToVM() {
-        toolbarViewModel.setTitleStr(getString(R.string.about));
-    }
-
-    @Override
-    public void setRightTitleStringToVM() {
-
-    }
-
-    @Override
-    public ToolbarViewModel<? extends ItimeCommonMvpView> getToolBarViewModel() {
-        return new ToolbarViewModel<>(this);
     }
 
     @Override
