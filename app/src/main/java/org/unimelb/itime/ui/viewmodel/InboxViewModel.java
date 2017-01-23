@@ -11,14 +11,10 @@ import android.widget.TextView;
 
 import com.android.databinding.library.baseAdapters.BR;
 
-
-import org.dmfs.rfc5545.DateTime;
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.util.EventUtil;
-
-import java.util.Calendar;
 
 
 /**
@@ -171,32 +167,11 @@ public class InboxViewModel extends CommonViewModel {
 
     public void setTimeString(String timeString) {
 
-        Calendar updateTimeCalendar = EventUtil.parseTimeStringToCalendar(timeString);
-        Calendar now = Calendar.getInstance();
-        this.timeString = getDatesRelationType(now, updateTimeCalendar);
+        this.timeString = EventUtil.parseRelativeTime(presenter.getContext(), timeString);
         notifyPropertyChanged(BR.timeString);
     }
 
-    /**
-     *
-     * @param todayM is current time
-     * @param comparedTime is compared time
-     * @return
-     */
-    private String getDatesRelationType(Calendar todayM, Calendar comparedTime){
-        Calendar todayMCalendar = EventUtil.getBeginOfDayCalendar(todayM);
-        Calendar currentDayMCalendar = EventUtil.getBeginOfDayCalendar(comparedTime);
 
-        long delta = currentDayMCalendar.getTimeInMillis() - todayMCalendar.getTimeInMillis();
-        long oneDay = 24 * 60 * 60 * 1000;
-        if (delta==0){
-            return String.format("%1$tH:%1$tM",comparedTime);
-        }else if (delta == oneDay){
-            return presenter.getContext().getString(R.string.Yesterday);
-        }else{
-            return String.format("%1$td/%1$tm/%1$tY", comparedTime);
-        }
-    }
 
 
 

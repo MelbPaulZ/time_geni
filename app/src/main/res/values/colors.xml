@@ -329,6 +329,7 @@
     <color name="color_F45B69">#F45B69</color>
     <color name="color_c3c3c7">#C3C3C7</color>
     <color name="color_a2a2a2">#A2A2A2</color>
+    <color name="color_aaaaaa">#AAAAAA</color>
     <color name="color_f7f7f7">#f7f7f7</color>
     <color name="color_454545">#454545</color>
     <color name="color_4A90E2">#4A90E2</color>
@@ -355,6 +356,8 @@
     <color name="color_F6F7F8">#F6F7F8</color>
     <color name="color_B2B2B2">#B2B2B2</color>
     <color name="color_999999">#999999</color>
+    <color name="color_9E9E9E">#9E9E9E</color>
+    <color name="color_C6C6C6">#C6C6C6</color>
 
     <!--contact-->
     <!--<color name="green">#32CD32</color>-->
@@ -388,6 +391,6 @@
     <color name="textBlue">#0076FF</color>
     <color name="divider_line">#AAAAAA</color>
     <color name = "hintText">#949494</color>
-    <color name="toolbar_disabled">#e0e0e0</color>
+    <color name="disabled">#e0e0e0</color>
 
 </resources>

@@ -1,9 +1,7 @@
 package org.unimelb.itime.util;
 
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
@@ -19,15 +17,12 @@ import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
-import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
 import java.io.File;
 import java.lang.reflect.Type;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -581,6 +576,40 @@ public class EventUtil {
         Calendar updateTimeCalendar = Calendar.getInstance();
         updateTimeCalendar.setTime(d);
         return updateTimeCalendar;
+    }
+
+    /**
+     *
+     * @param ctx
+     * @param todayM
+     * @param comparedTime
+     * @return
+     */
+    public static String parseRelativeTime(Context ctx, Calendar todayM, Calendar comparedTime){
+        Calendar todayMCalendar = EventUtil.getBeginOfDayCalendar(todayM);
+        Calendar currentDayMCalendar = EventUtil.getBeginOfDayCalendar(comparedTime);
+
+        long delta = currentDayMCalendar.getTimeInMillis() - todayMCalendar.getTimeInMillis();
+        long oneDay = 24 * 60 * 60 * 1000;
+        if (delta==0){
+            return String.format("%1$tH:%1$tM",comparedTime);
+        }else if (delta == oneDay){
+            return ctx.getString(R.string.Yesterday);
+        }else{
+            return String.format("%1$td/%1$tm/%1$tY", comparedTime);
+        }
+    }
+
+    /**
+     *
+     * @param ctx
+     * @param timeString
+     * @return
+     */
+    public static String parseRelativeTime(Context ctx, String timeString){
+        Calendar updateTimeCalendar = EventUtil.parseTimeStringToCalendar(timeString);
+        Calendar now = Calendar.getInstance();
+        return parseRelativeTime(ctx, now, updateTimeCalendar);
     }
 
     public static boolean isUserHostOfEvent(Context context, Event event) {
