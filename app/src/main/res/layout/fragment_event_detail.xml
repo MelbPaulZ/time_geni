@@ -640,7 +640,7 @@
                 android:onClick="@{contentVM.onClickHostConfirm()}"
                 android:text="@string/confirm_event"
                 android:textAlignment="center"
-                android:textColor="@{TimeSlotUtil.isAtLeastOneWrapperSelected(contentVM.wrapperTimeSlotList)? @color/color_FE9E18 : @color/gray_b2b2b2}"
+                android:textColor="@{TimeSlotUtil.isAtLeastOneWrapperSelected(contentVM.wrapperTimeSlotList)? @color/color_FE9E18 : @color/disabled}"
                 android:textSize="17sp" />
 
         </LinearLayout>
