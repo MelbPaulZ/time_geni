@@ -46,43 +46,37 @@
             <!--background-->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <!--top message bar-->
                 <RelativeLayout
                     android:id="@+id/event_detail_first_message"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:paddingStart="7dp"
+                    android:paddingEnd="5dp"
                     android:background="@drawable/round_corner_gray">
+
+                    <TextView
+                        android:id="@+id/event_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{contentVM.event.message.subtitle1}"
+                        android:textColor="@color/color_FF9600"
+                        android:layout_centerVertical="true"
+                        />
 
                     <ImageView
                         android:id="@+id/host_photo"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
                         app:url="@{contentVM.event.message.photo}" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignEnd="@id/host_photo"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/event_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{contentVM.event.message.subtitle1}"
-                            android:textColor="@color/color_63ADF2"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
                 </RelativeLayout>
 
                 <!-- event content -->
@@ -93,7 +87,7 @@
                     android:layout_below="@+id/event_detail_first_message"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="@dimen/padding_10"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="vertical">
                     <!-- ********************************************** -->
 
@@ -122,8 +116,9 @@
                             android:visibility="@{contentVM.confirmTimeVisibility(contentVM.event)}">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="3dp"
                                 android:src="@drawable/icon_event_clock" />
 
                             <TextView
@@ -144,8 +139,9 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="3dp"
                                 android:src="@drawable/icon_event_repeated" />
 
                             <TextView
@@ -167,8 +163,9 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="3dp"
                                 android:src="@drawable/icon_event_location" />
 
                             <TextView
@@ -190,8 +187,9 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="3dp"
                                 android:src="@drawable/icon_event_note" />
 
                             <TextView
