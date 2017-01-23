@@ -111,7 +111,7 @@
                             android:id="@+id/event_detail_confirm_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="7dp"
+                            android:layout_marginTop="5dp"
                             android:orientation="horizontal"
                             android:visibility="@{contentVM.confirmTimeVisibility(contentVM.event)}">
 
@@ -135,7 +135,7 @@
                             android:id="@+id/event_detail_repeat_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -158,7 +158,7 @@
                             android:id="@+id/event_detail_location_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:visibility="@{contentVM.getLocationVisibility(contentVM.event)}"
                             android:orientation="horizontal">
 
@@ -182,7 +182,7 @@
                             android:id="@+id/event_detail_note_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:visibility="@{contentVM.getNoteVisibility(contentVM.event)}"
                             android:orientation="horizontal">
 
@@ -230,7 +230,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:background="#ffffff"
                         android:orientation="vertical">
 
@@ -238,6 +237,7 @@
                             android:id="@+id/event_detail_timeslot_listview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
                             android:divider="#00000000"
                             app:items="@{contentVM.wrapperTimeSlotList}"
                             app:itemView="@{contentVM.timeslotItemView}"
@@ -405,15 +405,16 @@
                             android:layout_height="13dp"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/padding_10"
+                            android:layout_marginStart="@dimen/padding_10"
                             android:background="@drawable/icon_general_arrow_right" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/padding_5"
-                            android:layout_toLeftOf="@+id/event_detail_calendar_arrow"
+                            android:layout_marginEnd="@dimen/padding_5"
+                            android:layout_toStartOf="@+id/event_detail_calendar_arrow"
+                            android:textSize="17sp"
                             android:text="@{CalendarUtil.getInstance(context).getCalendarName(contentVM.event)}" />
 
                         <TextView
