@@ -48,6 +48,15 @@ public class CalendarUtil {
 
 
     public String getCalendarName(Event event){
+        if (event.getCalendarUid().equals("")){
+            String defaultUid = getDefaultCalendarUid();
+            for (Calendar calendar: getCalendar()){
+                if (calendar.getCalendarUid().equals(defaultUid)){
+                    return calendar.getSummary();
+                }
+            }
+        }
+
         AbstractDao dao = DBManager.getInstance(context).getQueryDao(Calendar.class);
         List<Calendar> cals = dao.queryBuilder().where(
                 CalendarDao.Properties.CalendarUid.eq(event.getCalendarUid())

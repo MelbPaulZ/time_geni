@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
@@ -287,6 +288,11 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
             ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
             List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
             event.setPhoto(photoUrls);
+            setEvent(event);
+        }
+
+        if (requestCode == REQ_INVITEE && resultCode == InviteeFragment.RESULT_CANCEL){
+            event.setInvitee(new ArrayList<Invitee>());
             setEvent(event);
         }
     }
