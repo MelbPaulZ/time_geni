@@ -377,14 +377,13 @@
                             android:id="@+id/event_detail_host_url_link"
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
-                            android:autoLink="web"
                             android:gravity="center_vertical"
                             android:layout_centerVertical="true"
                             android:hint="@string/url"
                             android:onClick="@{contentVM.onClickUrl()}"
                             android:text="@{contentVM.event.url}"
                             android:textColor="@color/color_06457F"
-                            android:textSize="15sp" />
+                            android:textSize="17sp" />
 
                         <TextView
                             style="@style/itime_bottom_divider_line" />
