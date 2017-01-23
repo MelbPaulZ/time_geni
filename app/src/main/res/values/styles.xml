@@ -104,4 +104,14 @@
         <item name="android:layout_height">46dp</item>
         <item name="android:background">@drawable/background_top_bottom_divider</item>
     </style>
+
+    <!--the right arrow of each item in event detail page-->
+    <style name="arrow_disclosure_indicator">
+        <item name="android:layout_width">8dp</item>
+        <item name="android:layout_height">13dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginEnd">14dp</item>
+        <item name="android:background">@drawable/icon_general_arrow_right</item>
+    </style>
 </resources>

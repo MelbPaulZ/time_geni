@@ -307,25 +307,28 @@
                         <TextView
                             style="@style/itime_bottom_divider_line"
                             />
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="68dp"
-                            android:gravity="center"
                             >
                             <android.support.v7.widget.RecyclerView
                                 android:layout_width="match_parent"
                                 android:layout_height="37dp"
                                 android:layout_marginStart="16dp"
+                                android:layout_marginEnd="30dp"
+                                android:layout_centerVertical="true"
                                 app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, false)}"
                                 app:items="@{contentVM.inviteeList}"
                                 app:itemView="@{contentVM.inviteeItemView}"
                                 />
-
-                        </LinearLayout>
+                            <TextView
+                                style="@style/arrow_disclosure_indicator"/>
+                        </RelativeLayout>
                         <TextView
                             style="@style/itime_bottom_divider_line" />
                     </LinearLayout>
 
+                    <!--event photo-->
                     <RelativeLayout
                         android:id="@+id/event_detail_host_photo_RL"
                         android:layout_width="match_parent"
@@ -349,12 +352,15 @@
                             android:layout_height="37dp"
                             android:minWidth="200dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_marginStart="16dp"
                             android:layout_centerVertical="true"
+                            android:layout_marginEnd="30dp"
                             app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, true)}"
                             app:items="@{contentVM.photoUrls}"
                             app:itemView="@{contentVM.photoItemView}"
                             />
+
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
 
                         <TextView
                             style="@style/itime_bottom_divider_line" />
@@ -400,22 +406,16 @@
                             android:textSize="17sp" />
 
                         <TextView
-                            android:id="@+id/event_detail_calendar_arrow"
-                            android:layout_width="8dp"
-                            android:layout_height="13dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="@dimen/padding_10"
-                            android:background="@drawable/icon_general_arrow_right" />
-
-                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginEnd="@dimen/padding_5"
-                            android:layout_toStartOf="@+id/event_detail_calendar_arrow"
+                            android:layout_alignParentEnd="true"
                             android:textSize="17sp"
+                            android:layout_marginEnd="30dp"
                             android:text="@{CalendarUtil.getInstance(context).getCalendarName(contentVM.event)}" />
+
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
 
                         <TextView
                             style="@style/itime_bottom_divider_line" />
@@ -437,6 +437,9 @@
                             android:textSize="17sp" />
 
                         <TextView
+                            style="@style/arrow_disclosure_indicator"/>
+
+                        <TextView
                             style="@style/itime_bottom_divider_line" />
                     </RelativeLayout>
 
@@ -456,6 +459,8 @@
                             android:textColor="@color/color_06457F"
                             android:layout_centerVertical="true"
                             android:text="@string/create_event_from_this_event" />
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
                     </RelativeLayout>
                     <TextView
                         style="@style/itime_bottom_divider_line" />
