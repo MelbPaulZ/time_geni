@@ -1,7 +1,6 @@
 package org.unimelb.itime.base;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,17 +24,6 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpBasePresenter
     public final static int TASK_SELF_DETAIL_EVENT  = 3;
 
     FragmentManager fragmentManager;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
 
 
     protected int getFragmentContainerId(){
