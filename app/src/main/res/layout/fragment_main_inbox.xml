@@ -6,6 +6,9 @@
             <variable
                 name="toolbarVM"
                 type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
+            <variable
+                name="contentVM"
+                type="org.unimelb.itime.ui.viewmodel.InboxViewModel"/>
         </data>
 
     <RelativeLayout
@@ -28,17 +31,23 @@
             <org.unimelb.itime.widget.SearchBar
                 android:id="@+id/message_searchview"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="28dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="11dp"
                 app:searchHintTitle="@string/search"
                 app:searchHintText="@string/search"
+                app:searchListener="@{contentVM.onSearching()}"
                 />
         </LinearLayout>
         <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/inbox_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/inbox_searchview_layout"/>
+            android:layout_below="@id/inbox_searchview_layout"
+            android:onListItemClick="@{contentVM.onItemClicked()}"
+            app:onListItemMenuClick="@{contentVM.onDeleteClicked()}"
+            app:items="@{contentVM.list}"
+            app:itemView="@{contentVM.itemSelector}"
+            />
     </RelativeLayout>
 </layout>

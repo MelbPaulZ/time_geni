@@ -2,7 +2,7 @@
     <data>
         <variable
             name="vm"
-            type="org.unimelb.itime.ui.viewmodel.InboxViewModel"/>
+            type="org.unimelb.itime.ui.viewmodel.InboxViewModel.ItemViewModel"/>
         <import type="org.unimelb.itime.bean.Message"/>
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

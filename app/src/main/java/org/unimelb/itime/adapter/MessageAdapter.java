@@ -94,8 +94,8 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-        InboxViewModel viewModel = new InboxViewModel(presenter);
         Message message = filteredMessageList.get(position);
+        InboxViewModel.ItemViewModel viewModel = new InboxViewModel.ItemViewModel(presenter, message);
         if (convertView==null) {
             if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)) {
                 inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
@@ -124,14 +124,14 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
             }
             convertView.setTag(viewModel);
         }else{
-            viewModel = (InboxViewModel) convertView.getTag();
+            viewModel = (InboxViewModel.ItemViewModel) convertView.getTag();
         }
-        viewModel.setMessage(message);
+//        viewModel.setMessage(message);
         return convertView;
     }
 
     //david added
-    public void setImage(ImageView view, String url){
+    private void setImage(ImageView view, String url){
         if (url.equals("")){
             Picasso.with(presenter.getContext()).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
             return;

@@ -40,8 +40,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 
-import static org.unimelb.itime.ui.presenter.contact.ContextPresenter.getContext;
-
 /**
  * Created by yinchuandong on 20/06/2016.
  */
@@ -101,7 +99,7 @@ public class RemoteService extends Service{
         new Thread(){
             @Override
             public void run() {
-                EventManager.getInstance(getContext()).refreshEventManager();
+                EventManager.getInstance(context).refreshEventManager();
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
             }
         }.start();

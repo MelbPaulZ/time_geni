@@ -23,9 +23,7 @@ import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.FriendRequestDao;
 import org.unimelb.itime.dao.MessageDao;
 import org.unimelb.itime.dao.UserDao;
-import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.UserUtil;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,6 +185,7 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
         QueryBuilder<Message> qb = messageDao.queryBuilder();
+        qb.where(MessageDao.Properties.DeleteLevel.eq(0));
         List<Message> list = qb.list();
         return list;
     }
