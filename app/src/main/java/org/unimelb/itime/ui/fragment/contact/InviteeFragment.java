@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.contact;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.databinding.FragmentInviteFridendsBinding;
 import org.unimelb.itime.databinding.ListviewInviteeHeaderBinding;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.fragment.event.EventEditFragment;
 import org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment;
 import org.unimelb.itime.ui.mvpview.contact.InviteFriendMvpView;
 import org.unimelb.itime.ui.presenter.contact.InviteFriendPresenter;
@@ -30,6 +32,8 @@ import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 
 import java.util.List;
 
+import static android.R.attr.fragment;
+
 /**
  * Created by 37925 on 2016/12/4.
  */
@@ -38,6 +42,7 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
 
     public final static String DATA_INVITEE = "invitee";
     public final static String DATA_EVENT = "event";
+    public final static int RESULT_CANCEL = -1;
 
     private FragmentInviteFridendsBinding binding;
     private ListviewInviteeHeaderBinding headerBinding;
@@ -129,69 +134,19 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
     //Write your code here
     @Override
     public void onNext() {
-        EventTimeSlotViewFragment fragment = new EventTimeSlotViewFragment();
-        fragment.setFragment_task(EventTimeSlotViewFragment.TASK_EDIT);
         event.setInvitee((List<Invitee>) viewModel.getSelectedist());
-        fragment.setData(event, null);
-//        fragment.setData(eventManager.copyCurrentEvent(event));
-        getBaseActivity().openFragment(fragment);
-
-//        event.setInvitee((List<Invitee>) viewModel.getSelectedist());
-//        if(getFrom() instanceof EventCreateNewFragment){
-//            if (event.getInvitee().size()>=1) {
-//                // pick at least one invitee
-//                EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-//                eventTimeSlotViewFragment.setData(eventManager.copyCurrentEvent(event));
-//                openFragment(this, eventTimeSlotViewFragment);
-//            }else{
-//                EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-//                beforeSendingFragment.setData(eventManager.copyCurrentEvent(event));
-//                openFragment(this, beforeSendingFragment);
-//            }
-//        }else
-
-//        if (getFrom() instanceof EventTimeSlotViewFragment) {
-//            if (event.getInvitee().size() >= 1) {
-//                EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFrom();
-//                eventTimeSlotViewFragment.setData(eventManager.copyCurrentEvent(event));
-//                eventTimeSlotViewFragment.resetCalendar(eventManager.copyCurrentEvent(event));
-//                openFragment(this, (EventTimeSlotViewFragment) getFrom());
-//            } else {
-//                EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-//                beforeSendingFragment.setData(eventManager.copyCurrentEvent(event));
-//                openFragment(this, beforeSendingFragment);
-//            }
-//        } else if (getFrom() instanceof EventCreateDetailBeforeSendingFragment) {
-//            if (event.getInvitee().size() >= 1) {
-//                EventTimeSlotViewFragment eventTimeSlotViewFragment = (EventTimeSlotViewFragment) getFragmentManager().findFragmentByTag(EventTimeSlotViewFragment.class.getSimpleName());
-//                eventTimeSlotViewFragment.setData(eventManager.copyCurrentEvent(event));
-//                openFragment(this, eventTimeSlotViewFragment);
-//            } else {
-//                EventCreateDetailBeforeSendingFragment beforeSendingFragment = (EventCreateDetailBeforeSendingFragment) getFragmentManager().findFragmentByTag(EventCreateDetailBeforeSendingFragment.class.getSimpleName());
-//                beforeSendingFragment.setData(eventManager.copyCurrentEvent(event));
-//                openFragment(this, beforeSendingFragment);
-//            }
-//        }else if (getFrom() instanceof EventEditFragment){
-//            if (event.getInvitee().size()>=1) {
-//                EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFragmentManager().findFragmentByTag(EventDetailTimeSlotFragment.class.getSimpleName());
-//                eventDetailTimeSlotFragment.setData(eventManager.copyCurrentEvent(event));
-//                openFragment(this, eventDetailTimeSlotFragment);
-//            }else{
-//                EventEditFragment eventEditFragment = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-//                eventEditFragment.setData(eventManager.copyCurrentEvent(event));
-//                openFragment(this, eventEditFragment);
-//            }
-//        } else if (getFrom() instanceof EventDetailTimeSlotFragment) {
-//            if (event.getInvitee().size() > 1) {
-//                EventDetailTimeSlotFragment eventDetailTimeSlotFragment = (EventDetailTimeSlotFragment) getFrom();
-//                eventDetailTimeSlotFragment.setData(eventManager.copyCurrentEvent(event));
-//                openFragment(this, eventDetailTimeSlotFragment);
-//            } else {
-//                EventEditFragment eventEditFragment = (EventEditFragment)getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
-//                eventEditFragment.setData(eventManager.copyCurrentEvent(event));
-//                openFragment(this, eventEditFragment);
-//            }
-//        }
+        if(viewModel.getSelectedist().size()>0){
+            // has invitee, as a group event, to select timeslot fragment
+            EventTimeSlotViewFragment fragment = new EventTimeSlotViewFragment();
+            fragment.setFragment_task(EventTimeSlotViewFragment.TASK_EDIT);
+            fragment.setData(event, null);
+            getBaseActivity().openFragment(fragment);
+        }else{
+            // solo event, jump to event edit page
+            EventEditFragment fragment = (EventEditFragment) getTargetFragment();
+            fragment.onActivityResult(getTargetRequestCode(), RESULT_CANCEL, null);
+            getFragmentManager().popBackStack();
+        }
     }
 
     public void onBack() {
@@ -206,7 +161,7 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
 
     @Override
     public void setDoneable(boolean bool) {
-        toolbarViewModel.setRightClickable(bool);
+//        toolbarViewModel.setRightClickable(bool);
     }
 
 

@@ -87,6 +87,7 @@ public class RemoteService extends Service{
 
     @Override
     public void onDestroy() {
+        Log.i(TAG, "onDestroy: " + "destryo");
         if (messageHandler != null){
             messageHandler.cancel(true);
         }
@@ -126,7 +127,7 @@ public class RemoteService extends Service{
                 }
 
                 TokenUtil.getInstance(context).setCalendarToken(user.getUserUid(),httpResult.getSyncToken());
-                DBManager.getInstance(getApplicationContext()).insertOrReplace(httpResult.getData());
+                DBManager.getInstance(context).insertOrReplace(httpResult.getData());
             }
         };
         String token = TokenUtil.getInstance(context).getCalendarToken(user.getUserUid());
@@ -181,9 +182,9 @@ public class RemoteService extends Service{
 
                     //if calendar not shown
                     if (visibility == 0){
-                        DBManager.getInstance(getApplicationContext()).insertOrReplace(listHttpResult.getData());
+                        DBManager.getInstance(context).insertOrReplace(listHttpResult.getData());
                     }else{
-                        EventManager.getInstance(getApplicationContext()).updateDB(listHttpResult.getData());
+                        EventManager.getInstance(context).updateDB(listHttpResult.getData());
                         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                         isUpdateThreadRuning = false;
                     }
@@ -298,13 +299,13 @@ public class RemoteService extends Service{
             }
             if (valid){
                 //update syncToken
-                SharedPreferences sp = AppUtil.getTokenSaver(getApplicationContext());
+                SharedPreferences sp = AppUtil.getTokenSaver(context);
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, token);
                 editor.apply();
                 EventBus.getDefault().post(new MessageInboxMessage(messages));
             }else{
-                Toast.makeText(getApplicationContext(), "Message cannot find correspond event, dropped." ,Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Message cannot find correspond event, dropped." ,Toast.LENGTH_LONG).show();
             }
 
             valid =false;

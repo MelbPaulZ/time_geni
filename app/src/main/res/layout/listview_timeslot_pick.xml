@@ -4,6 +4,7 @@
     <data>
         <import type="org.unimelb.itime.util.TimeSlotUtil"/>
         <import type="org.unimelb.itime.util.EventUtil"/>
+        <import type="android.view.View"/>
         <variable
             name="itemVM"
             type="org.unimelb.itime.ui.viewmodel.EventDetailViewModel.SubTimeslotViewModel"/>
@@ -42,6 +43,7 @@
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:clickable="@{itemVM.inviteeVisibility == 1? true : false}"
             android:onClick="@{itemVM.onRightPartClicked()}"
             />
 
@@ -54,6 +56,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="27dp"
             android:textColor="@color/color_9E9E9E"
+            android:visibility="@{itemVM.inviteeVisibility == 1? View.VISIBLE: View.GONE}"
             android:text="@{itemVM.getPeopleNum(itemVM.wrapper.timeSlot, itemVM.replyData)}"
             android:textSize="17dp"
             />

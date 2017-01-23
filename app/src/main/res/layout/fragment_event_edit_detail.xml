@@ -205,31 +205,31 @@
                         <LinearLayout
                             android:id="@+id/create_event_attendee_tv"
                             android:layout_width="wrap_content"
-                            android:layout_height="50dp"
+                            android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toLeftOf="@id/arrow"
                             android:orientation="horizontal">
 
                             <ImageView
                                 android:id="@+id/invitee_1"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="37dp"
+                                android:layout_height="37dp"
                                 android:padding="2dp"
                                 app:index="@{0}"
                                 app:urls="@{eventEditVM.event.invitee}" />
 
                             <ImageView
                                 android:id="@+id/invitee_2"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="37dp"
+                                android:layout_height="37dp"
                                 android:padding="2dp"
                                 app:index="@{1}"
                                 app:urls="@{eventEditVM.event.invitee}" />
 
                             <ImageView
                                 android:id="@+id/invitee_3"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="37dp"
+                                android:layout_height="37dp"
                                 android:padding="2dp"
                                 app:index="@{2}"
                                 app:urls="@{eventEditVM.event.invitee}" />
@@ -289,6 +289,27 @@
 
                         <!--</RelativeLayout>-->
                     </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="@{EventUtil.hasOtherInviteeExceptSelf(context, eventEditVM.event)? View.VISIBLE : View.GONE}"
+                        android:background="@drawable/table_row_border">
+                        <TextView
+                            style="@style/itime_blacktitle_17sp"
+                            android:layout_alignParentLeft="true"
+                            android:text="@string/allow_invitee_to_see_each_other"/>
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:checked="@{eventEditVM.event.inviteeVisibility == 1? true : false}"
+                            android:onCheckChange="@{eventEditVM.inviteeVisibilityChange()}"
+                            />
+
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <TextView
@@ -301,6 +322,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/table_row_border"
                     android:paddingLeft="10dp"
+                    android:visibility="@{EventUtil.hasOtherInviteeExceptSelf(context, eventEditVM.event)? View.GONE: View.VISIBLE}"
                     android:paddingRight="10dp">
 
                     <TextView
@@ -510,7 +532,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/table_row_border">
 
                         <TextView

@@ -40,6 +40,9 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpBasePresenter
         return R.id.setting_activity_framelayout;
     }
 
+    public void clearFragmentStack(){
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
 
     public void openFragment(Fragment fragment) {
         openFragment(fragment, null, true);

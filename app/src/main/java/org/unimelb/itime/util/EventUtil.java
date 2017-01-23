@@ -836,6 +836,8 @@ public class EventUtil {
         return isAllDay;
     }
 
+
+
     /**
      *
      * @param event
