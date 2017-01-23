@@ -500,8 +500,8 @@ public class EventEditViewModel extends EventCommonViewModel {
             event.setEventType(Event.TYPE_SOLO);
             event.setStatus(Event.STATUS_CONFIRMED);
         }
-        if (event.getCalendarUid() == "") {
-            event.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(0).getCalendarUid());
+        if (event.getCalendarUid().equals("")) {
+            event.setCalendarUid(CalendarUtil.getInstance(getContext()).getDefaultCalendarUid());
             Toast.makeText(getContext(), "auto set Uid", Toast.LENGTH_SHORT).show();
         }
         event.setRecurringEventUid("");

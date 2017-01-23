@@ -1,17 +1,12 @@
 package org.unimelb.itime.ui.activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -26,16 +21,15 @@ import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.messageevent.MessageNewFriendRequest;
-import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
-import org.unimelb.itime.ui.fragment.MainContactFragment;
 import org.unimelb.itime.ui.fragment.MainCalendarFragment;
+import org.unimelb.itime.ui.fragment.MainContactFragment;
 import org.unimelb.itime.ui.fragment.MainInboxFragment;
 import org.unimelb.itime.ui.fragment.MainSettingFragment;
+import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.mvpview.MainTabBarView;
 import org.unimelb.itime.ui.presenter.MainTabBarPresenter;
 import org.unimelb.itime.ui.viewmodel.MainTabBarViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresenter> implements MainTabBarView{
@@ -64,10 +58,10 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
         init();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-
-    }
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//
+//    }
 
     @NonNull
     @Override

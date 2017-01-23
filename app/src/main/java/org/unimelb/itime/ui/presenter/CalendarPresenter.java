@@ -5,10 +5,13 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.greendao.AbstractDao;
 import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.dao.CalendarDao;
 import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.restfulapi.CalendarApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
@@ -19,6 +22,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Func1;
 
 /**
  * Created by yinchuandong on 11/1/17.
@@ -42,9 +46,14 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
         return context;
     }
 
-    public List<Calendar> loadCalendarFromDB(){
-        AbstractDao queryDao = DBManager.getInstance(context).getQueryDao(Calendar.class);
-        return queryDao.queryBuilder().where(CalendarDao.Properties.DeleteLevel.le(0)).list();
+    private void reloadLocalCalendars(Calendar calendar){
+        Calendar oldCal =  DBManager.getInstance(context).find(
+                Calendar.class, "calendarUid", calendar.getCalendarUid()).get(0);
+        oldCal.delete();
+        DBManager.getInstance(context).insertOrReplace(Arrays.asList(calendar));
+
+        EventManager.getInstance(context).refreshEventManager();
+        EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
     }
 
     public void update(final Calendar calendar){
@@ -52,7 +61,19 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
             getView().onTaskStart(TASK_CALENDAR_UPDATE);
         }
 
-        Observable<HttpResult<Calendar>> observable = calendarApi.update(calendar.getCalendarUid(),calendar);
+        Observable<HttpResult<Calendar>> observable = calendarApi
+                .update(calendar.getCalendarUid(),calendar)
+                .map(new Func1<HttpResult<Calendar>, HttpResult<Calendar>>() {
+                    @Override
+                    public HttpResult<Calendar> call(HttpResult<Calendar> calendarHttpResult) {
+                        if(calendarHttpResult.getStatus() == 1){
+                            reloadLocalCalendars(calendarHttpResult.getData());
+                        }
+
+                        return calendarHttpResult;
+                    }
+                });
+
         Subscriber<HttpResult<Calendar>> subscriber = new Subscriber<HttpResult<Calendar>>() {
             @Override
             public void onCompleted() {
@@ -69,10 +90,6 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
 
             @Override
             public void onNext(HttpResult<Calendar> calendarHttpResult) {
-                Calendar oldCal =  DBManager.getInstance(context).find(
-                        Calendar.class, "calendarUid",calendar.getCalendarUid()).get(0);
-                oldCal.delete();
-                DBManager.getInstance(context).insertOrReplace(Arrays.asList(calendarHttpResult.getData()));
 
                 if(getView() != null){
                     getView().onTaskSuccess(TASK_CALENDAR_UPDATE,calendarHttpResult.getData());
@@ -88,7 +105,17 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
             getView().onTaskStart(TASK_CALENDAR_DELETE);
         }
 
-        Observable<HttpResult<Calendar>> observable = calendarApi.delete(calendar.getCalendarUid());
+        Observable<HttpResult<Calendar>> observable = calendarApi
+                .delete(calendar.getCalendarUid())
+                .map(new Func1<HttpResult<Calendar>, HttpResult<Calendar>>() {
+                    @Override
+                    public HttpResult<Calendar> call(HttpResult<Calendar> calendarHttpResult) {
+                        if(calendarHttpResult.getStatus() == 1){
+                            reloadLocalCalendars(calendarHttpResult.getData());
+                        }
+                        return calendarHttpResult;
+                    }
+                });
         Subscriber<HttpResult<Calendar>> subscriber = new Subscriber<HttpResult<Calendar>>() {
             @Override
             public void onCompleted() {
@@ -105,11 +132,6 @@ public class CalendarPresenter<V extends TaskBasedMvpView<Calendar>> extends Mvp
 
             @Override
             public void onNext(HttpResult<Calendar> calendarHttpResult) {
-                Calendar oldCal =  DBManager.getInstance(context).find(
-                        Calendar.class, "calendarUid",calendar.getCalendarUid()).get(0);
-                oldCal.setDeleteLevel(calendarHttpResult.getData().getDeleteLevel());
-                oldCal.update();
-
                 if(getView() != null){
                     getView().onTaskSuccess(TASK_CALENDAR_DELETE,calendarHttpResult.getData());
                 }

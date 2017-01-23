@@ -22,8 +22,10 @@ import java.util.List;
  * Created by Paul on 24/09/2016.
  */
 public class CalendarUtil {
+    /**
+     * CalendarUtil does not maintain any list of calendars, just insert it in DB
+     */
     private static CalendarUtil instance;
-    private List<Calendar> calendars;
     private Context context;
     private CalendarUtil(Context context){
         this.context = context;
@@ -32,18 +34,18 @@ public class CalendarUtil {
     public static CalendarUtil getInstance(Context context){
         if (instance == null){
             instance = new CalendarUtil(context);
-            instance.init();
         }
         return instance;
     }
 
     public List<Calendar> getCalendar() {
-        return calendars;
+        return DBManager.getInstance(context).getAllCalendarsForUser();
     }
 
-    public void setCalendar(List<Calendar> calendars) {
-        this.calendars = calendars;
+    public String getDefaultCalendarUid(){
+        return UserUtil.getInstance(context).getUserUid();
     }
+
 
     public String getCalendarName(Event event){
         AbstractDao dao = DBManager.getInstance(context).getQueryDao(Calendar.class);
@@ -58,10 +60,6 @@ public class CalendarUtil {
         return cals.get(0).getSummary();
     }
 
-    private void init(){
-        List<Calendar> calendarList = DBManager.getInstance(context).getAllCalendarsForUser();
-        this.calendars = calendarList;
-    }
 
     public void clear(){
         instance = null;

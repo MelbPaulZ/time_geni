@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.SimpleFormatter;
 
+import static android.R.attr.handle;
+
 /**
  * Created by yuhaoliu on 29/08/16.
  */
@@ -184,57 +186,12 @@ public class EventManager {
         }
     }
 
-    public void refreshEventManager(final OnRefreshEventManager onRefreshEventManager){
-        final String START = "start";
-        final String END = "end";
-        final String KEY = "key";
-
+    /**
+     * reload all events
+     */
+    public void refreshEventManager(){
         init();
-
-        final Handler handle = new Handler(context.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                String data = msg.getData().getString(KEY);
-
-                switch (data){
-                    case START:
-                        if (onRefreshEventManager != null) onRefreshEventManager.onTaskStart();
-                        break;
-                    case END:
-                        if (onRefreshEventManager != null) onRefreshEventManager.onTaskEnd();
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-        };
-
-        new Thread() {
-            @Override
-            public void run() {
-                Message msg_start = new Message();
-                Bundle bs = new Bundle();
-                bs.putString(KEY, START);
-                msg_start.setData(bs);
-
-                handle.sendMessage(msg_start);
-
-                try {
-                    loadDB();
-                } finally {
-                }
-
-                Message msg_end = new Message();
-                Bundle be = new Bundle();// 存放数据
-                be.putString(KEY, END);
-                msg_end.setData(be);
-                handle.sendMessage(msg_end);
-
-                super.run();
-            }
-        }.start();
+        loadDB();
     }
 
     private void loadDB(){

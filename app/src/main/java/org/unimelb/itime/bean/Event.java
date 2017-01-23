@@ -451,7 +451,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
 
     public boolean hasRecurrence(){
-        return this.recurrence!=null;
+        return this.recurrence!=null && this.recurrence.length>0;
     }
 
     public List<Invitee> getInvitee() {

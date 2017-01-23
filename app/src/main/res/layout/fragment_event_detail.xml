@@ -16,6 +16,7 @@
         <import type="android.support.v7.widget.LinearLayoutManager" />
 
         <import type="android.view.View" />
+        <import type="org.unimelb.itime.bean.Event"/>
         <variable
             name="toolbarVM"
             type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
@@ -58,6 +59,7 @@
                     android:layout_marginTop="10dp"
                     android:paddingStart="7dp"
                     android:paddingEnd="5dp"
+                    android:visibility="@{contentVM.event.eventType.equals(Event.TYPE_SOLO)? View.GONE : View.VISIBLE}"
                     android:background="@drawable/round_corner_gray">
 
                     <TextView
@@ -136,6 +138,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
+                            android:visibility="@{contentVM.event.hasRecurrence()? View.VISIBLE: View.GONE}"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -286,7 +289,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text='@{String.valueOf(EventUtil.getInviteeWithStatus(contentVM.event.invitee,Invitee.STATUS_ACCEPTED).size()) + @string/going}'
+                                android:text='@{contentVM.inviteeString1}'
                                 android:textColor="@color/blue"/>
 
                             <TextView
@@ -300,7 +303,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text='@{String.valueOf(EventUtil.getInviteeWithStatus(contentVM.event.invitee,Invitee.STATUS_NEEDSACTION).size()) + @string/no_reply}'
+                                android:text='@{contentVM.inviteeString2}'
                                 android:textColor="@color/orange"/>
                         </LinearLayout>
 
@@ -358,6 +361,13 @@
                             app:items="@{contentVM.photoUrls}"
                             app:itemView="@{contentVM.photoItemView}"
                             />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentBottom="true"
+                            android:onClick="@{contentVM.gotoGridView()}"/>
 
                         <TextView
                             style="@style/arrow_disclosure_indicator"/>
@@ -424,6 +434,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginStart="16dp"
+                        android:visibility="@{contentVM.event.eventType.equals(Event.TYPE_SOLO) ? View.GONE : View.VISIBLE}"
                         android:onClick="@{contentVM.toResponse()}">
 
                         <TextView
@@ -620,30 +631,28 @@
 
 
         <!-- Host event Unconfirmed show-->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:background="@color/color_f9f9f9"
-            android:gravity="center"
-            android:paddingLeft="@dimen/padding_10"
-            android:paddingRight="@dimen/padding_10"
+            android:orientation="vertical"
             android:visibility="@{contentVM.unconfirmHostVisibility(contentVM.event)}">
 
             <!--change from event to wrapperlist panduan-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:clickable="@{TimeSlotUtil.isAtLeastOneWrapperSelected(contentVM.wrapperTimeSlotList)? true: false}"
-                android:gravity="center"
+                android:layout_centerInParent="true"
                 android:onClick="@{contentVM.onClickHostConfirm()}"
                 android:text="@string/confirm_event"
                 android:textAlignment="center"
                 android:textColor="@{TimeSlotUtil.isAtLeastOneWrapperSelected(contentVM.wrapperTimeSlotList)? @color/color_FE9E18 : @color/disabled}"
                 android:textSize="17sp" />
 
-        </LinearLayout>
+
+        </RelativeLayout>
 
 
     </RelativeLayout>

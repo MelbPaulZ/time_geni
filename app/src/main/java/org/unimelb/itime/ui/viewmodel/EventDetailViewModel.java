@@ -42,6 +42,7 @@ import java.util.Map;
 import me.fesky.library.widget.ios.ActionSheetDialog;
 import me.tatarka.bindingcollectionadapter.ItemView;
 
+import static org.unimelb.itime.R.string.going;
 import static org.unimelb.itime.R.string.photo;
 import static org.unimelb.itime.util.EventUtil.isUserHostOfEvent;
 
@@ -59,6 +60,7 @@ public class EventDetailViewModel extends CommonViewModel {
     private ObservableBoolean isViewInCalendarClickable = new ObservableBoolean(false);
     private int hostConfirmVisibility, hostUnconfirmVisibility, inviteeConfirmVisibility,
             inviteeUnconfirmVisibility, soloInvisible;
+    private String inviteeString1, inviteeString2;
 
 
     /**
@@ -327,6 +329,17 @@ public class EventDetailViewModel extends CommonViewModel {
 
         Invitee me = EventUtil.getSelfInInvitees(context, event);
         setIsViewInCalendarClickable(!me.getStatus().equals(Invitee.STATUS_DECLINED));
+        setInviteeStrings();
+    }
+
+    private void setInviteeStrings(){
+        String baseStr1 = String.valueOf(EventUtil.getInviteeWithStatus(event.getInvitee(), Invitee.STATUS_ACCEPTED).size());
+        String baseStr2 = String.valueOf(EventUtil.getInviteeWithStatus(event.getInvitee(), Invitee.STATUS_NEEDSACTION).size());
+        setInviteeString1(event.getStatus().equals(Event.STATUS_CONFIRMED) ?
+                baseStr1 + " " + getContext().getString(R.string.going) : baseStr1 + " " + getContext().getString(R.string.replied));
+
+        setInviteeString2(event.getStatus().equals(Event.STATUS_CONFIRMED) ?
+                baseStr2 + " " + getContext().getString(R.string.invited) : baseStr2 + " " + getContext().getString(R.string.not_replied));
     }
 
     // left buttons
@@ -620,6 +633,8 @@ public class EventDetailViewModel extends CommonViewModel {
     //***********************************************************
 
 
+
+
     @Bindable
     public int getSoloInvisible() {
         if (!EventUtil.isGroupEvent(context, event)) {
@@ -672,6 +687,26 @@ public class EventDetailViewModel extends CommonViewModel {
         this.rightBtnText = rightBtnText;
     }
 
+
+    @Bindable
+    public String getInviteeString1() {
+        return inviteeString1;
+    }
+
+    public void setInviteeString1(String inviteeString1) {
+        this.inviteeString1 = inviteeString1;
+        notifyPropertyChanged(BR.inviteeString1);
+    }
+
+    @Bindable
+    public String getInviteeString2() {
+        return inviteeString2;
+    }
+
+    public void setInviteeString2(String inviteeString2) {
+        this.inviteeString2 = inviteeString2;
+        notifyPropertyChanged(BR.inviteeString2);
+    }
 
     /**
      * for timeslot view
@@ -790,6 +825,9 @@ public class EventDetailViewModel extends CommonViewModel {
             return count + "";
         }
 
+
+
+
         @Bindable
         public Map<String, List<EventUtil.StatusKeyStruct>> getReplyData() {
             return replyData;
@@ -829,4 +867,6 @@ public class EventDetailViewModel extends CommonViewModel {
         this.inviteeItemView = inviteeItemView;
         notifyPropertyChanged(BR.inviteeItemView);
     }
+
+
 }

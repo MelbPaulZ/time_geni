@@ -405,7 +405,7 @@ public class DBManager {
         CalendarDao calendarDao = daoSession.getCalendarDao();
         List<Calendar> calendarList = calendarDao.queryBuilder().where(
                 CalendarDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid())
-        ).list();
+        ).orderAsc(CalendarDao.Properties.CreatedAt).list();
         return calendarList;
     }
 
