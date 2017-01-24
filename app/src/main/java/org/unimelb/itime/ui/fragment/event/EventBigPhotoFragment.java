@@ -36,7 +36,15 @@ public class EventBigPhotoFragment extends BaseUiAuthFragment<EventBigPhotoMvpVi
     private EventBigPhotoViewModel viewModel;
     private List<PhotoUrl> photos;
     private int position;
+    private boolean editable;
 
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
 
     @Nullable
     @Override
@@ -81,8 +89,10 @@ public class EventBigPhotoFragment extends BaseUiAuthFragment<EventBigPhotoMvpVi
         toolbarViewModel = new ToolbarViewModel(this);
         toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.photo));
-        toolbarViewModel.setRightClickable(true);
-        toolbarViewModel.setRightDrawable(getResources().getDrawable(R.drawable.trash));
+        if(isEditable()) {
+            toolbarViewModel.setRightClickable(true);
+            toolbarViewModel.setRightDrawable(getResources().getDrawable(R.drawable.trash));
+        }
     }
 
     public void setPosition(int position) {

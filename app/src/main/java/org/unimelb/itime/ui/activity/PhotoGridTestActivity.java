@@ -39,7 +39,7 @@ public class PhotoGridTestActivity extends EmptyActivity {
         p3.setUrl("http://static.open-open.com/lib/uploadImg/20150705/20150705190525_630.png");
         photos.add(p3);
 
-        fragment.setPhotos(photos);
+        //fragment.setPhotos(photos);
 
         openFragment(fragment, null, false);
     }

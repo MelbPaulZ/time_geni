@@ -28,8 +28,8 @@
             android:layout_height="wrap_content"
             app:photos = "@{viewModel.photos}"
             app:spacing="4dp"
-            app:editable="true"
-            app:maxnum="9"
+            app:editable="@{viewModel.editable}"
+            app:maxnum="@{viewModel.maxNum}"
             app:addMoreOnClickListener="@{viewModel.addMoreOnClickListener}"
             app:itemOnClickListener="@{viewModel.itemOnClickListener}"/>
 

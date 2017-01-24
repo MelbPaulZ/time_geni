@@ -78,6 +78,14 @@ public class PhotoGridView extends ViewGroup {
         }
     }
 
+    public void setEditable(boolean editable){
+        addable = editable;
+    }
+
+    public void setMaxnum(int maxnum){
+        this.maxnum = maxnum;
+    }
+
     public void setPhotos(List<PhotoUrl> photos){
         this.photos = photos;
         this.removeAllViews();

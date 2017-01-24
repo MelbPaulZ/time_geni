@@ -533,7 +533,8 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border">
+                        android:background="@drawable/table_row_border"
+                        android:onClick="@{eventEditVM.pickPhoto()}">
 
                         <TextView
                             android:id="@+id/photo_title"

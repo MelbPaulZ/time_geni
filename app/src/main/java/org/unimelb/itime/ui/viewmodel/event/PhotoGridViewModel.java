@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.viewmodel.event;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.text.Editable;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -30,6 +31,28 @@ import me.fesky.library.widget.ios.ActionSheetDialog;
 public class PhotoGridViewModel extends BaseObservable{
     private List<PhotoUrl> photos;
     private EventPhotoPresenter presenter;
+    private boolean editable;
+    private int maxNum;
+
+    @Bindable
+    public int getMaxNum() {
+        return maxNum;
+    }
+
+    public void setMaxNum(int maxNum) {
+        this.maxNum = maxNum;
+        notifyPropertyChanged(BR.maxNum);
+    }
+
+    @Bindable
+    public boolean getEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+        notifyPropertyChanged(BR.editable);
+    }
 
     public PhotoGridViewModel (EventPhotoPresenter presenter){
         this.presenter = presenter;

@@ -20,7 +20,6 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.databinding.FragmentPhotogridBinding;
 import org.unimelb.itime.ui.activity.PhotoPickerActivity;
-import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.event.EventPhotoGridMvpView;
 import org.unimelb.itime.ui.presenter.event.EventPhotoPresenter;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
@@ -40,17 +39,34 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
     public final static int REQ_LOCATION = 1000;
     public final static int REQ_CUSTOM_REPEAT = 1003;
     public final static int REQ_PHOTO = 1004;
-    public final static int MAX_PHOTO_NUM = 9;
 
+    private int maxNum = 9;
     public final static int REQUEST_PHOTO_PERMISSION = 101;
     private List<String> permissionList;
 
     private FragmentPhotogridBinding binding;
-    private List<PhotoUrl> photos;
+    private Event event;
     private List<PhotoUrl> tmpPhotos;
     private ToolbarViewModel toolbarViewModel;
     private PhotoGridViewModel viewModel;
     private EventBigPhotoFragment bigPhotoFragment;
+    private boolean editable = true;
+
+    public boolean getEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    public int getMaxNum() {
+        return maxNum;
+    }
+
+    public void setMaxNum(int maxNum) {
+        this.maxNum = maxNum;
+    }
 
     @Nullable
     @Override
@@ -68,7 +84,7 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = new PhotoGridViewModel(getPresenter());
-        viewModel.setPhotos(tmpPhotos);
+        loadData();
         initToolbar();
         binding.setViewModel(viewModel);
         binding.setToolbarVM(toolbarViewModel);
@@ -77,13 +93,19 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
     @Override
     public void onResume(){
         super.onResume();
-        viewModel.setPhotos(tmpPhotos);
+        loadData();
     }
 
     @Override
     public void onStart(){
         super.onStart();
+        loadData();
+    }
+
+    private void loadData(){
         viewModel.setPhotos(tmpPhotos);
+        viewModel.setEditable(editable);
+        viewModel.setMaxNum(maxNum);
     }
 
     private void initToolbar() {
@@ -94,14 +116,14 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
         toolbarViewModel.setRightTitleStr(getString(R.string.done));
     }
 
-    public void setPhotos(List<PhotoUrl> photos) {
-        this.photos = photos;
-        tmpPhotos = new ArrayList<>(photos);
+    public void setEvent(Event event) {
+        this.event = event;
+        tmpPhotos = new ArrayList<>(event.getPhoto());
     }
 
     @Override
     public void onBack() {
-        if(!photos.equals(tmpPhotos)){
+        if(!event.getPhoto().equals(tmpPhotos)){
             openAlertDialog();
         }else{
             getBaseActivity().onBackPressed();
@@ -128,13 +150,19 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
 
     @Override
     public void onNext() {
-        photos = tmpPhotos;
+        event.setPhoto(tmpPhotos);
         getBaseActivity().onBackPressed();
     }
 
     @Override
     public void openCamera() {
-
+        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
+        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum - tmpPhotos.size());
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
+        intent.putExtra(PhotoPickerActivity.CAMERA_ONLY, true);
+        startActivityForResult(intent, REQ_PHOTO);
     }
 
     @Override
@@ -149,6 +177,7 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
         }
         bigPhotoFragment.setPosition(position);
         bigPhotoFragment.setPhotos(photos);
+        bigPhotoFragment.setEditable(editable);
         getBaseActivity().openFragment(bigPhotoFragment, null, true);
     }
 
@@ -185,7 +214,7 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
         Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
         int selectedMode = PhotoPickerActivity.MODE_MULTI;
         intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, MAX_PHOTO_NUM - tmpPhotos.size());
+        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum - tmpPhotos.size());
         intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
         startActivityForResult(intent, REQ_PHOTO);
     }

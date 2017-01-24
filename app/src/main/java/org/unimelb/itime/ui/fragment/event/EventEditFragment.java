@@ -192,7 +192,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
         int maxNum = 9;
         intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
-        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, true);
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
         startActivityForResult(intent, REQ_PHOTO);
     }
 
@@ -209,8 +209,18 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         if(eventPhotoFragment==null){
             eventPhotoFragment = new EventPhotoFragment();
         }
-        eventPhotoFragment.setPhotos(event.getPhoto());
+        eventPhotoFragment.setEvent(event);
         getBaseActivity().openFragment(eventPhotoFragment);
+    }
+
+    public void openCamera() {
+        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
+        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, 1);
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
+        intent.putExtra(PhotoPickerActivity.CAMERA_ONLY, true);
+        startActivityForResult(intent, REQ_PHOTO);
     }
 
     private void openPhotoActionSheetDialog(){
@@ -224,7 +234,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
                             new ActionSheetDialog.OnSheetItemClickListener() {
                                 @Override
                                 public void onClick(int i) {
-                                    //presenter.getView().openCamera();
+                                    openCamera();
                                 }
                             })
                     .addSheetItem(presenter.getContext().getResources().getString(R.string.choose_from_photos),
