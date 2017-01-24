@@ -4,16 +4,22 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
+import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.squareup.picasso.Picasso;
 
+import org.unimelb.itime.R;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.widget.BaseTitleBar;
 import org.unimelb.itime.widget.SearchBar;
 import org.unimelb.itime.widget.WideBadgeArrowButton;
+
+import java.io.File;
 
 /**
  * Created by 37925 on 2016/12/15.
@@ -76,5 +82,22 @@ public class BindLoader extends BaseObservable {
     @BindingAdapter("bind:onItemClickListener")
     public static void setOnItemClickListener(ListView view, AdapterView.OnItemClickListener listener){
         view.setOnItemClickListener(listener);
+    }
+
+    @BindingAdapter("bind:onPageChangeListener")
+    public static void setOnItemClickListener(ViewPager view, ViewPager.OnPageChangeListener listener){
+        view.setOnPageChangeListener(listener);
+    }
+
+    @BindingAdapter("bind:photo")
+    public static void bindPhoto(ImageView view, PhotoUrl url){
+        if (!url.getLocalPath().equals("")){
+            File file = new File(url.getLocalPath());
+            if (file.exists()){
+                Picasso.with(view.getContext()).load(new File(url.getLocalPath())).error(R.drawable.ic_photo_loading).fit().into(view);
+            }
+        }else if (!url.getUrl().equals("")){
+            Picasso.with(view.getContext()).load(url.getUrl()).error(R.drawable.ic_photo_loading).fit().into(view);
+        }
     }
 }

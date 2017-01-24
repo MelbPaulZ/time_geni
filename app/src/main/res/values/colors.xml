@@ -395,4 +395,12 @@
     <color name = "hintText">#949494</color>
     <color name="disabled">#e0e0e0</color>
 
+    <color name="default_photo_background_1">#1BBC9B</color>
+    <color name="default_photo_background_2">#3598DB</color>
+    <color name="default_photo_background_3">#9B58B5</color>
+    <color name="default_photo_background_4">#34495E</color>
+    <color name="default_photo_background_5">#F1C40F</color>
+    <color name="default_photo_background_6">#E77E23</color>
+    <color name="default_photo_background_7">#E84C3D</color>
+
 </resources>

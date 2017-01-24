@@ -40,6 +40,7 @@ import static org.unimelb.itime.ui.fragment.event.EventTimeSlotViewFragment.TASK
 public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, EventPresenter<EventDetailMvpView>> implements EventDetailMvpView {
     private FragmentEventDetailBinding binding;
     private Event event;
+    private EventPhotoFragment eventPhotoFragment;
 
     private EventDetailViewModel contentViewModel;
     private ToolbarViewModel<EventDetailMvpView> toolbarViewModel;
@@ -184,9 +185,15 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
 
     @Override
     public void gotoGridView() {
-        EventPhotoGridFragment gridFragment = new EventPhotoGridFragment();
-        gridFragment.setEvent(event);
-        getBaseActivity().openFragment(gridFragment);
+//        EventPhotoGridFragment gridFragment = new EventPhotoGridFragment();
+//        gridFragment.setEvent(event);
+//        getBaseActivity().openFragment(gridFragment);
+        if(eventPhotoFragment==null){
+            eventPhotoFragment = new EventPhotoFragment();
+        }
+        eventPhotoFragment.setEvent(event);
+        eventPhotoFragment.setEditable(false);
+        getBaseActivity().openFragment(eventPhotoFragment);
     }
 
     @Override

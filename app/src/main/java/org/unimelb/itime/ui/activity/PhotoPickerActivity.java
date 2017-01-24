@@ -51,6 +51,8 @@ public class PhotoPickerActivity extends Activity implements PhotoAdapter.PhotoC
     public final static String KEY_RESULT = "picker_result";
     public final static int REQUEST_CAMERA = 1;
 
+    public final static String CAMERA_ONLY = "camera_only";
+
     /** 是否显示相机 */
     public final static String EXTRA_SHOW_CAMERA = "is_show_camera";
     /** 照片选择模式 */
@@ -94,14 +96,18 @@ public class PhotoPickerActivity extends Activity implements PhotoAdapter.PhotoC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.lling.photopicker.R.layout.activity_photo_picker);
-        initIntentParams();
-        initView();
+        if(getIntent().getBooleanExtra(CAMERA_ONLY,false)){
+            showCamera();
+        }else {
+            setContentView(com.lling.photopicker.R.layout.activity_photo_picker);
+            initIntentParams();
+            initView();
+            getPhotosTask.execute();
+        }
         if (!OtherUtils.isExternalStorageAvailable()) {
             Toast.makeText(this, "No SD card!", Toast.LENGTH_SHORT).show();
             return;
         }
-        getPhotosTask.execute();
     }
 
     private void initView() {

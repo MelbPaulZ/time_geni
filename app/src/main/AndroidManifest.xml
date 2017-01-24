@@ -199,6 +199,7 @@
         <activity android:name=".ui.activity.AddFriendActivity"/>
         <activity android:name=".ui.activity.FriendRequestActivity"/>
         <activity android:name=".ui.activity.BlockContactsActivity"/>
+        <activity android:name=".ui.activity.PhotoGridTestActivity"/>
         <activity android:name=".util.googleAuth.GoogleAuthActivity"/>
     </application>
 

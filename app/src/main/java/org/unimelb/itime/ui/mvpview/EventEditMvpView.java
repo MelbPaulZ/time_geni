@@ -14,4 +14,5 @@ public interface EventEditMvpView extends TaskBasedMvpView<List<Event>>, ItimeCo
     void toInviteePickerPage();
     void toPhotoPickerPage();
     void toCustomPage();
+    void gotoGridView();
 }
