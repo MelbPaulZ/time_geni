@@ -245,7 +245,6 @@ public class EventManager {
     }
 
     public synchronized void updateEvent(Event oldEvent, Event newEvent){
-        setCurrentEvent(newEvent);
 
         if (EventUtil.isAllDayEvent(oldEvent)){
             updateAllDayEvent(oldEvent, newEvent);

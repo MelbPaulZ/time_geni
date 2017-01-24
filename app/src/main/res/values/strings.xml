@@ -389,6 +389,7 @@
     <string name="my_qr_code">My QR Code</string>
     <string name="setting_gender">Gender</string>
     <string name="location">Region</string>
+    <string name="search_location">location</string>
     <string name="setting_my_profile">My Profile</string>
     <string name="setting_calendar_pref">Calendar Preferences</string>
     <string name="photo_my_profile">Photo</string>

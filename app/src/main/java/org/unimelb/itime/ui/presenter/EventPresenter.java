@@ -580,7 +580,6 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             eventManager.updateEvent(oldEvent, ev);
         }else{
             eventManager.addEvent(ev);
-            eventManager.setCurrentEvent(ev);
             DBManager.getInstance(context).insertEvent(ev);
         }
     }

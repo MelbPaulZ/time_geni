@@ -2,6 +2,7 @@ package org.unimelb.itime.util;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
@@ -40,8 +41,8 @@ import java.util.Map;
 public class EventUtil {
     public static final int ACTIVITY_EDIT_EVENT = 1;
     public static final int ACTIVITY_CREATE_EVENT = 2;
-    public static double latitude = 0.0;
-    public static double longitude = 0.0;
+    public static double latitude;
+    public static double longitude;
 
     public final static int REPEAT_NEVER = 0;
     public final static int REPEAT_EVERYDAY = 1;
@@ -506,11 +507,15 @@ public class EventUtil {
         if (!isSelfInEvent(context, event)) {
             Invitee self = new Invitee();
             self.setStatus(Invitee.STATUS_ACCEPTED);
-            if (EventManager.getInstance(context).getHostInviteeUid(EventManager.getInstance(context).getCurrentEvent()) != null) {
-                self.setInviteeUid(EventManager.getInstance(context).getHostInviteeUid(EventManager.getInstance(context).getCurrentEvent()));
-            } else {
-                self.setInviteeUid(AppUtil.generateUuid());
-            }
+            String inviteeUid = EventManager.getInstance(context).getHostInviteeUid(EventManager.getInstance(context).getCurrentEvent());
+            Log.i("inviteeUid", "addSelfInInvitee: " + inviteeUid);
+            self.setInviteeUid(inviteeUid!=null ? inviteeUid : AppUtil.generateUuid());
+//            if (EventManager.getInstance(context).getHostInviteeUid(EventManager.getInstance(context).getCurrentEvent()) != null) {
+//                self.setInviteeUid(
+//                        EventManager.getInstance(context).getHostInviteeUid(EventManager.getInstance(context).getCurrentEvent()));
+//            } else {
+//                self.setInviteeUid(AppUtil.generateUuid());
+//            }
             self.setUserUid(UserUtil.getInstance(context).getUserUid());
             self.setEventUid(event.getEventUid());
             self.setUserId(UserUtil.getInstance(context).getUser().getUserId());
