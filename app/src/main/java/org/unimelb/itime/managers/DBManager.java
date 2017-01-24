@@ -36,10 +36,12 @@ public class DBManager {
     private static DBManager mInstance;
     private DaoMaster.DevOpenHelper openHelper;
     private Context context;
+    private DaoMaster daoMaster;
 
     public DBManager(Context context) {
         this.context = context;
         openHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
+        daoMaster = new DaoMaster(getWritableDatabase());
     }
 
 
@@ -55,60 +57,53 @@ public class DBManager {
     }
 
     public synchronized void insertSetting(SettingWrapper setting){
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         // TODO: 28/12/2016 insertOrReplace SettingWrapper to db
     }
 
     public synchronized void insertEvent(Event event) {
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDaoDao = daoSession.getEventDao();
         eventDaoDao.insertOrReplace(event);
     }
 
     public synchronized void insertMessage(Message message) {
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
         messageDao.insertOrReplace(message);
     }
 
-    public void insertMessageList(List<Message> messageList) {
+    public synchronized void insertMessageList(List<Message> messageList) {
         for (Message message : messageList) {
             insertMessage(message);
         }
     }
 
-    public void insertContact(Contact contact) {
+    public synchronized void insertContact(Contact contact) {
         if(contact==null){
             return;
         }
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
         contactDao.insertOrReplace(contact);
     }
 
-    public void deleteContact(Contact contact){
+    public synchronized void deleteContact(Contact contact){
         if(contact==null){
             return;
         }
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
         contactDao.delete(contact);
     }
 
-    public void updateContact(Contact contact){
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+    public synchronized void updateContact(Contact contact){
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
         contactDao.update(contact);
     }
 
-    public Contact searchContact(String contactUid){
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+    public synchronized Contact searchContact(String contactUid){
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
         QueryBuilder<Contact> qb = contactDao.queryBuilder();
@@ -122,9 +117,8 @@ public class DBManager {
         }
     }
 
-    public void insertUser(User user){
+    public synchronized void insertUser(User user){
         if(user!=null) {
-            DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
             DaoSession daoSession = daoMaster.newSession();
             UserDao userDao = daoSession.getUserDao();
             userDao.insertOrReplace(user);
@@ -133,7 +127,7 @@ public class DBManager {
 
 
 //    public void insertTimeSlot(Timeslot timeSlot){
-//        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+//
 //        DaoSession daoSession = daoMaster.newSession();
 //        TimeslotDao timeSlotDao = daoSession.getTimeslotDao();
 //        timeSlotDao.insertOrReplace(timeSlot);
@@ -141,11 +135,10 @@ public class DBManager {
 
 
 
-    public void insertEventList(List<Event> events) {
+    public synchronized void insertEventList(List<Event> events) {
         if (events == null || events.isEmpty()) {
             return;
         }
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDaoDao = daoSession.getEventDao();
         eventDaoDao.insertInTx(events);
@@ -155,14 +148,12 @@ public class DBManager {
 //        if (invitees == null || invitees.isEmpty()) {
 //            return;
 //        }
-//        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
 //        DaoSession daoSession = daoMaster.newSession();
 //        InviteeDao inviteeDao = daoSession.getInviteeDao();
 //        inviteeDao.insertInTx(invitees);
 //    }
 
-    public List<Event> queryEventList(long startTime, long endTime) {
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+    public synchronized List<Event> queryEventList(long startTime, long endTime) {
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDao = daoSession.getEventDao();
         QueryBuilder<Event> qb = eventDao.queryBuilder();
@@ -171,8 +162,7 @@ public class DBManager {
         return list;
     }
 
-    public List<Event> getAllEvents() {
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+    public synchronized List<Event> getAllEvents() {
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDao = daoSession.getEventDao();
         QueryBuilder<Event> qb = eventDao.queryBuilder();
@@ -180,25 +170,23 @@ public class DBManager {
         return list;
     }
 
-    public List<Message> getAllMessages() {
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+    public synchronized List<Message> getAllMessages() {
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
         QueryBuilder<Message> qb = messageDao.queryBuilder();
         qb.where(MessageDao.Properties.DeleteLevel.eq(0));
+        qb.orderDesc(MessageDao.Properties.CreatedAt);
         List<Message> list = qb.list();
         return list;
     }
 
     public synchronized void deleteAllMessages() {
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
         messageDao.deleteAll();
     }
 
-    public List<Contact> getAllContact() {
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+    public synchronized List<Contact> getAllContact() {
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
         QueryBuilder<Contact> qb = contactDao.queryBuilder();
@@ -209,8 +197,7 @@ public class DBManager {
         return list;
     }
 
-    public List<Block> getBlockContacts() {
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+    public synchronized List<Block> getBlockContacts() {
         DaoSession daoSession = daoMaster.newSession();
         BlockDao blockDao = daoSession.getBlockDao();
         QueryBuilder<Block> qb = blockDao.queryBuilder();
@@ -219,35 +206,34 @@ public class DBManager {
         return list;
     }
 
-    public void insertBlock(Block block) {
+    public synchronized void insertBlock(Block block) {
         if(block==null){
             return;
         }
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         BlockDao blockDao = daoSession.getBlockDao();
         blockDao.insertOrReplace(block);
     }
 
-    public void deleteBlock(Block block) {
+    public synchronized void deleteBlock(Block block) {
         if(block==null){
             return;
         }
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+
         DaoSession daoSession = daoMaster.newSession();
         BlockDao blockDao = daoSession.getBlockDao();
         blockDao.delete(block);
     }
 
     public synchronized void deleteAllContact(){
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
         contactDao.deleteAll();
     }
 
     public Event getEvent(String uid) {
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+
         DaoSession daoSession = daoMaster.newSession();
         EventDao eventDao = daoSession.getEventDao();
         QueryBuilder<Event> qb = eventDao.queryBuilder();
@@ -280,11 +266,11 @@ public class DBManager {
         return db;
     }
 
-    public void insertFriendRequest(FriendRequest request) {
+    public synchronized void insertFriendRequest(FriendRequest request) {
         if(request==null){
             return;
         }
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+
         DaoSession daoSession = daoMaster.newSession();
         FriendRequestDao friendRequestDao = daoSession.getFriendRequestDao();
         friendRequestDao.insertOrReplace(request);
@@ -292,7 +278,7 @@ public class DBManager {
     }
 
     public List<FriendRequest> getAllFriendRequest(){
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+
         DaoSession daoSession = daoMaster.newSession();
         FriendRequestDao friendRequestDao = daoSession.getFriendRequestDao();
         QueryBuilder<FriendRequest> qb = friendRequestDao.queryBuilder();
@@ -302,7 +288,7 @@ public class DBManager {
     }
 
     public List<Calendar> getAllCalendars(){
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+
         DaoSession daoSession = daoMaster.newSession();
         CalendarDao calendarDao = daoSession.getCalendarDao();
         QueryBuilder<Calendar> qb = calendarDao.queryBuilder();
@@ -310,18 +296,18 @@ public class DBManager {
         return list;
     }
 
-    public void insertCalendars(List<Calendar> cals){
+    public synchronized void insertCalendars(List<Calendar> cals){
         if (cals == null || cals.isEmpty()) {
             return;
         }
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+
         DaoSession daoSession = daoMaster.newSession();
         CalendarDao calDao = daoSession.getCalendarDao();
         calDao.insertInTx(cals);
     }
 
-    public void clearCalendars(){
-        DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
+    public synchronized void clearCalendars(){
+
         DaoSession daoSession = daoMaster.newSession();
         CalendarDao calDao = daoSession.getCalendarDao();
         calDao.deleteAll();
@@ -330,7 +316,7 @@ public class DBManager {
     /*********************************** delete above *************************************/
     @SuppressWarnings("unchecked")
     public <T extends Object,V> List<T> find(Class<T> className, String name, V value){
-        AbstractDao abd =  (new DaoMaster(getWritableDatabase()).newSession()).getDao(className);
+        AbstractDao abd =  daoMaster.newSession().getDao(className);
         QueryBuilder<T> qb = abd.queryBuilder();
         Property[] ptys = abd.getProperties();
         Property attr = null;
@@ -352,28 +338,27 @@ public class DBManager {
 
     @SuppressWarnings("unchecked")
     public <T extends Object> AbstractDao getQueryDao(Class<T> className){
-        return (new DaoMaster(getWritableDatabase()).newSession()).getDao(className);
+        return daoMaster.newSession().getDao(className);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends Object> List<T> getAll(Class<T> className){
-        return ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(className)).queryBuilder().list();
+        return ((AbstractDao) daoMaster.newSession().getDao(className)).queryBuilder().list();
     }
 
 
     @SuppressWarnings("unchecked")
-    public <T extends Object> void deleteAll(Class<T> className){
-        ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(className)).deleteAll();
+    public synchronized  <T extends Object> void deleteAll(Class<T> className){
+        ((AbstractDao) (daoMaster.newSession()).getDao(className)).deleteAll();
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Object> void insertOrReplace(List<T> objs){
+    public synchronized  <T extends Object> void insertOrReplace(List<T> objs){
         if (objs == null || objs.isEmpty()) {
             return;
         }
-        for (T obj:objs
-             ) {
-            ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(obj.getClass())).insertOrReplace(obj);
+        for (T obj:objs) {
+            ((AbstractDao) (daoMaster.newSession()).getDao(obj.getClass())).insertOrReplace(obj);
         }
     }
 
@@ -399,13 +384,17 @@ public class DBManager {
 
     public List<Calendar> getAllCalendarsForUser(){
         String uid = UserUtil.getInstance(context).getUserUid();
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+
         DaoSession daoSession = daoMaster.newSession();
         CalendarDao calendarDao = daoSession.getCalendarDao();
         List<Calendar> calendarList = calendarDao.queryBuilder().where(
                 CalendarDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid())
         ).orderAsc(CalendarDao.Properties.CreatedAt).list();
         return calendarList;
+    }
+
+    public DaoSession getNewSession(){
+        return daoMaster.newSession();
     }
 
 }

@@ -28,7 +28,6 @@ import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.TokenUtil;
 import org.unimelb.itime.util.UserUtil;
 
-import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
@@ -148,8 +147,6 @@ public class RemoteService extends Service {
                     public HttpResult<List<Message>> call(HttpResult<List<Message>> ret) {
                         if (isStart && ret.getStatus() == 1) {
                             List<Message> msgs = ret.getData();
-                            Collections.sort(msgs);
-                            Collections.reverse(msgs);
                             dbManager.insertMessageList(msgs);
                             tokenUtil.setMessageToken(user.getUserUid(), ret.getSyncToken());
                         }
@@ -173,7 +170,7 @@ public class RemoteService extends Service {
                 if (!isStart) {
                     return;
                 }
-                if (ret.getStatus() == 1) {
+                if (ret.getStatus() == 1 && ret.getData().size() > 0) {
                     EventBus.getDefault().post(new MessageInboxMessage(ret.getData()));
                 }
             }
@@ -196,7 +193,6 @@ public class RemoteService extends Service {
                                 dbManager.insertOrReplace(ret.getData());
                             } else {
                                 eventManager.updateDB(ret.getData());
-                                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                             }
                             //update syncToken
                             tokenUtil.setEventToken(user.getUserUid(), calendar.getCalendarUid(), ret.getSyncToken());
@@ -222,13 +218,27 @@ public class RemoteService extends Service {
                 if (!isStart) {
                     return;
                 }
+                if(result.getStatus() == 1 && result.getStatus() > 0){
+                    EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                }
             }
         };
         HttpUtil.subscribe(observable, subscriber);
     }
 
     private void fetchContact() {
-        Observable<HttpResult<List<Contact>>> observable = contactApi.list();
+        Observable<HttpResult<List<Contact>>> observable = contactApi.list().map(new Func1<HttpResult<List<Contact>>, HttpResult<List<Contact>>>() {
+            @Override
+            public HttpResult<List<Contact>> call(HttpResult<List<Contact>> ret) {
+                if(ret.getStatus() == 1 && ret.getData().size() > 0){
+                    List<Contact> contactList = ret.getData();
+                    for (Contact contact : contactList) {
+                        dbManager.insertContact(contact);
+                    }
+                }
+                return ret;
+            }
+        });
         Subscriber<HttpResult<List<Contact>>> subscriber = new Subscriber<HttpResult<List<Contact>>>() {
             @Override
             public void onCompleted() {
@@ -241,13 +251,9 @@ public class RemoteService extends Service {
             }
 
             @Override
-            public void onNext(HttpResult<List<Contact>> listHttpResult) {
+            public void onNext(HttpResult<List<Contact>> ret) {
                 if (!isStart) {
                     return;
-                }
-                List<Contact> contactList = listHttpResult.getData();
-                for (Contact contact : contactList) {
-                    DBManager.getInstance(getBaseContext()).insertContact(contact);
                 }
                 Log.i(TAG, "onNext: ");
             }
@@ -255,6 +261,9 @@ public class RemoteService extends Service {
         HttpUtil.subscribe(observable, subscriber);
     }
 
+    /**
+     * for polling
+     */
     private class PollingThread extends Thread {
         @Override
         public void run() {

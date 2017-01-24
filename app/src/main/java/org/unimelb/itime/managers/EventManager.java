@@ -1,16 +1,11 @@
 package org.unimelb.itime.managers;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageEventRefresh;
 import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
@@ -23,13 +18,9 @@ import org.unimelb.itime.vendor.listener.ITimeEventPackageInterface;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.SimpleFormatter;
-
-import static android.R.attr.handle;
 
 /**
  * Created by yuhaoliu on 29/08/16.
@@ -156,7 +147,7 @@ public class EventManager {
         return null;
     }
 
-    public void syncRepeatedEvent(long currentDate){
+    public synchronized void syncRepeatedEvent(long currentDate){
         boolean reachPreFlg = currentDate < this.getLoadPreFlag();
         boolean reachFurFlg = currentDate > this.getLoadFurFlag();
         if (reachPreFlg || reachFurFlg){
@@ -189,7 +180,7 @@ public class EventManager {
     /**
      * reload all events
      */
-    public void refreshEventManager(){
+    public synchronized void refreshEventManager(){
         init();
         loadDB();
     }
@@ -205,11 +196,11 @@ public class EventManager {
         }
     }
 
-    public void clear(){
+    public synchronized void clear(){
         this.instance = null;
     }
 
-    public void addEvent(Event event){
+    public synchronized void addEvent(Event event){
         //check if special event
         handleSpecialEvent(event);
 
@@ -290,7 +281,7 @@ public class EventManager {
         }
     }
 
-    private void updateRegularEvent(Event oldEvent, Event newEvent){
+    private synchronized void updateRegularEvent(Event oldEvent, Event newEvent){
         long oldBeginTime = EventUtil.getDayBeginMilliseconds(oldEvent.getStartTime());
 
         if (this.regularEventMap.containsKey(oldBeginTime)){
@@ -318,18 +309,18 @@ public class EventManager {
         }
     }
 
-    private void updateRepeatedEvent(Event oldEvent, Event newEvent){
+    private synchronized void updateRepeatedEvent(Event oldEvent, Event newEvent){
         this.removeRepeatedEvent(oldEvent);
         this.orgRepeatedEventList.remove(oldEvent);
         this.addEvent(newEvent);
     }
 
-    private void updateAllDayEvent(Event oldEvent, Event newEvent){
+    private synchronized void updateAllDayEvent(Event oldEvent, Event newEvent){
         this.allDayEventList.remove(EventUtil.getItemInList(new ArrayList(this.allDayEventList), oldEvent));
         this.addEvent(newEvent);
     }
 
-    private void handleSpecialEvent(Event event){
+    private synchronized void handleSpecialEvent(Event event){
         String rEUID = event.getRecurringEventUid();
 
         if (!rEUID.equals("") && !rEUID.equals(event.getEventUid())){
@@ -361,7 +352,7 @@ public class EventManager {
         return false;
     }
 
-    private void addRepeatedEvent(Event event, long rangeStart, long rangeEnd){
+    private synchronized void addRepeatedEvent(Event event, long rangeStart, long rangeEnd){
         RuleModel rule = RuleFactory.getInstance().getRuleModel(event);
         event.setRule(rule);
 
@@ -441,7 +432,7 @@ public class EventManager {
         }
     }
 
-    private void removeRepeatedEvent(Event event){
+    private synchronized void removeRepeatedEvent(Event event){
         List<EventTracer> tracers = uidTracerMap.get(event.getEventUid());
         if (tracers != null){
             for (EventTracer tracer:tracers

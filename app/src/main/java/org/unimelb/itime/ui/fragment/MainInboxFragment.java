@@ -126,6 +126,12 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
         binding.inboxListview.setAdapter(adapter);
     }
 
+    public void setData(List<Message> data){
+        this.list = transform(data);
+        contentViewModel.setList(list);
+        adapter.setData(list);
+    }
+
     @Override
     public void onFilterMessage(List<Message> filterList) {
         this.list = transform(filterList);
@@ -145,18 +151,24 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
 
     @Override
     public void onTaskStart(int taskId) {
-        showProgressDialog();
+        if(taskId == MainInboxPresenter.TASK_EVENT_GET){
+            showProgressDialog();
+        }
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
         hideProgressDialog();
         if(taskId == MainInboxPresenter.TASK_EVENT_GET){
-            List<? extends Object> list = (List) data;
-            if (list.get(0) instanceof Event){
-                toEventDetailPage((Event) ((List) data).get(0));
-            }
+            Event event = (Event) data;
+            toEventDetailPage(event);
             return;
+        }
+
+        if(taskId == MainInboxPresenter.TASK_MSG_DELETE || taskId == MainInboxPresenter.TASK_MSG_READ){
+            List<ItemViewModel> messages = transform((List<Message>) data);
+            contentViewModel.setList(messages);
+            adapter.setData(messages);
         }
     }
 

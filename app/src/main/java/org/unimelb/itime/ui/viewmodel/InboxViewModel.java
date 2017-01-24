@@ -9,9 +9,11 @@ import com.android.databinding.library.baseAdapters.BR;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.managers.DBManager;
+import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
 import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.widget.SearchBar;
@@ -48,6 +50,7 @@ public class InboxViewModel extends CommonViewModel {
                     //unread to read
                     message.setRead(true);
                     message.update();
+                    EventBus.getDefault().post(new MessageInboxMessage(new ArrayList<Message>()));
                     presenter.markAsRead(message);
                 }
 
@@ -119,7 +122,7 @@ public class InboxViewModel extends CommonViewModel {
 
         public void setMessage(Message message) {
             this.message = message;
-            setTimeString(message.getUpdatedAt());
+            setTimeString(message.getCreatedAt());
             notifyPropertyChanged(BR.message);
         }
 

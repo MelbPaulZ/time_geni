@@ -11,12 +11,13 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.managers.MessageManager;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
 import org.unimelb.itime.util.HttpUtil;
+import org.unimelb.itime.util.TokenUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,16 +41,37 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
     private MessageApi messageApi;
     private EventApi eventApi;
     private MessageFilter filter;
+    private TokenUtil tokenUtil;
+    private UserUtil userUtil;
+    private DBManager dbManager;
 
     public MainInboxPresenter(Context context) {
         this.context = context;
         messageApi = HttpUtil.createService(context, MessageApi.class);
         eventApi = HttpUtil.createService(context, EventApi.class);
         filter = new MessageFilter();
+
+        tokenUtil = TokenUtil.getInstance(context);
+        userUtil = UserUtil.getInstance(context);
+        dbManager = DBManager.getInstance(context);
     }
 
     public Context getContext() {
         return context;
+    }
+
+    /**
+     * save the message and syncToken to db
+     */
+    private class MessageSaver implements Func1<HttpResult<List<Message>>, HttpResult<List<Message>>> {
+        @Override
+        public HttpResult<List<Message>> call(HttpResult<List<Message>> ret) {
+            if(ret.getStatus() == 1 && ret.getData().size() > 0){
+                dbManager.insertMessageList(ret.getData());
+                tokenUtil.setMessageToken(userUtil.getUserUid(), ret.getSyncToken());
+            }
+            return ret;
+        }
     }
 
     public void markAsRead(Message message){
@@ -62,8 +84,9 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
         HashMap<String, Object> map = new HashMap<>();
         map.put("messageUids", messageList);
         map.put("isRead", isRead);
-        Observable<HttpResult<Void>> observable = messageApi.read(map);
-        Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
+        String syncToken = tokenUtil.getMessageToken(userUtil.getUserUid());
+        Observable<HttpResult<List<Message>>> observable = messageApi.read(map, syncToken).map(new MessageSaver());
+        Subscriber<HttpResult<List<Message>>> subscriber = new Subscriber<HttpResult<List<Message>>>() {
             @Override
             public void onCompleted() {
                 Log.i(TAG, "onCompleted: ");
@@ -77,12 +100,12 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
             }
 
             @Override
-            public void onNext(HttpResult<Void> ret) {
+            public void onNext(HttpResult<List<Message>> ret) {
                 if(getView() == null){
                     return;
                 }
                 if(ret.getStatus() == 1){
-                    getView().onTaskSuccess(TASK_MSG_READ, null);
+                    getView().onTaskSuccess(TASK_MSG_READ, ret.getData());
                 }else{
                     getView().onTaskError(TASK_MSG_READ, ret.getInfo());
                 }
@@ -100,10 +123,9 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("messageUids", messageList);
-
-        MessageManager.getInstance().insertWaitMessage(message);
-        Observable<HttpResult<Void>> observable = messageApi.delete(map);
-        Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
+        String syncToken = tokenUtil.getMessageToken(userUtil.getUserUid());
+        Observable<HttpResult<List<Message>>> observable = messageApi.delete(map, syncToken).map(new MessageSaver());
+        Subscriber<HttpResult<List<Message>>> subscriber = new Subscriber<HttpResult<List<Message>>>() {
             @Override
             public void onCompleted() {
                 Log.i(TAG, "onCompleted: ");
@@ -117,13 +139,12 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
             }
 
             @Override
-            public void onNext(HttpResult<Void> ret) {
+            public void onNext(HttpResult<List<Message>> ret) {
                 if(getView() == null){
                     return;
                 }
                 if(ret.getStatus() == 1){
-                    MessageManager.getInstance().deleteWaitMessage(message);
-                    getView().onTaskSuccess(TASK_MSG_DELETE, null);
+                    getView().onTaskSuccess(TASK_MSG_DELETE, ret.getData());
                 }else{
                     getView().onTaskError(TASK_MSG_DELETE, ret.getInfo());
                 }
@@ -132,6 +153,7 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
 
         HttpUtil.subscribe(observable, subscriber);
     }
+
 
     public void fetchEvent(String calendarUid, String eventUid){
         if (getView() != null){
@@ -169,7 +191,7 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
                     return;
                 }
                 if(ret.getStatus() == 1){
-                    getView().onTaskSuccess(TASK_EVENT_GET, Arrays.asList(ret.getData()));
+                    getView().onTaskSuccess(TASK_EVENT_GET, ret.getData());
                 }else{
                     getView().onTaskError(TASK_EVENT_GET, ret.getInfo());
                 }

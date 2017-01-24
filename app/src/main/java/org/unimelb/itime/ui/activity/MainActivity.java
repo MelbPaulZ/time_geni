@@ -87,8 +87,12 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
         showFragmentById(0);
     }
 
+    /**
+     * for listen the badge of inbox tab
+     * @param messageInboxMessage
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getInboxMessage(MessageInboxMessage messageInboxMessage){
+    public void listenInbox(MessageInboxMessage messageInboxMessage){
         List<Message> messageList = DBManager.getInstance(getApplicationContext()).getAllMessages();
         int unReadNum = 0;
         for (Message message : messageList){
@@ -97,10 +101,15 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
             }
         }
         tabBarViewModel.setUnReadNum(unReadNum+"");
+        ((MainInboxFragment)tagFragments[2]).setData(messageList);
     }
 
+    /**
+     * for listen the badge of contact tab
+     * @param msg
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setNewFriendRequestCount(MessageNewFriendRequest msg){
+    public void listenFriendRequest(MessageNewFriendRequest msg){
         tabBarViewModel.setUnReadFriendRequest(msg.count);
     }
 
