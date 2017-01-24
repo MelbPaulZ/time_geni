@@ -219,6 +219,13 @@
     <string name="event_delete_repeat_text1">Delete This Event</string>
     <string name="event_delete_repeat_text2">Delete All Future Events</string>
 
+    <string name="take_photo">Take photo</string>
+    <string name="choose_from_photos">Choose from Photos</string>
+    <string name="cancel_photos_alert_msg">You haven\'t upload these photos, are you sure to discard photo editing?</string>
+    <string name="leave">Leave</string>
+    <string name="delete_this_photo">Delete this photo?</string>
+    <string name="delete">Delete</string>
+
     <!--tags are for fragment tag listener-->
     <string name="tag_create_event">tag create new event</string>
     <string name="tag_edit_event">tag edit event</string>

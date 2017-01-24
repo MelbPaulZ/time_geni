@@ -36,6 +36,8 @@ import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.fesky.library.widget.ios.ActionSheetDialog;
+
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_INSERT;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_EVENT_UPDATE;
 import static org.unimelb.itime.ui.presenter.EventPresenter.TASK_SYN_IMAGE;
@@ -68,6 +70,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     private List<WrapperTimeSlot> wrapperTimeSlotList;
     private EventManager eventManager;
     private List<PhotoUrl> photoUrls;
+    private EventPhotoFragment eventPhotoFragment;
 
     private EventEditViewModel eventEditViewModel;
     //    private EventPresenter presenter;
@@ -149,6 +152,13 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     }
 
     @Override
+    public void gotoGridView() {
+        EventPhotoGridFragment gridFragment = new EventPhotoGridFragment();
+        gridFragment.setEvent(event);
+        getBaseActivity().openFragment(gridFragment);
+    }
+
+    @Override
     public void toTimeslotViewPage() {
         // // TODO: 12/1/17  changet to
 
@@ -179,7 +189,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
         int selectedMode = PhotoPickerActivity.MODE_MULTI;
         intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-        int maxNum = 3;
+        int maxNum = 9;
         intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
         intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, true);
         startActivityForResult(intent, REQ_PHOTO);
@@ -187,7 +197,44 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
     @Override
     public void toPhotoPickerPage() {
-        checkPhotoPickerPermissions();
+        if(event.getPhoto().isEmpty()) {
+            openPhotoActionSheetDialog();
+        }else{
+            toPhotoGridPage();
+        }
+    }
+
+    private void toPhotoGridPage(){
+        if(eventPhotoFragment==null){
+            eventPhotoFragment = new EventPhotoFragment();
+        }
+        eventPhotoFragment.setPhotos(event.getPhoto());
+        getBaseActivity().openFragment(eventPhotoFragment);
+    }
+
+    private void openPhotoActionSheetDialog(){
+        if (presenter.getView()!=null) {
+            new ActionSheetDialog(getActivity())
+                    .builder()
+                    .setCancelable(true)
+                    .setCanceledOnTouchOutside(true)
+                    .addSheetItem(getContext().getResources().getString(R.string.take_photo),
+                            null,
+                            new ActionSheetDialog.OnSheetItemClickListener() {
+                                @Override
+                                public void onClick(int i) {
+                                    //presenter.getView().openCamera();
+                                }
+                            })
+                    .addSheetItem(presenter.getContext().getResources().getString(R.string.choose_from_photos),
+                            null,
+                            new ActionSheetDialog.OnSheetItemClickListener() {
+                                @Override
+                                public void onClick(int i) {
+                                    checkPhotoPickerPermissions();
+                                }
+                            }).show();
+        }
     }
 
 
@@ -288,6 +335,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
             List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
             event.setPhoto(photoUrls);
             setEvent(event);
+            toPhotoGridPage();
         }
     }
 

@@ -12,10 +12,16 @@ import android.widget.Toast;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
+import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.databinding.ActivityContactMainBinding;
+import org.unimelb.itime.databinding.FragmentPhotogridBinding;
+import org.unimelb.itime.ui.fragment.event.EventPhotoFragment;
 import org.unimelb.itime.util.DefaultPhotoUtil;
 import org.unimelb.itime.util.googleAuth.GoogleSignUtil;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactTestActivity extends EmptyActivity {
     ActivityContactMainBinding binding;
@@ -53,7 +59,8 @@ public class ContactTestActivity extends EmptyActivity {
     }
 
     public void toQRCode() {
-        startActivityForResult(new Intent(this, CaptureActivityContact.class), 0);
+        startActivityForResult(new Intent(this, PhotoGridTestActivity.class), 0);
+
     }
 
     public View.OnClickListener getGoogleAuth(){
