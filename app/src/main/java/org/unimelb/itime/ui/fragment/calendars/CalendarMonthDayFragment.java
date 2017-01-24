@@ -100,10 +100,10 @@ public class CalendarMonthDayFragment extends CalendarBaseViewFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (monthDayView != null){
-            monthDayView.setDayEventMap(eventManager.getEventsPackage());
-            monthDayView.reloadEvents();
-        }
+//        if (monthDayView != null){
+//            monthDayView.setDayEventMap(eventManager.getEventsPackage());
+//            monthDayView.reloadEvents();
+//        }
         EventBus.getDefault().register(this);
     }
 

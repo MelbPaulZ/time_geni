@@ -519,7 +519,6 @@ public class EventEditViewModel extends EventCommonViewModel {
         }
         event.setRecurringEventUid("");
         event.setRecurringEventId("");
-        eventManager.setCurrentEvent(event);
         presenter.insertEvent(event);
     }
 
