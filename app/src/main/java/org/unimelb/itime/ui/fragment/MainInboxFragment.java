@@ -43,7 +43,7 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
 
     private FragmentMainInboxBinding binding;
     private MainInboxPresenter presenter;
-    private MessageAdapter messageAdapter;
+    private MessageAdapter adapter;
 
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
     private InboxViewModel contentViewModel;
@@ -76,13 +76,15 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dbManager = DBManager.getInstance(getContext());
+        adapter = new MessageAdapter(getContext(), presenter);
 
         toolbarViewModel = new ToolbarViewModel<>(this);
         toolbarViewModel.setTitleStr(getString(R.string.inbox));
         toolbarViewModel.setRightDrawable(getResources().getDrawable(R.drawable.icon_three_lines));
 
-        list = transform(dbManager.getAllMessages());
         contentViewModel = new InboxViewModel(getPresenter());
+        list = transform(dbManager.getAllMessages());
+        adapter.setData(list);
         contentViewModel.setList(list);
 
         binding.setToolbarVM(toolbarViewModel);
@@ -121,12 +123,14 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
         // set creator
         binding.inboxListview.setMenuCreator(creator);
         binding.inboxListview.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
-
+        binding.inboxListview.setAdapter(adapter);
     }
 
     @Override
-    public void onFilterMessage(List<Message> list) {
-        contentViewModel.setList(transform(list));
+    public void onFilterMessage(List<Message> filterList) {
+        this.list = transform(filterList);
+        contentViewModel.setList(list);
+        adapter.setData(list);
     }
 
     @Override

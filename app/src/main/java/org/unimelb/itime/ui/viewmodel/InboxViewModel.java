@@ -25,10 +25,6 @@ import org.unimelb.itime.widget.SearchBar;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.tatarka.bindingcollectionadapter.BaseItemViewSelector;
-import me.tatarka.bindingcollectionadapter.ItemView;
-import me.tatarka.bindingcollectionadapter.ItemViewSelector;
-
 import static org.unimelb.itime.ui.presenter.contact.ContextPresenter.getContext;
 
 
@@ -36,18 +32,11 @@ import static org.unimelb.itime.ui.presenter.contact.ContextPresenter.getContext
  * Created by Paul on 1/12/16.
  */
 public class InboxViewModel extends CommonViewModel {
+    private final static String TAG = "InboxViewModel";
     private MainInboxPresenter presenter;
     private DBManager dbManager;
-
     private List<ItemViewModel> list;
-    private ItemViewSelector<ItemViewModel> itemSelector = new BaseItemViewSelector<ItemViewModel>() {
-        @Override
-        public void select(ItemView itemView, int position, ItemViewModel item) {
-            itemView.set(BR.vm, R.layout.listview_inbox_invitee);
-        }
-    };
 
-    private final String TAG = "InboxViewModel";
 
     public InboxViewModel(MainInboxPresenter presenter) {
         this.presenter = presenter;
@@ -105,25 +94,14 @@ public class InboxViewModel extends CommonViewModel {
         };
     }
 
-    @Bindable
     public List<ItemViewModel> getList() {
         return list;
     }
 
     public void setList(List<ItemViewModel> list) {
         this.list = list;
-        notifyPropertyChanged(BR.list);
     }
 
-    @Bindable
-    public ItemViewSelector<ItemViewModel> getItemSelector() {
-        return itemSelector;
-    }
-
-    public void setItemSelector(ItemViewSelector<ItemViewModel> itemSelector) {
-        this.itemSelector = itemSelector;
-        notifyPropertyChanged(BR.itemSelector);
-    }
 
     /**
      * the view model of each host
@@ -132,20 +110,22 @@ public class InboxViewModel extends CommonViewModel {
         private MainInboxPresenter presenter;
         private String timeString = "";
         private Message message;
+        private Context context;
 
         public ItemViewModel(MainInboxPresenter presenter, Message message){
             this.presenter = presenter;
+            this.context = presenter.getContext();
             setMessage(message);
         }
 
-        public String getTag1(Context context, Message message) {
-            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)) {
+        public String getTag1() {
+            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED_NORMAL)) {
                 int goingNum = message.getNum1();
                 return goingNum + " " + context.getString(R.string.going);
-            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED)) {
+            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_NORMAL)) {
                 int acceptNum = message.getNum1();
                 return acceptNum + " " + context.getString(R.string.accept);
-            } else if (message.getTemplate().equals(Message.TPL_HOST_DELETED)) {
+            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_DELETED)) {
                 int acceptNum = message.getNum1();
                 int totalNum = message.getNum1() + message.getNum2() + message.getNum3();
                 return acceptNum + "/" + totalNum + " " + context.getString(R.string.going);
@@ -154,14 +134,14 @@ public class InboxViewModel extends CommonViewModel {
 
         }
 
-        public String getTag2(Context context, Message message) {
-            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)) {
+        public String getTag2() {
+            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED_NORMAL)) {
                 int noReplyNum = message.getNum3();
                 return noReplyNum + " " + context.getString(R.string.no_reply);
-            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED)){
+            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_NORMAL)){
                 int rejectNum = message.getNum2();
                 return rejectNum + " " + context.getString(R.string.reject);
-            } else if (message.getTemplate().equals(Message.TPL_HOST_DELETED)){
+            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_DELETED)){
                 int notGoingNum = message.getNum2();
                 int totalNum = message.getNum1() + message.getNum2() + message.getNum3();
                 return notGoingNum + "/" + totalNum + " " + context.getString(R.string.Not_going);
@@ -170,14 +150,14 @@ public class InboxViewModel extends CommonViewModel {
 
         }
 
-        public String getTag3(Context context, Message message) {
+        public String getTag3() {
             Log.i("message3", "getTag3: " + message.getTitle());
-            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)) {
+            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED_NORMAL)) {
                 return "";
-            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED)){
+            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_NORMAL)){
                 int noReplyNum = message.getNum3();
                 return noReplyNum + " " + context.getString(R.string.no_reply);
-            }else if (message.getTemplate().equals(Message.TPL_HOST_DELETED)){
+            }else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_DELETED)){
                 int noReplyNum = message.getNum3();
                 int totalNum = message.getNum1() + message.getNum2() + message.getNum3();
                 return noReplyNum + "/" + totalNum + " " + context.getString(R.string.no_reply);
@@ -198,7 +178,7 @@ public class InboxViewModel extends CommonViewModel {
 
         @BindingAdapter({"bind:message", " bind:tagNum"})
         public static void setTagBackground(TextView view, Message message, int tagNum) {
-            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)) {
+            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED_NORMAL)) {
                 if (tagNum == 1) {
                     view.setBackgroundResource(R.drawable.inbox_host_tag_green);
                 } else if (tagNum == 2) {
@@ -206,7 +186,7 @@ public class InboxViewModel extends CommonViewModel {
                 } else if (tagNum == 3) {
                     view.setBackgroundResource(R.drawable.inbox_host_tag_gray);
                 }
-            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED)){
+            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_NORMAL)){
                 if (tagNum == 1) {
                     view.setBackgroundResource(R.drawable.inbox_host_tag_blue);
                 } else if (tagNum == 2) {
@@ -214,7 +194,7 @@ public class InboxViewModel extends CommonViewModel {
                 } else if (tagNum == 3) {
                     view.setBackgroundResource(R.drawable.inbox_host_tag_gray);
                 }
-            } else if (message.getTemplate().equals(Message.TPL_HOST_DELETED)){
+            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_DELETED)){
                 // all gray for deleted tag
                 view.setBackgroundResource(R.drawable.inbox_host_tag_gray);
             }
@@ -226,18 +206,18 @@ public class InboxViewModel extends CommonViewModel {
         // for the tag3 visibility
         @BindingAdapter({"bind:visible"})
         public static void setVisible(TextView view, Message message) {
-            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)) {
+            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED_NORMAL)) {
                 view.setVisibility(View.GONE);
-            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED)){
+            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_NORMAL)){
                 view.setVisibility(View.VISIBLE);
-            } else if (message.getTemplate().equals(Message.TPL_HOST_DELETED)){
+            } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_DELETED)){
                 view.setVisibility(View.VISIBLE);
             }
         }
 
         @BindingAdapter({"bind:crossLine"})
         public static void setCrossLine(TextView view, Message message){
-            if (message.getTemplate().equals(Message.TPL_HOST_DELETED) || message.getTemplate().equals(Message.TPL_INVITEE_DELETED)){
+            if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_DELETED) || message.getTemplate().equals(Message.TPL_INVITEE_DELETED)){
                 view.setPaintFlags(view.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }else{
                 view.setPaintFlags(view.getPaintFlags() &(~Paint.STRIKE_THRU_TEXT_FLAG));
@@ -253,11 +233,11 @@ public class InboxViewModel extends CommonViewModel {
 
         public void setMessage(Message message) {
             this.message = message;
-//        if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)) {
+//        if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED_NORMAL)) {
 //            setTag3Visible(View.GONE);
-//        } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED)){
+//        } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_NORMAL)){
 //            setTag3Visible(View.VISIBLE);
-//        } else if (message.getTemplate().equals(Message.TPL_HOST_DELETED)){
+//        } else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED_DELETED)){
 //            setTag3Visible(View.VISIBLE);
 //        }
             setTimeString(message.getUpdatedAt());

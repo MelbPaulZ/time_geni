@@ -46,7 +46,8 @@ public class AndroidViewModel extends BaseObservable {
 
     @BindingAdapter("app:onListItemMenuClick")
     public static void setOnSwipeListItemMenuClickListener(View view, SwipeMenuListView.OnMenuItemClickListener listener){
-//        ((SwipeMenuListView)view).setOnMenuItemClickListener(listener);
+        ((SwipeMenuListView)view).setOnMenuItemClickListener(listener);
+
     }
 
     @BindingAdapter("android:selected")

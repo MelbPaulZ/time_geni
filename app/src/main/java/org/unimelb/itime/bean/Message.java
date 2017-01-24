@@ -1,28 +1,26 @@
 package org.unimelb.itime.bean;
 
-import org.greenrobot.greendao.annotation.Entity;
-
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Id;
 import org.unimelb.itime.dao.DaoSession;
 import org.unimelb.itime.dao.MessageDao;
 import org.unimelb.itime.util.EventUtil;
 
 import java.io.Serializable;
-import java.util.*;
 
 /**
  * Created by yuhaoliu on 1/12/16.
  */
 @Entity(active = true)
 public class Message implements Comparable<Message> , Serializable{
-    public final static String TPL_INVITEE = "invitee";
-    public final static String TPL_HOST_UNCONFIRMED = "host_unconfirmed";
-    public final static String TPL_HOST_DELETED = "host_deleted";
+    public final static String TPL_INVITEE_NORMAL = "invitee_normal";
     public final static String TPL_INVITEE_DELETED = "invitee_deleted";
-    public final static String TPL_HOST_CONFIRMED = "host_confirmed";
+    public final static String TPL_HOST_UNCONFIRMED_NORMAL = "host_unconfirmed_normal";
+    public final static String TPL_HOST_UNCONFIRMED_DELETED = "host_unconfirmed_deleted";
+    public final static String TPL_HOST_CONFIRMED_NORMAL = "host_confirmed_normal";
+    public final static String TPL_HOST_CONFIRMED_DELETED= "host_confirmed_deleted";
 
 
     String title = "";

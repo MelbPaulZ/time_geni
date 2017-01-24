@@ -24,7 +24,6 @@
         android:layout_width="236dp"
         android:layout_height="wrap_content"
         android:text="@{vm.message.title}"
-        android:textColor="@{vm.message.template.equals(Message.TPL_INVITEE_DELETED) ? @color/gray_9b9b9b : @color/color_000000}"
         android:textSize="17sp"
         android:layout_toRightOf="@+id/inbox_avatar"
         android:paddingLeft="7dp"
@@ -33,6 +32,7 @@
         android:maxLines="1"
         app:crossLine="@{vm.message}"
         />
+    <!--android:textColor="@{vm.message.template.equals(Message.TPL_INVITEE_DELETED) ? @color/gray_9b9b9b : @color/color_000000}"-->
 
     <!--todo gei title hua xian -->
 
@@ -59,12 +59,12 @@
         android:layout_toRightOf="@+id/inbox_avatar"
         android:paddingLeft="7dp"
         android:layout_marginBottom="10dp"
-        android:textColor="@{vm.message.template.equals(Message.TPL_INVITEE_DELETED) ? @color/gray_9b9b9b : @color/color_FF9600}"
         android:text="@{vm.message.subtitle2}"
         android:textSize="12sp"
         android:maxLines="1"
         />
-    
+    <!--android:textColor="@{vm.message.template.equals(Message.TPL_INVITEE_DELETED) ? @color/gray_9b9b9b : @color/color_FF9600}"-->
+
     <ImageView
         android:id="@+id/inbox_red_dot"
         android:layout_width="10dp"

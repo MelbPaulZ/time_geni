@@ -46,8 +46,6 @@
             android:layout_below="@id/inbox_searchview_layout"
             android:onListItemClick="@{contentVM.onItemClicked()}"
             app:onListItemMenuClick="@{contentVM.onDeleteClicked()}"
-            app:items="@{contentVM.list}"
-            app:itemView="@{contentVM.itemSelector}"
             />
     </RelativeLayout>
 </layout>
