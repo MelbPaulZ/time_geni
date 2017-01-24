@@ -18,17 +18,14 @@
 
         <include layout="@layout/line"/>
 
-        <RelativeLayout
+        <android.support.v4.view.ViewPager
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/black">
-            <ImageView
-                android:id="@+id/profile_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                app:photo="@{viewModel.photo}"
-                android:adjustViewBounds="true" />
-        </RelativeLayout>
+            app:items="@{viewModel.photos}"
+            app:itemView="@{viewModel.itemView}"
+            app:onPageChangeListener="@{viewModel.onPageChangeListener}"
+            >
+
+        </android.support.v4.view.ViewPager>
         </LinearLayout>
     </layout>

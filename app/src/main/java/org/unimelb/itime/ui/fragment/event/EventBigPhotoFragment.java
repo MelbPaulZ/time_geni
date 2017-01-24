@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,29 @@ public class EventBigPhotoFragment extends BaseUiAuthFragment<EventBigPhotoMvpVi
         viewModel.setPhotos(photos);
         viewModel.setPosition(position);
         viewModel.setSize(photos.size());
+        viewModel.setPageChangeListener(getOnPageChangeListener());
         toolbarViewModel.setTitleStr(getTitleString());
+    }
+
+    public ViewPager.OnPageChangeListener getOnPageChangeListener(){
+        return new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                setPosition(position);
+                toolbarViewModel.setTitleStr(getTitleString());
+                viewModel.setPosition(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        };
     }
 
     private String getTitleString(){
@@ -146,6 +169,7 @@ public class EventBigPhotoFragment extends BaseUiAuthFragment<EventBigPhotoMvpVi
             }
             toolbarViewModel.setTitleStr(getTitleString());
             viewModel.setPosition(position);
+            viewModel.setPhotos(photos);
         }
     }
 }

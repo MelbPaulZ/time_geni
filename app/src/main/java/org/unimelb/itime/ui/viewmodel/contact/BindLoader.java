@@ -4,7 +4,9 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
+import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -80,6 +82,11 @@ public class BindLoader extends BaseObservable {
     @BindingAdapter("bind:onItemClickListener")
     public static void setOnItemClickListener(ListView view, AdapterView.OnItemClickListener listener){
         view.setOnItemClickListener(listener);
+    }
+
+    @BindingAdapter("bind:onPageChangeListener")
+    public static void setOnItemClickListener(ViewPager view, ViewPager.OnPageChangeListener listener){
+        view.setOnPageChangeListener(listener);
     }
 
     @BindingAdapter("bind:photo")
