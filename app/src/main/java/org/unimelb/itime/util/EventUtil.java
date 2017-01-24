@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * Created by Paul on 8/09/2016.
@@ -572,6 +573,7 @@ public class EventUtil {
 
     public static Calendar parseTimeStringToCalendar(String timeString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date d = null;
         try {
             d = sdf.parse(timeString);
