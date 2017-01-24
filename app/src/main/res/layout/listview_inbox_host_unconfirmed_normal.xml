@@ -6,15 +6,13 @@
             name="vm"
             type="org.unimelb.itime.ui.viewmodel.InboxViewModel.ItemViewModel" />
 
-        <import type="org.unimelb.itime.bean.Message" />
+        <import type="android.view.View" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="104dp"
-        android:paddingStart="10dp"
-        android:orientation="horizontal"
-        >
+        android:layout_height="103dp"
+        android:paddingStart="10dp">
 
         <org.unimelb.itime.widget.RoundImageView
             android:id="@+id/photo"
@@ -24,63 +22,65 @@
             android:layout_marginTop="15dp"
             app:remote_url="@{vm.message.photo}" />
 
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/notification_red_dot"
+            android:visibility="@{vm.message.hasBadge ? View.VISIBLE : View.GONE}" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/photo"
-            android:layout_marginStart="7dp"
             android:layout_marginEnd="12dp"
+            android:layout_marginStart="7dp"
+            android:layout_toEndOf="@+id/photo"
             android:orientation="vertical">
 
-            <!--app:crossLine="@{vm.message}" />-->
-            <!--android:textColor="@{vm.message.template.equals(Message.TPL_HOST_DELETED) ? @color/gray_9b9b9b : @color/color_000000}"-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:maxLines="1"
-                android:textSize="17sp"
+                android:text="@{vm.message.title}"
                 android:textColor="@color/color_212121"
-                android:textStyle='@{vm.message.isRead() ? "normal" : "bold"}'
-                android:text="Group Meeting with Market Team"
-                />
+                android:textSize="17sp"
+                android:textStyle='@{vm.message.isRead() ? "normal" : "bold"}' />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                >
-            <!--tag1 accept-->
-            <TextView
-                android:layout_width="85dp"
-                android:layout_height="18dp"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:text="3 Accept"
-                android:background="@drawable/inbox_host_tag_blue"
-                android:gravity="center"
-                />
+                android:layout_marginTop="3dp">
+                <!--tag1 accept-->
+                <TextView
+                    android:layout_width="85dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/inbox_host_tag_blue"
+                    android:gravity="center"
+                    android:text='@{vm.message.num1 + " " + @string/accept}'
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
                 <!-- tag2 reject-->
-            <TextView
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:gravity="center"
-                android:text="2 Reject"
-                android:textSize="12sp"
-                android:textColor="@color/white"
-                android:background="@drawable/inbox_host_tag_red"
-                />
+                <TextView
+                    android:layout_width="85dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/inbox_host_tag_red"
+                    android:gravity="center"
+                    android:text='@{vm.message.num2 + " " + @string/reject}'
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
                 <!--tag3 no reply-->
-            <TextView
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:text="10 No Reply"
-                android:textColor="@color/white"
-                android:background="@drawable/inbox_host_tag_gray"
-                />
+                <TextView
+                    android:layout_width="85dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/inbox_host_tag_gray"
+                    android:gravity="center"
+                    android:text='@{vm.message.num3 + " " + @string/no_reply}'
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -90,39 +90,35 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:maxLines="1"
+                android:text="@{vm.message.subtitle1}"
                 android:textColor="@color/color_424242"
-                android:text="Sarah rejected all timeslots"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginTop="3dp">
 
                 <!-- subtitle 2-->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@{vm.message.subtitle2}"
                     android:textColor="@color/color_FFAB40"
-                    android:text="Waiting for you to confirm"
-                    android:textSize="12sp"
-                    />
+                    android:textSize="12sp" />
 
-                <!--android:text="@{vm.timeString}"-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="10/12/2016"
-                    android:textSize="12sp"
+                    android:text="@{vm.timeString}"
                     android:textColor="@color/color_9E9E9E"
-                    />
+                    android:textSize="12sp" />
             </RelativeLayout>
         </LinearLayout>
 
         <TextView
-            android:layout_marginStart="15dp"
-            style="@style/itime_bottom_divider_line" />
+            style="@style/itime_bottom_divider_line"
+            android:layout_marginStart="15dp" />
     </RelativeLayout>
 </layout>

@@ -3,6 +3,7 @@ package org.unimelb.itime.ui.viewmodel;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
+import android.graphics.Paint;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.squareup.picasso.Picasso;
@@ -77,6 +79,16 @@ public class AndroidViewModel extends BaseObservable {
     @BindingAdapter("android:onTouch")
     public static void setOnTouchListener(View view, View.OnTouchListener listener){
         view.setOnTouchListener(listener);
+    }
+
+    @BindingAdapter({"android:crossLine"})
+    public static void setCrossLine(View view, boolean enabled){
+        TextView tv = (TextView) view;
+        if(enabled){
+            tv.setPaintFlags(tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }else{
+            tv.setPaintFlags(tv.getPaintFlags() &(~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
     }
 
     /** The on

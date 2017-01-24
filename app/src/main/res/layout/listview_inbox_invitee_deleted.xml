@@ -1,97 +1,81 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="vm"
-            type="org.unimelb.itime.ui.viewmodel.InboxViewModel.ItemViewModel"/>
-        <import type="org.unimelb.itime.bean.Message"/>
+            type="org.unimelb.itime.ui.viewmodel.InboxViewModel.ItemViewModel" />
+
+        <import type="android.view.View" />
     </data>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="76dp">
 
-    <org.unimelb.itime.widget.RoundImageView
-        android:id="@+id/inbox_avatar"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginLeft="12dp"
-        app:remote_url="@{vm.message.photo}"
-        />
-
-    <!--title should be put in middle-->
-    <TextView
-        android:id="@+id/inbox_event_title"
-        android:layout_width="236dp"
-        android:layout_height="wrap_content"
-        android:text="@{vm.message.title}"
-        android:textSize="17sp"
-        android:layout_toRightOf="@+id/inbox_avatar"
-        android:paddingLeft="7dp"
-        android:textStyle='@{vm.message.isRead() ? "normal" : "bold"}'
-        android:layout_marginTop="14dp"
-        android:maxLines="1"
-        app:crossLine="@{vm.message}"
-        />
-    <!--android:textColor="@{vm.message.template.equals(Message.TPL_INVITEE_DELETED) ? @color/gray_9b9b9b : @color/color_000000}"-->
-
-    <!--todo gei title hua xian -->
-
-    <!--statue should be put in the top-->
-    <TextView
-        android:id="@+id/inbox_event_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/inbox_event_title"
-        android:layout_toRightOf="@+id/inbox_avatar"
-        android:paddingLeft="7dp"
-        android:text="@{vm.message.subtitle1}"
-        android:textColor="@color/gray_9b9b9b"
-        android:textSize="12sp"
-        android:maxLines="1"
-        />
-
-    <!--invitee actions should be put at the last-->
-    <TextView
-        android:id="@+id/inbox_invitee_action"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/inbox_event_status"
-        android:layout_toRightOf="@+id/inbox_avatar"
-        android:paddingLeft="7dp"
-        android:layout_marginBottom="10dp"
-        android:text="@{vm.message.subtitle2}"
-        android:textSize="12sp"
-        android:maxLines="1"
-        />
-    <!--android:textColor="@{vm.message.template.equals(Message.TPL_INVITEE_DELETED) ? @color/gray_9b9b9b : @color/color_FF9600}"-->
-
-    <ImageView
-        android:id="@+id/inbox_red_dot"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_marginLeft="17dp"
-        android:layout_marginTop="18dp"
-        app:dotVisible="@{vm.message}"
-        android:background="@drawable/notification_red_dot"
-        />
-    <TextView
-        android:id="@+id/inbox_event_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="12dp"
-        android:textSize="10sp"
-        android:text="@{vm.timeString}"
-        android:textColor="@color/gray_9b9b9b"
-        android:layout_alignParentEnd="true"
-        />
-    <TextView
-        android:id="@+id/inbox_split_line"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:textColor="@color/gray_9b9b9b"
-        android:layout_alignParentBottom="true"
-        android:paddingBottom="1dp"
-        />
-</RelativeLayout>
+        android:layout_height="74dp"
+        android:paddingStart="10dp">
+
+        <org.unimelb.itime.widget.RoundImageView
+            android:id="@+id/photo"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp"
+            app:remote_url="@{vm.message.photo}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="7dp"
+            android:layout_toEndOf="@+id/photo"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:maxLines="1"
+                android:crossLine="@{true}"
+                android:text="@{vm.message.title}"
+                android:textColor="@color/color_bdbdbd"
+                android:textSize="17sp"
+                />
+
+            <!--subtitle1-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:maxLines="1"
+                android:text="@{vm.message.subtitle1}"
+                android:textColor="@color/color_bdbdbd"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="3dp">
+
+                <!-- subtitle 2-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.message.subtitle2}"
+                    android:textColor="@color/color_bdbdbd"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="@{vm.timeString}"
+                    android:textColor="@color/color_9E9E9E"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            style="@style/itime_bottom_divider_line"
+            android:layout_marginStart="15dp" />
+    </RelativeLayout>
 </layout>
