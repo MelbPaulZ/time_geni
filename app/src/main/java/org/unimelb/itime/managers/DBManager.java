@@ -71,7 +71,7 @@ public class DBManager {
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
-        messageDao.insert(message);
+        messageDao.insertOrReplace(message);
     }
 
     public void insertMessageList(List<Message> messageList) {
