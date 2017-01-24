@@ -46,11 +46,7 @@ public class LoginBaseFragment extends BaseUiAuthFragment<LoginMvpView, LoginPre
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         String synToken = AuthUtil.getJwtToken(getContext());
-        // this use to create DB manager...
-        DBManager.getInstance(getContext());
-        EventManager.getInstance(getContext());
         if (!synToken.equals("")){
             successLogin();
             return;

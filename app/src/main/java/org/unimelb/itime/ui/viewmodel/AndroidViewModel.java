@@ -2,7 +2,6 @@ package org.unimelb.itime.ui.viewmodel;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -12,17 +11,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.util.CircleTransform;
-import org.unimelb.itime.util.EventUtil;
 import org.unimelb.itime.vendor.helper.DensityUtil;
 
 import java.io.File;
@@ -44,6 +42,12 @@ public class AndroidViewModel extends BaseObservable {
     @BindingAdapter("android:onListItemClick")
     public static void setOnListItemClickListener(View view, AdapterView.OnItemClickListener listener){
         ((ListView)view).setOnItemClickListener(listener);
+    }
+
+    @BindingAdapter("app:onListItemMenuClick")
+    public static void setOnSwipeListItemMenuClickListener(View view, SwipeMenuListView.OnMenuItemClickListener listener){
+        ((SwipeMenuListView)view).setOnMenuItemClickListener(listener);
+
     }
 
     @BindingAdapter("android:selected")

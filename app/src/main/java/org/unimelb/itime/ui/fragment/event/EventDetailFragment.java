@@ -92,6 +92,12 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             SubTimeslotViewModel subTimeslotViewModel = new SubTimeslotViewModel(this);
             subTimeslotViewModel.setWrapper(wrapper);
             subTimeslotViewModel.setHostEvent(EventUtil.isUserHostOfEvent(getContext(), event));
+            // set invitee visibility
+            if (event.getInviteeVisibility() == 0 && !EventUtil.isUserHostOfEvent(getContext(), event)) {
+                subTimeslotViewModel.setInviteeVisibility(0);
+            }else{
+                subTimeslotViewModel.setInviteeVisibility(1);
+            }
             subTimeslotViewModel.setReplyData(replyData);
             this.timeslotVMList.add(subTimeslotViewModel);
         }
@@ -127,6 +133,12 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
             SubTimeslotViewModel vm = new SubTimeslotViewModel(this);
             vm.setWrapper(t);
             vm.setHostEvent(EventUtil.isUserHostOfEvent(getContext(), event));
+            // set invitee visibility
+            if (event.getInviteeVisibility() == 0 && !EventUtil.isUserHostOfEvent(getContext(), event)) {
+                vm.setInviteeVisibility(0);
+            }else{
+                vm.setInviteeVisibility(1);
+            }
             vm.setReplyData(replyData);
             vm.setIconSelected(t.isSelected());
             timeslotVMList.add(vm);

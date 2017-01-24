@@ -225,6 +225,20 @@ public class EventEditViewModel extends EventCommonViewModel {
         };
     }
 
+    public Switch.OnCheckedChangeListener inviteeVisibilityChange(){
+        return new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    event.setInviteeVisibility(1);
+                }else{
+                    event.setInviteeVisibility(0);
+                }
+                setEvent(event);
+            }
+        };
+    }
+
 
     @Bindable
     public int getIsAlldayEvent() {
@@ -500,9 +514,8 @@ public class EventEditViewModel extends EventCommonViewModel {
             event.setEventType(Event.TYPE_SOLO);
             event.setStatus(Event.STATUS_CONFIRMED);
         }
-        if (event.getCalendarUid() == "") {
-            event.setCalendarUid(CalendarUtil.getInstance(getContext()).getCalendar().get(0).getCalendarUid());
-            Toast.makeText(getContext(), "auto set Uid", Toast.LENGTH_SHORT).show();
+        if (event.getCalendarUid().equals("")) {
+            event.setCalendarUid(CalendarUtil.getInstance(getContext()).getDefaultCalendarUid());
         }
         event.setRecurringEventUid("");
         event.setRecurringEventId("");

@@ -68,17 +68,7 @@ public class SettingCalendarDisplayFragment extends BaseUiAuthFragment<SettingCa
 
     @Override
     public void onTaskSuccess(int taskId, Calendar data) {
-        EventManager.getInstance(getContext()).refreshEventManager(new EventManager.OnRefreshEventManager() {
-            @Override
-            public void onTaskStart() {
-                showProgressDialog();
-            }
-
-            @Override
-            public void onTaskEnd() {
-                hideProgressDialog();
-            }
-        });
+        hideProgressDialog();
     }
 
     @Override

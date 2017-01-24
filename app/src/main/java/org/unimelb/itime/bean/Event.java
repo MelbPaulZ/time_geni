@@ -70,7 +70,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
     private String source = "";
     private int deleteLevel;
     private int icsSequence;
-    private int inviteeVisibility = 1;
+    private int inviteeVisibility = 1; // default 1 = visible to each other, 0 = invisible
     private String display = "";
 
     private String url = "";
@@ -451,7 +451,7 @@ public class Event implements ITimeEventInterface<Event>, Serializable, Cloneabl
 
 
     public boolean hasRecurrence(){
-        return this.recurrence!=null;
+        return this.recurrence!=null && this.recurrence.length>0;
     }
 
     public List<Invitee> getInvitee() {

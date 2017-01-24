@@ -2,61 +2,65 @@ package org.unimelb.itime.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
+import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
+import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Message;
-import org.unimelb.itime.databinding.ListviewInboxHostBinding;
-import org.unimelb.itime.databinding.ListviewInboxInviteeBinding;
-import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.ui.presenter.MainInboxPresenter;
-import org.unimelb.itime.ui.viewmodel.InboxViewModel;
-import org.unimelb.itime.util.CircleTransform;
+import org.unimelb.itime.ui.viewmodel.InboxViewModel.ItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import me.tatarka.bindingcollectionadapter.ItemView;
+
+
 /**
  * Created by Paul on 1/12/16.
  */
-public class MessageAdapter extends BaseAdapter implements Filterable {
-    private List<Message> filteredMessageList;
-    private MessageFilter messageFilter;
+public class MessageAdapter extends BaseAdapter{
+    private List<ItemViewModel> data;
     private Context context;
-    private ListviewInboxHostBinding inboxHostBinding;
-    private ListviewInboxInviteeBinding inboxInviteeBinding;
-    private final static int TYPE_INVITEE = 0;
-    private final static int TYPE_HOST = 1;
     private MainInboxPresenter presenter;
+    private LayoutInflater inflater;
+
+    private int layouts[];
 
     public MessageAdapter(Context context, MainInboxPresenter presenter) {
         this.context = context;
         this.presenter = presenter;
-        this.filteredMessageList = new ArrayList<>();
+        this.data = new ArrayList<>();
+        this.inflater = LayoutInflater.from(context);
+        this.layouts = new int[]{
+                R.layout.listview_inbox_invitee_normal,
+                R.layout.listview_inbox_invitee_deleted,
+                R.layout.listview_inbox_host_confirmed_normal,
+                R.layout.listview_inbox_host_confirmed_deleted,
+                R.layout.listview_inbox_host_unconfirmed_normal,
+                R.layout.listview_inbox_host_unconfirmed_deleted
+        };
     }
 
-    public void setMessageList(List<Message> filteredMessageList) {
-        this.filteredMessageList = filteredMessageList;
+    public void setData(List<ItemViewModel> data){
+        this.data = data;
         notifyDataSetChanged();
     }
 
 
     @Override
     public int getCount() {
-        return filteredMessageList.size();
+        return data.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return filteredMessageList.get(i);
+        return data.get(i);
 
     }
 
@@ -68,7 +72,7 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public int getViewTypeCount() {
-        return 3;
+        return layouts.length;
     }
 
     /**
@@ -76,106 +80,48 @@ public class MessageAdapter extends BaseAdapter implements Filterable {
      */
     @Override
     public int getItemViewType(int position) {
-        Message message = filteredMessageList.get(position);
-        switch (message.getTemplate()){
-            case Message.TPL_HOST_CONFIRMED:
+        ItemViewModel vm = data.get(position);
+        switch (vm.getMessage().getTemplate()){
+            case Message.TPL_INVITEE_NORMAL:
                 return 0;
-            case Message.TPL_HOST_UNCONFIRMED:
-                return 1;
-            case Message.TPL_HOST_DELETED:
-                return 1;
-            case Message.TPL_INVITEE:
-                return 2;
             case Message.TPL_INVITEE_DELETED:
+                return 1;
+            case Message.TPL_HOST_CONFIRMED_NORMAL:
                 return 2;
+            case Message.TPL_HOST_CONFIRMED_DELETED:
+                return 3;
+            case Message.TPL_HOST_UNCONFIRMED_NORMAL:
+                return 4;
+            case Message.TPL_HOST_UNCONFIRMED_DELETED:
+                return 5;
         }
-        throw new RuntimeException("Message type not found : " + message.getTemplate());
+        throw new RuntimeException("Message type not found : " + vm.getMessage().getTemplate());
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-        InboxViewModel viewModel = new InboxViewModel(presenter);
-        Message message = filteredMessageList.get(position);
-        if (convertView==null) {
-            if (message.getTemplate().equals(Message.TPL_HOST_CONFIRMED)) {
-                inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
-                inboxHostBinding.setVm(viewModel);
-                convertView = inboxHostBinding.getRoot();
-            }else if (message.getTemplate().equals(Message.TPL_HOST_UNCONFIRMED)){
-                inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
-                inboxHostBinding.setVm(viewModel);
-                convertView = inboxHostBinding.getRoot();
-            }else if (message.getTemplate().equals(Message.TPL_HOST_DELETED)){
-                inboxHostBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_host, viewGroup, false);
-                inboxHostBinding.setVm(viewModel);
-                convertView = inboxHostBinding.getRoot();
-            }else if (message.getTemplate().equals(Message.TPL_INVITEE_DELETED)){
-                inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
-                inboxInviteeBinding.setVm(viewModel);
-                convertView = inboxInviteeBinding.getRoot();
-                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)),message.getPhoto());
-            } else {
-                // message.template = invitee
-                inboxInviteeBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.listview_inbox_invitee, viewGroup, false);
-                inboxInviteeBinding.setVm(viewModel);
-                convertView = inboxInviteeBinding.getRoot();
-                //david added
-                setImage(((ImageView)convertView.findViewById(R.id.inbox_avatar)),message.getPhoto());
-            }
-            convertView.setTag(viewModel);
+        ItemViewModel viewModel = data.get(position);
+        ViewDataBinding binding;
+        int layoutRes = layouts[getItemViewType(position)];
+
+        if(convertView == null){
+            binding = DataBindingUtil.inflate(inflater, layoutRes, viewGroup, false);
         }else{
-            viewModel = (InboxViewModel) convertView.getTag();
+            binding = DataBindingUtil.getBinding(convertView);
         }
-        viewModel.setMessage(message);
-        return convertView;
+
+        bindVariable(binding, BR.vm, layoutRes, viewModel);
+        return binding.getRoot();
     }
 
-    //david added
-    public void setImage(ImageView view, String url){
-        if (url.equals("")){
-            Picasso.with(presenter.getContext()).load(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
-            return;
-        }
-        Picasso.with(presenter.getContext()).load(url).placeholder(org.unimelb.itime.vendor.R.drawable.invitee_selected_default_picture).transform(new CircleTransform()).into(view);
-    }
-
-    @Override
-    public Filter getFilter() {
-        if (messageFilter == null) {
-            messageFilter = new MessageFilter();
-        }
-        return messageFilter;
-    }
-
-    private class MessageFilter extends Filter {
-
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            FilterResults filterResults = new FilterResults();
-            if (constraint != null && constraint.length() > 0) {
-                ArrayList<Message> matchList = new ArrayList<>();
-                for (Message message : DBManager.getInstance(context).getAllMessages()) {
-                    if (message.getTitle().toLowerCase().contains(constraint.toString().toLowerCase())) {
-                        matchList.add(message);
-                    }
-                }
-
-                filterResults.values = matchList;
-                filterResults.count = matchList.size();
-            } else {
-                filterResults.values = DBManager.getInstance(context).getAllMessages();
-                filterResults.count = DBManager.getInstance(context).getAllMessages().size();
+    private void bindVariable(ViewDataBinding binding, int bindingVariable, @LayoutRes int layoutRes, ItemViewModel item) {
+        if (bindingVariable != ItemView.BINDING_VARIABLE_NONE) {
+            boolean result = binding.setVariable(bindingVariable, item);
+            if (!result) {
+                throw new RuntimeException("data binding: can not find this variable");
             }
-            return filterResults;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-
-//            loginViewModel.setMessages((List<Message>) results.values);
-            filteredMessageList = (List<Message>) results.values;
-            notifyDataSetChanged();
+            binding.executePendingBindings();
         }
     }
+
 }

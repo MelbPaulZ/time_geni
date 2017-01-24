@@ -105,18 +105,16 @@
                     android:layout_marginTop="13dp"
                     android:background="@color/color_C0C7D3" />
 
-                <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginStart="20dp"
-                    app:items="@{loginVM.suggestedEmailList}"
-                    app:itemView="@{loginVM.suggestedEmailItemView}"
-                    android:onListItemClick="@{loginVM.onSuggestedEmailItemClick}"
-                    android:divider="@null"
-                    android:dividerHeight="0dp"
-                    android:scrollbars="none"
-                    />
+                <!--<ListView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="80dp"-->
+                    <!--android:layout_marginTop="14dp"-->
+                    <!--android:layout_marginStart="20dp"-->
+                    <!--android:onListItemClick="@{loginVM.onSuggestedEmailItemClick}"-->
+                    <!--android:divider="@null"-->
+                    <!--android:dividerHeight="0dp"-->
+                    <!--android:scrollbars="none"-->
+                    <!--/>-->
             </LinearLayout>
         </LinearLayout>
 

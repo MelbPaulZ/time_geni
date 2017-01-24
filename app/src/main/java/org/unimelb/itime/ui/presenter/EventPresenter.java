@@ -61,10 +61,13 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
     public static final int TASK_TIMESLOT_REJECT = 9;
     public static final int TASK_BACK = 10;
 
+
     public static final int TASK_UPLOAD_IMAGE= 11;
     public static final int TASK_UPDATE_IMAGE= 12;
     public static final int TASK_DELETE_IMAGE= 13;
     public static final int TASK_SYN_IMAGE= 14;
+    public static final int TASK_EVENT_FETCH = 15;
+
 
 
     public static final String UPDATE_THIS = "this";
@@ -129,6 +132,9 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
     }
 
     public void fetchEvent(String calendarUid, String eventUid){
+        if (getView()!=null){
+            getView().onTaskStart(TASK_EVENT_FETCH);
+        }
         Observable<HttpResult<Event>> observable = eventApi.get(
                 calendarUid
                 , eventUid);
@@ -479,6 +485,9 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
      * @param timeslotUid
      */
     public void confirmEvent(String calendarUid, String eventUid, String timeslotUid){
+        if (getView()!=null){
+            getView().onTaskStart(TASK_EVENT_CONFIRM);
+        }
         String syncToken = AppUtil.getEventSyncToken(context);
         setEventToEventManager(eventUid);
         Observable<HttpResult<List<Event>>> observable = eventApi.confirm(calendarUid,eventUid, timeslotUid, syncToken);

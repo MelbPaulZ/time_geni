@@ -23,9 +23,7 @@ import org.unimelb.itime.dao.EventDao;
 import org.unimelb.itime.dao.FriendRequestDao;
 import org.unimelb.itime.dao.MessageDao;
 import org.unimelb.itime.dao.UserDao;
-import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.UserUtil;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,6 +185,7 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         MessageDao messageDao = daoSession.getMessageDao();
         QueryBuilder<Message> qb = messageDao.queryBuilder();
+        qb.where(MessageDao.Properties.DeleteLevel.eq(0));
         List<Message> list = qb.list();
         return list;
     }
@@ -361,6 +360,7 @@ public class DBManager {
         return ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(className)).queryBuilder().list();
     }
 
+
     @SuppressWarnings("unchecked")
     public <T extends Object> void deleteAll(Class<T> className){
         ((AbstractDao) (new DaoMaster(getWritableDatabase()).newSession()).getDao(className)).deleteAll();
@@ -394,6 +394,18 @@ public class DBManager {
         }
 
         return events;
+    }
+
+
+    public List<Calendar> getAllCalendarsForUser(){
+        String uid = UserUtil.getInstance(context).getUserUid();
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        CalendarDao calendarDao = daoSession.getCalendarDao();
+        List<Calendar> calendarList = calendarDao.queryBuilder().where(
+                CalendarDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid())
+        ).orderAsc(CalendarDao.Properties.CreatedAt).list();
+        return calendarList;
     }
 
 }

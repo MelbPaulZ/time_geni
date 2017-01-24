@@ -11,8 +11,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.base.C;
 import org.unimelb.itime.bean.Calendar;
@@ -69,6 +67,7 @@ public class RemoteService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
+
         eventApi = HttpUtil.createService(getBaseContext(), EventApi.class);
         msgApi = HttpUtil.createService(getBaseContext(), MessageApi.class);
         calendarApi = HttpUtil.createService(getBaseContext(), CalendarApi.class);
@@ -77,14 +76,18 @@ public class RemoteService extends Service{
         context = getApplicationContext();
         user = UserUtil.getInstance(context).getUser();
         Log.i(TAG, "onCreate: ");
+        loadLocalEvents();
+
 
         //create the polling thread
         pollingThread = new PollingThread();
-        pullDataFromRemote();
+        pollingThread.start();
+
     }
 
     @Override
     public void onDestroy() {
+        Log.i(TAG, "onDestroy: " + "destryo");
         if (messageHandler != null){
             messageHandler.cancel(true);
         }
@@ -93,10 +96,16 @@ public class RemoteService extends Service{
         super.onDestroy();
     }
 
-    private void pullDataFromRemote(){
-        fetchCalendar();
-        fetchContact();
+    private void loadLocalEvents(){
+        new Thread(){
+            @Override
+            public void run() {
+                EventManager.getInstance(context).refreshEventManager();
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+            }
+        }.start();
     }
+
 
     private void fetchCalendar() {
         // here to list calendar;
@@ -118,9 +127,7 @@ public class RemoteService extends Service{
                 }
 
                 TokenUtil.getInstance(context).setCalendarToken(user.getUserUid(),httpResult.getSyncToken());
-                DBManager.getInstance(getApplicationContext()).insertOrReplace(httpResult.getData());
-
-                pollingThread.start();
+                DBManager.getInstance(context).insertOrReplace(httpResult.getData());
             }
         };
         String token = TokenUtil.getInstance(context).getCalendarToken(user.getUserUid());
@@ -175,9 +182,9 @@ public class RemoteService extends Service{
 
                     //if calendar not shown
                     if (visibility == 0){
-                        DBManager.getInstance(getApplicationContext()).insertOrReplace(listHttpResult.getData());
+                        DBManager.getInstance(context).insertOrReplace(listHttpResult.getData());
                     }else{
-                        EventManager.getInstance(getApplicationContext()).updateDB(listHttpResult.getData());
+                        EventManager.getInstance(context).updateDB(listHttpResult.getData());
                         EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
                         isUpdateThreadRuning = false;
                     }
@@ -243,13 +250,14 @@ public class RemoteService extends Service{
         public void run() {
             isPollingThreadRunning = true;
             while (isStart) {
-                // todo: here to list events
+                fetchCalendar();
                 for(Calendar calendar : CalendarUtil.getInstance(getApplication()).getCalendar()){
                     if (calendar.getDeleteLevel() == 0){
                         fetchEvents(calendar);
                     }
                 }
                 fetchMessages();
+                fetchContact();
 
                 SystemClock.sleep(5000); // cannot use thread sleep because of interrupt exception when sleep
                 // do something
@@ -291,13 +299,13 @@ public class RemoteService extends Service{
             }
             if (valid){
                 //update syncToken
-                SharedPreferences sp = AppUtil.getTokenSaver(getApplicationContext());
+                SharedPreferences sp = AppUtil.getTokenSaver(context);
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(C.spkey.MESSAGE_LIST_SYNC_TOKEN, token);
                 editor.apply();
                 EventBus.getDefault().post(new MessageInboxMessage(messages));
             }else{
-                Toast.makeText(getApplicationContext(), "Message cannot find correspond event, dropped." ,Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Message cannot find correspond event, dropped." ,Toast.LENGTH_LONG).show();
             }
 
             valid =false;

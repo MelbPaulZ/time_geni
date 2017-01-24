@@ -7,7 +7,6 @@ import org.unimelb.itime.bean.Message;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by yuhaoliu on 1/12/16.
@@ -39,8 +38,7 @@ public class MessageManager {
     }
 
     public boolean isInWaitList(String msgUID){
-        for (Message msg:this.deletedWaitingList
-             ) {
+        for (Message msg:this.deletedWaitingList) {
             if (msg.getMessageUid().equals(msgUID)){
                 return true;
             }

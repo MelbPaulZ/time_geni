@@ -41,24 +41,12 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
         binding.setLoginVM(loginViewModel);
 
         String synToken = AuthUtil.getJwtToken(getContext());
-        // this use to create DB manager...
-        DBManager.getInstance(getContext());
-        EventManager.getInstance(getContext());
         if (!synToken.equals("")){
             onTaskSuccess(LoginPresenter.TASK_LOGIN, null);
         }
     }
 
-    private void loadData(){
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                EventManager.getInstance(getContext()).refreshEventManager(null);
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
-            }
-        }.start();
-    }
+
 
     @Override
     public void onPageChange(int task) {
@@ -91,7 +79,6 @@ public class LoginFragment extends LoginBaseFragment implements LoginMvpView {
         hideProgressDialog();
         if(taskId == LoginPresenter.TASK_LOGIN){
             successLogin();
-            loadData();
         }
     }
 

@@ -32,8 +32,8 @@ public class LoginViewModel extends AndroidViewModel{
 
     private int topIconVisibility = View.VISIBLE;
 
-    private ArrayList<String> suggestedEmailList = new ArrayList<>();
-    private ItemView suggestedEmailItemView = ItemView.of(BR.itemText, R.layout.listview_login_email_tips);
+//    private ArrayList<String> suggestedEmailList = new ArrayList<>();
+//    private ItemView suggestedEmailItemView = ItemView.of(BR.itemText, R.layout.listview_login_email_tips);
 
 
     private User loginUser;
@@ -52,9 +52,9 @@ public class LoginViewModel extends AndroidViewModel{
     public LoginViewModel(LoginPresenter presenter){
         this.presenter = presenter;
         mvpView = presenter.getView();
-        this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
-        this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
-        this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
+//        this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
+//        this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
+//        this.suggestedEmailList.add("chuandongy@student.unimelb.edu.au");
     }
 
     private Context getContext(){
@@ -158,7 +158,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                loginUser.setEmail(suggestedEmailList.get(i));
+//                loginUser.setEmail(suggestedEmailList.get(i));
             }
         };
     }
@@ -199,7 +199,7 @@ public class LoginViewModel extends AndroidViewModel{
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginUser.setEmail("");
+                loginUser.setUserId("");
                 setLoginUser(loginUser);
             }
         };
@@ -239,25 +239,25 @@ public class LoginViewModel extends AndroidViewModel{
         notifyPropertyChanged(BR.topIconVisibility);
     }
 
-    @Bindable
-    public ArrayList<String> getSuggestedEmailList(){
-        return this.suggestedEmailList;
-    }
-
-    public void setSuggestedEmailList(ArrayList<String> suggestedEmailList){
-        this.suggestedEmailList = suggestedEmailList;
-        notifyPropertyChanged(BR.suggestedEmailList);
-    }
-
-    @Bindable
-    public ItemView getSuggestedEmailItemView(){
-        return this.suggestedEmailItemView;
-    }
-
-    public void setSuggestedEmailItemView(ItemView suggestedEmailItemView){
-        this.suggestedEmailItemView = suggestedEmailItemView;
-        notifyPropertyChanged(BR.suggestedEmailItemView);
-    }
+//    @Bindable
+//    public ArrayList<String> getSuggestedEmailList(){
+//        return this.suggestedEmailList;
+//    }
+//
+//    public void setSuggestedEmailList(ArrayList<String> suggestedEmailList){
+//        this.suggestedEmailList = suggestedEmailList;
+//        notifyPropertyChanged(BR.suggestedEmailList);
+//    }
+//
+//    @Bindable
+//    public ItemView getSuggestedEmailItemView(){
+//        return this.suggestedEmailItemView;
+//    }
+//
+//    public void setSuggestedEmailItemView(ItemView suggestedEmailItemView){
+//        this.suggestedEmailItemView = suggestedEmailItemView;
+//        notifyPropertyChanged(BR.suggestedEmailItemView);
+//    }
 
     @Bindable
     public User getLoginUser() {

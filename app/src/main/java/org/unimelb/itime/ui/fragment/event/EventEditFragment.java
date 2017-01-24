@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.databinding.FragmentEventEditDetailBinding;
 import org.unimelb.itime.managers.EventManager;
@@ -336,6 +337,11 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
             event.setPhoto(photoUrls);
             setEvent(event);
             toPhotoGridPage();
+        }
+
+        if (requestCode == REQ_INVITEE && resultCode == InviteeFragment.RESULT_CANCEL){
+            event.setInvitee(new ArrayList<Invitee>());
+            setEvent(event);
         }
     }
 

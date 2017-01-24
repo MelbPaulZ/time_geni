@@ -16,6 +16,7 @@
         <import type="android.support.v7.widget.LinearLayoutManager" />
 
         <import type="android.view.View" />
+        <import type="org.unimelb.itime.bean.Event"/>
         <variable
             name="toolbarVM"
             type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel"/>
@@ -46,43 +47,38 @@
             <!--background-->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <!--top message bar-->
                 <RelativeLayout
                     android:id="@+id/event_detail_first_message"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:paddingStart="7dp"
+                    android:paddingEnd="5dp"
+                    android:visibility="@{contentVM.event.eventType.equals(Event.TYPE_SOLO)? View.GONE : View.VISIBLE}"
                     android:background="@drawable/round_corner_gray">
+
+                    <TextView
+                        android:id="@+id/event_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{contentVM.event.message.subtitle1}"
+                        android:textColor="@color/color_FF9600"
+                        android:layout_centerVertical="true"
+                        />
 
                     <ImageView
                         android:id="@+id/host_photo"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
                         app:url="@{contentVM.event.message.photo}" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignEnd="@id/host_photo"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/event_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{contentVM.event.message.subtitle1}"
-                            android:textColor="@color/color_63ADF2"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
                 </RelativeLayout>
 
                 <!-- event content -->
@@ -93,7 +89,7 @@
                     android:layout_below="@+id/event_detail_first_message"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="@dimen/padding_10"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="vertical">
                     <!-- ********************************************** -->
 
@@ -117,13 +113,14 @@
                             android:id="@+id/event_detail_confirm_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="7dp"
+                            android:layout_marginTop="5dp"
                             android:orientation="horizontal"
                             android:visibility="@{contentVM.confirmTimeVisibility(contentVM.event)}">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="3dp"
                                 android:src="@drawable/icon_event_clock" />
 
                             <TextView
@@ -140,12 +137,14 @@
                             android:id="@+id/event_detail_repeat_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
+                            android:visibility="@{contentVM.event.hasRecurrence()? View.VISIBLE: View.GONE}"
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="3dp"
                                 android:src="@drawable/icon_event_repeated" />
 
                             <TextView
@@ -162,13 +161,14 @@
                             android:id="@+id/event_detail_location_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:visibility="@{contentVM.getLocationVisibility(contentVM.event)}"
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="3dp"
                                 android:src="@drawable/icon_event_location" />
 
                             <TextView
@@ -185,13 +185,14 @@
                             android:id="@+id/event_detail_note_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:visibility="@{contentVM.getNoteVisibility(contentVM.event)}"
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginTop="3dp"
                                 android:src="@drawable/icon_event_note" />
 
                             <TextView
@@ -232,7 +233,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:background="#ffffff"
                         android:orientation="vertical">
 
@@ -240,6 +240,7 @@
                             android:id="@+id/event_detail_timeslot_listview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
                             android:divider="#00000000"
                             app:items="@{contentVM.wrapperTimeSlotList}"
                             app:itemView="@{contentVM.timeslotItemView}"
@@ -275,7 +276,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="@{contentVM.soloInvisible}">
+                        android:visibility="@{contentVM.inviteeVisibility}">
 
                         <!-- invitee replied/not replied & going/invited -->
                         <LinearLayout
@@ -288,7 +289,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text='@{String.valueOf(EventUtil.getInviteeWithStatus(contentVM.event.invitee,Invitee.STATUS_ACCEPTED).size()) + @string/going}'
+                                android:text='@{contentVM.inviteeString1}'
                                 android:textColor="@color/blue"/>
 
                             <TextView
@@ -302,32 +303,35 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text='@{String.valueOf(EventUtil.getInviteeWithStatus(contentVM.event.invitee,Invitee.STATUS_NEEDSACTION).size()) + @string/no_reply}'
+                                android:text='@{contentVM.inviteeString2}'
                                 android:textColor="@color/orange"/>
                         </LinearLayout>
 
                         <TextView
                             style="@style/itime_bottom_divider_line"
                             />
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="68dp"
-                            android:gravity="center"
                             >
                             <android.support.v7.widget.RecyclerView
                                 android:layout_width="match_parent"
                                 android:layout_height="37dp"
                                 android:layout_marginStart="16dp"
+                                android:layout_marginEnd="30dp"
+                                android:layout_centerVertical="true"
                                 app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, false)}"
                                 app:items="@{contentVM.inviteeList}"
                                 app:itemView="@{contentVM.inviteeItemView}"
                                 />
-
-                        </LinearLayout>
+                            <TextView
+                                style="@style/arrow_disclosure_indicator"/>
+                        </RelativeLayout>
                         <TextView
                             style="@style/itime_bottom_divider_line" />
                     </LinearLayout>
 
+                    <!--event photo-->
                     <RelativeLayout
                         android:id="@+id/event_detail_host_photo_RL"
                         android:layout_width="match_parent"
@@ -351,12 +355,22 @@
                             android:layout_height="37dp"
                             android:minWidth="200dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_marginStart="16dp"
                             android:layout_centerVertical="true"
+                            android:layout_marginEnd="30dp"
                             app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, true)}"
                             app:items="@{contentVM.photoUrls}"
                             app:itemView="@{contentVM.photoItemView}"
                             />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentBottom="true"
+                            android:onClick="@{contentVM.gotoGridView()}"/>
+
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
 
                         <TextView
                             style="@style/itime_bottom_divider_line" />
@@ -373,14 +387,13 @@
                             android:id="@+id/event_detail_host_url_link"
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
-                            android:autoLink="web"
                             android:gravity="center_vertical"
                             android:layout_centerVertical="true"
                             android:hint="@string/url"
                             android:onClick="@{contentVM.onClickUrl()}"
                             android:text="@{contentVM.event.url}"
                             android:textColor="@color/color_06457F"
-                            android:textSize="15sp" />
+                            android:textSize="17sp" />
 
                         <TextView
                             style="@style/itime_bottom_divider_line" />
@@ -402,21 +415,16 @@
                             android:textSize="17sp" />
 
                         <TextView
-                            android:id="@+id/event_detail_calendar_arrow"
-                            android:layout_width="8dp"
-                            android:layout_height="13dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/padding_10"
-                            android:background="@drawable/icon_general_arrow_right" />
-
-                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/padding_5"
-                            android:layout_toLeftOf="@+id/event_detail_calendar_arrow"
+                            android:layout_alignParentEnd="true"
+                            android:textSize="17sp"
+                            android:layout_marginEnd="30dp"
                             android:text="@{CalendarUtil.getInstance(context).getCalendarName(contentVM.event)}" />
+
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
 
                         <TextView
                             style="@style/itime_bottom_divider_line" />
@@ -426,6 +434,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginStart="16dp"
+                        android:visibility="@{contentVM.event.eventType.equals(Event.TYPE_SOLO) ? View.GONE : View.VISIBLE}"
                         android:onClick="@{contentVM.toResponse()}">
 
                         <TextView
@@ -436,6 +445,9 @@
                             android:text="@string/Messages"
                             android:textColor="@color/color_333333"
                             android:textSize="17sp" />
+
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
 
                         <TextView
                             style="@style/itime_bottom_divider_line" />
@@ -457,6 +469,8 @@
                             android:textColor="@color/color_06457F"
                             android:layout_centerVertical="true"
                             android:text="@string/create_event_from_this_event" />
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
                     </RelativeLayout>
                     <TextView
                         style="@style/itime_bottom_divider_line" />
@@ -617,30 +631,28 @@
 
 
         <!-- Host event Unconfirmed show-->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:background="@color/color_f9f9f9"
-            android:gravity="center"
-            android:paddingLeft="@dimen/padding_10"
-            android:paddingRight="@dimen/padding_10"
+            android:orientation="vertical"
             android:visibility="@{contentVM.unconfirmHostVisibility(contentVM.event)}">
 
             <!--change from event to wrapperlist panduan-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:clickable="@{TimeSlotUtil.isAtLeastOneWrapperSelected(contentVM.wrapperTimeSlotList)? true: false}"
-                android:gravity="center"
+                android:layout_centerInParent="true"
                 android:onClick="@{contentVM.onClickHostConfirm()}"
                 android:text="@string/confirm_event"
                 android:textAlignment="center"
-                android:textColor="@{TimeSlotUtil.isAtLeastOneWrapperSelected(contentVM.wrapperTimeSlotList)? @color/color_FE9E18 : @color/gray_b2b2b2}"
+                android:textColor="@{TimeSlotUtil.isAtLeastOneWrapperSelected(contentVM.wrapperTimeSlotList)? @color/color_FE9E18 : @color/disabled}"
                 android:textSize="17sp" />
 
-        </LinearLayout>
+
+        </RelativeLayout>
 
 
     </RelativeLayout>

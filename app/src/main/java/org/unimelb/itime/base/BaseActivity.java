@@ -1,7 +1,7 @@
 package org.unimelb.itime.base;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -26,14 +26,12 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpBasePresenter
 
     FragmentManager fragmentManager;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
     }
 
 
@@ -42,6 +40,9 @@ public abstract class BaseActivity<V extends MvpView, P extends MvpBasePresenter
         return R.id.setting_activity_framelayout;
     }
 
+    public void clearFragmentStack(){
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
 
     public void openFragment(Fragment fragment) {
         openFragment(fragment, null, true);

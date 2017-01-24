@@ -1,0 +1,98 @@
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="org.unimelb.itime.ui.viewmodel.InboxViewModel.ItemViewModel"/>
+        <import type="org.unimelb.itime.bean.Message"/>
+    </data>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="81dp">
+        <TextView
+            android:id="@+id/inbox_host_tag1"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp"
+            android:text="@{vm.getTag1()}"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:padding="3dp"
+            app:message="@{vm.message}"
+            app:tagNum="@{1}" />
+
+        <TextView
+            android:id="@+id/inbox_host_tag2"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="12dp"
+            android:layout_toRightOf="@+id/inbox_host_tag1"
+            android:text="@{vm.getTag2()}"
+            android:padding="3dp"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            app:message="@{vm.message}"
+            app:tagNum="@{2}" />
+
+        <TextView
+            android:id="@+id/inbox_host_tag3"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="12dp"
+            android:padding="3dp"
+            android:layout_toRightOf="@+id/inbox_host_tag2"
+            app:visible="@{vm.message}"
+            android:text="@{vm.getTag3()}"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            app:message="@{vm.message}"
+            app:tagNum="@{3}" />
+
+        <TextView
+            android:id="@+id/inbox_host_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/inbox_host_tag1"
+            android:layout_alignLeft="@id/inbox_host_tag1"
+            android:text="@{vm.message.title}"
+            android:textSize="17sp"
+            android:textStyle='@{vm.message.isRead() ? "normal" : "bold"}'
+            android:maxLines="1"
+            app:crossLine="@{vm.message}"
+            />
+        <!--android:textColor="@{vm.message.template.equals(Message.TPL_HOST_DELETED) ? @color/gray_9b9b9b : @color/color_000000}"-->
+
+        <TextView
+            android:id="@+id/inbox_host_event_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="12dp"
+            android:textSize="10sp"
+            android:text="@{vm.timeString}"
+            android:textColor="@color/gray_9b9b9b"
+            android:layout_alignParentEnd="true"
+            />
+        <TextView
+            android:id="@+id/inbox_host_split_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:textColor="@color/gray_9b9b9b"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="1dp"
+            />
+        <TextView
+            android:id="@+id/inbox_host_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/inbox_host_title"
+            android:layout_alignLeft="@id/inbox_host_title"
+            android:layout_marginBottom="10dp"
+            android:text="@{vm.message.subtitle1}"
+            android:textSize="12sp"
+            />
+        <!--android:textColor="@{vm.message.template.equals(Message.TPL_HOST_DELETED) ? @color/gray_9b9b9b : @color/color_FF9600}"-->
+    </RelativeLayout>
+</layout>
