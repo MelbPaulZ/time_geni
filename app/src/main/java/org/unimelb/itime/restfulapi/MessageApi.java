@@ -24,4 +24,7 @@ public interface MessageApi {
 
     @POST("message/delete")
     Observable<HttpResult<List<Message>>> delete(@Body HashMap<String, Object> uidHashMap, @Query("syncToken") String syncToken);
+
+    @POST("message/clear")
+    Observable<HttpResult<List<Message>>> clear(@Query("syncToken") String syncToken);
 }

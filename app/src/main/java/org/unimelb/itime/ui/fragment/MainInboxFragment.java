@@ -124,6 +124,7 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
         binding.inboxListview.setMenuCreator(creator);
         binding.inboxListview.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
         binding.inboxListview.setAdapter(adapter);
+
     }
 
     public void setData(List<Message> data){
@@ -151,7 +152,7 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
 
     @Override
     public void onTaskStart(int taskId) {
-        if(taskId == MainInboxPresenter.TASK_EVENT_GET){
+        if(taskId != MainInboxPresenter.TASK_MSG_READ_ONE){
             showProgressDialog();
         }
     }
@@ -165,11 +166,9 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
             return;
         }
 
-        if(taskId == MainInboxPresenter.TASK_MSG_DELETE || taskId == MainInboxPresenter.TASK_MSG_READ){
-            List<ItemViewModel> messages = transform(dbManager.getAllMessages());
-            contentViewModel.setList(messages);
-            adapter.setData(messages);
-        }
+        List<ItemViewModel> messages = transform(dbManager.getAllMessages());
+        contentViewModel.setList(messages);
+        adapter.setData(messages);
     }
 
     @Override
@@ -185,6 +184,6 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
 
     @Override
     public void onNext() {
-
+        contentViewModel.setShowSpinnerMenu(!contentViewModel.isShowSpinnerMenu());
     }
 }

@@ -674,9 +674,12 @@ public class EventUtil {
         return null;
     }
 
-    //return ->
-    // String: timeslot Uid,
-    // List<StatusKeyStruct>: get(status),get(invitees)
+    /**
+     *
+     * @param event
+     * @return
+     * String: timeslot Uid, List<StatusKeyStruct>: get(status),get(invitees)
+     */
     public static Map<String, List<StatusKeyStruct>> getAdapterData(Event event){
         List<Invitee> invitees = event.getInvitee();
         List<Timeslot> timeSlots = event.getTimeslot();

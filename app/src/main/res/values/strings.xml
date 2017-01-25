@@ -384,6 +384,9 @@
     <string name="name">Name</string>
     <string name="email">Email</string>
 
+    <string name="inbox_menu_mark_all_read">Mark All Read</string>
+    <string name="inbox_menu_clear_inbox">Clear Inbox</string>
+
     <string name="setting">Settings</string>
     <string name="setting_reset_password">Reset Password</string>
     <string name="my_qr_code">My QR Code</string>
