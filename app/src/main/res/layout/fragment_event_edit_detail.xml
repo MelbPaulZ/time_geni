@@ -56,6 +56,34 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/page_blank_row_height" />
+
+                <!--title-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@color/white"
+                    >
+                    <EditText
+                        android:id="@+id/edit_event_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:focusable="true"
+                        android:background="@null"
+                        android:focusableInTouchMode="true"
+                        android:onFocusChange="@{eventEditVM.onEditFocusChange}"
+                        android:text="@={eventEditVM.event.title}"
+                        android:textColor="@color/text_enable"
+                        android:textSize="@dimen/page_text_size" />
+
+                    <TextView style="@style/itime_bottom_divider_line" />
+                </RelativeLayout>
+
+                <!--location-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp">
+                    
+                </RelativeLayout>
                 <!-- end -->
                 <LinearLayout
                     android:id="@+id/part_1"
@@ -66,18 +94,8 @@
                     android:paddingBottom="0dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="0dp">
-                    <!--Tittle Row-->
-                    <EditText
-                        android:id="@+id/edit_event_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:onFocusChange="@{eventEditVM.onEditFocusChange}"
-                        android:text="@={eventEditVM.event.title}"
-                        android:textColor="@color/text_enable"
-                        android:textSize="@dimen/page_text_size" />
+
+
 
                     <!--Fst Row-->
                     <LinearLayout
@@ -274,7 +292,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="@{EventUtil.hasOtherInviteeExceptSelf(context, eventEditVM.event)? View.VISIBLE : View.GONE}"
-                        android:background="@drawable/table_row_border">
+                        android:background="@drawable/table_row_border"
+                        >
                         <TextView
                             style="@style/itime_blacktitle_17sp"
                             android:layout_alignParentStart="true"
@@ -300,7 +319,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/table_row_border"
                     android:paddingLeft="10dp"
                     android:visibility="@{EventUtil.hasOtherInviteeExceptSelf(context, eventEditVM.event)? View.GONE: View.VISIBLE}"
