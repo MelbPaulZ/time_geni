@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="app_backgroud">#FFFFFF</color>
     <color name="colorPrimary">#0163ADF2</color>
     <color name="colorPrimaryDark">#0163ADF2</color>
     <color name="colorAccent">#FF4081</color>
@@ -358,6 +359,8 @@
     <color name="color_999999">#999999</color>
     <color name="color_9E9E9E">#9E9E9E</color>
     <color name="color_C6C6C6">#C6C6C6</color>
+    <color name="color_212121">#212121</color>
+    <color name="color_FFAB40">#FFAB40</color>
 
     <!--contact-->
     <!--<color name="green">#32CD32</color>-->

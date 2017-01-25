@@ -16,6 +16,7 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.MessageAdapter;
 import org.unimelb.itime.base.BaseUiAuthFragment;
@@ -24,6 +25,7 @@ import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.FragmentMainInboxBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
@@ -90,6 +92,8 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
         binding.setToolbarVM(toolbarViewModel);
         binding.setContentVM(contentViewModel);
 
+        //notify the badge of tab bar
+        EventBus.getDefault().post(new MessageInboxMessage(new ArrayList<Message>()));
         initView();
     }
 
@@ -124,6 +128,13 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
         binding.inboxListview.setMenuCreator(creator);
         binding.inboxListview.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
         binding.inboxListview.setAdapter(adapter);
+
+    }
+
+    public void setData(List<Message> data){
+        this.list = transform(data);
+        contentViewModel.setList(list);
+        adapter.setData(list);
     }
 
     @Override
@@ -145,19 +156,24 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
 
     @Override
     public void onTaskStart(int taskId) {
-        showProgressDialog();
+        if(taskId != MainInboxPresenter.TASK_MSG_READ_ONE){
+            showProgressDialog();
+        }
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
         hideProgressDialog();
         if(taskId == MainInboxPresenter.TASK_EVENT_GET){
-            List<? extends Object> list = (List) data;
-            if (list.get(0) instanceof Event){
-                toEventDetailPage((Event) ((List) data).get(0));
-            }
+            Event event = (Event) data;
+            toEventDetailPage(event);
             return;
         }
+
+        List<ItemViewModel> messages = transform(dbManager.getAllMessages());
+        contentViewModel.setList(messages);
+        adapter.setData(messages);
+        EventBus.getDefault().post(new MessageInboxMessage(new ArrayList<Message>()));
     }
 
     @Override
@@ -173,6 +189,6 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
 
     @Override
     public void onNext() {
-
+        contentViewModel.setShowSpinnerMenu(!contentViewModel.isShowSpinnerMenu());
     }
 }

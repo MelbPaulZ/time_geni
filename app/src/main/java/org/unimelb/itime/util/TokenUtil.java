@@ -2,12 +2,10 @@ package org.unimelb.itime.util;
 
 import android.content.Context;
 
-import org.greenrobot.greendao.AbstractDao;
 import org.unimelb.itime.bean.SyncToken;
 import org.unimelb.itime.dao.SyncTokenDao;
 import org.unimelb.itime.managers.DBManager;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,9 +15,11 @@ import java.util.List;
 public class TokenUtil {
     private static TokenUtil instance;
     private Context context;
+    private DBManager dbManager;
 
     private TokenUtil(Context context) {
         this.context = context;
+        this.dbManager = DBManager.getInstance(context);
     }
 
     public static TokenUtil getInstance(Context context){
@@ -36,10 +36,10 @@ public class TokenUtil {
      * @return
      */
     public String getCalendarToken(String userUid){
-        AbstractDao dao = DBManager.getInstance(context).getQueryDao(SyncToken.class);
+        String tokenKey = userUid + "_" + SyncToken.PREFIX_CAL;
+        SyncTokenDao dao = dbManager.getNewSession().getSyncTokenDao();
         List<SyncToken> calendarToken = dao.queryBuilder().where(
-                SyncTokenDao.Properties.UserUid.eq(userUid),
-                SyncTokenDao.Properties.Name.eq(SyncToken.PREFIX_CAL)
+                SyncTokenDao.Properties.Name.eq(tokenKey)
                 ).list();
         if (calendarToken.size() == 0){
             return "";
@@ -48,30 +48,20 @@ public class TokenUtil {
     }
 
     public void setCalendarToken(String userUid, String token){
-        AbstractDao dao = DBManager.getInstance(context).getQueryDao(SyncToken.class);
-        List<SyncToken> calendarToken = dao.queryBuilder().where(
-                SyncTokenDao.Properties.UserUid.eq(userUid),
-                SyncTokenDao.Properties.Name.eq(SyncToken.PREFIX_CAL)
-        ).list();
-        if (calendarToken.size() == 0){
-            SyncToken newToken = new SyncToken();
-            newToken.setName(SyncToken.PREFIX_CAL);
-            newToken.setUserUid(userUid);
-            newToken.setValue(token);
-            DBManager.getInstance(context).insertOrReplace(Arrays.asList(newToken));
-            return;
-        }
-
-        calendarToken.get(0).setValue(token);
+        String tokenKey = userUid + "_" + SyncToken.PREFIX_CAL;
+        SyncTokenDao dao = dbManager.getNewSession().getSyncTokenDao();
+        SyncToken newToken = new SyncToken();
+        newToken.setName(tokenKey);
+        newToken.setUserUid(userUid);
+        newToken.setValue(token);
+        dao.insertOrReplace(newToken);
     }
 
     public String getEventToken(String userUid, String calenderUid){
-        String tokenKey = SyncToken.PREFIX_EVENT + calenderUid;
-        AbstractDao dao = DBManager.getInstance(context).getQueryDao(SyncToken.class);
+        String tokenKey = userUid + "_" + SyncToken.PREFIX_EVENT + "_" + calenderUid;
+        SyncTokenDao dao = dbManager.getNewSession().getSyncTokenDao();
         List<SyncToken> calendarToken = dao.queryBuilder().where(
-                SyncTokenDao.Properties.UserUid.eq(userUid),
-                SyncTokenDao.Properties.Name.eq(tokenKey)
-                ).list();
+                SyncTokenDao.Properties.Name.eq(tokenKey)).list();
         if (calendarToken.size() == 0){
             return "";
         }
@@ -86,29 +76,20 @@ public class TokenUtil {
      * @param token
      */
     public void setEventToken(String userUid, String calenderUid, String token){
-        String tokenKey = SyncToken.PREFIX_EVENT + calenderUid;
-        AbstractDao dao = DBManager.getInstance(context).getQueryDao(SyncToken.class);
-        List<SyncToken> calendarToken = dao.queryBuilder().where(
-                SyncTokenDao.Properties.UserUid.eq(userUid),
-                SyncTokenDao.Properties.Name.eq(tokenKey)
-                ).list();
-        if (calendarToken.size() == 0){
-            SyncToken newToken = new SyncToken();
-            newToken.setName(tokenKey);
-            newToken.setUserUid(userUid);
-            newToken.setValue(token);
-            DBManager.getInstance(context).insertOrReplace(Arrays.asList(newToken));
-            return;
-        }
-
-        calendarToken.get(0).setValue(token);
+        String tokenKey = userUid + "_" + SyncToken.PREFIX_EVENT + "_" + calenderUid;
+        SyncTokenDao dao = dbManager.getNewSession().getSyncTokenDao();
+        SyncToken newToken = new SyncToken();
+        newToken.setName(tokenKey);
+        newToken.setUserUid(userUid);
+        newToken.setValue(token);
+        dao.insertOrReplace(newToken);
     }
 
     public String getMessageToken(String userUid){
-        AbstractDao dao = DBManager.getInstance(context).getQueryDao(SyncToken.class);
+        String tokenKey = userUid + "_" + SyncToken.PREFIX_MESSAGE;
+        SyncTokenDao dao = dbManager.getNewSession().getSyncTokenDao();
         List<SyncToken> messageToken = dao.queryBuilder().where(
-                SyncTokenDao.Properties.UserUid.eq(userUid),
-                SyncTokenDao.Properties.Name.eq(SyncToken.PREFIX_MESSAGE)
+                SyncTokenDao.Properties.Name.eq(tokenKey)
                 ).list();
         if (messageToken.size() == 0){
             return "";
@@ -117,21 +98,13 @@ public class TokenUtil {
     }
 
     public void setMessageToken(String userUid, String token){
-        AbstractDao dao = DBManager.getInstance(context).getQueryDao(SyncToken.class);
-        List<SyncToken> messageToken = dao.queryBuilder().where(
-                SyncTokenDao.Properties.UserUid.eq(userUid),
-                SyncTokenDao.Properties.Name.eq(SyncToken.PREFIX_MESSAGE)
-                ).list();
-        if (messageToken.size() == 0){
-            SyncToken newToken = new SyncToken();
-            newToken.setName(SyncToken.PREFIX_MESSAGE);
-            newToken.setUserUid(userUid);
-            newToken.setValue(token);
-            DBManager.getInstance(context).insertOrReplace(Arrays.asList(newToken));
-            return;
-        }
-
-        messageToken.get(0).setValue(token);
+        String tokenKey = userUid + "_" + SyncToken.PREFIX_MESSAGE;
+        SyncTokenDao dao = dbManager.getNewSession().getSyncTokenDao();
+        SyncToken newToken = new SyncToken();
+        newToken.setName(tokenKey);
+        newToken.setUserUid(userUid);
+        newToken.setValue(token);
+        dao.insertOrReplace(newToken);
     }
 
 }

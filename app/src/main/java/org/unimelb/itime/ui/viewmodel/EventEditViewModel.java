@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.squareup.picasso.Picasso;
@@ -712,7 +711,12 @@ public class EventEditViewModel extends EventCommonViewModel {
     }
 
     public void setPhotoUrls(List<PhotoUrl> photoUrls) {
-        this.photoUrls = photoUrls;
+        this.photoUrls = new ArrayList<>();
+        if(photoUrls.size() > 3){
+            this.photoUrls.addAll(photoUrls.subList(photoUrls.size() - 4, photoUrls.size() - 1));
+        }else{
+            this.photoUrls.addAll(photoUrls);
+        }
         notifyPropertyChanged(BR.photoUrls);
     }
 

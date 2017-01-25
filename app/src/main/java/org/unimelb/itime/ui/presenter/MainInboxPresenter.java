@@ -11,12 +11,13 @@ import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
-import org.unimelb.itime.managers.MessageManager;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.ui.mvpview.MainInboxMvpView;
 import org.unimelb.itime.util.HttpUtil;
+import org.unimelb.itime.util.TokenUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,63 +32,112 @@ import rx.functions.Func1;
  * Created by Paul on 3/10/16.
  */
 public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> implements Filterable {
-    public static final int TASK_MSG_READ = 1;
+    public static final int TASK_MSG_READ_ONE = 1;
     public static final int TASK_MSG_DELETE = 2;
+    public static final int TASK_MSG_CLEAR = 3;
     public static final int TASK_EVENT_GET = 4;
+    public static final int TASK_MSG_READ_MANY = 5;
 
     private String TAG = "MainInboxPresenter";
     private Context context;
     private MessageApi messageApi;
     private EventApi eventApi;
     private MessageFilter filter;
+    private TokenUtil tokenUtil;
+    private UserUtil userUtil;
+    private DBManager dbManager;
 
     public MainInboxPresenter(Context context) {
         this.context = context;
         messageApi = HttpUtil.createService(context, MessageApi.class);
         eventApi = HttpUtil.createService(context, EventApi.class);
         filter = new MessageFilter();
+
+        tokenUtil = TokenUtil.getInstance(context);
+        userUtil = UserUtil.getInstance(context);
+        dbManager = DBManager.getInstance(context);
     }
 
     public Context getContext() {
         return context;
     }
 
-    public void markAsRead(Message message){
-        if(getView() != null){
-            getView().onTaskStart(TASK_MSG_READ);
+    /**
+     * save the message and syncToken to db
+     */
+    private class MessageSaver implements Func1<HttpResult<List<Message>>, HttpResult<List<Message>>> {
+        @Override
+        public HttpResult<List<Message>> call(HttpResult<List<Message>> ret) {
+            if(ret.getStatus() == 1 && ret.getData().size() > 0){
+                dbManager.insertMessageList(ret.getData());
+                tokenUtil.setMessageToken(userUtil.getUserUid(), ret.getSyncToken());
+            }
+            return ret;
         }
-        int isRead = message.getIsRead() ? 1 : 0;
-        ArrayList<String> messageList = new ArrayList<>();
-        messageList.add(message.getMessageUid());
+    }
+
+    private class MessageSubscriber extends Subscriber<HttpResult<List<Message>>>{
+        private int task;
+
+        public MessageSubscriber(int task){
+            this.task = task;
+        }
+
+        @Override
+        public void onCompleted() {
+            Log.i(TAG, "onCompleted: ");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if(getView() != null){
+                getView().onTaskError(task, e.getMessage());
+            }
+        }
+
+        @Override
+        public void onNext(HttpResult<List<Message>> ret) {
+            if(getView() == null){
+                return;
+            }
+            if(ret.getStatus() == 1){
+                getView().onTaskSuccess(task, ret.getData());
+            }else{
+                getView().onTaskError(task, ret.getInfo());
+            }
+        }
+    }
+
+    public void markAsRead(Message message){
+        List<Message> messageList = new ArrayList<>();
+        messageList.add(message);
+        markAsRead(messageList, true);
+    }
+
+    public void markAsRead(List<Message> messageList, boolean isRead){
+        if(getView() != null){
+            getView().onTaskStart(messageList.size() > 1 ? TASK_MSG_READ_MANY : TASK_MSG_READ_ONE);
+        }
+        ArrayList<String> uids = new ArrayList<>();
+        for(Message msg: messageList){
+            uids.add(msg.getMessageUid());
+        }
         HashMap<String, Object> map = new HashMap<>();
-        map.put("messageUids", messageList);
-        map.put("isRead", isRead);
-        Observable<HttpResult<Void>> observable = messageApi.read(map);
-        Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
-            @Override
-            public void onCompleted() {
-                Log.i(TAG, "onCompleted: ");
-            }
+        map.put("messageUids", uids);
+        map.put("isRead", isRead ? 1 : 0);
+        String syncToken = tokenUtil.getMessageToken(userUtil.getUserUid());
+        Observable<HttpResult<List<Message>>> observable = messageApi.read(map, syncToken).map(new MessageSaver());
+        Subscriber<HttpResult<List<Message>>> subscriber = new MessageSubscriber(messageList.size() > 1 ? TASK_MSG_READ_MANY : TASK_MSG_READ_ONE);
+        HttpUtil.subscribe(observable, subscriber);
+    }
 
-            @Override
-            public void onError(Throwable e) {
-                if(getView() != null){
-                    getView().onTaskError(TASK_MSG_READ, e.getMessage());
-                }
-            }
-
-            @Override
-            public void onNext(HttpResult<Void> ret) {
-                if(getView() == null){
-                    return;
-                }
-                if(ret.getStatus() == 1){
-                    getView().onTaskSuccess(TASK_MSG_READ, null);
-                }else{
-                    getView().onTaskError(TASK_MSG_READ, ret.getInfo());
-                }
-            }
-        };
+    public void clearAll(){
+        if(getView() != null){
+            getView().onTaskStart(TASK_MSG_CLEAR);
+        }
+        String syncToken = tokenUtil.getMessageToken(userUtil.getUserUid());
+        Observable<HttpResult<List<Message>>> observable = messageApi.clear(syncToken).map(new MessageSaver());
+        Subscriber<HttpResult<List<Message>>> subscriber = new MessageSubscriber(TASK_MSG_CLEAR);
         HttpUtil.subscribe(observable, subscriber);
     }
 
@@ -100,38 +150,13 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("messageUids", messageList);
-
-        MessageManager.getInstance().insertWaitMessage(message);
-        Observable<HttpResult<Void>> observable = messageApi.delete(map);
-        Subscriber<HttpResult<Void>> subscriber = new Subscriber<HttpResult<Void>>() {
-            @Override
-            public void onCompleted() {
-                Log.i(TAG, "onCompleted: ");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if(getView() != null){
-                    getView().onTaskError(TASK_MSG_DELETE, e.getMessage());
-                }
-            }
-
-            @Override
-            public void onNext(HttpResult<Void> ret) {
-                if(getView() == null){
-                    return;
-                }
-                if(ret.getStatus() == 1){
-                    MessageManager.getInstance().deleteWaitMessage(message);
-                    getView().onTaskSuccess(TASK_MSG_DELETE, null);
-                }else{
-                    getView().onTaskError(TASK_MSG_DELETE, ret.getInfo());
-                }
-            }
-        };
+        String syncToken = tokenUtil.getMessageToken(userUtil.getUserUid());
+        Observable<HttpResult<List<Message>>> observable = messageApi.delete(map, syncToken).map(new MessageSaver());
+        Subscriber<HttpResult<List<Message>>> subscriber = new MessageSubscriber(TASK_MSG_DELETE);
 
         HttpUtil.subscribe(observable, subscriber);
     }
+
 
     public void fetchEvent(String calendarUid, String eventUid){
         if (getView() != null){
@@ -169,7 +194,7 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
                     return;
                 }
                 if(ret.getStatus() == 1){
-                    getView().onTaskSuccess(TASK_EVENT_GET, Arrays.asList(ret.getData()));
+                    getView().onTaskSuccess(TASK_EVENT_GET, ret.getData());
                 }else{
                     getView().onTaskError(TASK_EVENT_GET, ret.getInfo());
                 }

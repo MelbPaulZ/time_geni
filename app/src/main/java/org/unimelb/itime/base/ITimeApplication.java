@@ -2,10 +2,7 @@ package org.unimelb.itime.base;
 
 import android.support.multidex.MultiDexApplication;
 
-import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVOSCloud;
-
-import org.unimelb.itime.util.GreenDaoUtil;
 
 /**
  * Created by yinchuandong on 18/08/2016.
@@ -17,7 +14,7 @@ public class ITimeApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        GreenDaoUtil.init(this);
+//        GreenDaoUtil.init(this);
         registerLeanCloud();
     }
 
