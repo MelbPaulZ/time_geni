@@ -94,7 +94,7 @@ public class BindLoader extends BaseObservable {
         if (!url.getLocalPath().equals("")){
             File file = new File(url.getLocalPath());
             if (file.exists()){
-                Picasso.with(view.getContext()).load(new File(url.getLocalPath())).error(R.drawable.ic_photo_loading).fit().into(view);
+                Picasso.with(view.getContext()).load(new File(url.getLocalPath())).error(R.drawable.ic_photo_loading).into(view);
             }
         }else if (!url.getUrl().equals("")){
             Picasso.with(view.getContext()).load(url.getUrl()).error(R.drawable.ic_photo_loading).fit().into(view);

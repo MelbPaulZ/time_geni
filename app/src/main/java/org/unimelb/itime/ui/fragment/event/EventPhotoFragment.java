@@ -151,6 +151,9 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
         this.event = event;
         tmpPhotos = new ObservableArrayList<>();
         tmpPhotos.addAll(event.getPhoto());
+        if(tmpPhotos.size()>=maxNum){
+            setEditable(false);
+        }
     }
 
     @Override
@@ -189,43 +192,13 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
 
     @Override
     public void openCamera() {
-//        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
-//        int selectedMode = PhotoPickerActivity.MODE_MULTI;
-//        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-//        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum - tmpPhotos.size());
-//        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
-//        intent.putExtra(PhotoPickerActivity.CAMERA_ONLY, true);
-//        startActivityForResult(intent, REQ_PHOTO);
-        takePicture(TAKE_PHOTO);
-    }
-
-    public void takePicture(int requestCode) {
-        Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File takeImageFile;
-        takePictureIntent.setFlags(67108864);
-        if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            if(Utils.existSDCard()) {
-                takeImageFile = new File(Environment.getExternalStorageDirectory(), "/DCIM/camera/");
-            } else {
-                takeImageFile = Environment.getDataDirectory();
-            }
-
-            takeImageFile = createFile(takeImageFile, "IMG_", ".jpg");
-            if(takeImageFile != null) {
-                takePictureIntent.putExtra("output", Uri.fromFile(takeImageFile));
-            }
-        }
-        startActivityForResult(takePictureIntent, requestCode);
-    }
-
-    public static File createFile(File folder, String prefix, String suffix) {
-        if(!folder.exists() || !folder.isDirectory()) {
-            folder.mkdirs();
-        }
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
-        String filename = prefix + dateFormat.format(new Date(System.currentTimeMillis())) + suffix;
-        return new File(folder, filename);
+        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
+        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum - tmpPhotos.size());
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
+        intent.putExtra(PhotoPickerActivity.CAMERA_ONLY, true);
+        startActivityForResult(intent, REQ_PHOTO);
     }
 
     @Override
@@ -272,34 +245,24 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
 //            tmpPhotos.addAll(photoUrls);
 //            viewModel.setPhotos(tmpPhotos);
 //        }
-//        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK) {
-//            ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-//            List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
-//            tmpPhotos.addAll(photoUrls);
-//            viewModel.setPhotos(tmpPhotos);
-//        }
-        if (requestCode==CHOOSE_FROM_LIBRARY && resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-            if (data != null && (requestCode == CHOOSE_FROM_LIBRARY || requestCode == ImagePicker.REQUEST_CODE_CROP)) {
-                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                List<PhotoUrl> photoUrls = new ArrayList<>();
-                for (int i = 0; i < images.size(); i++) {
-                    photoUrls.add(EventUtil.fromStringToPhotoUrl(getContext(), images.get(i).path));
-                }
-                tmpPhotos.addAll(photoUrls);
-                viewModel.setPhotos(tmpPhotos);
-            }
+        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK) {
+            ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+            List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
+            tmpPhotos.addAll(photoUrls);
+            viewModel.setPhotos(tmpPhotos);
         }
 
-        if (requestCode==TAKE_PHOTO ) {
-            if (data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS) == null) {
-            } else {
-                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                List<PhotoUrl> photoUrls = new ArrayList<>();
-                for (int i = 0; i < images.size(); i++) {
-                    photoUrls.add(EventUtil.fromStringToPhotoUrl(getContext(), images.get(i).path));
+        if(data!=null) {
+            if (requestCode == CHOOSE_FROM_LIBRARY && resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+                if (data != null && (requestCode == CHOOSE_FROM_LIBRARY || requestCode == ImagePicker.REQUEST_CODE_CROP)) {
+                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                    List<PhotoUrl> photoUrls = new ArrayList<>();
+                    for (int i = 0; i < images.size(); i++) {
+                        photoUrls.add(EventUtil.fromStringToPhotoUrl(getContext(), images.get(i).path));
+                    }
+                    tmpPhotos.addAll(photoUrls);
+                    viewModel.setPhotos(tmpPhotos);
                 }
-                tmpPhotos.addAll(photoUrls);
-                viewModel.setPhotos(tmpPhotos);
             }
         }
     }
