@@ -151,6 +151,9 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
         this.event = event;
         tmpPhotos = new ObservableArrayList<>();
         tmpPhotos.addAll(event.getPhoto());
+        if(tmpPhotos.size()>=maxNum){
+            setEditable(false);
+        }
     }
 
     @Override
@@ -189,14 +192,13 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
 
     @Override
     public void openCamera() {
-//        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
-//        int selectedMode = PhotoPickerActivity.MODE_MULTI;
-//        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-//        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum - tmpPhotos.size());
-//        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
-//        intent.putExtra(PhotoPickerActivity.CAMERA_ONLY, true);
-//        startActivityForResult(intent, REQ_PHOTO);
-        ImagePicker.getInstance().takePicture(this,TAKE_PHOTO);
+        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
+        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum - tmpPhotos.size());
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
+        intent.putExtra(PhotoPickerActivity.CAMERA_ONLY, true);
+        startActivityForResult(intent, REQ_PHOTO);
     }
 
     @Override
@@ -243,28 +245,16 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
 //            tmpPhotos.addAll(photoUrls);
 //            viewModel.setPhotos(tmpPhotos);
 //        }
-//        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK) {
-//            ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-//            List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
-//            tmpPhotos.addAll(photoUrls);
-//            viewModel.setPhotos(tmpPhotos);
-//        }
+        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK) {
+            ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+            List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
+            tmpPhotos.addAll(photoUrls);
+            viewModel.setPhotos(tmpPhotos);
+        }
+
         if(data!=null) {
             if (requestCode == CHOOSE_FROM_LIBRARY && resultCode == ImagePicker.RESULT_CODE_ITEMS) {
                 if (data != null && (requestCode == CHOOSE_FROM_LIBRARY || requestCode == ImagePicker.REQUEST_CODE_CROP)) {
-                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                    List<PhotoUrl> photoUrls = new ArrayList<>();
-                    for (int i = 0; i < images.size(); i++) {
-                        photoUrls.add(EventUtil.fromStringToPhotoUrl(getContext(), images.get(i).path));
-                    }
-                    tmpPhotos.addAll(photoUrls);
-                    viewModel.setPhotos(tmpPhotos);
-                }
-            }
-
-            if (requestCode == TAKE_PHOTO) {
-                if (data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS) == null) {
-                } else {
                     ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                     List<PhotoUrl> photoUrls = new ArrayList<>();
                     for (int i = 0; i < images.size(); i++) {
