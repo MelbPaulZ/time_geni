@@ -22,7 +22,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="@{contentVM.onOutsideClicked()}"
             >
             <include
                 android:id="@+id/toolbar_layout"
@@ -58,20 +57,27 @@
                 app:onListItemMenuClick="@{contentVM.onMessageDeleteClicked()}" />
         </RelativeLayout>
 
-        <!--spinner menu-->
-        <ListView
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginTop="48dp"
-            android:layout_gravity="end"
-            android:paddingStart="9dp"
-            android:paddingEnd="9dp"
-            android:background="@drawable/shape_border_with_shadow"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="@{contentVM.showSpinnerMenu ? View.VISIBLE : View.GONE}"
-            android:footerDividersEnabled="false"
-            android:onListItemClick="@{contentVM.onMenuSpinnerClicked()}"
-            app:itemView="@{contentVM.menuItemView}"
-            app:items="@{contentVM.menuItems}" />
+            android:onClick="@{contentVM.onOutsideClicked()}"
+            >
+            <!--spinner menu-->
+            <ListView
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="48dp"
+                android:layout_gravity="end"
+                android:paddingStart="9dp"
+                android:paddingEnd="9dp"
+                android:background="@drawable/shape_border_with_shadow"
+                android:visibility="@{contentVM.showSpinnerMenu ? View.VISIBLE : View.GONE}"
+                android:footerDividersEnabled="false"
+                android:onListItemClick="@{contentVM.onMenuSpinnerClicked()}"
+                app:itemView="@{contentVM.menuItemView}"
+                app:items="@{contentVM.menuItems}" />
+        </FrameLayout>
     </FrameLayout>
 </layout>
