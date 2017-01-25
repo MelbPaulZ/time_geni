@@ -65,7 +65,6 @@
                     android:orientation="vertical"
                     android:paddingBottom="0dp"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:paddingTop="0dp">
                     <!--Tittle Row-->
                     <EditText
@@ -126,19 +125,14 @@
                             android:id="@+id/edit_event_repeat_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/padding_10"
-                            android:layout_toLeftOf="@+id/edit_event_repeat_arrow"
+                            android:layout_marginEnd="30dp"
+                            android:layout_alignParentEnd="true"
                             android:text="@{eventEditVM.getRepeatString(eventEditVM.event)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
 
-                        <ImageView
-                            android:id="@+id/edit_event_repeat_arrow"
-                            android:layout_width="10dp"
-                            android:layout_height="15dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/icon_general_arrow_right" />
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
                     </RelativeLayout>
 
                     <!--End Repeat-->
@@ -162,19 +156,14 @@
                             android:id="@+id/edit_event_end_repeat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/padding_10"
-                            android:layout_toLeftOf="@+id/edit_event_end_repeat_arrow"
+                            android:layout_marginEnd="30dp"
+                            android:layout_alignParentEnd="true"
                             android:text="@{EventUtil.getRepeatEndString(context, eventEditVM.event)}"
                             android:textColor="@color/text_disable"
                             android:textSize="@dimen/page_text_size" />
 
-                        <ImageView
-                            android:id="@+id/edit_event_end_repeat_arrow"
-                            android:layout_width="10dp"
-                            android:layout_height="15dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/icon_general_arrow_right" />
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -187,27 +176,19 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
                             android:text="@string/invitee"
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
-
-                        <ImageView
-                            android:id="@+id/arrow"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_gravity="center_vertical|right"
-                            android:src="@drawable/arrow" />
 
                         <LinearLayout
                             android:id="@+id/create_event_attendee_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_toLeftOf="@id/arrow"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="30dp"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -234,6 +215,10 @@
                                 app:index="@{2}"
                                 app:urls="@{eventEditVM.event.invitee}" />
                         </LinearLayout>
+
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
+
                     </RelativeLayout>
 
                     <!--Proposed time slot-->
@@ -257,7 +242,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
                                 android:onClick="@{eventEditVM.editTimeSlot()}"
-                                android:text="Proposed Timeslots"
+                                android:text="@string/event_proposed_timeslots"
                                 android:textColor="@color/text_enable"
                                 android:textSize="@dimen/page_text_size" />
 
@@ -279,13 +264,8 @@
                             android:layout_centerVertical="true"
                             android:onClick="@{eventEditVM.editTimeSlot()}"></LinearLayout>
 
-                        <ImageView
-                            android:layout_width="10dp"
-                            android:layout_height="15dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/icon_general_arrow_right"
-                            android:onClick="@{eventEditVM.editTimeSlot()}" />
+                        <TextView
+                            style="@style/arrow_disclosure_indicator"/>
 
                         <!--</RelativeLayout>-->
                     </RelativeLayout>
@@ -297,7 +277,7 @@
                         android:background="@drawable/table_row_border">
                         <TextView
                             style="@style/itime_blacktitle_17sp"
-                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             android:text="@string/allow_invitee_to_see_each_other"/>
 
                         <Switch
@@ -305,6 +285,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
+                            android:layout_marginEnd="14dp"
                             android:checked="@{eventEditVM.event.inviteeVisibility == 1? true : false}"
                             android:onCheckChange="@{eventEditVM.inviteeVisibilityChange()}"
                             />
@@ -323,7 +304,7 @@
                     android:background="@drawable/table_row_border"
                     android:paddingLeft="10dp"
                     android:visibility="@{EventUtil.hasOtherInviteeExceptSelf(context, eventEditVM.event)? View.GONE: View.VISIBLE}"
-                    android:paddingRight="10dp">
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -338,6 +319,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="14dp"
                         android:layout_centerVertical="true"
                         android:checked="@{EventUtil.isAllDayEvent(eventEditVM.event)}"
                         android:onCheckChange="@{eventEditVM.eventAlldayChange()}" />
@@ -348,27 +330,31 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/table_row_border"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:visibility="@{eventEditVM.startTimeVisibility}">
 
                     <TextView
                         style="@style/itime_blacktitle_17sp"
-                        android:text="Starts" />
+                        android:text="@string/event_starts" />
 
+                    <!--date part-->
+                    <TextView
+                        style="@style/itime_select_date_16sp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_toStartOf="@+id/create_event_start_time"
+                        android:onClick="@{eventEditVM.onChangeDate(PickerTask.START_TIME)}"
+                        android:text="@{EventUtil.getSelectDateStringFromLong(context, eventEditVM.event.startTime)}" />
+                    <!--time part-->
                     <TextView
                         android:id="@+id/create_event_start_time"
                         style="@style/itime_select_time_16sp"
                         android:enabled="@{eventEditVM.isAlldayEvent ==1 ? false: true}"
                         android:onClick="@{eventEditVM.onChangeTime(PickerTask.START_TIME)}"
                         android:text="@{EventUtil.getSelectTimeStringFromLong(context, eventEditVM.event.startTime)}"
-                        android:textColor="@color/text_enable" />
+                        android:textColor="@color/text_enable"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="14dp"
+                        />
 
-                    <TextView
-                        style="@style/itime_select_date_16sp"
-                        android:layout_marginRight="15dp"
-                        android:layout_toLeftOf="@+id/create_event_start_time"
-                        android:onClick="@{eventEditVM.onChangeDate(PickerTask.START_TIME)}"
-                        android:text="@{EventUtil.getSelectDateStringFromLong(context, eventEditVM.event.startTime)}" />
 
                 </RelativeLayout>
 
@@ -377,27 +363,29 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/table_row_border"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:visibility="@{eventEditVM.endTimeVisibility}">
 
                     <TextView
                         style="@style/itime_blacktitle_17sp"
-                        android:text="Ends" />
+                        android:text="@string/event_ends" />
 
+                    <TextView
+                        style="@style/itime_select_date_16sp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_toStartOf="@+id/create_event_end_time"
+                        android:onClick="@{eventEditVM.onChangeDate(PickerTask.END_TIME)}"
+                        android:text="@{EventUtil.getSelectDateStringFromLong(context, eventEditVM.event.endTime)}" />
                     <TextView
                         android:id="@+id/create_event_end_time"
                         style="@style/itime_select_time_16sp"
                         android:enabled="@{eventEditVM.isAlldayEvent ==1 ? false: true}"
                         android:onClick="@{eventEditVM.onChangeTime(PickerTask.END_TIME)}"
                         android:text="@{EventUtil.getSelectTimeStringFromLong(context, eventEditVM.event.endTime)}"
-                        android:textColor="@color/text_enable" />
+                        android:textColor="@color/text_enable"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="14dp"
+                        />
 
-                    <TextView
-                        style="@style/itime_select_date_16sp"
-                        android:layout_marginRight="15dp"
-                        android:layout_toLeftOf="@+id/create_event_end_time"
-                        android:onClick="@{eventEditVM.onChangeDate(PickerTask.END_TIME)}"
-                        android:text="@{EventUtil.getSelectDateStringFromLong(context, eventEditVM.event.endTime)}" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -406,7 +394,7 @@
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    >
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -417,19 +405,22 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
                             android:text="@string/alert_time"
                             android:textColor="@color/text_enable"
-                            android:textSize="17dp" />
+                            android:textSize="@dimen/page_text_size" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="50dp"
                             android:text="@{eventEditVM.alertString}"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="30dp"
+                            />
 
+                        <TextView style="@style/arrow_disclosure_indicator" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -450,24 +441,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/padding_10"
-                            android:layout_toLeftOf="@+id/event_edit_calendarType_arrow"
+                            android:layout_marginEnd="30dp"
+                            android:layout_alignParentEnd="true"
                             android:text="@{CalendarUtil.getInstance(context).getCalendarName(eventEditVM.event)}"
                             android:textSize="17dp" />
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="50dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
-
-                        <ImageView
-                            android:id="@+id/event_edit_calendarType_arrow"
-                            android:layout_width="10dp"
-                            android:layout_height="15dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/icon_general_arrow_right" />
+                        <TextView style="@style/arrow_disclosure_indicator" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -481,55 +460,10 @@
                     android:background="@drawable/table_row_border"
                     android:orientation="vertical"
                     android:paddingBottom="0dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingStart="10dp"
                     android:paddingTop="0dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border">
-
-                        <EditText
-                            android:id="@+id/edit_event_url"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#00000000"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:hint="@string/url"
-                            android:onFocusChange="@{eventEditVM.onEditFocusChange}"
-                            android:text="@={eventEditVM.event.url}"
-                            android:textColor="@color/blue"
-                            android:textSize="@dimen/page_text_size" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/table_row_border"
-                        android:orientation="horizontal">
-
-                        <EditText
-                            android:id="@+id/edit_event_note"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#00000000"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:hint="@string/description"
-                            android:onFocusChange="@{eventEditVM.onEditFocusChange}"
-                            android:text="@={eventEditVM.event.description}"
-                            android:textColor="@color/text_enable"
-                            android:textSize="@dimen/page_text_size" />
-                    </LinearLayout>
-
-                    <!--<RelativeLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:background="@drawable/table_row_border"-->
-                        <!--android:onClick="@{eventEditVM.pickPhoto()}">-->
-
+                    <!--photo-->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -546,22 +480,11 @@
                             android:textColor="@color/text_enable"
                             android:textSize="@dimen/page_text_size" />
 
-
-
-                        <ImageView
-                            android:id="@+id/edit_event_photo_arrow"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_gravity="center_vertical|right"
-                            android:src="@drawable/arrow" />
-
-
                         <android.support.v7.widget.RecyclerView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_toLeftOf="@+id/edit_event_photo_arrow"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="30dp"
                             android:minWidth="200dp"
                             android:layout_gravity="center_vertical"
                             app:layoutManager="@{LayoutManagers.linear(LinearLayoutManager.HORIZONTAL, true)}"
@@ -575,7 +498,58 @@
                             android:layout_alignParentTop="true"
                             android:layout_alignParentBottom="true"
                             android:onClick="@{eventEditVM.pickPhoto()}"/>
+
+                        <TextView style="@style/arrow_disclosure_indicator" />
+
                     </RelativeLayout>
+
+                    <!--url-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:paddingEnd="@dimen/subtitle_14dp"
+                        >
+
+                        <EditText
+                            android:id="@+id/edit_event_url"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:hint="@string/url"
+                            android:onFocusChange="@{eventEditVM.onEditFocusChange}"
+                            android:text="@={eventEditVM.event.url}"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+                    <!--note-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/table_row_border"
+                        android:orientation="horizontal"
+                        android:paddingEnd="14dp"
+                        >
+
+                        <EditText
+                            android:id="@+id/edit_event_note"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:background="#00000000"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:gravity="top"
+                            android:hint="@string/description"
+                            android:onFocusChange="@{eventEditVM.onEditFocusChange}"
+                            android:text="@={eventEditVM.event.description}"
+                            android:textColor="@color/text_enable"
+                            android:textSize="@dimen/page_text_size" />
+                    </LinearLayout>
+
+
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
