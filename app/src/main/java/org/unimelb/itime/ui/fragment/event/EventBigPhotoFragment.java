@@ -1,16 +1,13 @@
 package org.unimelb.itime.ui.fragment.event;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableList;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toolbar;
-
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
@@ -18,12 +15,8 @@ import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.databinding.FragmentEventBigphotoBinding;
 import org.unimelb.itime.ui.mvpview.event.EventBigPhotoMvpView;
 import org.unimelb.itime.ui.presenter.event.EventBigPhotoPresenter;
-import org.unimelb.itime.ui.presenter.event.EventPhotoPresenter;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.event.EventBigPhotoViewModel;
-import org.unimelb.itime.ui.viewmodel.event.PhotoGridViewModel;
-
-import java.util.List;
 
 import me.fesky.library.widget.ios.AlertDialog;
 
@@ -35,7 +28,7 @@ public class EventBigPhotoFragment extends BaseUiAuthFragment<EventBigPhotoMvpVi
     private ToolbarViewModel toolbarViewModel;
     private FragmentEventBigphotoBinding binding;
     private EventBigPhotoViewModel viewModel;
-    private List<PhotoUrl> photos;
+    private ObservableList<PhotoUrl> photos;
     private int position;
     private boolean editable;
 
@@ -122,7 +115,7 @@ public class EventBigPhotoFragment extends BaseUiAuthFragment<EventBigPhotoMvpVi
         this.position = position;
     }
 
-    public void setPhotos(List<PhotoUrl> photos) {
+    public void setPhotos(ObservableList<PhotoUrl> photos) {
         this.photos = photos;
     }
 

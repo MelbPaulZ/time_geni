@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -14,20 +18,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.Utils;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.imagepicker.view.CropImageView;
+import com.squareup.picasso.Picasso;
+
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.databinding.FragmentPhotogridBinding;
 import org.unimelb.itime.ui.activity.PhotoPickerActivity;
+import org.unimelb.itime.ui.activity.PicassoImageLoader;
+import org.unimelb.itime.ui.activity.ProfilePhotoPickerActivity;
 import org.unimelb.itime.ui.mvpview.event.EventPhotoGridMvpView;
 import org.unimelb.itime.ui.presenter.event.EventPhotoPresenter;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.event.PhotoGridViewModel;
+import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import me.fesky.library.widget.ios.AlertDialog;
 
@@ -36,9 +55,9 @@ import me.fesky.library.widget.ios.AlertDialog;
  */
 
 public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView, EventPhotoPresenter> implements EventPhotoGridMvpView {
-    public final static int REQ_LOCATION = 1000;
-    public final static int REQ_CUSTOM_REPEAT = 1003;
     public final static int REQ_PHOTO = 1004;
+    private static final int CHOOSE_FROM_LIBRARY = 3333 ;
+    private static final int TAKE_PHOTO = 3323 ;
 
     private int maxNum = 9;
     public final static int REQUEST_PHOTO_PERMISSION = 101;
@@ -46,11 +65,13 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
 
     private FragmentPhotogridBinding binding;
     private Event event;
-    private List<PhotoUrl> tmpPhotos;
+    private ObservableList<PhotoUrl> tmpPhotos;
     private ToolbarViewModel toolbarViewModel;
     private PhotoGridViewModel viewModel;
     private EventBigPhotoFragment bigPhotoFragment;
     private boolean editable = true;
+
+    private ImagePicker imagePicker;
 
     public boolean getEditable() {
         return editable;
@@ -66,6 +87,14 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
 
     public void setMaxNum(int maxNum) {
         this.maxNum = maxNum;
+    }
+
+    private void initImagePicker(){
+        imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
+        imagePicker.setMultiMode(true);
+        imagePicker.setShowCamera(false);
+        imagePicker.setSelectLimit(maxNum);
     }
 
     @Nullable
@@ -88,6 +117,8 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
         initToolbar();
         binding.setViewModel(viewModel);
         binding.setToolbarVM(toolbarViewModel);
+
+        initImagePicker();
     }
 
     @Override
@@ -118,7 +149,8 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
 
     public void setEvent(Event event) {
         this.event = event;
-        tmpPhotos = new ArrayList<>(event.getPhoto());
+        tmpPhotos = new ObservableArrayList<>();
+        tmpPhotos.addAll(event.getPhoto());
     }
 
     @Override
@@ -150,28 +182,62 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
 
     @Override
     public void onNext() {
-        event.setPhoto(tmpPhotos);
+        event.getPhoto().clear();
+        event.getPhoto().addAll(tmpPhotos);
         getBaseActivity().onBackPressed();
     }
 
     @Override
     public void openCamera() {
-        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
-        int selectedMode = PhotoPickerActivity.MODE_MULTI;
-        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum - tmpPhotos.size());
-        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
-        intent.putExtra(PhotoPickerActivity.CAMERA_ONLY, true);
-        startActivityForResult(intent, REQ_PHOTO);
+//        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
+//        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+//        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+//        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum - tmpPhotos.size());
+//        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
+//        intent.putExtra(PhotoPickerActivity.CAMERA_ONLY, true);
+//        startActivityForResult(intent, REQ_PHOTO);
+        takePicture(TAKE_PHOTO);
+    }
+
+    public void takePicture(int requestCode) {
+        Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File takeImageFile;
+        takePictureIntent.setFlags(67108864);
+        if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            if(Utils.existSDCard()) {
+                takeImageFile = new File(Environment.getExternalStorageDirectory(), "/DCIM/camera/");
+            } else {
+                takeImageFile = Environment.getDataDirectory();
+            }
+
+            takeImageFile = createFile(takeImageFile, "IMG_", ".jpg");
+            if(takeImageFile != null) {
+                takePictureIntent.putExtra("output", Uri.fromFile(takeImageFile));
+            }
+        }
+        startActivityForResult(takePictureIntent, requestCode);
+    }
+
+    public static File createFile(File folder, String prefix, String suffix) {
+        if(!folder.exists() || !folder.isDirectory()) {
+            folder.mkdirs();
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
+        String filename = prefix + dateFormat.format(new Date(System.currentTimeMillis())) + suffix;
+        return new File(folder, filename);
     }
 
     @Override
     public void openAlbum(){
-        checkPhotoPickerPermissions();
+//        checkPhotoPickerPermissions();
+        Intent intent = new Intent(getActivity(), ImageGridActivity.class);
+        imagePicker.setSelectLimit(maxNum - tmpPhotos.size());
+        startActivityForResult(intent, CHOOSE_FROM_LIBRARY);
     }
 
     @Override
-    public void openBigPhoto(int position, List<PhotoUrl> photos){
+    public void openBigPhoto(int position, ObservableList<PhotoUrl> photos){
         if(bigPhotoFragment==null){
             bigPhotoFragment = new EventBigPhotoFragment();
         }
@@ -197,13 +263,44 @@ public class EventPhotoFragment extends BaseUiAuthFragment<EventPhotoGridMvpView
 
     }
 
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK) {
-            ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
-            List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
-            tmpPhotos.addAll(photoUrls);
-            viewModel.setPhotos(tmpPhotos);
+//        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK) {
+//            ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+//            List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
+//            tmpPhotos.addAll(photoUrls);
+//            viewModel.setPhotos(tmpPhotos);
+//        }
+//        if (requestCode == REQ_PHOTO && resultCode == Activity.RESULT_OK) {
+//            ArrayList<String> result = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+//            List<PhotoUrl> photoUrls = EventUtil.fromStringToPhotoUrlList(getContext(), result);
+//            tmpPhotos.addAll(photoUrls);
+//            viewModel.setPhotos(tmpPhotos);
+//        }
+        if (requestCode==CHOOSE_FROM_LIBRARY && resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+            if (data != null && (requestCode == CHOOSE_FROM_LIBRARY || requestCode == ImagePicker.REQUEST_CODE_CROP)) {
+                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                List<PhotoUrl> photoUrls = new ArrayList<>();
+                for (int i = 0; i < images.size(); i++) {
+                    photoUrls.add(EventUtil.fromStringToPhotoUrl(getContext(), images.get(i).path));
+                }
+                tmpPhotos.addAll(photoUrls);
+                viewModel.setPhotos(tmpPhotos);
+            }
+        }
+
+        if (requestCode==TAKE_PHOTO ) {
+            if (data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS) == null) {
+            } else {
+                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                List<PhotoUrl> photoUrls = new ArrayList<>();
+                for (int i = 0; i < images.size(); i++) {
+                    photoUrls.add(EventUtil.fromStringToPhotoUrl(getContext(), images.get(i).path));
+                }
+                tmpPhotos.addAll(photoUrls);
+                viewModel.setPhotos(tmpPhotos);
+            }
         }
     }
 

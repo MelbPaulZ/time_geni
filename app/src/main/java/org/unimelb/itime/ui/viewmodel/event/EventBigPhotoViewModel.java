@@ -1,19 +1,15 @@
 package org.unimelb.itime.ui.viewmodel.event;
 
-import android.content.ClipData;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableList;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.ui.presenter.event.EventBigPhotoPresenter;
-
-import java.util.List;
 
 import me.tatarka.bindingcollectionadapter.ItemView;
 
@@ -22,7 +18,7 @@ import me.tatarka.bindingcollectionadapter.ItemView;
  */
 
 public class EventBigPhotoViewModel extends BaseObservable {
-    private List<PhotoUrl> photos;
+    private ObservableList<PhotoUrl> photos;
     private int position;
     private int size;
     private EventBigPhotoPresenter presenter;
@@ -35,11 +31,11 @@ public class EventBigPhotoViewModel extends BaseObservable {
     }
 
     @Bindable
-    public List<PhotoUrl> getPhotos() {
+    public ObservableList<PhotoUrl> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<PhotoUrl> photos) {
+    public void setPhotos(ObservableList<PhotoUrl> photos) {
         this.photos = photos;
         notifyPropertyChanged(BR.photos);
     }
