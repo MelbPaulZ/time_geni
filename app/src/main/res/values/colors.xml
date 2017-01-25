@@ -404,4 +404,11 @@
     <color name="default_photo_background_6">#E77E23</color>
     <color name="default_photo_background_7">#E84C3D</color>
 
+
+    <!--chong gou hou**********************************************-->
+    
+    <color name="cell_name">#000000</color>
+    <color name="cell_value">#C7C7CD</color>
+
+
 </resources>

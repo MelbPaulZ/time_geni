@@ -48,13 +48,21 @@
         <item name="android:layout_alignParentEnd">true</item>
     </style>
 
-    <!--for setting-->
+    <!--cell name-->
     <style name="itime_blacktitle_17sp">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/cell_name</item>
         <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <!--cell Relative Layout-->
+    <style name="itime_cell_relative_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:paddingLeft">10dp</item>
     </style>
 
     
@@ -112,4 +120,5 @@
         <item name="android:layout_marginEnd">14dp</item>
         <item name="android:background">@drawable/icon_general_arrow_right</item>
     </style>
+
 </resources>

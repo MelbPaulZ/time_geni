@@ -394,7 +394,8 @@
     <string name="setting_reset_password">Reset Password</string>
     <string name="my_qr_code">My QR Code</string>
     <string name="setting_gender">Gender</string>
-    <string name="location">Region</string>
+    <string name="location">Location</string>
+    <string name="region">Region</string>
     <string name="search_location">location</string>
     <string name="setting_my_profile">My Profile</string>
     <string name="setting_calendar_pref">Calendar Preferences</string>
