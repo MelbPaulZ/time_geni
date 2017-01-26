@@ -2,6 +2,13 @@ package org.unimelb.itime.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.databinding.BindingAdapter;
+import android.databinding.BindingMethod;
+import android.databinding.BindingMethods;
+import android.databinding.InverseBindingListener;
+import android.databinding.InverseBindingMethod;
+import android.databinding.InverseBindingMethods;
+import android.databinding.adapters.ListenerUtil;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.text.Editable;
@@ -19,12 +26,21 @@ import android.widget.TextView;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.util.SizeUtil;
+import org.unimelb.itime.vendor.weekview.WeekView;
+
+import static android.R.attr.type;
 
 
 /**
  * Created by Qiushuo Huang on 2016/12/5.
  */
 
+@InverseBindingMethods({
+        @InverseBindingMethod(type = SearchBar.class, attribute = "android:inputText"),
+})
+@BindingMethods({
+        @BindingMethod(type = SearchBar.class, attribute = "android:onTextChanged", method = "setSearchListener")
+})
 public class SearchBar extends FrameLayout {
 
     private static final int DEFAULT_SEARCH_BACKGROUND_COLOR = Color.WHITE;
@@ -70,6 +86,23 @@ public class SearchBar extends FrameLayout {
         super(context, attrs, defStyleAttr);
         initDeclaredStyle(context, attrs, defStyleAttr);
         init();
+    }
+
+    /**
+     * this is for set the text of search view from outside
+     * @param text
+     */
+    public void setInputText(String text){
+        inputText.setText(text);
+    }
+
+
+    /**
+     * get current display text from out set
+     * @return
+     */
+    public String getInputText(){
+        return inputText.getText().toString();
     }
 
     private void initDeclaredStyle(Context context, AttributeSet attrs, int defStyleAttr){
@@ -341,5 +374,41 @@ public class SearchBar extends FrameLayout {
 
     public interface OnEditListener{
         void onEditing(View view, String text);
+    }
+
+
+    @BindingAdapter(value = {
+            "android:inputText", "android:onTextChanged","android:inputTextAttrChanged" }, requireAll = false)
+    public static void setListeners(SearchBar view, String inputText,
+                                    InputTextChangedListener inputTextChangedListener,
+                                    final InverseBindingListener bindingListener){
+
+        InputTextChangedListener newListener;
+        if (bindingListener == null){
+            newListener = inputTextChangedListener;
+        }else{
+            newListener = new InputTextChangedListener(inputTextChangedListener, bindingListener);
+        }
+        view.setSearchListener(newListener);
+    }
+
+    public static class InputTextChangedListener implements OnEditListener{
+        OnEditListener onEditListener;
+        InverseBindingListener inputTextChangedListener;
+
+        public InputTextChangedListener(OnEditListener onEditListener, InverseBindingListener inputTextChangedListener) {
+            this.onEditListener = onEditListener;
+            this.inputTextChangedListener = inputTextChangedListener;
+        }
+
+        @Override
+        public void onEditing(View view, String text) {
+            if (onEditListener!=null){
+                onEditListener.onEditing(view, text);
+            }
+            if (inputTextChangedListener!=null) {
+                inputTextChangedListener.onChange();
+            }
+        }
     }
 }
