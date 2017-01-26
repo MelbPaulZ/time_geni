@@ -41,7 +41,8 @@ public class BindLoader extends BaseObservable {
 
     @BindingAdapter("bind:img")
     public static void loadAvartar(ImageView iv, int img) {
-        Picasso.with(iv.getContext()).load(img).resize(100,100).centerCrop().into(iv);
+        Picasso.with(iv.getContext()).load(img).placeholder(R.drawable.invitee_selected_default_picture)
+                .error(R.drawable.invitee_selected_default_picture).resize(100,100).centerCrop().into(iv);
     }
 
     @BindingAdapter("bind:qrcode")
@@ -51,17 +52,20 @@ public class BindLoader extends BaseObservable {
 
     @BindingAdapter("bind:smallAvatar")
     public static void loadSmallAvartar(ImageView iv, String img) {
-        Picasso.with(iv.getContext()).load(img).resize(100,100).centerCrop().into(iv);
+        Picasso.with(iv.getContext()).load(img).placeholder(R.drawable.invitee_selected_default_picture)
+                .error(R.drawable.invitee_selected_default_picture).resize(100,100).centerCrop().into(iv);
     }
 
     @BindingAdapter("bind:avatar")
     public static void bindAvatar(ImageView view, String img){
-        Picasso.with(view.getContext()).load(img).into(view);
+        Picasso.with(view.getContext()).load(img).placeholder(R.drawable.invitee_selected_default_picture)
+                .error(R.drawable.invitee_selected_default_picture).into(view);
     }
 
     @BindingAdapter("bind:avatar")
     public static void bindAvatar(ImageView view, int img){
-        Picasso.with(view.getContext()).load(img).into(view);
+        Picasso.with(view.getContext()).load(img).placeholder(R.drawable.invitee_selected_default_picture)
+                .error(R.drawable.invitee_selected_default_picture).into(view);
     }
 
     @BindingAdapter("bind:titleBackListener")
@@ -91,13 +95,15 @@ public class BindLoader extends BaseObservable {
 
     @BindingAdapter("bind:photo")
     public static void bindPhoto(ImageView view, PhotoUrl url){
-        if (!url.getLocalPath().equals("")){
+        if (!url.getUrl().equals("")){
+            Picasso.with(view.getContext()).load(url.getUrl()).placeholder(R.drawable.ic_photo_loading)
+                    .error(R.drawable.ic_photo_loading).fit().into(view);
+        }else if (!url.getLocalPath().equals("")){
             File file = new File(url.getLocalPath());
             if (file.exists()){
-                Picasso.with(view.getContext()).load(new File(url.getLocalPath())).error(R.drawable.ic_photo_loading).into(view);
+                Picasso.with(view.getContext()).load(new File(url.getLocalPath())).placeholder(R.drawable.ic_photo_loading)
+                        .error(R.drawable.ic_photo_loading).into(view);
             }
-        }else if (!url.getUrl().equals("")){
-            Picasso.with(view.getContext()).load(url.getUrl()).error(R.drawable.ic_photo_loading).fit().into(view);
         }
     }
 }

@@ -14,10 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;
-
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
@@ -29,7 +25,6 @@ import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.activity.LocationPickerActivity;
 import org.unimelb.itime.ui.activity.PhotoPickerActivity;
-import org.unimelb.itime.ui.activity.PicassoImageLoader;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
@@ -71,7 +66,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public final static int REQUEST_LOCATION_PERMISSION = 102;
     private List<String> permissionList;
 
-    private ImagePicker imagePicker;
     private FragmentEventEditDetailBinding binding;
     private Event event = null;
     private List<WrapperTimeSlot> wrapperTimeSlotList;
@@ -111,15 +105,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
         binding.setEventEditVM(eventEditViewModel);
         binding.setToolbarVM(toolbarViewModel);
-        initImagePicker();
-    }
-
-    private void initImagePicker(){
-        imagePicker = ImagePicker.getInstance();
-        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
-        imagePicker.setMultiMode(true);
-        imagePicker.setShowCamera(false);
-        imagePicker.setSelectLimit(9);
     }
 
     private void initToolbar() {
@@ -257,7 +242,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
                             new ActionSheetDialog.OnSheetItemClickListener() {
                                 @Override
                                 public void onClick(int i) {
-                                    openAlbum();
+                                    checkPhotoPickerPermissions();
                                 }
                             }).show();
         }
@@ -368,21 +353,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
             event.setInvitee(new ArrayList<Invitee>());
             setEvent(event);
         }
-
-        if(data!=null) {
-            if (requestCode == REQ_PHOTO && resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-                if (data != null && (requestCode == REQ_PHOTO || requestCode == ImagePicker.REQUEST_CODE_CROP)) {
-                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                    List<PhotoUrl> photoUrls = new ArrayList<>();
-                    for (int i = 0; i < images.size(); i++) {
-                        photoUrls.add(EventUtil.fromStringToPhotoUrl(getContext(), images.get(i).path));
-                    }
-                    event.setPhoto(photoUrls);
-                    setEvent(event);
-                    toPhotoGridPage();
-                }
-            }
-        }
     }
 
 
@@ -414,13 +384,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
             }
 
         }
-    }
-
-    public void openAlbum(){
-//        checkPhotoPickerPermissions();
-        Intent intent = new Intent(getActivity(), ImageGridActivity.class);
-        imagePicker.setSelectLimit(9);
-        startActivityForResult(intent, REQ_PHOTO);
     }
 
     /**

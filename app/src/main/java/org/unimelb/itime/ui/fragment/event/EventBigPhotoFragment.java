@@ -107,7 +107,7 @@ public class EventBigPhotoFragment extends BaseUiAuthFragment<EventBigPhotoMvpVi
         toolbarViewModel.setTitleStr(getString(R.string.photo));
         if(isEditable()) {
             toolbarViewModel.setRightClickable(true);
-            toolbarViewModel.setRightDrawable(getResources().getDrawable(R.drawable.trash));
+            toolbarViewModel.setRightDrawable(getResources().getDrawable(R.drawable.icon_photo_trash));
         }
     }
 
