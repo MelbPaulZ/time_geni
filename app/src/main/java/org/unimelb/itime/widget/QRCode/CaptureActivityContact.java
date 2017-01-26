@@ -52,7 +52,6 @@ import com.lzy.imagepicker.ui.ImageGridActivity;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.databinding.ActivityQrCodeScanBinding;
-import org.unimelb.itime.ui.activity.ContactBaseActivity;
 import org.unimelb.itime.ui.activity.EmptyActivity;
 import org.unimelb.itime.ui.activity.MyQRCodeActivity;
 import org.unimelb.itime.ui.activity.PicassoImageLoader;

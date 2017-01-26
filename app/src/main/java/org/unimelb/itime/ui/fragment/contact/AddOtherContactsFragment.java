@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unimelb.itime.R;
+import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.databinding.FragmentAddOtherContactsBinding;
 import org.unimelb.itime.ui.mvpview.contact.AddContactsMvpView;
@@ -20,7 +21,7 @@ import org.unimelb.itime.widget.SideBarListView;
  * Created by 37925 on 2016/12/15.
  */
 
-public class AddOtherContactsFragment extends BaseContactFragment<AddContactsMvpView, AddContactsPresenter> implements AddContactsMvpView {
+public class AddOtherContactsFragment extends BaseUiAuthFragment<AddContactsMvpView, AddContactsPresenter> implements AddContactsMvpView {
     public static final int GMAIL = 1;
     public static final int FACEBOOK = 2;
 
