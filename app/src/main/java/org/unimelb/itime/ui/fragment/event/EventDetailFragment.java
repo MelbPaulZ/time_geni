@@ -204,6 +204,16 @@ public class EventDetailFragment extends BaseUiAuthFragment<EventDetailMvpView, 
                 unselectWrappers(wrapper);
             }
         }
+
+        // two people event can only select one timeslot, need to unselect other timeslots
+        if (!EventUtil.isUserHostOfEvent(getContext(), event)){
+            if (wrapper.isSelected()
+                    && TimeSlotUtil.numberSelectedWrapper(timeslotVMList) > 1
+                    && event.getInvitee().size() == 2){
+                unselectWrappers(wrapper);
+            }
+        }
+
         contentViewModel.setWrapperTimeSlotList(timeslotVMList);
 
     }
