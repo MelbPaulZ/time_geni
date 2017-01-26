@@ -179,11 +179,12 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
+        hideProgressDialog();
         switch (taskId){
             case InviteFriendPresenter.TASK_SEARCH_CONTACT:
                 if(data instanceof Contact){
@@ -201,6 +202,7 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
 
     @Override
     public void onTaskError(int taskId,Object data) {
+        hideProgressDialog();
         switch (taskId){
             case InviteFriendPresenter.TASK_SEARCH_CONTACT:
                 Toast.makeText(getContext(), getResources().getString(R.string.access_fail),Toast.LENGTH_SHORT).show();

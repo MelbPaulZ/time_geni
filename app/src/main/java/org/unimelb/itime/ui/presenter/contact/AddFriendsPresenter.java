@@ -29,6 +29,7 @@ import rx.Subscriber;
 public class AddFriendsPresenter extends MvpBasePresenter<AddFriendsMvpView> {
 
     private static final String TAG = "AddFriend";
+    public static final int TASK_SEARCH_USER = 1112;
     private Context context;
     private UserApi userApi;
     public AddFriendsPresenter(Context context){
@@ -37,7 +38,12 @@ public class AddFriendsPresenter extends MvpBasePresenter<AddFriendsMvpView> {
     }
 
 
-    public void findFriend(String searchStr, final AddFriendsViewModel.SearchUserCallBack callBack){
+    public void findFriend(String searchStr){
+
+        if(getView()!=null){
+            getView().onTaskStart(TASK_SEARCH_USER);
+        }
+
         if(searchStr==null || searchStr.equals("")){
             return;
         }
@@ -47,8 +53,9 @@ public class AddFriendsPresenter extends MvpBasePresenter<AddFriendsMvpView> {
         for(Contact contact:contacts){
             if(contact.getUserDetail().getPhone().equals(searchStr)
                     || contact.getUserDetail().getEmail().equals(searchStr)){
-                callBack.gotoProfile(contact);
-                AppUtil.hideProgressBar();
+                if(getView()!=null) {
+                    getView().onTaskSuccess(TASK_SEARCH_USER, contact);
+                }
                 return;
             }
         }
@@ -58,13 +65,11 @@ public class AddFriendsPresenter extends MvpBasePresenter<AddFriendsMvpView> {
             @Override
             public void onCompleted() {
                 Log.d(TAG, "onCompleted: ");
-                AppUtil.hideProgressBar();
             }
 
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
-                AppUtil.hideProgressBar();
                 Toast.makeText(context, context.getResources().getString(R.string.access_fail),Toast.LENGTH_SHORT).show();
             }
 
@@ -72,13 +77,19 @@ public class AddFriendsPresenter extends MvpBasePresenter<AddFriendsMvpView> {
             public void onNext(HttpResult<List<User>> result) {
                 Log.d(TAG, "onNext: " + result.getInfo());
                 if (result.getStatus()!=1){
-                    callBack.gotoProfile(null);
+                    if(getView()!=null) {
+                        getView().onTaskError(TASK_SEARCH_USER, null);
+                    }
                 }else {
                     if(result.getData().isEmpty()){
-                        callBack.gotoProfile(null);
+                        if(getView()!=null) {
+                            getView().onTaskError(TASK_SEARCH_USER, null);
+                        }
                     }else {
                         User user = result.getData().get(0);
-                        callBack.gotoProfile(new Contact(user));
+                        if(getView()!=null) {
+                            getView().onTaskSuccess(TASK_SEARCH_USER, new Contact(user));
+                        }
                     }
                 }
             }
