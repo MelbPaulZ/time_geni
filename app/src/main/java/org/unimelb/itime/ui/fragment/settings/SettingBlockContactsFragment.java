@@ -15,17 +15,11 @@ import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.ITimeUser;
 import org.unimelb.itime.databinding.FragmentBlocklistBinding;
-import org.unimelb.itime.messageevent.contact.MessageBlockContact;
-import org.unimelb.itime.messageevent.contact.MessageUnblockContact;
-import org.unimelb.itime.ui.activity.AddFriendActivity;
-import org.unimelb.itime.ui.activity.FriendRequestActivity;
-import org.unimelb.itime.ui.fragment.contact.BaseContactFragment;
 import org.unimelb.itime.ui.fragment.contact.ProfileFragment;
 import org.unimelb.itime.ui.mvpview.contact.BlockContactsMvpView;
 import org.unimelb.itime.ui.presenter.contact.BlockContactsPresenter;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.ui.viewmodel.contact.BlockContactsViewModel;
-import org.unimelb.itime.ui.viewmodel.contact.ContactHomePageViewModel;
 
 import java.util.List;
 
