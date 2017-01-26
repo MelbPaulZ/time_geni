@@ -39,8 +39,10 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="11dp"
                     bind:searchHintText="@string/search_location"
-                    app:searchListener="@{locationVM.onSearching()}"
+                    android:inputText="@={locationVM.searchViewInputText}"
+                    android:onTextChanged="@{locationVM.onSearching()}"
                     />
+
             </LinearLayout>
 
             <!--current location-->

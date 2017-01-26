@@ -116,12 +116,27 @@ public class InviteeResponseAdapter extends BaseAdapter{
                 ) {
             View root = layoutInflater.inflate(R.layout.listview_timeslot_response, null);
             ImageView imgView = (ImageView) root.findViewById(R.id.img_view);
+            imgView.setOnClickListener(toProfilePage(invitee));
             TextView txtView = (TextView) root.findViewById(R.id.text_view);
             bindUrlHelper(context, invitee.getPhoto(), imgView, new CircleTransform());
             txtView.setText(invitee.getName() + ifHost(event, invitee));
             this.views.add(root);
         }
 
+    }
+
+    /**
+     * after click the photo of user, jump to profile page
+     * @param invitee
+     * @return
+     */
+    private View.OnClickListener toProfilePage(Invitee invitee){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        };
     }
 
     private <T extends Transformation> void bindUrlHelper(Context context, String url, ImageView view, T transformer){
@@ -133,7 +148,7 @@ public class InviteeResponseAdapter extends BaseAdapter{
     }
 
     private String ifHost(Event event, Invitee invitee){
-        if (event.getUserUid().equals(invitee.getUserUid())){
+        if (event.getHostUserUid().equals(invitee.getUserUid())){
             return "(Host)";
         }
         return "";

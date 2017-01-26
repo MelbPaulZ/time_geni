@@ -187,6 +187,9 @@
     <string name="photo">Photos</string>
     <string name="event_details">Event Details</string>
     <string name="new_invitation">New Invitation</string>
+    <string name="event_proposed_timeslots">Proposed Timeslots</string>
+    <string name="event_starts">Starts</string>
+    <string name="event_ends">Ends</string>
     <string name="reason">Reason...</string>
     <string name="please_enter_the_reason_of_rejecting_this_event">Please enter the reason of rejecting this event</string>
     <string name="reject_this_event">Reject This Event</string>
@@ -391,7 +394,8 @@
     <string name="setting_reset_password">Reset Password</string>
     <string name="my_qr_code">My QR Code</string>
     <string name="setting_gender">Gender</string>
-    <string name="location">Region</string>
+    <string name="location">Location</string>
+    <string name="region">Region</string>
     <string name="search_location">location</string>
     <string name="setting_my_profile">My Profile</string>
     <string name="setting_calendar_pref">Calendar Preferences</string>
