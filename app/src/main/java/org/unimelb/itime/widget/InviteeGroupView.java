@@ -13,6 +13,7 @@ import android.util.Size;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -169,12 +170,17 @@ public class InviteeGroupView extends LinearLayout {
     }
 
     public void addInvitee(ITimeInviteeInterface invitee){
-
+        hideKeyboard();
         if(invitee.getUserStatus().equals(Invitee.USER_STATUS_ACTIVATED)){
             addAvatarInvitee(invitee);
         }else{
             addEmailInvitee(invitee);
         }
+    }
+
+    public void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(inputEditText.getWindowToken(),0);
     }
 
     public void addEmailInvitee(ITimeInviteeInterface invitee){
