@@ -19,6 +19,7 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
+import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
@@ -403,11 +404,16 @@ public class EventUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
         String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
-//        if ()
-//        RuleModel ruleModel = RuleFactory.getInstance().getRuleModel(event);
-//        event.setRule(ruleModel);
         FrequencyEnum frequencyEnum = event.getRule().getFrequencyEnum();
         int interval = event.getRule().getInterval();
+
+        // for event detail and edit event, the frequencyEnum will be null,
+        // but the recurrence is not null, so need to get the frequenceEnum from the recurrence
+        if (frequencyEnum==null){
+            RuleModel ruleModel = RuleFactory.getInstance().getRuleModel(event);
+            event.setRule(ruleModel);
+            frequencyEnum = ruleModel.getFrequencyEnum();
+        }
 
         // when view event details, the fraquencyEnum will be null
         if (frequencyEnum == null){
