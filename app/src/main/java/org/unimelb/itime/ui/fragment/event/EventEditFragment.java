@@ -14,6 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageGridActivity;
+
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
@@ -25,6 +29,7 @@ import org.unimelb.itime.ui.activity.EventCreateActivity;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.activity.LocationPickerActivity;
 import org.unimelb.itime.ui.activity.PhotoPickerActivity;
+import org.unimelb.itime.ui.activity.PicassoImageLoader;
 import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.EventEditMvpView;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
@@ -187,12 +192,21 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
      * only photo related permission granted, then can go to photo picker
      */
     private void startPhotoPicker() {
-        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
-        int selectedMode = PhotoPickerActivity.MODE_MULTI;
-        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-        int maxNum = 9;
-        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
-        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
+//        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
+//        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+//        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+//        int maxNum = 9;
+//        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
+//        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
+//        startActivityForResult(intent, REQ_PHOTO);
+
+        ImagePicker imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
+        imagePicker.setMultiMode(true);
+        imagePicker.setShowCamera(false);
+        imagePicker.setSelectLimit(9);
+
+        Intent intent = new Intent(getActivity(), ImageGridActivity.class);
         startActivityForResult(intent, REQ_PHOTO);
     }
 
@@ -352,6 +366,19 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
         if (requestCode == REQ_INVITEE && resultCode == InviteeFragment.RESULT_CANCEL){
             event.setInvitee(new ArrayList<Invitee>());
             setEvent(event);
+        }
+
+        if(data!=null) {
+            if (requestCode == REQ_PHOTO && resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                    List<PhotoUrl> photoUrls = new ArrayList<>();
+                    for (int i = 0; i < images.size(); i++) {
+                        photoUrls.add(EventUtil.fromStringToPhotoUrl(getContext(), images.get(i).path));
+                    }
+                event.setPhoto(photoUrls);
+                setEvent(event);
+                toPhotoGridPage();
+            }
         }
     }
 

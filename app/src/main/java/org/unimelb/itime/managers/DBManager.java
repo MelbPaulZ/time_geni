@@ -190,9 +190,9 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
         QueryBuilder<Contact> qb = contactDao.queryBuilder();
-        qb.where(
+        qb.where(qb.and(ContactDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid()),
                  qb.and(ContactDao.Properties.Status.eq(Contact.ACTIVATED),
-                         ContactDao.Properties.BlockLevel.eq(0))).orderAsc(ContactDao.Properties.AliasName);
+                         ContactDao.Properties.BlockLevel.eq(0)))).orderAsc(ContactDao.Properties.AliasName);
         List<Contact> list = qb.list();
         return list;
     }
@@ -201,7 +201,8 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         BlockDao blockDao = daoSession.getBlockDao();
         QueryBuilder<Block> qb = blockDao.queryBuilder();
-        qb.where(BlockDao.Properties.BlockLevel.gt(0));
+        qb.where(qb.and(BlockDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid()),
+                BlockDao.Properties.BlockLevel.gt(0)));
         List<Block> list = qb.list();
         return list;
     }
@@ -270,7 +271,6 @@ public class DBManager {
         if(request==null){
             return;
         }
-
         DaoSession daoSession = daoMaster.newSession();
         FriendRequestDao friendRequestDao = daoSession.getFriendRequestDao();
         friendRequestDao.insertOrReplace(request);
@@ -278,10 +278,10 @@ public class DBManager {
     }
 
     public List<FriendRequest> getAllFriendRequest(){
-
         DaoSession daoSession = daoMaster.newSession();
         FriendRequestDao friendRequestDao = daoSession.getFriendRequestDao();
         QueryBuilder<FriendRequest> qb = friendRequestDao.queryBuilder();
+        qb.where(FriendRequestDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid()));
         qb.orderDesc(FriendRequestDao.Properties.UpdatedAt);
         List<FriendRequest> list = qb.list();
         return list;

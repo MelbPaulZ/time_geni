@@ -2,25 +2,15 @@ package org.unimelb.itime.ui.viewmodel.event;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
-import android.text.Editable;
+import android.databinding.ObservableList;
 import android.view.View;
-import android.widget.GridView;
-import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.adapter.EventPhotoAdapter;
-import org.unimelb.itime.adapter.PhotoAdapter;
-import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.PhotoUrl;
-import org.unimelb.itime.ui.fragment.event.EventPhotoFragment;
 import org.unimelb.itime.ui.presenter.event.EventPhotoPresenter;
 import org.unimelb.itime.widget.PhotoGridView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import me.fesky.library.widget.ios.ActionSheetDialog;
 
@@ -29,7 +19,7 @@ import me.fesky.library.widget.ios.ActionSheetDialog;
  */
 
 public class PhotoGridViewModel extends BaseObservable{
-    private List<PhotoUrl> photos;
+    private ObservableList<PhotoUrl> photos;
     private EventPhotoPresenter presenter;
     private boolean editable;
     private int maxNum;
@@ -58,13 +48,13 @@ public class PhotoGridViewModel extends BaseObservable{
         this.presenter = presenter;
     }
 
-    public void setPhotos(List<PhotoUrl> photos) {
+    public void setPhotos(ObservableList<PhotoUrl> photos) {
         this.photos = photos;
         notifyPropertyChanged(BR.photos);
     }
 
     @Bindable
-    public List<PhotoUrl> getPhotos(){
+    public ObservableList<PhotoUrl> getPhotos(){
         return photos;
     }
 

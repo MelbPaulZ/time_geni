@@ -83,15 +83,21 @@
                 android:id="@+id/sexIcon"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0"/>
+
+            <FrameLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0"
+                android:onClick="@{viewModel.editAliasListener}"
+                android:visibility="@{viewModel.showEdit?View.VISIBLE:View.GONE}">
             <ImageView
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:layout_marginLeft="19dp"
                 android:src="@drawable/icon_edit"
-                android:visibility="@{viewModel.showEdit?View.VISIBLE:View.GONE}"
-                android:onClick="@{viewModel.editAliasListener}"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0"/>
+                android:layout_gravity="center"
+                />
+            </FrameLayout>
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"

@@ -122,11 +122,6 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
         }
         editAliasFragment.setContact(user);
         getBaseActivity().openFragment(editAliasFragment, null, true);
-//        fm.beginTransaction()
-//                .hide(this)
-//                .replace(R.id.contentFrameLayout, editAliasFragment)
-//                .addToBackStack(null)
-//                .commit();
     }
 
     public Context getContext(){

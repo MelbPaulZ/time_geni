@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
         List<Message> messageList = DBManager.getInstance(getApplicationContext()).getAllMessages();
         int unReadNum = 0;
         for (Message message : messageList){
-            if (!message.isRead()){
+            if (message.getHasBadge()){
                 unReadNum+=1;
             }
         }

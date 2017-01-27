@@ -1,12 +1,10 @@
 package org.unimelb.itime.ui.mvpview.event;
 
-import android.content.Context;
+import android.databinding.ObservableList;
 
 import org.unimelb.itime.bean.PhotoUrl;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.TaskBasedMvpView;
-
-import java.util.List;
 
 /**
  * Created by Qiushuo Huang on 2017/1/24.
@@ -15,5 +13,5 @@ import java.util.List;
 public interface EventPhotoGridMvpView extends TaskBasedMvpView, ItimeCommonMvpView {
     void openCamera();
     void openAlbum();
-    void openBigPhoto(int position, List<PhotoUrl> photos);
+    void openBigPhoto(int position, ObservableList<PhotoUrl> photos);
 }

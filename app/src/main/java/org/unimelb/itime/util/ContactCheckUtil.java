@@ -21,11 +21,13 @@ public class ContactCheckUtil {
         return instance;
     }
 
-    public boolean isUnimelbEmail(String email){
+    public boolean isUnimelbEmail(String input){
+        String email = input.trim();
         return isEmail(email)&&email.toLowerCase().trim().endsWith("unimelb.edu.au");
     }
 
-    public boolean isEmail(String email){
+    public boolean isEmail(String input){
+        String email = input.trim();
         return emailPattern.matcher(email).matches();
     }
 

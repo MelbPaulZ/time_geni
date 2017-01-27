@@ -192,7 +192,7 @@
 
                     <TextView
                         style="@style/itime_blacktitle_17sp"
-                        android:text="@string/location" />
+                        android:text="@string/region" />
 
                     <ImageView style="@style/image_right_arrow" />
 

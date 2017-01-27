@@ -226,6 +226,17 @@ public class EventUtil {
         return arrayList;
     }
 
+    public static PhotoUrl fromStringToPhotoUrl(Context context, String url) {
+            // here should update photoUrl, as Chuandong Request
+        PhotoUrl photoUrl = new PhotoUrl();
+        photoUrl.setLocalPath(url);
+        photoUrl.setFilename(getPhotoFileName(url));
+        photoUrl.setSuccess(0);
+        photoUrl.setPhotoUid(AppUtil.generateUuid());
+        photoUrl.setEventUid(EventManager.getInstance(context).getCurrentEvent().getEventUid());
+        return photoUrl;
+    }
+
     private static String getPhotoFileName(String url) {
         File f = new File(url);
         String name = f.getName();

@@ -102,7 +102,6 @@ public class LocationPickerFragment extends BaseUiAuthFragment<LocationPickerMvp
         super.onActivityCreated(savedInstanceState);
         init();
         initTitles();
-//        initListeners();
     }
 
     private void init() {
@@ -131,23 +130,12 @@ public class LocationPickerFragment extends BaseUiAuthFragment<LocationPickerMvp
                 .build();
         mGoogleApiClient.connect();
         viewModel = new LocationViewModel(getPresenter());
-//
-//        mAutocompleteView = (AutoCompleteTextView)
-//                root.findViewById(R.id.autocomplete_places);
 
         mAdapter = new LocationPresenter.PlaceAutoCompleteAdapter(getContext(), mGoogleApiClient, locationNearByBounds, null);
         mAdapter.setMvpView(this);
         presenter.setPlaceAutoCompleteAdapter(mAdapter);
         binding.setLocationVM(viewModel);
 
-//        locations.add(getString(R.string.current_location));
-//
-//        strAdapter = new ITimeLocationAdapter(getContext());
-
-//        mAutocompleteView.setOnItemClickListener(currentLocationListener);
-//        mAutocompleteView.setAdapter(strAdapter);
-//
-//        mAutocompleteView.setText(place);
     }
 
     private void initTitles(){
@@ -367,7 +355,7 @@ public class LocationPickerFragment extends BaseUiAuthFragment<LocationPickerMvp
     @Override
     public void onNext() {
         Intent intent = new Intent();
-        intent.putExtra("location", place);
+        intent.putExtra("location", viewModel.getSearchViewInputText());
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
         getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -386,7 +374,7 @@ public class LocationPickerFragment extends BaseUiAuthFragment<LocationPickerMvp
 
     @Override
     public void onChooseLocation(String location) {
-        place = location;
+        viewModel.setSearchViewInputText(location);
         onNext();
     }
 

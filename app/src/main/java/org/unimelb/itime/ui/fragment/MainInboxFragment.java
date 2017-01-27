@@ -16,6 +16,7 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.R;
 import org.unimelb.itime.adapter.MessageAdapter;
 import org.unimelb.itime.base.BaseUiAuthFragment;
@@ -24,6 +25,7 @@ import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.FragmentMainInboxBinding;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.ui.activity.EventDetailActivity;
 import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
@@ -90,6 +92,8 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
         binding.setToolbarVM(toolbarViewModel);
         binding.setContentVM(contentViewModel);
 
+        //notify the badge of tab bar
+        EventBus.getDefault().post(new MessageInboxMessage(new ArrayList<Message>()));
         initView();
     }
 
@@ -169,6 +173,7 @@ public class MainInboxFragment extends BaseUiAuthFragment<MainInboxMvpView, Main
         List<ItemViewModel> messages = transform(dbManager.getAllMessages());
         contentViewModel.setList(messages);
         adapter.setData(messages);
+        EventBus.getDefault().post(new MessageInboxMessage(new ArrayList<Message>()));
     }
 
     @Override

@@ -9,9 +9,6 @@ import android.text.style.StyleSpan;
 import android.view.View;
 
 import org.unimelb.itime.bean.Contact;
-import org.unimelb.itime.bean.ITimeUser;
-import org.unimelb.itime.bean.User;
-import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.ContactCheckUtil;
 import org.unimelb.itime.ui.presenter.contact.AddFriendsPresenter;
 import org.unimelb.itime.widget.SearchBar;
@@ -72,7 +69,7 @@ public class AddFriendsViewModel extends BaseObservable {
         setShowNotFound(false);
         setShowButtons(false);
         setShowAlert(false);
-        setShowTitile(false);
+        setShowTitle(false);
         setShowCancel(true);
     }
 
@@ -131,7 +128,7 @@ public class AddFriendsViewModel extends BaseObservable {
         setShowButtons(true);
         setShowNotFound(false);
         setShowSearch(false);
-        setShowTitile(true);
+        setShowTitle(true);
         setShowCancel(false);
         setResetSearchBar(true);
     }
@@ -182,7 +179,7 @@ public class AddFriendsViewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 String searchStr = getPureSearchText();
-                presenter.findFriend(searchStr,new SearchUserCallBack());
+                presenter.findFriend(searchStr);
             }
         };
     }
@@ -228,23 +225,13 @@ public class AddFriendsViewModel extends BaseObservable {
 
     }
 
-    public class SearchUserCallBack{
-        public void gotoProfile(Contact contact){
-            if(contact==null){
-                showNotFound();
-            }else{
-               presenter.goToProfile(contact);
-            }
-        }
-    }
-
     @Bindable
     public boolean getShowTitle() {
         return showTitile;
     }
 
-    public void setShowTitile(boolean showTitile) {
-        this.showTitile = showTitile;
+    public void setShowTitle(boolean showTitle) {
+        this.showTitile = showTitle;
         notifyPropertyChanged(BR.showTitle);
     }
 

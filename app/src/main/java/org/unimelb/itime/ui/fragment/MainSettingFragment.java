@@ -16,14 +16,19 @@ import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.base.BaseUiFragment;
+import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentSettingBinding;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.ui.activity.LoginActivity;
+import org.unimelb.itime.ui.activity.ProfileActivity;
 import org.unimelb.itime.ui.activity.SettingActivity;
+import org.unimelb.itime.ui.fragment.contact.ProfileFragment;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.MainSettingMvpView;
+import org.unimelb.itime.ui.presenter.SettingPresenter;
+import org.unimelb.itime.ui.presenter.contact.AddFriendsPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
@@ -36,15 +41,16 @@ import me.fesky.library.widget.ios.ActionSheetDialog;
  * Created by Paul on 25/12/2016.
  */
 
-public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,MvpBasePresenter<MainSettingMvpView>> implements MainSettingMvpView {
+public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,SettingPresenter<MainSettingMvpView>> implements MainSettingMvpView {
     private FragmentSettingBinding binding;
     private MainSettingViewModel contentViewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
     private static final String HF_URL = "http://www.google.com";
+    private ProfileFragment profileFragment;
 
     @Override
-    public MvpBasePresenter createPresenter() {
-        return new MvpBasePresenter<>();
+    public SettingPresenter createPresenter() {
+        return new SettingPresenter(getContext());
     }
 
     @Nullable
@@ -81,7 +87,7 @@ public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,M
     public void toQRcodePage() {
         Intent intent = new Intent(getActivity(), CaptureActivityContact.class);
         intent.putExtra(SettingActivity.TASK, SettingActivity.TASK_TO_QR_CODE);
-        startActivity(intent);
+        startActivityForResult(intent, SettingActivity.TASK_TO_QR_CODE);
     }
 
     @Override
@@ -148,6 +154,19 @@ public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,M
     @Override
     public void onTaskSuccess(int taskId, Object data) {
         hideProgressDialog();
+        switch (taskId){
+            case SettingPresenter.TASK_SEARCH_USER:
+                gotoProfile((Contact) data);
+        }
+    }
+
+    public void gotoProfile(Contact contact){
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), ProfileActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ProfileActivity.USER,contact);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override
@@ -212,6 +231,15 @@ public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,M
             case SettingActivity.TASK_TO_MY_PROFILE:
                 //update user
                 contentViewModel.setUser(UserUtil.getInstance(getContext()).getUser());
+                break;
+            case SettingActivity.TASK_TO_QR_CODE:
+                if (resultCode == getActivity().RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    if (bundle != null) {
+                        String result = bundle.getString("result");
+                        presenter.findFriend(result);
+                    }
+                }
         }
     }
 }

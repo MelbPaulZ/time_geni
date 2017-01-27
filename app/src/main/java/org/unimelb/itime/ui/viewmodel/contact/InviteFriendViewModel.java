@@ -392,7 +392,7 @@ public class InviteFriendViewModel extends BaseObservable {
             @Override
             public void onClick(View view) {
                 if(getValidInput()) {
-                    addInvitee(addButtonText);
+                    addInvitee(addButtonText.trim());
                 } else {
                     setShowAlertMsg(true);
                 }
