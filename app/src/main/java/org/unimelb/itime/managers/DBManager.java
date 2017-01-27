@@ -201,7 +201,7 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         BlockDao blockDao = daoSession.getBlockDao();
         QueryBuilder<Block> qb = blockDao.queryBuilder();
-        qb.where(qb.and(ContactDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid()),
+        qb.where(qb.and(BlockDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid()),
                 BlockDao.Properties.BlockLevel.gt(0)));
         List<Block> list = qb.list();
         return list;
@@ -281,7 +281,7 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         FriendRequestDao friendRequestDao = daoSession.getFriendRequestDao();
         QueryBuilder<FriendRequest> qb = friendRequestDao.queryBuilder();
-        qb.where(ContactDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid()));
+        qb.where(FriendRequestDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid()));
         qb.orderDesc(FriendRequestDao.Properties.UpdatedAt);
         List<FriendRequest> list = qb.list();
         return list;
