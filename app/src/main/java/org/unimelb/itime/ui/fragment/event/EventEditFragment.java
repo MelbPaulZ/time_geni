@@ -187,13 +187,14 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
      * only photo related permission granted, then can go to photo picker
      */
     private void startPhotoPicker() {
-        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
-        int selectedMode = PhotoPickerActivity.MODE_MULTI;
-        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-        int maxNum = 9;
-        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
-        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
-        startActivityForResult(intent, REQ_PHOTO);
+//        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
+//        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+//        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+//        int maxNum = 9;
+//        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
+//        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
+//        startActivityForResult(intent, REQ_PHOTO);
+
     }
 
     @Override
