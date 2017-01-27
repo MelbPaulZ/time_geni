@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
         List<Message> messageList = DBManager.getInstance(getApplicationContext()).getAllMessages();
         int unReadNum = 0;
         for (Message message : messageList){
-            if (message.getHasBadge()){
+            if (!message.isRead()){
                 unReadNum+=1;
             }
         }
@@ -128,20 +128,26 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
     }
 
 
+    /**
+     * todo: fix scroll to
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CalendarBaseViewFragment.REQ_EVENT_CREATE ){
-            if (resultCode == Activity.RESULT_OK) {
-                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
-                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
-            }
-        }else if (requestCode == CalendarBaseViewFragment.REQ_EVENT_DETAIL ){
-            if (resultCode == Activity.RESULT_OK) {
-                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
-                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
-            }
-        }
+//        if (requestCode == CalendarBaseViewFragment.REQ_EVENT_CREATE ){
+//            if (resultCode == Activity.RESULT_OK) {
+//                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
+//                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+//            }
+//        }else if (requestCode == CalendarBaseViewFragment.REQ_EVENT_DETAIL ){
+//            if (resultCode == Activity.RESULT_OK) {
+//                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
+//                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
+//            }
+//        }
     }
 
 

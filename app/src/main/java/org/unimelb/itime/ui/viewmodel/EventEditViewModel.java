@@ -163,8 +163,14 @@ public class EventEditViewModel extends EventCommonViewModel {
     }
 
     public void editEvent() {
-        // popup alertDialog to choose whether change all or just one
+        // set start time and end time as the first timeslot
+        if (event.getTimeslot().size()>0 && event.getConfirmedCount()==0) {
+            Timeslot firstTimeslot = event.getTimeslot().get(0);
+            event.setStartTime(firstTimeslot.getStartTime());
+            event.setEndTime(firstTimeslot.getEndTime());
+        }
 
+        // popup alertDialog to choose whether change all or just one
         if (eventManager.getCurrentEvent().getRecurrence().length > 0) {
             // the event is repeat event
             final AlertDialog alertDialog = new AlertDialog.Builder(presenter.getContext()).create();

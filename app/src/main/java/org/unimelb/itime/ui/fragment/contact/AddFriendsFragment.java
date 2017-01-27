@@ -115,7 +115,7 @@ public class AddFriendsFragment extends BaseUiAuthFragment<AddFriendsMvpView, Ad
             Bundle bundle = data.getExtras();
             if (bundle != null) {
                 String result = bundle.getString("result");
-                presenter.findFriend(result, mainViewModel.new SearchUserCallBack());
+                presenter.findFriend(result);
             }
         }
     }
@@ -146,5 +146,32 @@ public class AddFriendsFragment extends BaseUiAuthFragment<AddFriendsMvpView, Ad
     @Override
     public void onNext() {
 
+    }
+
+    @Override
+    public void onTaskStart(int taskId) {
+        showProgressDialog();
+
+    }
+
+    @Override
+    public void onTaskSuccess(int taskId, Contact data) {
+        hideProgressDialog();
+        switch (taskId){
+            case AddFriendsPresenter.TASK_SEARCH_USER:
+                goToProfileFragment(data);
+                break;
+        }
+
+    }
+
+    @Override
+    public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
+        switch (taskId){
+            case AddFriendsPresenter.TASK_SEARCH_USER:
+                mainViewModel.showNotFound();
+                break;
+        }
     }
 }

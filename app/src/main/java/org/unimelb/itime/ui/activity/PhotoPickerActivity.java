@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -32,12 +33,16 @@ import com.lling.photopicker.beans.PhotoFloder;
 import com.lling.photopicker.utils.LogUtils;
 import com.lling.photopicker.utils.OtherUtils;
 import com.lling.photopicker.utils.PhotoUtils;
+import com.lzy.imagepicker.Utils;
 
 import org.unimelb.itime.R;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -377,14 +382,25 @@ public class PhotoPickerActivity extends Activity implements PhotoAdapter.PhotoC
         if(cameraIntent.resolveActivity(getPackageManager()) != null){
             // 设置系统相机拍照后的输出路径
             // 创建临时文件
-            mTmpFile = OtherUtils.createFile(getApplicationContext());
+//            mTmpFile = OtherUtils.createFile(getApplicationContext());
+            if (Utils.existSDCard())
+                mTmpFile = new File(Environment.getExternalStorageDirectory(), "/DCIM/camera/");
+            else mTmpFile = Environment.getDataDirectory();
+            mTmpFile = createFile(mTmpFile, "IMG_", ".jpg");
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTmpFile));
             startActivityForResult(cameraIntent, REQUEST_CAMERA);
         }else{
             Toast.makeText(getApplicationContext(),
                     com.lling.photopicker.R.string.msg_no_camera, Toast.LENGTH_SHORT).show();
         }
+    }
 
+    /** 根据系统时间、前缀、后缀产生一个文件 */
+    public static File createFile(File folder, String prefix, String suffix) {
+        if (!folder.exists() || !folder.isDirectory()) folder.mkdirs();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
+        String filename = prefix + dateFormat.format(new Date(System.currentTimeMillis())) + suffix;
+        return new File(folder, filename);
     }
 
     @Override

@@ -34,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{contentVM.onProfileClick()}"
+            android:layout_marginTop="13dp"
             android:background="@drawable/background_top_bottom_divider">
             <!--Avatar-->
             <ImageView
@@ -64,8 +65,9 @@
                 android:textColor="@color/color_757575"
                 android:textSize="12sp" />
 
-            <!--right arrow 8 13-->
-            <ImageView style="@style/image_right_arrow" />
+            <!--right arrow-->
+            <TextView
+                style="@style/arrow_disclosure_indicator"/>
         </RelativeLayout>
 
         <!--Scan QR code part-->
@@ -94,7 +96,8 @@
                 android:src="@drawable/icon_qr_code"/>
 
             <!--right arrow-->
-            <ImageView style="@style/image_right_arrow" />
+            <TextView
+                style="@style/arrow_disclosure_indicator"/>
 
         </RelativeLayout>
 
@@ -116,7 +119,9 @@
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/blocked_users" />
 
-                <ImageView style="@style/image_right_arrow" />
+                <!--right arrow-->
+                <TextView
+                    style="@style/arrow_disclosure_indicator"/>
 
                 <TextView style="@style/itime_bottom_divider_line" />
 
@@ -134,7 +139,9 @@
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/notifications" />
 
-                <ImageView style="@style/image_right_arrow" />
+                <!--right arrow-->
+                <TextView
+                    style="@style/arrow_disclosure_indicator"/>
 
                 <TextView style="@style/itime_bottom_divider_line" />
             </RelativeLayout>
@@ -151,7 +158,9 @@
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/calendar_preferences" />
 
-                <ImageView style="@style/image_right_arrow" />
+                <!--right arrow-->
+                <TextView
+                    style="@style/arrow_disclosure_indicator"/>
 
             </RelativeLayout>
         </LinearLayout>
@@ -174,7 +183,9 @@
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/help_and_feedback" />
 
-                <ImageView style="@style/image_right_arrow" />
+                <!--right arrow-->
+                <TextView
+                    style="@style/arrow_disclosure_indicator"/>
 
                 <TextView style="@style/itime_bottom_divider_line" />
             </RelativeLayout>
@@ -191,7 +202,10 @@
                     style="@style/itime_blacktitle_17sp"
                     android:text="@string/about" />
 
-                <ImageView style="@style/image_right_arrow" />
+                <!--right arrow-->
+                <TextView
+                    style="@style/arrow_disclosure_indicator"/>
+
             </RelativeLayout>
 
         </LinearLayout>

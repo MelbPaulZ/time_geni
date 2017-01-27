@@ -373,6 +373,7 @@
     <string name="alert">Alert</string>
     <string name="edit_alias_alert_msg">Alias should be no longer than 20 letters</string>
     <string name="edit_alias_alert">Too long alias</string>
+    <string name="do_not_inviete_yourself">There is no need to invite yourself</string>
     <!--setting-->
     <string name="blocked_users">Blocked Users</string>
     <string name="notifications">Notifications</string>
@@ -436,4 +437,6 @@
     <string name="calendar_name">Calendar Name</string>
     <string name="delete_calendar">Delete Calendar</string>
 
+    <!--OnBoarding-->
+    <string name="skip">Skip</string>
 </resources>

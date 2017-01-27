@@ -1,5 +1,6 @@
 package org.unimelb.itime.ui.fragment.settings;
 
+import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -86,7 +87,7 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
 
     @Override
     public void onBack() {
-        getBaseActivity().backFragment(new SettingMyProfileFragment());
+        getFragmentManager().popBackStack();
     }
 
     @Override
@@ -96,16 +97,18 @@ public class SettingProfileGenderFragment  extends BaseUiAuthFragment<TaskBasedM
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, User data) {
-        getBaseActivity().backFragment(new SettingMyProfileFragment());
+        hideProgressDialog();
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void onTaskError(int taskId, Object data) {
-
+        hideProgressDialog();
     }
 }

@@ -71,7 +71,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
     public final static int REQUEST_LOCATION_PERMISSION = 102;
     private List<String> permissionList;
 
-    private ImagePicker imagePicker;
     private FragmentEventEditDetailBinding binding;
     private Event event = null;
     private List<WrapperTimeSlot> wrapperTimeSlotList;
@@ -111,15 +110,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
         binding.setEventEditVM(eventEditViewModel);
         binding.setToolbarVM(toolbarViewModel);
-        initImagePicker();
-    }
-
-    private void initImagePicker(){
-        imagePicker = ImagePicker.getInstance();
-        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
-        imagePicker.setMultiMode(true);
-        imagePicker.setShowCamera(false);
-        imagePicker.setSelectLimit(9);
     }
 
     private void initToolbar() {
@@ -202,12 +192,21 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
      * only photo related permission granted, then can go to photo picker
      */
     private void startPhotoPicker() {
-        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
-        int selectedMode = PhotoPickerActivity.MODE_MULTI;
-        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
-        int maxNum = 9;
-        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
-        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
+//        Intent intent = new Intent(getActivity(), PhotoPickerActivity.class);
+//        int selectedMode = PhotoPickerActivity.MODE_MULTI;
+//        intent.putExtra(PhotoPickerActivity.EXTRA_SELECT_MODE, selectedMode);
+//        int maxNum = 9;
+//        intent.putExtra(PhotoPickerActivity.EXTRA_MAX_MUN, maxNum);
+//        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, false);
+//        startActivityForResult(intent, REQ_PHOTO);
+
+        ImagePicker imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
+        imagePicker.setMultiMode(true);
+        imagePicker.setShowCamera(false);
+        imagePicker.setSelectLimit(9);
+
+        Intent intent = new Intent(getActivity(), ImageGridActivity.class);
         startActivityForResult(intent, REQ_PHOTO);
     }
 
@@ -257,7 +256,7 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
                             new ActionSheetDialog.OnSheetItemClickListener() {
                                 @Override
                                 public void onClick(int i) {
-                                    openAlbum();
+                                    checkPhotoPickerPermissions();
                                 }
                             }).show();
         }
@@ -371,16 +370,14 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
 
         if(data!=null) {
             if (requestCode == REQ_PHOTO && resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-                if (data != null && (requestCode == REQ_PHOTO || requestCode == ImagePicker.REQUEST_CODE_CROP)) {
                     ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                     List<PhotoUrl> photoUrls = new ArrayList<>();
                     for (int i = 0; i < images.size(); i++) {
                         photoUrls.add(EventUtil.fromStringToPhotoUrl(getContext(), images.get(i).path));
                     }
-                    event.setPhoto(photoUrls);
-                    setEvent(event);
-                    toPhotoGridPage();
-                }
+                event.setPhoto(photoUrls);
+                setEvent(event);
+                toPhotoGridPage();
             }
         }
     }
@@ -414,13 +411,6 @@ public class EventEditFragment extends BaseUiAuthFragment<EventEditMvpView, Even
             }
 
         }
-    }
-
-    public void openAlbum(){
-//        checkPhotoPickerPermissions();
-        Intent intent = new Intent(getActivity(), ImageGridActivity.class);
-        imagePicker.setSelectLimit(9);
-        startActivityForResult(intent, REQ_PHOTO);
     }
 
     /**

@@ -142,6 +142,11 @@ public class EventDetailViewModel extends CommonViewModel {
         };
     }
 
+    /**
+     * copy current event, and change its status to pending,
+     * in order to create another new event from this template
+     * @return
+     */
     public View.OnClickListener createEventFromThisTemplate() {
         return new View.OnClickListener() {
             @Override
@@ -150,6 +155,7 @@ public class EventDetailViewModel extends CommonViewModel {
                 Event cpyEvent = EventUtil.copyEvent(event);
                 String eventUid = AppUtil.generateUuid();
                 cpyEvent.setEventUid(eventUid);
+                cpyEvent.setStatus(Event.STATUS_PENDING);
                 for (Invitee invitee : cpyEvent.getInvitee()) {
                     invitee.setEventUid(eventUid);
                     invitee.setStatus(Invitee.STATUS_NEEDSACTION); // maybe need to check if it is host

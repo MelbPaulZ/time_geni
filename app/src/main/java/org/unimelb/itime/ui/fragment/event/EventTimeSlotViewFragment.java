@@ -1,15 +1,25 @@
 package org.unimelb.itime.ui.fragment.event;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,18 +31,23 @@ import com.wx.wheelview.widget.WheelView;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.Invitee;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
+import org.unimelb.itime.databinding.TimeslotViewResponseBinding;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.TimeslotBaseMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotPresenter;
 import org.unimelb.itime.ui.viewmodel.EventCreateTimeslotViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
+import org.unimelb.itime.ui.viewmodel.event.TimeslotViewResponseViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.EventUtil;
+import org.unimelb.itime.util.SizeUtil;
 import org.unimelb.itime.util.TimeSlotUtil;
 import org.unimelb.itime.vendor.dayview.TimeSlotController;
+import org.unimelb.itime.vendor.listener.ITimeTimeSlotInterface;
 import org.unimelb.itime.vendor.unitviews.DraggableTimeSlotView;
 import org.unimelb.itime.vendor.weekview.WeekView;
 import org.unimelb.itime.vendor.wrapper.WrapperTimeSlot;
@@ -41,6 +56,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -71,6 +87,8 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     public static final int TASK_VIEW = 2;
     private int fragment_task = -1;
     private boolean displayTimeslot= true;
+
+    private Map<String, List<EventUtil.StatusKeyStruct>> replyData = null;
 
     @Nullable
     @Override
@@ -142,6 +160,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
     public void setData(Event event){
         this.event = event;
         showingTime = event.getStartTime();
+        replyData = EventUtil.getAdapterData(event);
     }
 
     /**
@@ -153,6 +172,7 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
         this.event = event;
         this.timeslotWrapperList = wrapperList;
         showingTime = event.getStartTime();
+        replyData = EventUtil.getAdapterData(event);
     }
 
 
@@ -293,23 +313,26 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
 
             @Override
             public void onTimeSlotClick(DraggableTimeSlotView draggableTimeSlotView) {
-                WrapperTimeSlot wrapper = draggableTimeSlotView.getWrapper();
-                if (EventUtil.isUserHostOfEvent(getContext(), event)){
+                final WrapperTimeSlot wrapper = draggableTimeSlotView.getWrapper();
+                int inviteeVisibility = event.getInviteeVisibility();
+                if (EventUtil.isUserHostOfEvent(getContext(), event)) {
                     // when user is host, can only select one timeslot
-                    if (wrapper.isSelected()){
-                        wrapper.setSelected(false);
-                    }else{
-                        // wrapper is unselected, need to check number of timeslots has selected
-                        if (getSelectedTimeslotNum()>=1){
-                            Toast.makeText(getContext(), "cannot select, please unselect one timeslot", Toast.LENGTH_SHORT).show();
-                        }else{
-                            wrapper.setSelected(true);
-                        }
+                    if (getSelectedTimeslotNum() >= 1 && !wrapper.isSelected()) {
+                        Toast.makeText(getContext(), "cannot select, please unselect one timeslot", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // wrapper.setSelected(false);
+                        popupTimeslotInfo(wrapper);
                     }
-                }else{
-                    wrapper.setSelected(!wrapper.isSelected());
+                } else {
+                    if (inviteeVisibility == 0) {
+                        wrapper.setSelected(!wrapper.isSelected());
+                    } else {
+                        popupTimeslotInfo(wrapper);
+                    }
                 }
                 timeslotWeekView.reloadTimeSlots(false);
+
+                int breakpoint;
             }
 
             @Override
@@ -328,6 +351,98 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             }
         });
         timeslotWeekView.removeAllOptListener();
+    }
+
+    /**
+     * Created by Xiaojie on 27/01/2017.
+     */
+    private void popupTimeslotInfo(final WrapperTimeSlot wrapper) {
+        /*
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setTitle("Please enter a password");
+        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                wrapper.setSelected(!wrapper.isSelected());
+                timeslotWeekView.reloadTimeSlots(false);
+
+            }
+        });
+        dialog.setNegativeButton("CANCEL", null);
+        dialog.show();
+        */
+        ITimeTimeSlotInterface timeslot = wrapper.getTimeSlot();
+        String timeslotUid = timeslot.getTimeslotUid();
+        long startTime = timeslot.getStartTime();
+        long endTime = timeslot.getEndTime();
+
+        List<EventUtil.StatusKeyStruct> responses = replyData.get(timeslotUid);
+        EventUtil.StatusKeyStruct responseAccepted = responses.get(0);
+        List<String> inviteesAccepted = new ArrayList<String>();
+        for (Invitee invitee:responseAccepted.getInviteeList())
+            inviteesAccepted.add(invitee.getAliasName());
+        EventUtil.StatusKeyStruct responseRejected = responses.get(1);
+        List<String> inviteesRejected = new ArrayList<String>();
+        for (Invitee invitee:responseRejected.getInviteeList())
+            inviteesRejected.add(invitee.getAliasName());
+        EventUtil.StatusKeyStruct responseNoResponse = responses.get(2);
+        List<String> inviteeNoResponse = new ArrayList<String>();
+        for (Invitee invitee:responseNoResponse.getInviteeList())
+            inviteeNoResponse.add(invitee.getAliasName());
+
+        Context context = getContext();
+        List<String> times = EventUtil.getTimeslotViewResponseFromLong(context, startTime, endTime);
+
+        // TimeslotViewResponseBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.timeslot_view_response, null, false);
+        TimeslotViewResponseBinding binding = TimeslotViewResponseBinding.inflate(LayoutInflater.from(context));
+        TimeslotViewResponseViewModel viewModel = new TimeslotViewResponseViewModel();
+        binding.setViewModel(viewModel);
+        viewModel.setInviteesAccepted(inviteesAccepted);
+        viewModel.setInviteesRejected(inviteesRejected);
+        viewModel.setInviteesNoResponse(inviteeNoResponse);
+        viewModel.setTimeRange(times.get(0));
+        viewModel.setDayOfWeek(times.get(1));
+        if (inviteesAccepted.size() == 0)
+            viewModel.setShowAccepted(false);
+        if (inviteesRejected.size() == 0)
+            viewModel.setShowRejected(false);
+        if (inviteeNoResponse.size() == 0)
+            viewModel.setShowNoResponse(false);
+        if (wrapper.isSelected()) {
+            viewModel.setRightButtonText("Unselect");
+        } else {
+            viewModel.setRightButtonText("Select");
+        }
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        View rootView = binding.getRoot();
+//        LinearLayout.LayoutParams rootViewParams = new LinearLayout.LayoutParams(
+//                SizeUtil.dp2px(context, 400), SizeUtil.dp2px(context, 400));
+//        rootView.setLayoutParams(rootViewParams);
+//        rootView.measure(SizeUtil.dp2px(context, 400), SizeUtil.dp2px(context, 400));
+        dialog.setContentView(rootView);
+
+        Button buttonSelect = (Button) dialog.findViewById(R.id.timeslot_view_response_select);
+        buttonSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wrapper.setSelected(!wrapper.isSelected());
+                timeslotWeekView.reloadTimeSlots(false);
+                dialog.dismiss();
+            }
+        });
+        Button buttonCancel = (Button) dialog.findViewById(R.id.timeslot_view_response_cancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(SizeUtil.dp2px(context, 270.0), SizeUtil.dp2px(context, 367.5));
     }
 
     private int getSelectedTimeslotNum(){

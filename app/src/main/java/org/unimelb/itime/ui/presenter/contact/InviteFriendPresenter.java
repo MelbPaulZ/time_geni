@@ -2,6 +2,7 @@ package org.unimelb.itime.ui.presenter.contact;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -19,6 +20,7 @@ import org.unimelb.itime.ui.viewmodel.contact.InviteFriendViewModel;
 import org.unimelb.itime.util.AppUtil;
 import org.unimelb.itime.util.ContactCheckUtil;
 import org.unimelb.itime.util.HttpUtil;
+import org.unimelb.itime.util.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,7 +165,15 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
 //    }
 
     public void searchContact(String input){
-        AppUtil.showProgressBar(context, context.getString(R.string.Searching), context.getString(R.string.please_wait));
+        if(getView()!=null){
+            getView().onTaskStart(TASK_SEARCH_CONTACT);
+        }
+        input = input.trim();
+        if(UserUtil.getInstance(context).getUser().getEmail().equals(input)
+                ||UserUtil.getInstance(context).getUser().getPhone().equals(input)){
+            Toast.makeText(context, getContext().getString(R.string.do_not_inviete_yourself), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         DBManager dbManager = DBManager.getInstance(context);
         List<Contact> contacts = dbManager.getAllContact();
@@ -172,7 +182,6 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
                     || contact.getUserDetail().getEmail().equals(input)){
                 if(getView()!=null)
                     getView().onTaskSuccess(TASK_SEARCH_CONTACT, contact);
-                AppUtil.hideProgressBar();
                 return;
             }
         }
@@ -181,19 +190,16 @@ public class InviteFriendPresenter extends MvpBasePresenter<InviteFriendMvpView>
     }
 
     public void findFriend(final String searchStr){
-        AppUtil.showProgressBar(context, context.getString(R.string.Searching), context.getString(R.string.please_wait));
         Observable<HttpResult<List<User>>> observable = userApi.search(searchStr);
         Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
             @Override
             public void onCompleted() {
                 Log.d(TAG, "onCompleted: ");
-                AppUtil.hideProgressBar();
             }
 
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
-                AppUtil.hideProgressBar();
                 if(getView()!=null)
                     getView().onTaskError(TASK_SEARCH_CONTACT, null);
             }

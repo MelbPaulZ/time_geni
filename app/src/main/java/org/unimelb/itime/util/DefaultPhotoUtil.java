@@ -11,6 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.unimelb.itime.R;
+
+import java.util.ArrayList;
+
 /**
  * Created by Qiushuo Huang on 2016/12/30.
  */
@@ -73,7 +77,18 @@ public class DefaultPhotoUtil{
     }
 
     private int getColor(Context context){
-        return Color.BLACK;
+        int[] colors = new int[7];
+        colors[0] = context.getResources().getColor(R.color.default_photo_background_1);
+        colors[1] = context.getResources().getColor(R.color.default_photo_background_2);
+        colors[2] = context.getResources().getColor(R.color.default_photo_background_3);
+        colors[3] = context.getResources().getColor(R.color.default_photo_background_4);
+        colors[4] = context.getResources().getColor(R.color.default_photo_background_5);
+        colors[5] = context.getResources().getColor(R.color.default_photo_background_6);
+        colors[6] = context.getResources().getColor(R.color.default_photo_background_7);
+
+        int i = (int) (Math.random()*7);
+
+        return colors[i];
     }
 
     private Bitmap convertViewToBitmap(View view){
