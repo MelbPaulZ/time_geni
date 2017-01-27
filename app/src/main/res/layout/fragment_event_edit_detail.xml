@@ -427,7 +427,6 @@
                         android:text="@{CalendarUtil.getInstance(context).getCalendarName(eventEditVM.event)}"
                         android:textSize="17dp" />
 
-                    <TextView style="@style/itime_bottom_divider_line" />
                 </RelativeLayout>
 
                 <!--gray blank space-->

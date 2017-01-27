@@ -36,6 +36,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
                 android:background="@drawable/background_top_bottom_divider"
                 android:orientation="vertical">
 
@@ -50,7 +51,9 @@
                         style="@style/itime_blacktitle_17sp"
                         android:text="@string/profile_photo" />
 
-                    <ImageView style="@style/image_right_arrow" />
+                    <!--right arrow-->
+                    <TextView
+                        style="@style/arrow_disclosure_indicator"/>
 
                     <ImageView
                         android:layout_width="62dp"
@@ -74,7 +77,9 @@
                         style="@style/itime_blacktitle_17sp"
                         android:text="@string/name" />
 
-                    <ImageView style="@style/image_right_arrow" />
+                    <!--right arrow-->
+                    <TextView
+                        style="@style/arrow_disclosure_indicator"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -86,7 +91,7 @@
                         android:textColor="@color/color_757575"
                         android:textSize="15sp" />
 
-                    <ImageView style="@style/itime_bottom_divider_line" />
+                    <TextView style="@style/itime_bottom_divider_line" />
 
                 </RelativeLayout>
 
@@ -108,7 +113,7 @@
                         android:layout_marginRight="16dp"
                         android:text="@{contentVM.user.email}" />
 
-                    <ImageView style="@style/itime_bottom_divider_line" />
+                    <TextView style="@style/itime_bottom_divider_line" />
 
                 </RelativeLayout>
 
@@ -123,7 +128,9 @@
                         style="@style/itime_blacktitle_17sp"
                         android:text="@string/setting_reset_password" />
 
-                    <ImageView style="@style/image_right_arrow" />
+                    <!--right arrow-->
+                    <TextView
+                        style="@style/arrow_disclosure_indicator"/>
 
                     <TextView style="@style/itime_bottom_divider_line" />
 
@@ -140,7 +147,9 @@
                         style="@style/itime_blacktitle_17sp"
                         android:text="@string/my_qr_code" />
 
-                    <ImageView style="@style/image_right_arrow" />
+                    <!--right arrow-->
+                    <TextView
+                        style="@style/arrow_disclosure_indicator"/>
 
                     <ImageView
                         android:layout_width="16dp"
@@ -173,7 +182,9 @@
                         style="@style/itime_blacktitle_17sp"
                         android:text="@string/setting_gender" />
 
-                    <ImageView style="@style/image_right_arrow" />
+                    <!--right arrow-->
+                    <TextView
+                        style="@style/arrow_disclosure_indicator"/>
 
                     <TextView
                         style="@style/itime_subtitle_15sp"
@@ -194,7 +205,9 @@
                         style="@style/itime_blacktitle_17sp"
                         android:text="@string/region" />
 
-                    <ImageView style="@style/image_right_arrow" />
+                    <!--right arrow-->
+                    <TextView
+                        style="@style/arrow_disclosure_indicator"/>
 
                     <TextView
                         android:layout_width="wrap_content"

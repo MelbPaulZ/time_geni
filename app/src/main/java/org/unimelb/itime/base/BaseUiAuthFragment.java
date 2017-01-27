@@ -65,11 +65,15 @@ public abstract class BaseUiAuthFragment<V extends MvpView, P extends MvpPresent
     }
 
     public void showProgressDialog(){
-        progressDialog.show();
+        if (!progressDialog.isShowing()) {
+            progressDialog.show();
+        }
     }
 
     public void hideProgressDialog(){
-        progressDialog.hide();
+        if (progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
     }
 
     @Override

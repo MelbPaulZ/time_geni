@@ -1,10 +1,12 @@
 package org.unimelb.itime.ui.fragment.settings;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
 
     private UserProfileViewModel contentViewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
+    public static final int REQ_GENDER = 1000;
 
     @Nullable
     @Override
@@ -89,7 +92,9 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
 
     @Override
     public void toEditGenderPage() {
-        getBaseActivity().openFragment(new SettingProfileGenderFragment());
+        Fragment fragment = new SettingProfileGenderFragment();
+        fragment.setTargetFragment(this, REQ_GENDER);
+        getBaseActivity().openFragment(fragment);
     }
 
     @Override
@@ -121,5 +126,14 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
     @Override
     public void onNext() {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_GENDER && resultCode == Activity.RESULT_OK){
+            User user = UserUtil.getInstance(getContext()).getUser();
+            contentViewModel.setUser(user);
+        }
     }
 }

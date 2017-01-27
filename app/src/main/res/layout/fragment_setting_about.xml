@@ -54,8 +54,8 @@
                 style="@style/itime_blacktitle_17sp"
                 android:text="@string/rate_itime"/>
 
-            <ImageView
-                style="@style/image_right_arrow" />
+           <TextView
+               style="@style/arrow_disclosure_indicator" />
 
             <TextView
                 style="@style/itime_bottom_divider_line" />
@@ -72,8 +72,8 @@
                 style="@style/itime_blacktitle_17sp"
                 android:text="@string/terms_of_service"/>
 
-            <ImageView
-                style="@style/image_right_arrow" />
+            <TextView
+                style="@style/arrow_disclosure_indicator" />
 
             <TextView
                 style="@style/itime_bottom_divider_line" />
@@ -88,8 +88,8 @@
                 style="@style/itime_blacktitle_17sp"
                 android:text="@string/privacy_policy"/>
 
-            <ImageView
-                style="@style/image_right_arrow" />
+            <TextView
+                style="@style/arrow_disclosure_indicator" />
 
         </RelativeLayout>
 
