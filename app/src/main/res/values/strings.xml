@@ -437,4 +437,6 @@
     <string name="calendar_name">Calendar Name</string>
     <string name="delete_calendar">Delete Calendar</string>
 
+    <!--OnBoarding-->
+    <string name="skip">Skip</string>
 </resources>
