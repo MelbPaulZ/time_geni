@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable name="viewModel" type="org.unimelb.itime.ui.viewmodel.event.TimeslotViewResponseViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="18.0dp"
+        android:background="@drawable/background_timeslot_view_response" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="@dimen/font_normal"
+            app:text="@{viewModel.timeRange}" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="@dimen/font_small"
+            app:text="@{viewModel.dayOfWeek}" />
+
+        <ScrollView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="27dp" android:paddingRight="27dp" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/timeslot_view_response_accepted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.showAccepted ? View.VISIBLE : View.GONE}"
+                    app:icon="@{viewModel.iconAccepted}"
+                    app:items="@{viewModel.inviteesAccepted}" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Accepted"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_normal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeslot_view_response_rejected"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.showRejected ? View.VISIBLE : View.GONE}"
+                    app:icon="@{viewModel.iconRejected}"
+                    app:items="@{viewModel.inviteesRejected}" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rejected"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_normal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeslot_view_response_no_response"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.showNoResponse ? View.VISIBLE : View.GONE}"
+                    app:icon="@{viewModel.iconNoResponse}"
+                    app:items="@{viewModel.inviteesNoResponse}" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No Response"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_normal" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </ScrollView>
+
+        <include layout="@layout/line"></include>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="46.5dp"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/timeslot_view_response_cancel"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text=" Cancel"
+                android:background="@null"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/vertical_line"></include>
+
+            <Button
+                android:id="@+id/timeslot_view_response_select"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:textAllCaps="false"
+                app:text="@{viewModel.rightButtonText}" />
+        </LinearLayout>
+    </LinearLayout>
+
+</layout>
