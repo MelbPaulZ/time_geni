@@ -35,14 +35,14 @@
                 android:layout_height="43dp"
                 android:layout_below="@id/toolbar_layout"
                 android:background="@color/color_c3c3c7"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:gravity="center">
 
                 <org.unimelb.itime.widget.SearchBar
                     android:id="@+id/message_searchview"
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
-                    android:layout_marginEnd="11dp"
-                    android:layout_marginStart="8dp"
                     app:searchHintText="@string/search"
                     app:searchHintTitle="@string/search"
                     app:searchListener="@{contentVM.onSearching()}" />
