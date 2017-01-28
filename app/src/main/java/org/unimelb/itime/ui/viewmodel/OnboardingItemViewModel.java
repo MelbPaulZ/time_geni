@@ -7,7 +7,7 @@ import com.android.databinding.library.baseAdapters.BR;
  * Created by Qiushuo Huang on 2017/1/27.
  */
 
-public class OnboardingItemViewModel extends BaseObservable{
+public class OnBoardingItemViewModel extends BaseObservable{
     private int graphyImg;
     private int wordsImg;
 

@@ -18,7 +18,7 @@
         android:background="@color/grey_three"
         android:orientation="vertical">
 
-        <FrameLayout
+        <org.unimelb.itime.widget.InviteeGroupView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="135dp"
@@ -26,30 +26,26 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginBottom="4dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
             android:animateLayoutChanges="true"
-            android:paddingLeft="10dp">
-        <org.unimelb.itime.widget.InviteeGroupView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
+            android:paddingLeft="10dp"
             app:hintText="@string/search_hint"
             android:id="@+id/inviteeGroupView"
             app:inviteeList = "@{viewModel.inviteeList}"
             app:onInviteeClickListener = "@{viewModel.onInviteeGroupViewItemClickListener}"
             app:onEditListener = "@{viewModel.onEditListener}"
             />
-        </FrameLayout>
+
         <TextView android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="@dimen/font_tiny"
             android:textColor="@color/grey_four"
             android:text="@{viewModel.countStr}"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="9dp"
-            android:layout_marginBottom="7dp"/>
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="11dp"
+            android:layout_marginBottom="20.5dp"/>
     </LinearLayout>
 
     <LinearLayout

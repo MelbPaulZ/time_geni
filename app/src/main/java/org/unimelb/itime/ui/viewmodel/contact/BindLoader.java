@@ -68,6 +68,16 @@ public class BindLoader extends BaseObservable {
                 .error(R.drawable.invitee_selected_default_picture).into(view);
     }
 
+    @BindingAdapter("bind:onBoarding")
+    public static void bindOnBoarding(ImageView view, int img){
+        Picasso.with(view.getContext()).load(img).resize(300, 300).into(view);
+    }
+
+    @BindingAdapter("bind:img")
+    public static void bindImg(ImageView view, int img){
+        Picasso.with(view.getContext()).load(img).into(view);
+    }
+
     @BindingAdapter("bind:titleBackListener")
     public static void bindTitileBack(BaseTitleBar titleBar, View.OnClickListener backListener){
         titleBar.setBackOnClickListener(backListener);

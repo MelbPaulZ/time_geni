@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -49,8 +50,8 @@ public class InviteeGroupView extends LinearLayout {
     private FlowLayout avatarFlowLayout;
     private FlowLayout textFlowLayout;
     private PureEditText inputEditText;
-    private float INPUT_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_normal));
-    private float ITEM_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_tiny));
+    private float INPUT_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_big));
+    private float ITEM_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_small));
     private int avatarWidth;
     private int avatarHeight;
     private int squareHeight;
@@ -81,8 +82,23 @@ public class InviteeGroupView extends LinearLayout {
         initAvatarFlowLayout();
         initTextFlowLayout();
         initInputEditText(hint);
-
+        initPaddingLayout();
         inviteeMap = new HashMap<>();
+    }
+
+    private void initPaddingLayout(){
+        TextView paddingLayout = new TextView(getContext());
+        paddingLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputEditText.performClick();
+                inputEditText.requestFocus();
+                Toast.makeText(getContext(), "test", Toast.LENGTH_SHORT).show();
+            }
+        });
+        LinearLayout.LayoutParams params = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        paddingLayout.setLayoutParams(params);
+        this.addView(paddingLayout);
     }
 
     public void clearViews(){
