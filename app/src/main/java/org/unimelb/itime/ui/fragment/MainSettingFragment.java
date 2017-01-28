@@ -81,6 +81,8 @@ public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,S
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         intent.putExtra(SettingActivity.TASK, SettingActivity.TASK_TO_MY_PROFILE);
         startActivityForResult(intent, SettingActivity.TASK_TO_MY_PROFILE);
+        getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
     }
 
     @Override

@@ -49,6 +49,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
     private EventApi eventApi;
     private PhotoApi photoApi;
     private final static String TAG = "EventPresenter";
+    private MainInboxPresenter inboxPresenter;
 
     public static final int TASK_EVENT_UPDATE = 1;
     public static final int TASK_EVENT_INSERT = 2;
@@ -78,6 +79,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
         this.context = context;
         eventApi = HttpUtil.createService(context, EventApi.class);
         photoApi = HttpUtil.createService(context, PhotoApi.class);
+        inboxPresenter = new MainInboxPresenter(context);
     }
 
     public Context getContext(){
@@ -124,6 +126,8 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                 }
                 synchronizeLocal(eventHttpResult.getData());
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                //sync message
+                inboxPresenter.fetchMessages();
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
                 updateImage(event);
             }
@@ -239,6 +243,8 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onNext(HttpResult<List<Event>> listHttpResult) {
                 AppUtil.saveEventSyncToken(context, listHttpResult.getSyncToken());
                 synchronizeLocal(listHttpResult.getData());
+                //sync message
+                inboxPresenter.fetchMessages();
                 if (getView()!=null){
                     getView().onTaskSuccess(TASK_EVENT_DELETE, listHttpResult.getData());
                 }
@@ -393,6 +399,10 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
                 if (getView()!=null){
                     getView().onTaskSuccess(TASK_EVENT_REJECT, listHttpResult.getData());
                 }
+
+                //sync message
+                inboxPresenter.fetchMessages();
+
             }
         };
         HttpUtil.subscribe(observable, subscriber);
@@ -424,9 +434,10 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             @Override
             public void onNext(HttpResult<List<Event>> listHttpResult) {
                 synchronizeLocal(listHttpResult.getData());
-
                 AppUtil.saveEventSyncToken(context, listHttpResult.getSyncToken());
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+                //sync message
+                inboxPresenter.fetchMessages();
                 if (getView()!=null){
                     getView().onTaskSuccess(TASK_EVENT_ACCEPT, listHttpResult.getData());
                 }
@@ -469,6 +480,8 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onNext(HttpResult<List<Event>> eventHttpResult) {
                 synchronizeLocal(eventHttpResult.getData());
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
+                //sync message
+                inboxPresenter.fetchMessages();
                 if (getView()!=null){
                     getView().onTaskSuccess(TASK_TIMESLOT_ACCEPT, eventHttpResult.getData());
                 }
@@ -508,6 +521,8 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onNext(HttpResult<List<Event>> eventHttpResult) {
                 synchronizeLocal(eventHttpResult.getData());
                 AppUtil.saveEventSyncToken(context, eventHttpResult.getSyncToken());
+                //sync message
+                inboxPresenter.fetchMessages();
                 if (getView()!=null){
                     getView().onTaskSuccess(TASK_EVENT_CONFIRM, eventHttpResult.getData());
                 }
@@ -544,6 +559,8 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
             public void onNext(HttpResult<List<Event>> listHttpResult) {
                 synchronizeLocal(listHttpResult.getData());
 
+                //sync message
+                inboxPresenter.fetchMessages();
                 // after synchronizeLocal, remove this event from EventManager
                 for (Event ev: listHttpResult.getData()){
                     if (ev.getShowLevel()!=1){

@@ -64,7 +64,7 @@ public class UserUtil {
     }
 
     public String getUserUid(){
-        return getUser().getUserUid();
+        return instance.getUser().getUserUid();
     }
 
     public Setting getSetting(){

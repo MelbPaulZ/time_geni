@@ -37,11 +37,13 @@ public class DBManager {
     private DaoMaster.DevOpenHelper openHelper;
     private Context context;
     private DaoMaster daoMaster;
+    private UserUtil userUtil;
 
     public DBManager(Context context) {
         this.context = context;
         openHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
         daoMaster = new DaoMaster(getWritableDatabase());
+        userUtil = UserUtil.getInstance(context);
     }
 
 
@@ -175,6 +177,7 @@ public class DBManager {
         MessageDao messageDao = daoSession.getMessageDao();
         QueryBuilder<Message> qb = messageDao.queryBuilder();
         qb.where(MessageDao.Properties.DeleteLevel.eq(0));
+        qb.where(MessageDao.Properties.UserUid.eq(userUtil.getUserUid()));
         qb.orderDesc(MessageDao.Properties.CreatedAt);
         List<Message> list = qb.list();
         return list;

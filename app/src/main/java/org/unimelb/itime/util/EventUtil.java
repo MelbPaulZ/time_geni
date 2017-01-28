@@ -19,6 +19,7 @@ import org.unimelb.itime.bean.SlotResponse;
 import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.util.rulefactory.FrequencyEnum;
+import org.unimelb.itime.util.rulefactory.RuleFactory;
 import org.unimelb.itime.util.rulefactory.RuleModel;
 import org.unimelb.itime.vendor.listener.ITimeEventInterface;
 
@@ -156,6 +157,29 @@ public class EventUtil {
         String endTimeStr = df.format(endCalendar.getTime());
 
         return dayOfWeek + " " + day + "/" + month + " " + startTimeStr + " - " + endTimeStr;
+    }
+
+    public static List<String> getTimeslotViewResponseFromLong(Context context, Long startTime, Long endtime) {
+        DateFormat df = new SimpleDateFormat("HH:mm");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(startTime);
+        String dayOfWeek =  calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, context.getResources().getConfiguration().locale);
+        dayOfWeek = dayOfWeek.toUpperCase();
+        String day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+        String month = String.format("%02d", calendar.get(Calendar.MONTH) + 1);
+        String year = String.format("%04d", calendar.get(Calendar.YEAR));
+        String startTimeStr = df.format(calendar.getTime());
+        String startAmOrPm = calendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
+
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTimeInMillis(endtime);
+        String endTimeStr = df.format(endCalendar.getTime());
+        String endAmOrPm = endCalendar.get(Calendar.HOUR_OF_DAY) >= 12 ? "PM" : "AM";
+
+        List<String> times = new ArrayList<String>();
+        times.add(startTimeStr + " " + startAmOrPm + " - " + endTimeStr + " " + endAmOrPm);
+        times.add(dayOfWeek + " " + year);
+        return times;
     }
 
     public static String getSlotStringFromLong(Context context, Long startTime, Long endtime) {
@@ -403,11 +427,16 @@ public class EventUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
         String dayOfWeek = EventUtil.getDayOfWeekFull(context, calendar.get(Calendar.DAY_OF_WEEK));
-//        if ()
-//        RuleModel ruleModel = RuleFactory.getInstance().getRuleModel(event);
-//        event.setRule(ruleModel);
         FrequencyEnum frequencyEnum = event.getRule().getFrequencyEnum();
         int interval = event.getRule().getInterval();
+
+        // for event detail and edit event, the frequencyEnum will be null,
+        // but the recurrence is not null, so need to get the frequenceEnum from the recurrence
+        if (frequencyEnum==null){
+            RuleModel ruleModel = RuleFactory.getInstance().getRuleModel(event);
+            event.setRule(ruleModel);
+            frequencyEnum = ruleModel.getFrequencyEnum();
+        }
 
         // when view event details, the fraquencyEnum will be null
         if (frequencyEnum == null){

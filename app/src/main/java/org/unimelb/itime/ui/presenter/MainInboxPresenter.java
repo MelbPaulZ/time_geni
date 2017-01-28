@@ -4,13 +4,17 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.Message;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.messageevent.MessageInboxMessage;
 import org.unimelb.itime.restfulapi.EventApi;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
@@ -46,6 +50,7 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
     private TokenUtil tokenUtil;
     private UserUtil userUtil;
     private DBManager dbManager;
+    private EventManager eventManager;
 
     public MainInboxPresenter(Context context) {
         this.context = context;
@@ -54,8 +59,9 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
         filter = new MessageFilter();
 
         tokenUtil = TokenUtil.getInstance(context);
-        userUtil = UserUtil.getInstance(context);
         dbManager = DBManager.getInstance(context);
+        eventManager = EventManager.getInstance(context);
+        userUtil = UserUtil.getInstance(context);
     }
 
     public Context getContext() {
@@ -153,6 +159,44 @@ public class MainInboxPresenter extends MvpBasePresenter<MainInboxMvpView> imple
         String syncToken = tokenUtil.getMessageToken(userUtil.getUserUid());
         Observable<HttpResult<List<Message>>> observable = messageApi.delete(map, syncToken).map(new MessageSaver());
         Subscriber<HttpResult<List<Message>>> subscriber = new MessageSubscriber(TASK_MSG_DELETE);
+
+        HttpUtil.subscribe(observable, subscriber);
+    }
+
+    public void fetchMessages() {
+        final String token = tokenUtil.getMessageToken(userUtil.getUserUid());
+        Observable<HttpResult<List<Message>>> observable = messageApi.get(token)
+                .map(new Func1<HttpResult<List<Message>>, HttpResult<List<Message>>>() {
+                    @Override
+                    public HttpResult<List<Message>> call(HttpResult<List<Message>> ret) {
+                        if (ret.getStatus() == 1) {
+                            List<Message> msgs = ret.getData();
+                            dbManager.insertMessageList(msgs);
+                            Log.i(TAG, "call: new message size:" + msgs.size());
+                            tokenUtil.setMessageToken(userUtil.getUserUid(), ret.getSyncToken());
+                            EventBus.getDefault().post(new MessageInboxMessage(ret.getData()));
+
+                        }
+                        return ret;
+                    }
+                });
+        Subscriber<HttpResult<List<Message>>> subscriber = new Subscriber<HttpResult<List<Message>>>() {
+
+            @Override
+            public void onCompleted() {
+                Log.i(TAG, "onCompleted: " + "messageApi");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: " + "messageApi" + e.getMessage());
+            }
+
+            @Override
+            public void onNext(HttpResult<List<Message>> ret) {
+
+            }
+        };
 
         HttpUtil.subscribe(observable, subscriber);
     }
