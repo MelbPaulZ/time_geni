@@ -18,7 +18,7 @@ public interface ProfileMvpView extends ItimeCommonMvpView, TaskBasedMvpView{
 
     View getContentView();
 
-    void goToInviteFragment(Contact user);
+    void goToInviteFragment();
 
-    void goToEditAlias(Contact contact);
+    void goToEditAlias();
 }

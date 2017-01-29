@@ -21,7 +21,7 @@ import rx.Observable;
 
 public interface FriendRequestApi {
 
-//    Description: Get all friend requests that is STATUS_SENT TO THIS USER. (Other Users->This User)
+//    Description: Get all friend requests that is STATUS_SENT TO THIS USER_ID. (Other Users->This User)
     @GET("contact/friend_request/list")
     Observable<HttpResult<FriendRequestResult>> list();
 

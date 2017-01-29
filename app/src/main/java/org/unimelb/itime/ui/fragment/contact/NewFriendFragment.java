@@ -71,12 +71,12 @@ public class NewFriendFragment extends BaseUiAuthFragment<NewFriendMvpView, NewF
 //                .commit();
     }
 
-    public void goToProfileFragment(Contact contact, FriendRequest request){
+    public void goToProfileFragment(String userId, int mode){
         if (profileFragment == null) {
             profileFragment = new ProfileFragment();
         }
-        profileFragment.setUser(contact);
-        profileFragment.setRequest(request);
+        profileFragment.setUserId(userId);
+        profileFragment.setStartMode(mode);
         getBaseActivity().openFragment(profileFragment, null, true);
 //        fm.beginTransaction()
 //                .hide(this)

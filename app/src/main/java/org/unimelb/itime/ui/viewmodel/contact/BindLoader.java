@@ -78,6 +78,12 @@ public class BindLoader extends BaseObservable {
         Picasso.with(view.getContext()).load(img).into(view);
     }
 
+    @BindingAdapter("bind:icon")
+    public static void bindIcon(ImageView view, int img){
+        if(img!=0)
+            Picasso.with(view.getContext()).load(img).into(view);
+    }
+
     @BindingAdapter("bind:titleBackListener")
     public static void bindTitileBack(BaseTitleBar titleBar, View.OnClickListener backListener){
         titleBar.setBackOnClickListener(backListener);

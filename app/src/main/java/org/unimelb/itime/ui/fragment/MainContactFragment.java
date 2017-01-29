@@ -116,7 +116,7 @@ public class MainContactFragment extends BaseUiAuthFragment<MainContactsMvpView,
         Intent intent = new Intent();
         intent.setClass(getActivity(), ProfileActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ProfileActivity.USER,user);
+        bundle.putSerializable(ProfileActivity.USER_ID,user.getUserDetail().getUserId());
         intent.putExtras(bundle);
         startActivity(intent);
     }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 
 import org.unimelb.itime.R;
-import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.ui.fragment.contact.ProfileFragment;
 
 /**
@@ -14,15 +13,18 @@ import org.unimelb.itime.ui.fragment.contact.ProfileFragment;
 
 public class ProfileActivity extends EmptyActivity {
     private FragmentManager fragmentManager;
-    public static String USER = "user";
+    public static String USER_ID = "user";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DataBindingUtil.setContentView(this, R.layout.activity_contacts);
         fragmentManager = getSupportFragmentManager();
         ProfileFragment fragment = new ProfileFragment();
-        Contact user = (Contact) getIntent().getSerializableExtra(USER);
-        fragment.setUser(user);
+        String userId = getIntent().getStringExtra(USER_ID);
+        if(userId!=null) {
+            fragment.setUserId(userId);
+        }
+        fragment.setStartMode(ProfileFragment.MODE_CONTACT);
         fragmentManager.beginTransaction().replace(getFragmentContainerId(), fragment).commit();
     }
 

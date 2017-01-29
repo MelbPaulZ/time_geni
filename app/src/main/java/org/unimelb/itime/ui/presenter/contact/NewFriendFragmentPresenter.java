@@ -17,6 +17,7 @@ import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.bean.RequestFriend;
+import org.unimelb.itime.ui.fragment.contact.ProfileFragment;
 import org.unimelb.itime.ui.mvpview.contact.NewFriendMvpView;
 import org.unimelb.itime.ui.viewmodel.contact.RequestFriendItemViewModel;
 import org.unimelb.itime.util.HttpUtil;
@@ -202,13 +203,11 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
 
     public void gotoProfile(RequestFriend requestFriend){
         if(getView()!=null) {
+            String userId = requestFriend.getUser().getUserId();
             if (requestFriend.getDisplayStatus().equals(FriendRequest.DISPLAY_STATUS_ACCEPT)) {
-                Contact contact = new Contact(requestFriend.getUser());
-                contact.setStatus(FriendRequest.DISPLAY_STATUS_ACCEPT);
-                getView().goToProfileFragment(contact, requestFriend.getRequest());
+                getView().goToProfileFragment(userId, ProfileFragment.MODE_REQUEST);
             } else {
-                Contact contact = DBManager.getInstance(context).searchContact(requestFriend.getUser().getUserUid());
-                getView().goToProfileFragment(contact, requestFriend.getRequest());
+                getView().goToProfileFragment(userId, ProfileFragment.MODE_CONTACT);
             }
         }
     }

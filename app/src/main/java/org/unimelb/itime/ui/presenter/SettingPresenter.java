@@ -29,7 +29,7 @@ import rx.Subscriber;
  */
 public class SettingPresenter <V extends TaskBasedMvpView> extends MvpBasePresenter<V> {
     public static final int TASK_SETTING_UPDATE = 0;
-    public static final int TASK_SEARCH_USER = 1;
+    public static final int TASK_SEARCH_USER = 44444;
 
     private static final String TAG = "SettingPresenter";
     private Context context;

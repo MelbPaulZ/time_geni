@@ -12,14 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
 import org.unimelb.itime.bean.Contact;
-import org.unimelb.itime.bean.FriendRequest;
 import org.unimelb.itime.databinding.FragmentProfileBinding;
-import org.unimelb.itime.messageevent.MessageEditContact;
 import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.contact.ProfileMvpView;
@@ -35,22 +31,42 @@ import java.util.Calendar;
  */
 
 public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfilePresenter> implements ProfileMvpView{
+    public static final int MODE_CONTACT = 1;
+    public static final int MODE_REQUEST = 2;
+    public static final int MODE_STRANGER = 3;
+
     private FragmentProfileBinding binding;
     private ProfileFragmentViewModel viewModel;
     private EditAliasFragment editAliasFragment;
-    private Contact user;
-    private FriendRequest request;
+    private String userId = "";
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
+    private int startMode = 1;
+    private Contact contact;
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public int getStartMode() {
+        return startMode;
+    }
+
+    public void setStartMode(int startMode) {
+        this.startMode = startMode;
+    }
 
     public View getContentView(){
         return getView();
     }
 
-    public void setRequest(FriendRequest request){
-        this.request = request;
-        if(viewModel!=null){
-            viewModel.setRequest(request);
-        }
+    private void hideToolbarRight(){
+        toolbarViewModel.setRightDrawable(null);
+        toolbarViewModel.setRightClickable(false);
+    }
+
+    private void showToolbarRight(){
+        toolbarViewModel.setRightDrawable(getResources().getDrawable(R.drawable.contact_more_bgwhite));
+        toolbarViewModel.setRightClickable(true);
     }
 
     @NonNull
@@ -62,23 +78,27 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
     @Override
     public void onCreate(Bundle bundle){
         super.onCreate(bundle);
-        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(startMode == MODE_REQUEST){
+            presenter.getRequest(userId);
+        }else{
+            presenter.getContact(userId);
+        }
     }
 
     @Override
     public void onActivityCreated(Bundle bundle){
         super.onActivityCreated(bundle);
         viewModel = new ProfileFragmentViewModel(presenter);
-        viewModel.setFriend(user);
-        viewModel.setRequest(request);
         binding.setViewModel(viewModel);
-
 
         toolbarViewModel = new ToolbarViewModel<>(this);
         toolbarViewModel.setLeftDrawable(getContext().getResources().getDrawable(R.drawable.ic_back_arrow));
         toolbarViewModel.setTitleStr(getString(R.string.profile));
-        toolbarViewModel.setRightClickable(true);
-        toolbarViewModel.setRightDrawable(getResources().getDrawable(R.drawable.contact_more_bgwhite));
         binding.setToolbarVM(toolbarViewModel);
     }
 
@@ -92,22 +112,24 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
         return binding.getRoot();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void editContact(MessageEditContact msg){
-        this.user = msg.contact;
-        if(viewModel != null){
-            viewModel.setFriend(user);
-        }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void editContact(MessageEditContact msg){
+//        this.user = msg.contact;
+//        if(viewModel != null){
+//            viewModel.setContact(user);
+//        }
+//    }
+
+    private void setContact(Contact contact) {
+        this.contact = contact;
     }
 
-    public void setUser(Contact user) {
-        this.user = user;
-        if(viewModel != null){
-            viewModel.setFriend(user);
-        }
+    public Contact getContact(){
+        return contact;
     }
 
-    public void goToInviteFragment(Contact contact){
+    @Override
+    public void goToInviteFragment(){
         Intent intent = new Intent(getActivity(), EventCreateActivity.class);
         intent.putExtra("start_time", Calendar.getInstance().getTimeInMillis());
         intent.putExtra("contact", contact);
@@ -116,11 +138,11 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
     }
 
     @Override
-    public void goToEditAlias(Contact contact) {
+    public void goToEditAlias() {
         if(editAliasFragment == null) {
             editAliasFragment = new EditAliasFragment();
         }
-        editAliasFragment.setContact(user);
+        editAliasFragment.setContact(contact);
         getBaseActivity().openFragment(editAliasFragment, null, true);
     }
 
@@ -131,7 +153,6 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
     @Override
     public void onDestroy(){
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -146,11 +167,12 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
 
     @Override
     public void onTaskStart(int taskId) {
-
+        showProgressDialog();
     }
 
     @Override
     public void onTaskSuccess(int taskId, Object data) {
+        hideProgressDialog();
         switch (taskId){
             case ProfilePresenter.TASK_ACCEPT :
                 viewModel.setShowAccept(false);
@@ -170,11 +192,30 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
                 Toast.makeText(getContext(), getString(R.string.delete_success), Toast.LENGTH_SHORT).show();
                 onBack();
                 break;
+            case ProfilePresenter.TASK_CONTACT :
+                contact = (Contact) data;
+                viewModel.setContact(contact);
+                viewModel.contactMode();
+                showToolbarRight();
+                break;
+            case ProfilePresenter.TASK_STRANGER:
+                contact = (Contact) data;
+                viewModel.setContact(contact);
+                viewModel.strangerMode();
+                hideToolbarRight();
+                break;
+            case ProfilePresenter.TASK_REQUEST :
+                contact = (Contact) data;
+                viewModel.setContact(contact);
+                viewModel.requestMode();
+                hideToolbarRight();
+                break;
         }
     }
 
     @Override
     public void onTaskError(int taskId, Object data) {
+        hideProgressDialog();
         switch (taskId){
             case ProfilePresenter.TASK_ACCEPT :
                 Toast.makeText(getContext(), getString(R.string.accept_fail), Toast.LENGTH_SHORT).show();
@@ -190,6 +231,9 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
                 break;
             case ProfilePresenter.TASK_DELETE :
                 Toast.makeText(getContext(), getString(R.string.delete_fail), Toast.LENGTH_SHORT).show();
+                break;
+            case ProfilePresenter.TASK_STRANGER :
+                Toast.makeText(getContext(), getString(R.string.access_fail), Toast.LENGTH_SHORT).show();
                 break;
         }
     }

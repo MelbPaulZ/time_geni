@@ -14,7 +14,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/fragment_background">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:paddingBottom="7.5dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:background="@color/grey_six">
+        android:background="@color/color_c3c3c7">
         <org.unimelb.itime.widget.SearchBar
             android:layout_width="match_parent"
             android:layout_height="28dp"

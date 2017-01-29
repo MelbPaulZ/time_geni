@@ -161,7 +161,7 @@ public class InviteeFragment extends BaseUiAuthFragment<InviteFriendMvpView, Inv
 
     @Override
     public void setDoneable(boolean bool) {
-//        toolbarViewModel.setRightClickable(bool);
+        toolbarViewModel.setRightClickable(bool);
     }
 
 

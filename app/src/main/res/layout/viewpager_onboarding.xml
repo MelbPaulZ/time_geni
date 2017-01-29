@@ -13,12 +13,6 @@
         android:layout_height="300dp"
         app:onBoarding="@{viewModel.graphyImg}"
         android:layout_gravity="center_horizontal"/>
-    <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="50dp"
-        app:onBoarding="@{viewModel.wordsImg}"
-        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>
 </layout>

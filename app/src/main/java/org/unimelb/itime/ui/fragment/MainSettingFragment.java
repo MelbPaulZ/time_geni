@@ -9,26 +9,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseUiAuthFragment;
-import org.unimelb.itime.base.BaseUiFragment;
 import org.unimelb.itime.bean.Contact;
-import org.unimelb.itime.bean.Setting;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.databinding.FragmentSettingBinding;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.ui.activity.LoginActivity;
 import org.unimelb.itime.ui.activity.ProfileActivity;
 import org.unimelb.itime.ui.activity.SettingActivity;
-import org.unimelb.itime.ui.fragment.contact.ProfileFragment;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.MainSettingMvpView;
 import org.unimelb.itime.ui.presenter.SettingPresenter;
-import org.unimelb.itime.ui.presenter.contact.AddFriendsPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
@@ -46,7 +40,6 @@ public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,S
     private MainSettingViewModel contentViewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
     private static final String HF_URL = "http://www.google.com";
-    private ProfileFragment profileFragment;
 
     @Override
     public SettingPresenter createPresenter() {
@@ -166,7 +159,7 @@ public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,S
         Intent intent = new Intent();
         intent.setClass(getActivity(), ProfileActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ProfileActivity.USER,contact);
+        bundle.putSerializable(ProfileActivity.USER_ID,contact.getUserDetail().getUserId());
         intent.putExtras(bundle);
         startActivity(intent);
     }
