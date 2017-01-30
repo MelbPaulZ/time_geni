@@ -215,7 +215,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="33dp"
-                        android:text="Melbourne, Ausralia"
+                        android:text="@{contentVM.user.region}"
                         android:textColor="@color/color_757575"
                         android:textSize="15sp" />
                 </RelativeLayout>

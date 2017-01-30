@@ -190,7 +190,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
             return;
         }
         this.contact = contact;
-        setLocation(contact.getUserDetail().getLocation());
+        setLocation(contact.getUserDetail().getRegion());
         setEmail(contact.getUserDetail().getEmail());
         setPhoto(contact.getAliasPhoto());
         setPhone(contact.getUserDetail().getPhone());

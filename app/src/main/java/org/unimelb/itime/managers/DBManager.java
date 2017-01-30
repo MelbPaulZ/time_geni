@@ -2,6 +2,7 @@ package org.unimelb.itime.managers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;
@@ -51,12 +52,6 @@ public class DBManager {
         openHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
         daoMaster = new DaoMaster(getWritableDatabase());
         userUtil = UserUtil.getInstance(context);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                initRegion();
-            }
-        }).start();
     }
 
 
@@ -453,7 +448,7 @@ public class DBManager {
         regionDao.insertOrReplace(region);
     }
 
-    private void initRegion(){
+    public void initRegion(){
         InputStream is = context.getResources().openRawResource(R.raw.location);
 
         BufferedReader r = new BufferedReader(new InputStreamReader(is));
@@ -480,8 +475,13 @@ public class DBManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.i("loadLocation", "initRegion: " +"finish");
     }
 
+    /**
+     * need to handle if getCountryList is null
+     * @return
+     */
     public List<Region> getCountryList(){
         DaoSession daoSession = daoMaster.newSession();
         RegionDao regionDao = daoSession.getRegionDao();

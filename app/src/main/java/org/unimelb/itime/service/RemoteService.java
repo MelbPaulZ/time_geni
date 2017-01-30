@@ -76,8 +76,7 @@ public class RemoteService extends Service {
         user = UserUtil.getInstance(context).getUser();
         Log.i(TAG, "onCreate: ");
         loadLocalEvents();
-
-
+        loadRegions();
         //create the polling thread
         pollingThread = new PollingThread();
         pollingThread.start();
@@ -98,6 +97,20 @@ public class RemoteService extends Service {
             public void run() {
                 eventManager.refreshEventManager();
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.RELOAD_EVENT));
+            }
+        }.start();
+    }
+
+    /**
+     * if haven't load regions, then init regions
+     */
+    private void loadRegions(){
+        new Thread(){
+            @Override
+            public void run() {
+                if (DBManager.getInstance(context).getCountryList().size() == 0) {
+                    DBManager.getInstance(context).initRegion();
+                }
             }
         }.start();
     }

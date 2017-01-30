@@ -111,7 +111,7 @@ public class SettingRegionViewModel extends CommonViewModel {
                 }else{
                     selectedCityStr = "";
                 }
-                user.setLocation(selectedCountryStr + ", " + selectedCityStr);
+                user.setRegion(selectedCountryStr + ", " + selectedCityStr);
             }
         };
     }

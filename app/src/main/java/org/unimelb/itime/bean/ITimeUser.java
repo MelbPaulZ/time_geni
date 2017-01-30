@@ -21,8 +21,8 @@ public class ITimeUser extends BaseContact {
     public ITimeUser(Contact contact) {
         super(contact);
         setSex(contact.getUserDetail().getGender());
-        if(contact.getUserDetail().getLocation()!=null){
-            setLocation(contact.getUserDetail().getLocation());
+        if(contact.getUserDetail().getRegion()!=null){
+            setLocation(contact.getUserDetail().getRegion());
         }
 
         if(contact.getUserDetail().getPhone()!=null){
@@ -43,8 +43,8 @@ public class ITimeUser extends BaseContact {
 
     public ITimeUser(User user){
         this.user = user;
-        if(user.getLocation()!=null){
-            setLocation(user.getLocation());
+        if(user.getRegion()!=null){
+            setLocation(user.getRegion());
         }
 
         if(user.getPhone()!=null){

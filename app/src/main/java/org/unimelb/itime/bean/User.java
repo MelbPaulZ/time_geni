@@ -47,46 +47,40 @@ public class User implements Serializable, Cloneable {
     private String createdAt="";
     private String updatedAt="";
     private String gender="";
-    private String location ="";
+    private String region ="";
 
-@Generated(hash = 223006400)
-public User(String userUid, String userId, String password,
-        String personalAlias, String email, String phone, String photo,
-        String source, String deviceToken, String deviceId,
-        String averageRatingValue, String timezone, String lastSigninTime,
-        int signinCount, String createdAt, String updatedAt, String gender,
-        String location) {
-    this.userUid = userUid;
-    this.userId = userId;
-    this.password = password;
-    this.personalAlias = personalAlias;
-    this.email = email;
-    this.phone = phone;
-    this.photo = photo;
-    this.source = source;
-    this.deviceToken = deviceToken;
-    this.deviceId = deviceId;
-    this.averageRatingValue = averageRatingValue;
-    this.timezone = timezone;
-    this.lastSigninTime = lastSigninTime;
-    this.signinCount = signinCount;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.gender = gender;
-    this.location = location;
-}
+
+    @Generated(hash = 923557527)
+    public User(String userUid, String userId, String password,
+            String personalAlias, String email, String phone, String photo,
+            String source, String deviceToken, String deviceId,
+            String averageRatingValue, String timezone, String lastSigninTime,
+            int signinCount, String createdAt, String updatedAt, String gender,
+            String region) {
+        this.userUid = userUid;
+        this.userId = userId;
+        this.password = password;
+        this.personalAlias = personalAlias;
+        this.email = email;
+        this.phone = phone;
+        this.photo = photo;
+        this.source = source;
+        this.deviceToken = deviceToken;
+        this.deviceId = deviceId;
+        this.averageRatingValue = averageRatingValue;
+        this.timezone = timezone;
+        this.lastSigninTime = lastSigninTime;
+        this.signinCount = signinCount;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.gender = gender;
+        this.region = region;
+    }
 
     @Generated(hash = 586692638)
     public User() {
     }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
+    
 
     public String getGender() {
         return gender;
@@ -232,11 +226,11 @@ public User(String userUid, String userId, String password,
     }
 
     public String getRegion(){
-        return location;
+        return region;
     }
 
     public void setRegion(String region){
-        location = region;
+        this.region = region;
     }
 
     @Override
