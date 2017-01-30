@@ -39,7 +39,7 @@ public class TimeGeniiDialog extends PopupWindow {
         this.context = context;
         this.contentView = contentView;
         titleFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_big));
-        msgFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_tiny));
+        msgFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_tiny_old));
         selectFontSize = SizeUtil.px2dp(context,context.getResources().getDimension(R.dimen.font_big));
         initDialog();
         this.setContentView(mainView);

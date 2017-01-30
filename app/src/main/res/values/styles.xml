@@ -104,6 +104,14 @@
         <item name="android:layout_alignParentBottom">true</item>
     </style>
 
+    <!--the top gray divider line-->
+    <style name="itime_top_divider_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@drawable/shape_divider_line</item>
+        <item name="android:layout_alignParentTop">true</item>
+    </style>
+
     <!--toolbar style-->
     <style name="itime_toolbar">
         <item name="android:layout_width">match_parent</item>

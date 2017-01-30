@@ -2,19 +2,16 @@ package org.unimelb.itime.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.databinding.ObservableList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Size;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,8 +20,6 @@ import com.squareup.picasso.Picasso;
 
 import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Invitee;
-import org.unimelb.itime.bean.SizeCollector;
-import org.unimelb.itime.bean.User;
 import org.unimelb.itime.util.SizeUtil;
 import org.unimelb.itime.vendor.listener.ITimeInviteeInterface;
 
@@ -50,7 +45,7 @@ public class InviteeGroupView extends LinearLayout {
     private FlowLayout textFlowLayout;
     private PureEditText inputEditText;
     private float INPUT_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_normal));
-    private float ITEM_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_tiny));
+    private float ITEM_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_tiny_old));
     private int avatarWidth;
     private int avatarHeight;
     private int squareHeight;

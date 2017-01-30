@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--title of location-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/location"
+        android:textSize="15sp"
+        android:textColor="@color/color_757575" />
+
+    <!--current location line-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/icon_current_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_bluelocation_1"
+            android:layout_marginStart="16dp"
+            android:layout_centerVertical="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/icon_current_location"
+            android:layout_marginStart="3dp"
+            android:text="Australia Melbourne Victoria"
+            android:layout_centerVertical="true"
+            android:textSize="17sp"
+            android:textColor="@color/black"
+            />
+        <!--bottom divider-->
+        <TextView
+            style="@style/itime_bottom_divider_line" />
+
+        <!--top divider-->
+        <TextView
+            style="@style/itime_top_divider_line" />
+    </RelativeLayout>
+
+    <!--region lists title-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/all_regions"
+        android:textSize="15sp"
+        android:textColor="@color/color_757575"
+        />
+
+</LinearLayout>

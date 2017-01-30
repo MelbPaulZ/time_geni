@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
     private UserProfileViewModel contentViewModel;
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
     public static final int REQ_GENDER = 1000;
+    public static final int REQ_REGION = 1001;
 
     @Nullable
     @Override
@@ -99,7 +101,9 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
 
     @Override
     public void toEditRegionPage() {
-
+        Fragment fragment = new SettingRegionFragment();
+        fragment.setTargetFragment(this, REQ_REGION);
+        getBaseActivity().openFragment(fragment);
     }
 
     @Override
@@ -132,8 +136,16 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_GENDER && resultCode == Activity.RESULT_OK){
-            User user = UserUtil.getInstance(getContext()).getUser();
-            contentViewModel.setUser(user);
+            refreshDataInViewModel();
         }
+
+        if (requestCode == REQ_REGION && resultCode == Activity.RESULT_OK){
+            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+    }
+
+    private void refreshDataInViewModel(){
+        User user = UserUtil.getInstance(getContext()).getUser();
+        contentViewModel.setUser(user);
     }
 }

@@ -106,8 +106,10 @@
                             android:layout_height="wrap_content"
                             android:text="@{contentVM.event.title}"
                             android:textColor="@color/black"
+                            android:textStyle="bold"
                             android:textSize="24sp"
-                            />
+                        />
+
                         <!-- for confirmed event, event confirmed time-->
                         <LinearLayout
                             android:id="@+id/event_detail_confirm_time"
@@ -225,7 +227,7 @@
                         android:gravity="bottom"
                         android:text="@{contentVM.event.invitee.size()>1 ? @string/select_one_or_more_timeslot : @string/select_one_timeslot}"
                         android:textColor="@color/color_9E9E9E"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/font_small"
                         android:visibility="@{contentVM.timeslotListVisibility(contentVM.event)}" />
 
                     <TextView style="@style/itime_bottom_divider_line" />
@@ -289,6 +291,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textSize="@dimen/font_small"
                                 android:text='@{contentVM.inviteeString1}'
                                 android:textColor="@color/blue"/>
 
@@ -303,6 +306,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textSize="@dimen/font_small"
                                 android:text='@{contentVM.inviteeString2}'
                                 android:textColor="@color/orange"/>
                         </LinearLayout>

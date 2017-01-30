@@ -29,7 +29,7 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:gravity="center"
-            android:textSize="@dimen/font_small"
+            android:textSize="@dimen/font_small_old"
             app:text="@{viewModel.dayOfWeek}" />
 
         <ScrollView

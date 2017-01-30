@@ -295,6 +295,7 @@
 
     <string name="duration">Duration</string>
     <string name="select">Select</string>
+    <string name="selected">Selected</string>
     <string name="calendar">Calendar</string>
     <string name="note">note</string>
     <string name="starts">Starts</string>
@@ -397,6 +398,7 @@
     <string name="setting_gender">Gender</string>
     <string name="location">Location</string>
     <string name="region">Region</string>
+    <string name="all_regions">All Regions</string>
     <string name="search_location">location</string>
     <string name="setting_my_profile">My Profile</string>
     <string name="setting_calendar_pref">Calendar Preferences</string>
