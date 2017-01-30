@@ -63,7 +63,7 @@ public class OnBoardingViewModel extends BaseObservable{
         dotImages.add(R.drawable.onboarding_page4_dots_icon);
         for(int i=0;i<4;i++) {
             ImageView view = new ImageView(context);
-            BindLoader.bindImg(view, dotImages.get(i));
+            BindLoader.loadAvartar(view, dotImages.get(i));
         }
         setDotImage(dotImages.get(0));
     }

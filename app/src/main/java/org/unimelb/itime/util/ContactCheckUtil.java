@@ -34,4 +34,28 @@ public class ContactCheckUtil {
     public boolean isPhone(String str){
         return false;
     }
+
+    /**
+     * Ellipsize email more than 12 letters to 9 letters plus "..."
+     * @param input
+     * @return
+     */
+    public String ellipsizeEmail(String input){
+        return ellipsizeEmail(input, 12);
+    }
+
+    /**
+     * Ellipsize email to length len plus "..."
+     * @param input
+     * @param len
+     * @return
+     */
+    public String ellipsizeEmail(String input, int len){
+        if(input.length()>len){
+            return input.substring(0, len-3)+"...";
+        }else{
+            return input;
+        }
+
+    }
 }

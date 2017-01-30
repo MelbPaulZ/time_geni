@@ -192,14 +192,19 @@ public class ProfileFragmentViewModel extends BaseObservable {
         this.contact = contact;
         setLocation(contact.getUserDetail().getLocation());
         setEmail(contact.getUserDetail().getEmail());
-        setPhoto(contact.getPhoto());
+        setPhoto(contact.getAliasPhoto());
         setPhone(contact.getUserDetail().getPhone());
         setGender(contact.getUserDetail().getGender());
-        setName(contact.getName());
+        setName(contact.getAliasName());
         setRealName(contact.getUserDetail().getPersonalAlias());
         setBlocked(contact.getBlockLevel()!=0);
         setShowGender(!contact.getUserDetail().getGender().equals(User.UNDEFINED));
         setGenderIcon(contact.getUserDetail().getGender());
+    }
+
+    @Bindable
+    public String getPhoto(){
+        return photo;
     }
 
     public void contactMode(){

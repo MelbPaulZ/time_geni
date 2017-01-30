@@ -17,8 +17,6 @@
 
     <include layout="@layout/toolbar_common"
         app:vm="@{toolbarVM}"/>
-
-<include layout="@layout/line"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +34,7 @@
                 android:layout_height="90dp"
                 app:border_inside_color="@color/lightGrey"
                 app:border_thickness="4dp"
-                app:avatar="@{viewModel.contact.aliasPhoto}"
+                app:avatar="@{viewModel.photo}"
                 />
             <RelativeLayout
                 android:layout_width="25dp"

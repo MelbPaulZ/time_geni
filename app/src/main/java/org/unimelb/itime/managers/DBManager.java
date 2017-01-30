@@ -310,7 +310,8 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         FriendRequestDao friendRequestDao = daoSession.getFriendRequestDao();
         QueryBuilder<FriendRequest> qb = friendRequestDao.queryBuilder();
-        qb.where(FriendRequestDao.Properties.FreqUserUid.eq(UserUtil.getInstance(context).getUserUid()));
+        qb.where(qb.or(FriendRequestDao.Properties.FreqUserUid.eq(UserUtil.getInstance(context).getUserUid()),
+                FriendRequestDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid())));
         qb.orderDesc(FriendRequestDao.Properties.UpdatedAt);
         List<FriendRequest> list = qb.list();
         return list;
