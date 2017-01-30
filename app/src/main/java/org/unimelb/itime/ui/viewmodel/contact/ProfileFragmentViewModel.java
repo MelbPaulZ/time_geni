@@ -25,7 +25,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
     private AlertDialog deleteDialog;
     private ActionSheetDialog popupWindow;
     private Contact contact;
-    private FriendRequest request;
+    private String requestId;
     private String email = "";
     private String gender = "2";
     private String location = "";
@@ -96,7 +96,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.acceptRequest(request);
+                presenter.acceptRequest(requestId, contact.getUserDetail());
             }
         };
     }
@@ -478,8 +478,8 @@ public class ProfileFragmentViewModel extends BaseObservable {
         notifyPropertyChanged(BR.showAccepted);
     }
 
-    public void setRequest(FriendRequest request){
-        this.request = request;
+    public void setRequestId(String requestId){
+        this.requestId = requestId;
     }
 
     @Bindable

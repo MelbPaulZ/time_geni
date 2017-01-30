@@ -68,8 +68,8 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
         getView().getActivity().onBackPressed();
     }
 
-    public void acceptRequest(final FriendRequest request){
-        Observable<HttpResult<List<FriendRequest>>> observable = requestApi.confirm(request.getFreqUid());
+    public void acceptRequest(final String requestId, final User user){
+        Observable<HttpResult<List<FriendRequest>>> observable = requestApi.confirm(requestId);
         Subscriber<HttpResult<List<FriendRequest>>> subscriber = new Subscriber<HttpResult<List<FriendRequest>>>() {
             @Override
             public void onCompleted() {
@@ -91,7 +91,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
 
                 }else {
                     FriendRequest resultRequest = result.getData().get(0);
-                    resultRequest.setUserDetail(request.getUserDetail());
+                    resultRequest.setUserDetail(user);
                     dbManager.insertFriendRequest(resultRequest);
                     if(getView()!=null) {
                         getView().onTaskSuccess(TASK_ACCEPT, null);

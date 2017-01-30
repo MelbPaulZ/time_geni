@@ -205,9 +205,9 @@ public class NewFriendFragmentPresenter extends MvpBasePresenter<NewFriendMvpVie
         if(getView()!=null) {
             String userId = requestFriend.getUser().getUserId();
             if (requestFriend.getDisplayStatus().equals(FriendRequest.DISPLAY_STATUS_ACCEPT)) {
-                getView().goToProfileFragment(userId, ProfileFragment.MODE_REQUEST);
+                getView().goToProfileFragment(userId, requestFriend.getRequest().getFreqUid(), ProfileFragment.MODE_REQUEST);
             } else {
-                getView().goToProfileFragment(userId, ProfileFragment.MODE_CONTACT);
+                getView().goToProfileFragment(userId, null, ProfileFragment.MODE_CONTACT);
             }
         }
     }

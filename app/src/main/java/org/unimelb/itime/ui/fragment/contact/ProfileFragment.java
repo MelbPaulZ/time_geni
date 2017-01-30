@@ -42,6 +42,11 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
     private ToolbarViewModel<? extends ItimeCommonMvpView> toolbarViewModel;
     private int startMode = 1;
     private Contact contact;
+    private String requestId;
+
+    public void setRequestId(String requestId){
+        this.requestId = requestId;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -208,6 +213,7 @@ public class ProfileFragment extends BaseUiAuthFragment<ProfileMvpView, ProfileP
                 contact = (Contact) data;
                 viewModel.setContact(contact);
                 viewModel.requestMode();
+                viewModel.setRequestId(requestId);
                 hideToolbarRight();
                 break;
         }
