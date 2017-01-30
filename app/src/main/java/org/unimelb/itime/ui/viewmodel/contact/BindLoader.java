@@ -34,7 +34,10 @@ public class BindLoader extends BaseObservable {
 
     @BindingAdapter("bind:img")
     public static void loadAvartar(ImageView iv, String img) {
-        try {
+        try{
+        if(img==null||img.isEmpty()){
+            Picasso.with(iv.getContext()).load(R.drawable.invitee_selected_default_picture).into(iv);
+        }else
             Picasso.with(iv.getContext()).load(img).into(iv);
         }catch (Exception e){}
     }
@@ -52,20 +55,38 @@ public class BindLoader extends BaseObservable {
 
     @BindingAdapter("bind:smallAvatar")
     public static void loadSmallAvartar(ImageView iv, String img) {
-        Picasso.with(iv.getContext()).load(img).placeholder(R.drawable.invitee_selected_default_picture)
+        if(img==null||img.isEmpty()){
+            Picasso.with(iv.getContext()).load(R.drawable.invitee_selected_default_picture).into(iv);
+        }else
+            Picasso.with(iv.getContext()).load(img).placeholder(R.drawable.invitee_selected_default_picture)
                 .error(R.drawable.invitee_selected_default_picture).resize(100,100).centerCrop().into(iv);
     }
 
     @BindingAdapter("bind:avatar")
     public static void bindAvatar(ImageView view, String img){
-        Picasso.with(view.getContext()).load(img).placeholder(R.drawable.invitee_selected_default_picture)
-                .error(R.drawable.invitee_selected_default_picture).into(view);
+        if(img==null||img.isEmpty()){
+            Picasso.with(view.getContext()).load(R.drawable.invitee_selected_default_picture).into(view);
+        }else {
+            Picasso.with(view.getContext()).load(img).placeholder(R.drawable.invitee_selected_default_picture)
+                    .error(R.drawable.invitee_selected_default_picture).into(view);
+        }
     }
 
     @BindingAdapter("bind:avatar")
     public static void bindAvatar(ImageView view, int img){
         Picasso.with(view.getContext()).load(img).placeholder(R.drawable.invitee_selected_default_picture)
                 .error(R.drawable.invitee_selected_default_picture).into(view);
+    }
+
+    @BindingAdapter("bind:onBoarding")
+    public static void bindOnBoarding(ImageView view, int img){
+        Picasso.with(view.getContext()).load(img).resize(300, 300).into(view);
+    }
+
+    @BindingAdapter("bind:icon")
+    public static void bindIcon(ImageView view, int img){
+        if(img!=0)
+            Picasso.with(view.getContext()).load(img).into(view);
     }
 
     @BindingAdapter("bind:titleBackListener")

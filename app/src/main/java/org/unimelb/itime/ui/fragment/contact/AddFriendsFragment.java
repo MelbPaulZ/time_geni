@@ -62,7 +62,8 @@ public class AddFriendsFragment extends BaseUiAuthFragment<AddFriendsMvpView, Ad
         if(profileFragment == null) {
             profileFragment = new ProfileFragment();
         }
-        profileFragment.setUser(user);
+        profileFragment.setUserId(user.getUserDetail().getUserId());
+        profileFragment.setStartMode(ProfileFragment.MODE_CONTACT);
         getBaseActivity().openFragment(profileFragment, null, true);
 
 //        fm.beginTransaction()

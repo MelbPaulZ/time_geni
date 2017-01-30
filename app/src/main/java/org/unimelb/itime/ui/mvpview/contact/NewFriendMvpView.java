@@ -21,5 +21,5 @@ public interface NewFriendMvpView extends ItimeCommonMvpView, TaskBasedMvpView<L
 
     void goToAddFriendsFragment();
 
-    void goToProfileFragment(Contact requestFriend, FriendRequest request);
+    void goToProfileFragment(String userId, String requestId, int mode);
 }

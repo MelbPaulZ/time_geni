@@ -106,7 +106,7 @@ public class RequestFriendItemViewModel extends BaseObservable implements Contac
 
     @Override
     public String getPhoto() {
-        return null;
+        return requestFriend.getPhoto();
     }
 
     public SpannableString changeMatchColor(String str, String matchStr){

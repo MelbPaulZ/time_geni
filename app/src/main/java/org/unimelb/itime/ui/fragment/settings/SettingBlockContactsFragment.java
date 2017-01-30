@@ -68,7 +68,8 @@ public class SettingBlockContactsFragment extends BaseUiAuthFragment<BlockContac
         if (profileFragment == null) {
             profileFragment = new ProfileFragment();
         }
-        profileFragment.setUser(user);
+        profileFragment.setUserId(user.getUserDetail().getUserId());
+        profileFragment.setStartMode(ProfileFragment.MODE_CONTACT);
         getBaseActivity().openFragment(profileFragment, null, true);
 //        fm.beginTransaction()
 //                .hide(this)
@@ -78,7 +79,7 @@ public class SettingBlockContactsFragment extends BaseUiAuthFragment<BlockContac
 //        Intent intent = new Intent();
 //        intent.setClass(getActivity(), ProfileActivity.class);
 //        Bundle bundle = new Bundle();
-//        bundle.putSerializable(ProfileActivity.USER,user);
+//        bundle.putSerializable(ProfileActivity.USER_ID,user);
 //        intent.putExtras(bundle);
 //        startActivity(intent);
     }

@@ -98,6 +98,10 @@ public class DefaultPhotoUtil{
         return view.getDrawingCache();
     }
     private String getText(String name){
+        if(name == null){
+            return "";
+        }
+        
         String text = "";
         String[] tokens = name.split(" ");
         int length = tokens.length;

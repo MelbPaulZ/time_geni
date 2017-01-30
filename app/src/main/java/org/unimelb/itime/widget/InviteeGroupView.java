@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -44,8 +45,9 @@ public class InviteeGroupView extends LinearLayout {
     private FlowLayout avatarFlowLayout;
     private FlowLayout textFlowLayout;
     private PureEditText inputEditText;
-    private float INPUT_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_normal));
-    private float ITEM_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_tiny_old));
+
+    private float INPUT_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_big));
+    private float ITEM_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_small));
     private int avatarWidth;
     private int avatarHeight;
     private int squareHeight;
@@ -76,7 +78,6 @@ public class InviteeGroupView extends LinearLayout {
         initAvatarFlowLayout();
         initTextFlowLayout();
         initInputEditText(hint);
-
         inviteeMap = new HashMap<>();
     }
 
@@ -137,9 +138,10 @@ public class InviteeGroupView extends LinearLayout {
 
     private void initInputEditText(String hint){
         inputEditText = new PureEditText(this.getContext());
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.weight = 1;
         inputEditText.setLayoutParams(params);
+        inputEditText.setGravity(Gravity.TOP);
         inputEditText.setSingleLine(true);
         inputEditText.setHintTextColor(getResources().getColor(R.color.normalGrey));
         inputEditText.setTextSize(INPUT_FONT_SIZE);
@@ -300,19 +302,6 @@ public class InviteeGroupView extends LinearLayout {
             }
         }
     }
-
-//    private class AvatarOnClickListener implements OnClickListener
-//    {
-//        @Override
-//        public void onClick(View view) {
-//            avatarFlowLayout.removeView(view);
-//            ITimeInviteeInterface invitee = (ITimeInviteeInterface) view.getTag();
-//            inviteeMap.remove(invitee);
-//            if(onInviteeClickListener!=null) {
-//                onInviteeClickListener.onClick(view, invitee);
-//            }
-//        }
-//    }
 
     public interface OnEditListener{
         void onEditing(View view, String text);

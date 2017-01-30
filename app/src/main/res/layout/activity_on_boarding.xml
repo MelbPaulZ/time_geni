@@ -9,31 +9,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
     <TextView
         android:layout_width="61dp"
         android:layout_height="24dp"
         android:text="@string/skip"
         android:textSize="@dimen/font_big"
         android:textColor="@color/White"
-        android:background="@color/grey_six"
+        android:background="@drawable/drawable_skip_background"
         android:gravity="center"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"/>
+        android:layout_marginRight="20dp"
+        android:onClick="@{viewModel.skipListener}"/>
 
     <android.support.v4.view.ViewPager
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="320dp"
+        android:layout_height="450dp"
         android:layout_centerInParent="true"
         app:items = "@{viewModel.pages}"
         app:itemView ="@{viewModel.itemView}"
         app:onPageChangeListener = "@{viewModel.onPageChangeListener}"/>
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@{viewModel.dotImage}"
+        android:layout_width="54dp"
+        android:layout_height="8dp"
+        app:img="@{viewModel.dotImage}"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="70dp"

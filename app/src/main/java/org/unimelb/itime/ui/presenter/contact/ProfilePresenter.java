@@ -9,6 +9,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Block;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.FriendRequest;
+import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.messageevent.MessageAddContact;
 import org.unimelb.itime.messageevent.MessageRemoveContact;
@@ -37,6 +38,10 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
     public static final int TASK_BLOCK = 2;
     public static final int TASK_UNBLOCK = 3;
     public static final int TASK_ACCEPT = 4;
+    public static final int TASK_CONTACT = 5;
+    public static final int TASK_STRANGER = 6;
+    public static final int TASK_REQUEST = 7;
+
     private Context context;
     private UserApi userApi;
     private ContactApi contactApi;
@@ -63,8 +68,8 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
         getView().getActivity().onBackPressed();
     }
 
-    public void acceptRequest(final FriendRequest request){
-        Observable<HttpResult<List<FriendRequest>>> observable = requestApi.confirm(request.getFreqUid());
+    public void acceptRequest(final String requestId, final User user){
+        Observable<HttpResult<List<FriendRequest>>> observable = requestApi.confirm(requestId);
         Subscriber<HttpResult<List<FriendRequest>>> subscriber = new Subscriber<HttpResult<List<FriendRequest>>>() {
             @Override
             public void onCompleted() {
@@ -86,7 +91,7 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
 
                 }else {
                     FriendRequest resultRequest = result.getData().get(0);
-                    resultRequest.setUserDetail(request.getUserDetail());
+                    resultRequest.setUserDetail(user);
                     dbManager.insertFriendRequest(resultRequest);
                     if(getView()!=null) {
                         getView().onTaskSuccess(TASK_ACCEPT, null);
@@ -129,9 +134,6 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
                     Block block = result.getData();
                     block.setUserDetail(user.getUserDetail());
                     dbManager.insertBlock(block);
-                    EventBus.getDefault().post(new MessageRemoveContact(user));
-                    EventBus.getDefault().post(new MessageBlockContact(user));
-
                     if(getView()!=null) {
                         getView().onTaskSuccess(TASK_BLOCK, null);
                     }
@@ -258,15 +260,106 @@ public class ProfilePresenter extends MvpBasePresenter<ProfileMvpView> {
         HttpUtil.subscribe(observable, subscriber);
     }
 
-    public void inviteUser(Contact user){
+    public void inviteUser(){
         if(getView()!=null) {
-            getView().goToInviteFragment(user);
+            getView().goToInviteFragment();
         }
     }
 
-    public void gotoEditAlias(Contact contact) {
+    public void gotoEditAlias() {
         if(getView()!=null){
-            getView().goToEditAlias(contact);
+            getView().goToEditAlias();
         }
+    }
+
+    public void getRequest(String userId){
+        List<FriendRequest> requests = dbManager.getAllFriendRequest();
+        for(FriendRequest request: requests){
+            if (request.getUserDetail().getUserId().equals(userId)){
+                getView().onTaskSuccess(TASK_REQUEST, new Contact(request.getUserDetail()));
+                return;
+            }
+        }
+    }
+
+    public void getContact(String userId){
+        if(userId==null || userId.equals("")){
+            return;
+        }
+
+        userId = userId.trim();
+        if(getView()!=null) {
+            getView().onTaskStart(TASK_CONTACT);
+            List<Contact> contacts = dbManager.getAllContact();
+            for(Contact contact: contacts){
+                if (contact.getUserDetail().getUserId().equals(userId)){
+                    getView().onTaskSuccess(TASK_CONTACT, contact);
+                    return;
+                }
+            }
+
+            List<Block> blocks = dbManager.getBlockContacts();
+            for(Block block: blocks){
+                if (block.getUserDetail().getUserId().equals(userId)){
+                    Contact contact = new Contact(block.getUserDetail());
+                    contact.setBlockLevel(1);
+                    getView().onTaskSuccess(TASK_CONTACT, contact);
+                    return;
+                }
+            }
+
+            User user = dbManager.searchUserByUserId(userId);
+            if(user!=null){
+                getView().onTaskSuccess(TASK_STRANGER, new Contact(user));
+                return;
+            }
+
+            findUser(userId);
+        }
+    }
+
+    private void findUser(String userId){
+        if(userId==null || userId.equals("")){
+            return;
+        }
+
+        Observable<HttpResult<List<User>>> observable = userApi.search(userId);
+        Subscriber<HttpResult<List<User>>> subscriber = new Subscriber<HttpResult<List<User>>>() {
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError: " + e.getMessage());
+                if(getView()!=null) {
+                    getView().onTaskError(TASK_STRANGER, null);
+                }
+            }
+
+            @Override
+            public void onNext(HttpResult<List<User>> result) {
+                Log.d(TAG, "onNext: " + result.getInfo());
+                if (result.getStatus()!=1){
+                    if(getView()!=null) {
+                        getView().onTaskError(TASK_STRANGER, null);
+                    }
+                }else {
+                    if(result.getData().isEmpty()){
+                        if(getView()!=null) {
+                            getView().onTaskError(TASK_STRANGER, null);
+                        }
+                    }else {
+                        User user = result.getData().get(0);
+                        dbManager.insertUser(user);
+                        if(getView()!=null) {
+                            getView().onTaskSuccess(TASK_STRANGER, new Contact(user));
+                        }
+                    }
+                }
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
     }
 }

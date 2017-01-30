@@ -24,10 +24,17 @@ public class ProfileFragmentViewModel extends BaseObservable {
     private AlertDialog blockDialog;
     private AlertDialog deleteDialog;
     private ActionSheetDialog popupWindow;
-    private Contact friend;
-    private FriendRequest request;
-    private boolean showTitileBack = true;
-    private boolean showTitleRight = true;
+    private Contact contact;
+    private String requestId;
+    private String email = "";
+    private String gender = "2";
+    private String location = "";
+    private String realName = "";
+    private String name = "";
+    private String phone = "";
+    private String photo = "";
+    private boolean blocked;
+
     private boolean showAdd = false;
     private boolean showSent = false;
     private boolean showEmail = true;
@@ -36,16 +43,17 @@ public class ProfileFragmentViewModel extends BaseObservable {
     private boolean showAccepted = false;
     private boolean showEdit = false;
     private boolean showRealName = false;
+    private boolean showGender = false;
     private ProfilePresenter presenter;
+    private int genderIcon;
 
-    @Bindable
-    public boolean getShowTitileBack() {
-        return showTitileBack;
+    public void setShowGender(boolean showGender) {
+        this.showGender = showGender;
     }
 
-    public void setShowTitileBack(boolean showTitileBack) {
-        this.showTitileBack = showTitileBack;
-        notifyPropertyChanged(BR.showTitileBack);
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+        notifyPropertyChanged(BR.blocked);
     }
 
     @Bindable
@@ -58,15 +66,6 @@ public class ProfileFragmentViewModel extends BaseObservable {
         notifyPropertyChanged(BR.showRealName);
     }
 
-    @Bindable
-    public boolean getShowTitleRight() {
-        return showTitleRight;
-    }
-
-    public void setShowTitleRight(boolean showTitleRight) {
-        this.showTitleRight = showTitleRight;
-        notifyPropertyChanged(BR.showTitleRight);
-    }
 
     public ProfileFragmentViewModel(ProfilePresenter presenter){
         this.presenter = presenter;
@@ -77,7 +76,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.inviteUser(friend);
+                presenter.inviteUser();
             }
         };
     }
@@ -87,7 +86,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.addUser(friend);
+                presenter.addUser(contact);
             }
         };
     }
@@ -97,7 +96,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.acceptRequest(request);
+                presenter.acceptRequest(requestId, contact.getUserDetail());
             }
         };
     }
@@ -122,73 +121,142 @@ public class ProfileFragmentViewModel extends BaseObservable {
         notifyPropertyChanged(BR.showPhone);
     }
 
-    @Bindable
-    public Contact getFriend() {
-        return friend;
+    public void setEmail(String email) {
+        this.email = email;
+        notifyPropertyChanged(BR.email);
+        notifyPropertyChanged(BR.emailText);
     }
 
-    public void setFriend(Contact friend) {
-        this.friend = friend;
-        notifyPropertyChanged(BR.friend);
-        notifyPropertyChanged(BR.location);
-        notifyPropertyChanged(BR.email);
-        notifyPropertyChanged(BR.phone);
-        notifyPropertyChanged(BR.isMale);
-        notifyPropertyChanged(BR.name);
-        notifyPropertyChanged(BR.blocked);
-        notifyPropertyChanged(BR.showGender);
-        notifyPropertyChanged(BR.realName);
+    @Bindable
+    public String getGender() {
+        return gender;
+    }
 
-        if(friend.getRelationship()>0 && friend.getStatus().equals(Contact.ACTIVATED)){
-            setShowTitleRight(true);
-            setShowAdd(false);
-            setShowEmail(true);
-            setShowPhone(true);
-            setShowSent(false);
-            setShowAccept(false);
-            setShowAccepted(false);
-            setShowEdit(true);
-            setShowRealName(true);
-        }else if(friend.getStatus().equals(FriendRequest.DISPLAY_STATUS_ACCEPT)){
-            setShowTitleRight(false);
-            setShowSent(false);
-            setShowAdd(false);
-            setShowEmail(true);
-            setShowPhone(true);
-            setShowAccept(true);
-            setShowAccepted(false);
-            if(friend.getUserDetail().getPhone().equals("")){
-                setShowPhone(false);
-            }
-            if(friend.getUserDetail().getEmail().equals("")){
-                setShowEmail(false);
-            }
-            setShowEdit(false);
-            setShowRealName(false);
-        }else{
-            setShowAccept(false);
-            setShowTitleRight(false);
-            setShowSent(false);
-            setShowAdd(true);
-            setShowEmail(true);
-            setShowPhone(true);
-            setShowAccepted(false);
-            if(friend.getUserDetail().getPhone().equals("")){
-                setShowPhone(false);
-            }
-            if(friend.getUserDetail().getEmail().equals("")){
-                setShowEmail(false);
-            }
-            setShowEdit(false);
-            setShowRealName(false);
+    public void setGender(String gender) {
+        this.gender = gender;
+        notifyPropertyChanged(BR.gender);
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+        notifyPropertyChanged(BR.location);
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+        notifyPropertyChanged(BR.realName);
+        notifyPropertyChanged(BR.realNameText);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        notifyPropertyChanged(BR.name);
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+        notifyPropertyChanged(BR.phone);
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+        notifyPropertyChanged(BR.photo);
+    }
+
+    @Bindable
+    public int getGenderIcon() {
+        return genderIcon;
+    }
+
+    public void setGenderIcon(String gender) {
+        switch (gender){
+            case User.FEMALE:
+                genderIcon = R.drawable.female_icon;
+                break;
+            case User.MALE:
+                genderIcon = R.drawable.male_icon;
+                break;
         }
+        notifyPropertyChanged(BR.genderIcon);
+    }
+
+    @Bindable
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        if(contact ==null){
+            return;
+        }
+        this.contact = contact;
+        setLocation(contact.getUserDetail().getLocation());
+        setEmail(contact.getUserDetail().getEmail());
+        setPhoto(contact.getAliasPhoto());
+        setPhone(contact.getUserDetail().getPhone());
+        setGender(contact.getUserDetail().getGender());
+        setName(contact.getAliasName());
+        setRealName(contact.getUserDetail().getPersonalAlias());
+        setBlocked(contact.getBlockLevel()!=0);
+        setShowGender(!contact.getUserDetail().getGender().equals(User.UNDEFINED));
+        setGenderIcon(contact.getUserDetail().getGender());
+    }
+
+    @Bindable
+    public String getPhoto(){
+        return photo;
+    }
+
+    public void contactMode(){
+        setShowAdd(false);
+        setShowEmail(true);
+        setShowPhone(true);
+        setShowSent(false);
+        setShowAccept(false);
+        setShowAccepted(false);
+        setShowEdit(true);
+        setShowRealName(true);
+    }
+
+    public void requestMode(){
+        setShowSent(false);
+        setShowAdd(false);
+        setShowEmail(true);
+        setShowPhone(true);
+        setShowAccept(true);
+        setShowAccepted(false);
+        if(contact.getUserDetail().getPhone().equals("")){
+            setShowPhone(false);
+        }
+        if(contact.getUserDetail().getEmail().equals("")){
+            setShowEmail(false);
+        }
+        setShowEdit(false);
+        setShowRealName(false);
+    }
+
+    public void strangerMode(){
+        setShowAccept(false);
+        setShowSent(false);
+        setShowAdd(true);
+        setShowEmail(true);
+        setShowPhone(true);
+        setShowAccepted(false);
+        if(contact.getUserDetail().getPhone().equals("")){
+            setShowPhone(false);
+        }
+        if(contact.getUserDetail().getEmail().equals("")){
+            setShowEmail(false);
+        }
+        setShowEdit(false);
+        setShowRealName(false);
     }
 
     public View.OnClickListener getEditAliasListener(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.gotoEditAlias(friend);
+                presenter.gotoEditAlias();
             }
         };
     }
@@ -196,47 +264,42 @@ public class ProfileFragmentViewModel extends BaseObservable {
 
     @Bindable
     public boolean getShowGender(){
-        return !friend.getUserDetail().getGender().equals(User.UNDEFINED);
+        return !gender.equals(User.UNDEFINED);
     }
 
-
-    @Bindable
-    public boolean getIsMale(){
-        return friend.getUserDetail().getGender().equals(User.MALE);
-    }
 
     @Bindable
     public String getName(){
-        return friend.getAliasName();
+        return name;
     }
 
     @Bindable
     public String getRealName(){
-        return friend.getUserDetail().getPersonalAlias();
+        return realName;
     }
 
     @Bindable
     public String getLocation(){
-        return friend.getUserDetail().getLocation();
+        return location;
     }
     @Bindable
     public String getPhone(){
-        return "Phone: "+friend.getUserDetail().getPhone();
+        return phone;
     }
 
     @Bindable
     public String getEmail(){
-        return friend.getUserDetail().getEmail();
+        return email;
     }
 
     @Bindable
     public String getEmailText(){
-        return  presenter.getContext().getString(R.string.email)+": " + friend.getUserDetail().getEmail();
+        return  presenter.getContext().getString(R.string.email)+": " + email;
     }
 
     @Bindable
     public String getRealNameText(){
-        return presenter.getContext().getString(R.string.name)+": " + friend.getUserDetail().getPersonalAlias();
+        return presenter.getContext().getString(R.string.name)+": " + realName;
     }
 
 
@@ -262,7 +325,7 @@ public class ProfileFragmentViewModel extends BaseObservable {
 
     @Bindable
     public boolean getBlocked(){
-        return friend.getBlockLevel()!=0;
+        return blocked;
     }
 
     public void onRightClicked(){
@@ -372,26 +435,26 @@ public class ProfileFragmentViewModel extends BaseObservable {
 
 
     private void unblockFriend(){
-        presenter.unblockUser(friend);
+        presenter.unblockUser(contact);
     }
 
     private void blockFriend(){
-        presenter.blockUser(friend);
+        presenter.blockUser(contact);
     }
 
     private void deleteFriend(){
-        presenter.deleteUser(friend);
+        presenter.deleteUser(contact);
     }
 
     public void blockSuccess(){
-        friend.setBlockLevel(1);
-        notifyPropertyChanged(BR.blocked);
+        contact.setBlockLevel(1);
+        setBlocked(true);
         initPopupWindow();
     }
 
     public void unblockSuccess(){
-        friend.setBlockLevel(0);
-        notifyPropertyChanged(BR.blocked);
+        contact.setBlockLevel(0);
+        setBlocked(false);
         initPopupWindow();
     }
 
@@ -415,8 +478,8 @@ public class ProfileFragmentViewModel extends BaseObservable {
         notifyPropertyChanged(BR.showAccepted);
     }
 
-    public void setRequest(FriendRequest request){
-        this.request = request;
+    public void setRequestId(String requestId){
+        this.requestId = requestId;
     }
 
     @Bindable

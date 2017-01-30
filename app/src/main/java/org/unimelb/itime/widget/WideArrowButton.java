@@ -106,6 +106,7 @@ public class WideArrowButton extends RelativeLayout {
         arrowImageView.setLayoutParams(params);
         arrowImageView.setImageResource(R.drawable.arrow_icon);
         arrowImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        arrowImageView.setId(View.generateViewId());
         contentView.addView(arrowImageView);
     }
 

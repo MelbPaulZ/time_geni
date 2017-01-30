@@ -124,8 +124,8 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         ContactDao contactDao = daoSession.getContactDao();
         QueryBuilder<Contact> qb = contactDao.queryBuilder();
-        qb.where(
-                ContactDao.Properties.ContactUid.eq(contactUid));
+        qb.where(qb.and(qb.and(ContactDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid()),
+                ContactDao.Properties.ContactUid.eq(contactUid)), ContactDao.Properties.Status.eq(Contact.ACTIVATED)));
         List<Contact> list = qb.list();
         if(list.isEmpty()){
             return null;
@@ -140,6 +140,20 @@ public class DBManager {
             UserDao userDao = daoSession.getUserDao();
             userDao.insertOrReplace(user);
         }
+    }
+
+    public synchronized User searchUserByUserId(String userId){
+            DaoSession daoSession = daoMaster.newSession();
+            UserDao userDao = daoSession.getUserDao();
+            QueryBuilder<User> qb = userDao.queryBuilder();
+            qb.where(
+                    UserDao.Properties.UserId.eq(userId));
+            List<User> list = qb.list();
+            if(list.isEmpty()){
+                return null;
+            }else {
+                return list.get(0);
+            }
     }
 
 
@@ -214,6 +228,18 @@ public class DBManager {
         List<Contact> list = qb.list();
         return list;
     }
+
+    public synchronized List<Contact> getAllContactWithBlocked() {
+        DaoSession daoSession = daoMaster.newSession();
+        ContactDao contactDao = daoSession.getContactDao();
+        QueryBuilder<Contact> qb = contactDao.queryBuilder();
+        qb.where(qb.and(ContactDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid()),
+                ContactDao.Properties.Status.eq(Contact.ACTIVATED))).orderAsc(ContactDao.Properties.AliasName);
+        List<Contact> list = qb.list();
+        return list;
+    }
+
+
 
     public synchronized List<Block> getBlockContacts() {
         DaoSession daoSession = daoMaster.newSession();
@@ -299,7 +325,8 @@ public class DBManager {
         DaoSession daoSession = daoMaster.newSession();
         FriendRequestDao friendRequestDao = daoSession.getFriendRequestDao();
         QueryBuilder<FriendRequest> qb = friendRequestDao.queryBuilder();
-        qb.where(FriendRequestDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid()));
+        qb.where(qb.or(FriendRequestDao.Properties.FreqUserUid.eq(UserUtil.getInstance(context).getUserUid()),
+                FriendRequestDao.Properties.UserUid.eq(UserUtil.getInstance(context).getUserUid())));
         qb.orderDesc(FriendRequestDao.Properties.UpdatedAt);
         List<FriendRequest> list = qb.list();
         return list;

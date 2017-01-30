@@ -19,7 +19,6 @@ import org.unimelb.itime.util.SizeUtil;
 
 public class WideBadgeArrowButton extends WideArrowButton {
     private TextView badgeView;
-    private BadgeView badge;
 
     public WideBadgeArrowButton(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -48,7 +47,6 @@ public class WideBadgeArrowButton extends WideArrowButton {
         }else{
             badgeView.setVisibility(VISIBLE);
         }
-
     }
 
 }

@@ -17,8 +17,6 @@
 
     <include layout="@layout/toolbar_common"
         app:vm="@{toolbarVM}"/>
-
-<include layout="@layout/line"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +34,7 @@
                 android:layout_height="90dp"
                 app:border_inside_color="@color/lightGrey"
                 app:border_thickness="4dp"
-                app:avatar="@{viewModel.friend.aliasPhoto}"
+                app:avatar="@{viewModel.photo}"
                 />
             <RelativeLayout
                 android:layout_width="25dp"
@@ -78,7 +76,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginLeft="4dp"
-                android:src='@{viewModel.isMale? @drawable/male_icon : @drawable/female_icon}'
+                app:icon='@{viewModel.genderIcon}'
                 android:visibility="@{viewModel.showGender?View.VISIBLE:View.GONE}"
                 android:id="@+id/sexIcon"
                 android:layout_gravity="center_vertical"
@@ -163,7 +161,7 @@
             android:textColor="@color/grey_one"
             android:layout_marginBottom="10dp"
             android:visibility="@{viewModel.showEmail?View.VISIBLE:View.GONE}"
-            android:singleLine="true"
+            android:maxLines="1"
             android:ellipsize="end"/>
         </LinearLayout>
         <FrameLayout
