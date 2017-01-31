@@ -22,7 +22,6 @@ public class MainTabBarViewModel extends CommonViewModel{
 
     public MainTabBarViewModel(MainTabBarPresenter presenter){
         this.presenter = presenter;
-        presenter.getRequestCount();
     }
 
     public View.OnClickListener onTabBarClick(final int pageId){

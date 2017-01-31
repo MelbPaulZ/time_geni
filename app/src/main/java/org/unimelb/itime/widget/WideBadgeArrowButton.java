@@ -30,7 +30,8 @@ public class WideBadgeArrowButton extends WideArrowButton {
         badgeView = new TextView(getContext());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(SizeUtil.dp2px(getContext(),20),
                 SizeUtil.dp2px(getContext(),20));
-        params.addRule(LEFT_OF,getArrowView().getId());
+        params.setMargins(0, 0, SizeUtil.dp2px(getContext(),30), 0);
+        params.addRule(ALIGN_PARENT_RIGHT);
         params.addRule(CENTER_VERTICAL);
         badgeView.setGravity(Gravity.CENTER);
         badgeView.setLayoutParams(params);
