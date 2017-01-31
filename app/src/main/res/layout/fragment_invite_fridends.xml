@@ -69,7 +69,7 @@
                     android:text="Add Invitee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/font_big"
+                    android:textSize="@dimen/font_large"
                     android:textColor="@color/grey_four"/>
 
                 <TextView

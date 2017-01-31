@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:textSize="@dimen/font_normal"
+                android:textSize="@dimen/font_large"
                 android:textColor="@color/black"
                 android:text="@{viewModel.contact.sortLetters}"
                 />

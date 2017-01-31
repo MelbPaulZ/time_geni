@@ -29,8 +29,8 @@ public class WideArrowButton extends RelativeLayout {
     private int iconWidth;
     private int iconHeight;
     private int icon;
-    private int FONT_SIZE = SizeUtil.px2dp(getContext(), getContext().getResources().getDimension(R.dimen.font_big));
-    private int textColor = R.color.grey_one;
+    private int FONT_SIZE = SizeUtil.px2dp(getContext(), getContext().getResources().getDimension(R.dimen.font_large));
+    private int textColor = R.color.normal_text_color;
     private RelativeLayout contentView;
 
 

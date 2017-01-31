@@ -46,7 +46,7 @@ public class InviteeGroupView extends LinearLayout {
     private FlowLayout textFlowLayout;
     private PureEditText inputEditText;
 
-    private float INPUT_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_big));
+    private float INPUT_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_large));
     private float ITEM_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_small));
     private int avatarWidth;
     private int avatarHeight;

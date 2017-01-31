@@ -289,7 +289,7 @@ public class InviteFriendViewModel extends BaseObservable {
     }
 
     public void setCountStr(int count) {
-        this.countStr = count + " people selected";
+        this.countStr = count + " selected";
         notifyPropertyChanged(BR.countStr);
         presenter.setDoneable(count>0);
     }

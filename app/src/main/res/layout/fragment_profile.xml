@@ -54,58 +54,53 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/nameLayout"
-            android:layout_below="@id/avatarView"
-            android:orientation="horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/font_extra_plus"
+                android:textSize="@dimen/font_huge"
                 android:text="@{viewModel.name}"
-                android:textColor="@color/grey_one"
+                android:textColor="@color/normal_text_color"
+                android:layout_centerHorizontal="true"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:id="@+id/nameTextView"
-                android:layout_weight="1"/>
+                android:layout_below="@id/avatarView"
+                android:layout_marginTop="20dp"/>
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginLeft="4dp"
                 app:icon='@{viewModel.genderIcon}'
                 android:visibility="@{viewModel.showGender?View.VISIBLE:View.GONE}"
+                android:layout_toRightOf="@id/nameTextView"
+                android:layout_alignBottom="@id/nameTextView"
                 android:id="@+id/sexIcon"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0"/>
+                android:layout_gravity="center_vertical"/>
 
             <FrameLayout
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="0"
+                android:layout_toRightOf="@id/sexIcon"
+                android:layout_alignBottom="@id/nameTextView"
                 android:onClick="@{viewModel.editAliasListener}"
                 android:visibility="@{viewModel.showEdit?View.VISIBLE:View.GONE}">
             <ImageView
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:src="@drawable/icon_edit"
-                android:layout_gravity="center"
+                android:layout_gravity="bottom"
                 />
             </FrameLayout>
-        </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_small_old"
+            android:textSize="@dimen/font_middle"
             android:textColor="@color/lightOrange"
             android:text="@{viewModel.location}"
             android:id="@+id/addressTextView"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/nameLayout"/>
+            android:layout_below="@+id/nameTextView"/>
 
 
     </RelativeLayout>
@@ -135,20 +130,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
                 android:id="@+id/EmailLayout"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="45dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginStart="55dp"
+            android:layout_marginStart="52dp"
             android:layout_marginEnd="10dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{viewModel.realNameText}"
-            android:textSize="@dimen/font_big"
-            android:textColor="@color/grey_one"
-            android:layout_marginBottom="3.5dp"
+            android:textSize="@dimen/font_large"
+            android:textColor="@color/normal_text_color"
+            android:layout_marginBottom="2.5dp"
             android:visibility="@{viewModel.showRealName?View.VISIBLE:View.GONE}"
             android:maxLines="1"
             android:ellipsize="end"/>
@@ -156,9 +151,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{viewModel.emailText}"
-            android:textSize="@dimen/font_big"
+            android:textSize="@dimen/font_large"
             android:id="@+id/emailTextView"
-            android:textColor="@color/grey_one"
+            android:textColor="@color/normal_text_color"
             android:layout_marginBottom="10dp"
             android:visibility="@{viewModel.showEmail?View.VISIBLE:View.GONE}"
             android:maxLines="1"
@@ -178,7 +173,7 @@
         android:layout_height="53dp"
         android:layout_marginTop="63dp"
         android:text="@string/invite_to_an_event"
-        android:textSize="@dimen/font_big"
+        android:textSize="@dimen/font_large"
         android:layout_gravity="center_horizontal"
         android:onClick="@{viewModel.invitenListener}"
         android:id="@+id/inviteButton"/>
@@ -187,7 +182,7 @@
         android:layout_height="53dp"
         android:layout_marginTop="16dp"
         android:text="@string/add_to_contact"
-        android:textSize="@dimen/font_big"
+        android:textSize="@dimen/font_large"
         android:visibility="@{viewModel.showAdd?View.VISIBLE:View.GONE}"
         android:gravity="center"
         android:onClick="@{viewModel.addListener}"
@@ -199,7 +194,7 @@
         android:layout_height="53dp"
         android:layout_marginTop="16dp"
         android:text="@string/request_sent"
-        android:textSize="@dimen/font_big"
+        android:textSize="@dimen/font_large"
         android:textColor="@color/lightBlue"
         android:visibility="@{viewModel.showSent?View.VISIBLE:View.GONE}"
         android:gravity="center"
@@ -211,7 +206,7 @@
         android:layout_height="53dp"
         android:layout_marginTop="30dp"
         android:text="@string/Accept"
-        android:textSize="@dimen/font_big"
+        android:textSize="@dimen/font_large"
         android:visibility="@{viewModel.showAccept?View.VISIBLE:View.GONE}"
         android:gravity="center"
         android:onClick="@{viewModel.acceptListener}"
@@ -222,7 +217,7 @@
         android:layout_height="53dp"
         android:layout_marginTop="16dp"
         android:text="@string/Accepted"
-        android:textSize="@dimen/font_big"
+        android:textSize="@dimen/font_large"
         android:textColor="@color/lightBlue"
         android:visibility="@{viewModel.showAccepted?View.VISIBLE:View.GONE}"
         android:gravity="center"

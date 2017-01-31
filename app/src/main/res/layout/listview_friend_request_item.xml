@@ -85,7 +85,7 @@
             android:background="@drawable/blue_cornor_small"
             android:text="Accept"
             android:textColor="@color/white"
-            android:textSize="@dimen/font_normal"
+            android:textSize="@dimen/font_small"
             android:layout_centerVertical="true"
             android:layout_centerInParent="true"
             android:layout_marginRight="10dp"

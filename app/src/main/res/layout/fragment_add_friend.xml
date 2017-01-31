@@ -50,6 +50,7 @@
             android:text="@string/cancel"
             android:id="@+id/cancelButton"
             android:layout_marginLeft="8dp"
+            android:textSize="@dimen/font_large"
             android:layout_weight="0"
             android:visibility="@{mainViewModel.showCancel?View.VISIBLE:View.GONE}"
             android:onClick="@{mainViewModel.cancelListener}"
@@ -116,7 +117,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_big"
+            android:textSize="@dimen/font_large"
             android:text="User not found"
             android:layout_marginTop="30dp"
             android:layout_gravity="center_horizontal"/>
@@ -125,7 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="@{mainViewModel.inviteText}"
-            android:textSize = "@dimen/font_big"
+            android:textSize = "@dimen/font_large"
             android:layout_gravity="center_horizontal"
             android:visibility="@{mainViewModel.isUnimelb?View.VISIBLE:View.GONE}"
             android:onClick="@{()-> mainViewModel.sendInvite()}"/>
@@ -137,7 +138,7 @@
             android:gravity="center"
             android:text="@{mainViewModel.inviteText}"
             android:textColor="@color/white"
-            android:textSize = "@dimen/font_big"
+            android:textSize = "@dimen/font_large"
             android:layout_gravity="center_horizontal"
             android:visibility="@{mainViewModel.isUnimelb?View.GONE:View.VISIBLE}"
             android:onClick="@{()-> mainViewModel.setShowAlert(true)}"/>
@@ -148,7 +149,7 @@
             android:layout_height="wrap_content"
             android:text= "*Sorry, currently Timegenii is only available to University of Melbourne Email Account."
             android:textColor="@color/red_alert"
-            android:textSize="@dimen/font_normal"
+            android:textSize="@dimen/font_small"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:visibility="@{mainViewModel.showAlert?View.VISIBLE:View.GONE}"/>
