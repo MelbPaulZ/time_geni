@@ -13,6 +13,10 @@ import org.unimelb.itime.ui.fragment.settings.SettingCalendarPreferenceFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingMyProfileFragment;
 import org.unimelb.itime.ui.fragment.settings.SettingNotificationFragment;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class SettingActivity extends EmptyActivity{
     public final static int TASK_LOGOUT = 1;
     public final static int TASK_VIEW_AVATAR = 2;
@@ -48,6 +52,8 @@ public class SettingActivity extends EmptyActivity{
         int task = getIntent().getIntExtra(TASK,-100);
         this.fragmentSwitcher(task);
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

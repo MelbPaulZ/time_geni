@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="contentVM"
+            type="org.unimelb.itime.ui.viewmodel.SettingRegionViewModel" />
+
+        <variable
+            name="toolbarVM"
+            type="org.unimelb.itime.ui.viewmodel.ToolbarViewModel" />
+    </data>
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_fafafa">
+    <include
+        layout="@layout/toolbar_common"
+        bind:vm="@{toolbarVM}" />
+
+    <!--region list-->
+    <ListView
+        android:id="@+id/region_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:items="@{contentVM.items}"
+        app:itemView="@{contentVM.itemView}"
+        android:onListItemClick="@{contentVM.onClickCountry()}"/>
+
+    <TextView
+        style="@style/itime_bottom_divider_line" />
+
+
+
+</LinearLayout>
+</layout>

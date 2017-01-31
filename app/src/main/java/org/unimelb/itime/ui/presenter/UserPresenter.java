@@ -37,6 +37,10 @@ public class UserPresenter<V extends TaskBasedMvpView<User>> extends MvpBasePres
         userApi = HttpUtil.createService(context,UserApi.class);
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public void updateProfile(User user){
         if(getView() != null){
             getView().onTaskStart(TASK_USER_UPDATE);

@@ -54,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:maxLines="1"
+                android:textStyle="bold"
                 android:text="@{vm.message.subtitle1}"
                 android:textColor="@color/color_424242"
                 android:textSize="12sp" />
@@ -68,6 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@{vm.message.subtitle2}"
+                    android:textStyle="bold"
                     android:textColor="@color/color_FFAB40"
                     android:textSize="12sp" />
 

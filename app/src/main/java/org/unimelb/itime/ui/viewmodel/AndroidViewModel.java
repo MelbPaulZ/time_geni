@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -44,6 +45,7 @@ public class AndroidViewModel extends BaseObservable {
     public static void setOnListItemClickListener(View view, AdapterView.OnItemClickListener listener){
         ((AdapterView)view).setOnItemClickListener(listener);
     }
+    
 
     @BindingAdapter("android:onListItemSelect")
     public static void setOnListItemSelectListener(View view, AdapterView.OnItemSelectedListener listener){

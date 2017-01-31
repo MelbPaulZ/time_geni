@@ -92,7 +92,7 @@
                 android:maxLines="1"
                 android:text="@{vm.message.subtitle1}"
                 android:textColor="@color/color_424242"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{vm.message.subtitle2}"
                     android:textColor="@color/color_FFAB40"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
