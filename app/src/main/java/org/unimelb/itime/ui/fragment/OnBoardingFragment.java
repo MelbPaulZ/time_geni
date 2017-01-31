@@ -66,7 +66,6 @@ public class OnBoardingFragment extends BaseUiAuthFragment {
                 @Override
                 public void onClick(View view) {
                     startLogin();
-                    Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT).show();
                 }
             });
             initViewPager();
