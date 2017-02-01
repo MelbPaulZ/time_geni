@@ -12,6 +12,8 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.PhotoUrl;
+import org.unimelb.itime.bean.Timeslot;
+import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
@@ -28,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -90,7 +93,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
         if(getView() != null){
             getView().onTaskStart(TASK_EVENT_UPDATE);
         }
-
+        recordScrollTime(event.getStartTime());
         setEventToEventManager(event);
         // orgCalendarUid to get the previous org event in server link
         String orgCalendarUid = EventManager.getInstance(context).getCurrentEvent().getCalendarUid();
@@ -173,6 +176,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
         if (getView()!=null){
             getView().onTaskStart(TASK_EVENT_INSERT);
         }
+        recordScrollTime(event.getStartTime());
         setEventToEventManager(event);
 //        String syncToken = AppUtil.getEventSyncToken(context);
         String syncToken = TokenUtil.getInstance(context).getEventToken(
@@ -412,6 +416,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
         if (getView()!=null){
             getView().onTaskStart(TASK_TIMESLOT_ACCEPT);
         }
+        recordScrollTime(orgStartTime);
         setEventToEventManager(eventUid);
         String syncToken = AppUtil.getEventSyncToken(context);
         Observable<HttpResult<List<Event>>> observable = eventApi.acceptEvent(
@@ -451,10 +456,16 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
      *  after this api called, it will automatically sync with db
      *
      * */
-    public void acceptTimeslots(String calendarUid, String eventUid, HashMap<String, Object> params){
+    public void acceptTimeslots(Event event, HashMap<String, Object> params, long firstAcceptTimeslot){
         if (getView()!=null){
             getView().onTaskStart(TASK_TIMESLOT_ACCEPT);
         }
+
+        // find timeslot start time to record scroll
+        recordScrollTime(firstAcceptTimeslot);
+
+        String eventUid = event.getEventUid();
+        String calendarUid = event.getCalendarUid();
 
         setEventToEventManager(eventUid);
         String syncToken = AppUtil.getEventSyncToken(context);
@@ -497,11 +508,12 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
      * @param eventUid
      * @param timeslotUid
      */
-    public void confirmEvent(String calendarUid, String eventUid, String timeslotUid){
+    public void confirmEvent(String calendarUid, String eventUid, String timeslotUid, long confirmStartTime){
         if (getView()!=null){
             getView().onTaskStart(TASK_EVENT_CONFIRM);
         }
         String syncToken = AppUtil.getEventSyncToken(context);
+        recordScrollTime(confirmStartTime);
         setEventToEventManager(eventUid);
         Observable<HttpResult<List<Event>>> observable = eventApi.confirm(calendarUid,eventUid, timeslotUid, syncToken);
         Subscriber<HttpResult<List<Event>>> subscriber = new Subscriber<HttpResult<List<Event>>>() {
@@ -601,10 +613,22 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
         }
     }
 
+
+    /**
+     * this method is for record where calendar should automatically scroll to..
+     * @param startTime
+     */
+    private void recordScrollTime(long startTime){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(startTime);
+        CalendarManager.getInstance().setCurrentShowCalendar(cal);
+    }
+
     /**
      * this method is to make calendar automatically scroll to event
      * @param eventUid
      */
+    @Deprecated
     private void setEventToEventManager(String eventUid){
         Event event = EventManager.getInstance(context).findEventByUid(eventUid);
         EventManager.getInstance(context).setCurrentEvent(event);
@@ -614,6 +638,7 @@ public class EventPresenter<V extends TaskBasedMvpView<List<Event>>> extends Mvp
      * this method is to make calendar automatically scroll to event
      * @param event
      */
+    @Deprecated
     private void setEventToEventManager(Event event){
         EventManager.getInstance(context).setCurrentEvent(event);
 

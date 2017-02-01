@@ -17,6 +17,7 @@ import org.unimelb.itime.R;
 import org.unimelb.itime.base.BaseActivity;
 import org.unimelb.itime.bean.Message;
 import org.unimelb.itime.databinding.ActivityMainBinding;
+import org.unimelb.itime.managers.CalendarManager;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
@@ -137,17 +138,19 @@ public class MainActivity extends BaseActivity<MainTabBarView, MainTabBarPresent
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == CalendarBaseViewFragment.REQ_EVENT_CREATE ){
-//            if (resultCode == Activity.RESULT_OK) {
-//                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
-//                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
-//            }
-//        }else if (requestCode == CalendarBaseViewFragment.REQ_EVENT_DETAIL ){
-//            if (resultCode == Activity.RESULT_OK) {
-//                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
-//                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(eventManager.getCurrentEvent().getStartTime());
-//            }
-//        }
+        if (requestCode == CalendarBaseViewFragment.REQ_EVENT_CREATE ){
+            if (resultCode == Activity.RESULT_OK) {
+                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
+                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(CalendarManager.getInstance().getCurrentShowCalendar().getTimeInMillis());
+            }
+        }
+
+        if (requestCode == CalendarBaseViewFragment.REQ_EVENT_DETAIL ){
+            if (resultCode == Activity.RESULT_OK) {
+                ((MainCalendarFragment) tagFragments[0]).reloadEvent();
+                ((MainCalendarFragment) tagFragments[0]).scrollToWithOffset(CalendarManager.getInstance().getCurrentShowCalendar().getTimeInMillis());
+            }
+        }
     }
 
 

@@ -188,14 +188,20 @@ public class EventDetailViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                long confirmTimeslotStartTime = 0;
                 Timeslot timeslot = null;
                 for (SubTimeslotViewModel viewModel : wrapperTimeSlotList) {
                     if (viewModel.getWrapper().isSelected()) {
                         timeslot = (Timeslot) viewModel.getWrapper().getTimeSlot();
+                        confirmTimeslotStartTime = timeslot.getStartTime(); // for automatically scrolling
                         break;
                     }
                 }
-                presenter.confirmEvent(event.getCalendarUid(), event.getEventUid(), timeslot.getTimeslotUid());
+                presenter.confirmEvent(
+                        event.getCalendarUid(),
+                        event.getEventUid(),
+                        timeslot.getTimeslotUid(),
+                        confirmTimeslotStartTime);
             }
         };
     }
@@ -206,7 +212,7 @@ public class EventDetailViewModel extends CommonViewModel {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                long firstAcceptTimeslot = 0;
                 Event orgEvent = EventManager.getInstance(context).getCurrentEvent();
                 if (event.getStatus().equals(Event.STATUS_CONFIRMED)) {
                     // todo implement update only this
@@ -221,13 +227,17 @@ public class EventDetailViewModel extends CommonViewModel {
                         if (viewModel.getWrapper().isSelected()) {
                             Timeslot timeslot = (Timeslot) viewModel.getWrapper().getTimeSlot();
                             timeslotUids.add(timeslot.getTimeslotUid());
+                            if (firstAcceptTimeslot == 0) {
+                                // this is for recording where to scroll, first accept timeslot
+                                firstAcceptTimeslot = timeslot.getStartTime();
+                            }
                         }
                     }
                     params.put("timeslots", timeslotUids);
                     presenter.acceptTimeslots(
-                            event.getCalendarUid(),
-                            event.getEventUid(),
-                            params);
+                            event,
+                            params,
+                            firstAcceptTimeslot);
                 }
             }
         };

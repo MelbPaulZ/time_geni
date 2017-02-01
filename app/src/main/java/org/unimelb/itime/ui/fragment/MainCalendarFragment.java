@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,6 +27,7 @@ import org.unimelb.itime.ui.fragment.calendars.CalendarBaseViewFragment;
 import org.unimelb.itime.ui.fragment.calendars.CalendarMonthDayFragment;
 import org.unimelb.itime.ui.fragment.calendars.CalendarWeekFragment;
 import org.unimelb.itime.ui.viewmodel.MainCalendarViewModel;
+import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.EventUtil;
 
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ public class MainCalendarFragment extends CalendarBaseViewFragment{
     private FragmentMainCalendarBinding binding;
     private MainCalendarViewModel mainCalendarViewModel;
 
+    private int spinnerCount = 0 ;
+
 
     public void reloadEvent(){
         if (monthDayFragment!=null && monthDayFragment.isAdded()){
@@ -57,9 +61,8 @@ public class MainCalendarFragment extends CalendarBaseViewFragment{
     }
 
     public void scrollToWithOffset(long eventStartTime){
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(eventStartTime);
-        CalendarManager.getInstance().setCurrentShowCalendar(c);
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(eventStartTime);
         if (monthDayFragment!=null && monthDayFragment.isAdded()){
             monthDayFragment.scrollToWithOffset(eventStartTime);
         }
@@ -67,7 +70,7 @@ public class MainCalendarFragment extends CalendarBaseViewFragment{
             weekFragment.scrollToWithOffset(eventStartTime);
         }
         if (agendaFragment!=null && agendaFragment.isAdded()){
-            agendaFragment.scrollTo(c);
+            agendaFragment.scrollTo(cal);
         }
 
     }
@@ -127,6 +130,8 @@ public class MainCalendarFragment extends CalendarBaseViewFragment{
         });
     }
 
+
+
     public void initSpinner(){
         ArrayList<String> viewOptionsArrayList = new ArrayList<>();
         viewOptionsArrayList.add(getString(R.string.month_day_view));
@@ -139,7 +144,11 @@ public class MainCalendarFragment extends CalendarBaseViewFragment{
         binding.threeLines.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (spinnerCount++<1){
+                    return ;
+                }
                 changeView(i);
+                scrollToWithOffset(CalendarManager.getInstance().getCurrentShowCalendar().getTimeInMillis());
             }
 
             @Override

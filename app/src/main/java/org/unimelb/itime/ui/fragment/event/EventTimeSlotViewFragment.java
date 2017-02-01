@@ -38,6 +38,9 @@ import org.unimelb.itime.bean.Timeslot;
 import org.unimelb.itime.databinding.FragmentEventCreateTimeslotViewBinding;
 import org.unimelb.itime.databinding.TimeslotViewResponseBinding;
 import org.unimelb.itime.managers.EventManager;
+import org.unimelb.itime.ui.activity.EventCreateActivity;
+import org.unimelb.itime.ui.activity.EventDetailActivity;
+import org.unimelb.itime.ui.fragment.contact.InviteeFragment;
 import org.unimelb.itime.ui.mvpview.ItimeCommonMvpView;
 import org.unimelb.itime.ui.mvpview.TimeslotBaseMvpView;
 import org.unimelb.itime.ui.presenter.TimeslotPresenter;
@@ -582,10 +585,21 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             event.setTimeslot(list);
             EventEditFragment frag = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
             frag.setEvent(event);
-            // clean all stacks
-            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            // open fragment but not add it into back stack
-            getBaseActivity().openFragment(frag, null, false);
+            // cannot merge those two below, on CreateActivity, editFragment not added into stack
+            if (getActivity() instanceof EventCreateActivity) {
+                // in create event activity
+                // clean all stacks
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                // open fragment but not add it into back stack
+                getBaseActivity().openFragment(frag, null, false);
+                return;
+            }
+
+            if (getActivity() instanceof EventDetailActivity){
+                getFragmentManager().popBackStack(EventEditFragment.class.getSimpleName(), 0); // 0 = not popup itself
+                getBaseActivity().openFragment(frag, null, false);
+                return ;
+            }
         }else if (fragment_task == TASK_VIEW){
 
             getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
