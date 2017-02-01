@@ -5,8 +5,12 @@ import java.util.Calendar;
 /**
  * Created by Paul on 1/12/16.
  */
+
+/**
+ * The calendar Manager used for control when the calendar should be displayed
+ */
 public class CalendarManager {
-    private static Calendar currentShowCalendar; // default today , this will change when a calendar jump to a different date
+    private Calendar currentShowCalendar; // default today , this will change when a calendar jump to a different date
     private static CalendarManager instance;
 
     private CalendarManager(){
@@ -14,11 +18,12 @@ public class CalendarManager {
     }
 
     public static CalendarManager getInstance() {
-        if (currentShowCalendar== null ) {
-            currentShowCalendar = Calendar.getInstance();
-        }
         if (instance == null){
             instance = new CalendarManager();
+        }
+
+        if (instance.currentShowCalendar== null ) {
+            instance.currentShowCalendar = Calendar.getInstance();
         }
         return instance;
     }
@@ -30,5 +35,10 @@ public class CalendarManager {
 
     public void setCurrentShowCalendar(Calendar currentShowCalendar) {
         instance.currentShowCalendar = currentShowCalendar;
+    }
+
+    public void clear(){
+        currentShowCalendar = null;
+        instance = null;
     }
 }

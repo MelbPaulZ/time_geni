@@ -121,4 +121,6 @@ public abstract class CommonViewModel extends AndroidViewModel {
             view.setVisibility(View.GONE);
         }
     }
+
+
 }

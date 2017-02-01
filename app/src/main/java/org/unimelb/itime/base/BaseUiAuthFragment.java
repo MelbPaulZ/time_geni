@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -73,6 +74,15 @@ public abstract class BaseUiAuthFragment<V extends MvpView, P extends MvpPresent
     public void hideProgressDialog(){
         if (progressDialog.isShowing()) {
             progressDialog.hide();
+        }
+    }
+
+    public void cleanStack(){
+        int len = getFragmentManager().getBackStackEntryCount();
+        for (int i = 0; i < len-1; i++){
+            String name = getFragmentManager().getBackStackEntryAt(i).getName();
+            Fragment frag = getFragmentManager().findFragmentByTag(name);
+            getFragmentManager().beginTransaction().remove(frag).commit();
         }
     }
 

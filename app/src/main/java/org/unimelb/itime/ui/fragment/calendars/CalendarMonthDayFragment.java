@@ -40,9 +40,7 @@ public class CalendarMonthDayFragment extends CalendarBaseViewFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (root ==null){
-            root = inflater.inflate(R.layout.fragment_calendar_monthday, container, false);
-        }
+        root = inflater.inflate(R.layout.fragment_calendar_monthday, container, false);
         eventManager = EventManager.getInstance(getContext());
         initView();
         return root;

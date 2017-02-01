@@ -9,8 +9,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +59,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
+import static android.R.attr.fragment;
+import static android.R.attr.id;
 
 
 /**
@@ -575,10 +580,12 @@ public class EventTimeSlotViewFragment extends BaseUiAuthFragment<TimeslotBaseMv
             }
             TimeSlotUtil.sortTimeslot(list);
             event.setTimeslot(list);
+            EventEditFragment frag = (EventEditFragment) getFragmentManager().findFragmentByTag(EventEditFragment.class.getSimpleName());
+            frag.setEvent(event);
+            // clean all stacks
             getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            EventEditFragment fragment = new EventEditFragment();
-            fragment.setEvent(event);
-            getBaseActivity().openFragment(fragment, null, false);
+            // open fragment but not add it into back stack
+            getBaseActivity().openFragment(frag, null, false);
         }else if (fragment_task == TASK_VIEW){
 
             getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);

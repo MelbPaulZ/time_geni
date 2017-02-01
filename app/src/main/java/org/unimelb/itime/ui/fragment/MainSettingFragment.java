@@ -26,6 +26,7 @@ import org.unimelb.itime.ui.presenter.SettingPresenter;
 import org.unimelb.itime.ui.viewmodel.MainSettingViewModel;
 import org.unimelb.itime.ui.viewmodel.ToolbarViewModel;
 import org.unimelb.itime.util.AppUtil;
+import org.unimelb.itime.util.CalendarUtil;
 import org.unimelb.itime.util.UserUtil;
 import org.unimelb.itime.widget.QRCode.CaptureActivityContact;
 
@@ -131,6 +132,7 @@ public class MainSettingFragment extends BaseUiAuthFragment<MainSettingMvpView,S
     public void logOut(MessageEvent messageEvent){
         if (messageEvent.task == MessageEvent.LOGOUT){
             onTaskSuccess(1, null);
+            CalendarUtil.getInstance(getContext()).clear(); // this to remove where should the calendar display
             UserUtil.getInstance(getContext()).clearAccount();
             Intent i = new Intent(getContext(), LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);

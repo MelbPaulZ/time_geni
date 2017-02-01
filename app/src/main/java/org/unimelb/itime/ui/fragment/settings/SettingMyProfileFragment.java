@@ -140,7 +140,6 @@ public class SettingMyProfileFragment extends BaseUiAuthFragment<UserMvpView, Us
         }
 
         if (requestCode == REQ_REGION && resultCode == Activity.RESULT_OK){
-            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             refreshDataInViewModel();
         }
     }

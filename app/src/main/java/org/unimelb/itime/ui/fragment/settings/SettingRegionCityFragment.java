@@ -103,7 +103,8 @@ public class SettingRegionCityFragment extends BaseUiAuthFragment<SettingRegionM
     @Override
     public void onTaskSuccess(int taskId, User data) {
         hideProgressDialog();
-        SettingMyProfileFragment fragment = new SettingMyProfileFragment();
+        SettingMyProfileFragment fragment = (SettingMyProfileFragment) getFragmentManager().findFragmentByTag(SettingMyProfileFragment.class.getSimpleName());
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getBaseActivity().backFragment(fragment);
         fragment.onActivityResult(SettingMyProfileFragment.REQ_REGION, Activity.RESULT_OK, null);
     }

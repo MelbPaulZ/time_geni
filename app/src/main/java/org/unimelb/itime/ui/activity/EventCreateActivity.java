@@ -63,7 +63,7 @@ public class EventCreateActivity extends EmptyActivity implements PlaceSelection
         }
         EventManager.getInstance(getApplicationContext()).setCurrentEvent(event);
         fragmentManager.beginTransaction()
-                .replace(getFragmentContainerId(), fragment)
+                .replace(getFragmentContainerId(), fragment, fragment.getClass().getSimpleName())
                 .commit();
     }
 

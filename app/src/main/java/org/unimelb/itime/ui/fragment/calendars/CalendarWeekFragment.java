@@ -34,9 +34,7 @@ public class CalendarWeekFragment extends CalendarBaseViewFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (root == null) {
-            root = inflater.inflate(R.layout.fragment_week_view, container, false);
-        }
+        root = inflater.inflate(R.layout.fragment_week_view, container, false);
         initViews();
         return root;
     }
