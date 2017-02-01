@@ -68,11 +68,11 @@
                     />
                 <ImageView
                     android:layout_marginLeft="5dp"
-                    android:layout_width="12.5dp"
-                    android:layout_height="12.5dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
                     android:visibility="@{viewModel.showGender?View.VISIBLE:View.GONE}"
                     android:src="@{viewModel.user.gender.equals(User.MALE)?@drawable/male_icon:@drawable/female_icon}"
-                    android:layout_gravity="center_vertical"
                     android:layout_toRightOf="@id/nameTextView"
                     android:layout_alignBottom="@id/nameTextView"/>
 

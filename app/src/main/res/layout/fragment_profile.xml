@@ -36,22 +36,16 @@
                 app:border_thickness="4dp"
                 app:avatar="@{viewModel.photo}"
                 />
-            <RelativeLayout
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="1dp"
-                android:background="@drawable/background_block_icon"
-                android:visibility="@{viewModel.blocked?View.VISIBLE:View.GONE}">
                 <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/lock_icon"
-                    android:layout_centerInParent="true"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="1dp"
+                    android:src="@drawable/icon_contact_lock"
+                    android:visibility="@{viewModel.blocked?View.VISIBLE:View.GONE}"
                     android:id="@+id/block"/>
-            </RelativeLayout>
         </RelativeLayout>
 
             <TextView
@@ -67,8 +61,8 @@
                 android:layout_below="@id/avatarView"
                 android:layout_marginTop="20dp"/>
             <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
                 android:layout_marginLeft="4dp"
                 app:icon='@{viewModel.genderIcon}'
                 android:visibility="@{viewModel.showGender?View.VISIBLE:View.GONE}"
@@ -86,8 +80,8 @@
                 android:onClick="@{viewModel.editAliasListener}"
                 android:visibility="@{viewModel.showEdit?View.VISIBLE:View.GONE}">
             <ImageView
-                android:layout_width="14dp"
-                android:layout_height="14dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@drawable/icon_edit"
                 android:layout_gravity="bottom"
                 />

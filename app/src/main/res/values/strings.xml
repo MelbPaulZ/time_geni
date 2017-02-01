@@ -337,6 +337,7 @@
     <string name="try_again">Try Again</string>
 
     <!--Contact Part-->
+    <string name="count_selected"> selected</string>
     <string name="my_qr_code_explain">Scan the QR code to add me on Timegenii</string>
     <string name="my_qr_code_title">My QR Code</string>
     <string name="save_to_album">Save Photo</string>
@@ -346,6 +347,7 @@
     <string name="invite_friend_through_qr_code">Invite Friend Through QR Code</string>
     <string name="unblock_fail">Unblock failed, please check your network</string>
     <string name="access_fail">Access failed, please check your network</string>
+
     <string name="block_fail">Block failed, please check your network</string>
     <string name="unblock_contact">Unblock contact</string>
     <string name="block_contact">Block contact</string>

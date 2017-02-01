@@ -10,6 +10,8 @@
         <attr name="inviteeList" format="reference"/>
         <attr name="onInviteeClickListener" format="reference"/>
         <attr name="onEditListener" format="reference"/>
+        <attr name="onAddClickListener" format="reference"/>
+        <attr name="addable" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="BaseTitleBar">
         <attr name="title" format = "string"/>

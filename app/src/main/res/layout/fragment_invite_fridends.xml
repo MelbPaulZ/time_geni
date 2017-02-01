@@ -47,7 +47,7 @@
             <ImageView
                 android:layout_width="37dp"
                 android:layout_height="37dp"
-                android:src="@{viewModel.validInput?@drawable/blue_plus_icon:@drawable/grey_plus_icon}"
+                android:src="@{viewModel.validInput?@drawable/icon_addinvitee_plus_clickable:@drawable/icon_addinvitee_plus_disabled}"
                 android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="11dp"
@@ -86,15 +86,5 @@
             <include layout="@layout/line"/>
         </LinearLayout>
     </LinearLayout>
-        <TextView
-            android:layout_marginTop="20dp"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:text= "*Sorry, currently Timegenii is only available to University of Melbourne Email Account."
-            android:textColor="@color/red_alert"
-            android:textSize="@dimen/font_normal"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:visibility="@{viewModel.showAlertMsg?View.VISIBLE:View.GONE}"/>
     </LinearLayout>
 </layout>
