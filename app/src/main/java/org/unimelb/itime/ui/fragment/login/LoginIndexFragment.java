@@ -36,8 +36,6 @@ public class LoginIndexFragment extends LoginBaseFragment implements LoginMvpVie
         binding.setLoginVM(loginViewModel);
     }
 
-
-
     @Override
     public void onPageChange(int task) {
         switch (task){

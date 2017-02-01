@@ -12,15 +12,20 @@ import org.greenrobot.eventbus.EventBus;
 import org.unimelb.itime.bean.Calendar;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
+import org.unimelb.itime.bean.FriendRequest;
+import org.unimelb.itime.bean.FriendRequestResult;
 import org.unimelb.itime.bean.Message;
+import org.unimelb.itime.bean.RequestFriend;
 import org.unimelb.itime.bean.User;
 import org.unimelb.itime.managers.DBManager;
 import org.unimelb.itime.managers.EventManager;
 import org.unimelb.itime.messageevent.MessageEvent;
 import org.unimelb.itime.messageevent.MessageInboxMessage;
+import org.unimelb.itime.messageevent.MessageNewFriendRequest;
 import org.unimelb.itime.restfulapi.CalendarApi;
 import org.unimelb.itime.restfulapi.ContactApi;
 import org.unimelb.itime.restfulapi.EventApi;
+import org.unimelb.itime.restfulapi.FriendRequestApi;
 import org.unimelb.itime.restfulapi.MessageApi;
 import org.unimelb.itime.restfulresponse.HttpResult;
 import org.unimelb.itime.util.CalendarUtil;
@@ -28,6 +33,7 @@ import org.unimelb.itime.util.HttpUtil;
 import org.unimelb.itime.util.TokenUtil;
 import org.unimelb.itime.util.UserUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -43,6 +49,7 @@ public class RemoteService extends Service {
     private MessageApi msgApi;
     private CalendarApi calendarApi;
     private ContactApi contactApi;
+    private FriendRequestApi requestApi;
     private Boolean isStart = true;
     private PollingThread pollingThread;
 
@@ -72,6 +79,7 @@ public class RemoteService extends Service {
         msgApi = HttpUtil.createService(context, MessageApi.class);
         calendarApi = HttpUtil.createService(context, CalendarApi.class);
         contactApi = HttpUtil.createService(context, ContactApi.class);
+        requestApi = HttpUtil.createService(context, FriendRequestApi.class);
 
         user = UserUtil.getInstance(context).getUser();
         Log.i(TAG, "onCreate: ");
@@ -274,6 +282,61 @@ public class RemoteService extends Service {
         HttpUtil.subscribe(observable, subscriber);
     }
 
+    // Added by Qiushuo Huang
+    private void fetchFriendRequest(){
+        Observable<HttpResult<FriendRequestResult>> observable = requestApi.list().map(new Func1<HttpResult<FriendRequestResult>, HttpResult<FriendRequestResult>>() {
+            @Override
+            public HttpResult<FriendRequestResult> call(HttpResult<FriendRequestResult> result) {
+                Log.d(TAG, "onNext: " + result.getInfo());
+                if (result.getStatus()!=1){
+                    return null;
+                }else {
+                    for(FriendRequest request:result.getData().getSend()) {
+                        dbManager.insertFriendRequest(request);
+                    }
+                    for(FriendRequest request:result.getData().getReceive()) {
+                        dbManager.insertFriendRequest(request);
+                    }
+                    return result;
+                }
+            }
+        });
+
+        Subscriber<HttpResult<FriendRequestResult>> subscriber = new Subscriber<HttpResult<FriendRequestResult>>() {
+            @Override
+            public void onCompleted() {
+                Log.d(TAG, "onCompleted: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError: " + e.getMessage());
+            }
+
+            @Override
+            public void onNext(HttpResult<FriendRequestResult> result) {
+                Log.d(TAG, "onNext: " + result.getInfo());
+                if (result.getStatus()!=1){
+
+                }else {
+                    int count = 0;
+                    for(FriendRequest request:result.getData().getSend()) {
+                        if(!request.isRead()){
+                            count++;
+                        }
+                    }
+                    for(FriendRequest request:result.getData().getReceive()) {
+                        if(!request.isRead()){
+                            count++;
+                        }
+                    }
+                    EventBus.getDefault().post(new MessageNewFriendRequest(count));
+                }
+            }
+        };
+        HttpUtil.subscribe(observable, subscriber);
+    }
+
     /**
      * for polling
      */
@@ -289,12 +352,12 @@ public class RemoteService extends Service {
                 }
                 fetchMessages();
                 fetchContact();
+                fetchFriendRequest();
 
                 SystemClock.sleep(5000); // cannot use thread sleep because of interrupt exception when sleep
                 // do something
             }
         }
-
     }
 
 }

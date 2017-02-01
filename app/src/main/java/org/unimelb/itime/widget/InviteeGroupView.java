@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Size;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public class InviteeGroupView extends LinearLayout {
     private FlowLayout textFlowLayout;
     private PureEditText inputEditText;
 
-    private float INPUT_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_big));
+    private float INPUT_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_large));
     private float ITEM_FONT_SIZE = px2dp(getContext().getResources().getDimension(R.dimen.font_small));
     private int avatarWidth;
     private int avatarHeight;
@@ -56,6 +57,25 @@ public class InviteeGroupView extends LinearLayout {
     private OnItemClickListener onInviteeClickListener;
     private OnEditListener onEditListener;
     private Map<String, View> inviteeMap;
+    private OnClickListener onAddClickListener;
+    private boolean addable = false;
+    private TextView addPlusIcon;
+
+    public OnClickListener getOnAddClickListener() {
+        return onAddClickListener;
+    }
+
+    public void setOnAddClickListener(OnClickListener onAddClickListener) {
+        this.onAddClickListener = onAddClickListener;
+    }
+
+    public void setAddable(boolean addable){
+        if(addable){
+            addPlusIcon.setBackground(getResources().getDrawable(R.drawable.icon_addinvitee_plus_clickable));
+        }else{
+            addPlusIcon.setBackground(getResources().getDrawable(R.drawable.icon_addinvitee_plus_disabled));
+        }
+    }
 
     public InviteeGroupView(Context context, AttributeSet arrs) {
         super(context, arrs);
@@ -70,11 +90,9 @@ public class InviteeGroupView extends LinearLayout {
 
 //        phoneColor = array.getColor(R.styleable.PeopleGroupView_phoneColor, PHONE_COLOR_DEFAULT);
 //        emailColor = array.getColor(R.styleable.PeopleGroupView_emailColor, EMAIL_COLOR_DEFAULT);
-        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
         this.setOrientation(LinearLayout.VERTICAL);
-        this.setLayoutParams(params);
-
+//        this.setPadding(SizeUtil.dp2px(getContext(), 14), SizeUtil.dp2px(getContext(), 20),
+//                SizeUtil.dp2px(getContext(), 14), SizeUtil.dp2px(getContext(), 20));
         initAvatarFlowLayout();
         initTextFlowLayout();
         initInputEditText(hint);
@@ -120,7 +138,7 @@ public class InviteeGroupView extends LinearLayout {
     private void initAvatarFlowLayout (){
         avatarFlowLayout = new FlowLayout(this.getContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, dp2px(15),0,0);
+        params.setMargins(0, 0, 0, SizeUtil.dp2px(getContext(), 10));
         params.gravity = Gravity.CENTER_HORIZONTAL;
         avatarFlowLayout.setLayoutParams(params);
         avatarFlowLayout.setSpace(6,14);
@@ -131,14 +149,21 @@ public class InviteeGroupView extends LinearLayout {
         textFlowLayout = new FlowLayout(this.getContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER_HORIZONTAL;
+        params.setMargins(0, 0, 0, SizeUtil.dp2px(getContext(), 10));
         textFlowLayout.setLayoutParams(params);
         textFlowLayout.setSpace(24, 14);
         this.addView(textFlowLayout);
     }
 
     private void initInputEditText(String hint){
+        LinearLayout inputLayout = new LinearLayout(getContext());
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.weight = 1;
+        inputLayout.setLayoutParams(layoutParams);
+        inputLayout.setOrientation(LinearLayout.HORIZONTAL);
+
         inputEditText = new PureEditText(this.getContext());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         params.weight = 1;
         inputEditText.setLayoutParams(params);
         inputEditText.setGravity(Gravity.TOP);
@@ -153,6 +178,11 @@ public class InviteeGroupView extends LinearLayout {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(onEditListener!=null) {
                     onEditListener.onEditing(inputEditText, inputEditText.getText().toString());
+                    if(inputEditText.getText().toString().isEmpty()){
+                        addPlusIcon.setVisibility(GONE);
+                    }else{
+                        addPlusIcon.setVisibility(VISIBLE);
+                    }
                 }
             }
 
@@ -163,7 +193,23 @@ public class InviteeGroupView extends LinearLayout {
             public void afterTextChanged(Editable s) {
             }
         });
-        this.addView(inputEditText);
+        inputLayout.addView(inputEditText);
+
+        addPlusIcon = new TextView(getContext());
+        LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(SizeUtil.dp2px(getContext(), 27.5),
+                SizeUtil.dp2px(getContext(), 27.5));
+        iconParams.setMargins(SizeUtil.dp2px(getContext(), 10), 0, 0, 0);
+        addPlusIcon.setLayoutParams(iconParams);
+        addPlusIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onAddClickListener.onClick(view);
+            }
+        });
+        addPlusIcon.setVisibility(GONE);
+        inputLayout.addView(addPlusIcon);
+
+        this.addView(inputLayout);
     }
 
     public void addInvitee(ITimeInviteeInterface invitee){

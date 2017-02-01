@@ -99,7 +99,7 @@ public class AddFriendsViewModel extends BaseObservable {
         setShowSearch(false);
         setShowAlert(false);
         notifyPropertyChanged(BR.isUnimelb);
-        String str = "Invite "+searchText+" to use iTime";
+        String str = "Invite "+ ContactCheckUtil.getInsstance().ellipsizeEmail(searchText) +" to use Timegenii";
 
         SpannableStringBuilder text = new SpannableStringBuilder(str);
         int begin = str.indexOf(searchText);

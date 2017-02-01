@@ -61,18 +61,18 @@
                     android:text="@{viewModel.user.personalAlias}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/font_huge_old"
+                    android:textSize="@dimen/font_huge"
                     android:id="@+id/nameTextView"
-                    android:textColor="@color/grey_one"
+                    android:textColor="@color/normal_text_color"
                     android:layout_alignParentLeft="true"
                     />
                 <ImageView
                     android:layout_marginLeft="5dp"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
                     android:visibility="@{viewModel.showGender?View.VISIBLE:View.GONE}"
                     android:src="@{viewModel.user.gender.equals(User.MALE)?@drawable/male_icon:@drawable/female_icon}"
-                    android:layout_gravity="center_vertical"
                     android:layout_toRightOf="@id/nameTextView"
                     android:layout_alignBottom="@id/nameTextView"/>
 
@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/lightOrange"
-                    android:textSize="@dimen/font_small_old"
+                    android:textSize="@dimen/font_middle"
                     android:id="@+id/contactTextView"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/nameTextView"/>
@@ -120,8 +120,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/my_qr_code_explain"
-            android:textColor="@color/grey_one"
-            android:textSize="@dimen/font_small_old"/>
+            android:textColor="@color/normal_text_color"
+            android:textSize="@dimen/font_middle"/>
     </LinearLayout>
     </RelativeLayout>
 

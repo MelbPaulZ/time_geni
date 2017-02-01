@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import org.unimelb.itime.R;
 import org.unimelb.itime.bean.Contact;
 import org.unimelb.itime.bean.Event;
 import org.unimelb.itime.bean.ITimeUser;
@@ -289,7 +290,7 @@ public class InviteFriendViewModel extends BaseObservable {
     }
 
     public void setCountStr(int count) {
-        this.countStr = count + " people selected";
+        this.countStr = count + presenter.getContext().getString(R.string.count_selected);
         notifyPropertyChanged(BR.countStr);
         presenter.setDoneable(count>0);
     }

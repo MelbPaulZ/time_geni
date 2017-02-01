@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
-            android:textSize="@dimen/font_small_old"
+            android:textSize="@dimen/font_middle"
             android:text="@string/scan_qr_code_explain"
             android:layout_below="@+id/capture_crop_view"
             android:id="@+id/scan_explain"/>
@@ -69,7 +69,7 @@
             android:textColor="@color/lightOrange"
             android:layout_centerHorizontal="true"
             android:text="@string/my_qr_code_title"
-            android:textSize="@dimen/font_small_old"
+            android:textSize="@dimen/font_middle"
             android:layout_below="@id/scan_explain"
             android:id="@+id/myQRCodeTextView"
             android:onClick="@{viewModel.myQRCodeListener}"/>

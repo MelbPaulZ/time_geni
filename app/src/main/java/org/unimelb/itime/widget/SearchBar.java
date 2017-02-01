@@ -52,7 +52,7 @@ public class SearchBar extends FrameLayout {
     private RelativeLayout inputView;
     private PureEditText inputText;
     private ImageView cleanIcon;
-    private int inputFontSize = 12;
+    private int inputFontSize = SizeUtil.px2dp(getContext(), getContext().getResources().getDimension(R.dimen.font_small));
     private OnEditListener onEditListener;
     private boolean onEditing;
     private OnClickListener cancelListener;
