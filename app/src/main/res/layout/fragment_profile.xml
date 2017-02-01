@@ -138,9 +138,7 @@
             android:textSize="@dimen/font_large"
             android:textColor="@color/normal_text_color"
             android:layout_marginBottom="2.5dp"
-            android:visibility="@{viewModel.showRealName?View.VISIBLE:View.GONE}"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            android:visibility="@{viewModel.showRealName?View.VISIBLE:View.GONE}" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -149,9 +147,7 @@
             android:id="@+id/emailTextView"
             android:textColor="@color/normal_text_color"
             android:layout_marginBottom="10dp"
-            android:visibility="@{viewModel.showEmail?View.VISIBLE:View.GONE}"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            android:visibility="@{viewModel.showEmail?View.VISIBLE:View.GONE}" />
         </LinearLayout>
         <FrameLayout
             android:layout_width="match_parent"
